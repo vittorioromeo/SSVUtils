@@ -10,23 +10,38 @@ namespace ssvu
 {
 	namespace Utils
 	{
-		int countNewLines(const string& mString) { int result{0}; for(auto c : mString) if(c == '\n') result++; return result; }
-		string replace(const string& mString, const string& mFrom, const string& mTo)
+		int getNewLinesCount(const string& mString) { int result{0}; for(auto& c : mString) if(c == '\n') result++; return result; }
+		void replace(string& mString, const string& mFrom, const string& mTo)
+		{
+			size_t startPos{mString.find(mFrom)};
+			if(startPos == string::npos) return;
+			mString.replace(startPos, mFrom.length(), mTo);
+		}
+		void replaceAll(string& mString, const string& mFrom, const string& mTo)
+		{
+			size_t startPos{mString.find(mFrom)};
+			while(startPos != string::npos)
+			{
+				mString.replace(startPos, mFrom.length(), mTo);
+				startPos = mString.find(mFrom);
+			}
+		}
+		string getReplaced(const string& mString, const string& mFrom, const string& mTo)
 		{
 			string result{mString};
-			size_t start_pos = result.find(mFrom);
-			if(start_pos == string::npos) return result;
-			result.replace(start_pos, mFrom.length(), mTo);
+			size_t startPos{result.find(mFrom)};
+			if(startPos == string::npos) return result;
+			result.replace(startPos, mFrom.length(), mTo);
 			return result;
 		}
-		string replaceAll(const string& mString, const string& mFrom, const string& mTo)
+		string getReplacedAll(const string& mString, const string& mFrom, const string& mTo)
 		{
 			string result{mString};
-			size_t start_pos = result.find(mFrom);
-			while(start_pos != string::npos)
+			size_t startPos{result.find(mFrom)};
+			while(startPos != string::npos)
 			{
-				result.replace(start_pos, mFrom.length(), mTo);
-				start_pos = result.find(mFrom);
+				result.replace(startPos, mFrom.length(), mTo);
+				startPos = result.find(mFrom);
 			}
 			return result;
 		}

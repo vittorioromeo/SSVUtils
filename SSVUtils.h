@@ -27,4 +27,10 @@
 // FileSystem
 #include "FileSystem/FileSystem.h"
 
+// MemoryManager
+#include "MemoryManager/MemoryManager.h"
+
+// TimelineManager
+#include "Timeline/TimelineManager.h"
+
 #endif

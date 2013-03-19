@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=vittorio.romeo
-Date                   :=18/03/2013
+Date                   :=19/03/2013
 CodeLitePath           :="C:\Program Files (x86)\CodeLite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -37,7 +37,7 @@ PCHCompileFlags        :=
 MakeDirCommand         :=makedir
 RcCmpOptions           := 
 RcCompilerName         :=windres
-LinkOptions            :=  -O2
+LinkOptions            :=  
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). 
 IncludePCH             := 
 RcIncludePath          := 
@@ -52,7 +52,7 @@ LibPath                := $(LibraryPathSwitch).
 AR       := ar rcus
 CXX      := g++
 CC       := gcc
-CXXFLAGS :=  -W -s -pedantic -O3 -Wextra -std=c++11 -Wall $(Preprocessors)
+CXXFLAGS :=  -O3 -Wextra -pedantic -W -Wall -std=c++11 $(Preprocessors)
 CFLAGS   :=   $(Preprocessors)
 
 
@@ -64,7 +64,7 @@ UNIT_TEST_PP_SRC_DIR:=C:\UnitTest++-1.3
 WXWIN:=C:\wxWidgets-2.9.4
 WXCFG:=gcc_dll\mswu
 Objects0=$(IntermediateDirectory)/FileSystem_FileSystem$(ObjectSuffix) $(IntermediateDirectory)/Log_Log$(ObjectSuffix) $(IntermediateDirectory)/Utils_Utils$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsString$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsCollections$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsMath$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Command$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Do$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Go$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Timeline$(ObjectSuffix) \
-	$(IntermediateDirectory)/Timeline_Wait$(ObjectSuffix) 
+	$(IntermediateDirectory)/Timeline_Wait$(ObjectSuffix) $(IntermediateDirectory)/Timeline_TimelineManager$(ObjectSuffix) 
 
 Objects=$(Objects0) 
 
@@ -179,6 +179,14 @@ $(IntermediateDirectory)/Timeline_Wait$(DependSuffix): Timeline/Wait.cpp
 $(IntermediateDirectory)/Timeline_Wait$(PreprocessSuffix): Timeline/Wait.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Timeline_Wait$(PreprocessSuffix) "Timeline/Wait.cpp"
 
+$(IntermediateDirectory)/Timeline_TimelineManager$(ObjectSuffix): Timeline/TimelineManager.cpp $(IntermediateDirectory)/Timeline_TimelineManager$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/Vee/Software/GitHub/OHWorkspace/SSVUtils/Timeline/TimelineManager.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Timeline_TimelineManager$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Timeline_TimelineManager$(DependSuffix): Timeline/TimelineManager.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Timeline_TimelineManager$(ObjectSuffix) -MF$(IntermediateDirectory)/Timeline_TimelineManager$(DependSuffix) -MM "Timeline/TimelineManager.cpp"
+
+$(IntermediateDirectory)/Timeline_TimelineManager$(PreprocessSuffix): Timeline/TimelineManager.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Timeline_TimelineManager$(PreprocessSuffix) "Timeline/TimelineManager.cpp"
+
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
 ##
@@ -218,6 +226,9 @@ clean:
 	$(RM) $(IntermediateDirectory)/Timeline_Wait$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Timeline_Wait$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/Timeline_Wait$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/Timeline_TimelineManager$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Timeline_TimelineManager$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/Timeline_TimelineManager$(PreprocessSuffix)
 	$(RM) $(OutputFile)
 	$(RM) $(OutputFile)
 	$(RM) "../.build-release/SSVUtils"
