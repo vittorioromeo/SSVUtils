@@ -1,53 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="SSVUtils" InternalType="Library">
+  <Reconciliation>
+    <Regexes/>
+    <Excludepaths/>
+    <Ignorefiles/>
+    <Extensions>
+      <![CDATA[cpp;c;h;hpp;xrc;wxcp;fbp]]>
+    </Extensions>
+    <Topleveldir>../SSVUtils</Topleveldir>
+  </Reconciliation>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
     <VirtualDirectory Name="FileSystem">
-      <File Name="FileSystem/FileSystem.cpp"/>
-      <File Name="FileSystem/FileSystem.h"/>
+      <File Name="src/SSVUtils/FileSystem/FileSystem.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="Log">
-      <File Name="Log/Log.cpp"/>
-      <File Name="Log/Log.h"/>
-    </VirtualDirectory>
-    <File Name="SSVUtils.h"/>
-    <VirtualDirectory Name="Delegate">
-      <File Name="Delegate/Delegate.h"/>
+      <File Name="src/SSVUtils/Log/Log.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="Utils">
-      <File Name="Utils/Utils.cpp"/>
-      <File Name="Utils/Utils.h"/>
-      <File Name="Utils/UtilsString.h"/>
-      <File Name="Utils/UtilsString.cpp"/>
-      <File Name="Utils/UtilsCollections.h"/>
-      <File Name="Utils/UtilsCollections.cpp"/>
-      <File Name="Utils/UtilsMath.h"/>
-      <File Name="Utils/UtilsMath.cpp"/>
+      <File Name="src/SSVUtils/Utils/Utils.cpp"/>
+      <File Name="src/SSVUtils/Utils/UtilsCollections.cpp"/>
+      <File Name="src/SSVUtils/Utils/UtilsMath.cpp"/>
+      <File Name="src/SSVUtils/Utils/UtilsString.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="Timeline">
-      <File Name="Timeline/Command.cpp"/>
-      <File Name="Timeline/Command.h"/>
-      <File Name="Timeline/Do.cpp"/>
-      <File Name="Timeline/Do.h"/>
-      <File Name="Timeline/Go.cpp"/>
-      <File Name="Timeline/Go.h"/>
-      <File Name="Timeline/Timeline.cpp"/>
-      <File Name="Timeline/Timeline.h"/>
-      <File Name="Timeline/Wait.cpp"/>
-      <File Name="Timeline/Wait.h"/>
-      <File Name="Timeline/TimelineManager.cpp"/>
-      <File Name="Timeline/TimelineManager.h"/>
+      <File Name="src/SSVUtils/Timeline/Command.cpp"/>
+      <File Name="src/SSVUtils/Timeline/Do.cpp"/>
+      <File Name="src/SSVUtils/Timeline/Go.cpp"/>
+      <File Name="src/SSVUtils/Timeline/Timeline.cpp"/>
+      <File Name="src/SSVUtils/Timeline/TimelineManager.cpp"/>
+      <File Name="src/SSVUtils/Timeline/Wait.cpp"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="MemoryManager">
-      <File Name="MemoryManager/MemoryManager.h"/>
-      <VirtualDirectory Name="Traits">
-        <File Name="MemoryManager/Traits/Traits.h"/>
-      </VirtualDirectory>
+    <VirtualDirectory Name="Encryption">
+      <File Name="src/SSVUtils/Encryption/Base64.cpp"/>
+      <File Name="src/SSVUtils/Encryption/MD5.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
+  <VirtualDirectory Name="include">
+    <VirtualDirectory Name="SSVUtils">
+      <File Name="include/SSVUtils/SSVUtils.h"/>
+      <VirtualDirectory Name="Utils">
+        <File Name="include/SSVUtils/Utils/Utils.h"/>
+        <File Name="include/SSVUtils/Utils/UtilsCollections.h"/>
+        <File Name="include/SSVUtils/Utils/UtilsMath.h"/>
+        <File Name="include/SSVUtils/Utils/UtilsString.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="Timeline">
+        <File Name="include/SSVUtils/Timeline/Command.h"/>
+        <File Name="include/SSVUtils/Timeline/Do.h"/>
+        <File Name="include/SSVUtils/Timeline/Go.h"/>
+        <File Name="include/SSVUtils/Timeline/Timeline.h"/>
+        <File Name="include/SSVUtils/Timeline/TimelineManager.h"/>
+        <File Name="include/SSVUtils/Timeline/Wait.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="Log">
+        <File Name="include/SSVUtils/Log/Log.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="MemoryManager">
+        <VirtualDirectory Name="Traits">
+          <File Name="include/SSVUtils/MemoryManager/Traits/Traits.h"/>
+        </VirtualDirectory>
+        <File Name="include/SSVUtils/MemoryManager/MemoryManager.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="FileSystem">
+        <File Name="include/SSVUtils/FileSystem/FileSystem.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="Encryption">
+        <File Name="include/SSVUtils/Encryption/Base64.h"/>
+        <File Name="include/SSVUtils/Encryption/MD5.h"/>
+        <File Name="include/SSVUtils/Encryption/ObfuscatedValue.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="Delegate">
+        <File Name="include/SSVUtils/Delegate/Delegate.h"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+  </VirtualDirectory>
   <Settings Type="Dynamic Library">
     <GlobalSettings>
       <Compiler Options="" C_Options="">
@@ -97,7 +127,7 @@
     </Configuration>
     <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Dynamic Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-O3;-Wextra;-pedantic;-W;-Wall;-std=c++11" C_Options="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
-        <IncludePath Value="."/>
+        <IncludePath Value="./include/"/>
       </Compiler>
       <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
