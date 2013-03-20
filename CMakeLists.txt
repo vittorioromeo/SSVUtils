@@ -52,6 +52,13 @@ set(
 include_directories(${INC_DIR})
 add_library(${PROJECT_NAME} ${LIB_TYPE} ${SOURCES})
 
+if(SSVUTILS_BUILD_SHARED_LIBS)
+	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -d)
+else()
+	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -s-d)
+	set_target_properties(${PROJECT_NAME} PROPERTIES RELEASE_POSTFIX -s)
+endif()
+
 if(WIN32)
 	install(TARGETS ${PROJECT_NAME}
 		RUNTIME DESTINATION bin
