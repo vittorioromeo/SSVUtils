@@ -53,7 +53,7 @@ set(
 include_directories(${INC_DIR})
 add_library(${PROJECT_NAME} ${LIB_TYPE} ${SOURCES})
 
-if(SSVUTILS_BUILD_SHARED_LIBS)
+if(SSVUTILS_BUILD_SHARED_LIB)
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -d)
 else()
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -s-d)
