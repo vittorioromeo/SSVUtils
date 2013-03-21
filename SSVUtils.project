@@ -20,9 +20,9 @@
     </VirtualDirectory>
     <VirtualDirectory Name="Utils">
       <File Name="src/SSVUtils/Utils/Utils.cpp"/>
-      <File Name="src/SSVUtils/Utils/UtilsCollections.cpp"/>
       <File Name="src/SSVUtils/Utils/UtilsMath.cpp"/>
       <File Name="src/SSVUtils/Utils/UtilsString.cpp"/>
+      <File Name="src/SSVUtils/Utils/UtilsContainers.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="Timeline">
       <File Name="src/SSVUtils/Timeline/Command.cpp"/>
@@ -44,9 +44,9 @@
       <File Name="include/SSVUtils/SSVUtils.h"/>
       <VirtualDirectory Name="Utils">
         <File Name="include/SSVUtils/Utils/Utils.h"/>
-        <File Name="include/SSVUtils/Utils/UtilsCollections.h"/>
         <File Name="include/SSVUtils/Utils/UtilsMath.h"/>
         <File Name="include/SSVUtils/Utils/UtilsString.h"/>
+        <File Name="include/SSVUtils/Utils/UtilsContainers.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="Timeline">
         <File Name="include/SSVUtils/Timeline/Command.h"/>

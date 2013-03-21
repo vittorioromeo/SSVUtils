@@ -20,7 +20,7 @@ namespace ssvu
 			T dummy;
 			std::string encodedValue;
 
-			T fromString(const std::string& s) const { std::istringstream stream{s}; T t; stream >> t; return t; }
+			T fromString(const std::string& mString) const { std::istringstream stream{mString}; T t; stream >> t; return t; }
 
 		public:
 			ObfuscatedValue(T mValue) { set(mValue); }

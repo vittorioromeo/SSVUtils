@@ -31,7 +31,7 @@ set(
 	${INC_DIR}/${PROJECT_NAME}/Timeline/TimelineManager.h
 	${INC_DIR}/${PROJECT_NAME}/Timeline/Wait.h
 	${INC_DIR}/${PROJECT_NAME}/Utils/Utils.h
-	${INC_DIR}/${PROJECT_NAME}/Utils/UtilsCollections.h
+	${INC_DIR}/${PROJECT_NAME}/Utils/UtilsContainers.h
 	${INC_DIR}/${PROJECT_NAME}/Utils/UtilsMath.h
 	${INC_DIR}/${PROJECT_NAME}/Utils/UtilsString.h
 	${SRC_DIR}/${PROJECT_NAME}/Encryption/Base64.cpp
@@ -45,7 +45,7 @@ set(
 	${SRC_DIR}/${PROJECT_NAME}/Timeline/TimelineManager.cpp
 	${SRC_DIR}/${PROJECT_NAME}/Timeline/Wait.cpp
 	${SRC_DIR}/${PROJECT_NAME}/Utils/Utils.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Utils/UtilsCollections.cpp
+	${SRC_DIR}/${PROJECT_NAME}/Utils/UtilsContainers.cpp
 	${SRC_DIR}/${PROJECT_NAME}/Utils/UtilsMath.cpp
 	${SRC_DIR}/${PROJECT_NAME}/Utils/UtilsString.cpp
 )

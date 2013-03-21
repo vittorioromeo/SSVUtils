@@ -8,7 +8,7 @@
 namespace ssvu
 {
 	template<typename T> constexpr int getSign(const T& mValue) { return mValue > 0 ? 1 : -1; }
-	template<typename T> constexpr T clamp(const T& mValue, const T& mLow, const T& mHigh) { return mValue < mLow ? mLow : (mValue > mHigh ? mHigh : mValue); }
+	template<typename T> constexpr T getClamped(const T& mValue, const T& mLow, const T& mHigh) { return mValue < mLow ? mLow : (mValue > mHigh ? mHigh : mValue); }
 	template<typename T> constexpr T toRadians(const T& mValue) { return mValue / 57.3f; }
 	template<typename T> constexpr T toDegrees(const T& mValue) { return mValue * 57.3f; }
 	template<typename T> T wrapRadians(const T& mValue) { T result(fmod(mValue, 6.28f)); if(result < 0) result += 6.28f; return result; }

@@ -7,13 +7,13 @@ ProjectName            :=SSVUtils
 ConfigurationName      :=Release
 WorkspacePath          := "D:\Vee\Software\GitHub\OHWorkspace"
 ProjectPath            := "D:\Vee\Software\GitHub\OHWorkspace\SSVUtils"
-IntermediateDirectory  :=./_INTERMEDIATE
+IntermediateDirectory  :=./_INTERMEDIATE/
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=vittorio.romeo
-Date                   :=20/03/2013
+Date                   :=21/03/2013
 CodeLitePath           :="C:\Program Files (x86)\CodeLite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -63,7 +63,7 @@ CodeLiteDir:=C:\Program Files (x86)\CodeLite
 UNIT_TEST_PP_SRC_DIR:=C:\UnitTest++-1.3
 WXWIN:=C:\wxWidgets-2.9.4
 WXCFG:=gcc_dll\mswu
-Objects0=$(IntermediateDirectory)/FileSystem_FileSystem$(ObjectSuffix) $(IntermediateDirectory)/Log_Log$(ObjectSuffix) $(IntermediateDirectory)/Utils_Utils$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsCollections$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsMath$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsString$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Command$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Do$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Go$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Timeline$(ObjectSuffix) \
+Objects0=$(IntermediateDirectory)/FileSystem_FileSystem$(ObjectSuffix) $(IntermediateDirectory)/Log_Log$(ObjectSuffix) $(IntermediateDirectory)/Utils_Utils$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsMath$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsString$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsContainers$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Command$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Do$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Go$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Timeline$(ObjectSuffix) \
 	$(IntermediateDirectory)/Timeline_TimelineManager$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Wait$(ObjectSuffix) $(IntermediateDirectory)/Encryption_Base64$(ObjectSuffix) $(IntermediateDirectory)/Encryption_MD5$(ObjectSuffix) 
 
 Objects=$(Objects0) 
@@ -83,7 +83,7 @@ $(OutputFile): $(IntermediateDirectory)/.d $(Objects)
 	@echo rebuilt > "D:\Vee\Software\GitHub\OHWorkspace/.build-release/SSVUtils"
 
 $(IntermediateDirectory)/.d:
-	@$(MakeDirCommand) "./_INTERMEDIATE"
+	@$(MakeDirCommand) "./_INTERMEDIATE/"
 
 PreBuild:
 
@@ -115,14 +115,6 @@ $(IntermediateDirectory)/Utils_Utils$(DependSuffix): src/SSVUtils/Utils/Utils.cp
 $(IntermediateDirectory)/Utils_Utils$(PreprocessSuffix): src/SSVUtils/Utils/Utils.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Utils_Utils$(PreprocessSuffix) "src/SSVUtils/Utils/Utils.cpp"
 
-$(IntermediateDirectory)/Utils_UtilsCollections$(ObjectSuffix): src/SSVUtils/Utils/UtilsCollections.cpp $(IntermediateDirectory)/Utils_UtilsCollections$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/Vee/Software/GitHub/OHWorkspace/SSVUtils/src/SSVUtils/Utils/UtilsCollections.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Utils_UtilsCollections$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Utils_UtilsCollections$(DependSuffix): src/SSVUtils/Utils/UtilsCollections.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Utils_UtilsCollections$(ObjectSuffix) -MF$(IntermediateDirectory)/Utils_UtilsCollections$(DependSuffix) -MM "src/SSVUtils/Utils/UtilsCollections.cpp"
-
-$(IntermediateDirectory)/Utils_UtilsCollections$(PreprocessSuffix): src/SSVUtils/Utils/UtilsCollections.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Utils_UtilsCollections$(PreprocessSuffix) "src/SSVUtils/Utils/UtilsCollections.cpp"
-
 $(IntermediateDirectory)/Utils_UtilsMath$(ObjectSuffix): src/SSVUtils/Utils/UtilsMath.cpp $(IntermediateDirectory)/Utils_UtilsMath$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/Vee/Software/GitHub/OHWorkspace/SSVUtils/src/SSVUtils/Utils/UtilsMath.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Utils_UtilsMath$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Utils_UtilsMath$(DependSuffix): src/SSVUtils/Utils/UtilsMath.cpp
@@ -138,6 +130,14 @@ $(IntermediateDirectory)/Utils_UtilsString$(DependSuffix): src/SSVUtils/Utils/Ut
 
 $(IntermediateDirectory)/Utils_UtilsString$(PreprocessSuffix): src/SSVUtils/Utils/UtilsString.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Utils_UtilsString$(PreprocessSuffix) "src/SSVUtils/Utils/UtilsString.cpp"
+
+$(IntermediateDirectory)/Utils_UtilsContainers$(ObjectSuffix): src/SSVUtils/Utils/UtilsContainers.cpp $(IntermediateDirectory)/Utils_UtilsContainers$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/Vee/Software/GitHub/OHWorkspace/SSVUtils/src/SSVUtils/Utils/UtilsContainers.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Utils_UtilsContainers$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Utils_UtilsContainers$(DependSuffix): src/SSVUtils/Utils/UtilsContainers.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Utils_UtilsContainers$(ObjectSuffix) -MF$(IntermediateDirectory)/Utils_UtilsContainers$(DependSuffix) -MM "src/SSVUtils/Utils/UtilsContainers.cpp"
+
+$(IntermediateDirectory)/Utils_UtilsContainers$(PreprocessSuffix): src/SSVUtils/Utils/UtilsContainers.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Utils_UtilsContainers$(PreprocessSuffix) "src/SSVUtils/Utils/UtilsContainers.cpp"
 
 $(IntermediateDirectory)/Timeline_Command$(ObjectSuffix): src/SSVUtils/Timeline/Command.cpp $(IntermediateDirectory)/Timeline_Command$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/Vee/Software/GitHub/OHWorkspace/SSVUtils/src/SSVUtils/Timeline/Command.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Timeline_Command$(ObjectSuffix) $(IncludePath)
@@ -218,15 +218,15 @@ clean:
 	$(RM) $(IntermediateDirectory)/Utils_Utils$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Utils_Utils$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/Utils_Utils$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/Utils_UtilsCollections$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/Utils_UtilsCollections$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/Utils_UtilsCollections$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/Utils_UtilsMath$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Utils_UtilsMath$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/Utils_UtilsMath$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/Utils_UtilsString$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Utils_UtilsString$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/Utils_UtilsString$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/Utils_UtilsContainers$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Utils_UtilsContainers$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/Utils_UtilsContainers$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/Timeline_Command$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/Timeline_Command$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/Timeline_Command$(PreprocessSuffix)

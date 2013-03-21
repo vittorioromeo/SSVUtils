@@ -6,7 +6,7 @@
 #define SSVS_UTILS_TRAITS
 
 #include <vector>
-#include "SSVUtils/Utils/UtilsCollections.h"
+#include "SSVUtils/Utils/UtilsContainers.h"
 
 namespace ssvu
 {

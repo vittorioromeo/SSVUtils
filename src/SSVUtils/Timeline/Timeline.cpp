@@ -4,7 +4,7 @@
 
 #include "SSVUtils/Timeline/Timeline.h"
 #include "SSVUtils/Timeline/Command.h"
-#include "SSVUtils/Utils/UtilsCollections.h"
+#include "SSVUtils/Utils/UtilsContainers.h"
 
 using namespace std;
 
@@ -21,7 +21,7 @@ namespace ssvu
 	{
 		commandPtrs.insert(commandPtrs.begin() + mIndex, mCommandPtr);
 		if(currentCommandPtr == nullptr) currentCommandPtr = mCommandPtr;
-	}	
+	}
 	void Timeline::del(Command* mCommandPtr)
 	{
 		eraseRemove(commandPtrs, mCommandPtr);
@@ -66,7 +66,7 @@ namespace ssvu
 	void Timeline::next()
 	{
 		if(currentCommandPtr == nullptr) return;
-		
+
 		auto iter = find(commandPtrs.begin(), commandPtrs.end(), currentCommandPtr);
 		if(iter == commandPtrs.end() - 1)
 		{
@@ -79,7 +79,7 @@ namespace ssvu
 			currentCommandPtr = *iter;
 		}
 	}
-	
+
 	bool Timeline::isFinished() { return finished; }
 	int Timeline::getSize() { return commandPtrs.size(); }
 	int Timeline::getCurrentIndex()
