@@ -10,9 +10,10 @@
 # SSVUTILS_LIBRARY, where to find the SSVUtils library.
 
 
-FIND_PATH(SSVUTILS_INCLUDE_DIR SSVUtils/SSVUtils.h
-  PATH_SUFFIXES include .
-  PATHS
+FIND_PATH(SSVUTILS_INCLUDE_DIR 
+  NAMES SSVUtils/SSVUtils.h
+  PATH_SUFFIXES include
+  PATHS "${PROJECT_SOURCE_DIR}/extlibs/SSVUtils/"
   ${SSVUTILS_ROOT}
   $ENV{SSVUTILS_ROOT}
   ~/Library/Frameworks
