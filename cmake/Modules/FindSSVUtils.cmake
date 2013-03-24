@@ -12,7 +12,8 @@
 FIND_PATH(SSVUTILS_INCLUDE_DIR 
   NAMES SSVUtils/SSVUtils.h
   PATH_SUFFIXES include/
-  PATHS "${PROJECT_SOURCE_DIR}/extlibs/SSVUtils/"
+  PATHS "${PROJECT_SOURCE_DIR}/../SSVUtils/"
+  "${PROJECT_SOURCE_DIR}/extlibs/SSVUtils/"
   ${SSVUTILS_ROOT}
   $ENV{SSVUTILS_ROOT}
   /usr/local/
@@ -28,8 +29,8 @@ message("\nFound SSVUtils include at: ${SSVUTILS_INCLUDE_DIR}.\n")
 FIND_LIBRARY(SSVUTILS_LIBRARY
   NAMES SSVUtils libSSVUtils SSVUtils-s libSSVUtils-s ssvutils libssvutils ssvutils-s libssvutils-s
   PATH_SUFFIXES lib/ lib64/
-  PATHS "${PROJECT_SOURCE_DIR}/extlibs/SSVUtils/"
-  "${PROJECT_SOURCE_DIR}/../SSVUtils/"
+  PATHS "${PROJECT_SOURCE_DIR}/../SSVUtils/"
+  "${PROJECT_SOURCE_DIR}/extlibs/SSVUtils/"
   ${SSVUTILS_ROOT}
   $ENV{SSVUTILS_ROOT}
   /usr/local/
