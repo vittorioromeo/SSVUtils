@@ -37,8 +37,6 @@
       <File Name="src/SSVUtils/Encryption/MD5.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
-  <Dependencies Name="Debug"/>
-  <Dependencies Name="Release"/>
   <VirtualDirectory Name="include">
     <VirtualDirectory Name="SSVUtils">
       <File Name="include/SSVUtils/SSVUtils.h"/>
@@ -163,4 +161,6 @@
       </Completion>
     </Configuration>
   </Settings>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
 </CodeLite_Project>
