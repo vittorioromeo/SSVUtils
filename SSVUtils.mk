@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=vittorio.romeo
-Date                   :=22/03/2013
+Date                   :=24/03/2013
 CodeLitePath           :="C:\Program Files (x86)\CodeLite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -27,7 +27,7 @@ OutputSwitch           :=-o
 LibraryPathSwitch      :=-L
 PreprocessorSwitch     :=-D
 SourceSwitch           :=-c 
-OutputFile             :=./_RELEASE/$(ProjectName).dll
+OutputFile             :=./lib/lib$(ProjectName)-s.a
 Preprocessors          :=
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
@@ -52,7 +52,7 @@ LibPath                := $(LibraryPathSwitch).
 AR       := ar rcus
 CXX      := g++
 CC       := gcc
-CXXFLAGS :=  -O3 -Wextra -pedantic -W -Wall -std=c++11 $(Preprocessors)
+CXXFLAGS :=  -O3 -Wextra -pedantic -W -Wall -std=c++11 -DNDEBUG $(Preprocessors)
 CFLAGS   :=   $(Preprocessors)
 
 
@@ -66,23 +66,25 @@ WXCFG:=gcc_dll\mswu
 Objects0=$(IntermediateDirectory)/FileSystem_FileSystem$(ObjectSuffix) $(IntermediateDirectory)/Log_Log$(ObjectSuffix) $(IntermediateDirectory)/Utils_Utils$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsMath$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsString$(ObjectSuffix) $(IntermediateDirectory)/Utils_UtilsContainers$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Command$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Do$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Go$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Timeline$(ObjectSuffix) \
 	$(IntermediateDirectory)/Timeline_TimelineManager$(ObjectSuffix) $(IntermediateDirectory)/Timeline_Wait$(ObjectSuffix) $(IntermediateDirectory)/Encryption_Base64$(ObjectSuffix) $(IntermediateDirectory)/Encryption_MD5$(ObjectSuffix) 
 
+
+
 Objects=$(Objects0) 
 
 ##
 ## Main Build Targets 
 ##
 .PHONY: all clean PreBuild PrePreBuild PostBuild
-all: $(OutputFile)
+all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile): $(IntermediateDirectory)/.d $(Objects) 
+$(OutputFile): $(Objects)
 	@$(MakeDirCommand) $(@D)
 	@echo "" > $(IntermediateDirectory)/.d
 	@echo $(Objects0)  > $(ObjectsFileList)
-	$(SharedObjectLinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
+	$(AR) $(ArchiveOutputSwitch)$(OutputFile) $(Objects) $(ArLibs)
 	@$(MakeDirCommand) "D:\Vee\Software\GitHub\OHWorkspace/.build-release"
 	@echo rebuilt > "D:\Vee\Software\GitHub\OHWorkspace/.build-release/SSVUtils"
 
-$(IntermediateDirectory)/.d:
+./_INTERMEDIATE/:
 	@$(MakeDirCommand) "./_INTERMEDIATE/"
 
 PreBuild:
