@@ -17,6 +17,7 @@ MESSAGE("\nFound SSVUtils include at: ${SSVUTILS_INCLUDE_DIR}.\n")
 
 FIND_LIBRARY(SSVUTILS_LIBRARY
 	NAMES SSVUtils libSSVUtils SSVUtils-s libSSVUtils-s ssvutils libssvutils ssvutils-s libssvutils-s
+		SSVUtils-s-d libSSVUtils-s-d ssvutils-s-d libssvutils-s-d
 	PATH_SUFFIXES lib/ lib64/
 	PATHS "${PROJECT_SOURCE_DIR}/../SSVUtils/"
 	"${PROJECT_SOURCE_DIR}/extlibs/SSVUtils/"
