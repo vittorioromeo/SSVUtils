@@ -29,9 +29,9 @@ namespace ssvu
 			T get() const { return fromString(base64_decode(encodedValue)); }
 			operator T() const { return get(); }
 			T operator +=(const T& mValue) { set(get() + mValue); return get(); }
-			T operator -=(const T& mValue) { set(set() - mValue); return get(); }
-			T operator *=(const T& mValue) { set(set() * mValue); return get(); }
-			T operator /=(const T& mValue) { set(set() / mValue); return get(); }
+			T operator -=(const T& mValue) { set(get() - mValue); return get(); }
+			T operator *=(const T& mValue) { set(get() * mValue); return get(); }
+			T operator /=(const T& mValue) { set(get() / mValue); return get(); }
 			void operator =(const T& mValue) { set(mValue); }
 	};
 }
