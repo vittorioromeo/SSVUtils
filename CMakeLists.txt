@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
+
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type.")
 project(SSVUtils)
 
-set(SSVUTILS_BUILD_SHARED_LIB FALSE CACHE BOOL "Build shared libraries.")
-set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type." FORCE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -W -pedantic" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_DEBUG "-fno-omit-frame-pointer -g3 -gdwarf-2 -O3" CACHE STRING "" FORCE)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/;${CMAKE_MODULE_PATH}")
-
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -pg -Og" CACHE STRING "" FORCE)
+set(SSVUTILS_BUILD_SHARED_LIB FALSE CACHE BOOL "Build shared libraries.")
 
 if(SSVUTILS_BUILD_SHARED_LIB)
 	set(LIB_TYPE SHARED)
@@ -17,44 +17,29 @@ endif()
 set(SRC_DIR "src")
 set(INC_DIR "include")
 
-set(
-	SOURCES
-	${INC_DIR}/${PROJECT_NAME}/Delegate/Delegate.h
-	${INC_DIR}/${PROJECT_NAME}/Encryption/Base64.h
-	${INC_DIR}/${PROJECT_NAME}/Encryption/MD5.h
-	${INC_DIR}/${PROJECT_NAME}/Encryption/ObfuscatedValue.h
-	${INC_DIR}/${PROJECT_NAME}/FileSystem/FileSystem.h
-	${INC_DIR}/${PROJECT_NAME}/Log/Log.h
-	${INC_DIR}/${PROJECT_NAME}/MemoryManager/MemoryManager.h
-	${INC_DIR}/${PROJECT_NAME}/MemoryManager/Traits/Traits.h
-	${INC_DIR}/${PROJECT_NAME}/Timeline/Command.h
-	${INC_DIR}/${PROJECT_NAME}/Timeline/Do.h
-	${INC_DIR}/${PROJECT_NAME}/Timeline/Go.h
-	${INC_DIR}/${PROJECT_NAME}/Timeline/Timeline.h
-	${INC_DIR}/${PROJECT_NAME}/Timeline/TimelineManager.h
-	${INC_DIR}/${PROJECT_NAME}/Timeline/Wait.h
-	${INC_DIR}/${PROJECT_NAME}/Utils/Utils.h
-	${INC_DIR}/${PROJECT_NAME}/Utils/UtilsContainers.h
-	${INC_DIR}/${PROJECT_NAME}/Utils/UtilsMath.h
-	${INC_DIR}/${PROJECT_NAME}/Utils/UtilsString.h
-	${SRC_DIR}/${PROJECT_NAME}/Encryption/Base64.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Encryption/MD5.cpp
-	${SRC_DIR}/${PROJECT_NAME}/FileSystem/FileSystem.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Log/Log.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Timeline/Command.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Timeline/Do.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Timeline/Go.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Timeline/Timeline.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Timeline/TimelineManager.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Timeline/Wait.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Utils/Utils.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Utils/UtilsContainers.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Utils/UtilsMath.cpp
-	${SRC_DIR}/${PROJECT_NAME}/Utils/UtilsString.cpp
+file(GLOB SRC_LIST
+	"${INC_DIR}/${PROJECT_NAME}/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Delegate/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Delegate/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Encryption/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Encryption/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/FileSystem/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/FileSystem/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Log/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Log/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/MemoryManager/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/MemoryManager/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/MemoryManager/Traits/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/MemoryManager/Traits/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Timeline/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Timeline/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Utils/*.cpp"
 )
 
 include_directories(${INC_DIR})
-add_library(${PROJECT_NAME} ${LIB_TYPE} ${SOURCES})
+add_library(${PROJECT_NAME} ${LIB_TYPE} ${SRC_LIST})
 
 if(SSVUTILS_BUILD_SHARED_LIB)
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -d)
@@ -64,16 +49,9 @@ else()
 endif()
 
 if(WIN32)
-	install(TARGETS ${PROJECT_NAME}
-		RUNTIME DESTINATION bin
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib)
+	install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 else()
-	install(TARGETS ${PROJECT_NAME}
-		RUNTIME DESTINATION lib
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib)
+	install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 endif()
 
-install(DIRECTORY ${INC_DIR}
-	DESTINATION .)
+install(DIRECTORY ${INC_DIR} DESTINATION .)
