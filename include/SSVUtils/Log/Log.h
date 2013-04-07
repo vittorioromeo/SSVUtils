@@ -15,7 +15,7 @@
 namespace ssvu
 {
 	std::vector<std::string>& getLogEntries();
-	template<class T> void log(T mValue, std::string mTitle = "")
+	template<class T> void log(T mValue, const std::string& mTitle = "")
 	{
 		#ifndef SSVU_RELEASE
 			std::ostringstream entryStream;
