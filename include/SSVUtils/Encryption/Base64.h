@@ -15,3 +15,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: put all encryption stuff in an Encryption namespace and create consistent public interfaces
