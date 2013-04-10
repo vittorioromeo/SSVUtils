@@ -9,13 +9,13 @@ using namespace std;
 
 namespace ssvu
 {
-	int getRnd(int mMin, int mMax) { double x{rand()/static_cast<double>(RAND_MAX)}; return mMin + static_cast<int>(x * (mMax - mMin)); }
+	int getRnd(int mMin, int mMax) { double x{rand() / static_cast<double>(RAND_MAX)}; return mMin + static_cast<int>(x * (mMax - mMin)); }
 
 	float getSaturated(float mValue) { return max(0.0f, min(1.0f, mValue)); }
 	float getSmootherStep(float edge0, float edge1, float x)
 	{
 		x = getSaturated((x - edge0)/(edge1 - edge0));
-		return x*x*x*(x*(x*6 - 15) + 10);
+		return x * x * x * (x * (x * 6 - 15) + 10);
 	}
 }
 

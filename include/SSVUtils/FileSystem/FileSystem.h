@@ -19,9 +19,9 @@ namespace ssvu
 		bool isFolder(const std::string& mPath);
 		bool isRootOrParent(const std::string& mPath);
 		std::string getNormalizedPath(const std::string& mPath);
-		std::string getNameFromPath(const std::string& mPath, const std::string& mPrefix, const std::string& mSuffix);		
+		std::string getNameFromPath(const std::string& mPath, const std::string& mPrefix, const std::string& mSuffix);
 		void traverse(const std::string& mPath, std::function<void(std::string, std::string)> mFunction);
-		
+
 		// Fills (they fill an existing vector)
 		void recursiveFillFiles(std::vector<std::string>& mResult, const std::string& mPath);
 		void recursiveFillFilesByExtension(std::vector<std::string>& mResult, const std::string& mPath, const std::string& mExtension);
@@ -41,6 +41,8 @@ namespace ssvu
 		// Utilities
 		std::string getFileContents(const std::string& mPath);
 	}
+
+	// TODO: change traverse to a template
 }
 
 #endif

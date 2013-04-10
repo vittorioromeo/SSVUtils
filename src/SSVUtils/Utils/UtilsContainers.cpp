@@ -3,9 +3,3 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #include "SSVUtils/Utils/UtilsContainers.h"
-
-namespace ssvu
-{
-
-}
-

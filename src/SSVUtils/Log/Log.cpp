@@ -18,7 +18,7 @@ namespace ssvu
 
 	void saveLogToFile(const string& mPath)
 	{
-		#ifndef SSVS_RELEASE
+		#ifndef SSVS_DISABLE_LOG
 			ofstream o; o.open(mPath);
 			for(auto& logEntry : logEntries) o << logEntry;
 			o.flush(); o.close();
@@ -26,13 +26,13 @@ namespace ssvu
 	}
 	void startBenchmark()
 	{
-		#ifndef SSVS_RELEASE
+		#ifndef SSVS_DISABLE_LOG
 			start = high_resolution_clock::now();
 		#endif
 	}
 	string endBenchmark()
 	{
-		#ifndef SSVS_RELEASE
+		#ifndef SSVS_DISABLE_LOG
 			end = high_resolution_clock::now();
 			auto elapsed = duration_cast<milliseconds>(end-start).count();
 			return toStr(elapsed) + toStr(" ms");

@@ -14,7 +14,7 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
-		bool exists(const string& mPath) { struct stat buf; return (stat(getNormalizedPath(mPath).c_str(), &buf) != -1); }
+		bool exists(const string& mPath) { struct stat buf; return stat(getNormalizedPath(mPath).c_str(), &buf) != -1; }
 		bool hasExtension(const string& mFileName, const string& mExtension) { return endsWith(toLower(mFileName), toLower(mExtension)); }
 		bool isFolder(const string& mPath)
 		{
@@ -56,7 +56,8 @@ namespace ssvu
 
 		void recursiveFillFiles(vector<string>& mResult, const string& mPath)
 		{
-			traverse(mPath, [&](string, string path){
+			traverse(mPath, [&](const string&, const string& path)
+			{
 				if(!isRootOrParent(path))
 				{
 					if(isFolder(path)) recursiveFillFiles(mResult, path);
@@ -66,7 +67,8 @@ namespace ssvu
 		}
 		void recursiveFillFilesByExtension(vector<string>& mResult, const string& mPath, const string& mExtension)
 		{
-			traverse(mPath, [&](string name, string path){
+			traverse(mPath, [&](const string& name, const string& path)
+			{
 				if(!isRootOrParent(path))
 				{
 					if(isFolder(path)) recursiveFillFiles(mResult, path);
@@ -76,13 +78,15 @@ namespace ssvu
 		}
 		void recursiveFillFolders(vector<string>& mResult, const string& mPath)
 		{
-			traverse(mPath, [&](string, string path){
+			traverse(mPath, [&](const string&, const string& path)
+			{
 				if(!isRootOrParent(path)) if(isFolder(path)) { recursiveFillFolders(mResult, path); mResult.push_back(path); }
 			});
 		}
 		void recursiveFillAll(vector<string>& mResult, const string& mPath)
 		{
-			traverse(mPath, [&](string, string path){
+			traverse(mPath, [&](const string&, const string& path)
+			{
 				if(!isRootOrParent(path))
 				{
 					if(isFolder(path)) recursiveFillAll(mResult, path);
@@ -94,7 +98,8 @@ namespace ssvu
 		vector<string> getFiles(const string& mPath)
 		{
 			vector<string> result;
-			traverse(mPath, [&](string, string path){
+			traverse(mPath, [&](const string&, const string& path)
+			{
 				if(!isRootOrParent(path)) if(!isFolder(path)) result.push_back(path);
 			});
 			return result;
@@ -102,7 +107,8 @@ namespace ssvu
 		vector<string> getFilesByExtension(const string& mPath, const string& mExtension)
 		{
 			vector<string> result;
-			traverse(mPath, [&](string name, string path){
+			traverse(mPath, [&](const string& name, const string& path)
+			{
 				if(!isRootOrParent(path)) if(!isFolder(path)) if(endsWith(name, mExtension)) result.push_back(path);
 			});
 			return result;
@@ -110,7 +116,8 @@ namespace ssvu
 		vector<string> getFolders(const string& mPath)
 		{
 			vector<string> result;
-			traverse(mPath, [&](string, string path){
+			traverse(mPath, [&](const string&, const string& path)
+			{
 				if(!isRootOrParent(path)) if(isFolder(path)) result.push_back(path);
 			});
 			return result;
@@ -118,7 +125,8 @@ namespace ssvu
 		vector<string> getAll(const string& mPath)
 		{
 			vector<string> result;
-			traverse(mPath, [&](string, string path){
+			traverse(mPath, [&](const string&, const string& path)
+			{
 				if(!isRootOrParent(path)) result.push_back(path);
 			});
 			return result;
