@@ -40,6 +40,7 @@ namespace ssvu
 
 		// Utilities
 		std::string getFileContents(const std::string& mPath);
+		void createFolder(const std::string& mPath);
 	}
 
 	// TODO: change traverse to a template

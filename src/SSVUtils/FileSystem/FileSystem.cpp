@@ -146,6 +146,14 @@ namespace ssvu
 			if(fread(const_cast<char*>(content.c_str()), 1, fsize, fptr) != fsize) log("Error: " + mPath, "File loading");
 			fclose(fptr); return content;
 		}
+		void createFolder(const string& mPath)
+		{
+			#ifdef _WIN32
+				mkdir(mPath.c_str());
+			#else
+				mkdir(mPath.c_str(), 0755);
+			#endif
+		}
 	}
 }
 
