@@ -5,11 +5,13 @@
 #ifndef SSVU_UTILS
 #define SSVU_UTILS
 
+#include <time.h>
 #include "SSVUtils/Timeline/Timeline.h"
 
 namespace ssvu
 {
 	void clearAndResetTimeline(Timeline& mTimeline);
+	void setRandomSeed(unsigned int mSeed = unsigned(time(NULL)));
 }
 
 #endif
