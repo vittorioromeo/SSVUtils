@@ -48,8 +48,7 @@ namespace ssvu
 
 	void Timeline::reset()
 	{
-		finished = false;
-		ready = true;
+		start();
 		for(auto& commandPtr : commandPtrs) commandPtr->reset();
 
 		if(!commandPtrs.empty()) currentCommandPtr = commandPtrs[0];
@@ -61,6 +60,12 @@ namespace ssvu
 		for(auto& commandPtr : commandPtrs) delete commandPtr;
 		commandPtrs.clear();
 		finished = true;
+	}
+
+	void Timeline::start()
+	{
+		finished = false;
+		ready = true;
 	}
 
 	void Timeline::next()

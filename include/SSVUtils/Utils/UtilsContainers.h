@@ -22,14 +22,14 @@ namespace ssvu
 	template<typename T, typename T2> bool containsAny(T& mContainer, const T2& mValues)
 	{
 		for(auto& value : mValues) if(contains(mContainer, value)) return true;
-		return false; 
+		return false;
 	}
 	template<typename T> void sort(T& mContainer) { std::sort(std::begin(mContainer), std::end(mContainer)); }
 	template<typename T, typename P> void sort(T& mContainer, P mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
 	template<typename K, typename V> std::vector<K> getKeys(std::map<K, V> mMap)
 	{
 		std::vector<K> result;
-		for(auto itr = std::begin(mMap); itr != std::end(mMap); ++itr) result.push_back(itr->first);
+		for(auto& itr(std::begin(mMap)); itr != std::end(mMap); ++itr) result.push_back(itr->first);
 		return result;
 	}
 }
