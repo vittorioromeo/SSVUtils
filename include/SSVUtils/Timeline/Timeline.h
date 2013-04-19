@@ -44,12 +44,13 @@ namespace ssvu
 			}
 
 			void del(Command* mCommandPtr);
-			
+
 			void update(float mFrameTime);
 			void jumpTo(int mIndex);
 
 			void reset();
 			void clear();
+			void start();
 
 			int getSize();
 			int getCurrentIndex();
