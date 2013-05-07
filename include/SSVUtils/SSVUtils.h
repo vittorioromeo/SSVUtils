@@ -20,6 +20,7 @@
 #include "SSVUtils/Utils/UtilsMath.h"
 #include "SSVUtils/Utils/UtilsString.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
+#include "SSVUtils/Utils/UtilsMakeUnique.h"
 
 // Delegate
 #include "SSVUtils/Delegate/Delegate.h"
