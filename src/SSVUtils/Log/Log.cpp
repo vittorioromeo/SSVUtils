@@ -20,7 +20,7 @@ namespace ssvu
 	{
 		#ifndef SSVS_DISABLE_LOG
 			ofstream o; o.open(mPath);
-			for(auto& logEntry : logEntries) o << logEntry;
+			for(const auto& logEntry : logEntries) o << logEntry;
 			o.flush(); o.close();
 		#endif
 	}

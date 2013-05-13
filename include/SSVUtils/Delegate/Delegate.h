@@ -22,7 +22,7 @@ namespace ssvu
 			std::vector<TReturn> operator()(TArgs... mArgs)
 			{
 				std::vector<TReturn> result;
-				for(auto& f : funcs) result.push_back(f(mArgs...));
+				for(const auto& f : funcs) result.push_back(f(mArgs...));
 				return result;
 			}
 	};
@@ -35,8 +35,8 @@ namespace ssvu
 
 		public:
 			template<typename T> Delegate& operator+=(T mFunc) { funcs.push_back(Func(mFunc)); return *this; }
-			void operator()(TArgs... mArgs) { for(auto& f : funcs) f(mArgs...); }
+			void operator()(TArgs... mArgs) { for(const auto& f : funcs) f(mArgs...); }
 	};
 }
 
-#endif 
+#endif

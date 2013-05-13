@@ -20,7 +20,7 @@ namespace ssvu
 
 		public:
 			MemoryManager() { ContainerTraits::init(items); DelContainerTraits::init(itemsToDel); }
-			~MemoryManager() { for(auto& i : items) delete i; }
+			~MemoryManager() { for(const auto& i : items) delete i; }
 
 			template<typename TItemType, typename... TArgs> TItemType& create(TArgs&&... mArgs)
 			{
@@ -35,12 +35,12 @@ namespace ssvu
 			void del(TItem* mItem) { DelContainerTraits::add(itemsToDel, mItem); }
 			void cleanUp()
 			{
-				for(auto& i : itemsToDel) { ContainerTraits::del(items, i); delete i; }
+				for(const auto& i : itemsToDel) { ContainerTraits::del(items, i); delete i; }
 				DelContainerTraits::clear(itemsToDel);
 			}
 			void clear()
 			{
-				for(auto& i : items) delete i;
+				for(const auto& i : items) delete i;
 				ContainerTraits::clear(items);
 				DelContainerTraits::clear(itemsToDel);
 			}
