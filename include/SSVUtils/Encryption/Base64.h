@@ -9,9 +9,8 @@
 
 namespace ssvu
 {
-	std::string base64_encode(const std::string& mString);
-	std::string base64_encode(unsigned char const* , unsigned int len);
-	std::string base64_decode(std::string const& s);
+	std::string Base64Encode(const std::string& mString);
+	std::string Base64Decode(const std::string& mString);
 }
 
 #endif

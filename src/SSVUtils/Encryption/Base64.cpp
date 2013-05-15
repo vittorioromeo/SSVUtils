@@ -2,22 +2,18 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#include "SSVUtils/Encryption/Base64.h"
 #include <iostream>
+#include "SSVUtils/Encryption/Base64.h"
 
 using namespace std;
 
 namespace ssvu
 {
-	static const string base64_chars =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		"abcdefghijklmnopqrstuvwxyz"
-		"0123456789+/";
-
+	static const string base64_chars{"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"};
 
 	static inline bool is_base64(unsigned char c) { return (isalnum(c) || (c == '+') || (c == '/')); }
 
-	string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len)
+	string Base64Encode(unsigned char const* bytes_to_encode, unsigned int in_len)
 	{
 		string ret;
 		int i{0}, j{0};
@@ -54,15 +50,15 @@ namespace ssvu
 		return ret;
 	}
 
-	string base64_decode(string const& encoded_string)
+	string Base64Decode(const string& mString)
 	{
-		int in_len(encoded_string.size()), i{0}, j{0}, in_{0};
+		int in_len(mString.size()), i{0}, j{0}, in_{0};
 		unsigned char char_array_4[4], char_array_3[3];
 		string ret;
 
-		while(in_len-- && (encoded_string[in_] != '=') && is_base64(encoded_string[in_]))
+		while(in_len-- && (mString[in_] != '=') && is_base64(mString[in_]))
 		{
-			char_array_4[i++] = encoded_string[in_];
+			char_array_4[i++] = mString[in_];
 			in_++;
 			if(i == 4)
 			{
@@ -79,8 +75,8 @@ namespace ssvu
 
 		if(i)
 		{
-			for (j = i; j <4; j++) char_array_4[j] = 0;
-			for (j = 0; j <4; j++) char_array_4[j] = base64_chars.find(char_array_4[j]);
+			for(j = i; j <4; j++) char_array_4[j] = 0;
+			for(j = 0; j <4; j++) char_array_4[j] = base64_chars.find(char_array_4[j]);
 
 			char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
 			char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
@@ -92,5 +88,5 @@ namespace ssvu
 		return ret;
 	}
 
-	string base64_encode(const string& mString) { return base64_encode(reinterpret_cast<const unsigned char*>(mString.c_str()), mString.length()); }
+	string Base64Encode(const string& mString) { return Base64Encode(reinterpret_cast<const unsigned char*>(mString.c_str()), mString.length()); }
 }

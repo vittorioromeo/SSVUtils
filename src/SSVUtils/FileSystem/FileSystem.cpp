@@ -61,7 +61,7 @@ namespace ssvu
 				if(!isRootOrParent(path))
 				{
 					if(isFolder(path)) recursiveFillFiles(mResult, path);
-					else if(!isFolder(path)) mResult.push_back(path);
+					else mResult.push_back(path);
 				}
 			});
 		}
@@ -72,7 +72,7 @@ namespace ssvu
 				if(!isRootOrParent(path))
 				{
 					if(isFolder(path)) recursiveFillFiles(mResult, path);
-					else if(!isFolder(path)) if(endsWith(name, mExtension)) mResult.push_back(path);
+					else if(endsWith(name, mExtension)) mResult.push_back(path);
 				}
 			});
 		}

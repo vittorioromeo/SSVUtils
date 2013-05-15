@@ -25,8 +25,8 @@ namespace ssvu
 		public:
 			ObfuscatedValue(T mValue) { set(mValue); }
 
-			void set(T mValue) { dummy = mValue; encodedValue = base64_encode(toStr(mValue)); }
-			T get() const { return fromString(base64_decode(encodedValue)); }
+			void set(T mValue) { dummy = mValue; encodedValue = Base64Encode(toStr(mValue)); }
+			T get() const { return fromString(Base64Decode(encodedValue)); }
 			operator T() const { return get(); }
 			T operator +=(const T& mValue) { set(get() + mValue); return get(); }
 			T operator -=(const T& mValue) { set(get() - mValue); return get(); }
