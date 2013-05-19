@@ -2,6 +2,9 @@ lib/
 *.0000000
 doc/html
 doc/latex
+doc/rtf
+doc/man
+doc/xml
 
 #################
 ## Eclipse
