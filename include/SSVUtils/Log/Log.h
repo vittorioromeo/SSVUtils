@@ -14,7 +14,26 @@
 
 namespace ssvu
 {
+	/*!
+	 *
+	 * @brief Gets all the previously entered log entries.
+	 *
+	 * @return Returns a reference to the internal log std::vector<string>.
+	 *
+	 */
 	std::vector<std::string>& getLogEntries();
+
+	/*!
+	 *
+	 * @brief Creates a new log entry and sends it to std::cout.
+	 *
+	 * Logging introduces a minimal runtime overhead - you can disable logging by defining SSVU_DISABLE_LOG.
+	 *
+	 * @tparam T Type of the value to log.
+	 * @param mValue Value to log (gets internally converted to string).
+	 * @param mTitle Title of the log entry (will be displayed between square brackets).
+	 *
+	 */
 	template<class T> void log(T mValue, const std::string& mTitle = "")
 	{
 		#ifndef SSVU_DISABLE_LOG
@@ -28,9 +47,29 @@ namespace ssvu
 		#endif
 	}
 
+	/*!
+	 *
+	 * @brief Starts the benchmark timer.
+	 *
+	 */
 	void startBenchmark();
+
+	/*!
+	 *
+	 * @brief Ends the benchmark timer and returns the elapsed time.
+	 *
+	 * @return Returns the elapsed time as a string.
+	 *
+	 */
 	std::string endBenchmark();
 
+	/*!
+	 *
+	 * @brief Saves all the log entries to a file.
+	 *
+	 * @param File path (file will be created if it doesn't exist).
+	 *
+	 */
 	void saveLogToFile(const std::string& mPath);
 }
 

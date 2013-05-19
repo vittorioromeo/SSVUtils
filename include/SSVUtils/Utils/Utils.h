@@ -10,8 +10,25 @@
 
 namespace ssvu
 {
+	/*!
+	 *
+	 * @brief Clears and resets a timeline.
+	 *
+	 * @param Timeline to use.
+	 *
+	 */
 	void clearAndResetTimeline(Timeline& mTimeline);
+
+	/*!
+	 *
+	 * @brief Sets the random seed (uses srand);
+	 *
+	 * @param mSeed Seed to use. Default is "time(NULL)".
+	 *
+	 */
 	void setRandomSeed(unsigned int mSeed = unsigned(time(NULL)));
 }
+
+// TODO: Remove clearAndResetTimeline()
 
 #endif

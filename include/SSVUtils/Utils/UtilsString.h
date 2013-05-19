@@ -12,7 +12,8 @@
 
 namespace ssvu
 {
-	template<typename T> std::string toStr(const T &mValue) { std::ostringstream oss; oss << mValue; return oss.str(); }
+	template<typename T> std::string toStr(const T& mValue) { std::ostringstream oss; oss << mValue; return oss.str(); }
+
 	int getNewLinesCount(const std::string& mString);
 	void replace(std::string& mString, const std::string& mFrom, const std::string& mTo);
 	void replaceAll(std::string& mString, const std::string& mFrom, const std::string& mTo);

@@ -1,5 +1,7 @@
 lib/
 *.0000000
+doc/html
+doc/latex
 
 #################
 ## Eclipse
