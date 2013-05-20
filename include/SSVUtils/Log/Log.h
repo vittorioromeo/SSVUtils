@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include <ostream>
+#include <fstream>
 #include "SSVUtils/Utils/UtilsString.h"
 
 namespace ssvu
@@ -34,7 +35,7 @@ namespace ssvu
 	 * @param mTitle Title of the log entry (will be displayed between square brackets).
 	 *
 	 */
-	template<class T> void log(T mValue, const std::string& mTitle = "")
+	template<class T> void log(const T& mValue, const std::string& mTitle = "")
 	{
 		#ifndef SSVU_DISABLE_LOG
 			std::ostringstream entryStream;
@@ -42,8 +43,9 @@ namespace ssvu
 			if(mTitle != "") entryStream << "[" << mTitle << "] ";
 			entryStream << toStr(mValue) << std::endl;
 
-			std::cout << entryStream.str();
-			getLogEntries().push_back(entryStream.str());
+			std::string str{entryStream.str()};
+			std::cout << str;
+			getLogEntries().push_back(str);
 		#endif
 	}
 
@@ -67,7 +69,7 @@ namespace ssvu
 	 *
 	 * @brief Saves all the log entries to a file.
 	 *
-	 * @param File path (file will be created if it doesn't exist).
+	 * @param mPath File path (file will be created if it doesn't exist).
 	 *
 	 */
 	void saveLogToFile(const std::string& mPath);

@@ -183,10 +183,9 @@ namespace ssvu
 
 		/*!
 		 *
-		 * @brief Returns a vector with files of a specific extension (not folders) from a path, recursively.
+		 * @brief Returns a vector with files (not folders) from a path, recursively.
 		 *
 		 * @param mPath Path to use.
-		 * @param mExtension Extension to use.
 		 *
 		 * @return Returns a vector containing the file paths.
 		 *

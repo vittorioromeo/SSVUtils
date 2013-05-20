@@ -14,7 +14,7 @@ namespace ssvu
 	 *
 	 * @brief Clears and resets a timeline.
 	 *
-	 * @param Timeline to use.
+	 * @param mTimeline Timeline to use.
 	 *
 	 */
 	void clearAndResetTimeline(Timeline& mTimeline);
