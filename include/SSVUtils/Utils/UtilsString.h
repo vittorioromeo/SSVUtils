@@ -12,6 +12,18 @@
 
 namespace ssvu
 {
+	/*!
+	 *
+	 * @brief Converts a value to a std::string
+	 *
+	 * Uses std::ostringstream internally.
+	 *
+	 * @tparam T Type of value.
+	 * @param mValue Const reference to the value. (original value won't be changed)
+	 *
+	 * @return Returns a std::string representing the converted value.
+	 *
+	 */
 	template<typename T> std::string toStr(const T& mValue) { std::ostringstream oss; oss << mValue; return oss.str(); }
 
 	int getNewLinesCount(const std::string& mString);
