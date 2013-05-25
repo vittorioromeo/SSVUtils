@@ -37,7 +37,7 @@ namespace ssvu
 	vector<string> split(const string& mString, char mSplitter, bool mKeepSplitter)
 	{
 		vector<string> result;
-		unsigned int i{0}, j{0}, length{mString.length()};
+        unsigned int i{0}, j{0}, length{static_cast<unsigned int>(mString.length())};
 
 		for(i = 0; i < length + 1; ++i)
 			if(mString[i] == mSplitter || i == length)
