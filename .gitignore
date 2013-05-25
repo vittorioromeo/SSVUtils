@@ -5,6 +5,10 @@ doc/latex
 doc/rtf
 doc/man
 doc/xml
+*.0000000
+*.5e4d6ab
+*.mk
+*.project
 
 #################
 ## Eclipse
