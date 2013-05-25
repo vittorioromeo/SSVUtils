@@ -12,7 +12,7 @@ namespace ssvu
 {
 	typedef std::function<void()> Action;
 
-	class Command;
+    struct Command;
 
 	class Timeline
 	{
