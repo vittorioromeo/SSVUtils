@@ -8,7 +8,5 @@ using namespace std;
 
 namespace ssvu
 {
-	void clearAndResetTimeline(Timeline& mTimeline) { mTimeline.clear(); mTimeline.reset(); }
-
 	void setRandomSeed(unsigned int mSeed) { srand(mSeed); }
 }
