@@ -39,7 +39,7 @@ namespace ssvu
 			 * @param mString String to convert to arithmetic type.
 			 *
 			 */
-			T fromString(const std::string& mString) const { std::istringstream stream{mString}; T t; stream >> t; return t; }
+			T fromString(const std::string& mString) const { std::istringstream stream(mString); T t; stream >> t; return t; }
 
 		public:
 			/*!
