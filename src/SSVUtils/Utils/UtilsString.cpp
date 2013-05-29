@@ -8,7 +8,7 @@ using namespace std;
 
 namespace ssvu
 {
-	int getNewLinesCount(const string& mString) { int result{0}; for(const auto& c : mString) if(c == '\n') result++; return result; }
+	unsigned int getNewLinesCount(const string& mString) { unsigned int result{0}; for(const auto& c : mString) if(c == '\n') result++; return result; }
 	void replace(string& mString, const string& mFrom, const string& mTo)
 	{
 		size_t startPos{mString.find(mFrom)};
@@ -37,7 +37,7 @@ namespace ssvu
 	vector<string> split(const string& mString, char mSplitter, bool mKeepSplitter)
 	{
 		vector<string> result;
-        unsigned int i{0}, j{0}, length{static_cast<unsigned int>(mString.length())};
+		unsigned int i{0}, j{0}, length{static_cast<unsigned int>(mString.length())};
 
 		for(i = 0; i < length + 1; ++i)
 			if(mString[i] == mSplitter || i == length)
