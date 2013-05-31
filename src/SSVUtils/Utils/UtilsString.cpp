@@ -28,7 +28,7 @@ namespace ssvu
 	{
 		return mStart.size() <= mString.size() && mString.compare(0, mStart.size(), mStart) == 0;
 	}
-	bool endsWith(const string &mString, const string &mEnding)
+	bool endsWith(const string& mString, const string &mEnding)
 	{
 		if(mString.length() >= mEnding.length()) return (0 == mString.compare(mString.length() - mEnding.length(), mEnding.length(), mEnding));
 		return false;
