@@ -3,7 +3,7 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #include <iostream>
-#include "SSVUtils/Encryption/Base64.h"
+#include "SSVUtils/Encryption/Internal/Base64.h"
 
 using namespace std;
 

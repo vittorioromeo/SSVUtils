@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <climits>
-#include "SSVUtils/Encryption/MD5.h"
+#include "SSVUtils/Encryption/Internal/MD5.h"
 
 using namespace std;
 

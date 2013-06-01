@@ -10,9 +10,9 @@
 
 namespace ssvu
 {
-	typedef std::function<void()> Action;
+	using Action = std::function<void()>;
 
-    struct Command;
+	struct Command;
 
 	class Timeline
 	{

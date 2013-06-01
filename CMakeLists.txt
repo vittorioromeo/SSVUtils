@@ -26,6 +26,8 @@ file(GLOB SRC_LIST
 	"${SRC_DIR}/${PROJECT_NAME}/Delegate/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Encryption/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/Encryption/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Encryption/Internal/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Encryption/Internal/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/FileSystem/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/FileSystem/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Log/*.h"

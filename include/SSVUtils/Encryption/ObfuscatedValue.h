@@ -8,7 +8,7 @@
 #include <string>
 #include <sstream>
 #include <type_traits>
-#include "SSVUtils/Encryption/Base64.h"
+#include "SSVUtils/Encryption/Encryption.h"
 
 namespace ssvu
 {
@@ -58,14 +58,14 @@ namespace ssvu
 			 * @param mValue Value to use
 			 *
 			 */
-			void set(T mValue) { dummy = mValue; encodedValue = Base64Encode(toStr(mValue)); }
+			void set(T mValue) { dummy = mValue; encodedValue = Encryption::encrypt<Encryption::Type::BASE64>(toStr(mValue)); }
 
 			/*!
 			 *
 			 * @brief Converts the internal Base64 string and returns the unobfuscated value
 			 *
 			 */
-			T get() const { return fromString(Base64Decode(encodedValue)); }
+			T get() const { return fromString(Encryption::decrypt<Encryption::Type::BASE64>(encodedValue)); }
 
 			/*!
 			 *

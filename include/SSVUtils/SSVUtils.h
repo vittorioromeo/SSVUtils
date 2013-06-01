@@ -35,8 +35,7 @@
 #include "SSVUtils/Timeline/TimelineManager.h"
 
 // Encryption
-#include "SSVUtils/Encryption/MD5.h"
-#include "SSVUtils/Encryption/Base64.h"
+#include "SSVUtils/Encryption/Encryption.h"
 #include "SSVUtils/Encryption/ObfuscatedValue.h"
 
 #endif
