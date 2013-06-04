@@ -39,8 +39,8 @@ namespace ssvu
 		{
 			if(isFolder(mPath))
 			{
-				DIR *dir{opendir(mPath.c_str())};
-				struct dirent *entry{readdir(dir)};
+				DIR* dir{opendir(mPath.c_str())};
+				dirent* entry{readdir(dir)};
 
 				while(entry != NULL)
 				{
@@ -71,16 +71,28 @@ namespace ssvu
 			{
 				if(!isRootOrParent(path))
 				{
-					if(isFolder(path)) recursiveFillFiles(mResult, path);
+					if(isFolder(path)) recursiveFillFilesByExtension(mResult, path, mExtension);
 					else if(endsWith(name, mExtension)) mResult.push_back(path);
 				}
 			});
 		}
+		void recursiveFillFilesByName(vector<string>& mResult, const string& mPath, const string& mName)
+		{
+			traverse(mPath, [&](const string& name, const string& path)
+			{
+				if(!isRootOrParent(path))
+				{
+					if(isFolder(path)) recursiveFillFilesByName(mResult, path, mName);
+					else if(name == mName) mResult.push_back(path);
+				}
+			});
+		}
+
 		void recursiveFillFolders(vector<string>& mResult, const string& mPath)
 		{
 			traverse(mPath, [&](const string&, const string& path)
 			{
-				if(!isRootOrParent(path)) if(isFolder(path)) { recursiveFillFolders(mResult, path); mResult.push_back(path); }
+				if(!isRootOrParent(path) && isFolder(path)) { recursiveFillFolders(mResult, path); mResult.push_back(path); }
 			});
 		}
 		void recursiveFillAll(vector<string>& mResult, const string& mPath)
@@ -100,7 +112,7 @@ namespace ssvu
 			vector<string> result;
 			traverse(mPath, [&](const string&, const string& path)
 			{
-				if(!isRootOrParent(path)) if(!isFolder(path)) result.push_back(path);
+				if(!isRootOrParent(path) && !isFolder(path)) result.push_back(path);
 			});
 			return result;
 		}
@@ -109,7 +121,16 @@ namespace ssvu
 			vector<string> result;
 			traverse(mPath, [&](const string& name, const string& path)
 			{
-				if(!isRootOrParent(path)) if(!isFolder(path)) if(endsWith(name, mExtension)) result.push_back(path);
+				if(!isRootOrParent(path) && !isFolder(path) && endsWith(name, mExtension)) result.push_back(path);
+			});
+			return result;
+		}
+		vector<string> getFilesByName(const string& mPath, const string& mName)
+		{
+			vector<string> result;
+			traverse(mPath, [&](const string& name, const string& path)
+			{
+				if(!isRootOrParent(path) && !isFolder(path) && name == mName) result.push_back(path);
 			});
 			return result;
 		}
@@ -118,7 +139,7 @@ namespace ssvu
 			vector<string> result;
 			traverse(mPath, [&](const string&, const string& path)
 			{
-				if(!isRootOrParent(path)) if(isFolder(path)) result.push_back(path);
+				if(!isRootOrParent(path) && isFolder(path)) result.push_back(path);
 			});
 			return result;
 		}
@@ -131,10 +152,11 @@ namespace ssvu
 			});
 			return result;
 		}
-		vector<string> getRecursiveFiles(const string& mPath) { vector<string> result; recursiveFillFiles(result, mPath); return result; }
-		vector<string> getRecursiveFilesByExtension(const string& mPath, const string& mExtension) { vector<string> result; recursiveFillFilesByExtension(result, mPath, mExtension); return result; }
-		vector<string> getRecursiveFolders(const string& mPath) { vector<string> result; recursiveFillFolders(result, mPath); return result; }
-		vector<string> getRecursiveAll(const string& mPath) { vector<string> result; recursiveFillAll(result, mPath); return result; }
+		vector<string> getRecursiveFiles(const string& mPath)										{ vector<string> result; recursiveFillFiles(result, mPath); return result; }
+		vector<string> getRecursiveFilesByExtension(const string& mPath, const string& mExtension)	{ vector<string> result; recursiveFillFilesByExtension(result, mPath, mExtension); return result; }
+		vector<string> getRecursiveFilesByName(const string& mPath, const string& mName)			{ vector<string> result; recursiveFillFilesByName(result, mPath, mName); return result; }
+		vector<string> getRecursiveFolders(const string& mPath)										{ vector<string> result; recursiveFillFolders(result, mPath); return result; }
+		vector<string> getRecursiveAll(const string& mPath)											{ vector<string> result; recursiveFillAll(result, mPath); return result; }
 
 		string getFileContents(const string& mPath)
 		{
@@ -149,9 +171,9 @@ namespace ssvu
 		void createFolder(const string& mPath)
 		{
 			#ifdef _WIN32
-				mkdir(mPath.c_str());
+				mkdir(getNormalizedPath(mPath).c_str());
 			#else
-				mkdir(mPath.c_str(), 0755);
+				mkdir(getNormalizedPath(mPath).c_str(), 0755);
 			#endif
 		}
 	}

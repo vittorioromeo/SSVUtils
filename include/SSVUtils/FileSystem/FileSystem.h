@@ -111,10 +111,21 @@ namespace ssvu
 		 *
 		 * @param mResult Vector to fill.
 		 * @param mPath Path to use.
-		 * @param mExtension Extension to use.
+		 * @param mExtension Desired file extension.
 		 *
 		 */
 		void recursiveFillFilesByExtension(std::vector<std::string>& mResult, const std::string& mPath, const std::string& mExtension);
+
+		/*!
+		 *
+		 * @brief Fills an existing vector with files of a specific name (not folders) from a path, recursively.
+		 *
+		 * @param mResult Vector to fill.
+		 * @param mPath Path to use.
+		 * @param mExtension Desired file name.
+		 *
+		 */
+		void recursiveFillFilesByName(std::vector<std::string>& mResult, const std::string& mPath, const std::string& mName);
 
 		/*!
 		 *
@@ -152,12 +163,24 @@ namespace ssvu
 		 * @brief Returns a vector with files of a specific extension (not folders) from a path, non-recursively.
 		 *
 		 * @param mPath Path to use.
-		 * @param mExtension Extension to use.
+		 * @param mExtension Desired file extension.
 		 *
 		 * @return Returns a vector containing the file paths.
 		 *
 		 */
 		std::vector<std::string> getFilesByExtension(const std::string& mPath, const std::string& mExtension);
+
+		/*!
+		 *
+		 * @brief Returns a vector with files of a specific name (not folders) from a path, non-recursively.
+		 *
+		 * @param mPath Path to use.
+		 * @param mExtension Desired file name.
+		 *
+		 * @return Returns a vector containing the file paths.
+		 *
+		 */
+		std::vector<std::string> getFilesByName(const std::string& mPath, const std::string& mName);
 
 		/*!
 		 *
@@ -197,12 +220,25 @@ namespace ssvu
 		 * @brief Returns a vector with files of a specific extension (not folders) from a path, recursively.
 		 *
 		 * @param mPath Path to use.
-		 * @param mExtension Extension to use.
+		 * @param mExtension Desired file extension.
 		 *
 		 * @return Returns a vector containing the file paths.
 		 *
 		 */
 		std::vector<std::string> getRecursiveFilesByExtension(const std::string& mPath, const std::string& mExtension);
+
+		/*!
+		 *
+		 * @brief Returns a vector with files of a specific name (not folders) from a path, recursively.
+		 *
+		 * @param mPath Path to use.
+		 * @param mName Desired file name.
+		 *
+		 * @return Returns a vector containing the file paths.
+		 *
+		 */
+		std::vector<std::string> getRecursiveFilesByName(const std::string& mPath, const std::string& mName);
+
 
 		/*!
 		 *
@@ -253,3 +289,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: get<Mode::RECURSIVE, Type::FILEBYEXTENSION>(mPath, mArgs...)
