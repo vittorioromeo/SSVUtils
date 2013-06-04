@@ -124,6 +124,18 @@ namespace ssvu
 
 	/*!
 	 *
+	 * @brief Counts the number of occurences of a certain char in a std::string.
+	 *
+	 * @param mString String to work with.
+	 * @param mChar Character to look for.
+	 *
+	 * @return Returns an unsigned int which is the count of the character's occurrences.
+	 *
+	 */
+	unsigned int getCharCount(const std::string& mString, const char& mChar);
+
+	/*!
+	 *
 	 * @brief Counts the number of newlines in a std::string.
 	 *
 	 * @param mString String to work with.

@@ -8,7 +8,8 @@ using namespace std;
 
 namespace ssvu
 {
-	unsigned int getNewLinesCount(const string& mString) { unsigned int result{0}; for(const auto& c : mString) if(c == '\n') result++; return result; }
+	unsigned int getCharCount(const string& mString, const char& mChar) { unsigned int result{0}; for(const auto& c : mString) if(c == mChar) result++; return result; }
+	unsigned int getNewLinesCount(const string& mString) { return getCharCount(mString, '\n'); }
 	void replace(string& mString, const string& mFrom, const string& mTo)
 	{
 		size_t startPos{mString.find(mFrom)};
