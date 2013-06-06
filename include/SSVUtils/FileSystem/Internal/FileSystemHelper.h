@@ -13,14 +13,18 @@ namespace ssvu
 	{
 		enum class Mode { RECURSIVE, NON_RECURSIVE };
 		enum class Type { ALL, FILES, FOLDERS };
-		enum class Pick { ANY, ENDING_WITH };
+		enum class Pick { ANY, BY_FILE_EXTENSION, BY_FILE_NAME };
 
 		template<Pick TP> struct PickHelper;
 		template<> struct PickHelper<Pick::ANY>
 		{
 			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath) { mTarget.push_back(mPath); }
 		};
-		template<> struct PickHelper<Pick::ENDING_WITH>
+		template<> struct PickHelper<Pick::BY_FILE_EXTENSION>
+		{
+			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath) { /* todo */ }
+		};
+		template<> struct PickHelper<Pick::BY_FILE_NAME>
 		{
 			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath) { /* todo */ }
 		};
@@ -82,7 +86,7 @@ namespace ssvu
 
 					closedir(dir);
 				}
-				else ssvu::log("Directory \"" + mPath + "\" not found", "FileSystem");
+				else log("Directory \"" + mPath + "\" not found", "FileSystem");
 			}
 		};
 	}

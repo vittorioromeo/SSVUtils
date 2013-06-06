@@ -57,3 +57,4 @@ namespace ssvu
 	string getReplacedAll(const string& mString, const string& mFrom, const string& mTo) { string result{mString}; replaceAll(result, mFrom, mTo); return result; }
 }
 
+// TODO: consider getReplaced(string mString, ...) instead of getReplaced(const string& mString, ...) and do not create a new string in the body?
