@@ -30,6 +30,8 @@ file(GLOB SRC_LIST
 	"${SRC_DIR}/${PROJECT_NAME}/Encryption/Internal/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/FileSystem/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/FileSystem/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/FileSystem/Internal/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/FileSystem/Internal/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Log/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/Log/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/MemoryManager/*.h"
