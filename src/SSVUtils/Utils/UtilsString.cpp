@@ -2,13 +2,14 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
+#include <algorithm>
 #include "SSVUtils/Utils/UtilsString.h"
 
 using namespace std;
 
 namespace ssvu
 {
-	unsigned int getCharCount(const string& mString, const char& mChar) { unsigned int result{0}; for(const auto& c : mString) if(c == mChar) result++; return result; }
+	unsigned int getCharCount(const string& mString, const char& mChar) { return count(begin(mString), end(mString), mChar); }
 	unsigned int getNewLinesCount(const string& mString) { return getCharCount(mString, '\n'); }
 	void replace(string& mString, const string& mFrom, const string& mTo)
 	{

@@ -5,10 +5,9 @@
 #ifndef SSVU_UTILS_STRING
 #define SSVU_UTILS_STRING
 
-#include <string>
 #include <sstream>
+#include <string>
 #include <vector>
-#include <algorithm>
 
 namespace ssvu
 {
