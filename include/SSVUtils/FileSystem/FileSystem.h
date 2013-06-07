@@ -18,6 +18,58 @@ namespace ssvu
 	{
 		/*!
 		 *
+		 * @brief Fills an existing vector with files (not folders) from a path, non-recursively.
+		 *
+		 * @param mResult Vector to fill.
+		 * @param mPath Path to use.
+		 *
+		 */
+		void fillFiles(std::vector<std::string>& mResult, const std::string& mPath);
+
+		/*!
+		 *
+		 * @brief Fills an existing vector with files of a specific extension (not folders) from a path, non-recursively.
+		 *
+		 * @param mResult Vector to fill.
+		 * @param mPath Path to use.
+		 * @param mExtension Desired file extension.
+		 *
+		 */
+		void fillFilesByExtension(std::vector<std::string>& mResult, const std::string& mPath, const std::string& mExtension);
+
+		/*!
+		 *
+		 * @brief Fills an existing vector with files of a specific name (not folders) from a path, non-recursively.
+		 *
+		 * @param mResult Vector to fill.
+		 * @param mPath Path to use.
+		 * @param mExtension Desired file name.
+		 *
+		 */
+		void fillFilesByName(std::vector<std::string>& mResult, const std::string& mPath, const std::string& mName);
+
+		/*!
+		 *
+		 * @brief Fills an existing vector with folders (not files) from a path, non-recursively.
+		 *
+		 * @param mResult Vector to fill.
+		 * @param mPath Path to use.
+		 *
+		 */
+		void fillFolders(std::vector<std::string>& mResult, const std::string& mPath);
+
+		/*!
+		 *
+		 * @brief Fills an existing vector with files and folders from a path, non-recursively.
+		 *
+		 * @param mResult Vector to fill.
+		 * @param mPath Path to use.
+		 *
+		 */
+		void fillAll(std::vector<std::string>& mResult, const std::string& mPath);
+
+		/*!
+		 *
 		 * @brief Fills an existing vector with files (not folders) from a path, recursively.
 		 *
 		 * @param mResult Vector to fill.
