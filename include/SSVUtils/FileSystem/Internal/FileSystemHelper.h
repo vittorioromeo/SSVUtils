@@ -13,7 +13,7 @@ namespace ssvu
 	{
 		enum class Mode { RECURSIVE, NON_RECURSIVE };
 		enum class Type { ALL, FILES, FOLDERS };
-		enum class Pick { ANY, BY_FILE_EXTENSION, BY_FILE_NAME };
+		enum class Pick { ANY, BY_EXTENSION, BY_NAME };
 
 		template<Pick TP> struct PickHelper;
 		template<> struct PickHelper<Pick::ANY>
@@ -23,14 +23,14 @@ namespace ssvu
 				mTarget.push_back(mPath);
 			}
 		};
-		template<> struct PickHelper<Pick::BY_FILE_EXTENSION>
+		template<> struct PickHelper<Pick::BY_EXTENSION>
 		{
 			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesiredExtension)
 			{
 				if(endsWith(mName, mDesiredExtension)) mTarget.push_back(mPath);
 			}
 		};
-		template<> struct PickHelper<Pick::BY_FILE_NAME>
+		template<> struct PickHelper<Pick::BY_NAME>
 		{
 			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesiredName)
 			{
@@ -82,9 +82,9 @@ namespace ssvu
 			inline static void recurse(std::vector<std::string>&, const std::string&, const std::string&) { }
 		};
 
-		template<Mode TM, Type TT, Pick TP = Pick::ANY> struct FillHelper
+		template<Mode TM, Type TT, Pick TP> struct FillHelper
 		{
-			inline static void fill(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired = "")
+			inline static void fill(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired)
 			{
 				if(isFolder(mPath))
 				{
