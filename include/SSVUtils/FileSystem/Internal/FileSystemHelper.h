@@ -18,52 +18,31 @@ namespace ssvu
 		template<Pick TP> struct PickHelper;
 		template<> struct PickHelper<Pick::ANY>
 		{
-			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string&, const std::string&)
-			{
-				mTarget.push_back(mPath);
-			}
+			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string&, const std::string&) { mTarget.push_back(mPath); }
 		};
 		template<> struct PickHelper<Pick::BY_EXTENSION>
 		{
-			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesiredExtension)
-			{
-				if(endsWith(mName, mDesiredExtension)) mTarget.push_back(mPath);
-			}
+			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesiredExtension) { if(endsWith(mName, mDesiredExtension)) mTarget.push_back(mPath); }
 		};
 		template<> struct PickHelper<Pick::BY_NAME>
 		{
-			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesiredName)
-			{
-				if(mName == mDesiredName) mTarget.push_back(mPath);
-			}
+			inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesiredName) { if(mName == mDesiredName) mTarget.push_back(mPath); }
 		};
 
 		template<Type TT, Pick TP> struct TypeHelper;
 		template<Pick TP> struct TypeHelper<Type::ALL, TP>
 		{
-			inline static void pickFolder(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired)
-			{
-				PickHelper<TP>::pick(mTarget, mPath, mName, mDesired);
-			}
-			inline static void pickFile(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired)
-			{
-				PickHelper<TP>::pick(mTarget, mPath, mName, mDesired);
-			}
+			inline static void pickFolder(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired) { PickHelper<TP>::pick(mTarget, mPath, mName, mDesired); }
+			inline static void pickFile(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired) { PickHelper<TP>::pick(mTarget, mPath, mName, mDesired); }
 		};
 		template<Pick TP> struct TypeHelper<Type::FILES, TP>
 		{
 			inline static void pickFolder(std::vector<std::string>&, const std::string&, const std::string&, const std::string&) { }
-			inline static void pickFile(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired)
-			{
-				PickHelper<TP>::pick(mTarget, mPath, mName, mDesired);
-			}
+			inline static void pickFile(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired) { PickHelper<TP>::pick(mTarget, mPath, mName, mDesired); }
 		};
 		template<Pick TP> struct TypeHelper<Type::FOLDERS, TP>
 		{
-			inline static void pickFolder(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired)
-			{
-				PickHelper<TP>::pick(mTarget, mPath, mName, mDesired);
-			}
+			inline static void pickFolder(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired) { PickHelper<TP>::pick(mTarget, mPath, mName, mDesired); }
 			inline static void pickFile(std::vector<std::string>&, const std::string&, const std::string&, const std::string&) { }
 		};
 
@@ -72,10 +51,7 @@ namespace ssvu
 		template<Mode TM, Type TT, Pick TP> struct ModeHelper;
 		template<Type TT, Pick TP> struct ModeHelper<Mode::RECURSIVE, TT, TP>
 		{
-			inline static void recurse(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired)
-			{
-				FillHelper<Mode::RECURSIVE, TT, TP>::fill(mTarget, mPath, mDesired);
-			}
+			inline static void recurse(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired) { FillHelper<Mode::RECURSIVE, TT, TP>::fill(mTarget, mPath, mDesired); }
 		};
 		template<Type TT, Pick TP> struct ModeHelper<Mode::NON_RECURSIVE, TT, TP>
 		{
