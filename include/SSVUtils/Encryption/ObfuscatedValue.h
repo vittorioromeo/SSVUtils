@@ -12,7 +12,7 @@
 
 namespace ssvu
 {
-	template<typename T, typename TEnable = void> class ObfuscatedValue;
+	template<typename T, Encryption::Type TCrypto = Encryption::Type::Base64, typename TEnable = void> class ObfuscatedValue;
 
 	/*!
 	 *
@@ -24,7 +24,7 @@ namespace ssvu
 	 * @tparam T Type of the underlying arithmetic value.
 	 *
 	 */
-	template<typename T> class ObfuscatedValue<T, typename std::enable_if<std::is_arithmetic<T>::value>::type>
+	template<typename T, Encryption::Type TCrypto> class ObfuscatedValue<T, TCrypto, typename std::enable_if<std::is_arithmetic<T>::value>::type>
 	{
 		private:
 			T dummy; /*!< Dummy value used to "fool" memory scanners. */
@@ -58,14 +58,14 @@ namespace ssvu
 			 * @param mValue Value to use
 			 *
 			 */
-			void set(T mValue) { dummy = mValue; encodedValue = Encryption::encrypt<Encryption::Type::BASE64>(toStr(mValue)); }
+			void set(T mValue) { dummy = mValue; encodedValue = Encryption::encrypt<TCrypto>(toStr(mValue)); }
 
 			/*!
 			 *
 			 * @brief Converts the internal Base64 string and returns the unobfuscated value
 			 *
 			 */
-			T get() const { return fromString(Encryption::decrypt<Encryption::Type::BASE64>(encodedValue)); }
+			T get() const { return fromString(Encryption::decrypt<TCrypto>(encodedValue)); }
 
 			/*!
 			 *

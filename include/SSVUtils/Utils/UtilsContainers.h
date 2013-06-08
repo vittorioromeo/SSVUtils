@@ -59,7 +59,7 @@ namespace ssvu
 	 */
 	template<typename T, typename T2> bool containsAny(T& mContainer, const T2& mValues)
 	{
-		for(const auto& value : mValues) if(contains(mContainer, value)) return true;
+		for(const auto& v : mValues) if(contains(mContainer, v)) return true;
 		return false;
 	}
 

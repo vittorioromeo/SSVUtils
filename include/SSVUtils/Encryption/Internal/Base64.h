@@ -9,8 +9,14 @@
 
 namespace ssvu
 {
-	std::string Base64Encode(const std::string& mString);
-	std::string Base64Decode(const std::string& mString);
+	namespace Encryption
+	{
+		namespace Internal
+		{
+			std::string Base64Encode(const std::string& mString);
+			std::string Base64Decode(const std::string& mString);
+		}
+	}
 }
 
 #endif

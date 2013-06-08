@@ -10,7 +10,6 @@
 #include <iostream>
 #include <sstream>
 #include <ostream>
-#include <fstream>
 #include "SSVUtils/Utils/UtilsString.h"
 
 namespace ssvu
@@ -37,7 +36,7 @@ namespace ssvu
 	 */
 	template<class T> void log(const T& mValue, const std::string& mTitle = "")
 	{
-		#ifndef SSVU_DISABLE_LOG
+		#ifndef SSVU_LOG_DISABLE
 			std::ostringstream entryStream;
 
 			if(mTitle != "") entryStream << "[" << mTitle << "] ";

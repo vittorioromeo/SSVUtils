@@ -34,25 +34,31 @@ documentation and/or software.
 
 namespace ssvu
 {
-	class MD5
+	namespace Encryption
 	{
-		private:
-			std::string m_sHash;
-			unsigned char m_rawHash[16];
+		namespace Internal
+		{
+			class MD5
+			{
+				private:
+					std::string m_sHash;
+					unsigned char m_rawHash[16];
 
-		public:
-			MD5();
-			MD5(const std::string& source);
-			MD5(std::ifstream& file);
-			MD5(const unsigned char* source, uint32 len);
+				public:
+					MD5();
+					MD5(const std::string& source);
+					MD5(std::ifstream& file);
+					MD5(const unsigned char* source, uint32 len);
 
-			std::string Calculate(const std::string& source);
-			std::string Calculate(std::ifstream& file);
-			std::string Calculate(const unsigned char* source, uint32_t len);
+					std::string Calculate(const std::string& source);
+					std::string Calculate(std::ifstream& file);
+					std::string Calculate(const unsigned char* source, uint32_t len);
 
-			std::string GetHash() const;
-			const unsigned char* GetRawHash() const { return m_rawHash; }
-	};
+					std::string GetHash() const;
+					const unsigned char* GetRawHash() const { return m_rawHash; }
+			};
+		}
+	}
 }
 
 #endif

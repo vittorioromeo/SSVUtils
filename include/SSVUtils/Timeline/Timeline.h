@@ -21,12 +21,12 @@ namespace ssvu
 		friend class Go;
 
 		private:
-			std::vector<Command*> commandPtrs; // owned
-			Command* currentCommandPtr{nullptr};
+			std::vector<Command*> commands; // owned
+			Command* currentCommand{nullptr};
 			bool ready{true}, finished{false};
 
-			void append(Command* mCommandPtr);
-			void insert(int mIndex, Command* mCommandPtr);
+			void append(Command* mCommand);
+			void insert(int mIndex, Command* mCommand);
 			void next();
 
 		public:
@@ -43,7 +43,7 @@ namespace ssvu
 				insert(mIndex, result); return result;
 			}
 
-			void del(Command* mCommandPtr);
+			void del(Command* mCommand);
 
 			void update(float mFrameTime);
 			void jumpTo(int mIndex);

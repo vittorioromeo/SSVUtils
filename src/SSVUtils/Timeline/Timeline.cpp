@@ -12,21 +12,17 @@ namespace ssvu
 {
 	Timeline::~Timeline() { clear(); }
 
-	void Timeline::append(Command* mCommandPtr)
+	void Timeline::append(Command* mCommand)
 	{
-		commandPtrs.push_back(mCommandPtr);
-		if(currentCommandPtr == nullptr) currentCommandPtr = mCommandPtr;
+		commands.push_back(mCommand);
+		if(currentCommand == nullptr) currentCommand = mCommand;
 	}
-	void Timeline::insert(int mIndex, Command* mCommandPtr)
+	void Timeline::insert(int mIndex, Command* mCommand)
 	{
-		commandPtrs.insert(commandPtrs.begin() + mIndex, mCommandPtr);
-		if(currentCommandPtr == nullptr) currentCommandPtr = mCommandPtr;
+		commands.insert(commands.begin() + mIndex, mCommand);
+		if(currentCommand == nullptr) currentCommand = mCommand;
 	}
-	void Timeline::del(Command* mCommandPtr)
-	{
-		eraseRemove(commandPtrs, mCommandPtr);
-		delete mCommandPtr;
-	}
+	void Timeline::del(Command* mCommand) { eraseRemove(commands, mCommand); delete mCommand; }
 
 	void Timeline::update(float mFrameTime)
 	{
@@ -35,62 +31,58 @@ namespace ssvu
 
 		do
 		{
-			if(currentCommandPtr == nullptr)
+			if(currentCommand == nullptr)
 			{
 				finished = true;
 				ready = false;
 				break;
 			}
-			currentCommandPtr->update(mFrameTime);
+			currentCommand->update(mFrameTime);
 		} while(ready);
 	}
-	void Timeline::jumpTo(int mIndex) { currentCommandPtr = commandPtrs[mIndex]; }
+	void Timeline::jumpTo(int mIndex) { currentCommand = commands[mIndex]; }
 
 	void Timeline::reset()
 	{
 		start();
-		for(const auto& commandPtr : commandPtrs) commandPtr->reset();
+		for(const auto& c : commands) c->reset();
 
-		if(!commandPtrs.empty()) currentCommandPtr = commandPtrs[0];
-		else currentCommandPtr = nullptr;
+		if(!commands.empty()) currentCommand = commands[0];
+		else currentCommand = nullptr;
 	}
 	void Timeline::clear()
 	{
-		currentCommandPtr = nullptr;
-		for(const auto& commandPtr : commandPtrs) delete commandPtr;
-		commandPtrs.clear();
+		currentCommand = nullptr;
+		for(const auto& c : commands) delete c;
+		commands.clear();
 		finished = true;
 	}
 
-	void Timeline::start()
-	{
-		finished = false;
-		ready = true;
-	}
+	void Timeline::start() { finished = false; ready = true; }
 
 	void Timeline::next()
 	{
-		if(currentCommandPtr == nullptr) return;
+		if(currentCommand == nullptr) return;
 
-		auto iter = find(commandPtrs.begin(), commandPtrs.end(), currentCommandPtr);
-		if(iter == commandPtrs.end() - 1)
+		auto iter(find(begin(commands), end(commands), currentCommand));
+		if(iter == commands.end() - 1)
 		{
-			currentCommandPtr = nullptr; // no more commands
+			currentCommand = nullptr; // no more commands
 			return;
 		}
-		else if(iter < commandPtrs.end() - 1 && iter >= commandPtrs.begin())
+		else if(iter < commands.end() - 1 && iter >= commands.begin())
 		{
 			iter++;
-			currentCommandPtr = *iter;
+			currentCommand = *iter;
 		}
 	}
 
 	bool Timeline::isFinished() { return finished; }
-	int Timeline::getSize() { return commandPtrs.size(); }
+	int Timeline::getSize() { return commands.size(); }
 	int Timeline::getCurrentIndex()
 	{
-		if(currentCommandPtr == nullptr) return 0;
-		unsigned int pos(find(begin(commandPtrs), end(commandPtrs), currentCommandPtr) - begin(commandPtrs));
-		return pos < commandPtrs.size() ? pos : -1;
+		if(currentCommand == nullptr) return 0;
+		unsigned int pos(find(begin(commands), end(commands), currentCommand) - begin(commands));
+		return pos < commands.size() ? pos : -1;
 	}
 }

@@ -2,16 +2,17 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#include "SSVUtils/FileSystem/FileSystem.h"
-#include "SSVUtils/Utils/UtilsString.h"
-
-using namespace std;
+#ifndef SSVU_FILESYSTEM_ENUMS
+#define SSVU_FILESYSTEM_ENUMS
 
 namespace ssvu
 {
 	namespace FileSystem
 	{
-
+		enum class Mode{Recurse, Single};
+		enum class Type{All, File, Folder};
+		enum class Pick{Any, ByExt, ByName};
 	}
 }
 
+#endif

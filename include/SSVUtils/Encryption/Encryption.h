@@ -11,7 +11,7 @@ namespace ssvu
 {
 	namespace Encryption
 	{
-		enum class Type { MD5, BASE64 }; /*!< Enum containing all encryption types. */
+		enum class Type{MD5, Base64}; /*!< Enum containing all encryption types. */
 
 		/*!
 		 *
@@ -21,8 +21,8 @@ namespace ssvu
 		 * using namespace ssvu::Encrpytion;
 		 *
 		 * string s{"test"};
-		 * string e{encrypt<Type::BASE64>(s)};
-		 * strign d{decrypt<Type::BASE64>(s)};
+		 * string e{encrypt<Type::Base64>(s)};
+		 * strign d{decrypt<Type::Base64>(s)};
 		 *
 		 * assert(s == d);
 		 * @endcode
@@ -33,7 +33,7 @@ namespace ssvu
 		 * @return Returns a string containing the encrypted value.
 		 *
 		 */
-		template<Type T> std::string encrypt(const std::string& mString);
+		template<Type TT> std::string encrypt(const std::string& mString);
 
 		/*!
 		 *
@@ -43,8 +43,8 @@ namespace ssvu
 		 * using namespace ssvu::Encrpytion;
 		 *
 		 * string s{"test"};
-		 * string e{encrypt<Type::BASE64>(s)};
-		 * strign d{decrypt<Type::BASE64>(s)};
+		 * string e{encrypt<Type::Base64>(s)};
+		 * strign d{decrypt<Type::Base64>(s)};
 		 *
 		 * assert(s == d);
 		 * @endcode
@@ -55,7 +55,7 @@ namespace ssvu
 		 * @return Returns a string containing the decrypted value.
 		 *
 		 */
-		template<Type T> std::string decrypt(const std::string& mString);
+		template<Type TT> std::string decrypt(const std::string& mString);
 	}
 
 }
