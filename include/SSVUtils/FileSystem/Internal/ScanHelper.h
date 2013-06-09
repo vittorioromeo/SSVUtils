@@ -95,7 +95,7 @@ namespace ssvu
 
 						closedir(dir);
 					}
-					else log("Directory \"" + mPath + "\" not found", "FileSystem");
+					else log("Directory \"" + mPath + "\" not found", "ssvu::FileSystem::ScanHelper");
 
 					SortHelper<TS>::sort(mTarget);
 				}
