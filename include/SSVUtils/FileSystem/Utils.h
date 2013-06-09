@@ -73,6 +73,19 @@ namespace ssvu
 
 		/*!
 		 *
+		 * @brief Returns the parent path of a path. (One upper level)
+		 *
+		 * Equivalent of remove_leaf in boost::filesystem.
+		 *
+		 * @param mPath Path to use.
+		 *
+		 * @return Returns the parent path of mPath.
+		 *
+		 */
+		std::string getParentPath(const std::string& mPath);
+
+		/*!
+		 *
 		 * @brief Gets filename from a path.
 		 *
 		 * Simple string operations, it doesn't depend on the user's filesystem.
@@ -109,6 +122,15 @@ namespace ssvu
 		 *
 		 */
 		void createFolder(const std::string& mPath);
+
+		/*!
+		 *
+		 * @brief Removes a file from the user's filesystem.
+		 *
+		 * @param mPath Path to existing file.
+		 *
+		 */
+		void removeFile(const std::string& mPath);
 	}
 }
 

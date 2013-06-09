@@ -27,9 +27,18 @@ namespace ssvu
 		string getNormalizedPath(const string& mPath)
 		{
 			string result{mPath};
-			while(endsWith(result, R"(\)")) result = result.substr(0, result.size() - 1);
+			replaceAll(result, R"(\)", "/");
+			replaceAll(result, "//", "/");
 			while(endsWith(result, "/")) result = result.substr(0, result.size() - 1);
 			return result;
+		}
+		string getParentPath(const string& mPath)
+		{
+			string result{getNormalizedPath(mPath)};
+			for(auto i(result.length() - 1); i > 0; i--)
+				if(result[i] == '/') return result.substr(0, i + 1);
+
+			return "";
 		}
 		string getNameFromPath(const string& mPath, const string& mPrefix, const string& mSuffix)
 		{
@@ -42,7 +51,7 @@ namespace ssvu
 			size_t fsize(ftell(fptr));
 			fseek(fptr, 0, SEEK_SET);
 			string content; content.resize(fsize);
-			if(fread(const_cast<char*>(content.c_str()), 1, fsize, fptr) != fsize) log("Error: " + mPath, "File loading");
+			if(fread(const_cast<char*>(content.c_str()), 1, fsize, fptr) != fsize) log("Error: " + mPath, "ssvu::FileSystem::getFileContents");
 			fclose(fptr); return content;
 		}
 		void createFolder(const string& mPath)
@@ -52,6 +61,10 @@ namespace ssvu
 			#else
 				mkdir(getNormalizedPath(mPath).c_str(), 0755);
 			#endif
+		}
+		void removeFile(const string& mPath)
+		{
+			if(remove(mPath.c_str()) != 0) log("Error removing file: " + mPath, "ssvu::FileSystem::removeFile");
 		}
 	}
 }
