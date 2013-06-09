@@ -32,7 +32,7 @@
 #include "SSVUtils/MemoryManager/MemoryManager.h"
 
 // TemplateSystem
-#include "SSVUtils/TemplateSystem/TemplateSystem.h"
+#include "SSVUtils/TemplateSystem/Dictionary.h"
 
 // TimelineManager
 #include "SSVUtils/Timeline/TimelineManager.h"
