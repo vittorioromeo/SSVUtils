@@ -38,6 +38,8 @@ file(GLOB SRC_LIST
 	"${SRC_DIR}/${PROJECT_NAME}/MemoryManager/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/MemoryManager/Traits/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/MemoryManager/Traits/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/TemplateSystem/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/TemplateSystem/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Timeline/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/Timeline/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
