@@ -12,6 +12,7 @@ namespace ssvu
 		enum class Mode{Recurse, Single};
 		enum class Type{All, File, Folder};
 		enum class Pick{Any, ByExt, ByName};
+		enum class Sort{Alphabetic, Unsorted};
 	}
 }
 

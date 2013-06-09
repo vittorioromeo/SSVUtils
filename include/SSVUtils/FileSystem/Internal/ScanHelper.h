@@ -14,6 +14,16 @@ namespace ssvu
 	{
 		namespace Internal
 		{
+			template<Sort TS> struct SortHelper;
+			template<> struct SortHelper<Sort::Alphabetic>
+			{
+				inline static void sort(std::vector<std::string>& mTarget) { std::sort(std::begin(mTarget), std::end(mTarget)); }
+			};
+			template<> struct SortHelper<Sort::Unsorted>
+			{
+				inline static void sort(std::vector<std::string>&) { }
+			};
+
 			template<Pick TP> struct PickHelper;
 			template<> struct PickHelper<Pick::Any>
 			{
@@ -45,19 +55,19 @@ namespace ssvu
 				inline static void pickFile(std::vector<std::string>&, const std::string&, const std::string&, const std::string&) { }
 			};
 
-			template<Mode TM, Type TT, Pick TP> struct ScanHelper;
+			template<Mode TM, Type TT, Pick TP, Sort TS> struct ScanHelper;
 
-			template<Mode TM, Type TT, Pick TP> struct ModeHelper;
-			template<Type TT, Pick TP> struct ModeHelper<Mode::Recurse, TT, TP>
+			template<Mode TM, Type TT, Pick TP, Sort TS> struct ModeHelper;
+			template<Type TT, Pick TP, Sort TS> struct ModeHelper<Mode::Recurse, TT, TP, TS>
 			{
-				inline static void recurse(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired) { ScanHelper<Mode::Recurse, TT, TP>::scan(mTarget, mPath, mDesired); }
+				inline static void recurse(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired) { ScanHelper<Mode::Recurse, TT, TP, TS>::scan(mTarget, mPath, mDesired); }
 			};
-			template<Type TT, Pick TP> struct ModeHelper<Mode::Single, TT, TP>
+			template<Type TT, Pick TP, Sort TS> struct ModeHelper<Mode::Single, TT, TP, TS>
 			{
 				inline static void recurse(std::vector<std::string>&, const std::string&, const std::string&) { }
 			};
 
-			template<Mode TM, Type TT, Pick TP> struct ScanHelper
+			template<Mode TM, Type TT, Pick TP, Sort TS> struct ScanHelper
 			{
 				inline static void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired)
 				{
@@ -75,7 +85,7 @@ namespace ssvu
 								if(isFolder(path))
 								{
 									TypeHelper<TT, TP>::pickFolder(mTarget, path, name, mDesired);
-									ModeHelper<TM, TT, TP>::recurse(mTarget, path, mDesired);
+									ModeHelper<TM, TT, TP, TS>::recurse(mTarget, path, mDesired);
 								}
 								else TypeHelper<TT, TP>::pickFile(mTarget, path, name, mDesired);
 							}
@@ -86,6 +96,8 @@ namespace ssvu
 						closedir(dir);
 					}
 					else log("Directory \"" + mPath + "\" not found", "FileSystem");
+
+					SortHelper<TS>::sort(mTarget);
 				}
 			};
 		}

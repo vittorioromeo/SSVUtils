@@ -35,14 +35,15 @@ namespace ssvu
 		 * @tparam TM Mode to use: can be Mode::Recurse or Mode::Single.
 		 * @tparam TT Type to use: can be Type::All (both files and folders), Type::File, or Type::Folder
 		 * @tparam TP Pick to use: can be Pick::Any (no restrictions), Pick::ByExt (picks only files of a specific extension) or Pick::ByName (picks only files with a specific name)
+		 * @tparam TS Sort to use: can be Sort::Alphabetic or Sort::Unsorted
 		 * @param mTarget std::vector to fill.
 		 * @param mPath Path to start the search in.
 		 * @param mDesired Optional: only set if using Pick::ByExt or Pick::ByName.
 		 *
 		 */
-		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any> void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired = "")
+		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired = "")
 		{
-			Internal::ScanHelper<TM, TT, TP>::scan(mTarget, mPath, mDesired);
+			Internal::ScanHelper<TM, TT, TP, TS>::scan(mTarget, mPath, mDesired);
 		}
 
 		/*!
@@ -61,16 +62,17 @@ namespace ssvu
 		 * @tparam TM Mode to use: can be Mode::Recurse or Mode::Single.
 		 * @tparam TT Type to use: can be Type::All (both files and folders), Type::File, or Type::Folder
 		 * @tparam TP Pick to use: can be Pick::Any (no restrictions), Pick::ByExt (picks only files of a specific extension) or Pick::ByName (picks only files with a specific name)
+		 * @tparam TS Sort to use: can be Sort::Alphabetic or Sort::Unsorted
 		 * @param mPath Path to start the search in.
 		 * @param mDesired Optional: only set if using Pick::ByExt or Pick::ByName.
 		 *
 		 * @return Returns a newly created std::vector of strings containing the scanned paths.
 		 *
 		 */
-		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any> std::vector<std::string> getScan(const std::string& mPath, const std::string& mDesired = "")
+		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> std::vector<std::string> getScan(const std::string& mPath, const std::string& mDesired = "")
 		{
 			std::vector<std::string> result;
-			scan<TM, TT, TP>(result, mPath, mDesired);
+			scan<TM, TT, TP, TS>(result, mPath, mDesired);
 			return result;
 		}
 	}
