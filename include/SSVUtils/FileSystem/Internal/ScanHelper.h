@@ -14,92 +14,41 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<Sort TS> struct SortHelper;
-			template<> struct SortHelper<Sort::Alphabetic>
+			template<Mode TM, Type TT, Pick TP, Sort TS> static void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired)
 			{
-				inline static void sort(std::vector<std::string>& mTarget) { std::sort(std::begin(mTarget), std::end(mTarget)); }
-			};
-			template<> struct SortHelper<Sort::Unsorted>
-			{
-				inline static void sort(std::vector<std::string>&) { }
-			};
-
-			template<Pick TP> struct PickHelper;
-			template<> struct PickHelper<Pick::Any>
-			{
-				inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string&, const std::string&) { mTarget.push_back(mPath); }
-			};
-			template<> struct PickHelper<Pick::ByExt>
-			{
-				inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesiredExtension) { if(endsWith(mName, mDesiredExtension)) mTarget.push_back(mPath); }
-			};
-			template<> struct PickHelper<Pick::ByName>
-			{
-				inline static void pick(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesiredName) { if(mName == mDesiredName) mTarget.push_back(mPath); }
-			};
-
-			template<Type TT, Pick TP> struct TypeHelper;
-			template<Pick TP> struct TypeHelper<Type::All, TP>
-			{
-				inline static void pickFolder(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired) { PickHelper<TP>::pick(mTarget, mPath, mName, mDesired); }
-				inline static void pickFile(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired) { PickHelper<TP>::pick(mTarget, mPath, mName, mDesired); }
-			};
-			template<Pick TP> struct TypeHelper<Type::File, TP>
-			{
-				inline static void pickFolder(std::vector<std::string>&, const std::string&, const std::string&, const std::string&) { }
-				inline static void pickFile(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired) { PickHelper<TP>::pick(mTarget, mPath, mName, mDesired); }
-			};
-			template<Pick TP> struct TypeHelper<Type::Folder, TP>
-			{
-				inline static void pickFolder(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mName, const std::string& mDesired) { PickHelper<TP>::pick(mTarget, mPath, mName, mDesired); }
-				inline static void pickFile(std::vector<std::string>&, const std::string&, const std::string&, const std::string&) { }
-			};
-
-			template<Mode TM, Type TT, Pick TP, Sort TS> struct ScanHelper;
-
-			template<Mode TM, Type TT, Pick TP, Sort TS> struct ModeHelper;
-			template<Type TT, Pick TP, Sort TS> struct ModeHelper<Mode::Recurse, TT, TP, TS>
-			{
-				inline static void recurse(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired) { ScanHelper<Mode::Recurse, TT, TP, TS>::scan(mTarget, mPath, mDesired); }
-			};
-			template<Type TT, Pick TP, Sort TS> struct ModeHelper<Mode::Single, TT, TP, TS>
-			{
-				inline static void recurse(std::vector<std::string>&, const std::string&, const std::string&) { }
-			};
-
-			template<Mode TM, Type TT, Pick TP, Sort TS> struct ScanHelper
-			{
-				inline static void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired)
+				if(isFolder(mPath))
 				{
-					if(isFolder(mPath))
+					DIR* dir{opendir(mPath.c_str())};
+					dirent* entry{readdir(dir)};
+
+					while(entry != NULL)
 					{
-						DIR* dir{opendir(mPath.c_str())};
-						dirent* entry{readdir(dir)};
+						std::string name{entry->d_name}, path{getNormalizedPath(mPath) + "/" + name};
 
-						while(entry != NULL)
+						if(!isRootOrParent(path))
 						{
-							std::string name{entry->d_name}, path{getNormalizedPath(mPath) + "/" + name};
-
-							if(!isRootOrParent(path))
+							if(isFolder(path))
 							{
-								if(isFolder(path))
-								{
-									TypeHelper<TT, TP>::pickFolder(mTarget, path, name, mDesired);
-									ModeHelper<TM, TT, TP, TS>::recurse(mTarget, path, mDesired);
-								}
-								else TypeHelper<TT, TP>::pickFile(mTarget, path, name, mDesired);
+								if(TT == Type::All || TT == Type::Folder) { mTarget.push_back(path); }
+								if(TM == Mode::Recurse) { scan<Mode::Recurse, TT, TP, TS>(mTarget, path, mDesired); }
 							}
-
-							entry = readdir(dir);
+							else if(TT == Type::All || TT == Type::File)
+							{
+								if(TP == Pick::Any)			{ mTarget.push_back(path); }
+								else if(TP == Pick::ByExt)	{ if(endsWith(name, mDesired)) mTarget.push_back(path); }
+								else if(TP == Pick::ByName)	{ if(name == mDesired) mTarget.push_back(path); }
+							}
 						}
 
-						closedir(dir);
+						entry = readdir(dir);
 					}
-					else log("Directory \"" + mPath + "\" not found", "ssvu::FileSystem::ScanHelper");
 
-					SortHelper<TS>::sort(mTarget);
+					closedir(dir);
 				}
-			};
+				else log("Directory \"" + mPath + "\" not found", "ssvu::FileSystem::ScanHelper");
+
+				if(TS == Sort::Alphabetic) std::sort(std::begin(mTarget), std::end(mTarget));
+			}
 		}
 	}
 }

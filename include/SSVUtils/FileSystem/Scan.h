@@ -43,7 +43,7 @@ namespace ssvu
 		 */
 		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired = "")
 		{
-			Internal::ScanHelper<TM, TT, TP, TS>::scan(mTarget, mPath, mDesired);
+			Internal::scan<TM, TT, TP, TS>(mTarget, mPath, mDesired);
 		}
 
 		/*!
