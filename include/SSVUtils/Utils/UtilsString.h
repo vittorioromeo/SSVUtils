@@ -80,7 +80,7 @@ namespace ssvu
 	 * @return Returns a std::string that is a copy of mString, with all characters lowercase.
 	 *
 	 */
-	std::string toLower(const std::string &mString);
+	std::string toLower(std::string mString);
 
 	/*!
 	 *
@@ -106,7 +106,7 @@ namespace ssvu
 	 * @return Returns a std::string with mFrom replaced by mTo (first occurrence).
 	 *
 	 */
-	std::string getReplaced(const std::string& mString, const std::string& mFrom, const std::string& mTo);
+	std::string getReplaced(std::string mString, const std::string& mFrom, const std::string& mTo);
 
 	/*!
 	 *
@@ -119,7 +119,7 @@ namespace ssvu
 	 * @return Returns a std::string with mFrom replaced by mTo (all occurrences).
 	 *
 	 */
-	std::string getReplacedAll(const std::string& mString, const std::string& mFrom, const std::string& mTo);
+	std::string getReplacedAll(std::string mString, const std::string& mFrom, const std::string& mTo);
 
 	/*!
 	 *

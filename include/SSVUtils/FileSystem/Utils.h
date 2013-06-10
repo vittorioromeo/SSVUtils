@@ -63,13 +63,26 @@ namespace ssvu
 		 * @brief Normalizes a path string.
 		 *
 		 * Changes '\' to '/', removes useless backslashes at the end.
+		 * Modifies the passed string.
+		 *
+		 * @param mPath Path to normalize.
+		 *
+		 */
+		void normalizePath(std::string& mPath);
+
+		/*!
+		 *
+		 * @brief Normalizes a path string.
+		 *
+		 * Changes '\' to '/', removes useless backslashes at the end.
+		 * Does not modify the passed string.
 		 *
 		 * @param mPath Path to normalize.
 		 *
 		 * @return Returns normalized path string.
 		 *
 		 */
-		std::string getNormalizedPath(const std::string& mPath);
+		std::string getNormalizedPath(std::string mPath);
 
 		/*!
 		 *
@@ -82,7 +95,7 @@ namespace ssvu
 		 * @return Returns the parent path of mPath.
 		 *
 		 */
-		std::string getParentPath(const std::string& mPath);
+		std::string getParentPath(std::string mPath);
 
 		/*!
 		 *
@@ -121,7 +134,7 @@ namespace ssvu
 		 * @param mPath Path to non-existing folder, must end with '/'.
 		 *
 		 */
-		void createFolder(const std::string& mPath);
+		void createFolder(std::string mPath);
 
 		/*!
 		 *
@@ -130,7 +143,7 @@ namespace ssvu
 		 * @param mPath Path to existing file.
 		 *
 		 */
-		void removeFile(const std::string& mPath);
+		void removeFile(std::string mPath);
 	}
 }
 

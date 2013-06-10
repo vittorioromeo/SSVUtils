@@ -35,7 +35,7 @@ namespace ssvu
 		if(mString.length() >= mEnding.length()) return (0 == mString.compare(mString.length() - mEnding.length(), mEnding.length(), mEnding));
 		return false;
 	}
-	string toLower(const string& mString) { string result{mString}; transform(begin(result), end(result), begin(result), ::tolower); return result; }
+	string toLower(string mString) { transform(begin(mString), end(mString), begin(mString), ::tolower); return mString; }
 	vector<string> split(const string& mString, char mSplitter, bool mKeepSplitter)
 	{
 		vector<string> result;
@@ -53,8 +53,6 @@ namespace ssvu
 		return result;
 	}
 
-	string getReplaced(const string& mString, const string& mFrom, const string& mTo) { string result{mString}; replace(result, mFrom, mTo); return result; }
-	string getReplacedAll(const string& mString, const string& mFrom, const string& mTo) { string result{mString}; replaceAll(result, mFrom, mTo); return result; }
+	string getReplaced(string mString, const string& mFrom, const string& mTo) { replace(mString, mFrom, mTo); return mString; }
+	string getReplacedAll(string mString, const string& mFrom, const string& mTo) { replaceAll(mString, mFrom, mTo); return mString; }
 }
-
-// TODO: consider getReplaced(string mString, ...) instead of getReplaced(const string& mString, ...) and do not create a new string in the body?

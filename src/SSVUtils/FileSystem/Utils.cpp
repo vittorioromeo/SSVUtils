@@ -23,20 +23,19 @@ namespace ssvu
 			if(err != 0) return false;
 			return (fileStat.st_mode & S_IFMT) == S_IFDIR;
 		}
-		bool isRootOrParent(const string& mPath) { return (endsWith(mPath, ".") || endsWith(mPath, "..")); }
-		string getNormalizedPath(const string& mPath)
+		bool isRootOrParent(const string& mPath) { return endsWith(mPath, ".") || endsWith(mPath, ".."); }
+		void normalizePath(string& mPath)
 		{
-			string result{mPath};
-			replaceAll(result, R"(\)", "/");
-			replaceAll(result, "//", "/");
-			while(endsWith(result, "/")) result = result.substr(0, result.size() - 1);
-			return result;
+			replaceAll(mPath, R"(\)", "/");
+			replaceAll(mPath, "//", "/");
+			while(endsWith(mPath, "/")) mPath = mPath.substr(0, mPath.size() - 1);
 		}
-		string getParentPath(const string& mPath)
+		string getNormalizedPath(string mPath) { normalizePath(mPath); return mPath; }
+		string getParentPath(string mPath)
 		{
-			string result{getNormalizedPath(mPath)};
-			for(auto i(result.length() - 1); i > 0; i--)
-				if(result[i] == '/') return result.substr(0, i + 1);
+			normalizePath(mPath);
+			for(auto i(mPath.length() - 1); i > 0; --i)
+				if(mPath[i] == '/') return mPath.substr(0, i + 1);
 
 			return "";
 		}
@@ -54,16 +53,19 @@ namespace ssvu
 			if(fread(const_cast<char*>(content.c_str()), 1, fsize, fptr) != fsize) log("Error: " + mPath, "ssvu::FileSystem::getFileContents");
 			fclose(fptr); return content;
 		}
-		void createFolder(const string& mPath)
+		void createFolder(string mPath)
 		{
+			normalizePath(mPath);
+
 			#ifdef _WIN32
-				mkdir(getNormalizedPath(mPath).c_str());
+				mkdir(mPath.c_str());
 			#else
-				mkdir(getNormalizedPath(mPath).c_str(), 0755);
+				mkdir(mPath.c_str(), 0755);
 			#endif
 		}
-		void removeFile(const string& mPath)
+		void removeFile(string mPath)
 		{
+			normalizePath(mPath);
 			if(remove(mPath.c_str()) != 0) log("Error removing file: " + mPath, "ssvu::FileSystem::removeFile");
 		}
 	}

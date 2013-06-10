@@ -72,7 +72,7 @@ namespace ssvu
 				 * @return Returns a string containing the expanded dictionary template.
 				 *
 				 */
-				std::string getExpanded(const std::string& mString) const;
+				std::string getExpanded(std::string mString) const;
 
 				/*!
 				 *

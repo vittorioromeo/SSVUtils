@@ -15,29 +15,30 @@ namespace ssvu
 	{
 		Dictionary::Dictionary(initializer_list<pair<string, string>> mPairs) { for(const auto& p : mPairs) replacements.insert(p); }
 
-		string Dictionary::getExpanded(const string& mString) const
+		string Dictionary::getExpanded(string mString) const
 		{
-			string result{mString};
-
 			for(const auto& p : sectionDictionaries)
 			{
 				const string sectionStart{getSectionStart(p.first)}, sectionEnd{getSectionEnd(p.first)};
-				const auto outerSectionStartIndex(result.find(sectionStart));
-				const auto innerSectionEndIndex(result.find(sectionEnd));
+				const auto outerSectionStartIndex(mString.find(sectionStart));
+				const auto innerSectionEndIndex(mString.find(sectionEnd));
 				const auto innerSectionStartIndex(outerSectionStartIndex + sectionStart.length());
 				const auto outerSectionEndIndex(innerSectionEndIndex + sectionEnd.length());
 
-				const string innerSection{result.substr(innerSectionStartIndex, innerSectionEndIndex - innerSectionStartIndex)};
+				const string innerSection{mString.substr(innerSectionStartIndex, innerSectionEndIndex - innerSectionStartIndex)};
 				string innerSectionResult{""};
 
 				for(auto d : p.second) innerSectionResult += d.getExpanded(innerSection);
 
-				result.replace(outerSectionStartIndex, outerSectionEndIndex - outerSectionStartIndex, innerSectionResult);
+				mString.replace(outerSectionStartIndex, outerSectionEndIndex - outerSectionStartIndex, innerSectionResult);
 			}
 
-			for(const auto& p : replacements) replaceAll(result, getKey(p.first), p.second);
+			for(const auto& p : replacements) replaceAll(mString, getKey(p.first), p.second);
 
-			return result;
+			// TODO: cleanup unexpanded sections/replacements?
+			// TODO: newline stripping options?
+
+			return mString;
 		}
 
 		string& Dictionary::operator[](const string& mKey) { return replacements[mKey]; }
