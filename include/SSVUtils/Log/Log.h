@@ -10,7 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include <ostream>
-#include "SSVUtils/Utils/UtilsString.h"
+#include "SSVUtils/String/Utils.h"
 
 namespace ssvu
 {

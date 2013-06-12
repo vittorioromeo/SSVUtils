@@ -3,7 +3,7 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #include <algorithm>
-#include "SSVUtils/Utils/UtilsString.h"
+#include "SSVUtils/String/Utils.h"
 
 using namespace std;
 
@@ -36,23 +36,6 @@ namespace ssvu
 		return false;
 	}
 	string toLower(string mString) { transform(begin(mString), end(mString), begin(mString), ::tolower); return mString; }
-	vector<string> split(const string& mString, char mSplitter, bool mKeepSplitter)
-	{
-		vector<string> result;
-		unsigned int i{0}, j{0}, length{static_cast<unsigned int>(mString.length())};
-
-		for(i = 0; i < length + 1; ++i)
-			if(mString[i] == mSplitter || i == length)
-			{
-				string subString{mString.substr(j, i - j)};
-				if(!subString.empty()) result.push_back(subString);
-				j = i;
-				if(!mKeepSplitter) ++j;
-			}
-
-		return result;
-	}
-
 	string getReplaced(string mString, const string& mFrom, const string& mTo) { replace(mString, mFrom, mTo); return mString; }
 	string getReplacedAll(string mString, const string& mFrom, const string& mTo) { replaceAll(mString, mFrom, mTo); return mString; }
 }

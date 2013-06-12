@@ -4,7 +4,7 @@
 
 #include "SSVUtils/TemplateSystem/Dictionary.h"
 #include "SSVUtils/TemplateSystem/Internal/Symbols.h"
-#include "SSVUtils/Utils/UtilsString.h"
+#include "SSVUtils/String/Utils.h"
 
 using namespace std;
 using namespace ssvu::TemplateSystem::Internal;

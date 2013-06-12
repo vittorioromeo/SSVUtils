@@ -18,9 +18,12 @@
 // Utils
 #include "SSVUtils/Utils/Utils.h"
 #include "SSVUtils/Utils/UtilsMath.h"
-#include "SSVUtils/Utils/UtilsString.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 #include "SSVUtils/Utils/UtilsMakeUnique.h"
+
+// String
+#include "SSVUtils/String/Utils.h"
+#include "SSVUtils/String/Split.h"
 
 // Delegate
 #include "SSVUtils/Delegate/Delegate.h"

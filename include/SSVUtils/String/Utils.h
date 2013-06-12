@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_UTILS_STRING
-#define SSVU_UTILS_STRING
+#ifndef SSVU_STRING_UTILS
+#define SSVU_STRING_UTILS
 
 #include <sstream>
 #include <string>
@@ -81,19 +81,6 @@ namespace ssvu
 	 *
 	 */
 	std::string toLower(std::string mString);
-
-	/*!
-	 *
-	 * @brief Splits a string in smaller strings.
-	 *
-	 * @param mString String to split.
-	 * @param mSplitter Character to split at. Every occurrence of this character will cause a split.
-	 * @param mKeepSplitter Keep the splitter character in the splitted string.
-	 *
-	 * @return Returns a std::vector containing all splitted strings.
-	 *
-	 */
-	std::vector<std::string> split(const std::string& mString, char mSplitter, bool mKeepSplitter = false);
 
 	/*!
 	 *

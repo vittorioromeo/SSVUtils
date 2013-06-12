@@ -38,6 +38,10 @@ file(GLOB SRC_LIST
 	"${SRC_DIR}/${PROJECT_NAME}/MemoryManager/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/MemoryManager/Traits/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/MemoryManager/Traits/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/String/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/String/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/String/Internal/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/String/Internal/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/TemplateSystem/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/TemplateSystem/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/TemplateSystem/Internal/*.h"
@@ -46,6 +50,8 @@ file(GLOB SRC_LIST
 	"${SRC_DIR}/${PROJECT_NAME}/Timeline/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/Utils/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Utils/Internal/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Utils/Internal/*.cpp"
 )
 
 include_directories(${INC_DIR})
