@@ -7,6 +7,8 @@
 
 #include <string>
 #include <vector>
+#include "SSVUtils/String/Enums.h"
+#include "SSVUtils/String/Internal/SplitHelper.h"
 
 namespace ssvu
 {
@@ -14,93 +16,36 @@ namespace ssvu
 	 *
 	 * @brief Splits a string in smaller strings, filling a target vector<string>.
 	 *
+	 * @tparam T Type of the separator. Can be a char, a string, a vector<char> or a vector<string>.
+	 * @tparam TM Separation mode. Can be SplitMode::Normal or SplitMode::KeepSeparator (keeps the separator in the splitted strings).
 	 * @param mTarget Vector to fill with the splitted strings.
 	 * @param mString String to split.
-	 * @param mSeparator Character to split at. Every occurrence of this character will cause a split.
+	 * @param mSeparator Separator to split at. Every occurrence of the separator will cause a split.
 	 *
 	 */
-	void split(std::vector<std::string>& mTarget, const std::string& mString, char mSeparator);
-
-	/*!
-	 *
-	 * @brief Splits a string in smaller strings, filling a target vector<string>.
-	 *
-	 * @param mTarget Vector to fill with the splitted strings.
-	 * @param mString String to split.
-	 * @param mSeparator Vector of characters to split at. Every occurrence of any character in the vector will cause a split.
-	 *
-	 */
-	void split(std::vector<std::string>& mTarget, const std::string& mString, const std::vector<char>& mSeparator);
-
-	/*!
-	 *
-	 * @brief Splits a string in smaller strings, filling a target vector<string>.
-	 *
-	 * @param mTarget Vector to fill with the splitted strings.
-	 * @param mString String to split.
-	 * @param mSeparator String to split at. Every occurrence of this string will cause a split.
-	 *
-	 */
-	void split(std::vector<std::string>& mTarget, const std::string& mString, const std::string& mSeparator);
-
-	/*!
-	 *
-	 * @brief Splits a string in smaller strings, filling a target vector<string>.
-	 *
-	 * @param mTarget Vector to fill with the splitted strings.
-	 * @param mString String to split.
-	 * @param mSeparator Vector of strings to split at. Every occurrence of any string in the vector will cause a split.
-	 *
-	 */
-	void split(std::vector<std::string>& mTarget, const std::string& mString, const std::vector<std::string>& mSeparator);
+	template<typename T, SplitMode TM = SplitMode::Normal> void split(std::vector<std::string>& mTarget, const std::string& mString, const T& mSeparator)
+	{
+		Internal::SplitHelper<T, TM>::split(mTarget, mString, mSeparator);
+	}
 
 	/*!
 	 *
 	 * @brief Splits a string in smaller strings, returning a vector<string>.
 	 *
+	 * @tparam T Type of the separator. Can be a char, a string, a vector<char> or a vector<string>.
+	 * @tparam TM Separation mode. Can be SplitMode::Normal or SplitMode::KeepSeparator (keeps the separator in the splitted strings).
 	 * @param mString String to split.
-	 * @param mSeparator Character to split at. Every occurrence of this character will cause a split.
+	 * @param mSeparator Separator to split at. Every occurrence of the separator will cause a split.
 	 *
 	 * @return Returns a std::vector containing all splitted strings.
 	 *
 	 */
-	std::vector<std::string> getSplit(const std::string& mString, char mSeparator);
-
-	/*!
-	 *
-	 * @brief Splits a string in smaller strings, returning a vector<string>.
-	 *
-	 * @param mString String to split.
-	 * @param mSeparator Vector of characters to split at. Every occurrence of any character in the vector will cause a split.
-	 *
-	 * @return Returns a std::vector containing all splitted strings.
-	 *
-	 */
-	std::vector<std::string> getSplit(const std::string& mString, const std::vector<char>& mSeparator);
-
-	/*!
-	 *
-	 * @brief Splits a string in smaller strings, returning a vector<string>.
-	 *
-	 * @param mString String to split.
-	 * @param mSeparator String to split at. Every occurrence of this string will cause a split.
-	 *
-	 * @return Returns a std::vector containing all splitted strings.
-	 *
-	 */
-	std::vector<std::string> getSplit(const std::string& mString, const std::string& mSeparator);
-
-	/*!
-	 *
-	 * @brief Splits a string in smaller strings, returning a vector<string>.
-	 *
-	 * @param mString String to split.
-	 * @param mSeparator Vector of strings to split at. Every occurrence of any string in the vector will cause a split.
-	 *
-	 * @return Returns a std::vector containing all splitted strings.
-	 *
-	 */
-	std::vector<std::string> getSplit(const std::string& mString, const std::vector<std::string>& mSeparator);
+	template<typename T, SplitMode TM = SplitMode::Normal> std::vector<std::string> getSplit(const std::string& mString, const T& mSeparator)
+	{
+		std::vector<std::string> result;
+		split<T, TM>(result, mString, mSeparator);
+		return result;
+	}
 }
 
 #endif

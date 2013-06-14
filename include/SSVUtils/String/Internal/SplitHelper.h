@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include "SSVUtils/String/Enums.h"
 
 namespace ssvu
 {
@@ -14,16 +15,7 @@ namespace ssvu
 	{
 		using StringSize = std::string::size_type;
 
-		StringSize findFirstOf(const std::string& mString, const std::vector<std::string>& mSeparator, StringSize& mLength)
-		{
-			StringSize result{std::numeric_limits<StringSize>::max()};
-			for(const auto& s : mSeparator)
-			{
-				StringSize temp{mString.find(s)};
-				if(temp < result) { result = temp; mLength = s.length(); }
-			}
-			return result;
-		}
+		StringSize findFirstOf(const std::string& mString, const std::vector<std::string>& mSeparator, StringSize& mLength);
 
 		template<typename T> struct SplitFindHelper;
 		template<> struct SplitFindHelper<char>
@@ -41,14 +33,19 @@ namespace ssvu
 			}
 		};
 
-		template<typename T> struct SplitHelper
+		template<typename T, SplitMode TM> struct SplitHelper
 		{
 			inline static void split(std::vector<std::string>& mTarget, const std::string& mString, const T& mSeparator)
 			{
 				StringSize p{0}, q;
 				while ((q = SplitFindHelper<T>::getNextIndex(mString, mSeparator, p)) != std::string::npos)
 				{
-					std::string token{mString, p, q - p};
+					auto tokenLength(q - p);
+
+					// If we need to keep the separator in the splitted strings, add 1 to the token length (assuming a char has always length 1)
+					if(TM == SplitMode::KeepSeparator) tokenLength += 1;
+
+					std::string token{mString, p, tokenLength};
 					if(!token.empty()) mTarget.push_back(token);
 					p = q + 1;
 				}
@@ -56,7 +53,7 @@ namespace ssvu
 				if(!remaining.empty()) mTarget.push_back(remaining);
 			}
 		};
-		template<> struct SplitHelper<std::string>
+		template<SplitMode TM> struct SplitHelper<std::string, TM>
 		{
 			inline static void split(std::vector<std::string>& mTarget, std::string mString, const std::string& mSeparator)
 			{
@@ -64,14 +61,19 @@ namespace ssvu
 				std::string token;
 				while ((pos = mString.find(mSeparator)) != std::string::npos)
 				{
-					token = mString.substr(0, pos);
+					auto tokenLength(pos);
+
+					// If we need to keep the separator in the splitted strings, add the separator's length to the token length
+					if(TM == SplitMode::KeepSeparator) tokenLength += mSeparator.length();
+
+					token = mString.substr(0, tokenLength);
 					if(!token.empty()) mTarget.push_back(token);
 					mString.erase(0, pos + mSeparator.length());
 				}
 				if(!mString.empty()) mTarget.push_back(mString);
 			}
 		};
-		template<> struct SplitHelper<std::vector<std::string>>
+		template<SplitMode TM> struct SplitHelper<std::vector<std::string>, TM>
 		{
 			inline static void split(std::vector<std::string>& mTarget, std::string mString, const std::vector<std::string>& mSeparator)
 			{
@@ -79,7 +81,12 @@ namespace ssvu
 				std::string token;
 				while ((pos = findFirstOf(mString, mSeparator, lastLength)) != std::string::npos)
 				{
-					token = mString.substr(0, pos);
+					auto tokenLength(pos);
+
+					// If we need to keep the separator in the splitted strings, add the separator's length to the token length
+					if(TM == SplitMode::KeepSeparator) tokenLength += lastLength;
+
+					token = mString.substr(0, tokenLength);
 					if(!token.empty()) mTarget.push_back(token);
 					mString.erase(0, pos + lastLength);
 				}

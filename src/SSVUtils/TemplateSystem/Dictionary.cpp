@@ -35,7 +35,7 @@ namespace ssvu
 
 			for(const auto& p : replacements) replaceAll(mString, getKey(p.first), p.second);
 
-			// TODO: cleanup unexpanded sections/replacements?
+			// TODO: cleanup unexpanded sections/replacements? (use regex!)
 			// TODO: newline stripping options?
 
 			return mString;
