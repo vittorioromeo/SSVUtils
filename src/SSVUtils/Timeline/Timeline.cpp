@@ -12,20 +12,22 @@ namespace ssvu
 {
 	Timeline::~Timeline() { clear(); }
 
-	void Timeline::append(Command* mCommand)
+	void Timeline::append(Command& mCommand)
 	{
-		commands.push_back(mCommand);
-		if(currentCommand == nullptr) currentCommand = mCommand;
+		commands.push_back(&mCommand);
+		if(currentCommand == nullptr) currentCommand = &mCommand;
 	}
-	void Timeline::insert(int mIndex, Command* mCommand)
+	void Timeline::insert(int mIndex, Command& mCommand)
 	{
-		commands.insert(commands.begin() + mIndex, mCommand);
-		if(currentCommand == nullptr) currentCommand = mCommand;
+		commands.insert(begin(commands) + mIndex, &mCommand);
+		if(currentCommand == nullptr) currentCommand = &mCommand;
 	}
-	void Timeline::del(Command* mCommand) { eraseRemove(commands, mCommand); delete mCommand; }
+	void Timeline::del(Command& mCommand) { eraseRemove(commands, &mCommand); commandManager.del(&mCommand); }
 
 	void Timeline::update(float mFrameTime)
 	{
+		commandManager.cleanUp();
+
 		if(finished) return;
 		ready = true;
 
@@ -40,7 +42,7 @@ namespace ssvu
 			currentCommand->update(mFrameTime);
 		} while(ready);
 	}
-	void Timeline::jumpTo(int mIndex) { currentCommand = commands[mIndex]; }
+	void Timeline::jumpTo(unsigned int mIndex) { currentCommand = commands[mIndex]; }
 
 	void Timeline::reset()
 	{
@@ -53,7 +55,7 @@ namespace ssvu
 	void Timeline::clear()
 	{
 		currentCommand = nullptr;
-		for(const auto& c : commands) delete c;
+		for(const auto& c : commands) commandManager.del(c);
 		commands.clear();
 		finished = true;
 	}
@@ -70,7 +72,7 @@ namespace ssvu
 			currentCommand = nullptr; // no more commands
 			return;
 		}
-		else if(iter < commands.end() - 1 && iter >= commands.begin())
+		else if(iter < end(commands) - 1 && iter >= begin(commands))
 		{
 			iter++;
 			currentCommand = *iter;

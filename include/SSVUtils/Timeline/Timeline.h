@@ -7,12 +7,12 @@
 
 #include <vector>
 #include <functional>
+#include "SSVUtils/MemoryManager/MemoryManager.h"
+#include "SSVUtils/Timeline/Command.h"
 
 namespace ssvu
 {
 	using Action = std::function<void()>;
-
-	struct Command;
 
 	class Timeline
 	{
@@ -21,32 +21,36 @@ namespace ssvu
 		friend class Go;
 
 		private:
-			std::vector<Command*> commands; // owned
+			MemoryManager<Command> commandManager;
+			std::vector<Command*> commands;
 			Command* currentCommand{nullptr};
 			bool ready{true}, finished{false};
 
-			void append(Command* mCommand);
-			void insert(int mIndex, Command* mCommand);
+			void append(Command& mCommand);
+			void insert(int mIndex, Command& mCommand);
 			void next();
+
+			template<typename T, typename... TArgs> T& create(TArgs&&... mArgs)
+			{
+				return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...);
+			}
 
 		public:
 			~Timeline();
 
-			template<typename T, typename... TArgs> T* append(TArgs&&... mArgs)
+			template<typename T, typename... TArgs> T& append(TArgs&&... mArgs)
 			{
-				T* result{new T(*this, std::forward<TArgs>(mArgs)...)};
-				append(result); return result;
+				T& result(create<T>(mArgs...)); append(result); return result;
 			}
-			template<typename T, typename... TArgs> T* insert(int mIndex, TArgs&&... mArgs)
+			template<typename T, typename... TArgs> T& insert(int mIndex, TArgs&&... mArgs)
 			{
-				T* result{new T(*this, std::forward<TArgs>(mArgs)...)};
-				insert(mIndex, result); return result;
+				T& result(create<T>(mArgs...)); insert(mIndex, result); return result;
 			}
 
-			void del(Command* mCommand);
+			void del(Command& mCommand);
 
 			void update(float mFrameTime);
-			void jumpTo(int mIndex);
+			void jumpTo(unsigned int mIndex);
 
 			void reset();
 			void clear();
