@@ -25,9 +25,10 @@ namespace ssvu
 			std::vector<Command*> commands;
 			Command* currentCommand{nullptr};
 			bool ready{true}, finished{false};
+			float remainder{0.f};
 
+			void insert(unsigned int mIndex, Command& mCommand);
 			void append(Command& mCommand);
-			void insert(int mIndex, Command& mCommand);
 			void next();
 
 			template<typename T, typename... TArgs> T& create(TArgs&&... mArgs)
@@ -42,7 +43,7 @@ namespace ssvu
 			{
 				T& result(create<T>(mArgs...)); append(result); return result;
 			}
-			template<typename T, typename... TArgs> T& insert(int mIndex, TArgs&&... mArgs)
+			template<typename T, typename... TArgs> T& insert(unsigned int mIndex, TArgs&&... mArgs)
 			{
 				T& result(create<T>(mArgs...)); insert(mIndex, result); return result;
 			}

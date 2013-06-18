@@ -14,8 +14,9 @@ namespace ssvu
 		timeline.ready = false;
 
 		currentTime -= mFrameTime;
-		if(currentTime - mFrameTime > mFrameTime) return;
+		if(currentTime > 0) return;
 
+		timeline.remainder = currentTime;
 		timeline.next();
 		reset();
 	}

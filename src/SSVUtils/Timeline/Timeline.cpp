@@ -12,16 +12,12 @@ namespace ssvu
 {
 	Timeline::~Timeline() { clear(); }
 
-	void Timeline::append(Command& mCommand)
-	{
-		commands.push_back(&mCommand);
-		if(currentCommand == nullptr) currentCommand = &mCommand;
-	}
-	void Timeline::insert(int mIndex, Command& mCommand)
+	void Timeline::insert(unsigned int mIndex, Command& mCommand)
 	{
 		commands.insert(begin(commands) + mIndex, &mCommand);
 		if(currentCommand == nullptr) currentCommand = &mCommand;
 	}
+	void Timeline::append(Command& mCommand) { insert(commands.size(), mCommand); }
 	void Timeline::del(Command& mCommand) { eraseRemove(commands, &mCommand); commandManager.del(&mCommand); }
 
 	void Timeline::update(float mFrameTime)
@@ -33,13 +29,9 @@ namespace ssvu
 
 		do
 		{
-			if(currentCommand == nullptr)
-			{
-				finished = true;
-				ready = false;
-				break;
-			}
-			currentCommand->update(mFrameTime);
+			if(currentCommand == nullptr) { finished = true; ready = false; break; }
+			currentCommand->update(mFrameTime + remainder);
+			remainder = 0;
 		} while(ready);
 	}
 	void Timeline::jumpTo(unsigned int mIndex) { currentCommand = commands[mIndex]; }
@@ -48,9 +40,7 @@ namespace ssvu
 	{
 		start();
 		for(const auto& c : commands) c->reset();
-
-		if(!commands.empty()) currentCommand = commands[0];
-		else currentCommand = nullptr;
+		currentCommand = commands.empty() ? nullptr : commands[0];
 	}
 	void Timeline::clear()
 	{
@@ -66,16 +56,16 @@ namespace ssvu
 	{
 		if(currentCommand == nullptr) return;
 
-		auto iter(find(begin(commands), end(commands), currentCommand));
-		if(iter == commands.end() - 1)
+		auto itr(find(begin(commands), end(commands), currentCommand));
+		if(itr == commands.end() - 1)
 		{
 			currentCommand = nullptr; // no more commands
 			return;
 		}
-		else if(iter < end(commands) - 1 && iter >= begin(commands))
+		else if(itr < end(commands) - 1 && itr >= begin(commands))
 		{
-			iter++;
-			currentCommand = *iter;
+			++itr;
+			currentCommand = *itr;
 		}
 	}
 
