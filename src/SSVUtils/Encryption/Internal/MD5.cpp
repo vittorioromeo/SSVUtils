@@ -336,7 +336,7 @@ namespace ssvu
 			{
 				unsigned int i, j;
 
-				for(i = 0, j = 0; j < len; i++, j += 4)
+				for(i = 0, j = 0; j < len; ++i, j += 4)
 				{
 					output[j] = (unsigned char)(input[i] & 0xff);
 					output[j+1] = (unsigned char)((input[i] >> 8) & 0xff);
@@ -352,7 +352,7 @@ namespace ssvu
 			{
 				unsigned int i, j;
 
-				for(i = 0, j = 0; j < len; i++, j += 4)
+				for(i = 0, j = 0; j < len; ++i, j += 4)
 			 output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8) |
 			   (((UINT4)input[j+2]) << 16) | (((UINT4)input[j+3]) << 24);
 			}
@@ -364,7 +364,7 @@ namespace ssvu
 			{
 			  unsigned int i;
 
-			  for (i = 0; i < len; i++)
+			  for (i = 0; i < len; ++i)
 			 output[i] = input[i];
 			}
 
@@ -374,7 +374,7 @@ namespace ssvu
 			{
 				unsigned int i;
 
-			  for(i = 0; i < len; i++)
+			  for(i = 0; i < len; ++i)
 			 ((char *)output)[i] = (char)value;
 			}
 		}
