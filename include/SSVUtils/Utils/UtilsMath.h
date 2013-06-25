@@ -136,10 +136,6 @@ namespace ssvu
 	 *
 	 */
 	int getRnd(int mMin, int mMax);
-
-	// TODO: refactor/remove these two below
-	float getSaturated(float mValue);
-	float getSmootherStep(float, float, float);
 }
 
 #endif
