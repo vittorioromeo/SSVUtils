@@ -13,7 +13,7 @@ namespace ssvu
 {
 	namespace TemplateSystem
 	{
-		Dictionary::Dictionary(initializer_list<pair<string, string>> mPairs) { for(const auto& p : mPairs) replacements.insert(p); }
+		Dictionary::Dictionary(const initializer_list<pair<string, string>>& mPairs) { for(const auto& p : mPairs) replacements.insert(p); }
 
 		string Dictionary::getExpanded(string mString) const
 		{

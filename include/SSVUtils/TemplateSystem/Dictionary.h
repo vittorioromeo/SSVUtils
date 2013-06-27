@@ -50,7 +50,7 @@ namespace ssvu
 				 * @endcode
 				 *
 				 */
-				Dictionary(std::initializer_list<std::pair<std::string, std::string>> mPairs);
+				Dictionary(const std::initializer_list<std::pair<std::string, std::string>>& mPairs);
 
 				/*!
 				 *
