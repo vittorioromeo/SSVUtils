@@ -23,8 +23,7 @@ namespace ssvu
 
 					while(entry != NULL)
 					{
-						std::string name{entry->d_name}, path{getNormalizedPath(mPath) + "/" + name};
-
+						std::string name{entry->d_name}, path{getNormalizedPath(getNormalizedPath(mPath) + name)};
 						if(!isRootOrParent(path))
 						{
 							if(isFolder(path))

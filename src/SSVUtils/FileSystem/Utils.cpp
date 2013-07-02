@@ -2,6 +2,7 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
+#include <cstdlib>
 #include <dirent.h>
 #include <sys/stat.h>
 #include "SSVUtils/FileSystem/Utils.h"
@@ -23,12 +24,16 @@ namespace ssvu
 			if(err != 0) return false;
 			return (fileStat.st_mode & S_IFMT) == S_IFDIR;
 		}
-		bool isRootOrParent(const string& mPath) { return endsWith(mPath, ".") || endsWith(mPath, ".."); }
+		bool isRootOrParent(const string& mPath) { return endsWith(mPath, "./") || endsWith(mPath, "../"); }
 		void normalizePath(string& mPath)
 		{
 			replaceAll(mPath, R"(\)", "/");
+			replaceAll(mPath, R"(\\)", "/");
 			replaceAll(mPath, "//", "/");
-			while(endsWith(mPath, "/")) mPath = mPath.substr(0, mPath.size() - 1);
+
+			struct stat fileStat;
+			int err{stat(mPath.c_str(), &fileStat)};
+			if(err == 0 && (fileStat.st_mode & S_IFMT) == S_IFDIR && !endsWith(mPath, "/")) mPath.append("/");
 		}
 		string getNormalizedPath(string mPath) { normalizePath(mPath); return mPath; }
 		string getParentPath(string mPath)
@@ -68,6 +73,33 @@ namespace ssvu
 			normalizePath(mPath);
 			if(remove(mPath.c_str()) != 0) log("Error removing file: " + mPath, "ssvu::FileSystem::removeFile");
 		}
+
+		void expandUserPath(string& mPath)
+		{
+			// Same logic as python os.path.expanduserpath
+			// TODO: WIN32 NEEDS TESTING!
+
+			normalizePath(mPath);
+			string userHome;
+
+			#ifdef _WIN32
+				if(getenv("HOME") != NULL) userHome = getenv("HOME");
+				else if(getenv("USERPROFILE") != NULL) userHome = getenv("USERPROFILE");
+				else if(getenv("HOMEPATH") == NULL) return;
+				else
+				{
+					string drive{getenv("HOMEDRIVE")};
+					userHome = drive + getenv("HOMEPATH");
+				}
+			#else
+				if(getenv("HOME") != NULL) userHome = getenv("HOME");
+			#endif
+
+			replaceAll(mPath, "~", userHome);
+			normalizePath(mPath);
+		}
+
+		string getExpandedUserPath(string mPath) { expandUserPath(mPath); return mPath; }
 	}
 }
 

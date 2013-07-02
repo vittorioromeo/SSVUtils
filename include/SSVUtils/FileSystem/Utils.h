@@ -144,6 +144,9 @@ namespace ssvu
 		 *
 		 */
 		void removeFile(std::string mPath);
+
+		void expandUserPath(std::string& mPath);
+		std::string getExpandedUserPath(std::string mPath);
 	}
 }
 
