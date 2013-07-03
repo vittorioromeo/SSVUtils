@@ -37,8 +37,6 @@ namespace ssvu
 			}
 
 		public:
-			~Timeline();
-
 			template<typename T, typename... TArgs> T& append(TArgs&&... mArgs)
 			{
 				T& result(create<T>(mArgs...)); append(result); return result;

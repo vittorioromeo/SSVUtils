@@ -10,8 +10,6 @@ using namespace std;
 
 namespace ssvu
 {
-	Timeline::~Timeline() { clear(); }
-
 	void Timeline::insert(unsigned int mIndex, Command& mCommand)
 	{
 		commands.insert(begin(commands) + mIndex, &mCommand);
