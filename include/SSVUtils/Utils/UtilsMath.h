@@ -125,6 +125,10 @@ namespace ssvu
 		return wrapDegrees(start + (sin((end - start) / 57.3f)) *mSpeed);
 	}
 
+	// TODO: DOCUMENTATION
+	template<typename T> T get1DIndexFrom2D(const T& mX, const T& mY, const T& mColumns) { return mY * mColumns + mX; }
+	template<typename T> std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) { T y{mIndex / mColumns}; return {mIndex - y * mColumns, y}; }
+
 	/*!
 	 *
 	 * @brief Gets a random integer value between mMin and mMax.
