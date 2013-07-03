@@ -12,9 +12,9 @@ namespace ssvu
 {
 	namespace Encryption
 	{
-		template<> string encrypt<Type::Base64>(const string& mString) { return Internal::Base64Encode(mString); }
-		template<> string encrypt<Type::MD5>(const string& mString) { return Internal::MD5{mString}.GetHash(); }
-		template<> string decrypt<Type::Base64>(const string& mString) { return Internal::Base64Decode(mString); }
+		template<> string encrypt<Type::Base64>(const string& mString)	{ return Internal::Base64Encode(mString); }
+		template<> string encrypt<Type::MD5>(const string& mString)		{ return Internal::MD5{mString}.GetHash(); }
+		template<> string decrypt<Type::Base64>(const string& mString)	{ return Internal::Base64Decode(mString); }
 	}
 }
 

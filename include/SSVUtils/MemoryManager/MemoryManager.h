@@ -131,15 +131,17 @@ namespace ssvu
 			 */
 			TContainer& getItems() { return items; }
 
+
+			// Foreach loop/algorithms iterator support
 			typedef typename std::vector<TItem*>::iterator iterator;
 			typedef typename std::vector<TItem*>::const_iterator const_iterator;
 
-			iterator begin() { return items.begin(); }
-			const_iterator begin() const { return items.begin(); }
-			const iterator cbegin() const { return items.cbegin(); }
-			iterator end() { return items.end(); }
-			const_iterator end() const { return items.end(); }
-			const iterator cend() const { return items.cend(); }
+			iterator begin()				{ return items.begin(); }
+			const_iterator begin() const	{ return items.begin(); }
+			const iterator cbegin() const	{ return items.cbegin(); }
+			iterator end()					{ return items.end(); }
+			const_iterator end() const		{ return items.end(); }
+			const iterator cend() const		{ return items.cend(); }
 	};
 }
 
