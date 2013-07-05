@@ -15,25 +15,27 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
+		namespace Internal
+		{
+			bool isFolderNoNormalize(const string& mPath)
+			{
+				struct stat fileStat;
+				int err{stat(mPath.c_str(), &fileStat)};
+				if(err != 0) return false;
+				return (fileStat.st_mode & S_IFMT) == S_IFDIR;
+			}
+		}
+
 		bool exists(const string& mPath) { struct stat buf; return stat(getNormalizedPath(mPath).c_str(), &buf) != -1; }
 		bool hasExtension(const string& mFileName, const string& mExtension) { return endsWith(toLower(mFileName), toLower(mExtension)); }
-		bool isFolder(const string& mPath)
-		{
-			struct stat fileStat;
-			int err{stat(getNormalizedPath(mPath).c_str(), &fileStat)};
-			if(err != 0) return false;
-			return (fileStat.st_mode & S_IFMT) == S_IFDIR;
-		}
+		bool isFolder(const string& mPath) { return Internal::isFolderNoNormalize(getNormalizedPath(mPath)); }
 		bool isRootOrParent(const string& mPath) { return endsWith(mPath, "./") || endsWith(mPath, "../"); }
 		void normalizePath(string& mPath)
 		{
 			replaceAll(mPath, R"(\)", "/");
 			replaceAll(mPath, R"(\\)", "/");
 			replaceAll(mPath, "//", "/");
-
-			struct stat fileStat;
-			int err{stat(mPath.c_str(), &fileStat)};
-			if(err == 0 && (fileStat.st_mode & S_IFMT) == S_IFDIR && !endsWith(mPath, "/")) mPath.append("/");
+			if(Internal::isFolderNoNormalize(mPath) && !endsWith(mPath, "/")) mPath.append("/");
 		}
 		string getNormalizedPath(string mPath) { normalizePath(mPath); return mPath; }
 		string getParentPath(string mPath)
