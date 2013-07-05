@@ -48,7 +48,7 @@ namespace ssvu
 		}
 		string getNameFromPath(const string& mPath, const string& mPrefix, const string& mSuffix)
 		{
-			return mPath.substr(mPrefix.length(), mPath.length() - mPrefix.length() - mSuffix.length());
+			return getNormalizedPath(mPath).substr(mPrefix.length(), mPath.length() - mPrefix.length() - mSuffix.length());
 		}
 		string getFileContents(const string& mPath)
 		{
