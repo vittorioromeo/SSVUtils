@@ -125,8 +125,36 @@ namespace ssvu
 		return wrapDegrees(start + (sin((end - start) / 57.3f)) *mSpeed);
 	}
 
-	// TODO: DOCUMENTATION
+	/*!
+	 *
+	 * @brief Gets a 1D index from a 2D index.
+	 *
+	 * Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
+	 * Internally, it calculates and returns `mY * mColumns + mX`.
+	 *
+	 * @tparam T Type of index value.
+	 * @param mX X index.
+	 * @param mY Y index.
+	 * @param mColumns Number of columns of the 2D array.
+	 *
+	 * @return Returns a 1D index for an "implicit 2D" array with `mColumns` columns.
+	 *
+	 */
 	template<typename T> T get1DIndexFrom2D(const T& mX, const T& mY, const T& mColumns) { return mY * mColumns + mX; }
+
+	/*!
+	 *
+	 * @brief Gets a 2D index from an 1D index.
+	 *
+	 * Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
+	 *
+	 * @tparam T Type of index value.
+	 * @param mIndex 1D index.
+	 * @param mColumns Number of columns of the 2D array.
+	 *
+	 * @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mColumns` columns.
+	 *
+	 */
 	template<typename T> std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) { T y{mIndex / mColumns}; return {mIndex - y * mColumns, y}; }
 
 	/*!
