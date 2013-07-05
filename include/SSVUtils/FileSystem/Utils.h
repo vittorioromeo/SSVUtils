@@ -145,7 +145,28 @@ namespace ssvu
 		 */
 		void removeFile(std::string mPath);
 
+		/*!
+		 *
+		 * @brief Expands the `~` symbol in a path with the user's home path.
+		 *
+		 * Uses environment variables. Same logic as python's `os.path.expanduserpath`.
+		 *
+		 * @param mPath Path to expand.
+		 *
+		 */
 		void expandUserPath(std::string& mPath);
+
+		/*!
+		 *
+		 * @brief Expands the `~` symbol in a path with the user's home path.
+		 *
+		 * Uses environment variables. Same logic as python's `os.path.expanduserpath`.
+		 *
+		 * @param mPath Path to expand.
+		 *
+		 * @return Returns the path with the expanded `~` symbol.
+		 *
+		 */
 		std::string getExpandedUserPath(std::string mPath);
 	}
 }

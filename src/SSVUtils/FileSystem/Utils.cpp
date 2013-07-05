@@ -78,7 +78,6 @@ namespace ssvu
 
 		void expandUserPath(string& mPath)
 		{
-			// Same logic as python os.path.expanduserpath
 			// TODO: WIN32 NEEDS TESTING!
 
 			normalizePath(mPath);
