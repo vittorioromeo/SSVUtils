@@ -188,6 +188,15 @@ namespace ssvu
 			 */
 			TContainer& getItems() { return items; }
 
+			/*!
+			 *
+			 * @brief Gets a const reference to the main container. (const version)
+			 *
+			 * @return Returns a const reference to the main container.
+			 *
+			 */
+			const TContainer& getItems() const { return items; }
+
 
 			// Foreach loop/algorithms iterator support
 			typedef typename std::vector<TItem*>::iterator iterator;
