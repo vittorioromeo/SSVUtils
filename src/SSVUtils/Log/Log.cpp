@@ -11,7 +11,7 @@ using namespace std::chrono;
 
 namespace ssvu
 {
-	vector<string> logEntries;
+	static vector<string> logEntries;
 	time_point<high_resolution_clock> start, end;
 
 	vector<string>& getLogEntries() { return logEntries; }
