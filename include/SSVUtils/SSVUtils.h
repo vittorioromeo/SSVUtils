@@ -33,6 +33,7 @@
 
 // MemoryManager
 #include "SSVUtils/MemoryManager/MemoryManager.h"
+#include "SSVUtils/MemoryManager/MemoryManager2.h"
 
 // TemplateSystem
 #include "SSVUtils/TemplateSystem/Dictionary.h"
