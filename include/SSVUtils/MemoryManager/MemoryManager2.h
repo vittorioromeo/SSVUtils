@@ -20,6 +20,7 @@ namespace ssvu
 		public:
 			inline void cleanUp()	{ items.erase(std::remove_if(std::begin(items), std::end(items), deleter), std::end(items)); }
 			inline void populate()	{ for(const auto& i : toAdd) items.push_back(Uptr<T>(i)); toAdd.clear(); }
+			inline void clear()		{ items.clear(); toAdd.clear(); }
 
 			template<typename TType, typename... TArgs> inline TType& create(TArgs&&... mArgs) { TType* result{new TType(std::forward<TArgs>(mArgs)...)}; toAdd.push_back(result); return *result; }
 			template<typename... TArgs> inline T& create(TArgs&&... mArgs)	{ return create<T, TArgs...>(std::forward<TArgs>(mArgs)...); }
