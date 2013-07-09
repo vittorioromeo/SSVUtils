@@ -5,6 +5,8 @@
 #ifndef SSVU_UTILS_MATH
 #define SSVU_UTILS_MATH
 
+#include <array>
+
 namespace ssvu
 {
 	/*!
