@@ -5,11 +5,13 @@
 #ifndef SSVU_TIMELINE_COMMAND
 #define SSVU_TIMELINE_COMMAND
 
+#include "SSVUtils/MemoryManager/MemoryManager.h"
+
 namespace ssvu
 {
 	class Timeline;
 
-	struct Command
+	struct Command : public MemoryManageable
 	{
 		Timeline& timeline;
 

@@ -16,11 +16,11 @@ namespace ssvu
 		if(currentCommand == nullptr) currentCommand = &mCommand;
 	}
 	void Timeline::append(Command& mCommand) { insert(commands.size(), mCommand); }
-	void Timeline::del(Command& mCommand) { eraseRemove(commands, &mCommand); commandManager.del(&mCommand); }
+	void Timeline::del(Command& mCommand) { eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
 
 	void Timeline::update(float mFrameTime)
 	{
-		commandManager.cleanUp();
+		commandManager.refresh();
 
 		if(finished) return;
 		ready = true;
@@ -43,7 +43,6 @@ namespace ssvu
 	void Timeline::clear()
 	{
 		currentCommand = nullptr;
-		for(const auto& c : commands) commandManager.del(c);
 		commands.clear();
 		finished = true;
 	}

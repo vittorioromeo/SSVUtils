@@ -13,15 +13,19 @@ namespace ssvu
 	class TimelineManager
 	{
 		private:
-			ssvu::MemoryManager<ssvu::Timeline> memoryManager;
+			MemoryManager<Timeline> memoryManager;
 
 		public:
 			TimelineManager() = default;
 
-			ssvu::Timeline& create();
-			void update(float mFrameTime);
-			void clear();
+			inline Timeline& create() { return memoryManager.create(); }
+			inline void update(float mFrameTime)
+			{
+				memoryManager.refresh();
+				for(const auto& t : memoryManager) { t->update(mFrameTime); if(t->isFinished()) memoryManager.del(*t); }
+			}
+			inline void clear() { memoryManager.clear(); }
 	};
 }
 
-#endif 
+#endif

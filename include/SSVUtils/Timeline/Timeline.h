@@ -14,7 +14,7 @@ namespace ssvu
 {
 	using Action = std::function<void()>;
 
-	class Timeline
+	class Timeline : public MemoryManageable
 	{
 		friend class Wait;
 		friend class Do;
