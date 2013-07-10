@@ -157,7 +157,7 @@ namespace ssvu
 	 * @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mColumns` columns.
 	 *
 	 */
-	template<typename T> std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) { T y{mIndex / mColumns}; return std::array<T, 2>{mIndex - y * mColumns, y}; }
+	template<typename T> std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) { T y{mIndex / mColumns}; return std::array<T, 2>{{mIndex - y * mColumns, y}}; }
 
 	/*!
 	 *
