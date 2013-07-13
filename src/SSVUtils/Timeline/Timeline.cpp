@@ -47,8 +47,6 @@ namespace ssvu
 		finished = true;
 	}
 
-	void Timeline::start() { finished = false; ready = true; }
-
 	void Timeline::next()
 	{
 		if(currentCommand == nullptr) return;
@@ -66,8 +64,6 @@ namespace ssvu
 		}
 	}
 
-	bool Timeline::isFinished() { return finished; }
-	int Timeline::getSize() { return commands.size(); }
 	int Timeline::getCurrentIndex()
 	{
 		if(currentCommand == nullptr) return 0;

@@ -51,13 +51,13 @@ namespace ssvu
 			void update(float mFrameTime);
 			void jumpTo(unsigned int mIndex);
 
+			inline void start() { finished = false; ready = true; }
 			void reset();
 			void clear();
-			void start();
 
-			int getSize();
+			inline int getSize()		{ return commands.size(); }
+			inline bool isFinished()	{ return finished; }
 			int getCurrentIndex();
-			bool isFinished();
 	};
 }
 
