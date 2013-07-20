@@ -44,4 +44,7 @@
 #include "SSVUtils/Encryption/Encryption.h"
 #include "SSVUtils/Encryption/ObfuscatedValue.h"
 
+// Tokenizer
+#include "SSVUtils/Tokenizer/Tokenizer.h"
+
 #endif
