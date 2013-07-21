@@ -44,7 +44,7 @@ namespace ssvu
 
 					closedir(dir);
 				}
-				else log("Directory \"" + mPath + "\" not found", "ssvu::FileSystem::ScanHelper");
+				else lo << lt("ssvu::FileSystem::ScanHelper") << "Directory \"" << mPath << "\" not found" << std::endl;
 
 				if(TS == Sort::Alphabetic) std::sort(std::begin(mTarget), std::end(mTarget));
 			}

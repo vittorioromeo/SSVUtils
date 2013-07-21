@@ -3,7 +3,6 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #include <chrono>
-#include <fstream>
 #include "SSVUtils/Log/Log.h"
 
 using namespace std;
@@ -11,19 +10,12 @@ using namespace std::chrono;
 
 namespace ssvu
 {
-	static vector<string> logEntries;
-	time_point<high_resolution_clock> start, end;
+	static ostringstream logStream;
+	static time_point<high_resolution_clock> start, end;
+	Internal::LOut lo{};
 
-	vector<string>& getLogEntries() { return logEntries; }
+	ostringstream& getLogStream() { return logStream; }
 
-	void saveLogToFile(const string& mPath)
-	{
-		#ifndef SSVS_DISABLE_LOG
-			ofstream o; o.open(mPath);
-			for(const auto& logEntry : logEntries) o << logEntry;
-			o.flush(); o.close();
-		#endif
-	}
 	void startBenchmark()
 	{
 		#ifndef SSVS_DISABLE_LOG
@@ -36,6 +28,12 @@ namespace ssvu
 			end = high_resolution_clock::now();
 			auto elapsed = duration_cast<milliseconds>(end-start).count();
 			return toStr(elapsed) + toStr(" ms");
+		#endif
+	}
+	void saveLogToFile(const string& mPath)
+	{
+		#ifndef SSVS_DISABLE_LOG
+			std::ofstream o; o.open(mPath); o << getLogStream().str(); o.flush(); o.close();
 		#endif
 	}
 }

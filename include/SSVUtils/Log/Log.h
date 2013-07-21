@@ -8,45 +8,42 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <ostream>
+#include <fstream>
 #include "SSVUtils/String/Utils.h"
 
 namespace ssvu
 {
-	/*!
-	 *
-	 * @brief Gets all the previously entered log entries.
-	 *
-	 * @return Returns a reference to the internal log std::vector<string>.
-	 *
-	 */
-	std::vector<std::string>& getLogEntries();
+	std::ostringstream& getLogStream();
 
-	/*!
-	 *
-	 * @brief Creates a new log entry and sends it to std::cout.
-	 *
-	 * Logging introduces a minimal runtime overhead - you can disable logging by defining SSVU_DISABLE_LOG.
-	 *
-	 * @tparam T Type of the value to log.
-	 * @param mValue Value to log (gets internally converted to string).
-	 * @param mTitle Title of the log entry (will be displayed between square brackets).
-	 *
-	 */
-	template<class T> void log(const T& mValue, const std::string& mTitle = "")
+	namespace Internal
 	{
-		#ifndef SSVU_LOG_DISABLE
-			std::ostringstream entryStream;
+		using CoutType = std::basic_ostream<char, std::char_traits<char>>;
+		using StdEndLine = CoutType&(CoutType&);
 
-			if(mTitle != "") entryStream << "[" << mTitle << "] ";
-			entryStream << toStr(mValue) << std::endl;
+		struct LOut	{ };
+		struct LTitle { std::string str; };
 
-			std::string str{entryStream.str()};
-			std::cout << str;
-			getLogEntries().push_back(str);
-		#endif
+		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
+		{
+			std::string str{toStr(mValue)};
+			std::cout << str; getLogStream() << str;
+			return mLOut;
+		}
+		template<> inline LOut& operator<<<LTitle>(LOut& mLOut, const LTitle& mValue)
+		{
+			std::cout << std::left << std::setw(38) << mValue.str;
+			getLogStream() << std::left << std::setw(38) << mValue.str;
+			return mLOut;
+		}
+		inline LOut& operator<<(LOut& mLOut, StdEndLine manip) { manip(std::cout); manip(getLogStream()); return mLOut; }
+
 	}
+
+	extern Internal::LOut lo;
+	template<typename T> inline Internal::LTitle lt(const T& mValue) { Internal::LTitle result; result.str = "[" + toStr(mValue) + "] "; return result; }
 
 	/*!
 	 *
@@ -71,7 +68,9 @@ namespace ssvu
 	 * @param mPath File path (file will be created if it doesn't exist).
 	 *
 	 */
-	void saveLogToFile(const std::string& mPath);
+	extern void saveLogToFile(const std::string& mPath);
 }
 
 #endif
+
+// TODO: refactoring, cleanup and docs

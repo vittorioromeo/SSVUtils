@@ -57,7 +57,7 @@ namespace ssvu
 			size_t fsize(ftell(fptr));
 			fseek(fptr, 0, SEEK_SET);
 			string content; content.resize(fsize);
-			if(fread(const_cast<char*>(content.c_str()), 1, fsize, fptr) != fsize) log("Error: " + mPath, "ssvu::FileSystem::getFileContents");
+			if(fread(const_cast<char*>(content.c_str()), 1, fsize, fptr) != fsize) lo << lt("ssvu::FileSystem::getFileContents") << "Error: " << mPath;
 			fclose(fptr); return content;
 		}
 		void createFolder(string mPath)
@@ -73,7 +73,7 @@ namespace ssvu
 		void removeFile(string mPath)
 		{
 			normalizePath(mPath);
-			if(remove(mPath.c_str()) != 0) log("Error removing file: " + mPath, "ssvu::FileSystem::removeFile");
+			if(remove(mPath.c_str()) != 0) lo << lt("ssvu::FileSystem::removeFile") << "Error removing file: " << mPath;
 		}
 
 		void expandUserPath(string& mPath)
