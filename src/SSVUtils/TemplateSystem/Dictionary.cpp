@@ -22,8 +22,8 @@ namespace ssvu
 				const string sectionStart{getSectionStart(p.first)}, sectionEnd{getSectionEnd(p.first)};
 				const auto outerSectionStartIndex(mString.find(sectionStart));
 				const auto innerSectionEndIndex(mString.find(sectionEnd));
-				const auto innerSectionStartIndex(outerSectionStartIndex + sectionStart.length());
-				const auto outerSectionEndIndex(innerSectionEndIndex + sectionEnd.length());
+				const auto innerSectionStartIndex(outerSectionStartIndex + sectionStart.size());
+				const auto outerSectionEndIndex(innerSectionEndIndex + sectionEnd.size());
 
 				const string innerSection{mString.substr(innerSectionStartIndex, innerSectionEndIndex - innerSectionStartIndex)};
 				string innerSectionResult{""};

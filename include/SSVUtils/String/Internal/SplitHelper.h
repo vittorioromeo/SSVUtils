@@ -64,11 +64,11 @@ namespace ssvu
 					auto tokenLength(pos);
 
 					// If we need to keep the separator in the splitted strings, add the separator's length to the token length
-					if(TM == SplitMode::KeepSeparator) tokenLength += mSeparator.length();
+					if(TM == SplitMode::KeepSeparator) tokenLength += mSeparator.size();
 
 					token = mString.substr(0, tokenLength);
 					if(!token.empty()) mTarget.push_back(token);
-					mString.erase(0, pos + mSeparator.length());
+					mString.erase(0, pos + mSeparator.size());
 				}
 				if(!mString.empty()) mTarget.push_back(mString);
 			}

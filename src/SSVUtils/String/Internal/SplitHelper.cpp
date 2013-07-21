@@ -17,7 +17,7 @@ namespace ssvu
 			for(const auto& s : mSeparator)
 			{
 				StringSize temp{mString.find(s)};
-				if(temp < result) { result = temp; mLength = s.length(); }
+				if(temp < result) { result = temp; mLength = s.size(); }
 			}
 			return result;
 		}

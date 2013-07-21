@@ -130,6 +130,10 @@ namespace ssvu
 	 *
 	 */
 	unsigned int getNewLinesCount(const std::string& mString);
+
+	// TODO: documentation
+	size_t getLevenshteinDistance(const std::string& mA, const std::string& mB);
 }
 
 #endif
+

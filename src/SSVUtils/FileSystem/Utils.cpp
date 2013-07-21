@@ -41,14 +41,14 @@ namespace ssvu
 		string getParentPath(string mPath)
 		{
 			normalizePath(mPath);
-			for(auto i(mPath.length() - 1); i > 0; --i)
+			for(auto i(mPath.size() - 1); i > 0; --i)
 				if(mPath[i] == '/') return mPath.substr(0, i + 1);
 
 			return "";
 		}
 		string getNameFromPath(const string& mPath, const string& mPrefix, const string& mSuffix)
 		{
-			return getNormalizedPath(mPath).substr(mPrefix.length(), mPath.length() - mPrefix.length() - mSuffix.length());
+			return getNormalizedPath(mPath).substr(mPrefix.size(), mPath.size() - mPrefix.size() - mSuffix.size());
 		}
 		string getFileContents(const string& mPath)
 		{

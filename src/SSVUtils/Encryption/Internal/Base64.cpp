@@ -92,7 +92,7 @@ namespace ssvu
 				return ret;
 			}
 
-			string Base64Encode(const string& mString) { return Base64Encode(reinterpret_cast<const unsigned char*>(mString.c_str()), mString.length()); }
+			string Base64Encode(const string& mString) { return Base64Encode(reinterpret_cast<const unsigned char*>(mString.c_str()), mString.size()); }
 		}
 	}
 }
