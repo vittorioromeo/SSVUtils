@@ -21,7 +21,7 @@ namespace ssvu
 	 * @param mValue Const reference to the value.
 	 *
 	 */
-	template<typename T, typename V> void eraseRemove(T& mContainer, const V& mValue)
+	template<typename T, typename V> inline void eraseRemove(T& mContainer, const V& mValue)
 	{
 		mContainer.erase(std::remove(std::begin(mContainer), std::end(mContainer), mValue), std::end(mContainer));
 	}
@@ -38,7 +38,7 @@ namespace ssvu
 	 * @return Returns true if the container contains the specific item.
 	 *
 	 */
-	template<typename T, typename V> bool contains(const T& mContainer, const V& mValue)
+	template<typename T, typename V> inline bool contains(const T& mContainer, const V& mValue)
 	{
 		return std::find(std::begin(mContainer), std::end(mContainer), mValue) != std::end(mContainer);
 	}
@@ -57,7 +57,7 @@ namespace ssvu
 	 * @return Returns true if the container contains any of the items.
 	 *
 	 */
-	template<typename T, typename T2> bool containsAny(T& mContainer, const T2& mValues)
+	template<typename T, typename T2> inline bool containsAny(T& mContainer, const T2& mValues)
 	{
 		for(const auto& v : mValues) if(contains(mContainer, v)) return true;
 		return false;
@@ -71,7 +71,7 @@ namespace ssvu
 	 * @param mContainer Reference to the container.
 	 *
 	 */
-	template<typename T> void sort(T& mContainer) { std::sort(std::begin(mContainer), std::end(mContainer)); }
+	template<typename T> void inline sort(T& mContainer) { std::sort(std::begin(mContainer), std::end(mContainer)); }
 
 	/*!
 	 *
@@ -83,7 +83,7 @@ namespace ssvu
 	 * @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
 	 *
 	 */
-	template<typename T, typename P> void sort(T& mContainer, P mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
+	template<typename T, typename P> inline void sort(T& mContainer, P mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
 
 	/*!
 	 *
