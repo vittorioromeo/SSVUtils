@@ -6,9 +6,38 @@
 #define SSVU_UTILS_MATH
 
 #include <array>
+#include <random>
 
 namespace ssvu
 {
+	static std::mt19937 rndEngine;
+	template<typename T> using RndDistributionI = std::uniform_int_distribution<T>;
+	template<typename T> using RndDistributionF = std::uniform_real_distribution<T>;
+
+	/*!
+	 *
+	 * @brief Gets a random integer value between mMin and mMax.
+	 *
+	 * @param mMin Lower bound.
+	 * @param mMax Upper bound.
+	 *
+	 * @return Returns a random integer value, between mMin and mMax.
+	 *
+	 */
+	inline int getRnd(int mMin, int mMax) { return RndDistributionI<int>{mMin, mMax}(rndEngine); }
+
+	/*!
+	 *
+	 * @brief Gets a random floating point value between mMin and mMax.
+	 *
+	 * @param mMin Lower bound.
+	 * @param mMax Upper bound.
+	 *
+	 * @return Returns a random integer value, between mMin and mMax.
+	 *
+	 */
+	inline float getRndF(float mMin, float mMax) { return RndDistributionF<float>{mMin, mMax}(rndEngine); }
+
 	/*!
 	 *
 	 * @brief Gets the sign of a numeric value.
@@ -19,7 +48,7 @@ namespace ssvu
 	 * @return Returns 1 if the value is >0, -1 if the value is <= 0.
 	 *
 	 */
-	template<typename T> constexpr int getSign(const T& mValue) { return mValue > 0 ? 1 : -1; }
+	template<typename T> constexpr inline int getSign(const T& mValue) { return mValue > 0 ? 1 : -1; }
 
 	/*!
 	 *
@@ -33,7 +62,7 @@ namespace ssvu
 	 * @return Returns mMax if mValue > mMax, mMin if mValue < mMin, mValue if mMin < mValue < mMax.
 	 *
 	 */
-	template<typename T> constexpr T getClamped(const T& mValue, const T& mMin, const T& mMax) { return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
+	template<typename T> constexpr inline T getClamped(const T& mValue, const T& mMin, const T& mMax) { return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
 
 	/*!
 	 *
@@ -45,7 +74,7 @@ namespace ssvu
 	 * @return Returns the value in radians.
 	 *
 	 */
-	template<typename T> constexpr T toRadians(const T& mValue) { return mValue / 57.3f; }
+	template<typename T> constexpr inline T toRadians(const T& mValue) { return mValue / 57.3f; }
 
 	/*!
 	 *
@@ -57,7 +86,7 @@ namespace ssvu
 	 * @return Returns the value in degrees.
 	 *
 	 */
-	template<typename T> constexpr T toDegrees(const T& mValue) { return mValue * 57.3f; }
+	template<typename T> constexpr inline T toDegrees(const T& mValue) { return mValue * 57.3f; }
 
 	/*!
 	 *
@@ -69,7 +98,7 @@ namespace ssvu
 	 * @return Returns the restricted value in radians.
 	 *
 	 */
-	template<typename T> T wrapRadians(const T& mValue) { T result(fmod(mValue, 6.28f)); if(result < 0) result += 6.28f; return result; }
+	template<typename T> inline T wrapRadians(T mValue) { mValue = fmod(mValue, 6.28f); if(mValue < 0) mValue += 6.28f; return mValue; }
 
 	/*!
 	 *
@@ -81,7 +110,7 @@ namespace ssvu
 	 * @return Returns the restricted value in degrees.
 	 *
 	 */
-	template<typename T> T wrapDegrees(const T& mValue) { T result(fmod(mValue, 360.f)); if(result < 0) result += 360.f; return result; }
+	template<typename T> inline T wrapDegrees(T mValue) { mValue = fmod(mValue, 360.f); if(mValue < 0) mValue += 360.f; return mValue; }
 
 	/*!
 	 *
@@ -98,7 +127,7 @@ namespace ssvu
 	 * @return Returns the rotated angle in radians.
 	 *
 	 */
-	template<typename T, typename J> T getRotatedRadians(const T& mStart, const T& mEnd, const J& mSpeed)
+	template<typename T, typename J> inline T getRotatedRadians(const T& mStart, const T& mEnd, const J& mSpeed)
 	{
 		T start(wrapRadians(mStart)), end(wrapRadians(mEnd));
 		if(abs(start - end) < mSpeed) return end;
@@ -120,7 +149,7 @@ namespace ssvu
 	 * @return Returns the rotated angle in degrees.
 	 *
 	 */
-	template<typename T, typename J> T getRotatedDegrees(const T& mStart, const T& mEnd, const J& mSpeed)
+	template<typename T, typename J> inline T getRotatedDegrees(const T& mStart, const T& mEnd, const J& mSpeed)
 	{
 		T start(wrapDegrees(mStart)), end(wrapDegrees(mEnd));
 		if(abs(start - end) < mSpeed) return end;
@@ -142,7 +171,7 @@ namespace ssvu
 	 * @return Returns a 1D index for an "implicit 2D" array with `mColumns` columns.
 	 *
 	 */
-	template<typename T> T get1DIndexFrom2D(const T& mX, const T& mY, const T& mColumns) { return mY * mColumns + mX; }
+	template<typename T> constexpr inline T get1DIndexFrom2D(const T& mX, const T& mY, const T& mColumns) { return mY * mColumns + mX; }
 
 	/*!
 	 *
@@ -157,19 +186,8 @@ namespace ssvu
 	 * @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mColumns` columns.
 	 *
 	 */
-	template<typename T> std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) { T y{mIndex / mColumns}; return std::array<T, 2>{{mIndex - y * mColumns, y}}; }
-
-	/*!
-	 *
-	 * @brief Gets a random integer value between mMin and mMax.
-	 *
-	 * @param mMin Lower bound.
-	 * @param mMax Upper bound.
-	 *
-	 * @return Returns a random integer value, between mMin and mMax.
-	 *
-	 */
-	int getRnd(int mMin, int mMax);
+	template<typename T> inline std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) { T y{mIndex / mColumns}; return std::array<T, 2>{{mIndex - y * mColumns, y}}; }
 }
 
 #endif
+
