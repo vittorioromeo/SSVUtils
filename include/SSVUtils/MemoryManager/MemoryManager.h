@@ -8,7 +8,6 @@
 #include <vector>
 #include <algorithm>
 #include "SSVUtils/Global/Typedefs.h"
-#include "SSVUtils/MemoryManager/Internal/Deleter.h"
 
 namespace ssvu
 {
@@ -33,7 +32,7 @@ namespace ssvu
 		private:
 			Container items;
 			std::vector<T*> toAdd;
-			Internal::Deleter<T> deleter;
+			struct Deleter { inline bool operator()(const Uptr<T>& mItem) const { return !mItem->alive; } } deleter;
 
 		public:
 			inline void refresh()
