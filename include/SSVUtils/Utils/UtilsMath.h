@@ -24,7 +24,7 @@ namespace ssvu
 	 * @return Returns a random integer value, between mMin and mMax.
 	 *
 	 */
-	inline int getRnd(int mMin, int mMax) { return RndDistributionI<int>{mMin, mMax}(rndEngine); }
+	inline int getRnd(int mMin, int mMax) { return RndDistributionI<int>{mMin, mMax - 1}(rndEngine); }
 
 	/*!
 	 *
@@ -36,7 +36,7 @@ namespace ssvu
 	 * @return Returns a random integer value, between mMin and mMax.
 	 *
 	 */
-	inline float getRndF(float mMin, float mMax) { return RndDistributionF<float>{mMin, mMax}(rndEngine); }
+	inline float getRndF(float mMin, float mMax) { return RndDistributionF<float>{mMin, mMax - 1}(rndEngine); }
 
 	/*!
 	 *
