@@ -28,8 +28,7 @@ namespace ssvu
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
-			std::string str{toStr(mValue)};
-			std::cout << str; getLogStream() << str;
+			std::cout << mValue; getLogStream() << mValue;
 			return mLOut;
 		}
 		template<> inline LOut& operator<<<LTitle>(LOut& mLOut, const LTitle& mValue)
@@ -39,7 +38,6 @@ namespace ssvu
 			return mLOut;
 		}
 		inline LOut& operator<<(LOut& mLOut, StdEndLine manip) { manip(std::cout); manip(getLogStream()); return mLOut; }
-
 	}
 
 	extern Internal::LOut lo;
