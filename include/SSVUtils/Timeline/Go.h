@@ -6,6 +6,7 @@
 #define SSVU_TIMELINE_GO
 
 #include "SSVUtils/Timeline/Command.h"
+#include "SSVUtils/Timeline/Timeline.h"
 
 namespace ssvu
 {
@@ -14,11 +15,16 @@ namespace ssvu
 		protected:
 			int targetIndex, times, currentTimes;
 
-			void update(float mFrameTime) override;
-			void reset() override;
+			inline void update(float) override
+			{
+				if(currentTimes == 0)		{ timeline.next(); }
+				else if(currentTimes > 0)	{ currentTimes--; timeline.jumpTo(targetIndex); }
+				else						{ timeline.jumpTo(targetIndex); }
+			}
+			inline void reset() override { currentTimes = times; }
 
 		public:
-			Go(Timeline& mTimeline, int mTargetIndex, int mTimes);
+			Go(Timeline& mTimeline, int mTargetIndex, int mTimes = -1) : Command{mTimeline}, targetIndex{mTargetIndex}, times{mTimes}, currentTimes{mTimes} { }
 	};
 }
 

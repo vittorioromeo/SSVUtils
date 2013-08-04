@@ -14,11 +14,10 @@ namespace ssvu
 	struct Command : public MemoryManageable
 	{
 		Timeline& timeline;
-
-		Command(Timeline& mTimeline);
-		virtual ~Command();
-		virtual void update(float mFrameTime);
-		virtual void reset();
+		Command(Timeline& mTimeline) : timeline(mTimeline) { }
+		virtual ~Command() { }
+		virtual void update(float) { }
+		virtual void reset() { }
 	};
 }
 #endif

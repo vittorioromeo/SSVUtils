@@ -5,21 +5,20 @@
 #ifndef SSVU_TIMELINE_DO
 #define SSVU_TIMELINE_DO
 
-#include "SSVUtils/Timeline/Command.h"
 #include <functional>
+#include "SSVUtils/Timeline/Command.h"
+#include "SSVUtils/Timeline/Timeline.h"
 
 namespace ssvu
 {
 	class Do : public Command
 	{
-		typedef std::function<void()> Action;
-
 		protected:
-			Action action;
-			void update(float mFrameTime) override;
+			std::function<void()> action;
+			inline void update(float) override { action(); timeline.next(); }
 
 		public:
-			Do(Timeline& mTimeline, Action mAction);
+			Do(Timeline& mTimeline, Action mAction) : Command{mTimeline}, action{mAction} { }
 	};
 }
 

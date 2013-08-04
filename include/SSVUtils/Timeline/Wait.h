@@ -6,6 +6,7 @@
 #define SSVU_TIMELINE_WAIT
 
 #include "SSVUtils/Timeline/Command.h"
+#include "SSVUtils/Timeline/Timeline.h"
 
 namespace ssvu
 {
@@ -13,12 +14,23 @@ namespace ssvu
 	{
 		protected:
 			float time, currentTime;
-			void update(float mFrameTime) override;
-			void reset() override;
+
+			inline void update(float mFrameTime) override
+			{
+				timeline.ready = false;
+
+				currentTime -= mFrameTime;
+				if(currentTime > 0) return;
+
+				timeline.remainder = currentTime;
+				timeline.next(); reset();
+			}
+			inline void reset() override { currentTime = time; }
 
 		public:
-			Wait(Timeline& mTimeline, float mTime);
+			Wait(Timeline& mTimeline, float mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { }
 	};
 
 }
+
 #endif
