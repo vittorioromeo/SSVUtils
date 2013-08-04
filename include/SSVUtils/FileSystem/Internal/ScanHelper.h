@@ -18,7 +18,7 @@ namespace ssvu
 		{
 			template<Mode TM, Type TT, Pick TP, Sort TS> static void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired)
 			{
-				if(!isFolder(mPath)) lo << lt("ssvu::FileSystem::ScanHelper") << "Directory \"" << mPath << "\" not found" << std::endl;
+				if(!isFolder(mPath)) { lo << lt("ssvu::FileSystem::ScanHelper") << "Directory \"" << mPath << "\" not found" << std::endl; return; }
 
 				DIR* dir{opendir(mPath.c_str())};
 				dirent* entry{readdir(dir)};
@@ -43,8 +43,8 @@ namespace ssvu
 
 					entry = readdir(dir);
 				}
-				closedir(dir);
 
+				closedir(dir);
 				if(TS == Sort::Alphabetic) std::sort(std::begin(mTarget), std::end(mTarget));
 			}
 		}
