@@ -47,6 +47,7 @@ namespace ssvu
 			template<typename... TArgs> inline T& create(TArgs&&... mArgs)	{ return create<T, TArgs...>(std::forward<TArgs>(mArgs)...); }
 
 			inline Container& getItems() { return items; }
+			inline const Container& getItems() const { return items; }
 
 			// Foreach loop/algorithms iterator support
 			using iterator = typename Container::iterator;
