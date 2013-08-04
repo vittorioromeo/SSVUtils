@@ -2,6 +2,8 @@
 #define SSVU_PREALLOCATOR
 
 #include <vector>
+#include <algorithm>
+#include <functional>
 #include "SSVUtils/Global/Typedefs.h"
 
 namespace ssvu
@@ -94,6 +96,72 @@ namespace ssvu
 				auto objStart(reinterpret_cast<MemoryPtr>(mObject));
 				available.emplace_back(objStart, objStart + sizeof(T));
 			}
+	};
+
+	template<typename T> class PreAllocatedMemoryManager
+	{
+		public:
+			struct Handle
+			{
+				PreAllocator* p;
+				T* ptr;
+				std::function<void()> delfunc{nullptr};
+
+				inline Handle(PreAllocator& mPreAllocator, T* mPtr) : p(&mPreAllocator), ptr{mPtr} { }
+				inline Handle(PreAllocator& mPreAllocator, T* mPtr, std::function<void()> mDelfunc) : p(&mPreAllocator), ptr{mPtr}, delfunc(mDelfunc) { }
+				Handle(const Handle&) = delete;
+				Handle& operator=(const Handle&) = delete;
+				inline Handle(Handle&& mOther) : p(mOther.p), ptr(mOther.ptr) { mOther.ptr = nullptr; delfunc = mOther.delfunc;}
+				inline Handle& operator=(Handle&& mOther) { p = mOther.p; ptr = mOther.ptr; mOther.ptr = nullptr; delfunc = mOther.delfunc;}
+				inline ~Handle() { if(delfunc != nullptr) { delfunc(); return; } if(ptr != nullptr) p->destroy<T>(ptr); }
+
+				inline T* operator->() {return ptr;}
+				inline T& operator*() {return *ptr;}
+				inline T* get() { return ptr; }
+
+				inline T* operator->() const {return ptr;}
+				inline const T& operator*() const {return *ptr;}
+				inline T* get() const { return ptr; }
+			};
+
+		private:
+			PreAllocator& preAllocator;
+
+		public:
+			using Container = std::vector<Handle>;
+
+		private:
+			Container items;
+			std::vector<T*> toAdd;
+			struct Deleter { inline bool operator()(const Handle& mItem) const { return !mItem->alive; } } deleter;
+
+		public:
+			PreAllocatedMemoryManager(PreAllocator& mPreAllocator) : preAllocator(mPreAllocator) { }
+
+			inline void refresh()
+			{
+				items.erase(std::remove_if(std::begin(items), std::end(items), deleter), std::end(items));
+				for(auto& i : toAdd) items.push_back(Handle(preAllocator, i));
+				toAdd.clear();
+			}
+			inline void clear()	{ items.clear(); toAdd.clear(); }
+			inline void del(T& mItem) { mItem.alive = false; }
+
+			template<typename TType, typename... TArgs> inline TType& create(TArgs&&... mArgs) { TType* result{preAllocator.create<TType>(std::forward<TArgs>(mArgs)...)}; toAdd.push_back(result); return *result; }
+			template<typename... TArgs> inline T& create(TArgs&&... mArgs)	{ return create<T, TArgs...>(std::forward<TArgs>(mArgs)...); }
+
+			inline Container& getItems() { return items; }
+
+			// Foreach loop/algorithms iterator support
+			using iterator = typename Container::iterator;
+			using const_iterator = typename Container::const_iterator;
+
+			iterator begin()				{ return items.begin(); }
+			const_iterator begin() const	{ return items.begin(); }
+			const iterator cbegin() const	{ return items.cbegin(); }
+			iterator end()					{ return items.end(); }
+			const_iterator end() const		{ return items.end(); }
+			const iterator cend() const		{ return items.cend(); }
 	};
 }
 
