@@ -5,7 +5,6 @@
 #ifndef SSVU_LOG
 #define SSVU_LOG
 
-#include <vector>
 #include <string>
 #include <iostream>
 #include <iomanip>

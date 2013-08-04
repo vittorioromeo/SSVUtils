@@ -5,8 +5,6 @@
 #ifndef SSVU_FILESYSTEM_SCAN
 #define SSVU_FILESYSTEM_SCAN
 
-#include <dirent.h>
-#include <sys/stat.h>
 #include <vector>
 #include <string>
 #include "SSVUtils/Log/Log.h"
