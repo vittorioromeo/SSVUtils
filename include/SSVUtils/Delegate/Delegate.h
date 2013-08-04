@@ -11,6 +11,8 @@
 
 namespace ssvu
 {
+	template<typename T> class Delegate;
+
 	/*!
 	 *
 	 * @brief C#-like delegate class (returns a std::vector)
@@ -21,7 +23,7 @@ namespace ssvu
 	 * @tparam TArgs Function signature variadic arguments.
 	 *
 	 */
-	template<typename TReturn, typename... TArgs> class Delegate
+	template<typename TReturn, typename... TArgs> class Delegate<TReturn(TArgs...)>
 	{
 		private:
 			using Func = std::function<TReturn(TArgs...)>;
@@ -82,7 +84,7 @@ namespace ssvu
 	 * @tparam TArgs Function signature variadic arguments.
 	 *
 	 */
-	template<typename... TArgs> class Delegate<void, TArgs...>
+	template<typename... TArgs> class Delegate<void(TArgs...)>
 	{
 		private:
 			using Func = std::function<void(TArgs...)>;
