@@ -28,20 +28,34 @@ namespace ssvu
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
-			std::cout << mValue; getLogStream() << mValue;
-			return mLOut;
+			#ifndef SSVU_LOG_DISABLE
+				std::cout << mValue; getLogStream() << mValue;
+				return mLOut;
+			#endif
 		}
 		template<> inline LOut& operator<<<LTitle>(LOut& mLOut, const LTitle& mValue)
 		{
-			std::cout << std::left << std::setw(38) << mValue.str;
-			getLogStream() << std::left << std::setw(38) << mValue.str;
-			return mLOut;
+			#ifndef SSVU_LOG_DISABLE
+				std::cout << std::left << std::setw(38) << mValue.str;
+				getLogStream() << std::left << std::setw(38) << mValue.str;
+				return mLOut;
+			#endif
 		}
-		inline LOut& operator<<(LOut& mLOut, StdEndLine manip) { manip(std::cout); manip(getLogStream()); return mLOut; }
+		inline LOut& operator<<(LOut& mLOut, StdEndLine manip)
+		{
+			#ifndef SSVU_LOG_DISABLE
+				manip(std::cout); manip(getLogStream()); return mLOut;
+			#endif
+		}
 	}
 
 	extern Internal::LOut lo;
-	template<typename T> inline Internal::LTitle lt(const T& mValue) { Internal::LTitle result; result.str = "[" + toStr(mValue) + "] "; return result; }
+	template<typename T> inline Internal::LTitle lt(const T& mValue)
+	{
+		#ifndef SSVU_LOG_DISABLE
+			Internal::LTitle result; result.str = "[" + toStr(mValue) + "] "; return result;
+		#endif
+	}
 
 	/*!
 	 *
