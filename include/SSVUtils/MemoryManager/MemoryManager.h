@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_MEMORYMANAGER2
-#define SSVU_MEMORYMANAGER2
+#ifndef SSVU_MEMORYMANAGER
+#define SSVU_MEMORYMANAGER
 
 #include <vector>
 #include <algorithm>
