@@ -24,7 +24,7 @@ namespace ssvu
 				const auto outerSectionEndIndex(innerSectionEndIndex + sectionEnd.size());
 
 				const string innerSection{mString.substr(innerSectionStartIndex, innerSectionEndIndex - innerSectionStartIndex)};
-				string innerSectionResult{""};
+				string innerSectionResult;
 
 				for(auto d : p.second) innerSectionResult += d.getExpanded(innerSection);
 
