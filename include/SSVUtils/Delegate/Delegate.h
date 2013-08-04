@@ -44,7 +44,7 @@ namespace ssvu
 			 * @param mFunc Function to add - can be a std::function or a lambda
 			 *
 			 */
-			template<typename T> Delegate& operator+=(T mFunc) { funcs.push_back(Func(mFunc)); return *this; }
+			template<typename T> inline Delegate& operator+=(T mFunc) { funcs.push_back(Func(mFunc)); return *this; }
 
 			/*!
 			 *
@@ -67,7 +67,7 @@ namespace ssvu
 			 * @return std::vector containing return values from the functions
 			 *
 			 */
-			std::vector<TReturn> operator()(TArgs... mArgs)
+			inline std::vector<TReturn> operator()(TArgs... mArgs)
 			{
 				std::vector<TReturn> result;
 				for(const auto& f : funcs) result.push_back(f(mArgs...));
@@ -105,7 +105,7 @@ namespace ssvu
 			 * @param mFunc Function to add - can be a std::function or a lambda
 			 *
 			 */
-			template<typename T> Delegate& operator+=(T mFunc) { funcs.push_back(Func(mFunc)); return *this; }
+			template<typename T> inline Delegate& operator+=(T mFunc) { funcs.push_back(Func(mFunc)); return *this; }
 
 			/*!
 			 *
@@ -125,7 +125,7 @@ namespace ssvu
 			 * @param mArgs Arguments passed to every function
 			 *
 			 */
-			void operator()(TArgs... mArgs) { for(const auto& f : funcs) f(mArgs...); }
+			inline void operator()(TArgs... mArgs) { for(const auto& f : funcs) f(mArgs...); }
 	};
 }
 
