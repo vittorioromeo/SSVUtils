@@ -23,7 +23,7 @@ namespace ssvu
 	 * @return Returns a std::string representing the converted value.
 	 *
 	 */
-	template<typename T> std::string toStr(const T& mValue) { std::ostringstream oss; oss << mValue; return oss.str(); }
+	template<typename T> inline std::string toStr(const T& mValue) { std::ostringstream oss; oss << mValue; return oss.str(); }
 
 	/*!
 	 *
