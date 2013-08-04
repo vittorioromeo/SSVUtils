@@ -50,7 +50,7 @@ namespace ssvu
 				 * @endcode
 				 *
 				 */
-				Dictionary(const std::initializer_list<std::pair<std::string, std::string>>& mPairs);
+				Dictionary(const std::initializer_list<std::pair<std::string, std::string>>& mPairs) { for(const auto& p : mPairs) replacements.insert(p); }
 
 				/*!
 				 *
@@ -94,7 +94,7 @@ namespace ssvu
 				 * @return Returns a reference to the string used in the "key -> string" replacement. Set it to the value you desire.
 				 *
 				 */
-				std::string& operator[](const std::string& mKey);
+				inline std::string& operator[](const std::string& mKey) { return replacements[mKey]; }
 
 				/*!
 				 *
@@ -118,7 +118,7 @@ namespace ssvu
 				 * @param mPair Pair containing the key of the section name and the subdictionary to use in the replacement.
 				 *
 				 */
-				void operator+=(const std::pair<std::string, Dictionary>& mPair);
+				inline void operator+=(const std::pair<std::string, Dictionary>& mPair) { sectionDictionaries[mPair.first].push_back(mPair.second); }
 		};
 	}
 }

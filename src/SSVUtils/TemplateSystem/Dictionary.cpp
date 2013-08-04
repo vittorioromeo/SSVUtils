@@ -13,8 +13,6 @@ namespace ssvu
 {
 	namespace TemplateSystem
 	{
-		Dictionary::Dictionary(const initializer_list<pair<string, string>>& mPairs) { for(const auto& p : mPairs) replacements.insert(p); }
-
 		string Dictionary::getExpanded(string mString) const
 		{
 			for(const auto& p : sectionDictionaries)
@@ -40,8 +38,5 @@ namespace ssvu
 
 			return mString;
 		}
-
-		string& Dictionary::operator[](const string& mKey) { return replacements[mKey]; }
-		void Dictionary::operator+=(const pair<string, Dictionary>& mPair) { sectionDictionaries[mPair.first].push_back(mPair.second); }
 	}
 }
