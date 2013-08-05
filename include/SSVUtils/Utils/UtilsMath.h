@@ -10,7 +10,7 @@
 
 namespace ssvu
 {
-	static std::mt19937 rndEngine;
+	static std::minstd_rand rndEngine;
 	template<typename T> using RndDistributionI = std::uniform_int_distribution<T>;
 	template<typename T> using RndDistributionF = std::uniform_real_distribution<T>;
 
