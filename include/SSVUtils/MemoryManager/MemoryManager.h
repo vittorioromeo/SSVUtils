@@ -16,10 +16,10 @@ namespace ssvu
 
 	namespace Internal
 	{
-		template<typename TDerived, typename T, typename TDeleter = std::default_delete<T>> class MemoryManagerBase
+		template<typename TDerived, typename TItem, typename TDeleter = std::default_delete<TItem>> class MemoryManagerBase
 		{
 			protected:
-				using TUptr = Uptr<T, TDeleter>;
+				using TUptr = Uptr<TItem, TDeleter>;
 
 			public:
 				using Container = std::vector<TUptr>;
@@ -29,11 +29,11 @@ namespace ssvu
 				using ConstIterator = typename Container::const_iterator;
 
 				Container items;
-				std::vector<T*> toAdd;
+				std::vector<TItem*> toAdd;
 
 			 public:
 				inline void clear()			{ items.clear(); toAdd.clear(); }
-				inline void del(T& mItem)	{ mItem.mmAlive = false; }
+				inline void del(TItem& mItem)	{ mItem.mmAlive = false; }
 
 				// Statically polymorphic methods
 				inline void refresh() { static_cast<TDerived*>(this)->refreshImpl(); }
@@ -41,7 +41,7 @@ namespace ssvu
 				{
 					return static_cast<TDerived*>(this)->template createTImpl<TType, TArgs...>(std::forward<TArgs>(mArgs)...);
 				}
-				template<typename... TArgs> inline T& create(TArgs&&... mArgs)
+				template<typename... TArgs> inline TItem& create(TArgs&&... mArgs)
 				{
 					return static_cast<TDerived*>(this)->template createImpl<TArgs...>(std::forward<TArgs>(mArgs)...);
 				}
