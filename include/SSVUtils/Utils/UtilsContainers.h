@@ -102,6 +102,12 @@ namespace ssvu
 		for(const auto& itr(std::begin(mMap)); itr != std::end(mMap); ++itr) result.push_back(itr->first);
 		return result;
 	}
+
+	template<typename T, typename TPredicate> inline void eraseRemoveIf(T& mContainer, const TPredicate& mPredicate)
+	{
+		// TODO: doc
+		mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer));
+	}
 }
 
 #endif
