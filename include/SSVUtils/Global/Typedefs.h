@@ -9,7 +9,7 @@
 
 namespace ssvu
 {
-	template<typename T> using Uptr = std::unique_ptr<T>;
+	template<typename T, typename TDeleter = std::default_delete<T>> using Uptr = std::unique_ptr<T, TDeleter>;
 }
 
 #endif
