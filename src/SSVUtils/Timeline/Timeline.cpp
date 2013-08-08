@@ -4,19 +4,17 @@
 
 #include "SSVUtils/Timeline/Timeline.h"
 #include "SSVUtils/Timeline/Command.h"
-#include "SSVUtils/Utils/UtilsContainers.h"
 
 using namespace std;
 
 namespace ssvu
 {
-	void Timeline::insert(unsigned int mIndex, Command& mCommand)
+	Command& Timeline::insert(unsigned int mIndex, Command& mCommand)
 	{
 		commands.insert(begin(commands) + mIndex, &mCommand);
 		if(currentCommand == nullptr) currentCommand = &mCommand;
+		return mCommand;
 	}
-	void Timeline::append(Command& mCommand) { insert(commands.size(), mCommand); }
-	void Timeline::del(Command& mCommand) { eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
 
 	void Timeline::update(float mFrameTime)
 	{
@@ -32,7 +30,6 @@ namespace ssvu
 			remainder = 0;
 		} while(ready);
 	}
-	void Timeline::jumpTo(unsigned int mIndex) { currentCommand = commands[mIndex]; }
 
 	void Timeline::reset()
 	{
@@ -40,34 +37,13 @@ namespace ssvu
 		for(const auto& c : commands) c->reset();
 		currentCommand = commands.empty() ? nullptr : commands[0];
 	}
-	void Timeline::clear()
-	{
-		currentCommand = nullptr;
-		commands.clear();
-		finished = true;
-	}
 
 	void Timeline::next()
 	{
 		if(currentCommand == nullptr) return;
+		auto itr(find(commands, currentCommand));
 
-		auto itr(find(begin(commands), end(commands), currentCommand));
-		if(itr == commands.end() - 1)
-		{
-			currentCommand = nullptr; // no more commands
-			return;
-		}
-		else if(itr < end(commands) - 1 && itr >= begin(commands))
-		{
-			++itr;
-			currentCommand = *itr;
-		}
-	}
-
-	int Timeline::getCurrentIndex()
-	{
-		if(currentCommand == nullptr) return 0;
-		unsigned int pos(find(begin(commands), end(commands), currentCommand) - begin(commands));
-		return pos < commands.size() ? pos : -1;
+		if(itr == end(commands) - 1) { currentCommand = nullptr; return; } // no more commands, return
+		if(itr < end(commands) - 1 && itr >= begin(commands)) currentCommand = *++itr;
 	}
 }

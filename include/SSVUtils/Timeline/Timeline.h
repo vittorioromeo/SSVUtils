@@ -9,6 +9,7 @@
 #include <functional>
 #include "SSVUtils/MemoryManager/MemoryManager.h"
 #include "SSVUtils/Timeline/Command.h"
+#include "SSVUtils/Utils/UtilsContainers.h"
 
 namespace ssvu
 {
@@ -27,37 +28,35 @@ namespace ssvu
 			bool ready{true}, finished{false};
 			float remainder{0.f};
 
-			void insert(unsigned int mIndex, Command& mCommand);
-			void append(Command& mCommand);
+			Command& insert(unsigned int mIndex, Command& mCommand);
+			inline Command& append(Command& mCommand) { return insert(commands.size(), mCommand); }
 			void next();
 
-			template<typename T, typename... TArgs> T& create(TArgs&&... mArgs)
+			template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs)
 			{
 				return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...);
 			}
 
 		public:
-			template<typename T, typename... TArgs> T& append(TArgs&&... mArgs)
-			{
-				T& result(create<T>(mArgs...)); append(result); return result;
-			}
-			template<typename T, typename... TArgs> T& insert(unsigned int mIndex, TArgs&&... mArgs)
-			{
-				T& result(create<T>(mArgs...)); insert(mIndex, result); return result;
-			}
+			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return static_cast<T&>(append(create<T>(mArgs...))); }
+			template<typename T, typename... TArgs> inline T& insert(unsigned int mIndex, TArgs&&... mArgs)	{ return static_cast<T&>(insert(mIndex, create<T>(mArgs...))); }
 
-			void del(Command& mCommand);
+			inline void del(Command& mCommand)		{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
+			inline void jumpTo(unsigned int mIndex)	{ currentCommand = commands[mIndex]; }
+			inline void start()						{ finished = false; ready = true; }
+			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
 
 			void update(float mFrameTime);
-			void jumpTo(unsigned int mIndex);
-
-			inline void start() { finished = false; ready = true; }
 			void reset();
-			void clear();
 
-			inline int getSize()		{ return commands.size(); }
-			inline bool isFinished()	{ return finished; }
-			int getCurrentIndex();
+			inline int getSize() const		{ return commands.size(); }
+			inline bool isFinished() const	{ return finished; }
+			inline int getCurrentIndex() const
+			{
+				if(currentCommand == nullptr) return 0;
+				auto pos(indexOf(commands, currentCommand));
+				return pos < commands.size() ? pos : -1;
+			}
 	};
 }
 
