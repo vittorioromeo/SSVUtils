@@ -74,7 +74,7 @@ namespace ssvu
 
 				inline void unifyContiguous()
 				{
-					std::sort(std::begin(available), std::end(available), [](const MemRange& mA, const MemRange& mB){ return mA.begin < mB.begin; });
+					sort(available, [](const MemRange& mA, const MemRange& mB){ return mA.begin < mB.begin; });
 					//for(auto i(0u); i < available.size(); ++i) unifyFrom(i);
 					unifyFrom(0);
 				}
