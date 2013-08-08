@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include "SSVUtils/FileSystem/Enums.h"
 #include "SSVUtils/FileSystem/Utils.h"
+#include "SSVUtils/Utils/UtilsContainers.h"
 
 namespace ssvu
 {
@@ -45,7 +46,7 @@ namespace ssvu
 				}
 
 				closedir(dir);
-				if(TS == Sort::Alphabetic) std::sort(std::begin(mTarget), std::end(mTarget));
+				if(TS == Sort::Alphabetic) sort(mTarget);
 			}
 		}
 	}
