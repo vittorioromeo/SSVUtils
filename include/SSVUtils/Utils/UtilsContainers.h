@@ -11,6 +11,16 @@
 
 namespace ssvu
 {
+	// TODO: docs
+	template<typename T, typename V> inline typename T::const_iterator find(const T& mContainer, const V& mValue)
+	{
+		return std::find<typename T::const_iterator, V>(std::begin(mContainer), std::end(mContainer), mValue);
+	}
+	template<typename T, typename V> inline typename T::size_type indexOf(const T& mContainer, const V& mValue)
+	{
+		return find(mContainer, mValue) - std::begin(mContainer);
+	}
+
 	/*!
 	 *
 	 * @brief Removes a specific item from a container.
@@ -103,11 +113,22 @@ namespace ssvu
 		return result;
 	}
 
+	/*!
+	 *
+	 * @brief Removes all items that satisfy a predicate from a container.
+	 *
+	 * @tparam T Type of the container.
+	 * @tparam TPredicate Type of the predicate.
+	 * @param mContainer Reference to the container.
+	 * @param mPredicate Const reference to the predicate.
+	 *
+	 */
 	template<typename T, typename TPredicate> inline void eraseRemoveIf(T& mContainer, const TPredicate& mPredicate)
 	{
-		// TODO: doc
 		mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer));
 	}
+
+
 }
 
 #endif
