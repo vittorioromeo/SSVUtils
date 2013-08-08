@@ -43,4 +43,7 @@
 #include "SSVUtils/Encryption/Encryption.h"
 #include "SSVUtils/Encryption/ObfuscatedValue.h"
 
+// PreAlloc
+#include "SSVUtils/PreAlloc/PreAlloc.h"
+
 #endif
