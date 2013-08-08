@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <cmath>
 #include "SSVUtils/Global/Typedefs.h"
+#include "SSVUtils/Utils/UtilsContainers.h"
 #include "SSVUtils/MemoryManager/MemoryManager.h"
 
 namespace ssvu
@@ -168,26 +169,26 @@ namespace ssvu
 				inline void destroy(T* mObject) { PreAllocatorChunk::destroy<T>(mObject); }
 		};
 
-		template<typename T> class PreAllocMemoryManager : public MemoryManagerBase<PreAllocMemoryManager<T>, T, std::function<void(T*)>>
+		template<typename T> class PreAllocMMStatic : public ssvu::Internal::MemoryManagerBase<PreAllocMMStatic<T>, T, std::function<void(T*)>>
 		{
 			private:
 				using UptrDeleter = std::function<void(T*)>;
 
 			private:
-				PreAllocatorStatic<T> preAllocator{500};
+				PreAllocatorStatic<T> preAllocator{20000};
 				UptrDeleter uptrDeleter;
 
 			public:
-				PreAllocMemoryManager() : uptrDeleter{[&](T* mPtr){ preAllocator.destroy(mPtr); }} { }
+				PreAllocMMStatic() : uptrDeleter{[&](T* mPtr){ preAllocator.destroy(mPtr); }} { }
 
 				inline void refreshImpl()
 				{
-					this->items.erase(std::remove_if(std::begin(this->items), std::end(this->items), this->deleter), std::end(this->items));
+					eraseRemoveIf(this->items, this->template isDead<Uptr<T, UptrDeleter>>);
 					for(const auto& i : this->toAdd) this->items.emplace_back(i, uptrDeleter); this->toAdd.clear();
 				}
-				template<typename TType, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
+				template<typename TType, typename... TArgs> inline TType& createTImpl(TArgs&&...)
 				{
-					throw std::runtime_error("FUCK POLYMORPHISM.");
+					throw std::runtime_error("this should not be called!");
 				}
 				template<typename... TArgs> inline T& createImpl(TArgs&&... mArgs)
 				{
