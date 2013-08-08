@@ -57,7 +57,7 @@ namespace ssvu
 	 * @return Returns true if mString starts with mStart.
 	 *
 	 */
-	bool startsWith(const std::string& mString, const std::string& mStart);
+	bool beginsWith(const std::string& mString, const std::string& mStart);
 
 	/*!
 	 *

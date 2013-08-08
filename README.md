@@ -46,17 +46,60 @@ for(const auto& subFolderPath : ssvu::FileSystem::getScan<Mode::Recurse, Type::F
 ```
 
 ###Global
+```cpp
+// std::unique_ptr is verbose
+using namespace ssvu;
+
+Uptr<int> test{new int};
+Uptr<int, SomeCustomDeleter>{new int};
+```
 
 ###Log
+```cpp
+using namespace ssvu;
+
+lo << lt("Testing log") << "Hello!" << endl;
+// Prints to console: "[Testing log]	Hello!"
+
+saveLogToFile("log.txt");
+// Saves everything that was logged to "log.txt"
+```
 
 ###MemoryManager
+```cpp
+```
 
 ###PreAlloc
+```cpp
+```
 
 ###String
+```cpp
+string test{"abcdef"};
+
+assert(ssvu::beginsWith(test, "abc"));
+assert(ssvu::endsWith(test, "def"));
+
+string test2{"ABCDEF"};
+assert(ssvu::toLower(test2) == test);
+
+ssvu::replaceAll(test, "abc", "ABC");
+assert(ssvu::beginsWith(test, "ABC"));
+
+test += ssvu::toStr(100);
+assert(test == "ABCdef100");
+
+// and more...
+```
 
 ###TemplateSystem
+```cpp
+```
 
 ###Timeline
+```cpp
+```
 
 ###Utils
+```cpp
+```

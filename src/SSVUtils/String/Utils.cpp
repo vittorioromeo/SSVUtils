@@ -27,7 +27,7 @@ namespace ssvu
 			startPos = mString.find(mFrom);
 		}
 	}
-	bool startsWith(const string& mString, const string& mStart)
+	bool beginsWith(const string& mString, const string& mStart)
 	{
 		return mStart.size() <= mString.size() && mString.compare(0, mStart.size(), mStart) == 0;
 	}
