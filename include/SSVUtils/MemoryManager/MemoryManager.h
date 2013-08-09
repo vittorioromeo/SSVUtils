@@ -37,13 +37,9 @@ namespace ssvu
 
 				// Statically polymorphic methods
 				inline void refresh() { static_cast<TDerived*>(this)->refreshImpl(); }
-				template<typename TType, typename... TArgs> inline TType& create(TArgs&&... mArgs)
+				template<typename TType = TItem, typename... TArgs> inline TType& create(TArgs&&... mArgs)
 				{
 					return static_cast<TDerived*>(this)->template createTImpl<TType, TArgs...>(std::forward<TArgs>(mArgs)...);
-				}
-				template<typename... TArgs> inline TItem& create(TArgs&&... mArgs)
-				{
-					return static_cast<TDerived*>(this)->template createImpl<TArgs...>(std::forward<TArgs>(mArgs)...);
 				}
 
 				inline Container& getItems()					{ return items; }
@@ -70,13 +66,9 @@ namespace ssvu
 				eraseRemoveIf(this->items, this->template isDead<Uptr<T, TDeleter>>);
 				for(const auto& i : this->toAdd) this->items.emplace_back(i); this->toAdd.clear();
 			}
-			template<typename TType, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
+			template<typename TType = T, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
 			{
 				auto result(new TType(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
-			}
-			template<typename... TArgs> inline T& createImpl(TArgs&&... mArgs)
-			{
-				return createTImpl<T, TArgs...>(std::forward<TArgs>(mArgs)...);
 			}
 	};
 }

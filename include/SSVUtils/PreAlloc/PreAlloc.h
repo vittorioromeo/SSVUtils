@@ -67,15 +67,6 @@ namespace ssvu
 					{
 						auto result(this->preAllocator.template create<TType>(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
 					}
-					template<typename... TArgs> inline T& createImpl(TArgs&&... mArgs)
-					{
-						auto result(this->preAllocator.template create<T>(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
-					}
-			};
-
-			template<typename T, typename TPreAlloc, typename... TArgs> struct PreAllocMM : public PreAllocMMBase<T, TPreAlloc, TArgs...>
-			{
-				PreAllocMM(TArgs&&... mArgs) : PreAllocMMBase<T, TPreAlloc, TArgs...>{std::forward<TArgs>(mArgs)...} { }
 			};
 		}
 
@@ -200,9 +191,9 @@ namespace ssvu
 			inline void destroy(T* mObject) { PreAllocatorChunk::destroy<T>(mObject); }
 		};
 
-		template<typename T> using PreAllocMMDynamic = Internal::PreAllocMM<T, PreAllocatorDynamic, MemSize>;
-		template<typename T> using PreAllocMMChunk = Internal::PreAllocMM<T, PreAllocatorChunk, MemSize, unsigned int>;
-		template<typename T> using PreAllocMMStatic = Internal::PreAllocMM<T, PreAllocatorStatic<T>, unsigned int>;
+		template<typename T> using PreAllocMMDynamic = Internal::PreAllocMMBase<T, PreAllocatorDynamic, MemSize>;
+		template<typename T> using PreAllocMMChunk = Internal::PreAllocMMBase<T, PreAllocatorChunk, MemSize, unsigned int>;
+		template<typename T> using PreAllocMMStatic = Internal::PreAllocMMBase<T, PreAllocatorStatic<T>, unsigned int>;
 	}
 }
 
