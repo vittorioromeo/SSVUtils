@@ -19,9 +19,10 @@ namespace ssvu
 		using MemUnitPtr = MemUnit*;
 		using MemSize = decltype(sizeof(MemUnit)); // Should always be 1 byte
 
-		template<typename T> constexpr MemSize getKBsToBytes(const T& mValue) { return mValue * 1024; }
-		template<typename T> constexpr MemSize getMBsToBytes(const T& mValue) { return mValue * 1024 * 1024; }
-		template<typename T> constexpr MemSize getGBsToBytes(const T& mValue) { return mValue * 1024 * 1024 * 1024; }
+		template<typename T> constexpr MemSize getBytes(const T& mValue)		{ return mValue; }
+		template<typename T> constexpr MemSize getKBsToBytes(const T& mValue)	{ return mValue * 1024; }
+		template<typename T> constexpr MemSize getMBsToBytes(const T& mValue)	{ return getKBsToBytes(mValue) * 1024; }
+		template<typename T> constexpr MemSize getGBsToBytes(const T& mValue)	{ return getMBsToBytes(mValue) * 1024; }
 
 		namespace Internal
 		{
@@ -45,6 +46,15 @@ namespace ssvu
 					inline MemUnitPtr getEnd() const		{ return range.end; }
 					inline const MemRange& getRange() const	{ return range; }
 			};
+
+			template<typename T> inline MemRange destroyAndGetMemRange(T* mObject, MemSize mSize)
+			{
+				// Destroys a previously allocated object, calling its destructor and reclaiming its memory piece
+				// T must be the "real object type" - this method will fail with pointers to bases that store derived instances!
+
+				auto objStart(reinterpret_cast<MemUnitPtr>(mObject));
+				mObject->~T(); return {objStart, objStart + mSize};
+			}
 
 			template<typename T, typename TPreAlloc, typename... TCtorArgs> class PreAllocMMBase : public ssvu::Internal::MemoryManagerBase<PreAllocMMBase<T, TPreAlloc, TCtorArgs...>, T, std::function<void(T*)>>
 			{
@@ -139,15 +149,7 @@ namespace ssvu
 
 					return new (toUse) T{std::forward<TArgs>(mArgs)...};
 				}
-				template<typename T> inline void destroy(T* mObject)
-				{
-					// Destroys a previously allocated object, calling its destructor and reclaiming its memory piece
-					// T must be the "real object type" - this method will fail with pointers to bases that store derived instances!
-
-					auto objStart(reinterpret_cast<MemUnitPtr>(mObject));
-					available.emplace_back(objStart, objStart + sizeof(T));
-					mObject->~T();
-				}
+				template<typename T> inline void destroy(T* mObject) { available.emplace_back(Internal::destroyAndGetMemRange<T>(mObject, sizeof(T))); }
 		};
 
 		class PreAllocatorChunk
@@ -173,21 +175,13 @@ namespace ssvu
 					auto toUse(available.top().begin); available.pop();
 					return new (toUse) T{std::forward<TArgs>(mArgs)...};
 				}
-				template<typename T> inline void destroy(T* mObject)
-				{
-					// Destroys a previously allocated object, calling its destructor and reclaiming its memory piece
-					// T must be the "real object type" - this method will fail with pointers to bases that store derived instances!
-
-					auto objStart(reinterpret_cast<MemUnitPtr>(mObject));
-					available.emplace(objStart, objStart + chunkSize);
-					mObject->~T();
-				}
+				template<typename T> inline void destroy(T* mObject) { available.emplace(Internal::destroyAndGetMemRange<T>(mObject, chunkSize)); }
 		};
 
 		template<typename T> struct PreAllocatorStatic : public PreAllocatorChunk
 		{
 			PreAllocatorStatic(unsigned int mChunks) : PreAllocatorChunk{sizeof(T), mChunks} { }
-			template<typename... TArgs> inline T* create(TArgs&&... mArgs) { return PreAllocatorChunk::create<T, TArgs...>(std::forward<TArgs>(mArgs)...); }
+			template<typename TType = T, typename... TArgs> inline T* create(TArgs&&... mArgs) { return PreAllocatorChunk::create<TType, TArgs...>(std::forward<TArgs>(mArgs)...); }
 			inline void destroy(T* mObject) { PreAllocatorChunk::destroy<T>(mObject); }
 		};
 
