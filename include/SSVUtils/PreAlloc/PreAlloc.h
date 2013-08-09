@@ -45,9 +45,41 @@ namespace ssvu
 					inline MemUnitPtr getEnd() const		{ return range.end; }
 					inline const MemRange& getRange() const	{ return range; }
 			};
+
+			template<typename T, typename TPreAlloc, typename... TCtorArgs> class PreAllocMMBase : public ssvu::Internal::MemoryManagerBase<PreAllocMMBase<T, TPreAlloc, TCtorArgs...>, T, std::function<void(T*)>>
+			{
+				private:
+					using UptrDeleter = std::function<void(T*)>;
+
+				private:
+					TPreAlloc preAllocator;
+					UptrDeleter uptrDeleter;
+
+				public:
+					PreAllocMMBase(TCtorArgs&&... mArgs) : preAllocator{std::forward<TCtorArgs>(mArgs)...}, uptrDeleter{[&](T* mPtr){ preAllocator.destroy(mPtr); }} { }
+
+					inline void refreshImpl()
+					{
+						eraseRemoveIf(this->items, this->template isDead<Uptr<T, UptrDeleter>>);
+						for(const auto& i : this->toAdd) this->items.emplace_back(i, uptrDeleter); this->toAdd.clear();
+					}
+					template<typename TType, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
+					{
+						auto result(this->preAllocator.template create<TType>(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
+					}
+					template<typename... TArgs> inline T& createImpl(TArgs&&... mArgs)
+					{
+						auto result(this->preAllocator.template create<T>(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
+					}
+			};
+
+			template<typename T, typename TPreAlloc, typename... TArgs> struct PreAllocMM : public PreAllocMMBase<T, TPreAlloc, TArgs...>
+			{
+				PreAllocMM(TArgs&&... mArgs) : PreAllocMMBase<T, TPreAlloc, TArgs...>{std::forward<TArgs>(mArgs)...} { }
+			};
 		}
 
-		class PreAllocator
+		class PreAllocatorDynamic
 		{
 			private:
 				using MemRange = Internal::MemRange;
@@ -94,7 +126,7 @@ namespace ssvu
 				}
 
 			public:
-				PreAllocator(MemSize mBufferSize) : buffer{mBufferSize}
+				PreAllocatorDynamic(MemSize mBufferSize) : buffer{mBufferSize}
 				{
 					// Add the whole buffer to the available memory vector
 					available.push_back(buffer.getRange()); return;
@@ -161,40 +193,16 @@ namespace ssvu
 				}
 		};
 
-		template<typename T> class PreAllocatorStatic : public PreAllocatorChunk
+		template<typename T> struct PreAllocatorStatic : public PreAllocatorChunk
 		{
-			public:
-				PreAllocatorStatic(unsigned int mChunks) : PreAllocatorChunk{sizeof(T), mChunks} { }
-				template<typename... TArgs> inline T* create(TArgs&&... mArgs) { return PreAllocatorChunk::create<T, TArgs...>(std::forward<TArgs>(mArgs)...); }
-				inline void destroy(T* mObject) { PreAllocatorChunk::destroy<T>(mObject); }
+			PreAllocatorStatic(unsigned int mChunks) : PreAllocatorChunk{sizeof(T), mChunks} { }
+			template<typename... TArgs> inline T* create(TArgs&&... mArgs) { return PreAllocatorChunk::create<T, TArgs...>(std::forward<TArgs>(mArgs)...); }
+			inline void destroy(T* mObject) { PreAllocatorChunk::destroy<T>(mObject); }
 		};
 
-		template<typename T> class PreAllocMMStatic : public ssvu::Internal::MemoryManagerBase<PreAllocMMStatic<T>, T, std::function<void(T*)>>
-		{
-			private:
-				using UptrDeleter = std::function<void(T*)>;
-
-			private:
-				PreAllocatorStatic<T> preAllocator{20000};
-				UptrDeleter uptrDeleter;
-
-			public:
-				PreAllocMMStatic() : uptrDeleter{[&](T* mPtr){ preAllocator.destroy(mPtr); }} { }
-
-				inline void refreshImpl()
-				{
-					eraseRemoveIf(this->items, this->template isDead<Uptr<T, UptrDeleter>>);
-					for(const auto& i : this->toAdd) this->items.emplace_back(i, uptrDeleter); this->toAdd.clear();
-				}
-				template<typename TType, typename... TArgs> inline TType& createTImpl(TArgs&&...)
-				{
-					throw std::runtime_error("this should not be called!");
-				}
-				template<typename... TArgs> inline T& createImpl(TArgs&&... mArgs)
-				{
-					auto result(preAllocator.create(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
-				}
-		};
+		template<typename T> using PreAllocMMDynamic = Internal::PreAllocMM<T, PreAllocatorDynamic, MemSize>;
+		template<typename T> using PreAllocMMChunk = Internal::PreAllocMM<T, PreAllocatorChunk, MemSize, unsigned int>;
+		template<typename T> using PreAllocMMStatic = Internal::PreAllocMM<T, PreAllocatorStatic<T>, unsigned int>;
 	}
 }
 
