@@ -20,6 +20,14 @@ namespace ssvu
 	{
 		return find(mContainer, mValue) - std::begin(mContainer);
 	}
+	template<typename T, typename TPredicate> inline typename T::const_iterator findIf(const T& mContainer, const TPredicate& mPredicate)
+	{
+		return std::find_if<typename T::const_iterator, TPredicate>(std::begin(mContainer), std::end(mContainer), mPredicate);
+	}
+	template<typename T, typename TPredicate> inline bool containsAnyIf(T& mContainer, const TPredicate& mPredicate)
+	{
+		return findIf(mContainer, mPredicate) != std::end(mContainer);
+	}
 
 	/*!
 	 *
@@ -50,7 +58,7 @@ namespace ssvu
 	 */
 	template<typename T, typename V> inline bool contains(const T& mContainer, const V& mValue)
 	{
-		return std::find(std::begin(mContainer), std::end(mContainer), mValue) != std::end(mContainer);
+		return find(mContainer, mValue) != std::end(mContainer);
 	}
 
 	/*!
@@ -67,7 +75,7 @@ namespace ssvu
 	 * @return Returns true if the container contains any of the items.
 	 *
 	 */
-	template<typename T, typename T2> inline bool containsAny(T& mContainer, const T2& mValues)
+	template<typename T, typename T2> inline bool containsAnyOf(T& mContainer, const T2& mValues)
 	{
 		for(const auto& v : mValues) if(contains(mContainer, v)) return true;
 		return false;
