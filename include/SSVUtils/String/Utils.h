@@ -131,7 +131,19 @@ namespace ssvu
 	 */
 	unsigned int getNewLinesCount(const std::string& mString);
 
-	// TODO: documentation
+	/*!
+	 *
+	 * @brief Calculates the levenshtein distance between two strings.
+	 *
+	 * Levenshtein distance measures the "difference" between two strings.
+	 * Useful for mispelling detection, for example.
+	 *
+	 * @param mA First string.
+	 * @param mB Second string.
+	 *
+	 * @return Returns the levenshtein distance between two strings as a size_t.
+	 *
+	 */
 	size_t getLevenshteinDistance(const std::string& mA, const std::string& mB);
 }
 

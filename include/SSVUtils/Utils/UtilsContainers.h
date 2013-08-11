@@ -11,20 +11,62 @@
 
 namespace ssvu
 {
-	// TODO: docs
+	/*!
+	 *
+	 * @brief Wrapper around std::find that takes a container instead of two iterators.
+	 *
+	 * @tparam T Type of the container.
+	 * @tparam V Type of the value.
+	 * @param mContainer Reference to the container.
+	 * @param mValue Const reference to the value.
+	 *
+	 */
 	template<typename T, typename V> inline typename T::const_iterator find(const T& mContainer, const V& mValue)
 	{
 		return std::find<typename T::const_iterator, V>(std::begin(mContainer), std::end(mContainer), mValue);
 	}
+
+	/*!
+	 *
+	 * @brief Gets the index of a item in the container, using find and subtracting the begin iterator.
+	 *
+	 * @tparam T Type of the container.
+	 * @tparam V Type of the value.
+	 * @param mContainer Reference to the container.
+	 * @param mValue Const reference to the value.
+	 *
+	 */
 	template<typename T, typename V> inline typename T::size_type indexOf(const T& mContainer, const V& mValue)
 	{
 		return find(mContainer, mValue) - std::begin(mContainer);
 	}
-	template<typename T, typename TPredicate> inline typename T::const_iterator findIf(const T& mContainer, const TPredicate& mPredicate)
+
+	/*!
+	 *
+	 * @brief Finds a item that matches a specific predicate. Returns an interator (can be end iterator if the item is not found).
+	 *
+	 * @tparam T Type of the container.
+	 * @tparam P Type of the predicate.
+	 * @param mContainer Reference to the container.
+	 * @param mPredicate Predicate used for checking. Can be std::function, a lambda, a functor, etc...
+	 *
+	 */
+	template<typename T, typename P> inline typename T::const_iterator findIf(const T& mContainer, const P& mPredicate)
 	{
-		return std::find_if<typename T::const_iterator, TPredicate>(std::begin(mContainer), std::end(mContainer), mPredicate);
+		return std::find_if<typename T::const_iterator, P>(std::begin(mContainer), std::end(mContainer), mPredicate);
 	}
-	template<typename T, typename TPredicate> inline bool containsAnyIf(T& mContainer, const TPredicate& mPredicate)
+
+	/*!
+	 *
+	 * @brief Checks if a container contains any item that matches a specific predicate.
+	 *
+	 * @tparam T Type of the container.
+	 * @tparam P Type of the predicate.
+	 * @param mContainer Reference to the container.
+	 * @param mPredicate Predicate used for checking. Can be std::function, a lambda, a functor, etc...
+	 *
+	 */
+	template<typename T, typename P> inline bool containsAnyIf(T& mContainer, const P& mPredicate)
 	{
 		return findIf(mContainer, mPredicate) != std::end(mContainer);
 	}
