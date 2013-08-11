@@ -41,8 +41,8 @@ namespace ssvu
 					return static_cast<TDerived*>(this)->template createTImpl<TType, TArgs...>(std::forward<TArgs>(mArgs)...);
 				}
 
-				inline Container& getItems()					{ return items; }
-				inline const Container& getItems() const		{ return items; }
+				inline Container& getItems()				{ return items; }
+				inline const Container& getItems() const	{ return items; }
 
 				template<typename TType> inline static bool isAlive(const TType& mItem) { return mItem->mmAlive; }
 				template<typename TType> inline static bool isDead(const TType& mItem) 	{ return !mItem->mmAlive; }

@@ -10,20 +10,21 @@
 #include <memory>
 #include <type_traits>
 #include <utility>
+#include "SSVUtils/Global/Typedefs.h"
 
 namespace ssvu
 {
-	template<typename T, typename... TArgs> inline std::unique_ptr<T> make_unique_helper(std::false_type, TArgs&&... args)
+	template<typename T, typename... TArgs> inline Uptr<T> make_unique_helper(std::false_type, TArgs&&... args)
 	{
-		return std::unique_ptr<T>(new T(std::forward<TArgs>(args)...));
+		return Uptr<T>(new T(std::forward<TArgs>(args)...));
 	}
-	template<typename T, typename... TArgs> inline std::unique_ptr<T> make_unique_helper(std::true_type, TArgs&&... args)
+	template<typename T, typename... TArgs> inline Uptr<T> make_unique_helper(std::true_type, TArgs&&... args)
 	{
 		static_assert(std::extent<T>::value == 0, "make_unique<T[N]>() is forbidden, please use make_unique<T[]>().");
 		typedef typename std::remove_extent<T>::type U;
-		return std::unique_ptr<T>(new U[sizeof...(TArgs)]{std::forward<TArgs>(args)...});
+		return Uptr<T>(new U[sizeof...(TArgs)]{std::forward<TArgs>(args)...});
 	}
-	template<typename T, typename... TArgs> inline std::unique_ptr<T> make_unique(TArgs&&... args)
+	template<typename T, typename... TArgs> inline Uptr<T> make_unique(TArgs&&... args)
 	{
 		return make_unique_helper<T>(std::is_array<T>(), std::forward<TArgs>(args)...);
 	}
