@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <stack>
-#include <algorithm>
 #include <functional>
 #include <stdexcept>
 #include <cmath>

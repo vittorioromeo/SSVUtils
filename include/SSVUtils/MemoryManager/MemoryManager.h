@@ -6,7 +6,6 @@
 #define SSVU_MEMORYMANAGER
 
 #include <vector>
-#include <algorithm>
 #include "SSVUtils/Global/Typedefs.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 

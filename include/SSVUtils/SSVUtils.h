@@ -46,4 +46,7 @@
 // PreAlloc
 #include "SSVUtils/PreAlloc/PreAlloc.h"
 
+// Bimap
+#include "SSVUtils/Bimap/Bimap.h"
+
 #endif
