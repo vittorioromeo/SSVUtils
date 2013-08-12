@@ -22,40 +22,37 @@ namespace ssvu
 		{
 			private:
 				std::string path;
-				bool needsNormalization{true};
-
-				inline bool isFolder()
-				{
-					struct stat fileStat;
-					int err{stat(path.c_str(), &fileStat)};
-					if(err != 0) return false;
-					return (fileStat.st_mode & S_IFMT) == S_IFDIR;
-				}
+				bool mustNormalize{true};
 
 				inline void normalize()
 				{
+					if(!mustNormalize) return;
+					mustNormalize = false;
 					replaceAll(path, R"(\)", "/");
 					replaceAll(path, R"(\\)", "/");
 					replaceAll(path, "//", "/");
 					if(isFolder() && !endsWith(path, "/")) path += ("/");
 				}
 
-				inline void normalizeIfNeeded()
-				{
-					if(!needsNormalization) return;
-					normalize(); needsNormalization = false;
-				}
-
 			public:
+				inline Path() = default;
 				inline Path(const char* mPath) : path{mPath} { }
 				inline Path(const std::string& mPath) : path{mPath} { }
 
-				inline const std::string& getStr() const	{ const_cast<Path*>(this)->normalizeIfNeeded(); return path; }
-				inline const char* getCStr() const			{ const_cast<Path*>(this)->normalizeIfNeeded(); return path.c_str(); }
+				inline const std::string& getStr() const	{ const_cast<Path*>(this)->normalize(); return path; }
+				inline const char* getCStr() const			{ return getStr().c_str(); }
 
-				inline void operator=(const std::string& mPath)			{ needsNormalization = true; path = mPath; }
-				inline Path operator+(const std::string& mPath) const	{ return Path{path + mPath}; }
-				inline bool operator<(const Path& mPath) const			{ return path < mPath.getStr(); }
+				inline bool isFolder() const
+				{
+					struct stat fileStat;
+					int err{stat(getCStr(), &fileStat)};
+					if(err != 0) return false;
+					return (fileStat.st_mode & S_IFMT) == S_IFDIR;
+				}
+
+				inline void operator=(const std::string& mPath)			{ mustNormalize = true; path = mPath; }
+				inline Path operator+(const std::string& mPath) const	{ return {path + mPath}; }
+				inline bool operator<(const Path& mPath) const			{ return getStr() < mPath.getStr(); }
 
 				inline operator const std::string&() const { return getStr(); }
 		};
