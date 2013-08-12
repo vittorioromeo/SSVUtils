@@ -15,6 +15,11 @@
 
 namespace ssvu
 {
+	namespace FileSystem
+	{
+		class Path;
+	}
+
 	std::ostringstream& getLogStream();
 
 	namespace Internal
@@ -79,7 +84,7 @@ namespace ssvu
 	 * @param mPath File path (file will be created if it doesn't exist).
 	 *
 	 */
-	extern void saveLogToFile(const std::string& mPath);
+	extern void saveLogToFile(const FileSystem::Path& mPath);
 }
 
 #endif
