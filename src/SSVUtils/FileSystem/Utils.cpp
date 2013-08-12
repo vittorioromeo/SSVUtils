@@ -52,8 +52,8 @@ namespace ssvu
 		}
 		string getFileContents(const string& mPath)
 		{
-			//std::ifstream ifs{mPath, std::ios_base::binary};
-			//return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};
+			std::ifstream ifs{mPath, std::ios_base::binary};
+			return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};
 
 			FILE* filePtr{fopen(mPath.c_str(), "rb")};
 			fseek(filePtr, 0, SEEK_END);
