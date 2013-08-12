@@ -16,20 +16,8 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
-		namespace Internal
-		{
-			bool isFolderNoNormalize(const string& mPath)
-			{
-				struct stat fileStat;
-				int err{stat(mPath.c_str(), &fileStat)};
-				if(err != 0) return false;
-				return (fileStat.st_mode & S_IFMT) == S_IFDIR;
-			}
-		}
-
 		bool exists(const Path& mPath) { struct stat buf; return stat(mPath.getCStr(), &buf) != -1; }
 		bool hasExtension(const Path& mFileName, const string& mExtension) { return endsWith(toLower(mFileName), toLower(mExtension)); }
-		bool isFolder(const Path& mPath) { return Internal::isFolderNoNormalize(mPath); }
 		bool isRootOrParent(const Path& mPath) { return endsWith(mPath, "./") || endsWith(mPath, "../"); }
 		Path getParentPath(const Path& mPath)
 		{
