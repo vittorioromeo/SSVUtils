@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include "SSVUtils/FileSystem/Utils.h"
+#include "SSVUtils/FileSystem/Path.h"
 #include "SSVUtils/String/Utils.h"
 #include "SSVUtils/Log/Log.h"
 
@@ -26,56 +27,46 @@ namespace ssvu
 			}
 		}
 
-		bool exists(const string& mPath) { struct stat buf; return stat(getNormalizedPath(mPath).c_str(), &buf) != -1; }
-		bool hasExtension(const string& mFileName, const string& mExtension) { return endsWith(toLower(mFileName), toLower(mExtension)); }
-		bool isFolder(const string& mPath) { return Internal::isFolderNoNormalize(getNormalizedPath(mPath)); }
-		bool isRootOrParent(const string& mPath) { return endsWith(mPath, "./") || endsWith(mPath, "../"); }
-		void normalizePath(string& mPath)
+		bool exists(const Path& mPath) { struct stat buf; return stat(mPath.getCStr(), &buf) != -1; }
+		bool hasExtension(const Path& mFileName, const string& mExtension) { return endsWith(toLower(mFileName), toLower(mExtension)); }
+		bool isFolder(const Path& mPath) { return Internal::isFolderNoNormalize(mPath); }
+		bool isRootOrParent(const Path& mPath) { return endsWith(mPath, "./") || endsWith(mPath, "../"); }
+		Path getParentPath(const Path& mPath)
 		{
-			replaceAll(mPath, R"(\)", "/");
-			replaceAll(mPath, R"(\\)", "/");
-			replaceAll(mPath, "//", "/");
-			if(Internal::isFolderNoNormalize(mPath) && !endsWith(mPath, "/")) mPath.append("/");
-		}
-		string getNormalizedPath(string mPath) { normalizePath(mPath); return mPath; }
-		string getParentPath(string mPath)
-		{
-			normalizePath(mPath);
-			for(auto i(mPath.size() - 1); i > 0; --i)
-				if(mPath[i] == '/') return mPath.substr(0, i + 1);
+			string str(mPath);
 
-			return "";
+			for(auto i(str.size() - 1); i > 0; --i)
+				if(str[i] == '/') return {str.substr(0, i + 1)};
+
+			return {""};
 		}
-		string getNameFromPath(const string& mPath, const string& mPrefix, const string& mSuffix)
+		string getNameFromPath(const Path& mPath, const string& mPrefix, const string& mSuffix)
 		{
-			return getNormalizedPath(mPath).substr(mPrefix.size(), mPath.size() - mPrefix.size() - mSuffix.size());
+			string str(mPath);
+			return str.substr(mPrefix.size(), str.size() - mPrefix.size() - mSuffix.size());
 		}
-		string getFileContents(const string& mPath)
+		string getFileContents(const Path& mPath)
 		{
 			std::ifstream ifs{mPath, std::ios_base::binary};
 			return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};
 		}
-		void createFolder(string mPath)
+		void createFolder(const Path& mPath)
 		{
-			normalizePath(mPath);
-
 			#ifdef _WIN32
 				mkdir(mPath.c_str());
 			#else
-				mkdir(mPath.c_str(), 0755);
+				mkdir(mPath.getCStr(), 0755);
 			#endif
 		}
-		void removeFile(string mPath)
+		void removeFile(const Path& mPath)
 		{
-			normalizePath(mPath);
-			if(remove(mPath.c_str()) != 0) lo << lt("ssvu::FileSystem::removeFile") << "Error removing file: " << mPath;
+			if(remove(mPath.getCStr()) != 0) lo << lt("ssvu::FileSystem::removeFile") << "Error removing file: " << mPath;
 		}
 
-		void expandUserPath(string& mPath)
+		void expandUserPath(Path& mPath)
 		{
 			// TODO: WIN32 NEEDS TESTING!
 
-			normalizePath(mPath);
 			string userHome;
 
 			#ifdef _WIN32
@@ -91,11 +82,12 @@ namespace ssvu
 				if(getenv("HOME") != NULL) userHome = getenv("HOME");
 			#endif
 
-			replaceAll(mPath, "~", userHome);
-			normalizePath(mPath);
+			string str(mPath);
+			replaceAll(str, "~", userHome);
+			mPath = str;
 		}
 
-		string getExpandedUserPath(string mPath) { expandUserPath(mPath); return mPath; }
+		Path getExpandedUserPath(Path mPath) { expandUserPath(mPath); return mPath; }
 	}
 }
 

@@ -8,5 +8,6 @@
 #include "SSVUtils/FileSystem/Enums.h"
 #include "SSVUtils/FileSystem/Utils.h"
 #include "SSVUtils/FileSystem/Scan.h"
+#include "SSVUtils/FileSystem/Path.h"
 
 #endif

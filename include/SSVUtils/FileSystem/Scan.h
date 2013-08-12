@@ -9,6 +9,7 @@
 #include <string>
 #include "SSVUtils/Log/Log.h"
 #include "SSVUtils/FileSystem/Enums.h"
+#include "SSVUtils/FileSystem/Path.h"
 #include "SSVUtils/FileSystem/Internal/ScanHelper.h"
 
 namespace ssvu
@@ -39,7 +40,7 @@ namespace ssvu
 		 * @param mDesired Optional: only set if using Pick::ByExt or Pick::ByName.
 		 *
 		 */
-		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired = "")
+		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired = "")
 		{
 			Internal::scan<TM, TT, TP, TS>(mTarget, mPath, mDesired);
 		}
@@ -67,9 +68,9 @@ namespace ssvu
 		 * @return Returns a newly created std::vector of strings containing the scanned paths.
 		 *
 		 */
-		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> std::vector<std::string> getScan(const std::string& mPath, const std::string& mDesired = "")
+		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> std::vector<Path> getScan(const Path& mPath, const std::string& mDesired = "")
 		{
-			std::vector<std::string> result;
+			std::vector<Path> result;
 			scan<TM, TT, TP, TS>(result, mPath, mDesired);
 			return result;
 		}

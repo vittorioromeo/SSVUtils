@@ -11,6 +11,8 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
+		class Path;
+
 		/*!
 		 *
 		 * @brief Checks if a path exists on the user's filesystem.
@@ -20,7 +22,7 @@ namespace ssvu
 		 * @return Returns true if the path exists, false otherwise.
 		 *
 		 */
-		bool exists(const std::string& mPath);
+		bool exists(const Path& mPath);
 
 		/*!
 		 *
@@ -34,7 +36,7 @@ namespace ssvu
 		 * @return Returns true if the path exists, false otherwise.
 		 *
 		 */
-		bool hasExtension(const std::string& mFileName, const std::string& mExtension);
+		bool hasExtension(const Path& mFileName, const std::string& mExtension);
 
 		/*!
 		 *
@@ -45,7 +47,7 @@ namespace ssvu
 		 * @return Returns true if the path is a folder.
 		 *
 		 */
-		bool isFolder(const std::string& mPath);
+		bool isFolder(const Path& mPath);
 
 		/*!
 		 *
@@ -56,33 +58,7 @@ namespace ssvu
 		 * @return Returns true if the path ends with '.' or "..".
 		 *
 		 */
-		bool isRootOrParent(const std::string& mPath);
-
-		/*!
-		 *
-		 * @brief Normalizes a path string.
-		 *
-		 * Changes '\' to '/', removes useless backslashes at the end.
-		 * Modifies the passed string.
-		 *
-		 * @param mPath Path to normalize.
-		 *
-		 */
-		void normalizePath(std::string& mPath);
-
-		/*!
-		 *
-		 * @brief Normalizes a path string.
-		 *
-		 * Changes '\' to '/', removes useless backslashes at the end.
-		 * Does not modify the passed string.
-		 *
-		 * @param mPath Path to normalize.
-		 *
-		 * @return Returns normalized path string.
-		 *
-		 */
-		std::string getNormalizedPath(std::string mPath);
+		bool isRootOrParent(const Path& mPath);
 
 		/*!
 		 *
@@ -95,7 +71,7 @@ namespace ssvu
 		 * @return Returns the parent path of mPath.
 		 *
 		 */
-		std::string getParentPath(std::string mPath);
+		Path getParentPath(const Path& mPath);
 
 		/*!
 		 *
@@ -110,7 +86,7 @@ namespace ssvu
 		 * @return Returns the filename.
 		 *
 		 */
-		std::string getNameFromPath(const std::string& mPath, const std::string& mPrefix, const std::string& mSuffix);
+		std::string getNameFromPath(const Path& mPath, const std::string& mPrefix, const std::string& mSuffix);
 
 		/*!
 		 *
@@ -123,7 +99,7 @@ namespace ssvu
 		 * @return Returns a string containing the file's contents.
 		 *
 		 */
-		std::string getFileContents(const std::string& mPath);
+		std::string getFileContents(const Path& mPath);
 
 		/*!
 		 *
@@ -134,7 +110,7 @@ namespace ssvu
 		 * @param mPath Path to non-existing folder, must end with '/'.
 		 *
 		 */
-		void createFolder(std::string mPath);
+		void createFolder(const Path& mPath);
 
 		/*!
 		 *
@@ -143,7 +119,7 @@ namespace ssvu
 		 * @param mPath Path to existing file.
 		 *
 		 */
-		void removeFile(std::string mPath);
+		void removeFile(const Path& mPath);
 
 		/*!
 		 *
@@ -154,7 +130,7 @@ namespace ssvu
 		 * @param mPath Path to expand.
 		 *
 		 */
-		void expandUserPath(std::string& mPath);
+		void expandUserPath(Path& mPath);
 
 		/*!
 		 *
@@ -167,7 +143,7 @@ namespace ssvu
 		 * @return Returns the path with the expanded `~` symbol.
 		 *
 		 */
-		std::string getExpandedUserPath(std::string mPath);
+		Path getExpandedUserPath(Path mPath);
 	}
 }
 

@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include "SSVUtils/FileSystem/Enums.h"
 #include "SSVUtils/FileSystem/Utils.h"
+#include "SSVUtils/FileSystem/Path.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 
 namespace ssvu
@@ -17,22 +18,23 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<Mode TM, Type TT, Pick TP, Sort TS> static void scan(std::vector<std::string>& mTarget, const std::string& mPath, const std::string& mDesired)
+			template<Mode TM, Type TT, Pick TP, Sort TS> static void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired)
 			{
 				if(!isFolder(mPath)) { lo << lt("ssvu::FileSystem::ScanHelper") << "Directory \"" << mPath << "\" not found" << std::endl; return; }
 
-				DIR* dir{opendir(mPath.c_str())};
+				DIR* dir{opendir(mPath.getCStr())};
 				dirent* entry{readdir(dir)};
 
 				while(entry != NULL)
 				{
-					std::string name{entry->d_name}, path{getNormalizedPath(getNormalizedPath(mPath) + name)};
+					std::string name{entry->d_name};
+					Path path{mPath + name};
 					if(!isRootOrParent(path))
 					{
 						if(isFolder(path))
 						{
 							if(TT == Type::All || TT == Type::Folder) { mTarget.push_back(path); }
-							if(TM == Mode::Recurse) { scan<Mode::Recurse, TT, TP, TS>(mTarget, path, mDesired); }
+							if(TM == Mode::Recurse) { Internal::scan<Mode::Recurse, TT, TP, TS>(mTarget, path, mDesired); }
 						}
 						else if(TT == Type::All || TT == Type::File)
 						{
