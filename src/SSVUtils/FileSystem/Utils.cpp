@@ -54,14 +54,6 @@ namespace ssvu
 		{
 			std::ifstream ifs{mPath, std::ios_base::binary};
 			return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};
-
-			FILE* filePtr{fopen(mPath.c_str(), "rb")};
-			fseek(filePtr, 0, SEEK_END);
-			size_t fSize(ftell(filePtr));
-			fseek(filePtr, 0, SEEK_SET);
-			string result; result.resize(fSize);
-			if(fread(&result[0], 1, fSize, filePtr) != fSize) lo << lt("ssvu::FileSystem::getFileContents") << "Error: " << mPath;
-			fclose(filePtr); return result;
 		}
 		void createFolder(string mPath)
 		{
