@@ -4,6 +4,7 @@
 
 #include <chrono>
 #include "SSVUtils/Log/Log.h"
+#include "SSVUtils/FileSystem/FileSystem.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -30,7 +31,7 @@ namespace ssvu
 			return toStr(elapsed) + toStr(" ms");
 		#endif
 	}
-	void saveLogToFile(const string& mPath)
+	void saveLogToFile(const FileSystem::Path& mPath)
 	{
 		#ifndef SSVS_DISABLE_LOG
 			std::ofstream o; o.open(mPath); o << getLogStream().str(); o.flush(); o.close();
