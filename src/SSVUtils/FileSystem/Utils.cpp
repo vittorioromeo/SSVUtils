@@ -52,13 +52,16 @@ namespace ssvu
 		}
 		string getFileContents(const string& mPath)
 		{
-			FILE* fptr{fopen(mPath.c_str(), "rb")};
+			std::ifstream ifs{mPath, std::ios_base::binary};
+			return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};
+
+			/*FILE* fptr{fopen(mPath.c_str(), "rb")};
 			fseek(fptr, 0, SEEK_END);
 			size_t fsize(ftell(fptr));
 			fseek(fptr, 0, SEEK_SET);
 			string content; content.resize(fsize);
 			if(fread(const_cast<char*>(content.c_str()), 1, fsize, fptr) != fsize) lo << lt("ssvu::FileSystem::getFileContents") << "Error: " << mPath;
-			fclose(fptr); return content;
+			fclose(fptr); return content;*/
 		}
 		void createFolder(string mPath)
 		{
