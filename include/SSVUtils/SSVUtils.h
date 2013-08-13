@@ -49,4 +49,7 @@
 // Bimap
 #include "SSVUtils/Bimap/Bimap.h"
 
+// CommandLine
+#include "SSVUtils/CommandLine/CommandLine.h"
+
 #endif
