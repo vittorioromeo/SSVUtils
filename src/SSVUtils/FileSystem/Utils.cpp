@@ -17,17 +17,6 @@ namespace ssvu
 	namespace FileSystem
 	{
 		bool exists(const Path& mPath) { struct stat buf; return stat(mPath.getCStr(), &buf) != -1; }
-		bool hasExtension(const Path& mFileName, const string& mExtension) { return endsWith(toLower(mFileName), toLower(mExtension)); }
-		bool isRootOrParent(const Path& mPath) { return endsWith(mPath, "./") || endsWith(mPath, "../"); }
-		Path getParentPath(const Path& mPath)
-		{
-			string str(mPath);
-
-			for(auto i(str.size() - 1); i > 0; --i)
-				if(str[i] == '/') return {str.substr(0, i + 1)};
-
-			return {""};
-		}
 		string getNameFromPath(const Path& mPath, const string& mPrefix, const string& mSuffix)
 		{
 			string str(mPath);

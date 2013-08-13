@@ -26,55 +26,6 @@ namespace ssvu
 
 		/*!
 		 *
-		 * @brief Checks if a filename ends with a specific extension.
-		 *
-		 * This is a simple string comparison, doesn't actually use the user's filesystem.
-		 *
-		 * @param mFileName Filename to check, including extension, case unsensitive.
-		 * @param mExtension Extension to check, including the dot, case unsensitive.
-		 *
-		 * @return Returns true if the path exists, false otherwise.
-		 *
-		 */
-		bool hasExtension(const Path& mFileName, const std::string& mExtension);
-
-		/*!
-		 *
-		 * @brief Checks if a path on the user's filesystem is a folder.
-		 *
-		 * @param mPath Path to check, must end with '/'.
-		 *
-		 * @return Returns true if the path is a folder.
-		 *
-		 */
-		bool isFolder(const Path& mPath);
-
-		/*!
-		 *
-		 * @brief Checks if a path ends with '.' or "..".
-		 *
-		 * @param mPath Path to check.
-		 *
-		 * @return Returns true if the path ends with '.' or "..".
-		 *
-		 */
-		bool isRootOrParent(const Path& mPath);
-
-		/*!
-		 *
-		 * @brief Returns the parent path of a path. (One upper level)
-		 *
-		 * Equivalent of remove_leaf in boost::filesystem.
-		 *
-		 * @param mPath Path to use.
-		 *
-		 * @return Returns the parent path of mPath.
-		 *
-		 */
-		Path getParentPath(const Path& mPath);
-
-		/*!
-		 *
 		 * @brief Gets filename from a path.
 		 *
 		 * Simple string operations, it doesn't depend on the user's filesystem.

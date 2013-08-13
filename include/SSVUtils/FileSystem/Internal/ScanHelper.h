@@ -29,7 +29,7 @@ namespace ssvu
 				{
 					std::string name{entry->d_name};
 					Path path{mPath + name};
-					if(!isRootOrParent(path))
+					if(!path.isRootOrParent())
 					{
 						if(path.isFolder())
 						{

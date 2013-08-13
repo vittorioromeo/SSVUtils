@@ -50,6 +50,16 @@ namespace ssvu
 					return (fileStat.st_mode & S_IFMT) == S_IFDIR;
 				}
 
+				inline bool hasExtension(const std::string& mExtension) const	{ return endsWith(toLower(getStr()), toLower(mExtension)); }
+				inline bool exists() const										{ struct stat buf; return stat(getCStr(), &buf) != -1; }
+				inline bool isRootOrParent() const								{ return endsWith(getStr(), "./") || endsWith(getStr(), "../"); }
+				inline Path getParent() const
+				{
+					std::string str(getStr());
+					for(auto i(str.size() - 1); i > 0; --i) if(str[i] == '/') return {str.substr(0, i + 1)};
+					return {""};
+				}
+
 				inline void operator=(const std::string& mPath)			{ mustNormalize = true; path = mPath; }
 				inline Path operator+(const std::string& mPath) const	{ return {path + mPath}; }
 				inline bool operator<(const Path& mPath) const			{ return getStr() < mPath.getStr(); }
