@@ -26,6 +26,10 @@ namespace ssvu
 			inline bool has(const U& mValue) const				{ return map2.find(mValue) != end(map2); }
 			inline void erase(const T& mValue)					{ map2.erase(map1.at(mValue)); map1.erase(mValue); }
 			inline void erase(const U& mValue)					{ map1.erase(map2.at(mValue)); map2.erase(mValue); }
+			inline decltype(map1)& getMap1()					{ return map1; }
+			inline decltype(map2)& getMap2()					{ return map2; }
+			inline const decltype(map1)& getMap1() const		{ return map1; }
+			inline const decltype(map2)& getMap2() const		{ return map2; }
 	};
 
 }
