@@ -21,10 +21,10 @@ namespace ssvu
 			public:
 				OptArg(T mDefaultValue) : defaultValue{mDefaultValue} { }
 
-				inline operator bool() const { return active; }
+				inline operator bool() const						{ return active; }
 				inline void set(const std::string& mValue) override { Arg<T>::set(mValue); active = true; }
-				inline T get() const { return active ? Arg<T>::get() : defaultValue; }
-				inline std::string getUsageStr() const override { return "(OPTARG " + ElementBase::getName() + ")"; }
+				inline T get() const								{ return active ? Arg<T>::get() : defaultValue; }
+				inline std::string getUsageStr() const override		{ return "(OPTARG " + ElementBase::getName() + ")"; }
 		};
 	}
 }

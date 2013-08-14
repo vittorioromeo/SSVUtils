@@ -16,7 +16,7 @@ namespace ssvu
 	namespace CommandLine
 	{
 		class Flag;
-		class ArgBase;
+		struct ArgBase;
 		class ArgPackBase;
 		template<typename T> class Arg;
 		template<typename T> class OptArg;

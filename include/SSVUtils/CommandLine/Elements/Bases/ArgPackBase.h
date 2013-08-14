@@ -23,7 +23,6 @@ namespace ssvu
 			public:
 				ArgPackBase() : infinite{true} { }
 				ArgPackBase(unsigned int mMin, unsigned int mMax) : infinite{false}, min{mMin}, max{mMax} { }
-				virtual ~ArgPackBase() { }
 
 				virtual void set(const std::vector<std::string>& mStrings) = 0;
 

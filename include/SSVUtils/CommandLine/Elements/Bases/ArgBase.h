@@ -12,12 +12,10 @@ namespace ssvu
 {
 	namespace CommandLine
 	{
-		class ArgBase : public ElementBase
+		struct ArgBase : public ElementBase
 		{
-			public:
-				virtual ~ArgBase() { }
-				virtual void set(const std::string& mString) = 0;
-				inline std::string getUsageStr() const override { return "(ARG " + getName() + ")"; }
+			virtual void set(const std::string& mString) = 0;
+			inline std::string getUsageStr() const override { return "(ARG " + getName() + ")"; }
 		};
 	}
 }

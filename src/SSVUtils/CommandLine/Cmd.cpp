@@ -33,10 +33,10 @@ namespace ssvu
 			string result{"<"};
 			for(auto i(0u); i < names.size(); ++i)
 			{
-				result.append(names[i]);
-				if(i < names.size() - 1) result.append(" || ");
+				result += names[i];
+				if(i < names.size() - 1) result += " || ";
 			}
-			result.append(">");
+			result += ">";
 			return result;
 		}
 		string Cmd::getArgsStr() const
@@ -44,8 +44,8 @@ namespace ssvu
 			string result;
 			for(auto i(0u); i < args.size(); ++i)
 			{
-				result.append(args[i]->getUsageStr());
-				if(i < args.size() - 1) result.append(" ");
+				result += args[i]->getUsageStr();
+				if(i < args.size() - 1) result += " ";
 			}
 			return result;
 		}
@@ -54,8 +54,8 @@ namespace ssvu
 			string result;
 			for(auto i(0u); i < optArgs.size(); ++i)
 			{
-				result.append(optArgs[i]->getUsageStr());
-				if(i < optArgs.size() - 1) result.append(" ");
+				result += optArgs[i]->getUsageStr();
+				if(i < optArgs.size() - 1) result += " ";
 			}
 			return result;
 		}
@@ -64,8 +64,8 @@ namespace ssvu
 			string result;
 			for(auto i(0u); i < argPacks.size(); ++i)
 			{
-				result.append(argPacks[i]->getUsageStr());
-				if(i < argPacks.size() - 1) result.append(" ");
+				result += argPacks[i]->getUsageStr();
+				if(i < argPacks.size() - 1) result += " ";
 			}
 			return result;
 		}
@@ -74,8 +74,8 @@ namespace ssvu
 			string result;
 			for(auto i(0u); i < flags.size(); ++i)
 			{
-				result.append(flags[i]->getUsageStr());
-				if(i < flags.size() - 1) result.append(" ");
+				result += flags[i]->getUsageStr();
+				if(i < flags.size() - 1) result += " ";
 			}
 			return result;
 		}

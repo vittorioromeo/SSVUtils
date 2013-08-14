@@ -19,9 +19,9 @@ namespace ssvu
 			public:
 				virtual ~ElementBase() { }
 
-				inline void setName(const std::string& mName)					{ name = mName; }
-				inline void setBriefDesc(const std::string& mBriefDescription)	{ briefDesc = mBriefDescription; }
-				inline void setDesc(const std::string& mDescription)			{ desc = mDescription; }
+				inline void setName(const std::string& mName)			{ name = mName; }
+				inline void setBriefDesc(const std::string& mBriefDesc)	{ briefDesc = mBriefDesc; }
+				inline void setDesc(const std::string& mDesc)			{ desc = mDesc; }
 
 				inline const std::string& getName() const		{ return name; }
 				inline const std::string& getBriefDesc() const	{ return briefDesc; }
