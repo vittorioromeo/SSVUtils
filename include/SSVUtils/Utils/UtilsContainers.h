@@ -147,19 +147,18 @@ namespace ssvu
 
 	/*!
 	 *
-	 * @brief Gets all the keys from a std::map.
+	 * @brief Gets all the keys from a map container.
 	 *
-	 * @tparam K Type of the key.
-	 * @tparam V Type of the value.
-	 * @param mMap Const reference to the map.
+	 * @tparam TContainer Type of map container.
+	 * @param mMap Const reference to the map container.
 	 *
 	 * @return Returns a std::vector containing all the keys.
 	 *
 	 */
-	template<typename K, typename V> std::vector<K> getKeys(const std::map<K, V>& mMap)
+	template<typename TContainer> auto getKeys(const TContainer& mMap) -> std::vector<typename TContainer::key_type>
 	{
-		std::vector<K> result;
-		for(const auto& itr(std::begin(mMap)); itr != std::end(mMap); ++itr) result.push_back(itr->first);
+		std::vector<typename TContainer::key_type> result;
+		for(const auto& p : mMap) result.push_back(p.first);
 		return result;
 	}
 
@@ -177,8 +176,6 @@ namespace ssvu
 	{
 		mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer));
 	}
-
-
 }
 
 #endif
