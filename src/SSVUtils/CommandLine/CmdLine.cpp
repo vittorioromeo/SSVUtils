@@ -88,7 +88,7 @@ namespace ssvu
 				{
 					if(entered.size() < argPack.getMin()) throw runtime_error("Not enough args for finite argpack");
 
-					auto clampedCount(getClamped<std::size_t>(entered.size(), 0, argPack.getMax()));
+					auto clampedCount(getClamped<size_t>(entered.size(), 0, argPack.getMax()));
 					for(auto iS(0u); iS < clampedCount; ++iS) { toPack.push_back(entered.front()); entered.pop_front(); }
 				}
 
