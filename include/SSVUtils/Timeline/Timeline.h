@@ -49,8 +49,8 @@ namespace ssvu
 			void update(float mFrameTime);
 			void reset();
 
-			inline int getSize() const		{ return commands.size(); }
-			inline bool isFinished() const	{ return finished; }
+			inline std::size_t getSize() const	{ return commands.size(); }
+			inline bool isFinished() const		{ return finished; }
 			inline int getCurrentIndex() const
 			{
 				if(currentCommand == nullptr) return 0;

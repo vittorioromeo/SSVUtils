@@ -49,7 +49,7 @@ namespace ssvu
 
 			MD5::MD5() { }
 			MD5::MD5(const std::string& source) { Calculate(source); }
-			MD5::MD5(const unsigned char* source, uint32 len) { Calculate(source, len); }
+			MD5::MD5(const unsigned char* source, unsigned int len) { Calculate(source, len); }
 			MD5::MD5(std::ifstream& file) { Calculate(file); }
 
 			std::string MD5::Calculate(const std::string& source) { return Calculate((const unsigned char*)source.c_str(), source.size()); }

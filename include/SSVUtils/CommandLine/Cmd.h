@@ -55,10 +55,10 @@ namespace ssvu
 				void activateFlag(const std::string& mName);
 
 				inline bool hasName(const std::string& mName) const		{ return contains(names, mName); }
-				inline unsigned int getArgCount() const					{ return args.size(); }
-				inline unsigned int getOptArgCount() const				{ return optArgs.size(); }
-				inline unsigned int getArgPackCount() const				{ return argPacks.size(); }
-				inline unsigned int getFlagCount() const				{ return flags.size(); }
+				inline std::size_t getArgCount() const					{ return args.size(); }
+				inline std::size_t getOptArgCount() const				{ return optArgs.size(); }
+				inline std::size_t getArgPackCount() const				{ return argPacks.size(); }
+				inline std::size_t getFlagCount() const					{ return flags.size(); }
 				inline const decltype(names)& getNames() const			{ return names; }
 				inline const decltype(args)& getArgs() const			{ return args; }
 				inline const decltype(optArgs)& getOptArgs() const		{ return optArgs; }

@@ -29,7 +29,6 @@ documentation and/or software.
 
 #include <string>
 #include <fstream>
-#define uint32 unsigned int
 #include <stdint.h>
 
 namespace ssvu
@@ -48,7 +47,7 @@ namespace ssvu
 					MD5();
 					MD5(const std::string& source);
 					MD5(std::ifstream& file);
-					MD5(const unsigned char* source, uint32 len);
+					MD5(const unsigned char* source, unsigned int len);
 
 					std::string Calculate(const std::string& source);
 					std::string Calculate(std::ifstream& file);
