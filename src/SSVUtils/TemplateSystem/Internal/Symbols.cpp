@@ -19,9 +19,9 @@ namespace ssvu
 			const string sectionEndLeft{"{{/"};
 			const string sectionEndRight{"}}"};
 
-			string getKey(const std::string& mString) { return keyLeft + mString + keyRight; }
-			string getSectionStart(const std::string& mString) { return sectionStartLeft + mString + sectionStartRight; }
-			string getSectionEnd(const std::string& mString) { return sectionEndLeft + mString + sectionEndRight; }
+			string getKey(const string& mString) { return keyLeft + mString + keyRight; }
+			string getSectionStart(const string& mString) { return sectionStartLeft + mString + sectionStartRight; }
+			string getSectionEnd(const string& mString) { return sectionEndLeft + mString + sectionEndRight; }
 		}
 	}
 }

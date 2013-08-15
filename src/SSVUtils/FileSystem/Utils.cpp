@@ -24,8 +24,8 @@ namespace ssvu
 		}
 		string getFileContents(const Path& mPath)
 		{
-			std::ifstream ifs{mPath, std::ios_base::binary};
-			return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};
+			ifstream ifs{mPath, ios_base::binary};
+			return {istreambuf_iterator<char>(ifs), istreambuf_iterator<char>()};
 		}
 		void createFolder(const Path& mPath)
 		{

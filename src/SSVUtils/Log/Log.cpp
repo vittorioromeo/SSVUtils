@@ -34,7 +34,7 @@ namespace ssvu
 	void saveLogToFile(const FileSystem::Path& mPath)
 	{
 		#ifndef SSVS_DISABLE_LOG
-			std::ofstream o; o.open(mPath); o << getLogStream().str(); o.flush(); o.close();
+			ofstream o; o.open(mPath); o << getLogStream().str(); o.flush(); o.close();
 		#endif
 	}
 }

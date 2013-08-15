@@ -11,9 +11,9 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		StringSize findFirstOf(const std::string& mString, const std::vector<std::string>& mSeparator, StringSize& mLength)
+		StringSize findFirstOf(const string& mString, const vector<string>& mSeparator, StringSize& mLength)
 		{
-			StringSize result{std::numeric_limits<StringSize>::max()};
+			StringSize result{numeric_limits<StringSize>::max()};
 			for(const auto& s : mSeparator)
 			{
 				StringSize temp{mString.find(s)};
@@ -23,4 +23,3 @@ namespace ssvu
 		}
 	}
 }
-

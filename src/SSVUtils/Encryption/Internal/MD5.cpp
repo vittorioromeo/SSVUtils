@@ -48,17 +48,17 @@ namespace ssvu
 			void MD5Final(unsigned char[16], MD5_CTX*);
 
 			MD5::MD5() { }
-			MD5::MD5(const std::string& source) { Calculate(source); }
+			MD5::MD5(const string& source) { Calculate(source); }
 			MD5::MD5(const unsigned char* source, unsigned int len) { Calculate(source, len); }
-			MD5::MD5(std::ifstream& file) { Calculate(file); }
+			MD5::MD5(ifstream& file) { Calculate(file); }
 
-			std::string MD5::Calculate(const std::string& source) { return Calculate((const unsigned char*)source.c_str(), source.size()); }
-			std::string MD5::Calculate(std::ifstream& file)
+			string MD5::Calculate(const string& source) { return Calculate((const unsigned char*)source.c_str(), source.size()); }
+			string MD5::Calculate(ifstream& file)
 			{
 				if(!file) return "";
-				file.seekg(0, std::ios::end);
+				file.seekg(0, ios::end);
 				int length(file.tellg());
-				file.seekg(0, std::ios::beg);
+				file.seekg(0, ios::beg);
 
 				char* buffer{new char[length]};
 
@@ -67,7 +67,7 @@ namespace ssvu
 				delete[] buffer;
 				return m_sHash;
 			}
-			std::string MD5::Calculate(const unsigned char* source, uint32_t len)
+			string MD5::Calculate(const unsigned char* source, uint32_t len)
 			{
 				MD5_CTX context;
 
@@ -87,7 +87,7 @@ namespace ssvu
 				return m_sHash;
 			}
 
-			std::string MD5::GetHash() const { return m_sHash; }
+			string MD5::GetHash() const { return m_sHash; }
 
 			#define S11 7
 			#define S12 12
