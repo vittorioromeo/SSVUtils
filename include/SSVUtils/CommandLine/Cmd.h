@@ -24,16 +24,21 @@ namespace ssvu
 
 		class Cmd
 		{
+			friend class CmdLine;
+
 			private:
 				std::vector<std::string> names;
-				std::vector<Uptr<ArgBase>> args;
-				std::vector<Uptr<ArgBase>> optArgs;
+				std::vector<Uptr<ArgBase>> args, optArgs;
 				std::vector<Uptr<ArgPackBase>> argPacks;
 				std::vector<Uptr<Flag>> flags;
 				std::function<void()> func;
 				std::string desc;
 
 				Flag& findFlag(const std::string& mName);
+
+				void setArgValue(unsigned int mIndex, const std::string& mValue);
+				void setOptArgValue(unsigned int mIndex, const std::string& mValue);
+				void setArgPackValues(unsigned int mIndex, const std::vector<std::string>& mValues);
 
 			public:
 				Cmd(const std::initializer_list<std::string>& mNames) : names{mNames} { }
@@ -46,10 +51,6 @@ namespace ssvu
 				template<typename T> inline ArgPack<T>& createArgPack(unsigned int mMin, unsigned int mMax)	{ auto result(new ArgPack<T>(mMin, mMax)); argPacks.emplace_back(result); return *result; }
 				template<typename T> inline ArgPack<T>& createInfiniteArgPack()								{ auto result(new ArgPack<T>); argPacks.emplace_back(result); return *result; }
 				Flag& createFlag(const std::string& mShortName, const std::string& mLongName);
-
-				void setArgValue(unsigned int mIndex, const std::string& mValue);
-				void setOptArgValue(unsigned int mIndex, const std::string& mValue);
-				void setArgPackValues(unsigned int mIndex, const std::vector<std::string>& mValues);
 
 				bool isFlagActive(unsigned int mIndex) const;
 				void activateFlag(const std::string& mName);

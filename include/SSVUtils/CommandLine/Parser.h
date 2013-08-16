@@ -20,8 +20,8 @@ namespace ssvu
 		{
 			inline static int parse(const std::string& mString)
 			{
-				try { return stoi(mString); }
-				catch(...) { throw std::runtime_error("Cannot convert '" + mString + "' to int"); }
+				try { return std::stoi(mString); }
+				catch(...) { throw std::runtime_error("Cannot parse '" + mString + "' to int"); }
 			}
 		};
 		template<> struct Parser<std::string>
@@ -32,11 +32,11 @@ namespace ssvu
 		{
 			inline static bool parse(const std::string& mString)
 			{
-				std::vector<std::string> trueValues{"y", "yes", "on", "true", "1"};
-				std::vector<std::string> falseValues{"n", "no", "off", "false", "0"};
+				static std::vector<std::string> trueValues{"y", "yes", "on", "true", "1"};
+				static std::vector<std::string> falseValues{"n", "no", "off", "false", "0"};
 				if(contains(trueValues, toLower(mString))) return true;
 				if(contains(falseValues, toLower(mString))) return false;
-				throw std::runtime_error("Cannot convert '" + mString + "' to bool");
+				throw std::runtime_error("Cannot parse '" + mString + "' to bool");
 			}
 		};
 	}
