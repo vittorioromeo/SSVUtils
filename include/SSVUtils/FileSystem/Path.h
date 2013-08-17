@@ -31,7 +31,7 @@ namespace ssvu
 					replaceAll(path, R"(\)", "/");
 					replaceAll(path, R"(\\)", "/");
 					replaceAll(path, "//", "/");
-					if(isFolder() && !endsWith(path, "/")) path += ("/");
+					if(!endsWith(path, "/") && isFolder()) path += ("/");
 				}
 
 			public:
