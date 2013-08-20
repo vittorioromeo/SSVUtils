@@ -2,10 +2,6 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#include "SSVUtils/CommandLine/Elements/Bases/ArgBase.h"
-#include "SSVUtils/CommandLine/Elements/Bases/ArgPackBase.h"
-#include "SSVUtils/CommandLine/Elements/Arg.h"
-#include "SSVUtils/CommandLine/Elements/Flag.h"
 #include "SSVUtils/CommandLine/Cmd.h"
 
 using namespace std;
@@ -14,20 +10,6 @@ namespace ssvu
 {
 	namespace CommandLine
 	{
-		Flag& Cmd::findFlag(const string& mName)
-		{
-			for(const auto& f : flags) if(f->hasName(mName)) return *f;
-			throw runtime_error("No flag with name '" + mName + "' in command " + getNamesStr());
-		}
-
-		Flag& Cmd::createFlag(const string& mShortName, const string& mLongName) { auto result(new Flag{mShortName, mLongName}); flags.emplace_back(result); return *result; }
-
-		void Cmd::setArgValue(unsigned int mIndex, const string& mValue)	{ args[mIndex]->set(mValue); }
-		void Cmd::setOptArgValue(unsigned int mIndex, const string& mValue)	{ optArgs[mIndex]->set(mValue); }
-
-		void Cmd::activateFlag(const string& mName) { findFlag(mName) = true; }
-		bool Cmd::isFlagActive(unsigned int mIndex) const { return *flags[mIndex]; }
-
 		string Cmd::getNamesStr() const
 		{
 			string result{"<"};

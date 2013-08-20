@@ -10,6 +10,9 @@
 #include <functional>
 #include "SSVUtils/Global/Typedefs.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
+#include "SSVUtils/CommandLine/Elements/Flag.h"
+#include "SSVUtils/CommandLine/Elements/Bases/ArgBase.h"
+#include "SSVUtils/CommandLine/Elements/Bases/ArgPackBase.h"
 
 namespace ssvu
 {
@@ -34,11 +37,14 @@ namespace ssvu
 				std::function<void()> func;
 				std::string desc;
 
-				Flag& findFlag(const std::string& mName);
+				inline Flag& findFlag(const std::string& mName)
+				{
+					for(const auto& f : flags) if(f->hasName(mName)) return *f;
+					throw std::runtime_error("No flag with name '" + mName + "' in command " + getNamesStr());
+				}
 
-				void setArgValue(unsigned int mIndex, const std::string& mValue);
-				void setOptArgValue(unsigned int mIndex, const std::string& mValue);
-				void setArgPackValues(unsigned int mIndex, const std::vector<std::string>& mValues);
+				inline void setArgValue(unsigned int mIndex, const std::string& mValue)		{ args[mIndex]->set(mValue); }
+				inline void setOptArgValue(unsigned int mIndex, const std::string& mValue)	{ optArgs[mIndex]->set(mValue); }
 
 			public:
 				Cmd(const std::initializer_list<std::string>& mNames) : names{mNames} { }
@@ -50,10 +56,10 @@ namespace ssvu
 				template<typename T> inline OptArg<T>& createOptArg(const T& mDefaultValue)					{ auto result(new OptArg<T>(mDefaultValue)); optArgs.emplace_back(result); return *result; }
 				template<typename T> inline ArgPack<T>& createArgPack(unsigned int mMin, unsigned int mMax)	{ auto result(new ArgPack<T>(mMin, mMax)); argPacks.emplace_back(result); return *result; }
 				template<typename T> inline ArgPack<T>& createInfiniteArgPack()								{ auto result(new ArgPack<T>); argPacks.emplace_back(result); return *result; }
-				Flag& createFlag(const std::string& mShortName, const std::string& mLongName);
+				inline Flag& createFlag(const std::string& mShortName, const std::string& mLongName)		{ auto result(new Flag{mShortName, mLongName}); flags.emplace_back(result); return *result; }
 
-				bool isFlagActive(unsigned int mIndex) const;
-				void activateFlag(const std::string& mName);
+				inline bool isFlagActive(unsigned int mIndex) const	{ return *flags[mIndex]; }
+				inline void activateFlag(const std::string& mName)	{ findFlag(mName) = true; }
 
 				inline bool hasName(const std::string& mName) const		{ return contains(names, mName); }
 				inline std::size_t getArgCount() const					{ return args.size(); }

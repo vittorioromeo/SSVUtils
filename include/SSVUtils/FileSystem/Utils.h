@@ -5,14 +5,18 @@
 #ifndef SSVU_FILESYSTEM_UTILS
 #define SSVU_FILESYSTEM_UTILS
 
+#include <cstdlib>
+#include <dirent.h>
+#include <sys/stat.h>
 #include <string>
+#include "SSVUtils/String/Utils.h"
+#include "SSVUtils/Log/Log.h"
+#include "SSVUtils/FileSystem/Path.h"
 
 namespace ssvu
 {
 	namespace FileSystem
 	{
-		class Path;
-
 		/*!
 		 *
 		 * @brief Checks if a path exists on the user's filesystem.
@@ -22,7 +26,7 @@ namespace ssvu
 		 * @return Returns true if the path exists, false otherwise.
 		 *
 		 */
-		bool exists(const Path& mPath);
+		inline bool exists(const Path& mPath) { struct stat buf; return stat(mPath.getCStr(), &buf) != -1; }
 
 		/*!
 		 *
@@ -37,7 +41,7 @@ namespace ssvu
 		 * @return Returns the filename.
 		 *
 		 */
-		std::string getNameFromPath(const Path& mPath, const std::string& mPrefix, const std::string& mSuffix);
+		inline std::string getNameFromPath(const Path& mPath, const std::string& mPrefix, const std::string& mSuffix) { auto str(mPath.getStr()); return str.substr(mPrefix.size(), str.size() - mPrefix.size() - mSuffix.size()); }
 
 		/*!
 		 *
@@ -50,7 +54,11 @@ namespace ssvu
 		 * @return Returns a string containing the file's contents.
 		 *
 		 */
-		std::string getFileContents(const Path& mPath);
+		inline std::string getFileContents(const Path& mPath)
+		{
+			std::ifstream ifs{mPath, std::ios_base::binary};
+			return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};
+		}
 
 		/*!
 		 *
@@ -61,7 +69,14 @@ namespace ssvu
 		 * @param mPath Path to non-existing folder, must end with '/'.
 		 *
 		 */
-		void createFolder(const Path& mPath);
+		inline void createFolder(const Path& mPath)
+		{
+			#ifdef _WIN32
+				mkdir(mPath.c_str());
+			#else
+				mkdir(mPath.getCStr(), 0755);
+			#endif
+		}
 
 		/*!
 		 *
@@ -70,7 +85,7 @@ namespace ssvu
 		 * @param mPath Path to existing file.
 		 *
 		 */
-		void removeFile(const Path& mPath);
+		inline void removeFile(const Path& mPath) { if(remove(mPath.getCStr()) != 0) ssvu::lo << ssvu::lt("ssvu::FileSystem::removeFile") << "Error removing file: " << mPath; }
 
 		/*!
 		 *
@@ -81,7 +96,29 @@ namespace ssvu
 		 * @param mPath Path to expand.
 		 *
 		 */
-		void expandUserPath(Path& mPath);
+		inline void expandUserPath(Path& mPath)
+		{
+			// TODO: WIN32 NEEDS TESTING!
+
+			std::string userHome;
+
+			#ifdef _WIN32
+				if(getenv("HOME") != NULL) userHome = getenv("HOME");
+				else if(getenv("USERPROFILE") != NULL) userHome = getenv("USERPROFILE");
+				else if(getenv("HOMEPATH") == NULL) return;
+				else
+				{
+					string drive{getenv("HOMEDRIVE")};
+					userHome = drive + getenv("HOMEPATH");
+				}
+			#else
+				if(std::getenv("HOME") != NULL) userHome = std::getenv("HOME");
+			#endif
+
+			std::string str(mPath);
+			replaceAll(str, "~", userHome);
+			mPath = str;
+		}
 
 		/*!
 		 *
@@ -94,7 +131,7 @@ namespace ssvu
 		 * @return Returns the path with the expanded `~` symbol.
 		 *
 		 */
-		Path getExpandedUserPath(Path mPath);
+		inline Path getExpandedUserPath(Path mPath) { expandUserPath(mPath); return mPath; }
 	}
 }
 
