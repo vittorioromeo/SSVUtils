@@ -9,7 +9,7 @@
 
 namespace ssvu
 {
-	template<typename T, typename U, template<typename... TContainerArgs> class TContainer = std::map> class Bimap
+	template<typename T, typename U, template<typename...> class TContainer = std::map> class Bimap
 	{
 		private:
 			TContainer<T, U> map1;
@@ -24,8 +24,10 @@ namespace ssvu
 			inline void erase(const U& mValue)					{ map1.erase(map2.at(mValue)); map2.erase(mValue); }
 			inline const U& at(const T& mValue) const			{ return map1.at(mValue); }
 			inline const T& at(const U& mValue) const			{ return map2.at(mValue); }
-			inline bool has(const T& mValue) const				{ return map1.find(mValue) != end(map1); }
-			inline bool has(const U& mValue) const				{ return map2.find(mValue) != end(map2); }
+			inline auto find(const T& mValue) const -> decltype(std::declval<const decltype(map1)>().find(mValue)) { return map1.find(mValue); }
+			inline auto find(const U& mValue) const -> decltype(std::declval<const decltype(map2)>().find(mValue)) { return map2.find(mValue); }
+			inline bool has(const T& mValue) const				{ return find(mValue) != end(map1); }
+			inline bool has(const U& mValue) const				{ return find(mValue) != end(map2); }
 			inline decltype(map1)& getMap1()					{ return map1; }
 			inline decltype(map2)& getMap2()					{ return map2; }
 			inline const decltype(map1)& getMap1() const		{ return map1; }
