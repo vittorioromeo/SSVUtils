@@ -6,6 +6,8 @@
 #define SSVU_ENCRYPTION
 
 #include <string>
+#include "SSVUtils/Encryption/Internal/Base64.h"
+#include "SSVUtils/Encryption/Internal/MD5.h"
 
 namespace ssvu
 {
@@ -33,7 +35,9 @@ namespace ssvu
 		 * @return Returns a string containing the encrypted value.
 		 *
 		 */
-		template<Type TT> std::string encrypt(const std::string& mString);
+		template<Type TT> inline std::string encrypt(const std::string& mString);
+		template<> inline std::string encrypt<Type::Base64>(const std::string& mString)	{ return Internal::Base64Encode(mString); }
+		template<> inline std::string encrypt<Type::MD5>(const std::string& mString)	{ return Internal::MD5{mString}.GetHash(); }
 
 		/*!
 		 *
@@ -55,9 +59,10 @@ namespace ssvu
 		 * @return Returns a string containing the decrypted value.
 		 *
 		 */
-		template<Type TT> std::string decrypt(const std::string& mString);
-	}
+		template<Type TT> inline std::string decrypt(const std::string& mString);
+		template<> inline std::string decrypt<Type::Base64>(const std::string& mString)	{ return Internal::Base64Decode(mString); }
 
+	}
 }
 
 #endif

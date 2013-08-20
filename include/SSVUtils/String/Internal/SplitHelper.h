@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <limits>
 #include "SSVUtils/String/Enums.h"
 
 namespace ssvu
@@ -15,7 +16,16 @@ namespace ssvu
 	{
 		using StringSize = std::string::size_type;
 
-		StringSize findFirstOf(const std::string& mString, const std::vector<std::string>& mSeparator, StringSize& mLength);
+		inline StringSize findFirstOf(const std::string& mString, const std::vector<std::string>& mSeparator, StringSize& mLength)
+		{
+			StringSize result{std::numeric_limits<StringSize>::max()};
+			for(const auto& s : mSeparator)
+			{
+				StringSize temp{mString.find(s)};
+				if(temp < result) { result = temp; mLength = s.size(); }
+			}
+			return result;
+		}
 
 		template<typename T> struct SplitFindHelper;
 		template<> struct SplitFindHelper<char>

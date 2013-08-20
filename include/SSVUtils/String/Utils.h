@@ -8,6 +8,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include "SSVUtils/Global/Typedefs.h"
 
 namespace ssvu
 {
@@ -34,7 +36,12 @@ namespace ssvu
 	 * @param mTo Replacement string.
 	 *
 	 */
-	void replace(std::string& mString, const std::string& mFrom, const std::string& mTo);
+	inline void replace(std::string& mString, const std::string& mFrom, const std::string& mTo)
+	{
+		size_t startPos{mString.find(mFrom)};
+		if(startPos == std::string::npos) return;
+		mString.replace(startPos, mFrom.size(), mTo);
+	}
 
 	/*!
 	 *
@@ -45,7 +52,15 @@ namespace ssvu
 	 * @param mTo Replacement string.
 	 *
 	 */
-	void replaceAll(std::string& mString, const std::string& mFrom, const std::string& mTo);
+	inline void replaceAll(std::string& mString, const std::string& mFrom, const std::string& mTo)
+	{
+		size_t startPos{mString.find(mFrom)};
+		while(startPos != std::string::npos)
+		{
+			mString.replace(startPos, mFrom.size(), mTo);
+			startPos = mString.find(mFrom);
+		}
+	}
 
 	/*!
 	 *
@@ -57,7 +72,7 @@ namespace ssvu
 	 * @return Returns true if mString starts with mStart.
 	 *
 	 */
-	bool beginsWith(const std::string& mString, const std::string& mStart);
+	inline bool beginsWith(const std::string& mString, const std::string& mStart) { return mStart.size() <= mString.size() && mString.compare(0, mStart.size(), mStart) == 0; }
 
 	/*!
 	 *
@@ -69,7 +84,7 @@ namespace ssvu
 	 * @return Returns true if mString ends with mEnding.
 	 *
 	 */
-	bool endsWith(const std::string &mString, const std::string &mEnding);
+	inline bool endsWith(const std::string &mString, const std::string &mEnding) { return mString.size() >= mEnding.size() && mString.compare(mString.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
 
 	/*!
 	 *
@@ -80,7 +95,7 @@ namespace ssvu
 	 * @return Returns a std::string that is a copy of mString, with all characters lowercase.
 	 *
 	 */
-	std::string toLower(std::string mString);
+	inline std::string toLower(std::string mString) { std::transform(std::begin(mString), std::end(mString), std::begin(mString), ::tolower); return mString; }
 
 	/*!
 	 *
@@ -93,7 +108,7 @@ namespace ssvu
 	 * @return Returns a std::string with mFrom replaced by mTo (first occurrence).
 	 *
 	 */
-	std::string getReplaced(std::string mString, const std::string& mFrom, const std::string& mTo);
+	inline std::string getReplaced(std::string mString, const std::string& mFrom, const std::string& mTo) { replace(mString, mFrom, mTo); return mString; }
 
 	/*!
 	 *
@@ -106,7 +121,7 @@ namespace ssvu
 	 * @return Returns a std::string with mFrom replaced by mTo (all occurrences).
 	 *
 	 */
-	std::string getReplacedAll(std::string mString, const std::string& mFrom, const std::string& mTo);
+	inline std::string getReplacedAll(std::string mString, const std::string& mFrom, const std::string& mTo) { replaceAll(mString, mFrom, mTo); return mString; }
 
 	/*!
 	 *
@@ -118,7 +133,7 @@ namespace ssvu
 	 * @return Returns an unsigned int which is the count of the character's occurrences.
 	 *
 	 */
-	unsigned int getCharCount(const std::string& mString, const char& mChar);
+	inline std::size_t getCharCount(const std::string& mString, const char& mChar) { return std::count(std::begin(mString), std::end(mString), mChar); }
 
 	/*!
 	 *
@@ -129,7 +144,7 @@ namespace ssvu
 	 * @return Returns an unsigned int which is the count of newlines.
 	 *
 	 */
-	unsigned int getNewLinesCount(const std::string& mString);
+	inline std::size_t getNewLinesCount(const std::string& mString) { return getCharCount(mString, '\n'); }
 
 	/*!
 	 *
@@ -144,7 +159,38 @@ namespace ssvu
 	 * @return Returns the levenshtein distance between two strings as a size_t.
 	 *
 	 */
-	size_t getLevenshteinDistance(const std::string& mA, const std::string& mB);
+	inline size_t getLevenshteinDistance(const std::string& mA, const std::string& mB)
+	{
+		const auto& m(mA.size());
+		const auto& n(mB.size());
+		if(m == 0) return n;
+		if(n == 0) return m;
+
+		auto costs(Uptr<size_t[]>(new size_t[n + 1]));
+		for(size_t k{0}; k <= n; ++k) costs[k] = k;
+
+		size_t i{0};
+		for(auto it1(std::begin(mA)); it1 != std::end(mA); ++it1, ++i)
+		{
+			costs[0] = i + 1;
+			auto corner(i);
+
+			size_t j{0};
+			for(auto it2(std::begin(mB)); it2 != std::end(mB); ++it2, ++j)
+			{
+				auto upper(costs[j + 1]);
+				if(*it1 == *it2) costs[j + 1] = corner;
+				else
+				{
+					const auto& t(upper < corner ? upper : corner);
+					costs[j + 1] = (costs[j] < t ? costs[j] : t) + 1;
+				}
+
+				corner = upper;
+			}
+		}
+		return costs[n];
+	}
 }
 
 #endif

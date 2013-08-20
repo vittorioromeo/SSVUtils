@@ -32,10 +32,7 @@ namespace ssvu
 			inline Command& append(Command& mCommand) { return insert(commands.size(), mCommand); }
 			void next();
 
-			template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs)
-			{
-				return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...);
-			}
+			template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...); }
 
 		public:
 			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return static_cast<T&>(append(create<T>(mArgs...))); }

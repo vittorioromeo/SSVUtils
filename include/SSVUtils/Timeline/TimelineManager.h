@@ -16,8 +16,6 @@ namespace ssvu
 			MemoryManager<Timeline> timelines;
 
 		public:
-			TimelineManager() = default;
-
 			inline Timeline& create() { return timelines.create(); }
 			inline void update(float mFrameTime)
 			{
