@@ -44,7 +44,7 @@ namespace ssvu
 					unsigned char m_rawHash[16];
 
 				public:
-					MD5();
+					MD5() = default;
 					MD5(const std::string& source);
 					MD5(std::ifstream& file);
 					MD5(const unsigned char* source, unsigned int len);

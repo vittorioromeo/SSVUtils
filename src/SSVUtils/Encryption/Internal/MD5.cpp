@@ -15,39 +15,32 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			typedef unsigned char *POINTER;
+			using POINTER = unsigned char*;
 
 			// 16 bits integer
 			#if USHRT_MAX == 0xFFFF
-				typedef unsigned short UINT2;
+				using UINT2 = unsigned short;
 			#elif UINT_MAX == 0xFFFF
-				typedef unsigned int UINT2;
+				using UINT2 = unsigned int;
 			#elif ULONG_MAX == 0xFFFF
-				typedef unsigned long UINT2;
+				using UINT2 = unsigned long;
 			#endif
 
 			// 32 bits integer
 			#if USHRT_MAX == 0xFFFFFFFF
-				typedef unsigned short UINT4;
+				using UINT4 = unsigned short;
 			#elif UINT_MAX == 0xFFFFFFFF
-				typedef unsigned int UINT4;
+				using UINT4 = unsigned int;
 			#elif ULONG_MAX == 0xFFFFFFFF
-				typedef unsigned long UINT4;
+				using UINT4 = unsigned long;
 			#endif
 
-
-			typedef struct
-			{
-			  UINT4 state[4];
-			  UINT4 count[2];
-			  unsigned char buffer[64];
-			} MD5_CTX;
+			struct MD5_CTX { UINT4 state[4]; UINT4 count[2]; unsigned char buffer[64]; };
 
 			void MD5Init(MD5_CTX*);
 			void MD5Update(MD5_CTX*, const unsigned char*, unsigned int);
 			void MD5Final(unsigned char[16], MD5_CTX*);
 
-			MD5::MD5() { }
 			MD5::MD5(const string& source) { Calculate(source); }
 			MD5::MD5(const unsigned char* source, unsigned int len) { Calculate(source, len); }
 			MD5::MD5(ifstream& file) { Calculate(file); }
@@ -335,7 +328,6 @@ namespace ssvu
 			static void Encode (unsigned char *output, const UINT4 *input, unsigned int len)
 			{
 				unsigned int i, j;
-
 				for(i = 0, j = 0; j < len; ++i, j += 4)
 				{
 					output[j] = (unsigned char)(input[i] & 0xff);
@@ -348,34 +340,27 @@ namespace ssvu
 			/* Decodes input (unsigned char) into output (UINT4). Assumes len is
 			  a multiple of 4.
 			 */
-			static void Decode (UINT4 *output, const unsigned char *input, unsigned int len)
+			static void Decode(UINT4 *output, const unsigned char *input, unsigned int len)
 			{
 				unsigned int i, j;
-
-				for(i = 0, j = 0; j < len; ++i, j += 4)
-			 output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8) |
-			   (((UINT4)input[j+2]) << 16) | (((UINT4)input[j+3]) << 24);
+				for(i = 0, j = 0; j < len; ++i, j += 4) output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8) | (((UINT4)input[j+2]) << 16) | (((UINT4)input[j+3]) << 24);
 			}
 
 			/* Note: Replace "for loop" with standard memcpy if possible.
 			 */
 
-			static void MD5_memcpy (POINTER output, POINTER input, unsigned int len)
+			static void MD5_memcpy(POINTER output, POINTER input, unsigned int len)
 			{
-			  unsigned int i;
-
-			  for (i = 0; i < len; ++i)
-			 output[i] = input[i];
+				unsigned int i;
+				for(i = 0; i < len; ++i) output[i] = input[i];
 			}
 
 			/* Note: Replace "for loop" with standard memset if possible.
 			 */
-			static void MD5_memset (POINTER output, int value, unsigned int len)
+			static void MD5_memset(POINTER output, int value, unsigned int len)
 			{
 				unsigned int i;
-
-			  for(i = 0; i < len; ++i)
-			 ((char *)output)[i] = (char)value;
+				for(i = 0; i < len; ++i) ((char *)output)[i] = (char)value;
 			}
 		}
 	}
