@@ -18,10 +18,10 @@ namespace ssvu
 		using MemUnitPtr = MemUnit*;
 		using MemSize = decltype(sizeof(MemUnit)); // Should always be 1 byte
 
-		template<typename T> constexpr MemSize getBytes(const T& mValue)		{ return mValue; }
-		template<typename T> constexpr MemSize getKBsToBytes(const T& mValue)	{ return mValue * 1024; }
-		template<typename T> constexpr MemSize getMBsToBytes(const T& mValue)	{ return getKBsToBytes(mValue) * 1024; }
-		template<typename T> constexpr MemSize getGBsToBytes(const T& mValue)	{ return getMBsToBytes(mValue) * 1024; }
+		template<typename T> inline constexpr MemSize getBytes(const T& mBytes)		{ return mBytes; }
+		template<typename T> inline constexpr MemSize getKBsToBytes(const T& mKBs)	{ return mKBs * 1024; }
+		template<typename T> inline constexpr MemSize getMBsToBytes(const T& mMBs)	{ return getKBsToBytes(mMBs * 1024); }
+		template<typename T> inline constexpr MemSize getGBsToBytes(const T& mGBs)	{ return getMBsToBytes(mGBs * 1024); }
 
 		namespace Internal
 		{
@@ -55,17 +55,17 @@ namespace ssvu
 				mObject->~T(); return {objStart, objStart + mSize};
 			}
 
-			template<typename T, typename TPreAlloc, typename... TCtorArgs> class PreAllocMMBase : public ssvu::Internal::MemoryManagerBase<PreAllocMMBase<T, TPreAlloc, TCtorArgs...>, T, std::function<void(T*)>>
+			template<typename T, typename TPreAlloc> class PreAllocMMBase : public ssvu::Internal::MemoryManagerBase<PreAllocMMBase<T, TPreAlloc>, T, std::function<void(T*)>>
 			{
 				private:
 					using UptrDeleter = std::function<void(T*)>;
 
 				private:
-					TPreAlloc preAllocator;
+					TPreAlloc& preAllocator;
 					UptrDeleter uptrDeleter;
 
 				public:
-					PreAllocMMBase(TCtorArgs&&... mArgs) : preAllocator{std::forward<TCtorArgs>(mArgs)...}, uptrDeleter{[&](T* mPtr){ preAllocator.destroy(mPtr); }} { }
+					PreAllocMMBase(TPreAlloc& mPreAllocator) : preAllocator(mPreAllocator), uptrDeleter{[&](T* mPtr){ preAllocator.destroy(mPtr); }} { }
 
 					inline void refreshImpl()
 					{
@@ -86,69 +86,40 @@ namespace ssvu
 				Internal::MemBuffer buffer;
 				std::vector<MemRange> available;
 
-				inline void unifyFrom(unsigned int mIndex)
-				{
-					MemUnitPtr lastEnd(available[mIndex].end);
-					auto toChange(std::begin(available) + mIndex);
-					auto itr(toChange + 1);
-
-					for(; itr != std::end(available); ++itr)
-						if(itr->begin == lastEnd) lastEnd = itr->end;
-						else break;
-
-					// Erase all but the first unified elements, then change the first one with
-					// the updated range
-
-					available.erase(toChange + 1, itr);
-					toChange->begin = available[mIndex].begin;
-					toChange->end = lastEnd;
-				}
-
 				inline void unifyContiguous()
 				{
 					sort(available, [](const MemRange& mA, const MemRange& mB){ return mA.begin < mB.begin; });
-					//for(auto i(0u); i < available.size(); ++i) unifyFrom(i);
-					unifyFrom(0);
-				}
-
-				inline std::vector<MemRange>::iterator findSuitableMemory(MemSize mRequiredSize)
-				{
-					// Tries to find a memory piece big enough to hold mRequiredSize
-					// If it is not found, contiguous memory pieces are unified
-					// If it is not found again, throws an exception
-
-					for(int i{0}; i < 2; ++i)
+					for(auto itr(std::begin(available)); itr != std::end(available) - 1;)
 					{
-						for(auto itr(std::begin(available)); itr != std::end(available); ++itr) if(itr->getSize() >= mRequiredSize) return itr;
-						unifyContiguous();
+						auto& next(*(itr + 1));
+						if(itr->end != next.begin) { ++itr; continue; }
+
+						next.begin = itr->begin;
+						available.erase(itr);
 					}
-					throw std::runtime_error("PreAllocator couldn't find suitable memory (required: " + toStr(mRequiredSize) + ")");
 				}
 
 			public:
-				PreAllocatorDynamic(MemSize mBufferSize) : buffer{mBufferSize}
-				{
-					// Add the whole buffer to the available memory vector
-					available.push_back(buffer.getRange()); return;
-				}
+				PreAllocatorDynamic(MemSize mBufferSize) : buffer{mBufferSize} { available.push_back(buffer.getRange()); }
 
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
-					// Creates and returns a T* allocated with "placement new" on an available piece of the buffer
-					// T must be the "real object type" - this method will fail with pointers to bases that store derived instances!
-
-					const auto& requiredSize(sizeof(T));
-					const auto& suitable(findSuitableMemory(requiredSize));
-
-					MemUnitPtr toUse{suitable->begin};
-					MemRange leftover{toUse + requiredSize, suitable->end};
-
-					available.erase(suitable);
-					if(leftover.getSize() > 0) available.push_back(leftover);
-
-					return new (toUse) T{std::forward<TArgs>(mArgs)...};
+					const auto& reqSize(sizeof(T));
+					for(auto itr(std::begin(available)); itr != std::end(available); ++itr)
+					{
+						if(itr->getSize() < reqSize) continue;
+						MemUnitPtr toUse{itr->begin};
+						itr->begin = toUse + reqSize;
+						if(itr->getSize() == 0) available.erase(itr);
+						return new (toUse) T{std::forward<TArgs>(mArgs)...};
+					}
 				}
-				template<typename T> inline void destroy(T* mObject) { available.emplace_back(Internal::destroyAndGetMemRange<T>(mObject, sizeof(T))); }
+				template<typename T> inline void destroy(T* mObject, MemSize mSize)
+				{
+					available.push_back(Internal::destroyAndGetMemRange<T>(mObject, mSize));
+					unifyContiguous();
+				}
+				template<typename T> inline void destroy(T* mObject) { destroy(mObject, sizeof(T)); }
 		};
 
 		class PreAllocatorChunk
@@ -181,12 +152,11 @@ namespace ssvu
 		{
 			PreAllocatorStatic(unsigned int mChunks) : PreAllocatorChunk{sizeof(T), mChunks} { }
 			template<typename TType = T, typename... TArgs> inline T* create(TArgs&&... mArgs) { return PreAllocatorChunk::create<TType, TArgs...>(std::forward<TArgs>(mArgs)...); }
-			inline void destroy(T* mObject) { PreAllocatorChunk::destroy<T>(mObject); }
 		};
 
-		template<typename T> using PreAllocMMDynamic = Internal::PreAllocMMBase<T, PreAllocatorDynamic, MemSize>;
-		template<typename T> using PreAllocMMChunk = Internal::PreAllocMMBase<T, PreAllocatorChunk, MemSize, unsigned int>;
-		template<typename T> using PreAllocMMStatic = Internal::PreAllocMMBase<T, PreAllocatorStatic<T>, unsigned int>;
+		template<typename T> using PAMMDynamic =	Internal::PreAllocMMBase<T, PreAllocatorDynamic>;
+		template<typename T> using PAMMChunk =		Internal::PreAllocMMBase<T, PreAllocatorChunk>;
+		template<typename T> using PAMMStatic =		Internal::PreAllocMMBase<T, PreAllocatorStatic<T>>;
 	}
 }
 
