@@ -28,9 +28,21 @@ namespace ssvu
 			bool ready{true}, finished{false};
 			float remainder{0.f};
 
-			Command& insert(unsigned int mIndex, Command& mCommand);
+			inline Command& insert(unsigned int mIndex, Command& mCommand)
+			{
+				commands.insert(std::begin(commands) + mIndex, &mCommand);
+				if(currentCommand == nullptr) currentCommand = &mCommand;
+				return mCommand;
+			}
 			inline Command& append(Command& mCommand) { return insert(commands.size(), mCommand); }
-			void next();
+			inline void next()
+			{
+				if(currentCommand == nullptr) return;
+				auto itr(find(commands, currentCommand));
+
+				if(itr == std::end(commands) - 1) { currentCommand = nullptr; return; } // no more commands, return
+				if(itr < std::end(commands) - 1 && itr >= std::begin(commands)) currentCommand = *++itr;
+			}
 
 			template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...); }
 
@@ -43,8 +55,26 @@ namespace ssvu
 			inline void start()						{ finished = false; ready = true; }
 			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
 
-			void update(float mFrameTime);
-			void reset();
+			void update(float mFrameTime)
+			{
+				commandManager.refresh();
+
+				if(finished) return;
+				ready = true;
+
+				do
+				{
+					if(currentCommand == nullptr) { finished = true; ready = false; break; }
+					currentCommand->update(mFrameTime + remainder);
+					remainder = 0;
+				} while(ready);
+			}
+			inline void reset()
+			{
+				start();
+				for(const auto& c : commands) c->reset();
+				currentCommand = commands.empty() ? nullptr : commands[0];
+			}
 
 			inline std::size_t getSize() const	{ return commands.size(); }
 			inline bool isFinished() const		{ return finished; }

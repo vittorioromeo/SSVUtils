@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "SSVUtils/TemplateSystem/Internal/Symbols.h"
+#include "SSVUtils/String/Utils.h"
 
 namespace ssvu
 {
@@ -72,7 +74,33 @@ namespace ssvu
 				 * @return Returns a string containing the expanded dictionary template.
 				 *
 				 */
-				std::string getExpanded(std::string mString) const;
+				std::string getExpanded(std::string mString) const
+				{
+					using namespace Internal;
+
+					for(const auto& p : sectionDictionaries)
+					{
+						const std::string sectionStart{getSectionStart(p.first)}, sectionEnd{getSectionEnd(p.first)};
+						const auto outerSectionStartIndex(mString.find(sectionStart));
+						const auto innerSectionEndIndex(mString.find(sectionEnd));
+						const auto innerSectionStartIndex(outerSectionStartIndex + sectionStart.size());
+						const auto outerSectionEndIndex(innerSectionEndIndex + sectionEnd.size());
+
+						const std::string innerSection{mString.substr(innerSectionStartIndex, innerSectionEndIndex - innerSectionStartIndex)};
+						std::string innerSectionResult;
+
+						for(auto d : p.second) innerSectionResult += d.getExpanded(innerSection);
+
+						mString.replace(outerSectionStartIndex, outerSectionEndIndex - outerSectionStartIndex, innerSectionResult);
+					}
+
+					for(const auto& p : replacements) replaceAll(mString, getKey(p.first), p.second);
+
+					// TODO: cleanup unexpanded sections/replacements? (use regex!)
+					// TODO: newline stripping options?
+
+					return mString;
+				}
 
 				/*!
 				 *
