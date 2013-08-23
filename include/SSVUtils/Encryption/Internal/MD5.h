@@ -45,15 +45,15 @@ namespace ssvu
 
 				public:
 					MD5() = default;
-					MD5(const std::string& source);
-					MD5(std::ifstream& file);
-					MD5(const unsigned char* source, unsigned int len);
+					MD5(const std::string& source) { Calculate(source); }
+					MD5(std::ifstream& file) { Calculate(file); }
+					MD5(const unsigned char* source, unsigned int len) { Calculate(source, len); }
 
-					std::string Calculate(const std::string& source);
+					std::string Calculate(const std::string& source) { return Calculate((const unsigned char*)source.c_str(), source.size()); }
 					std::string Calculate(std::ifstream& file);
 					std::string Calculate(const unsigned char* source, uint32_t len);
 
-					std::string GetHash() const;
+					std::string GetHash() const { return m_sHash; }
 					const unsigned char* GetRawHash() const { return m_rawHash; }
 			};
 		}

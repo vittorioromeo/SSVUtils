@@ -50,11 +50,11 @@ namespace ssvu
 			template<typename T> struct ContainerHelper;
 			template<typename T, typename... TArgs> struct ContainerHelper<std::vector<T, TArgs...>>
 			{
-				template<typename... TItemArgs> static inline void emplace(std::vector<T, TArgs...>& mCont, TItemArgs&&... mArgs) { mCont.emplace_back(std::forward<TItemArgs>(mArgs)...); }
+				template<typename... TItemArgs> inline static void emplace(std::vector<T, TArgs...>& mCont, TItemArgs&&... mArgs) { mCont.emplace_back(std::forward<TItemArgs>(mArgs)...); }
 			};
 			template<typename T, typename... TArgs> struct ContainerHelper<std::stack<T, TArgs...>>
 			{
-				template<typename... TItemArgs> static inline void emplace(std::stack<T, TArgs...>& mCont, TItemArgs&&... mArgs) { mCont.emplace(std::forward<TItemArgs>(mArgs)...); }
+				template<typename... TItemArgs> inline static void emplace(std::stack<T, TArgs...>& mCont, TItemArgs&&... mArgs) { mCont.emplace(std::forward<TItemArgs>(mArgs)...); }
 			};
 			template<typename T, typename TCont> inline void destroyReclaim(T* mObj, TCont& mCont, MemSize mSize = sizeof(T))
 			{

@@ -2,10 +2,11 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
+#ifndef SSVU_ENCRYPTION_INTERNAL_BASE64_INL
+#define SSVU_ENCRYPTION_INTERNAL_BASE64_INL
+
 #include <iostream>
 #include "SSVUtils/Encryption/Internal/Base64.h"
-
-using namespace std;
 
 namespace ssvu
 {
@@ -13,13 +14,12 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			static const string base64_chars{"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"};
+			static const std::string base64_chars{"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"};
+			inline static bool is_base64(unsigned char c) { return (isalnum(c) || (c == '+') || (c == '/')); }
 
-			static inline bool is_base64(unsigned char c) { return (isalnum(c) || (c == '+') || (c == '/')); }
-
-			string Base64Encode(unsigned char const* bytes_to_encode, unsigned int in_len)
+			inline std::string Base64Encode(unsigned char const* bytes_to_encode, unsigned int in_len)
 			{
-				string ret;
+				std::string ret;
 				int i{0}, j{0};
 				unsigned char char_array_3[3], char_array_4[4];
 
@@ -54,11 +54,11 @@ namespace ssvu
 				return ret;
 			}
 
-			string Base64Decode(const string& mString)
+			inline std::string Base64Decode(const std::string& mString)
 			{
 				int in_len(mString.size()), i{0}, j{0}, in_{0};
 				unsigned char char_array_4[4], char_array_3[3];
-				string ret;
+				std::string ret;
 
 				while(in_len-- && (mString[in_] != '=') && is_base64(mString[in_]))
 				{
@@ -72,7 +72,7 @@ namespace ssvu
 						char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
 						char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
 
-						for (i = 0; (i < 3); i++) ret += char_array_3[i];
+						for(i = 0; (i < 3); i++) ret += char_array_3[i];
 						i = 0;
 					}
 				}
@@ -86,13 +86,15 @@ namespace ssvu
 					char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
 					char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
 
-					for (j = 0; (j < i - 1); j++) ret += char_array_3[j];
+					for(j = 0; (j < i - 1); j++) ret += char_array_3[j];
 				}
 
 				return ret;
 			}
 
-			string Base64Encode(const string& mString) { return Base64Encode(reinterpret_cast<const unsigned char*>(mString.c_str()), mString.size()); }
+			inline std::string Base64Encode(const std::string& mString) { return Base64Encode(reinterpret_cast<const unsigned char*>(mString.c_str()), mString.size()); }
 		}
 	}
 }
+
+#endif
