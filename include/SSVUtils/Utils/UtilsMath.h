@@ -187,6 +187,29 @@ namespace ssvu
 	 *
 	 */
 	template<typename T> inline std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) { T y{mIndex / mColumns}; return std::array<T, 2>{{mIndex - y * mColumns, y}}; }
+
+	/*!
+	 *
+	 * @brief Gets sign-indepedent modulo calculation.
+	 *
+	 * @code
+	 * assert(getSIMod(-2, 12) == 10);
+	 * @endcode
+	 *
+	 * @tparam T Type of value.
+	 * @param mA Left side of operation.
+	 * @param mB Right side of operation.
+	 *
+	 * @return Returns the mathematically correct mA % mB.
+	 *
+	 */
+	template<typename T> inline T getSIMod(const T& mA, const T& mB)
+	{
+		if(mB < 0) return getSIMod(-mA, -mB);
+		T result{mA % mB};
+		if(result < 0) result += mB;
+		return result;
+	}
 }
 
 #endif
