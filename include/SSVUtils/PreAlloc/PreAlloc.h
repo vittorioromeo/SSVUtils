@@ -6,6 +6,7 @@
 #include <functional>
 #include <stdexcept>
 #include <cmath>
+#include <cassert>
 #include "SSVUtils/Global/Typedefs.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 #include "SSVUtils/MemoryManager/MemoryManager.h"
@@ -46,26 +47,52 @@ namespace ssvu
 					inline const MemRange& getRange() const	{ return range; }
 			};
 
-			template<typename T> inline MemRange destroyAndGetMemRange(T* mObject, MemSize mSize)
+			template<typename T> struct ContainerHelper;
+			template<typename T, typename... TArgs> struct ContainerHelper<std::vector<T, TArgs...>>
 			{
-				// Destroys a previously allocated object, calling its destructor and reclaiming its memory piece
-				// T must be the "real object type" - this method will fail with pointers to bases that store derived instances!
-
-				auto objStart(reinterpret_cast<MemUnitPtr>(mObject));
-				mObject->~T(); return {objStart, objStart + mSize};
+				template<typename... TItemArgs> static inline void emplace(std::vector<T, TArgs...>& mContainer, TItemArgs&&... mArgs)
+				{
+					mContainer.template emplace_back<TItemArgs...>(std::forward<TItemArgs>(mArgs)...);
+				}
+			};
+			template<typename T, typename... TArgs> struct ContainerHelper<std::stack<T, TArgs...>>
+			{
+				template<typename... TItemArgs> static inline void emplace(std::stack<T, TArgs...>& mContainer, TItemArgs&&... mArgs)
+				{
+					mContainer.template emplace<TItemArgs...>(std::forward<TItemArgs>(mArgs)...);
+				}
+			};
+			template<typename T, typename TContainer> inline void destroyReclaim(T* mObj, TContainer& mContainer, MemSize mSize = sizeof(T))
+			{
+				auto objStart(reinterpret_cast<MemUnitPtr>(mObj));
+				mObj->~T(); ContainerHelper<TContainer>::emplace(mContainer, objStart, objStart + mSize);
 			}
 
-			template<typename T, typename TPreAlloc> class PreAllocMMBase : public ssvu::Internal::MemoryManagerBase<PreAllocMMBase<T, TPreAlloc>, T, std::function<void(T*)>>
+			template<typename T> inline void createChunks(T& mContainer, MemSize mSize, std::size_t mChunks, const MemBuffer& mBuffer)
+			{
+				for(auto i(0u); i < mChunks; ++i)
+				{
+					MemUnitPtr chunkBegin(mBuffer.getBegin() + (i * mSize));
+					ContainerHelper<T>::emplace(mContainer, chunkBegin, chunkBegin + mSize);
+				}
+			}
+
+			template<typename T, typename TPreAlloc> struct PreAllocMMDel
+			{
+				TPreAlloc* preAlloc;
+				PreAllocMMDel(TPreAlloc& mPreAlloc) : preAlloc(&mPreAlloc) { }
+				inline void operator()(T* mPtr) { preAlloc->destroy(mPtr); }
+			};
+
+			template<typename T, typename TPreAlloc> class PreAllocMMBase : public ssvu::Internal::MemoryManagerBase<PreAllocMMBase<T, TPreAlloc>, T, PreAllocMMDel<T, TPreAlloc>>
 			{
 				private:
-					using UptrDeleter = std::function<void(T*)>;
-
-				private:
-					TPreAlloc& preAllocator;
+					using UptrDeleter = PreAllocMMDel<T, TPreAlloc>;
+					TPreAlloc& preAlloc;
 					UptrDeleter uptrDeleter;
 
 				public:
-					PreAllocMMBase(TPreAlloc& mPreAllocator) : preAllocator(mPreAllocator), uptrDeleter{[&](T* mPtr){ preAllocator.destroy(mPtr); }} { }
+					PreAllocMMBase(TPreAlloc& mPreAlloc) : preAlloc(mPreAlloc), uptrDeleter(preAlloc) { }
 
 					inline void refreshImpl()
 					{
@@ -74,16 +101,16 @@ namespace ssvu
 					}
 					template<typename TType, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
 					{
-						auto result(this->preAllocator.template create<TType>(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
+						auto result(this->preAlloc.template create<TType>(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
 					}
 			};
 		}
 
-		class PreAllocatorDynamic
+		class PreAllocDyn
 		{
 			private:
 				using MemRange = Internal::MemRange;
-				Internal::MemBuffer buffer;
+				const Internal::MemBuffer buffer;
 				std::vector<MemRange> available;
 
 				inline void unifyContiguous()
@@ -100,8 +127,7 @@ namespace ssvu
 				}
 
 			public:
-				PreAllocatorDynamic(MemSize mBufferSize) : buffer{mBufferSize} { available.push_back(buffer.getRange()); }
-
+				PreAllocDyn(MemSize mBufferSize) : buffer{mBufferSize} { available.push_back(buffer.getRange()); }
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					const auto& reqSize(sizeof(T));
@@ -114,49 +140,48 @@ namespace ssvu
 						return new (toUse) T{std::forward<TArgs>(mArgs)...};
 					}
 				}
-				template<typename T> inline void destroy(T* mObject, MemSize mSize)
-				{
-					available.push_back(Internal::destroyAndGetMemRange<T>(mObject, mSize));
-					unifyContiguous();
-				}
-				template<typename T> inline void destroy(T* mObject) { destroy(mObject, sizeof(T)); }
+				template<typename T> inline void destroy(T* mObj, MemSize mSize = sizeof(T)) { Internal::destroyReclaim(mObj, available, mSize); unifyContiguous(); }
 		};
 
-		class PreAllocatorChunk
+		class PreAllocChunk
 		{
 			protected:
 				using MemRange = Internal::MemRange;
-				MemSize chunkSize;
-				Internal::MemBuffer buffer;
+				const MemSize chunkSize;
+				const Internal::MemBuffer buffer;
 				std::stack<MemRange, std::vector<MemRange>> available;
 
 			public:
-				PreAllocatorChunk(MemSize mChunkSize, unsigned int mChunks) : chunkSize{mChunkSize}, buffer{chunkSize * mChunks}
-				{
-					for(auto i(0u); i < mChunks; ++i)
-					{
-						MemUnitPtr chunkBegin(buffer.getBegin() + (i * chunkSize));
-						available.emplace(chunkBegin, chunkBegin + chunkSize);
-					}
-				}
-
+				PreAllocChunk(MemSize mChunkSize, std::size_t mChunks) : chunkSize{mChunkSize}, buffer{chunkSize * mChunks} { createChunks(available, mChunkSize, mChunks, buffer); }
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
+				{
+					assert(sizeof(T) <= chunkSize);
+					auto toUse(available.top().begin); available.pop();
+					return new (toUse) T{std::forward<TArgs>(mArgs)...};
+				}
+				template<typename T> inline void destroy(T* mObj) { Internal::destroyReclaim(mObj, available, chunkSize); }
+		};
+
+		template<typename T> class PreAllocStatic
+		{
+			protected:
+				using MemRange = Internal::MemRange;
+				const Internal::MemBuffer buffer;
+				std::stack<MemRange, std::vector<MemRange>> available;
+
+			public:
+				PreAllocStatic(std::size_t mChunks) : buffer{sizeof(T) * mChunks} { createChunks(available, sizeof(T), mChunks, buffer); }
+				template<typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					auto toUse(available.top().begin); available.pop();
 					return new (toUse) T{std::forward<TArgs>(mArgs)...};
 				}
-				template<typename T> inline void destroy(T* mObject) { available.emplace(Internal::destroyAndGetMemRange<T>(mObject, chunkSize)); }
+				inline void destroy(T* mObj) { Internal::destroyReclaim(mObj, available); }
 		};
 
-		template<typename T> struct PreAllocatorStatic : public PreAllocatorChunk
-		{
-			PreAllocatorStatic(unsigned int mChunks) : PreAllocatorChunk{sizeof(T), mChunks} { }
-			template<typename TType = T, typename... TArgs> inline T* create(TArgs&&... mArgs) { return PreAllocatorChunk::create<TType, TArgs...>(std::forward<TArgs>(mArgs)...); }
-		};
-
-		template<typename T> using PAMMDynamic =	Internal::PreAllocMMBase<T, PreAllocatorDynamic>;
-		template<typename T> using PAMMChunk =		Internal::PreAllocMMBase<T, PreAllocatorChunk>;
-		template<typename T> using PAMMStatic =		Internal::PreAllocMMBase<T, PreAllocatorStatic<T>>;
+		template<typename T> using PAMMDynamic =	Internal::PreAllocMMBase<T, PreAllocDyn>;
+		template<typename T> using PAMMChunk =		Internal::PreAllocMMBase<T, PreAllocChunk>;
+		template<typename T> using PAMMStatic =		Internal::PreAllocMMBase<T, PreAllocStatic<T>>;
 	}
 }
 
