@@ -50,22 +50,16 @@ namespace ssvu
 			template<typename T> struct ContainerHelper;
 			template<typename T, typename... TArgs> struct ContainerHelper<std::vector<T, TArgs...>>
 			{
-				template<typename... TItemArgs> static inline void emplace(std::vector<T, TArgs...>& mContainer, TItemArgs&&... mArgs)
-				{
-					mContainer.template emplace_back<TItemArgs...>(std::forward<TItemArgs>(mArgs)...);
-				}
+				template<typename... TItemArgs> static inline void emplace(std::vector<T, TArgs...>& mCont, TItemArgs&&... mArgs) { mCont.emplace_back(std::forward<TItemArgs>(mArgs)...); }
 			};
 			template<typename T, typename... TArgs> struct ContainerHelper<std::stack<T, TArgs...>>
 			{
-				template<typename... TItemArgs> static inline void emplace(std::stack<T, TArgs...>& mContainer, TItemArgs&&... mArgs)
-				{
-					mContainer.template emplace<TItemArgs...>(std::forward<TItemArgs>(mArgs)...);
-				}
+				template<typename... TItemArgs> static inline void emplace(std::stack<T, TArgs...>& mCont, TItemArgs&&... mArgs) { mCont.emplace(std::forward<TItemArgs>(mArgs)...); }
 			};
-			template<typename T, typename TContainer> inline void destroyReclaim(T* mObj, TContainer& mContainer, MemSize mSize = sizeof(T))
+			template<typename T, typename TCont> inline void destroyReclaim(T* mObj, TCont& mCont, MemSize mSize = sizeof(T))
 			{
 				auto objStart(reinterpret_cast<MemUnitPtr>(mObj));
-				mObj->~T(); ContainerHelper<TContainer>::emplace(mContainer, objStart, objStart + mSize);
+				mObj->~T(); ContainerHelper<TCont>::emplace(mCont, objStart, objStart + mSize);
 			}
 
 			template<typename T> inline void createChunks(T& mContainer, MemSize mSize, std::size_t mChunks, const MemBuffer& mBuffer)
@@ -171,7 +165,7 @@ namespace ssvu
 
 			public:
 				PreAllocStatic(std::size_t mChunks) : buffer{sizeof(T) * mChunks} { createChunks(available, sizeof(T), mChunks, buffer); }
-				template<typename... TArgs> inline T* create(TArgs&&... mArgs)
+				template<typename TType = T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					auto toUse(available.top().begin); available.pop();
 					return new (toUse) T{std::forward<TArgs>(mArgs)...};
@@ -179,9 +173,9 @@ namespace ssvu
 				inline void destroy(T* mObj) { Internal::destroyReclaim(mObj, available); }
 		};
 
-		template<typename T> using PAMMDynamic =	Internal::PreAllocMMBase<T, PreAllocDyn>;
-		template<typename T> using PAMMChunk =		Internal::PreAllocMMBase<T, PreAllocChunk>;
-		template<typename T> using PAMMStatic =		Internal::PreAllocMMBase<T, PreAllocStatic<T>>;
+		template<typename T> using PAMMDyn =	Internal::PreAllocMMBase<T, PreAllocDyn>;
+		template<typename T> using PAMMChunk =	Internal::PreAllocMMBase<T, PreAllocChunk>;
+		template<typename T> using PAMMStatic =	Internal::PreAllocMMBase<T, PreAllocStatic<T>>;
 	}
 }
 
