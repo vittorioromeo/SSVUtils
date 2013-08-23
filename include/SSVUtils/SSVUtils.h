@@ -52,4 +52,6 @@
 // CommandLine
 #include "SSVUtils/CommandLine/CommandLine.h"
 
+#include "SSVUtils/Log/Log.inl"
+
 #endif

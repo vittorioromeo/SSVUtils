@@ -53,7 +53,7 @@ namespace ssvu
 		}
 	}
 
-	extern Internal::LOut lo;
+	static Internal::LOut lo;
 	template<typename T> inline Internal::LTitle lt(const T& mValue)
 	{
 		#ifndef SSVU_LOG_DISABLE

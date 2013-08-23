@@ -14,7 +14,7 @@ namespace ssvu
 	class Do : public Command
 	{
 		protected:
-			std::function<void()> action;
+			Action action;
 			inline void update(float) override { action(); timeline.next(); }
 
 		public:
