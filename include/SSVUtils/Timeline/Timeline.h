@@ -14,10 +14,13 @@
 namespace ssvu
 {
 	using Action = std::function<void()>;
+	using Predicate = std::function<bool()>;
 
 	class Timeline : public MemoryManageable
 	{
 		friend class Wait;
+		friend class WaitWhile;
+		friend class WaitUntil;
 		friend class Do;
 		friend class Go;
 
