@@ -12,9 +12,10 @@ namespace ssvu
 {
 	class Wait : public Command
 	{
-		protected:
+		private:
 			float time, currentTime;
 
+		protected:
 			inline void update(float mFrameTime) override
 			{
 				timeline.ready = false;
@@ -29,6 +30,30 @@ namespace ssvu
 
 		public:
 			Wait(Timeline& mTimeline, float mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { }
+	};
+
+	class WaitWhile : public Command
+	{
+		private:
+			Predicate predicate;
+
+		protected:
+			inline void update(float) override { timeline.ready = false; if(!predicate()) timeline.next(); }
+
+		public:
+			WaitWhile(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
+	};
+
+	class WaitUntil : public Command
+	{
+		private:
+			Predicate predicate;
+
+		protected:
+			inline void update(float) override { timeline.ready = false; if(predicate()) timeline.next(); }
+
+		public:
+			WaitUntil(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
 	};
 
 }
