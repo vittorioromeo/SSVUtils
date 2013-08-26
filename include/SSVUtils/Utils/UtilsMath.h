@@ -52,6 +52,66 @@ namespace ssvu
 
 	/*!
 	 *
+	 * @brief Clamps a numeric value. (lower-bound only)
+	 *
+	 * @tparam T Type of value.
+	 * @param mValue Reference to the value. (will be modified)
+	 * @param mMin Lower bound.
+	 *
+	 */
+	template<typename T> inline void clampMin(T& mValue, const T& mMin) { if(mValue < mMin) mValue = mMin; }
+
+	/*!
+	 *
+	 * @brief Clamps a numeric value. (upper-bound only)
+	 *
+	 * @tparam T Type of value.
+	 * @param mValue Reference to the value. (will be modified)
+	 * @param mMax Upper bound.
+	 *
+	 */
+	template<typename T> inline void clampMax(T& mValue, const T& mMax) { if(mValue > mMax) mValue = mMax; }
+
+	/*!
+	 *
+	 * @brief Clamps a numeric value.
+	 *
+	 * @tparam T Type of value.
+	 * @param mValue Reference to the value. (will be modified)
+	 * @param mMin Lower bound.
+	 * @param mMax Upper bound.
+	 *
+	 */
+	template<typename T> inline void clamp(T& mValue, const T& mMin, const T& mMax) { if(mValue < mMin) mValue = mMin; else if(mValue > mMax) mValue = mMax; }
+
+	/*!
+	 *
+	 * @brief Gets a clamped numeric value. (lower-bound only)
+	 *
+	 * @tparam T Type of value.
+	 * @param mValue Const reference to the value. (original value won't be changed)
+	 * @param mMin Lower bound.
+	 *
+	 * @return Returns mMin if mValue < mMin, mValue otherwise.
+	 *
+	 */
+	template<typename T> constexpr inline T getClampedMin(const T& mValue, const T& mMin) { return mValue < mMin ? mMin : mValue; }
+
+	/*!
+	 *
+	 * @brief Gets a clamped numeric value. (upper-bound only)
+	 *
+	 * @tparam T Type of value.
+	 * @param mValue Const reference to the value. (original value won't be changed)
+	 * @param mMax Upper bound.
+	 *
+	 * @return Returns mMax if mValue > mMax, mValue otherwise.
+	 *
+	 */
+	template<typename T> constexpr inline T getClampedMax(const T& mValue, const T& mMax) { return mValue > mMax ? mMax : mValue; }
+
+	/*!
+	 *
 	 * @brief Gets a clamped numeric value.
 	 *
 	 * @tparam T Type of value.
