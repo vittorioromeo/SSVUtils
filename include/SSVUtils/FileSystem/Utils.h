@@ -72,7 +72,7 @@ namespace ssvu
 		inline void createFolder(const Path& mPath)
 		{
 			#ifdef _WIN32
-				mkdir(mPath.c_str());
+				mkdir(mPath.getCStr());
 			#else
 				mkdir(mPath.getCStr(), 0755);
 			#endif
@@ -103,13 +103,13 @@ namespace ssvu
 			std::string userHome;
 
 			#ifdef _WIN32
-				if(getenv("HOME") != NULL) userHome = getenv("HOME");
-				else if(getenv("USERPROFILE") != NULL) userHome = getenv("USERPROFILE");
-				else if(getenv("HOMEPATH") == NULL) return;
+				if(std::getenv("HOME") != NULL) userHome = std::getenv("HOME");
+				else if(std::getenv("USERPROFILE") != NULL) userHome = std::getenv("USERPROFILE");
+				else if(std::getenv("HOMEPATH") == NULL) return;
 				else
 				{
-					string drive{getenv("HOMEDRIVE")};
-					userHome = drive + getenv("HOMEPATH");
+					std::string drive{std::getenv("HOMEDRIVE")};
+					userHome = drive + std::getenv("HOMEPATH");
 				}
 			#else
 				if(std::getenv("HOME") != NULL) userHome = std::getenv("HOME");
