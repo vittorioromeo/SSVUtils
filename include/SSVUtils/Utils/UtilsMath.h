@@ -12,31 +12,33 @@ namespace ssvu
 {
 	static std::minstd_rand rndEngine;
 	template<typename T> using RndDistributionI = std::uniform_int_distribution<T>;
-	template<typename T> using RndDistributionF = std::uniform_real_distribution<T>;
+	template<typename T> using RndDistributionR = std::uniform_real_distribution<T>;
 
 	/*!
 	 *
 	 * @brief Gets a random integer value between mMin and mMax.
 	 *
+	 * @tparam T Type of integer value. (can also be unsigned int, for example)
 	 * @param mMin Lower bound.
 	 * @param mMax Upper bound.
 	 *
 	 * @return Returns a random integer value, between mMin and mMax.
 	 *
 	 */
-	inline int getRnd(int mMin, int mMax) { return RndDistributionI<int>{mMin, mMax - 1}(rndEngine); }
+	template<typename T = int> inline T getRnd(T mMin, T mMax) { return RndDistributionI<T>{mMin, mMax - 1}(rndEngine); }
 
 	/*!
 	 *
-	 * @brief Gets a random floating point value between mMin and mMax.
+	 * @brief Gets a random real value between mMin and mMax.
 	 *
+	 * @tparam T Type of integer value. (can also be double, for example)
 	 * @param mMin Lower bound.
 	 * @param mMax Upper bound.
 	 *
-	 * @return Returns a random integer value, between mMin and mMax.
+	 * @return Returns a random real value, between mMin and mMax.
 	 *
 	 */
-	inline float getRndF(float mMin, float mMax) { return RndDistributionF<float>{mMin, mMax - 1}(rndEngine); }
+	template<typename T = float> inline T getRndR(T mMin, T mMax) { return RndDistributionR<T>{mMin, mMax - 1}(rndEngine); }
 
 	/*!
 	 *
