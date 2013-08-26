@@ -18,7 +18,7 @@ namespace ssvu
 		protected:
 			inline void update(float mFrameTime) override
 			{
-				timeline.ready = false;
+				timeline.ready = false; // TODO: create timeline.block() method?
 
 				currentTime -= mFrameTime;
 				if(currentTime > 0) return;
