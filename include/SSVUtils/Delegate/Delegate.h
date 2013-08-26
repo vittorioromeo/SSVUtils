@@ -73,6 +73,13 @@ namespace ssvu
 				for(const auto& f : funcs) result.push_back(f(std::forward<TArgs>(mArgs)...));
 				return result;
 			}
+
+			/*!
+			 *
+			 * @brief Clears all the functions from the delegate.
+			 *
+			 */
+			inline void clear() { funcs.clear(); }
 	};
 
 	/*!
@@ -126,6 +133,13 @@ namespace ssvu
 			 *
 			 */
 			inline void operator()(TArgs... mArgs) { for(const auto& f : funcs) f(std::forward<TArgs>(mArgs)...); }
+
+			/*!
+			 *
+			 * @brief Clears all the functions from the delegate.
+			 *
+			 */
+			inline void clear() { funcs.clear(); }
 	};
 }
 
