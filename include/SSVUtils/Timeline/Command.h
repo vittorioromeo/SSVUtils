@@ -15,9 +15,9 @@ namespace ssvu
 	{
 		Timeline& timeline;
 		Command(Timeline& mTimeline) : timeline(mTimeline) { }
-		virtual ~Command() { }
-		virtual void update(float) { }
-		virtual void reset() { }
+		inline virtual ~Command()			{ }
+		inline virtual void update(float)	{ }
+		inline virtual void reset()			{ }
 	};
 }
 #endif

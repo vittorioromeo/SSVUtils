@@ -5,6 +5,7 @@
 #ifndef SSVU_TIMELINE_GO
 #define SSVU_TIMELINE_GO
 
+#include <cassert>
 #include "SSVUtils/Timeline/Command.h"
 #include "SSVUtils/Timeline/Timeline.h"
 
@@ -24,7 +25,7 @@ namespace ssvu
 			inline void reset() override { currentTimes = times; }
 
 		public:
-			Go(Timeline& mTimeline, int mTargetIndex, int mTimes = -1) : Command{mTimeline}, targetIndex{mTargetIndex}, times{mTimes}, currentTimes{mTimes} { }
+			Go(Timeline& mTimeline, int mTargetIndex, int mTimes = -1) : Command{mTimeline}, targetIndex{mTargetIndex}, times{mTimes}, currentTimes{mTimes} { assert(targetIndex > 0); }
 	};
 }
 

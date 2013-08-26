@@ -5,6 +5,7 @@
 #ifndef SSVU_UTILS_MATH
 #define SSVU_UTILS_MATH
 
+#include <cassert>
 #include <array>
 #include <random>
 
@@ -25,7 +26,7 @@ namespace ssvu
 	 * @return Returns a random integer value, between mMin and mMax.
 	 *
 	 */
-	template<typename T = int> inline T getRnd(T mMin, T mMax) { return RndDistributionI<T>{mMin, mMax - 1}(rndEngine); }
+	template<typename T = int> inline T getRnd(T mMin, T mMax) { assert(mMin < mMax); return RndDistributionI<T>{mMin, mMax - 1}(rndEngine); }
 
 	/*!
 	 *
@@ -38,7 +39,7 @@ namespace ssvu
 	 * @return Returns a random real value, between mMin and mMax.
 	 *
 	 */
-	template<typename T = float> inline T getRndR(T mMin, T mMax) { return RndDistributionR<T>{mMin, mMax - 1}(rndEngine); }
+	template<typename T = float> inline T getRndR(T mMin, T mMax) { assert(mMin < mMax); return RndDistributionR<T>{mMin, mMax - 1}(rndEngine); }
 
 	/*!
 	 *
@@ -84,7 +85,7 @@ namespace ssvu
 	 * @param mMax Upper bound.
 	 *
 	 */
-	template<typename T> inline void clamp(T& mValue, const T& mMin, const T& mMax) { if(mValue < mMin) mValue = mMin; else if(mValue > mMax) mValue = mMax; }
+	template<typename T> inline void clamp(T& mValue, const T& mMin, const T& mMax) { assert(mMin < mMax); if(mValue < mMin) mValue = mMin; else if(mValue > mMax) mValue = mMax; }
 
 	/*!
 	 *
@@ -124,7 +125,7 @@ namespace ssvu
 	 * @return Returns mMax if mValue > mMax, mMin if mValue < mMin, mValue if mMin < mValue < mMax.
 	 *
 	 */
-	template<typename T> constexpr inline T getClamped(const T& mValue, const T& mMin, const T& mMax) { return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
+	template<typename T> constexpr inline T getClamped(const T& mValue, const T& mMin, const T& mMax) { assert(mMin < mMax); return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
 
 	/*!
 	 *

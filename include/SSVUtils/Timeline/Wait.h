@@ -5,6 +5,7 @@
 #ifndef SSVU_TIMELINE_WAIT
 #define SSVU_TIMELINE_WAIT
 
+#include <cassert>
 #include "SSVUtils/Timeline/Command.h"
 #include "SSVUtils/Timeline/Timeline.h"
 
@@ -29,7 +30,7 @@ namespace ssvu
 			inline void reset() override { currentTime = time; }
 
 		public:
-			Wait(Timeline& mTimeline, float mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { }
+			Wait(Timeline& mTimeline, float mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { assert(time > 0); }
 	};
 
 	class WaitWhile : public Command
