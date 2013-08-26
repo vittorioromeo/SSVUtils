@@ -273,6 +273,10 @@ namespace ssvu
 		if(result < 0) result += mB;
 		return result;
 	}
+
+	// TODO: docs
+	template<typename T> inline T getDistanceEuclideanSquared(T mX1, T mY1, T mX2, T mY2)	{ return std::pow(mX1 - mX2, 2) + std::pow(mY1 - mY2, 2); }
+	template<typename T> inline T getDistanceEuclidean(T mX1, T mY1, T mX2, T mY2)			{ return std::sqrt(getDistanceEuclideanSquared(mX1, mY1, mX2, mY2)); }
 }
 
 #endif
