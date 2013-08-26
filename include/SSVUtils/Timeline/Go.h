@@ -25,7 +25,7 @@ namespace ssvu
 			inline void reset() override { currentTimes = times; }
 
 		public:
-			Go(Timeline& mTimeline, int mTargetIndex, int mTimes = -1) : Command{mTimeline}, targetIndex{mTargetIndex}, times{mTimes}, currentTimes{mTimes} { assert(targetIndex > 0); }
+			Go(Timeline& mTimeline, int mTargetIndex, int mTimes = -1) : Command{mTimeline}, targetIndex{mTargetIndex}, times{mTimes}, currentTimes{mTimes} { assert(targetIndex >= 0); }
 	};
 }
 
