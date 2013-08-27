@@ -274,9 +274,35 @@ namespace ssvu
 		return result;
 	}
 
-	// TODO: docs
-	template<typename T> inline T getDistanceEuclideanSquared(T mX1, T mY1, T mX2, T mY2)	{ return std::pow(mX1 - mX2, 2) + std::pow(mY1 - mY2, 2); }
-	template<typename T> inline T getDistanceEuclidean(T mX1, T mY1, T mX2, T mY2)			{ return std::sqrt(getDistanceEuclideanSquared(mX1, mY1, mX2, mY2)); }
+	/*!
+	 *
+	 * @brief Calculates euclidean distance (squared) between two points.
+	 *
+	 * @tparam T Type of value.
+	 * @param mX1 First point X.
+	 * @param mY1 First point Y.
+	 * @param mX2 Second point X.
+	 * @param mY2 Second point Y.
+	 *
+	 * @return Returns the euclidean distance (squared).
+	 *
+	 */
+	template<typename T> inline T getDistanceEuclideanSquared(T mX1, T mY1, T mX2, T mY2) { return std::pow(mX1 - mX2, 2) + std::pow(mY1 - mY2, 2); }
+
+	/*!
+	 *
+	 * @brief Calculates euclidean distance between two points.
+	 *
+	 * @tparam T Type of value.
+	 * @param mX1 First point X.
+	 * @param mY1 First point Y.
+	 * @param mX2 Second point X.
+	 * @param mY2 Second point Y.
+	 *
+	 * @return Returns the euclidean distance.
+	 *
+	 */
+	template<typename T> inline T getDistanceEuclidean(T mX1, T mY1, T mX2, T mY2) { return std::sqrt(getDistanceEuclideanSquared(mX1, mY1, mX2, mY2)); }
 }
 
 #endif
