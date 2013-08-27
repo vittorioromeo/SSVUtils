@@ -5,6 +5,7 @@
 #ifndef SSVU_FILESYSTEM_PATH
 #define SSVU_FILESYSTEM_PATH
 
+#include <cassert>
 #include <cstdlib>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -55,9 +56,48 @@ namespace ssvu
 				inline bool isRootOrParent() const								{ return endsWith(getStr(), "./") || endsWith(getStr(), "../"); }
 				inline Path getParent() const
 				{
-					std::string str(getStr());
+					auto str(getStr());
 					for(auto i(str.size() - 1); i > 0; --i) if(str[i] == '/') return {str.substr(0, i + 1)};
 					return {""};
+				}
+				inline std::string getFileName() const
+				{
+					assert(!isFolder());
+
+					auto str(getStr());
+					auto nameBegin(str.find_last_of('/') + 1);
+					return str.substr(nameBegin, str.size() - nameBegin);
+				}
+				inline std::string getFileNameNoExtensions() const
+				{
+					auto str(getFileName());
+					auto extBegin(str.find_first_of('.', beginsWith(str, '.') ? 1 : 0));
+					return str.substr(0, extBegin);
+				}
+				inline std::string getFolderName() const
+				{
+					assert(isFolder());
+
+					std::string str(getStr());
+					assert(endsWith(str, '/'));
+
+					str.erase(std::end(str) - 1);
+					auto nameBegin(str.find_last_of('/') + 1);
+					return str.substr(nameBegin, str.size() - nameBegin);
+				}
+				inline std::string getExtension() const
+				{
+					auto str(getFileName()); if(beginsWith(str, '.')) str.erase(std::begin(str));
+					auto extBegin(str.find_last_of('.'));
+					if(extBegin == std::string::npos) return "";
+					return str.substr(extBegin, str.size() - extBegin);
+				}
+				inline std::string getAllExtensions() const
+				{
+					auto str(getFileName());
+					auto extBegin(str.find_first_of('.', beginsWith(str, '.') ? 1 : 0));
+					if(extBegin == std::string::npos) return "";
+					return str.substr(extBegin, str.size() - extBegin);
 				}
 
 				inline void operator=(const std::string& mPath)			{ mustNormalize = true; path = mPath; }
