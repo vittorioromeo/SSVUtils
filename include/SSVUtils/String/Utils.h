@@ -74,6 +74,9 @@ namespace ssvu
 	 */
 	inline bool beginsWith(const std::string& mString, const std::string& mStart) { return mStart.size() <= mString.size() && mString.compare(0, mStart.size(), mStart) == 0; }
 
+	// TODO: docs
+	inline bool beginsWith(const std::string& mString, char mChar) { return mString.size() > 0 && mString.front() == mChar; }
+
 	/*!
 	 *
 	 * @brief Returns whether a string ends with a string or not.
@@ -85,6 +88,9 @@ namespace ssvu
 	 *
 	 */
 	inline bool endsWith(const std::string &mString, const std::string &mEnding) { return mString.size() >= mEnding.size() && mString.compare(mString.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
+
+	// TODO: docs
+	inline bool endsWith(const std::string& mString, char mChar) { return mString.size() > 0 && mString.back() == mChar; }
 
 	/*!
 	 *
