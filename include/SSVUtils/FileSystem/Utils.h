@@ -30,21 +30,6 @@ namespace ssvu
 
 		/*!
 		 *
-		 * @brief Gets filename from a path.
-		 *
-		 * Simple string operations, it doesn't depend on the user's filesystem.
-		 *
-		 * @param mPath Path to use.
-		 * @param mPrefix Path before the name.
-		 * @param mSuffix Path after the name.
-		 *
-		 * @return Returns the filename.
-		 *
-		 */
-		inline std::string getNameFromPath(const Path& mPath, const std::string& mPrefix, const std::string& mSuffix) { auto str(mPath.getStr()); return str.substr(mPrefix.size(), str.size() - mPrefix.size() - mSuffix.size()); }
-
-		/*!
-		 *
 		 * @brief Gets the file's binary contents.
 		 *
 		 * C-style code to ensure same results on both Linux and Windows.
