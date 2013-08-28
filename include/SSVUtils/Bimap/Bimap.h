@@ -24,6 +24,8 @@ namespace ssvu
 			inline void erase(const U& mValue)					{ map1.erase(map2.at(mValue)); map2.erase(mValue); }
 			inline const U& at(const T& mValue) const			{ return map1.at(mValue); }
 			inline const T& at(const U& mValue) const			{ return map2.at(mValue); }
+			inline U& operator[](const T& mValue)				{ return map1[mValue]; }
+			inline T& operator[](const U& mValue)				{ return map2[mValue]; }
 			inline auto find(const T& mValue) const -> decltype(std::declval<const decltype(map1)>().find(mValue)) { return map1.find(mValue); }
 			inline auto find(const U& mValue) const -> decltype(std::declval<const decltype(map2)>().find(mValue)) { return map2.find(mValue); }
 			inline bool has(const T& mValue) const				{ return find(mValue) != end(map1); }
