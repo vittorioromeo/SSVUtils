@@ -6,16 +6,13 @@
 #define SSVU_TIMELINE
 
 #include <vector>
-#include <functional>
+#include "SSVUtils/Global/Typedefs.h"
 #include "SSVUtils/MemoryManager/MemoryManager.h"
 #include "SSVUtils/Timeline/Command.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 
 namespace ssvu
 {
-	using Action = std::function<void()>;
-	using Predicate = std::function<bool()>;
-
 	class Timeline : public MemoryManageable
 	{
 		friend class Wait;
