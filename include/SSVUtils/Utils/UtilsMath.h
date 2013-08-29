@@ -48,10 +48,10 @@ namespace ssvu
 	 * @tparam T Type of value.
 	 * @param mValue Value to use.
 	 *
-	 * @return Returns 1 if the value is >0, -1 if the value is <= 0.
+	 * @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
 	 *
 	 */
-	template<typename T> constexpr inline int getSign(const T& mValue) { return mValue > 0 ? 1 : -1; }
+	template<typename T> constexpr inline int getSign(const T& mValue) { return mValue > 0 ? 1 : (mValue == 0 ? 0 : -1); }
 
 	/*!
 	 *
