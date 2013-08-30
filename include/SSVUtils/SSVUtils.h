@@ -52,6 +52,9 @@
 // CommandLine
 #include "SSVUtils/CommandLine/CommandLine.h"
 
+// Ticker
+#include "SSVUtils/Ticker/Ticker.h"
+
 #include "SSVUtils/Log/Log.inl"
 #include "SSVUtils/Encryption/Internal/Base64.inl"
 #include "SSVUtils/Encryption/Internal/MD5.inl"
