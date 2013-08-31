@@ -64,7 +64,7 @@ namespace ssvu
 
 	/*!
 	 *
-	 * @brief Returns whether a string starts with a string or not.
+	 * @brief Returns whether a string starts with a specific string.
 	 *
 	 * @param mString String to work with.
 	 * @param mStart String to test.
@@ -74,12 +74,21 @@ namespace ssvu
 	 */
 	inline bool beginsWith(const std::string& mString, const std::string& mStart) { return mStart.size() <= mString.size() && mString.compare(0, mStart.size(), mStart) == 0; }
 
-	// TODO: docs
+	/*!
+	 *
+	 * @brief Returns whether a string starts with a specific char.
+	 *
+	 * @param mString String to work with.
+	 * @param mChar Char to test.
+	 *
+	 * @return Returns true if mString starts with mChar.
+	 *
+	 */
 	inline bool beginsWith(const std::string& mString, char mChar) { return mString.size() > 0 && mString.front() == mChar; }
 
 	/*!
 	 *
-	 * @brief Returns whether a string ends with a string or not.
+	 * @brief Returns whether a string ends with a specific string.
 	 *
 	 * @param mString String to work with.
 	 * @param mEnding String to test.
@@ -89,7 +98,16 @@ namespace ssvu
 	 */
 	inline bool endsWith(const std::string &mString, const std::string &mEnding) { return mString.size() >= mEnding.size() && mString.compare(mString.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
 
-	// TODO: docs
+	/*!
+	 *
+	 * @brief Returns whether a string ends with a specific char.
+	 *
+	 * @param mString String to work with.
+	 * @param mChar Char to test.
+	 *
+	 * @return Returns true if mString ends with mChar.
+	 *
+	 */
 	inline bool endsWith(const std::string& mString, char mChar) { return mString.size() > 0 && mString.back() == mChar; }
 
 	/*!
