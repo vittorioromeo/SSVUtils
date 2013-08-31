@@ -37,6 +37,8 @@ namespace ssvu
 		inline Cmd& CmdLine::create(const std::initializer_list<std::string>& mNames) { auto result(new Cmd{mNames}); cmds.emplace_back(result); return *result; }
 		inline void CmdLine::parseCmdLine(const std::vector<std::string>& mArgs)
 		{
+			if(mArgs.empty()) return;
+
 			std::deque<std::string> entered{begin(mArgs), end(mArgs)};
 
 			// args.front() is expected to be the command name
