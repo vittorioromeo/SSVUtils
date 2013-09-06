@@ -7,12 +7,18 @@
 
 #include <memory>
 #include <functional>
+#include "SSVUtils/Delegate/FastFunc.h"
 
 namespace ssvu
 {
 	template<typename T, typename TDeleter = std::default_delete<T>> using Uptr = std::unique_ptr<T, TDeleter>;
-	using Action = std::function<void()>;
-	using Predicate = std::function<bool()>;
+
+	template<typename TSignature> struct FuncHelper;
+	template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = FastFunc<T(TArgs...)>; };
+	template<typename T> using Func = typename FuncHelper<T>::FuncType;
+
+	using Action = Func<void()>;
+	using Predicate = Func<bool()>;
 }
 
 #endif
