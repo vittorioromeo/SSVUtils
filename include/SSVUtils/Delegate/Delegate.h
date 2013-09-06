@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <functional>
+#include "SSVUtils/Delegate/FastFunc.h"
 
 namespace ssvu
 {
@@ -26,8 +27,8 @@ namespace ssvu
 	template<typename TReturn, typename... TArgs> class Delegate<TReturn(TArgs...)>
 	{
 		private:
-			using Func = std::function<TReturn(TArgs...)>;
-			std::vector<Func> funcs; /*!< Internal collection of functions. */
+			using FuncType = Func<TReturn(TArgs...)>;
+			std::vector<FuncType> funcs; /*!< Internal collection of functions. */
 
 		public:
 			/*!
@@ -94,8 +95,8 @@ namespace ssvu
 	template<typename... TArgs> class Delegate<void(TArgs...)>
 	{
 		private:
-			using Func = std::function<void(TArgs...)>;
-			std::vector<Func> funcs; /*!< Internal collection of functions. */
+			using FuncType = Func<void(TArgs...)>;
+			std::vector<FuncType> funcs; /*!< Internal collection of functions. */
 
 		public:
 			/*!
