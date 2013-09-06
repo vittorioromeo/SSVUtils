@@ -25,6 +25,7 @@
 #include "SSVUtils/String/Split.h"
 
 // Delegate
+#include "SSVUtils/Delegate/FastFunc.h"
 #include "SSVUtils/Delegate/Delegate.h"
 
 // FileSystem
