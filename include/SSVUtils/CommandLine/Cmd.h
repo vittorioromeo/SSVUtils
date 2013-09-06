@@ -49,7 +49,7 @@ namespace ssvu
 				std::vector<Uptr<ArgBase>> args, optArgs;
 				std::vector<Uptr<ArgPackBase>> argPacks;
 				std::vector<Uptr<Flag>> flags;
-				std::function<void()> func;
+				Action func;
 				std::string desc;
 
 				inline Flag& findFlag(const std::string& mName)
@@ -64,7 +64,7 @@ namespace ssvu
 			public:
 				Cmd(const std::initializer_list<std::string>& mNames) : names{mNames} { }
 
-				inline Cmd& operator+=(std::function<void()> mFunc) { func = mFunc; return *this; }
+				inline Cmd& operator+=(Action mFunc) { func = mFunc; return *this; }
 				inline Cmd& operator()() { func(); return *this; }
 
 				template<typename T> inline Arg<T>& createArg()												{ auto result(new Arg<T>()); args.emplace_back(result); return *result; }
