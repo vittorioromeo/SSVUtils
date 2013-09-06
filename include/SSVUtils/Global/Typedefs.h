@@ -15,6 +15,7 @@ namespace ssvu
 
 	template<typename TSignature> struct FuncHelper;
 	template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = FastFunc<T(TArgs...)>; };
+	//template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
 	template<typename T> using Func = typename FuncHelper<T>::FuncType;
 
 	using Action = Func<void()>;
