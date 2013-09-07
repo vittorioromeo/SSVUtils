@@ -80,17 +80,16 @@ namespace ssvu
 
 		template<typename TReturn, typename... TArgs> class FastFuncImpl
 		{
-			protected:
+			private:
 				using GenericMemFn = TReturn(Internal::AnyClass::*)(TArgs...);
 				using FuncSig = TReturn(*)(TArgs...);
 				using ClosureType = Internal::ClosurePtr<GenericMemFn, FuncSig>;
 				ClosureType closure;
-
-			private:
-				template<typename X> using XFuncToBind = TReturn(X::*)(TArgs...) const;
 				inline TReturn invokeStaticFunc(TArgs... mArgs) const { return (*(closure.getStaticFunc()))(std::forward<TArgs>(mArgs)...); }
-				inline void bind(FuncSig mFuncToBind) noexcept { closure.bindStaticFunc(this, &FastFuncImpl::invokeStaticFunc, mFuncToBind); }
-				template<typename X, typename Y> inline void bind(Y* mPtrThis, XFuncToBind<X> mFuncToBind) noexcept { closure.bindMemFunc(reinterpret_cast<const X*>(mPtrThis), mFuncToBind); }
+
+			protected:
+				template<class X, class XMemFunc> inline void bind(X* mPtrThis, XMemFunc mFuncToBind) noexcept { closure.bindMemFunc(mPtrThis, mFuncToBind); }
+				template<class TFunc> inline void bind(TFunc mFuncToBind) noexcept { closure.bindStaticFunc(this, &FastFuncImpl::invokeStaticFunc, mFuncToBind); }
 
 			public:
 				inline FastFuncImpl() noexcept = default;
@@ -98,7 +97,7 @@ namespace ssvu
 				inline FastFuncImpl(const FastFuncImpl& mImpl) noexcept : closure{mImpl.closure} { }
 				inline FastFuncImpl(FastFuncImpl&& mImpl) noexcept : closure{std::move(mImpl.closure)} { }
 				inline FastFuncImpl(FuncSig mFuncToBind) noexcept { bind(mFuncToBind); }
-				template<typename X, typename Y> inline FastFuncImpl(Y* mPtrThis, XFuncToBind<X> mFuncToBind) noexcept { bind(mPtrThis, mFuncToBind); }
+				template<typename X, typename Y> inline FastFuncImpl(X* mPtrThis, Y mFuncToBind) noexcept { bind(mPtrThis, mFuncToBind); }
 
 				inline void operator=(const FastFuncImpl& mImpl) noexcept	{ closure = mImpl.closure; }
 				inline void operator=(FastFuncImpl&& mImpl) noexcept		{ closure = std::move(mImpl.closure); }
@@ -142,14 +141,14 @@ namespace ssvu
 			template<typename TFunc, typename = ENABLEIF_ISSAMETYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLEIF_CONVERTIBLETOFUNCPTR(TFunc))
 			{
 				using FuncType = typename std::decay<TFunc>::type;
-				this->closure.bindMemFunc(&mFunc, &FuncType::operator());
+				this->bind(&mFunc, &FuncType::operator());
 			}
 			template<typename TFunc, typename = ENABLEIF_ISSAMETYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLEIF_NOTCONVERTIBLETOFUNCPTR(TFunc))
 				: storage(operator new(sizeof(TFunc)), funcDeleter<typename std::decay<TFunc>::type>)
 			{
 				using FuncType = typename std::decay<TFunc>::type;
 				new (storage.get()) FuncType(std::forward<TFunc>(mFunc));
-				this->closure.bindMemFunc(storage.get(), &FuncType::operator());
+				this->bind(storage.get(), &FuncType::operator());
 			}
 	};
 
