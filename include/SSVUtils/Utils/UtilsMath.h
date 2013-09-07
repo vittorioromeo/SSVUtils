@@ -17,26 +17,26 @@ namespace ssvu
 
 	/*!
 	 *
-	 * @brief Gets a random integer value between mMin and mMax.
+	 * @brief Gets a random integer value between [mMin and mMax).
 	 *
 	 * @tparam T Type of integer value. (can also be unsigned int, for example)
-	 * @param mMin Lower bound.
-	 * @param mMax Upper bound.
+	 * @param mMin Lower inclusive bound.
+	 * @param mMax Upper exclusive bound.
 	 *
-	 * @return Returns a random integer value, between mMin and mMax.
+	 * @return Returns a random integer value, between [mMin and mMax).
 	 *
 	 */
 	template<typename T = int> inline T getRnd(T mMin, T mMax) { assert(mMin < mMax); return RndDistributionI<T>{mMin, mMax - 1}(rndEngine); }
 
 	/*!
 	 *
-	 * @brief Gets a random real value between mMin and mMax.
+	 * @brief Gets a random real value between [mMin and mMax).
 	 *
 	 * @tparam T Type of integer value. (can also be double, for example)
-	 * @param mMin Lower bound.
-	 * @param mMax Upper bound.
+	 * @param mMin Lower inclusive bound.
+	 * @param mMax Upper exclusive bound.
 	 *
-	 * @return Returns a random real value, between mMin and mMax.
+	 * @return Returns a random real value, between [mMin and mMax).
 	 *
 	 */
 	template<typename T = float> inline T getRndR(T mMin, T mMax) { assert(mMin < mMax); return RndDistributionR<T>{mMin, mMax - 1}(rndEngine); }
@@ -51,7 +51,7 @@ namespace ssvu
 	 * @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
 	 *
 	 */
-	template<typename T> constexpr inline int getSign(const T& mValue) { return mValue > 0 ? 1 : (mValue == 0 ? 0 : -1); }
+	template<typename T> constexpr inline int getSign(const T& mValue) noexcept { return mValue > 0 ? 1 : (mValue == 0 ? 0 : -1); }
 
 	/*!
 	 *
@@ -62,7 +62,7 @@ namespace ssvu
 	 * @param mMin Lower bound.
 	 *
 	 */
-	template<typename T> inline void clampMin(T& mValue, const T& mMin) { if(mValue < mMin) mValue = mMin; }
+	template<typename T> inline void clampMin(T& mValue, const T& mMin) noexcept { if(mValue < mMin) mValue = mMin; }
 
 	/*!
 	 *
@@ -73,7 +73,7 @@ namespace ssvu
 	 * @param mMax Upper bound.
 	 *
 	 */
-	template<typename T> inline void clampMax(T& mValue, const T& mMax) { if(mValue > mMax) mValue = mMax; }
+	template<typename T> inline void clampMax(T& mValue, const T& mMax) noexcept { if(mValue > mMax) mValue = mMax; }
 
 	/*!
 	 *
@@ -85,7 +85,7 @@ namespace ssvu
 	 * @param mMax Upper bound.
 	 *
 	 */
-	template<typename T> inline void clamp(T& mValue, const T& mMin, const T& mMax) { assert(mMin <= mMax); if(mValue < mMin) mValue = mMin; else if(mValue > mMax) mValue = mMax; }
+	template<typename T> inline void clamp(T& mValue, const T& mMin, const T& mMax) noexcept { assert(mMin <= mMax); if(mValue < mMin) mValue = mMin; else if(mValue > mMax) mValue = mMax; }
 
 	/*!
 	 *
@@ -98,7 +98,7 @@ namespace ssvu
 	 * @return Returns mMin if mValue < mMin, mValue otherwise.
 	 *
 	 */
-	template<typename T> constexpr inline T getClampedMin(const T& mValue, const T& mMin) { return mValue < mMin ? mMin : mValue; }
+	template<typename T> constexpr inline T getClampedMin(const T& mValue, const T& mMin) noexcept { return mValue < mMin ? mMin : mValue; }
 
 	/*!
 	 *
@@ -111,7 +111,7 @@ namespace ssvu
 	 * @return Returns mMax if mValue > mMax, mValue otherwise.
 	 *
 	 */
-	template<typename T> constexpr inline T getClampedMax(const T& mValue, const T& mMax) { return mValue > mMax ? mMax : mValue; }
+	template<typename T> constexpr inline T getClampedMax(const T& mValue, const T& mMax) noexcept { return mValue > mMax ? mMax : mValue; }
 
 	/*!
 	 *
@@ -125,7 +125,7 @@ namespace ssvu
 	 * @return Returns mMax if mValue > mMax, mMin if mValue < mMin, mValue if mMin < mValue < mMax.
 	 *
 	 */
-	template<typename T> constexpr inline T getClamped(const T& mValue, const T& mMin, const T& mMax) { /*assert(mMin <= mMax);*/ return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
+	template<typename T> constexpr inline T getClamped(const T& mValue, const T& mMin, const T& mMax) noexcept { /*assert(mMin <= mMax);*/ return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
 
 	/*!
 	 *
@@ -137,7 +137,7 @@ namespace ssvu
 	 * @return Returns the value in radians.
 	 *
 	 */
-	template<typename T> constexpr inline T toRadians(const T& mValue) { return mValue / 57.3f; }
+	template<typename T> constexpr inline T toRadians(const T& mValue) noexcept { return mValue / 57.3f; }
 
 	/*!
 	 *
@@ -149,7 +149,7 @@ namespace ssvu
 	 * @return Returns the value in degrees.
 	 *
 	 */
-	template<typename T> constexpr inline T toDegrees(const T& mValue) { return mValue * 57.3f; }
+	template<typename T> constexpr inline T toDegrees(const T& mValue) noexcept { return mValue * 57.3f; }
 
 	/*!
 	 *
@@ -161,7 +161,7 @@ namespace ssvu
 	 * @return Returns the restricted value in radians.
 	 *
 	 */
-	template<typename T> inline T wrapRadians(T mValue) { mValue = fmod(mValue, 6.28f); if(mValue < 0) mValue += 6.28f; return mValue; }
+	template<typename T> inline T wrapRadians(T mValue) noexcept { mValue = fmod(mValue, 6.28f); if(mValue < 0) mValue += 6.28f; return mValue; }
 
 	/*!
 	 *
@@ -173,7 +173,7 @@ namespace ssvu
 	 * @return Returns the restricted value in degrees.
 	 *
 	 */
-	template<typename T> inline T wrapDegrees(T mValue) { mValue = fmod(mValue, 360.f); if(mValue < 0) mValue += 360.f; return mValue; }
+	template<typename T> inline T wrapDegrees(T mValue) noexcept { mValue = fmod(mValue, 360.f); if(mValue < 0) mValue += 360.f; return mValue; }
 
 	/*!
 	 *
@@ -190,7 +190,7 @@ namespace ssvu
 	 * @return Returns the rotated angle in radians.
 	 *
 	 */
-	template<typename T, typename J> inline T getRotatedRadians(const T& mStart, const T& mEnd, const J& mSpeed)
+	template<typename T, typename J> inline T getRotatedRadians(const T& mStart, const T& mEnd, const J& mSpeed) noexcept
 	{
 		T start(wrapRadians(mStart)), end(wrapRadians(mEnd));
 		if(abs(start - end) < mSpeed) return end;
@@ -212,7 +212,7 @@ namespace ssvu
 	 * @return Returns the rotated angle in degrees.
 	 *
 	 */
-	template<typename T, typename J> inline T getRotatedDegrees(const T& mStart, const T& mEnd, const J& mSpeed)
+	template<typename T, typename J> inline T getRotatedDegrees(const T& mStart, const T& mEnd, const J& mSpeed) noexcept
 	{
 		T start(wrapDegrees(mStart)), end(wrapDegrees(mEnd));
 		if(abs(start - end) < mSpeed) return end;
@@ -234,7 +234,7 @@ namespace ssvu
 	 * @return Returns a 1D index for an "implicit 2D" array with `mColumns` columns.
 	 *
 	 */
-	template<typename T> constexpr inline T get1DIndexFrom2D(const T& mX, const T& mY, const T& mColumns) { return mY * mColumns + mX; }
+	template<typename T> constexpr inline T get1DIndexFrom2D(const T& mX, const T& mY, const T& mColumns) noexcept { return mY * mColumns + mX; }
 
 	/*!
 	 *
@@ -249,7 +249,7 @@ namespace ssvu
 	 * @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mColumns` columns.
 	 *
 	 */
-	template<typename T> inline std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) { T y{mIndex / mColumns}; return std::array<T, 2>{{mIndex - y * mColumns, y}}; }
+	template<typename T> inline std::array<T, 2> get2DIndexFrom1D(const T& mIndex, const T& mColumns) noexcept { T y{mIndex / mColumns}; return std::array<T, 2>{{mIndex - y * mColumns, y}}; }
 
 	/*!
 	 *

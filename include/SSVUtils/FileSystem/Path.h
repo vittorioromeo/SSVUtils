@@ -41,7 +41,7 @@ namespace ssvu
 				inline Path(const std::string& mPath) : path{mPath} { }
 
 				inline const std::string& getStr() const	{ const_cast<Path*>(this)->normalize(); return path; }
-				inline const char* getCStr() const			{ return getStr().c_str(); }
+				inline const char* getCStr() const noexcept	{ return getStr().c_str(); }
 
 				inline bool isFolder() const
 				{

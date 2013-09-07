@@ -13,12 +13,12 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			const static std::string keyLeft{"{{"};
-			const static std::string keyRight{"}}"};
-			const static std::string sectionStartLeft{"{{#"};
-			const static std::string sectionStartRight{"}}"};
-			const static std::string sectionEndLeft{"{{/"};
-			const static std::string sectionEndRight{"}}"};
+			constexpr const char* keyLeft{"{{"};
+			constexpr const char* keyRight{"}}"};
+			constexpr const char* sectionStartLeft{"{{#"};
+			constexpr const char* sectionStartRight{"}}"};
+			constexpr const char* sectionEndLeft{"{{/"};
+			constexpr const char* sectionEndRight{"}}"};
 
 			inline static std::string getKey(const std::string& mString)			{ return keyLeft + mString + keyRight; }
 			inline static std::string getSectionStart(const std::string& mString)	{ return sectionStartLeft + mString + sectionStartRight; }

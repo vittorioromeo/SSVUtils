@@ -24,7 +24,7 @@ namespace ssvu
 				Cmd& findCmd(const std::string& mName) const;
 				Cmd& create(const std::initializer_list<std::string>& mNames);
 				void parseCmdLine(const std::vector<std::string>& mArgs);
-				inline const decltype(cmds)& getCmds() const { return cmds; }
+				inline const decltype(cmds)& getCmds() const noexcept { return cmds; }
 		};
 	}
 }

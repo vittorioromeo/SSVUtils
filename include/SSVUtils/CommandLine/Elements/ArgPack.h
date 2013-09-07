@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVUTILS_COMMANDLINE_ELEMENTS_ARGPACK
-#define SSVUTILS_COMMANDLINE_ELEMENTS_ARGPACK
+#ifndef SSVU_COMMANDLINE_ELEMENTS_ARGPACK
+#define SSVU_COMMANDLINE_ELEMENTS_ARGPACK
 
 #include <string>
 #include <vector>
@@ -22,20 +22,20 @@ namespace ssvu
 				std::vector<T> values;
 
 			public:
-				ArgPack() = default;
-				ArgPack(unsigned int mMin, unsigned int mMax) : ArgPackBase{mMin, mMax} { }
+				ArgPack() noexcept = default;
+				ArgPack(unsigned int mMin, unsigned int mMax) noexcept : ArgPackBase{mMin, mMax} { }
 
 				inline void set(const std::vector<std::string>& mValues) override
 				{
 					for(const auto& v : mValues) values.push_back(Parser<T>::parse(v));
 				}
 
-				inline Iterator begin()					{ return values.begin(); }
-				inline Iterator end()					{ return values.end(); }
-				inline ConstIterator begin() const		{ return values.begin(); }
-				inline ConstIterator end() const		{ return values.end(); }
-				inline const Iterator cbegin() const	{ return values.cbegin(); }
-				inline const Iterator cend() const		{ return values.cend(); }
+				inline Iterator begin() noexcept				{ return values.begin(); }
+				inline Iterator end() noexcept					{ return values.end(); }
+				inline ConstIterator begin() const noexcept		{ return values.begin(); }
+				inline ConstIterator end() const noexcept		{ return values.end(); }
+				inline const Iterator cbegin() const noexcept	{ return values.cbegin(); }
+				inline const Iterator cend() const noexcept		{ return values.cend(); }
 		};
 	}
 }

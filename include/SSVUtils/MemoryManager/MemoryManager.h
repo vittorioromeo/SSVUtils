@@ -31,8 +31,8 @@ namespace ssvu
 				std::vector<TItem*> toAdd;
 
 			 public:
-				inline void clear()			{ items.clear(); toAdd.clear(); }
-				inline void del(TItem& mItem)	{ mItem.mmAlive = false; }
+				inline void clear()	{ items.clear(); toAdd.clear(); }
+				inline void del(TItem& mItem) noexcept { mItem.mmAlive = false; }
 
 				// Statically polymorphic methods
 				inline void refresh() { static_cast<TDerived*>(this)->refreshImpl(); }
@@ -41,19 +41,19 @@ namespace ssvu
 					return static_cast<TDerived*>(this)->template createTImpl<TType, TArgs...>(std::forward<TArgs>(mArgs)...);
 				}
 
-				inline Container& getItems()				{ return items; }
-				inline const Container& getItems() const	{ return items; }
+				inline Container& getItems() noexcept				{ return items; }
+				inline const Container& getItems() const noexcept	{ return items; }
 
-				template<typename TType> inline static bool isAlive(const TType& mItem) { return mItem->mmAlive; }
-				template<typename TType> inline static bool isDead(const TType& mItem) 	{ return !mItem->mmAlive; }
+				template<typename TType> inline static bool isAlive(const TType& mItem) noexcept { return mItem->mmAlive; }
+				template<typename TType> inline static bool isDead(const TType& mItem) noexcept	{ return !mItem->mmAlive; }
 
 				// Foreach loop/algorithms iterator support
-				Iterator begin()				{ return items.begin(); }
-				ConstIterator begin() const		{ return items.begin(); }
-				const Iterator cbegin() const	{ return items.cbegin(); }
-				Iterator end()					{ return items.end(); }
-				ConstIterator end() const		{ return items.end(); }
-				const Iterator cend() const		{ return items.cend(); }
+				Iterator begin() noexcept				{ return items.begin(); }
+				ConstIterator begin() const noexcept	{ return items.begin(); }
+				const Iterator cbegin() const noexcept	{ return items.cbegin(); }
+				Iterator end() noexcept					{ return items.end(); }
+				ConstIterator end() const noexcept		{ return items.end(); }
+				const Iterator cend() const noexcept	{ return items.cend(); }
 		 };
 	}
 

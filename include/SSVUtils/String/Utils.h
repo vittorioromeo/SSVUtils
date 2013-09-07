@@ -72,7 +72,7 @@ namespace ssvu
 	 * @return Returns true if mString starts with mStart.
 	 *
 	 */
-	inline bool beginsWith(const std::string& mString, const std::string& mStart) { return mStart.size() <= mString.size() && mString.compare(0, mStart.size(), mStart) == 0; }
+	inline bool beginsWith(const std::string& mString, const std::string& mStart) noexcept { return mStart.size() <= mString.size() && mString.compare(0, mStart.size(), mStart) == 0; }
 
 	/*!
 	 *
@@ -84,7 +84,7 @@ namespace ssvu
 	 * @return Returns true if mString starts with mChar.
 	 *
 	 */
-	inline bool beginsWith(const std::string& mString, char mChar) { return mString.size() > 0 && mString.front() == mChar; }
+	inline bool beginsWith(const std::string& mString, char mChar) noexcept { return mString.size() > 0 && mString.front() == mChar; }
 
 	/*!
 	 *
@@ -96,7 +96,7 @@ namespace ssvu
 	 * @return Returns true if mString ends with mEnding.
 	 *
 	 */
-	inline bool endsWith(const std::string &mString, const std::string &mEnding) { return mString.size() >= mEnding.size() && mString.compare(mString.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
+	inline bool endsWith(const std::string &mString, const std::string &mEnding) noexcept { return mString.size() >= mEnding.size() && mString.compare(mString.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
 
 	/*!
 	 *
@@ -108,7 +108,7 @@ namespace ssvu
 	 * @return Returns true if mString ends with mChar.
 	 *
 	 */
-	inline bool endsWith(const std::string& mString, char mChar) { return mString.size() > 0 && mString.back() == mChar; }
+	inline bool endsWith(const std::string& mString, char mChar) noexcept { return mString.size() > 0 && mString.back() == mChar; }
 
 	/*!
 	 *

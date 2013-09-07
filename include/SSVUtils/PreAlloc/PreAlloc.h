@@ -19,19 +19,18 @@ namespace ssvu
 		using MemUnitPtr = MemUnit*;
 		using MemSize = decltype(sizeof(MemUnit)); // Should always be 1 byte
 
-		template<typename T> inline constexpr MemSize getBytes(const T& mBytes)		{ return mBytes; }
-		template<typename T> inline constexpr MemSize getKBsToBytes(const T& mKBs)	{ return mKBs * 1024; }
-		template<typename T> inline constexpr MemSize getMBsToBytes(const T& mMBs)	{ return getKBsToBytes(mMBs * 1024); }
-		template<typename T> inline constexpr MemSize getGBsToBytes(const T& mGBs)	{ return getMBsToBytes(mGBs * 1024); }
+		template<typename T> inline constexpr MemSize getBytes(const T& mBytes) noexcept	{ return mBytes; }
+		template<typename T> inline constexpr MemSize getKBsToBytes(const T& mKBs) noexcept	{ return mKBs * 1024; }
+		template<typename T> inline constexpr MemSize getMBsToBytes(const T& mMBs) noexcept	{ return getKBsToBytes(mMBs * 1024); }
+		template<typename T> inline constexpr MemSize getGBsToBytes(const T& mGBs) noexcept	{ return getMBsToBytes(mGBs * 1024); }
 
 		namespace Internal
 		{
-			struct MemRange
+			struct MemRange // MemRange is a range of memory [begin, end)
 			{
-				// MemRange is a range of memory [begin, end)
 				MemUnitPtr begin, end;
-				inline MemRange(MemUnitPtr mStart, MemUnitPtr mEnd) : begin{mStart}, end{mEnd} { assert(mStart <= mEnd); }
-				inline MemSize getSize() const { return sizeof(MemUnit) * (end - begin); }
+				inline MemRange(MemUnitPtr mStart, MemUnitPtr mEnd) noexcept : begin{mStart}, end{mEnd} { assert(mStart <= mEnd); }
+				inline MemSize getSize() const noexcept { return sizeof(MemUnit) * (end - begin); }
 			};
 
 			class MemBuffer
@@ -42,9 +41,9 @@ namespace ssvu
 
 				public:
 					inline MemBuffer(MemSize mSize) : buffer{new MemUnit[mSize]}, range{&buffer[0], &buffer[mSize]} { assert(mSize > 0); }
-					inline MemUnitPtr getBegin() const		{ return range.begin; }
-					inline MemUnitPtr getEnd() const		{ return range.end; }
-					inline const MemRange& getRange() const	{ return range; }
+					inline MemUnitPtr getBegin() const noexcept			{ return range.begin; }
+					inline MemUnitPtr getEnd() const noexcept			{ return range.end; }
+					inline const MemRange& getRange() const noexcept	{ return range; }
 			};
 
 			template<typename T> struct ContainerHelper;

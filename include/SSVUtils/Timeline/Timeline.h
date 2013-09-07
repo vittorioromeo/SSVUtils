@@ -52,7 +52,7 @@ namespace ssvu
 
 			inline void del(Command& mCommand)		{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
 			inline void jumpTo(unsigned int mIndex)	{ currentCommand = commands[mIndex]; }
-			inline void start()						{ finished = false; ready = true; }
+			inline void start()	noexcept			{ finished = false; ready = true; }
 			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
 
 			void update(float mFrameTime)
@@ -76,8 +76,8 @@ namespace ssvu
 				currentCommand = commands.empty() ? nullptr : commands[0];
 			}
 
-			inline std::size_t getSize() const	{ return commands.size(); }
-			inline bool isFinished() const		{ return finished; }
+			inline std::size_t getSize() const noexcept	{ return commands.size(); }
+			inline bool isFinished() const noexcept		{ return finished; }
 			inline int getCurrentIndex() const
 			{
 				if(currentCommand == nullptr) return 0;

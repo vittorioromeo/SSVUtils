@@ -88,7 +88,7 @@ namespace ssvu
 
 			private:
 				template<typename X> using XFuncToBind = TReturn(X::*)(TArgs...) const;
-				inline TReturn invokeStaticFunc(TArgs... mArgs) const { return (*(closure.getStaticFunc()))(mArgs...); }
+				inline TReturn invokeStaticFunc(TArgs... mArgs) const { return (*(closure.getStaticFunc()))(std::forward<TArgs>(mArgs)...); }
 				inline void bind(FuncSig mFuncToBind) noexcept { closure.bindStaticFunc(this, &FastFuncImpl::invokeStaticFunc, mFuncToBind); }
 				template<typename X, typename Y> inline void bind(Y* mPtrThis, XFuncToBind<X> mFuncToBind) noexcept { closure.bindMemFunc(reinterpret_cast<const X*>(mPtrThis), mFuncToBind); }
 
@@ -103,7 +103,7 @@ namespace ssvu
 				inline void operator=(const FastFuncImpl& mImpl) noexcept	{ closure = mImpl.closure; }
 				inline void operator=(FastFuncImpl&& mImpl) noexcept		{ closure = std::move(mImpl.closure); }
 				inline void operator=(FuncSig mFuncToBind) noexcept			{ bind(mFuncToBind); }
-				inline TReturn operator()(TArgs... mArgs) const				{ return (closure.getPtrThis()->*(closure.getPtrFunction()))(mArgs...); }
+				inline TReturn operator()(TArgs... mArgs) const				{ return (closure.getPtrThis()->*(closure.getPtrFunction()))(std::forward<TArgs>(mArgs)...); }
 
 				inline bool operator==(std::nullptr_t) const noexcept				{ return closure == nullptr; }
 				inline bool operator==(const FastFuncImpl& mImpl) const noexcept	{ return closure == mImpl.closure; }
@@ -115,6 +115,16 @@ namespace ssvu
 				inline bool operator>(const FastFuncImpl& mImpl) const				{ return closure > mImpl.closure; }
 		};
 	}
+	template<typename TFunc> struct MemFuncPtrToFuncPtr;
+	template<typename TReturn, typename TClass, typename... TArgs> struct MemFuncPtrToFuncPtr<TReturn(TClass::*)(TArgs...) const> { using type = TReturn(*)(TArgs...); };
+
+	template<typename TFunc> struct is_fun_ptr : std::integral_constant<bool, std::is_pointer<TFunc>::value && std::is_function<typename std::remove_pointer<TFunc>::type>::value> { };
+	template<typename TFunc> struct is_trivial : std::integral_constant<bool, std::is_constructible<typename MemFuncPtrToFuncPtr<decltype(&std::decay<TFunc>::type::operator())>::type, TFunc>::value> { };
+
+	#define ENABLEIF_FUNCPTR(x)					typename std::enable_if<is_fun_ptr<x>::value>::type* = nullptr
+	#define ENABLEIF_CONVERTIBLETOFUNCPTR(x)	typename std::enable_if<std::is_constructible<typename MemFuncPtrToFuncPtr<decltype(&std::decay<x>::type::operator())>::type, x>::value>::type* = nullptr
+	#define ENABLEIF_NOTCONVERTIBLETOFUNCPTR(x) typename std::enable_if<!std::is_constructible<typename MemFuncPtrToFuncPtr<decltype(&std::decay<x>::type::operator())>::type, x>::value>::type* = nullptr
+	#define ENABLEIF_ISSAMETYPE(x, y)			typename std::enable_if<!std::is_same<x, typename std::decay<y>::type>{}>::type
 
 	template<typename TSignature> class FastFunc;
 	template<typename TReturn, typename... TArgs> class FastFunc<TReturn(TArgs...)> : public Internal::FastFuncImpl<TReturn, TArgs...>
@@ -128,7 +138,13 @@ namespace ssvu
 			using BaseType::BaseType;
 
 			inline FastFunc() noexcept = default;
-			template<typename TFunc, typename = typename std::enable_if<!std::is_same<FastFunc, typename std::decay<TFunc>::type>{}>::type> inline FastFunc(TFunc&& mFunc)
+
+			template<typename TFunc, typename = ENABLEIF_ISSAMETYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLEIF_CONVERTIBLETOFUNCPTR(TFunc))
+			{
+				using FuncType = typename std::decay<TFunc>::type;
+				this->closure.bindMemFunc(&mFunc, &FuncType::operator());
+			}
+			template<typename TFunc, typename = ENABLEIF_ISSAMETYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLEIF_NOTCONVERTIBLETOFUNCPTR(TFunc))
 				: storage(operator new(sizeof(TFunc)), funcDeleter<typename std::decay<TFunc>::type>)
 			{
 				using FuncType = typename std::decay<TFunc>::type;
@@ -136,6 +152,11 @@ namespace ssvu
 				this->closure.bindMemFunc(storage.get(), &FuncType::operator());
 			}
 	};
+
+	#undef ENABLEIF_FUNCPTR
+	#undef ENABLEIF_CONVERTIBLETOFUNCPTR
+	#undef ENABLEIF_NOTCONVERTIBLETOFUNCPTR
+	#undef ENABLEIF_ISSAMETYPE
 }
 
 #endif

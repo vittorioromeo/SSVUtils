@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVUTILS_COMMANDLINE_ELEMENTS_BASES_ARGBASE
-#define SSVUTILS_COMMANDLINE_ELEMENTS_BASES_ARGBASE
+#ifndef SSVU_COMMANDLINE_ELEMENTS_BASES_ARGBASE
+#define SSVU_COMMANDLINE_ELEMENTS_BASES_ARGBASE
 
 #include <string>
 #include "SSVUtils/CommandLine/Elements/Bases/ElementBase.h"

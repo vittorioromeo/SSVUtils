@@ -155,7 +155,7 @@ namespace ssvu
 	 * @return Returns a std::vector containing all the keys.
 	 *
 	 */
-	template<typename TContainer> std::vector<typename TContainer::key_type> getKeys(const TContainer& mMap)
+	template<typename TContainer> inline std::vector<typename TContainer::key_type> getKeys(const TContainer& mMap)
 	{
 		std::vector<typename TContainer::key_type> result;
 		for(const auto& p : mMap) result.push_back(p.first);

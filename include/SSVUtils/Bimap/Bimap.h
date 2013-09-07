@@ -30,12 +30,11 @@ namespace ssvu
 			inline auto find(const U& mValue) const -> decltype(std::declval<const decltype(map2)>().find(mValue)) { return map2.find(mValue); }
 			inline bool has(const T& mValue) const				{ return find(mValue) != end(map1); }
 			inline bool has(const U& mValue) const				{ return find(mValue) != end(map2); }
-			inline decltype(map1)& getMap1()					{ return map1; }
-			inline decltype(map2)& getMap2()					{ return map2; }
-			inline const decltype(map1)& getMap1() const		{ return map1; }
-			inline const decltype(map2)& getMap2() const		{ return map2; }
+			inline decltype(map1)& getMap1() noexcept				{ return map1; }
+			inline decltype(map2)& getMap2() noexcept				{ return map2; }
+			inline const decltype(map1)& getMap1() const noexcept	{ return map1; }
+			inline const decltype(map2)& getMap2() const noexcept	{ return map2; }
 	};
-
 }
 
 #endif

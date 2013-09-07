@@ -17,8 +17,6 @@ namespace ssvu
 		static std::chrono::time_point<std::chrono::high_resolution_clock> benchStart, benchEnd;
 	}
 
-
-
 	inline std::ostringstream& getLogStream() { return Internal::logStream; }
 
 	inline void startBenchmark()

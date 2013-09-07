@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVUTILS_COMMANDLINE_ELEMENTS_BASES_ELEMENTBASE
-#define SSVUTILS_COMMANDLINE_ELEMENTS_BASES_ELEMENTBASE
+#ifndef SSVU_COMMANDLINE_ELEMENTS_BASES_ELEMENTBASE
+#define SSVU_COMMANDLINE_ELEMENTS_BASES_ELEMENTBASE
 
 #include <string>
 
@@ -23,10 +23,10 @@ namespace ssvu
 				inline void setBriefDesc(const std::string& mBriefDesc)	{ briefDesc = mBriefDesc; }
 				inline void setDesc(const std::string& mDesc)			{ desc = mDesc; }
 
-				inline const std::string& getName() const		{ return name; }
-				inline const std::string& getBriefDesc() const	{ return briefDesc; }
-				inline const std::string& getDesc() const		{ return desc; }
-				inline virtual std::string getUsageStr() const	{ return ""; }
+				inline const std::string& getName() const noexcept		{ return name; }
+				inline const std::string& getBriefDesc() const noexcept	{ return briefDesc; }
+				inline const std::string& getDesc() const noexcept		{ return desc; }
+				inline virtual std::string getUsageStr() const			{ return ""; }
 				inline std::string getHelpStr()
 				{
 					std::string result, usageStr{this->getUsageStr()};

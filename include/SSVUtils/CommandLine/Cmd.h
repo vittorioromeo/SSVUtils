@@ -49,7 +49,7 @@ namespace ssvu
 				std::vector<Uptr<ArgBase>> args, optArgs;
 				std::vector<Uptr<ArgPackBase>> argPacks;
 				std::vector<Uptr<Flag>> flags;
-				Action func;
+				ssvu::Delegate<void()> onAction;
 				std::string desc;
 
 				inline Flag& findFlag(const std::string& mName)
@@ -64,8 +64,8 @@ namespace ssvu
 			public:
 				Cmd(const std::initializer_list<std::string>& mNames) : names{mNames} { }
 
-				inline Cmd& operator+=(Action mFunc) { func = mFunc; return *this; }
-				inline Cmd& operator()() { func(); return *this; }
+				inline Cmd& operator+=(Action mFunc) { onAction += mFunc; return *this; }
+				inline Cmd& operator()() { onAction(); return *this; }
 
 				template<typename T> inline Arg<T>& createArg()												{ auto result(new Arg<T>()); args.emplace_back(result); return *result; }
 				template<typename T> inline OptArg<T>& createOptArg(const T& mDefaultValue)					{ auto result(new OptArg<T>(mDefaultValue)); optArgs.emplace_back(result); return *result; }
@@ -76,16 +76,16 @@ namespace ssvu
 				inline bool isFlagActive(unsigned int mIndex) const	{ return *flags[mIndex]; }
 				inline void activateFlag(const std::string& mName)	{ findFlag(mName) = true; }
 
-				inline bool hasName(const std::string& mName) const		{ return contains(names, mName); }
-				inline std::size_t getArgCount() const					{ return args.size(); }
-				inline std::size_t getOptArgCount() const				{ return optArgs.size(); }
-				inline std::size_t getArgPackCount() const				{ return argPacks.size(); }
-				inline std::size_t getFlagCount() const					{ return flags.size(); }
-				inline const decltype(names)& getNames() const			{ return names; }
-				inline const decltype(args)& getArgs() const			{ return args; }
-				inline const decltype(optArgs)& getOptArgs() const		{ return optArgs; }
-				inline const decltype(argPacks)& getArgPacks() const	{ return argPacks; }
-				inline const decltype(flags)& getFlags() const			{ return flags; }
+				inline bool hasName(const std::string& mName) const				{ return contains(names, mName); }
+				inline std::size_t getArgCount() const noexcept					{ return args.size(); }
+				inline std::size_t getOptArgCount() const noexcept				{ return optArgs.size(); }
+				inline std::size_t getArgPackCount() const noexcept				{ return argPacks.size(); }
+				inline std::size_t getFlagCount() const	 noexcept				{ return flags.size(); }
+				inline const decltype(names)& getNames() const noexcept			{ return names; }
+				inline const decltype(args)& getArgs() const noexcept			{ return args; }
+				inline const decltype(optArgs)& getOptArgs() const noexcept		{ return optArgs; }
+				inline const decltype(argPacks)& getArgPacks() const noexcept	{ return argPacks; }
+				inline const decltype(flags)& getFlags() const noexcept			{ return flags; }
 
 				std::string getNamesStr() const		{ return Internal::buildCmdStr(names, "<", ">", " || "); }
 				std::string getArgsStr() const		{ return Internal::buildCmdStr(args); }
@@ -106,8 +106,8 @@ namespace ssvu
 					return result;
 				}
 
-				inline void setDesc(const std::string& mDesc)	{ desc = mDesc; }
-				inline const std::string& getDesc() const		{ return desc; }
+				inline void setDesc(const std::string& mDesc)		{ desc = mDesc; }
+				inline const std::string& getDesc() const noexcept	{ return desc; }
 		};
 	}
 }
