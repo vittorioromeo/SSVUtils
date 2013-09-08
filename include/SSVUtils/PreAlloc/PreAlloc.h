@@ -106,17 +106,39 @@ namespace ssvu
 				const Internal::MemBuffer buffer;
 				std::vector<MemRange> available;
 
+				inline void joinRangesAt(int mIdx)
+				{
+					if(mIdx + 1 != available.size() - 1) available[mIdx + 1] = available.back();
+					available.pop_back();
+				}
+
 				inline void unifyContiguous()
 				{
-					sort(available, [](const MemRange& mA, const MemRange& mB){ return mA.begin < mB.begin; });
-					for(auto itr(std::begin(available)); itr != std::end(available) - 1;)
-					{
-						auto& next(*(itr + 1));
-						if(itr->end != next.begin) { ++itr; continue; }
+					std::size_t newNLast{0};
 
-						next.begin = itr->begin;
-						available.erase(itr);
-					}
+					do
+					{
+						int nLast{newNLast};
+						newNLast = available.size() - 1;
+						for(int i(available.size() - 2); i >= nLast; --i)
+						{
+							if(available[i].begin > available[i + 1].begin)
+							{
+								if(available[i].begin == available[i + 1].end)
+								{
+									available[i].begin = available[i + 1].begin;
+									joinRangesAt(i);
+								}
+								else std::swap(available[i], available[i + 1]);
+								newNLast = i + 1;
+							}
+							else if(available[i].end == available[i + 1].begin)
+							{
+								available[i].end = available[i + 1].end;
+								joinRangesAt(i);
+							}
+						}
+					} while(newNLast < available.size() - 1);
 				}
 
 			public:
