@@ -14,7 +14,13 @@ namespace ssvu
 	namespace Internal
 	{
 		class AnyClass;
-		using AnyMemFunc = void(Internal::AnyClass::*)();
+		using AnyPtrThis = AnyClass*;
+		using AnyPtrFunc = void(AnyClass::*)();
+		template<typename TReturn, typename... TArgs> using AnyPtrFuncT = TReturn(AnyClass::*)(TArgs...);
+		template<typename TReturn, typename... TArgs> using AnyPtrStaticFuncT = TReturn(*)(TArgs...);
+
+		template<typename> struct MemFuncToFunc;
+		template<typename TReturn, typename TThis, typename... TArgs> struct MemFuncToFunc<TReturn(TThis::*)(TArgs...) const> { using Type = TReturn(*)(TArgs...); };
 
 		constexpr std::size_t SingleMemFuncPtrSize{sizeof(void(AnyClass::*)())};
 
@@ -22,110 +28,90 @@ namespace ssvu
 		template<class TOut, class TIn> inline TOut horrible_cast(TIn mIn) noexcept { HorribleUnion<TOut, TIn> u; static_assert(sizeof(TIn) == sizeof(u) && sizeof(TIn) == sizeof(TOut), "Cannot use horrible_cast<>"); u.in = mIn; return u.out; }
 		template<class TOut, class TIn> inline TOut unsafe_horrible_cast(TIn mIn) noexcept { HorribleUnion<TOut, TIn> u; u.in = mIn; return u.out; }
 
-		template<std::size_t N> struct SimplifyMemFunc
+		template<std::size_t TN> struct SimplifyMemFunc
 		{
-			template<class X, class XFuncType, class AnyMemFunc> inline static AnyClass* convert(const X*, XFuncType, AnyMemFunc&) noexcept
+			template<class TThis, class TFunc> inline static AnyPtrThis convert(const TThis*, TFunc, AnyPtrFunc&) noexcept
 			{
-				static_assert(N - 100, "Unsupported member function pointer on this compiler");
+				static_assert(TN - 100, "Unsupported member function pointer on this compiler");
 				return 0;
 			}
 		};
 		template<> struct SimplifyMemFunc<SingleMemFuncPtrSize>
 		{
-			template<class X, class XFuncType, class AnyMemFunc> inline static AnyClass* convert(const X* mPtrThis, XFuncType mFuncToBind, AnyMemFunc& mFuncBound) noexcept
+			template<class TThis, class TFunc> inline static AnyPtrThis convert(const TThis* mThis, TFunc mFunc, AnyPtrFunc& mFuncOut) noexcept
 			{
-				mFuncBound = reinterpret_cast<AnyMemFunc>(mFuncToBind);
-				return reinterpret_cast<AnyClass*>(const_cast<X*>(mPtrThis));
+				mFuncOut = reinterpret_cast<AnyPtrFunc>(mFunc);
+				return reinterpret_cast<AnyPtrThis>(const_cast<TThis*>(mThis));
 			}
 		};
 
-		template<class TAnyMemFunc, class TStaticFunc> struct ClosurePtr
+		template<typename TReturn, typename... TArgs> struct Closure
 		{
 			private:
-				AnyClass* ptrThis{nullptr};
-				AnyMemFunc ptrFunction{nullptr};
+				using PtrFuncT = AnyPtrFuncT<TReturn, TArgs...>;
+				using PtrStaticFuncT = AnyPtrStaticFuncT<TReturn, TArgs...>;
+				AnyPtrThis ptrThis{nullptr};
+				AnyPtrFunc ptrFunction{nullptr};
 
 			public:
-				inline ClosurePtr() noexcept = default;
-				inline ClosurePtr(std::nullptr_t) noexcept { }
-				inline ClosurePtr(const ClosurePtr& mClosurePtr) noexcept : ptrThis{mClosurePtr.ptrThis}, ptrFunction{mClosurePtr.ptrFunction} { }
-				inline ClosurePtr(ClosurePtr&& mClosurePtr) noexcept : ptrThis{std::move(mClosurePtr.ptrThis)}, ptrFunction{std::move(mClosurePtr.ptrFunction)} { mClosurePtr = nullptr; }
-
-				inline ClosurePtr& operator=(std::nullptr_t) noexcept			{ ptrThis = nullptr; ptrFunction = nullptr; return *this; }
-				inline ClosurePtr& operator=(const ClosurePtr& mRhs) noexcept	{ ptrThis = mRhs.ptrThis; ptrFunction = mRhs.ptrFunction; return *this; }
-				inline ClosurePtr& operator=(ClosurePtr&& mRhs) noexcept		{ ptrThis = std::move(mRhs.ptrThis); ptrFunction = std::move(mRhs.ptrFunction); return *this; }
-
-				template<class X, class XMemFunc> inline void bindMemFunc(X* mPtrThis, XMemFunc mFuncToBind) noexcept { ptrThis = SimplifyMemFunc<sizeof(mFuncToBind)>::convert(mPtrThis, mFuncToBind, ptrFunction); }
-				template<class DerivedClass, class ParentInvokerSig> inline void bindStaticFunc(DerivedClass* mPtrParent, ParentInvokerSig mStaticFuncInvoker, TStaticFunc mFuncToBind) noexcept
+				template<class TThis, class TFunc> inline void bind(TThis* mThis, TFunc mFunc) noexcept { ptrThis = SimplifyMemFunc<sizeof(mFunc)>::convert(mThis, mFunc, ptrFunction); }
+				template<class TThis, class TInvoker> inline void bind(TThis* mThis, TInvoker mInvoker, PtrStaticFuncT mFunc) noexcept
 				{
-					static_assert(sizeof(AnyClass*) == sizeof(mFuncToBind), "Cannot use horrible_cast");
-					if(mFuncToBind == nullptr) ptrFunction = nullptr; else bindMemFunc(mPtrParent, mStaticFuncInvoker);
-					ptrThis = horrible_cast<AnyClass*>(mFuncToBind);
+					if(mFunc == nullptr) ptrFunction = nullptr; else bind(mThis, mInvoker);
+					ptrThis = horrible_cast<AnyPtrThis>(mFunc);
 				}
 
-				inline bool operator==(std::nullptr_t) const noexcept			{ return ptrThis == nullptr && ptrFunction == nullptr; }
-				inline bool operator==(const ClosurePtr& mRhs) const noexcept	{ return ptrThis == mRhs.ptrThis && ptrFunction == mRhs.ptrFunction; }
-				inline bool operator==(TStaticFunc mPtr) const noexcept			{ return mPtr == nullptr ? *this == nullptr : mPtr == reinterpret_cast<TStaticFunc>(getStaticFunc()); }
-				inline bool operator!=(std::nullptr_t) const noexcept			{ return !operator==(nullptr); }
-				inline bool operator!=(const ClosurePtr& mRhs) const noexcept	{ return !operator==(mRhs); }
-				inline bool operator!=(TStaticFunc mPtr) const noexcept			{ return !operator==(mPtr); }
-				inline bool operator<(const ClosurePtr& mRhs) const				{ return ptrThis != mRhs.ptrThis ? ptrThis < mRhs.ptrThis : std::memcmp(&ptrFunction, &mRhs.ptrFunction, sizeof(ptrFunction)) < 0; }
-				inline bool operator>(const ClosurePtr& mRhs) const				{ return mRhs < *this; }
+				inline bool operator==(std::nullptr_t) const noexcept		{ return ptrThis == nullptr && ptrFunction == nullptr; }
+				inline bool operator==(const Closure& mRhs) const noexcept	{ return ptrThis == mRhs.ptrThis && ptrFunction == mRhs.ptrFunction; }
+				inline bool operator==(PtrStaticFuncT mPtr) const noexcept	{ return mPtr == nullptr ? *this == nullptr : mPtr == reinterpret_cast<PtrStaticFuncT>(getStaticFunc()); }
+				inline bool operator!=(std::nullptr_t) const noexcept		{ return !operator==(nullptr); }
+				inline bool operator!=(const Closure& mRhs) const noexcept	{ return !operator==(mRhs); }
+				inline bool operator!=(PtrStaticFuncT mPtr) const noexcept	{ return !operator==(mPtr); }
+				inline bool operator<(const Closure& mRhs) const			{ return ptrThis != mRhs.ptrThis ? ptrThis < mRhs.ptrThis : std::memcmp(&ptrFunction, &mRhs.ptrFunction, sizeof(ptrFunction)) < 0; }
+				inline bool operator>(const Closure& mRhs) const			{ return !operator<(mRhs); }
 
-				inline std::size_t getHash() const noexcept						{ return reinterpret_cast<std::size_t>(ptrThis) ^ Internal::unsafe_horrible_cast<std::size_t>(ptrFunction); }
-				inline AnyClass* getPtrThis() const noexcept					{ return ptrThis; }
-				inline TAnyMemFunc getPtrFunction() const noexcept				{ return reinterpret_cast<TAnyMemFunc>(ptrFunction); }
-				inline TStaticFunc getStaticFunc() const noexcept				{ static_assert(sizeof(TStaticFunc) == sizeof(this), "Cannot use horrible_cast"); return horrible_cast<TStaticFunc>(this); }
+				inline std::size_t getHash() const noexcept					{ return reinterpret_cast<std::size_t>(ptrThis) ^ Internal::unsafe_horrible_cast<std::size_t>(ptrFunction); }
+				inline AnyPtrThis getPtrThis() const noexcept				{ return ptrThis; }
+				inline PtrFuncT getPtrFunction() const noexcept				{ return reinterpret_cast<PtrFuncT>(ptrFunction); }
+				inline PtrStaticFuncT getStaticFunc() const noexcept		{ return horrible_cast<PtrStaticFuncT>(this); }
 		};
 
 		template<typename TReturn, typename... TArgs> class FastFuncImpl
 		{
 			private:
-				using GenericMemFn = TReturn(Internal::AnyClass::*)(TArgs...);
-				using FuncSig = TReturn(*)(TArgs...);
-				using ClosureType = Internal::ClosurePtr<GenericMemFn, FuncSig>;
-				ClosureType closure;
+				using PtrStaticFuncT = AnyPtrStaticFuncT<TReturn, TArgs...>;
+				Closure<TReturn, TArgs...> closure;
 				inline TReturn invokeStaticFunc(TArgs... mArgs) const { return (*(closure.getStaticFunc()))(std::forward<TArgs>(mArgs)...); }
 
 			protected:
-				template<class X, class XMemFunc> inline void bind(X* mPtrThis, XMemFunc mFuncToBind) noexcept { closure.bindMemFunc(mPtrThis, mFuncToBind); }
-				template<class TFunc> inline void bind(TFunc mFuncToBind) noexcept { closure.bindStaticFunc(this, &FastFuncImpl::invokeStaticFunc, mFuncToBind); }
+				template<class TThis, class TFunc> inline void bind(TThis* mThis, TFunc mFunc) noexcept { closure.bind(mThis, mFunc); }
+				template<class TFunc> inline void bind(TFunc mFunc) noexcept { closure.bind(this, &FastFuncImpl::invokeStaticFunc, mFunc); }
 
 			public:
 				inline FastFuncImpl() noexcept = default;
 				inline FastFuncImpl(std::nullptr_t) noexcept { }
-				inline FastFuncImpl(const FastFuncImpl& mImpl) noexcept : closure{mImpl.closure} { }
-				inline FastFuncImpl(FastFuncImpl&& mImpl) noexcept : closure{std::move(mImpl.closure)} { }
-				inline FastFuncImpl(FuncSig mFuncToBind) noexcept { bind(mFuncToBind); }
-				template<typename X, typename Y> inline FastFuncImpl(X* mPtrThis, Y mFuncToBind) noexcept { bind(mPtrThis, mFuncToBind); }
+				inline FastFuncImpl(PtrStaticFuncT mFunc) noexcept { bind(mFunc); }
+				template<typename X, typename Y> inline FastFuncImpl(X* mThis, Y mFunc) noexcept { bind(mThis, mFunc); }
 
-				inline void operator=(const FastFuncImpl& mImpl) noexcept	{ closure = mImpl.closure; }
-				inline void operator=(FastFuncImpl&& mImpl) noexcept		{ closure = std::move(mImpl.closure); }
-				inline void operator=(FuncSig mFuncToBind) noexcept			{ bind(mFuncToBind); }
-				inline TReturn operator()(TArgs... mArgs) const				{ return (closure.getPtrThis()->*(closure.getPtrFunction()))(std::forward<TArgs>(mArgs)...); }
+				inline FastFuncImpl& operator=(PtrStaticFuncT mFunc) noexcept	{ bind(mFunc); }
+				inline TReturn operator()(TArgs... mArgs) const					{ return (closure.getPtrThis()->*(closure.getPtrFunction()))(std::forward<TArgs>(mArgs)...); }
 
 				inline bool operator==(std::nullptr_t) const noexcept				{ return closure == nullptr; }
 				inline bool operator==(const FastFuncImpl& mImpl) const noexcept	{ return closure == mImpl.closure; }
-				inline bool operator==(FuncSig mFuncPtr) const noexcept				{ return closure == mFuncPtr; }
+				inline bool operator==(PtrStaticFuncT mFuncPtr) const noexcept		{ return closure == mFuncPtr; }
 				inline bool operator!=(std::nullptr_t) const noexcept				{ return !operator==(nullptr); }
 				inline bool operator!=(const FastFuncImpl& mImpl) const noexcept	{ return !operator==(mImpl); }
-				inline bool operator!=(FuncSig mFuncPtr) const noexcept				{ return !operator==(mFuncPtr); }
+				inline bool operator!=(PtrStaticFuncT mFuncPtr) const noexcept		{ return !operator==(mFuncPtr); }
 				inline bool operator<(const FastFuncImpl& mImpl) const				{ return closure < mImpl.closure; }
-				inline bool operator>(const FastFuncImpl& mImpl) const				{ return closure > mImpl.closure; }
+				inline bool operator>(const FastFuncImpl& mImpl) const				{ return !operator<(mImpl); }
 		};
 	}
-	template<typename TFunc> struct MemFuncPtrToFuncPtr;
-	template<typename TReturn, typename TClass, typename... TArgs> struct MemFuncPtrToFuncPtr<TReturn(TClass::*)(TArgs...) const> { using type = TReturn(*)(TArgs...); };
 
-	template<typename TFunc> struct is_fun_ptr : std::integral_constant<bool, std::is_pointer<TFunc>::value && std::is_function<typename std::remove_pointer<TFunc>::type>::value> { };
-	template<typename TFunc> struct is_trivial : std::integral_constant<bool, std::is_constructible<typename MemFuncPtrToFuncPtr<decltype(&std::decay<TFunc>::type::operator())>::type, TFunc>::value> { };
+	#define ENABLE_IF_CONV_TO_FUN_PTR(x)		typename std::enable_if<std::is_constructible<typename Internal::MemFuncToFunc<decltype(&std::decay<x>::type::operator())>::Type, x>::value>::type* = nullptr
+	#define ENABLE_IF_NOT_CONV_TO_FUN_PTR(x)	typename std::enable_if<!std::is_constructible<typename Internal::MemFuncToFunc<decltype(&std::decay<x>::type::operator())>::Type, x>::value>::type* = nullptr
+	#define ENABLE_IF_SAME_TYPE(x, y)			typename = typename std::enable_if<!std::is_same<x, typename std::decay<y>::type>{}>::type
 
-	#define ENABLEIF_FUNCPTR(x)					typename std::enable_if<is_fun_ptr<x>::value>::type* = nullptr
-	#define ENABLEIF_CONVERTIBLETOFUNCPTR(x)	typename std::enable_if<std::is_constructible<typename MemFuncPtrToFuncPtr<decltype(&std::decay<x>::type::operator())>::type, x>::value>::type* = nullptr
-	#define ENABLEIF_NOTCONVERTIBLETOFUNCPTR(x) typename std::enable_if<!std::is_constructible<typename MemFuncPtrToFuncPtr<decltype(&std::decay<x>::type::operator())>::type, x>::value>::type* = nullptr
-	#define ENABLEIF_ISSAMETYPE(x, y)			typename std::enable_if<!std::is_same<x, typename std::decay<y>::type>{}>::type
-
-	template<typename TSignature> class FastFunc;
+	template<typename> class FastFunc;
 	template<typename TReturn, typename... TArgs> class FastFunc<TReturn(TArgs...)> : public Internal::FastFuncImpl<TReturn, TArgs...>
 	{
 		private:
@@ -138,12 +124,12 @@ namespace ssvu
 
 			inline FastFunc() noexcept = default;
 
-			template<typename TFunc, typename = ENABLEIF_ISSAMETYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLEIF_CONVERTIBLETOFUNCPTR(TFunc))
+			template<typename TFunc, ENABLE_IF_SAME_TYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLE_IF_CONV_TO_FUN_PTR(TFunc))
 			{
 				using FuncType = typename std::decay<TFunc>::type;
 				this->bind(&mFunc, &FuncType::operator());
 			}
-			template<typename TFunc, typename = ENABLEIF_ISSAMETYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLEIF_NOTCONVERTIBLETOFUNCPTR(TFunc))
+			template<typename TFunc, ENABLE_IF_SAME_TYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLE_IF_NOT_CONV_TO_FUN_PTR(TFunc))
 				: storage(operator new(sizeof(TFunc)), funcDeleter<typename std::decay<TFunc>::type>)
 			{
 				using FuncType = typename std::decay<TFunc>::type;
@@ -152,10 +138,9 @@ namespace ssvu
 			}
 	};
 
-	#undef ENABLEIF_FUNCPTR
-	#undef ENABLEIF_CONVERTIBLETOFUNCPTR
-	#undef ENABLEIF_NOTCONVERTIBLETOFUNCPTR
-	#undef ENABLEIF_ISSAMETYPE
+	#undef ENABLE_IF_CONV_TO_FUN_PTR
+	#undef ENABLE_IF_NOT_CONV_TO_FUN_PTR
+	#undef ENABLE_IF_SAME_TYPE
 }
 
 #endif
