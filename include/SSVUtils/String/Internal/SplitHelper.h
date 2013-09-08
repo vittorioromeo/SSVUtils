@@ -48,7 +48,7 @@ namespace ssvu
 			inline static void split(std::vector<std::string>& mTarget, const std::string& mString, const T& mSeparator)
 			{
 				StringSize p{0}, q;
-				while ((q = SplitFindHelper<T>::getNextIndex(mString, mSeparator, p)) != std::string::npos)
+				while((q = SplitFindHelper<T>::getNextIndex(mString, mSeparator, p)) != std::string::npos)
 				{
 					auto tokenLength(q - p);
 
@@ -69,7 +69,7 @@ namespace ssvu
 			{
 				StringSize pos{0};
 				std::string token;
-				while ((pos = mString.find(mSeparator)) != std::string::npos)
+				while((pos = mString.find(mSeparator)) != std::string::npos)
 				{
 					auto tokenLength(pos);
 
@@ -89,7 +89,7 @@ namespace ssvu
 			{
 				StringSize pos{0}, lastLength;
 				std::string token;
-				while ((pos = findFirstOf(mString, mSeparator, lastLength)) != std::string::npos)
+				while((pos = findFirstOf(mString, mSeparator, lastLength)) != std::string::npos)
 				{
 					auto tokenLength(pos);
 
