@@ -38,7 +38,7 @@ namespace ssvu
 	 */
 	inline void replace(std::string& mString, const std::string& mFrom, const std::string& mTo)
 	{
-		size_t startPos{mString.find(mFrom)};
+		std::size_t startPos{mString.find(mFrom)};
 		if(startPos == std::string::npos) return;
 		mString.replace(startPos, mFrom.size(), mTo);
 	}
@@ -54,7 +54,7 @@ namespace ssvu
 	 */
 	inline void replaceAll(std::string& mString, const std::string& mFrom, const std::string& mTo)
 	{
-		size_t startPos{mString.find(mFrom)};
+		std::size_t startPos{mString.find(mFrom)};
 		while(startPos != std::string::npos)
 		{
 			mString.replace(startPos, mFrom.size(), mTo);
@@ -180,26 +180,26 @@ namespace ssvu
 	 * @param mA First string.
 	 * @param mB Second string.
 	 *
-	 * @return Returns the levenshtein distance between two strings as a size_t.
+	 * @return Returns the levenshtein distance between two strings as an std::size_t.
 	 *
 	 */
-	inline size_t getLevenshteinDistance(const std::string& mA, const std::string& mB)
+	inline std::size_t getLevenshteinDistance(const std::string& mA, const std::string& mB)
 	{
 		const auto& m(mA.size());
 		const auto& n(mB.size());
 		if(m == 0) return n;
 		if(n == 0) return m;
 
-		auto costs(Uptr<size_t[]>(new size_t[n + 1]));
-		for(size_t k{0}; k <= n; ++k) costs[k] = k;
+		auto costs(Uptr<std::size_t[]>(new std::size_t[n + 1]));
+		for(std::size_t k{0}; k <= n; ++k) costs[k] = k;
 
-		size_t i{0};
+		std::size_t i{0};
 		for(auto it1(std::begin(mA)); it1 != std::end(mA); ++it1, ++i)
 		{
 			costs[0] = i + 1;
 			auto corner(i);
 
-			size_t j{0};
+			std::size_t j{0};
 			for(auto it2(std::begin(mB)); it2 != std::end(mB); ++it2, ++j)
 			{
 				auto upper(costs[j + 1]);
