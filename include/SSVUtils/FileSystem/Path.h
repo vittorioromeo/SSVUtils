@@ -89,15 +89,13 @@ namespace ssvu
 				{
 					auto str(getFileName()); if(beginsWith(str, '.')) str.erase(std::begin(str));
 					auto extBegin(str.find_last_of('.'));
-					if(extBegin == std::string::npos) return "";
-					return str.substr(extBegin, str.size() - extBegin);
+					return extBegin == std::string::npos ? "" : str.substr(extBegin, str.size() - extBegin);
 				}
 				inline std::string getAllExtensions() const
 				{
 					auto str(getFileName());
 					auto extBegin(str.find_first_of('.', beginsWith(str, '.') ? 1 : 0));
-					if(extBegin == std::string::npos) return "";
-					return str.substr(extBegin, str.size() - extBegin);
+					return extBegin == std::string::npos ? "" : str.substr(extBegin, str.size() - extBegin);
 				}
 
 				inline void operator=(const std::string& mPath)			{ mustNormalize = true; path = mPath; }
