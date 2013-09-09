@@ -55,12 +55,12 @@ namespace ssvu
 			{
 				template<typename... TItemArgs> inline static void emplace(std::stack<T, TArgs...>& mCont, TItemArgs&&... mArgs) { mCont.emplace(std::forward<TItemArgs>(mArgs)...); }
 			};
+
 			template<typename T, typename TCont> inline void destroyReclaim(T* mObj, TCont& mCont, MemSize mSize = sizeof(T))
 			{
 				auto objStart(reinterpret_cast<MemUnitPtr>(mObj));
 				mObj->~T(); ContainerHelper<TCont>::emplace(mCont, objStart, objStart + mSize);
 			}
-
 			template<typename T> inline void createChunks(T& mContainer, MemSize mSize, std::size_t mChunks, const MemBuffer& mBuffer)
 			{
 				for(auto i(0u); i < mChunks; ++i)
@@ -154,6 +154,8 @@ namespace ssvu
 						if(itr->getSize() == 0) available.erase(itr);
 						return new (toUse) T{std::forward<TArgs>(mArgs)...};
 					}
+
+					throw std::runtime_error{"Dynamic preallocator could not allocate object"};
 				}
 				template<typename T> inline void destroy(T* mObj, MemSize mSize = sizeof(T)) { Internal::destroyReclaim(mObj, available, mSize); unifyContiguous(); }
 		};
