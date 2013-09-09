@@ -15,10 +15,7 @@
 
 namespace ssvu
 {
-	namespace FileSystem
-	{
-		class Path;
-	}
+	namespace FileSystem { class Path; }
 
 	std::ostringstream& getLogStream();
 
@@ -34,22 +31,26 @@ namespace ssvu
 		{
 			#ifndef SSVU_LOG_DISABLE
 				std::cout << mValue; getLogStream() << mValue;
-				return mLOut;
 			#endif
+
+			return mLOut;
 		}
 		template<> inline LOut& operator<<<LTitle>(LOut& mLOut, const LTitle& mValue)
 		{
 			#ifndef SSVU_LOG_DISABLE
 				std::cout << std::left << std::setw(38) << mValue.str;
 				getLogStream() << std::left << std::setw(38) << mValue.str;
-				return mLOut;
 			#endif
+
+			return mLOut;
 		}
 		inline LOut& operator<<(LOut& mLOut, StdEndLine manip)
 		{
 			#ifndef SSVU_LOG_DISABLE
-				manip(std::cout); manip(getLogStream()); return mLOut;
+				manip(std::cout); manip(getLogStream());
 			#endif
+
+			return mLOut;
 		}
 	}
 
@@ -57,8 +58,10 @@ namespace ssvu
 	template<typename T> inline Internal::LTitle lt(const T& mValue)
 	{
 		#ifndef SSVU_LOG_DISABLE
-			Internal::LTitle result; result.str = "[" + toStr(mValue) + "] "; return result;
+			Internal::LTitle result; result.str = "[" + toStr(mValue) + "] ";
 		#endif
+
+		return result;
 	}
 
 	/*!

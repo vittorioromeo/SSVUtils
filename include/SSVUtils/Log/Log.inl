@@ -21,21 +21,23 @@ namespace ssvu
 
 	inline void startBenchmark()
 	{
-		#ifndef SSVS_DISABLE_LOG
+		#ifndef SSVU_LOG_DISABLE
 			Internal::benchStart = std::chrono::high_resolution_clock::now();
 		#endif
 	}
 	inline std::string endBenchmark()
 	{
-		#ifndef SSVS_DISABLE_LOG
+		#ifndef SSVU_LOG_DISABLE
 			Internal::benchEnd = std::chrono::high_resolution_clock::now();
 			auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(Internal::benchEnd - Internal::benchStart).count();
 			return toStr(elapsed) + toStr(" ms");
 		#endif
+
+		return "";
 	}
 	inline void saveLogToFile(const FileSystem::Path& mPath)
 	{
-		#ifndef SSVS_DISABLE_LOG
+		#ifndef SSVU_LOG_DISABLE
 			std::ofstream o; o.open(mPath); o << getLogStream().str(); o.flush(); o.close();
 		#endif
 	}
