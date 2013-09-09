@@ -13,9 +13,14 @@ namespace ssvu
 {
 	template<typename T, typename TDeleter = std::default_delete<T>> using Uptr = std::unique_ptr<T, TDeleter>;
 
-	template<typename TSignature> struct FuncHelper;
-	template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = FastFunc<T(TArgs...)>; };
-	//template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
+	template<typename> struct FuncHelper;
+
+	#ifndef SSVU_USE_STD_FUNCTION
+		template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = FastFunc<T(TArgs...)>; };
+	#else
+		template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
+	#endif
+
 	template<typename T> using Func = typename FuncHelper<T>::FuncType;
 
 	using Action = Func<void()>;
