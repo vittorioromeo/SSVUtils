@@ -16,6 +16,10 @@ namespace ssvu
 	namespace CommandLine
 	{
 		template<typename T> struct Parser;
+		template<> struct Parser<std::string>
+		{
+			inline static std::string parse(const std::string& mString) { return mString; }
+		};
 		template<> struct Parser<int>
 		{
 			inline static int parse(const std::string& mString)
@@ -24,9 +28,13 @@ namespace ssvu
 				catch(...) { throw std::runtime_error("Cannot parse '" + mString + "' to int"); }
 			}
 		};
-		template<> struct Parser<std::string>
+		template<> struct Parser<float>
 		{
-			inline static std::string parse(const std::string& mString) { return mString; }
+			inline static float parse(const std::string& mString)
+			{
+				try { return std::stof(mString); }
+				catch(...) { throw std::runtime_error("Cannot parse '" + mString + "' to float"); }
+			}
 		};
 		template<> struct Parser<bool>
 		{
