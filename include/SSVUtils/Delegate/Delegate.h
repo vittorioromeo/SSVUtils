@@ -12,7 +12,8 @@
 
 namespace ssvu
 {
-	template<typename T> class Delegate;
+	template<typename> class Delegate;
+	namespace Internal { template<typename, typename...> struct DelegateHelper; }
 
 	/*!
 	 *
@@ -26,6 +27,8 @@ namespace ssvu
 	 */
 	template<typename TReturn, typename... TArgs> class Delegate<TReturn(TArgs...)>
 	{
+		template<typename, typename...> friend struct Internal::DelegateHelper;
+
 		private:
 			using FuncType = Func<TReturn(TArgs...)>;
 			std::vector<FuncType> funcs; /*!< Internal collection of functions. */
@@ -65,14 +68,12 @@ namespace ssvu
 			 *
 			 * @param mArgs Arguments passed to every function
 			 *
-			 * @return std::vector containing return values from the functions
+			 * @return void or std::vector containing return values from the functions
 			 *
 			 */
-			inline std::vector<TReturn> operator()(TArgs... mArgs)
+			inline auto operator()(TArgs... mArgs) -> decltype(Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, mArgs...))
 			{
-				std::vector<TReturn> result;
-				for(const auto& f : funcs) result.push_back(f(std::forward<TArgs>(mArgs)...));
-				return result;
+				return Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, std::forward<TArgs>(mArgs)...);
 			}
 
 			/*!
@@ -83,65 +84,25 @@ namespace ssvu
 			inline void clear() { funcs.clear(); }
 	};
 
-	/*!
-	 *
-	 * @brief C#-like delegate class (returns void)
-	 *
-	 * A collection of functions with the same signature that can be dynamically changed.
-	 *
-	 * @tparam TArgs Function signature variadic arguments.
-	 *
-	 */
-	template<typename... TArgs> class Delegate<void(TArgs...)>
+	namespace Internal
 	{
-		private:
-			using FuncType = Func<void(TArgs...)>;
-			std::vector<FuncType> funcs; /*!< Internal collection of functions. */
-
-		public:
-			/*!
-			 *
-			 * @brief Add a function to the delegate.
-			 *
-			 * Operator+= adds a function the delegate's internal function list which will be called using operator().
-			 *
-			 * @code
-			 * ssvu::Delegate<void, int> delegate;
-			 * delegate += [](int mParameter){ std::cout << mParameter; };
-			 * @endcode
-			 *
-			 * @param mFunc Function to add - can be a std::function or a lambda
-			 *
-			 */
-			template<typename T> inline Delegate& operator+=(T mFunc) { funcs.emplace_back(mFunc); return *this; }
-
-			/*!
-			 *
-			 * @brief Call all the functions in the delegate.
-			 *
-			 * @code
-			 * int result{0};
-			 * ssvu::Delegate<void, int> delegate;
-			 * delegate += [&](int mParameter){ ++result; };
-			 * delegate += [&](int mParameter){ ++result; };
-			 * delegate += [&](int mParameter){ ++result; };
-			 * delegate();
-			 *
-			 * assert(result == 3);
-			 * @endcode
-			 *
-			 * @param mArgs Arguments passed to every function
-			 *
-			 */
-			inline void operator()(TArgs... mArgs) { for(const auto& f : funcs) f(std::forward<TArgs>(mArgs)...); }
-
-			/*!
-			 *
-			 * @brief Clears all the functions from the delegate.
-			 *
-			 */
-			inline void clear() { funcs.clear(); }
-	};
+		template<typename TReturn, typename... TArgs> struct DelegateHelper
+		{
+			inline static TReturn exec(Delegate<TReturn(TArgs...)>& mDelegate, TArgs... mArgs)
+			{
+				std::vector<TReturn> result; result.reserve(mDelegate.funcs.size());
+				for(const auto& f : mDelegate.funcs) result.push_back(f(std::forward<TArgs>(mArgs)...));
+				return result;
+			}
+		};
+		template<typename... TArgs> struct DelegateHelper<void, TArgs...>
+		{
+			inline static void exec(Delegate<void(TArgs...)>& mDelegate, TArgs... mArgs)
+			{
+				for(const auto& f : mDelegate.funcs) f(std::forward<TArgs>(mArgs)...);
+			}
+		};
+	}
 }
 
 #endif
