@@ -43,7 +43,7 @@ namespace ssvu
 
 	/*!
 	 *
-	 * @brief Gets the sign of a numeric value.
+	 * @brief Gets the sign of a numeric value. (unsigned version)
 	 *
 	 * @tparam T Type of value.
 	 * @param mValue Value to use.
@@ -51,7 +51,19 @@ namespace ssvu
 	 * @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
 	 *
 	 */
-	template<typename T> constexpr inline int getSign(const T& mValue) noexcept { return mValue > 0 ? 1 : (mValue == 0 ? 0 : -1); }
+	template<typename T> constexpr inline int getSign(T mValue, typename std::enable_if<!std::is_signed<T>::value>::type* = nullptr) noexcept { return T(0) < mValue; }
+
+	/*!
+	 *
+	 * @brief Gets the sign of a numeric value. (signed version)
+	 *
+	 * @tparam T Type of value.
+	 * @param mValue Value to use.
+	 *
+	 * @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
+	 *
+	 */
+	template<typename T> constexpr inline int getSign(T mValue, typename std::enable_if<std::is_signed<T>::value>::type* = nullptr) noexcept { return (T(0) < mValue) - (mValue < T(0)); }
 
 	/*!
 	 *
@@ -193,8 +205,8 @@ namespace ssvu
 	template<typename T, typename J> inline T getRotatedRadians(const T& mStart, const T& mEnd, const J& mSpeed) noexcept
 	{
 		T start(wrapRadians(mStart)), end(wrapRadians(mEnd));
-		if(abs(start - end) < mSpeed) return end;
-		return wrapRadians(start + (sin(end - start)) * mSpeed);
+		if(std::abs(start - end) < mSpeed) return end;
+		return wrapRadians(start + (std::sin(end - start)) * mSpeed);
 	}
 
 	/*!
@@ -215,8 +227,8 @@ namespace ssvu
 	template<typename T, typename J> inline T getRotatedDegrees(const T& mStart, const T& mEnd, const J& mSpeed) noexcept
 	{
 		T start(wrapDegrees(mStart)), end(wrapDegrees(mEnd));
-		if(abs(start - end) < mSpeed) return end;
-		return wrapDegrees(start + (sin((end - start) / 57.3f)) *mSpeed);
+		if(std::abs(start - end) < mSpeed) return end;
+		return wrapDegrees(start + (std::sin((end - start) / 57.3f)) * mSpeed);
 	}
 
 	/*!
@@ -287,7 +299,7 @@ namespace ssvu
 	 * @return Returns the euclidean distance (squared).
 	 *
 	 */
-	template<typename T> inline T getDistanceEuclideanSquared(T mX1, T mY1, T mX2, T mY2) { return std::pow(mX1 - mX2, 2) + std::pow(mY1 - mY2, 2); }
+	template<typename T> inline T getDistanceEuclideanSquared(T mX1, T mY1, T mX2, T mY2) noexcept { return (mX1 - mX2) * (mX1 - mX2) + (mY1 - mY2) * (mY1 - mY2); }
 
 	/*!
 	 *
@@ -302,7 +314,12 @@ namespace ssvu
 	 * @return Returns the euclidean distance.
 	 *
 	 */
-	template<typename T> inline T getDistanceEuclidean(T mX1, T mY1, T mX2, T mY2) { return std::sqrt(getDistanceEuclideanSquared(mX1, mY1, mX2, mY2)); }
+	template<typename T> inline T getDistanceEuclidean(T mX1, T mY1, T mX2, T mY2) noexcept { return std::sqrt(getDistanceEuclideanSquared(mX1, mY1, mX2, mY2)); }
+
+	// TODO: docs
+
+	template<typename T> inline T getRadiansTowards(T mX1, T mY1, T mX2, T mY2) noexcept { return std::atan2(mY2 - mY1, mX2 - mX1); }
+	template<typename T> inline T getDegreesTowards(T mX1, T mY1, T mX2, T mY2) noexcept { return toDegrees(getDegreesTowards(mX1, mY1, mX2, mY2)); }
 }
 
 #endif
