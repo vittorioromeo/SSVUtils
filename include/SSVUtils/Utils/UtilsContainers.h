@@ -21,10 +21,7 @@ namespace ssvu
 	 * @param mValue Const reference to the value.
 	 *
 	 */
-	template<typename T, typename V> inline typename T::const_iterator find(const T& mContainer, const V& mValue)
-	{
-		return std::find<typename T::const_iterator, V>(std::begin(mContainer), std::end(mContainer), mValue);
-	}
+	template<typename T, typename V> inline typename T::const_iterator find(const T& mContainer, const V& mValue) { return std::find<typename T::const_iterator, V>(std::begin(mContainer), std::end(mContainer), mValue); }
 
 	/*!
 	 *
@@ -36,10 +33,7 @@ namespace ssvu
 	 * @param mValue Const reference to the value.
 	 *
 	 */
-	template<typename T, typename V> inline typename T::size_type indexOf(const T& mContainer, const V& mValue)
-	{
-		return find(mContainer, mValue) - std::begin(mContainer);
-	}
+	template<typename T, typename V> inline typename T::size_type indexOf(const T& mContainer, const V& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
 
 	/*!
 	 *
@@ -51,10 +45,7 @@ namespace ssvu
 	 * @param mPredicate Predicate used for checking. Can be std::function, a lambda, a functor, etc...
 	 *
 	 */
-	template<typename T, typename P> inline typename T::const_iterator findIf(const T& mContainer, const P& mPredicate)
-	{
-		return std::find_if<typename T::const_iterator, P>(std::begin(mContainer), std::end(mContainer), mPredicate);
-	}
+	template<typename T, typename P> inline typename T::const_iterator findIf(const T& mContainer, const P& mPredicate) { return std::find_if<typename T::const_iterator, P>(std::begin(mContainer), std::end(mContainer), mPredicate); }
 
 	/*!
 	 *
@@ -66,10 +57,7 @@ namespace ssvu
 	 * @param mPredicate Predicate used for checking. Can be std::function, a lambda, a functor, etc...
 	 *
 	 */
-	template<typename T, typename P> inline bool containsAnyIf(T& mContainer, const P& mPredicate)
-	{
-		return findIf(mContainer, mPredicate) != std::end(mContainer);
-	}
+	template<typename T, typename P> inline bool containsAnyIf(T& mContainer, const P& mPredicate) { return findIf(mContainer, mPredicate) != std::end(mContainer); }
 
 	/*!
 	 *
@@ -81,10 +69,7 @@ namespace ssvu
 	 * @param mValue Const reference to the value.
 	 *
 	 */
-	template<typename T, typename V> inline void eraseRemove(T& mContainer, const V& mValue)
-	{
-		mContainer.erase(std::remove(std::begin(mContainer), std::end(mContainer), mValue), std::end(mContainer));
-	}
+	template<typename T, typename V> inline void eraseRemove(T& mContainer, const V& mValue) { mContainer.erase(std::remove(std::begin(mContainer), std::end(mContainer), mValue), std::end(mContainer)); }
 
 	/*!
 	 *
@@ -98,10 +83,7 @@ namespace ssvu
 	 * @return Returns true if the container contains the specific item.
 	 *
 	 */
-	template<typename T, typename V> inline bool contains(const T& mContainer, const V& mValue)
-	{
-		return find(mContainer, mValue) != std::end(mContainer);
-	}
+	template<typename T, typename V> inline bool contains(const T& mContainer, const V& mValue) { return find(mContainer, mValue) != std::end(mContainer); }
 
 	/*!
 	 *
@@ -143,7 +125,7 @@ namespace ssvu
 	 * @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
 	 *
 	 */
-	template<typename T, typename P> inline void sort(T& mContainer, P mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
+	template<typename T, typename P> inline void sort(T& mContainer, const P& mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
 
 	/*!
 	 *
@@ -167,15 +149,12 @@ namespace ssvu
 	 * @brief Removes all items that satisfy a predicate from a container.
 	 *
 	 * @tparam T Type of the container.
-	 * @tparam TPredicate Type of the predicate.
+	 * @tparam P Type of the predicate.
 	 * @param mContainer Reference to the container.
 	 * @param mPredicate Const reference to the predicate.
 	 *
 	 */
-	template<typename T, typename TPredicate> inline void eraseRemoveIf(T& mContainer, const TPredicate& mPredicate)
-	{
-		mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer));
-	}
+	template<typename T, typename P> inline void eraseRemoveIf(T& mContainer, const P& mPredicate) { mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer)); }
 }
 
 #endif
