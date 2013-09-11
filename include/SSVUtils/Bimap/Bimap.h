@@ -37,4 +37,27 @@ namespace ssvu
 	};
 }
 
+SSVU_TEST("Bimap tests")
+{
+	using namespace std;
+	using namespace ssvu;
+
+	Bimap<string, int> bimap;
+	bimap.insert({"hi", 10});
+	EXPECT(bimap[10] == "hi");
+	EXPECT(bimap["hi"] == 10);
+
+	bimap.insert({"hi", 1000});
+	EXPECT(bimap[10] == "hi");
+	EXPECT(bimap["hi"] != 10);
+	EXPECT(bimap[1000] == "hi");
+	EXPECT(bimap["hi"] == 1000);
+
+	bimap.erase(10);
+	EXPECT(!bimap.has(10));
+	EXPECT(!bimap.has("hi"));
+	EXPECT(bimap.has(1000));
+}
+SSVU_TEST_END();
+
 #endif

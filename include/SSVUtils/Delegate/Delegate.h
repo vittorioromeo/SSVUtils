@@ -88,7 +88,7 @@ namespace ssvu
 	{
 		template<typename TReturn, typename... TArgs> struct DelegateHelper
 		{
-			inline static TReturn exec(Delegate<TReturn(TArgs...)>& mDelegate, TArgs... mArgs)
+			inline static std::vector<TReturn> exec(Delegate<TReturn(TArgs...)>& mDelegate, TArgs... mArgs)
 			{
 				std::vector<TReturn> result; result.reserve(mDelegate.funcs.size());
 				for(const auto& f : mDelegate.funcs) result.push_back(f(std::forward<TArgs>(mArgs)...));
@@ -104,5 +104,32 @@ namespace ssvu
 		};
 	}
 }
+
+SSVU_TEST("Delegate tests")
+{
+	using namespace std;
+	using namespace ssvu;
+
+	bool testState{false};
+	Delegate<void()> del1;
+	del1 += [&testState]{ testState = !testState; };
+
+	del1(); EXPECT(testState == true);
+	del1(); EXPECT(testState == false);
+
+	Delegate<int(int)> del2;
+	del2 += [](int x){ return x + x; };
+	del2 += [](int x){ return x * x; };
+
+	auto del2result(del2(3));
+	EXPECT(del2result[0] == 6);
+	EXPECT(del2result[1] == 9);
+	EXPECT(del2result.size() == 2);
+
+	Delegate<void()> del3;
+	del3 += [&del1]{ del1(); };
+	del3(); EXPECT(testState == true);
+}
+SSVU_TEST_END();
 
 #endif
