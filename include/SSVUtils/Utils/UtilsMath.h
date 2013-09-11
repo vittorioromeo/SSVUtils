@@ -322,5 +322,47 @@ namespace ssvu
 	template<typename T> inline T getDegreesTowards(T mX1, T mY1, T mX2, T mY2) noexcept { return toDegrees(getDegreesTowards(mX1, mY1, mX2, mY2)); }
 }
 
+SSVU_TEST("UtilsMath tests")
+{
+	using namespace std;
+	using namespace ssvu;
+
+	for(int i{0}; i < 100; ++i)
+	{
+		auto r(getRnd<int>(-10, 10));
+		EXPECT(r >= -10 && r < 10);
+
+		auto ru(getRnd<unsigned int>(0, 10));
+		EXPECT(ru >= 0 && ru < 10);
+
+		auto rf(getRndR<float>(0.f, 2.f));
+		EXPECT(rf >= 0.f && rf < 2.f);
+	}
+
+	EXPECT(getSign(-1) == -1);
+	EXPECT(getSign(1) == 1);
+	EXPECT(getSign(0) == 0);
+
+	EXPECT(getSign(-1.5f) == -1);
+	EXPECT(getSign(1.5f) == 1);
+	EXPECT(getSign(0.5f) == 1);
+	EXPECT(getSign(0.0f) == 0);
+
+	EXPECT(getClampedMin(0, 100) == 100);
+	EXPECT(getClampedMin(150, 100) == 150);
+	EXPECT(getClampedMax(0, 100) == 0);
+	EXPECT(getClampedMax(150, 100) == 100);
+	EXPECT(getClamped(1000, 0, 500) == 500);
+	EXPECT(getClamped(1000, 1500, 2500) == 1500);
+
+	EXPECT(wrapDegrees(720) == 0);
+	EXPECT(wrapDegrees(720 + 180) == 180);
+
+	EXPECT(getSIMod(10, 9) == 1);
+	EXPECT(getSIMod(-10, 9) == 8);
+	EXPECT(getSIMod(10, -9) == 8);
+}
+SSVU_TEST_END();
+
 #endif
 
