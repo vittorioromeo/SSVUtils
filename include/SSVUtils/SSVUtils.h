@@ -5,6 +5,9 @@
 #ifndef SSVUTILS
 #define SSVUTILS
 
+// Test
+#include "SSVUtils/Test/Test.h"
+
 // Log
 #include "SSVUtils/Log/Log.h"
 
@@ -52,6 +55,8 @@
 
 // CommandLine
 #include "SSVUtils/CommandLine/CommandLine.h"
+
+
 
 #include "SSVUtils/Log/Log.inl"
 #include "SSVUtils/Encryption/Internal/Base64.inl"
