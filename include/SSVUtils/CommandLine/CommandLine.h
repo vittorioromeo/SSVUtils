@@ -6,8 +6,7 @@
 #define SSVU_COMMANDLINE
 
 #include "SSVUtils/CommandLine/Parser.h"
-#include "SSVUtils/CommandLine/Elements/Bases/ArgBase.h"
-#include "SSVUtils/CommandLine/Elements/Bases/ArgPackBase.h"
+#include "SSVUtils/CommandLine/Elements/Bases.h"
 #include "SSVUtils/CommandLine/Elements/Arg.h"
 #include "SSVUtils/CommandLine/Elements/OptArg.h"
 #include "SSVUtils/CommandLine/Elements/ArgPack.h"

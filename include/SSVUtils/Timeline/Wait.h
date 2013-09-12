@@ -33,30 +33,22 @@ namespace ssvu
 			Wait(Timeline& mTimeline, float mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { assert(time > 0); }
 	};
 
-	class WaitWhile : public Command
+	namespace Internal
 	{
-		private:
-			Predicate predicate;
+		template<bool TWhile> inline bool negate(bool mValue);
+		template<> inline bool negate<false>(bool mValue) { return mValue; }
+		template<> inline bool negate<true>(bool mValue) { return !mValue; }
 
-		protected:
-			inline void update(float) override { timeline.ready = false; if(!predicate()) timeline.next(); }
+		template<bool TWhile> class WaitLoop : public Command
+		{
+			private:	Predicate predicate;
+			protected:	inline void update(float) override { timeline.ready = false; if(negate<TWhile>(predicate())) timeline.next(); }
+			public:		WaitLoop(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
+		};
+	}
 
-		public:
-			WaitWhile(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
-	};
-
-	class WaitUntil : public Command
-	{
-		private:
-			Predicate predicate;
-
-		protected:
-			inline void update(float) override { timeline.ready = false; if(predicate()) timeline.next(); }
-
-		public:
-			WaitUntil(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
-	};
-
+	using WaitWhile = Internal::WaitLoop<true>;
+	using WaitUntil = Internal::WaitLoop<false>;
 }
 
 #endif

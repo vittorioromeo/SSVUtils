@@ -6,7 +6,6 @@
 #define SSVU_COMMANDLINE_ELEMENTS_OPTARG
 
 #include <string>
-#include "SSVUtils/CommandLine/Parser.h"
 
 namespace ssvu
 {

@@ -11,8 +11,7 @@
 #include "SSVUtils/Global/Typedefs.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 #include "SSVUtils/CommandLine/Elements/Flag.h"
-#include "SSVUtils/CommandLine/Elements/Bases/ArgBase.h"
-#include "SSVUtils/CommandLine/Elements/Bases/ArgPackBase.h"
+#include "SSVUtils/CommandLine/Elements/Bases.h"
 
 namespace ssvu
 {
@@ -58,22 +57,22 @@ namespace ssvu
 					throw std::runtime_error("No flag with name '" + mName + "' in command " + getNamesStr());
 				}
 
-				inline void setArgValue(unsigned int mIndex, const std::string& mValue)		{ args[mIndex]->set(mValue); }
-				inline void setOptArgValue(unsigned int mIndex, const std::string& mValue)	{ optArgs[mIndex]->set(mValue); }
+				inline void setArgValue(unsigned int mIdx, const std::string& mValue)		{ args[mIdx]->set(mValue); }
+				inline void setOptArgValue(unsigned int mIdx, const std::string& mValue)	{ optArgs[mIdx]->set(mValue); }
 
 			public:
 				Cmd(const std::initializer_list<std::string>& mNames) : names{mNames} { }
 
-				inline Cmd& operator+=(Action mFunc) { onAction += mFunc; return *this; }
+				inline Cmd& operator+=(const Action& mFunc) { onAction += mFunc; return *this; }
 				inline Cmd& operator()() { onAction(); return *this; }
 
 				template<typename T> inline Arg<T>& createArg()												{ auto result(new Arg<T>()); args.emplace_back(result); return *result; }
 				template<typename T> inline OptArg<T>& createOptArg(const T& mDefaultValue)					{ auto result(new OptArg<T>(mDefaultValue)); optArgs.emplace_back(result); return *result; }
 				template<typename T> inline ArgPack<T>& createArgPack(unsigned int mMin, unsigned int mMax)	{ auto result(new ArgPack<T>(mMin, mMax)); argPacks.emplace_back(result); return *result; }
 				template<typename T> inline ArgPack<T>& createInfiniteArgPack()								{ auto result(new ArgPack<T>); argPacks.emplace_back(result); return *result; }
-				inline Flag& createFlag(const std::string& mShortName, const std::string& mLongName)		{ auto result(new Flag{mShortName, mLongName}); flags.emplace_back(result); return *result; }
+				inline Flag& createFlag(std::string mShortName, std::string mLongName)						{ auto result(new Flag{std::move(mShortName), std::move(mLongName)}); flags.emplace_back(result); return *result; }
 
-				inline bool isFlagActive(unsigned int mIndex) const	{ return *flags[mIndex]; }
+				inline bool isFlagActive(unsigned int mIdx) const	{ return *flags[mIdx]; }
 				inline void activateFlag(const std::string& mName)	{ findFlag(mName) = true; }
 
 				inline bool hasName(const std::string& mName) const				{ return contains(names, mName); }
@@ -106,7 +105,7 @@ namespace ssvu
 					return result;
 				}
 
-				inline void setDesc(const std::string& mDesc)		{ desc = mDesc; }
+				inline void setDesc(std::string mDesc)				{ desc = std::move(mDesc); }
 				inline const std::string& getDesc() const noexcept	{ return desc; }
 		};
 	}

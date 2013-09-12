@@ -7,7 +7,6 @@
 
 #include <string>
 #include <vector>
-#include "SSVUtils/CommandLine/Parser.h"
 
 namespace ssvu
 {

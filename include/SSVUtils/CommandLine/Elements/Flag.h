@@ -6,7 +6,6 @@
 #define SSVU_COMMANDLINE_ELEMENTS_FLAG
 
 #include <string>
-#include "SSVUtils/CommandLine/Elements/Bases/ElementBase.h"
 
 namespace ssvu
 {

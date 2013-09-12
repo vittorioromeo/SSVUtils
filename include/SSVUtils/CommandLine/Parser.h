@@ -40,8 +40,8 @@ namespace ssvu
 		{
 			inline static bool parse(const std::string& mString)
 			{
-				static std::vector<std::string> trueValues{"y", "yes", "on", "true", "1"};
-				static std::vector<std::string> falseValues{"n", "no", "off", "false", "0"};
+				static std::string trueValues[]{"y", "yes", "on", "true", "1"};
+				static std::string falseValues[]{"n", "no", "off", "false", "0"};
 				if(contains(trueValues, toLower(mString))) return true;
 				if(contains(falseValues, toLower(mString))) return false;
 				throw std::runtime_error("Cannot parse '" + mString + "' to bool");

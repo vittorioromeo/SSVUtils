@@ -64,29 +64,15 @@ namespace ssvu
 		return result;
 	}
 
-	/*!
-	 *
-	 * @brief Starts the benchmark timer.
-	 *
-	 */
+	/// @brief Starts the benchmark timer.
 	void startBenchmark();
 
-	/*!
-	 *
-	 * @brief Ends the benchmark timer and returns the elapsed time.
-	 *
-	 * @return Returns the elapsed time as a string.
-	 *
-	 */
+	/// @brief Ends the benchmark timer and returns the elapsed time.
+	/// @return Returns the elapsed time as a string.
 	std::string endBenchmark();
 
-	/*!
-	 *
-	 * @brief Saves all the log entries to a file.
-	 *
-	 * @param mPath File path (file will be created if it doesn't exist).
-	 *
-	 */
+	/// @brief Saves all the log entries to a file.
+	/// @param mPath File path (file will be created if it doesn't exist).
 	extern void saveLogToFile(const FileSystem::Path& mPath);
 }
 

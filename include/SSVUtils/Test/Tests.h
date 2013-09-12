@@ -1,4 +1,6 @@
-#include "../SSVUtils.h"
+// Copyright (c) 2013 Vittorio Romeo
+// License: Academic Free License ("AFL") v. 3.0
+// AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #ifndef SSVU_TEST_TESTS
 #define SSVU_TEST_TESTS
@@ -23,6 +25,10 @@ SSVU_TEST("UtilsMath tests")
 	EXPECT(getSign(-1) == -1);
 	EXPECT(getSign(1) == 1);
 	EXPECT(getSign(0) == 0);
+
+	EXPECT(getSign(-1u) == 1);
+	EXPECT(getSign(1u) == 1);
+	EXPECT(getSign(0u) == 0);
 
 	EXPECT(getSign(-1.5f) == -1);
 	EXPECT(getSign(1.5f) == 1);
@@ -107,7 +113,7 @@ SSVU_TEST("Path tests")
 
 	path = "/usr.txt";
 	EXPECT(path.getStr() == "/usr.txt");
-	//EXPECT(path.getFolderName() == ""); TODO: throw an exception if isFolder() == false?
+	//EXPECT(path.getFolderName() == "");
 
 	path = "/usr.txt/banana/.log";
 	EXPECT(path.getStr() == "/usr.txt/banana/.log");
@@ -214,5 +220,34 @@ SSVU_TEST("String split tests")
 	EXPECT(spks3[2] == "b##");
 }
 SSVU_TEST_END()
+
+SSVU_TEST("Encryption tests")
+{
+	using namespace std;
+	using namespace ssvu;
+	using namespace ssvu::Encryption;
+
+	EXPECT(encrypt<Type::MD5>("testhash") == "082949a8dfacccda185a135db425377b");
+	EXPECT(encrypt<Type::MD5>("") == "d41d8cd98f00b204e9800998ecf8427e");
+
+	EXPECT(encrypt<Type::Base64>("testhash") == "dGVzdGhhc2g=");
+	EXPECT(decrypt<Type::Base64>("dGVzdGhhc2g=") == "testhash");
+}
+SSVU_TEST_END();
+
+SSVU_TEST("ObfuscatedValue tests")
+{
+	using namespace std;
+	using namespace ssvu;
+	using namespace ssvu::Encryption;
+
+	ObfuscatedValue<float> v{10.f};
+	EXPECT(v.get() == 10.f);
+	EXPECT(v == 10.f);
+	v = 15.f;
+	EXPECT(v.get() == 15.f);
+	EXPECT(v == 15.f);
+}
+SSVU_TEST_END();
 
 #endif

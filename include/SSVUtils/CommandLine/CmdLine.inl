@@ -12,8 +12,7 @@
 #include "SSVUtils/CommandLine/Cmd.h"
 #include "SSVUtils/CommandLine/Elements/Flag.h"
 #include "SSVUtils/CommandLine/CmdLine.h"
-#include "SSVUtils/CommandLine/Elements/Bases/ArgBase.h"
-#include "SSVUtils/CommandLine/Elements/Bases/ArgPackBase.h"
+#include "SSVUtils/CommandLine/Elements/Bases.h"
 
 namespace ssvu
 {

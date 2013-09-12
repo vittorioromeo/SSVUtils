@@ -15,16 +15,10 @@ namespace ssvu
 	template<typename> class Delegate;
 	namespace Internal { template<typename, typename...> struct DelegateHelper; }
 
-	/*!
-	 *
-	 * @brief C#-like delegate class (returns a std::vector)
-	 *
-	 * A collection of functions with the same signature that can be dynamically changed.
-	 *
-	 * @tparam TReturn Return type.
-	 * @tparam TArgs Function signature variadic arguments.
-	 *
-	 */
+	/// @brief C#-like delegate class.
+	/// @details A collection of functions with the same signature that can be dynamically changed.
+	/// @tparam TReturn Return type.
+	/// @tparam TArgs Function signature variadic arguments.
 	template<typename TReturn, typename... TArgs> class Delegate<TReturn(TArgs...)>
 	{
 		template<typename, typename...> friend struct Internal::DelegateHelper;
@@ -34,53 +28,35 @@ namespace ssvu
 			std::vector<FuncType> funcs; /*!< Internal collection of functions. */
 
 		public:
-			/*!
-			 *
-			 * @brief Add a function to the delegate
-			 *
-			 * Operator+= adds a function the delegate's internal function list which will be called using operator().
-			 *
-			 * @code
-			 * ssvu::Delegate<int, int> delegate;
-			 * delegate += [](int mParameter){ return mParameter * 2; };
-			 * @endcode
-			 *
-			 * @param mFunc Function to add - can be a std::function or a lambda
-			 *
-			 */
+			/// @brief Add a function to the delegate
+			/// @details Operator+= adds a function the delegate's internal function list which will be called using operator().
+			/// @code
+			/// ssvu::Delegate<int, int> delegate;
+			/// delegate += [](int mParameter){ return mParameter * 2; };
+			/// @endcode
+			/// @param mFunc Function to add - can be a std::function or a lambda
 			template<typename T> inline Delegate& operator+=(T mFunc) { funcs.emplace_back(mFunc); return *this; }
 
-			/*!
-			 *
-			 * @brief Call all the functions in the delegate.
-			 *
-			 * @code
-			 * ssvu::Delegate<int> delegate;
-			 * delegate += []{ return 0; };
-			 * delegate += []{ return 10; };
-			 * delegate += []{ return 20; };
-			 * auto result{delegate()};
-			 *
-			 * assert(result[0] == 0);
-			 * assert(result[1] == 10);
-			 * assert(result[2] == 20);
-			 * @endcode
-			 *
-			 * @param mArgs Arguments passed to every function
-			 *
-			 * @return void or std::vector containing return values from the functions
-			 *
-			 */
+			/// @brief Call all the functions in the delegate.
+			/// @code
+			/// ssvu::Delegate<int> delegate;
+			/// delegate += []{ return 0; };
+			/// delegate += []{ return 10; };
+			/// delegate += []{ return 20; };
+			/// auto result{delegate()};
+			///
+			/// assert(result[0] == 0);
+			/// assert(result[1] == 10);
+			/// assert(result[2] == 20);
+			/// @endcode
+			/// @param mArgs Arguments passed to every function
+			/// @return void or std::vector containing return values from the functions
 			inline auto operator()(TArgs... mArgs) -> decltype(Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, mArgs...))
 			{
 				return Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, std::forward<TArgs>(mArgs)...);
 			}
 
-			/*!
-			 *
-			 * @brief Clears all the functions from the delegate.
-			 *
-			 */
+			/// @brief Clears all the functions from the delegate.
 			inline void clear() { funcs.clear(); }
 	};
 

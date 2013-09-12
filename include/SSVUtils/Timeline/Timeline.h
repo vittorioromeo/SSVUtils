@@ -13,11 +13,12 @@
 
 namespace ssvu
 {
+	namespace Internal { template<bool> class WaitLoop; }
+
 	class Timeline : public MemoryManageable
 	{
 		friend class Wait;
-		friend class WaitWhile;
-		friend class WaitUntil;
+		template<bool> friend class Internal::WaitLoop;
 		friend class Do;
 		friend class Go;
 
@@ -28,13 +29,12 @@ namespace ssvu
 			bool ready{true}, finished{false};
 			float remainder{0.f};
 
-			inline Command& insert(unsigned int mIndex, Command& mCommand)
+			template<typename T> inline T& insertImpl(unsigned int mIdx, T& mCommand)
 			{
-				commands.insert(std::begin(commands) + mIndex, &mCommand);
+				commands.insert(std::begin(commands) + mIdx, &mCommand);
 				if(currentCommand == nullptr) currentCommand = &mCommand;
 				return mCommand;
 			}
-			inline Command& append(Command& mCommand) { return insert(commands.size(), mCommand); }
 			inline void next()
 			{
 				if(currentCommand == nullptr) return;
@@ -47,11 +47,11 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...); }
 
 		public:
-			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return static_cast<T&>(append(create<T>(mArgs...))); }
-			template<typename T, typename... TArgs> inline T& insert(unsigned int mIndex, TArgs&&... mArgs)	{ return static_cast<T&>(insert(mIndex, create<T>(mArgs...))); }
+			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return insertImpl(commands.size(), create<T>(mArgs...)); }
+			template<typename T, typename... TArgs> inline T& insert(unsigned int mIdx, TArgs&&... mArgs)	{ return insertImpl(mIdx, create<T>(mArgs...)); }
 
 			inline void del(Command& mCommand)		{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
-			inline void jumpTo(unsigned int mIndex)	{ currentCommand = commands[mIndex]; }
+			inline void jumpTo(unsigned int mIdx)	{ currentCommand = commands[mIdx]; }
 			inline void start()	noexcept			{ finished = false; ready = true; }
 			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
 
