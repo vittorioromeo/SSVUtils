@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	enum class SplitMode{Normal, KeepSeparator};
+	enum class Split{Normal, KeepSeparator};
 }
 
 #endif

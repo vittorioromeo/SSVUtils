@@ -35,6 +35,13 @@ namespace ssvu
 				return mString.find(mSeparator, mStart);
 			}
 		};
+		template<> struct SplitFindHelper<std::string>
+		{
+			inline static StringSize getNextIndex(const std::string& mString, const std::string& mSeparator, StringSize mStart)
+			{
+				return mString.find(mSeparator, mStart);
+			}
+		};
 		template<> struct SplitFindHelper<std::vector<char>>
 		{
 			inline static StringSize getNextIndex(const std::string& mString, const std::vector<char>& mSeparator, StringSize mStart)
@@ -43,7 +50,7 @@ namespace ssvu
 			}
 		};
 
-		template<typename T, SplitMode TM> struct SplitHelper
+		template<typename T, Split TM> struct SplitHelper
 		{
 			inline static void split(std::vector<std::string>& mTarget, const std::string& mString, const T& mSeparator)
 			{
@@ -53,7 +60,7 @@ namespace ssvu
 					auto tokenLength(q - p);
 
 					// If we need to keep the separator in the splitted strings, add 1 to the token length (assuming a char has always length 1)
-					if(TM == SplitMode::KeepSeparator) tokenLength += 1;
+					if(TM == Split::KeepSeparator) tokenLength += 1;
 
 					std::string token{mString, p, tokenLength};
 					if(!token.empty()) mTarget.push_back(token);
@@ -63,7 +70,7 @@ namespace ssvu
 				if(!remaining.empty()) mTarget.push_back(remaining);
 			}
 		};
-		template<SplitMode TM> struct SplitHelper<std::string, TM>
+		template<Split TM> struct SplitHelper<std::string, TM>
 		{
 			inline static void split(std::vector<std::string>& mTarget, std::string mString, const std::string& mSeparator)
 			{
@@ -74,7 +81,7 @@ namespace ssvu
 					auto tokenLength(pos);
 
 					// If we need to keep the separator in the splitted strings, add the separator's length to the token length
-					if(TM == SplitMode::KeepSeparator) tokenLength += mSeparator.size();
+					if(TM == Split::KeepSeparator) tokenLength += mSeparator.size();
 
 					token = mString.substr(0, tokenLength);
 					if(!token.empty()) mTarget.push_back(token);
@@ -83,7 +90,7 @@ namespace ssvu
 				if(!mString.empty()) mTarget.push_back(mString);
 			}
 		};
-		template<SplitMode TM> struct SplitHelper<std::vector<std::string>, TM>
+		template<Split TM> struct SplitHelper<std::vector<std::string>, TM>
 		{
 			inline static void split(std::vector<std::string>& mTarget, std::string mString, const std::vector<std::string>& mSeparator)
 			{
@@ -94,7 +101,7 @@ namespace ssvu
 					auto tokenLength(pos);
 
 					// If we need to keep the separator in the splitted strings, add the separator's length to the token length
-					if(TM == SplitMode::KeepSeparator) tokenLength += lastLength;
+					if(TM == Split::KeepSeparator) tokenLength += lastLength;
 
 					token = mString.substr(0, tokenLength);
 					if(!token.empty()) mTarget.push_back(token);

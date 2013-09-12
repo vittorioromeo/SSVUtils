@@ -56,11 +56,14 @@
 // CommandLine
 #include "SSVUtils/CommandLine/CommandLine.h"
 
-
-
+// Inl
 #include "SSVUtils/Log/Log.inl"
 #include "SSVUtils/Encryption/Internal/Base64.inl"
 #include "SSVUtils/Encryption/Internal/MD5.inl"
 #include "SSVUtils/CommandLine/CmdLine.inl"
+
+#ifndef SSVU_TEST_DISABLE
+	#include "SSVUtils/Test/Tests.h"
+#endif
 
 #endif

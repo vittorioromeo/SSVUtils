@@ -108,46 +108,4 @@ namespace ssvu
 	}
 }
 
-SSVU_TEST("Path tests")
-{
-	using namespace std;
-	using namespace ssvu;
-	using namespace ssvu::FileSystem;
-
-	Path path{"/usr"};
-	EXPECT(path.getStr() == "/usr/");
-	EXPECT(path.getFolderName() == "usr");
-
-	path = "/usr.txt";
-	EXPECT(path.getStr() == "/usr.txt");
-	//EXPECT(path.getFolderName() == ""); TODO: throw an exception if isFolder() == false?
-
-	path = "/usr.txt/banana/.log";
-	EXPECT(path.getStr() == "/usr.txt/banana/.log");
-	EXPECT(path.getParent().getFolderName() == "banana");
-	EXPECT(path.getExtension() == "");
-	EXPECT(path.getAllExtensions() == "");
-	EXPECT(path.getFileName() == ".log");
-	EXPECT(path.getFileNameNoExtensions() == ".log");
-
-	path = "///////////usr//////";
-	EXPECT(path.getStr() == "/usr/");
-	EXPECT(path.getFolderName() == "usr");
-
-	path = "/////\/\/\///\\\/usr///\\\///test//test2/////test4.png";
-	EXPECT(path.getStr() == "/usr/test/test2/test4.png");
-	EXPECT(path.getExtension() == ".png");
-	EXPECT(path.getAllExtensions() == ".png");
-	EXPECT(path.getFileName() == "test4.png");
-	EXPECT(path.getFileNameNoExtensions() == "test4");
-
-	path = "/////\/\/\///\\\/usr///\\\///test//test2/////test4.png.bak";
-	EXPECT(path.getStr() == "/usr/test/test2/test4.png.bak");
-	EXPECT(path.getExtension() == ".bak");
-	EXPECT(path.getAllExtensions() == ".png.bak");
-	EXPECT(path.getFileName() == "test4.png.bak");
-	EXPECT(path.getFileNameNoExtensions() == "test4");
-}
-SSVU_TEST_END();
-
 #endif

@@ -105,31 +105,4 @@ namespace ssvu
 	}
 }
 
-SSVU_TEST("Delegate tests")
-{
-	using namespace std;
-	using namespace ssvu;
-
-	bool testState{false};
-	Delegate<void()> del1;
-	del1 += [&testState]{ testState = !testState; };
-
-	del1(); EXPECT(testState == true);
-	del1(); EXPECT(testState == false);
-
-	Delegate<int(int)> del2;
-	del2 += [](int x){ return x + x; };
-	del2 += [](int x){ return x * x; };
-
-	auto del2result(del2(3));
-	EXPECT(del2result[0] == 6);
-	EXPECT(del2result[1] == 9);
-	EXPECT(del2result.size() == 2);
-
-	Delegate<void()> del3;
-	del3 += [&del1]{ del1(); };
-	del3(); EXPECT(testState == true);
-}
-SSVU_TEST_END();
-
 #endif
