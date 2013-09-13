@@ -35,14 +35,10 @@ namespace ssvu
 
 	namespace Internal
 	{
-		template<bool TWhile> inline bool negate(bool mValue);
-		template<> inline bool negate<false>(bool mValue) { return mValue; }
-		template<> inline bool negate<true>(bool mValue) { return !mValue; }
-
 		template<bool TWhile> class WaitLoop : public Command
 		{
 			private:	Predicate predicate;
-			protected:	inline void update(float) override { timeline.ready = false; if(negate<TWhile>(predicate())) timeline.next(); }
+			protected:	inline void update(float) override { timeline.ready = false; if(predicate() != TWhile) timeline.next(); }
 			public:		WaitLoop(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
 		};
 	}
