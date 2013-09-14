@@ -89,13 +89,13 @@ namespace ssvu
 	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the value in radians.
-	template<typename T> constexpr inline T toRadians(const T& mValue) noexcept { return mValue / degRadRatio; }
+	template<typename T> constexpr inline T toRadians(const T& mValue) noexcept { return mValue * degRadRatio; }
 
 	/// @brief Converts radians to degrees.
 	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the value in degrees.
-	template<typename T> constexpr inline T toDegrees(const T& mValue) noexcept { return mValue * degRadRatio; }
+	template<typename T> constexpr inline T toDegrees(const T& mValue) noexcept { return mValue / degRadRatio; }
 
 	/// @brief Restricts a radian value between 0 and 6.28f.
 	/// @tparam T Type of value.
