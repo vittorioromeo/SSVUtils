@@ -19,8 +19,8 @@ namespace ssvu
 		template<typename TReturn, typename... TArgs> using AnyPtrFuncT = TReturn(AnyClass::*)(TArgs...);
 		template<typename TReturn, typename... TArgs> using AnyPtrStaticFuncT = TReturn(*)(TArgs...);
 
-		template<typename> struct MemFuncToFunc;
-		template<typename TReturn, typename TThis, typename... TArgs> struct MemFuncToFunc<TReturn(TThis::*)(TArgs...) const> { using Type = TReturn(*)(TArgs...); };
+		template<typename> struct MemFuncPtrToFuncPtr;
+		template<typename TReturn, typename TThis, typename... TArgs> struct MemFuncPtrToFuncPtr<TReturn(TThis::*)(TArgs...) const> { using Type = TReturn(*)(TArgs...); };
 
 		constexpr std::size_t SingleMemFuncPtrSize{sizeof(void(AnyClass::*)())};
 
@@ -107,8 +107,8 @@ namespace ssvu
 		};
 	}
 
-	#define ENABLE_IF_CONV_TO_FUN_PTR(x)		typename std::enable_if<std::is_constructible<typename Internal::MemFuncToFunc<decltype(&std::decay<x>::type::operator())>::Type, x>::value>::type* = nullptr
-	#define ENABLE_IF_NOT_CONV_TO_FUN_PTR(x)	typename std::enable_if<!std::is_constructible<typename Internal::MemFuncToFunc<decltype(&std::decay<x>::type::operator())>::Type, x>::value>::type* = nullptr
+	#define ENABLE_IF_CONV_TO_FUN_PTR(x)		typename std::enable_if<std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&std::decay<x>::type::operator())>::Type, x>::value>::type* = nullptr
+	#define ENABLE_IF_NOT_CONV_TO_FUN_PTR(x)	typename std::enable_if<!std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&std::decay<x>::type::operator())>::Type, x>::value>::type* = nullptr
 	#define ENABLE_IF_SAME_TYPE(x, y)			typename = typename std::enable_if<!std::is_same<x, typename std::decay<y>::type>{}>::type
 
 	template<typename> class FastFunc;
