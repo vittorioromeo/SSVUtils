@@ -22,6 +22,7 @@
 #include "SSVUtils/Utils/UtilsMath.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 #include "SSVUtils/Utils/UtilsMakeUnique.h"
+#include "SSVUtils/Utils/UtilsTuple.h"
 
 // String
 #include "SSVUtils/String/Utils.h"
