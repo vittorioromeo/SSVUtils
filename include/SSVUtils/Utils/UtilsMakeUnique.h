@@ -25,3 +25,5 @@ namespace ssvu
 }
 
 #endif
+
+// C++14: remove

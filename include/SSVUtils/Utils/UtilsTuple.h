@@ -42,4 +42,7 @@ namespace ssvu
 		return Internal::Expander<sizeof...(Ts), F, std::tuple<Ts...>&&>::expand(std::forward<F>(f), std::move(t));
 	}
 }
+
 #endif
+
+// C++14: replace with STL's solution
