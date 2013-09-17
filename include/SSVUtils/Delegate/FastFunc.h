@@ -19,7 +19,7 @@ namespace ssvu
 		template<typename TReturn, typename... TArgs> using AnyPtrFuncT = TReturn(AnyClass::*)(TArgs...);
 		template<typename TReturn, typename... TArgs> using AnyPtrStaticFuncT = TReturn(*)(TArgs...);
 
-		template<typename> struct MemFuncPtrToFuncPtr;
+		template<typename> struct MemFuncPtrToFuncPtr { using Type = void; };
 		template<typename TReturn, typename TThis, typename... TArgs> struct MemFuncPtrToFuncPtr<TReturn(TThis::*)(TArgs...) const> { using Type = TReturn(*)(TArgs...); };
 
 		constexpr std::size_t SingleMemFuncPtrSize{sizeof(void(AnyClass::*)())};
