@@ -19,18 +19,23 @@ namespace ssvu
 	constexpr float degRadRatio{pi / 180.f}; // C++14: templatized values
 
 	/// @brief Gets a random integer value between [mMin and mMax).
-	/// @tparam T Type of integer value. (can also be unsigned int, for example)
+	/// @tparam T Type of integer value. (default int)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper exclusive bound.
 	/// @return Returns a random integer value, between [mMin and mMax).
 	template<typename T = int> inline T getRnd(T mMin, T mMax) { assert(mMin < mMax); return RndDistributionI<T>{mMin, mMax - 1}(rndEngine); }
 
 	/// @brief Gets a random real value between [mMin and mMax).
-	/// @tparam T Type of integer value. (can also be double, for example)
+	/// @tparam T Type of real value. (default float)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper exclusive bound.
 	/// @return Returns a random real value, between [mMin and mMax).
 	template<typename T = float> inline T getRndR(T mMin, T mMax) { assert(mMin < mMax); return RndDistributionR<T>{mMin, mMax - 1}(rndEngine); }
+
+	/// @brief Gets a random sign.
+	/// @tparam T Type of integer value. (default int)
+	/// @return Returns -1 or 1.
+	template<typename T = int> inline T getRndSign() { return RndDistributionI<T>{0, 1}(rndEngine) > 0 ? -1 : 1; }
 
 	/// @brief Gets the sign of a numeric value. (unsigned version)
 	/// @tparam T Type of value.
@@ -175,23 +180,41 @@ namespace ssvu
 		return result;
 	}
 
-	/// @brief Calculates euclidean distance (squared) between two points.
+	/// @brief Calculates Euclidean distance (squared) between two points.
 	/// @tparam T Type of value.
 	/// @param mX1 First point X.
 	/// @param mY1 First point Y.
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
-	/// @return Returns the euclidean distance (squared).
-	template<typename T> inline T getDistanceEuclideanSquared(T mX1, T mY1, T mX2, T mY2) noexcept { return (mX1 - mX2) * (mX1 - mX2) + (mY1 - mY2) * (mY1 - mY2); }
+	/// @return Returns the calculated distance (squared).
+	template<typename T> inline T getDistSquaredEuclidean(T mX1, T mY1, T mX2, T mY2) noexcept { return (mX1 - mX2) * (mX1 - mX2) + (mY1 - mY2) * (mY1 - mY2); }
 
-	/// @brief Calculates euclidean distance between two points.
+	/// @brief Calculates Euclidean distance between two points.
 	/// @tparam T Type of value.
 	/// @param mX1 First point X.
 	/// @param mY1 First point Y.
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
-	/// @return Returns the euclidean distance.
-	template<typename T> inline T getDistanceEuclidean(T mX1, T mY1, T mX2, T mY2) noexcept { return std::sqrt(getDistanceEuclideanSquared(mX1, mY1, mX2, mY2)); }
+	/// @return Returns the calculated distance.
+	template<typename T> inline T getDistEuclidean(T mX1, T mY1, T mX2, T mY2) noexcept { return std::sqrt(getDistSquaredEuclidean(mX1, mY1, mX2, mY2)); }
+
+	/// @brief Calculates Manhattan distance between two points.
+	/// @tparam T Type of value.
+	/// @param mX1 First point X.
+	/// @param mY1 First point Y.
+	/// @param mX2 Second point X.
+	/// @param mY2 Second point Y.
+	/// @return Returns the calculated distance.
+	template<typename T> inline T getDistManhattan(T mX1, T mY1, T mX2, T mY2) noexcept { return std::abs(mX1 - mX2) + std::abs(mY1 - mY2); }
+
+	/// @brief Calculates Chebyshev distance between two points.
+	/// @tparam T Type of value.
+	/// @param mX1 First point X.
+	/// @param mY1 First point Y.
+	/// @param mX2 Second point X.
+	/// @param mY2 Second point Y.
+	/// @return Returns the calculated distance.
+	template<typename T> inline T getDistChebyshev(T mX1, T mY1, T mX2, T mY2) noexcept { return std::max(std::abs(mX2 - mX1), std::abs(mY2 - mY1)); }
 
 	/// @brief Calculates degrees needed to turn towards a point.
 	/// @tparam T Type of value.
