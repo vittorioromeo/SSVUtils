@@ -30,7 +30,6 @@ namespace ssvu
 			T fromString(const std::string& mString) const { std::istringstream stream(mString); T t; stream >> t; return t; }
 
 		public:
-
 			/// @brief Constructs an ObfuscatedValue from an arithmetic value
 			/// @param mValue The arithmetic value that will be stored internally
 			inline ObfuscatedValue(const T& mValue) { set(mValue); }

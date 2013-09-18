@@ -17,6 +17,7 @@ namespace ssvu
 {
 	namespace FileSystem { class Path; }
 
+	/// @brief Returns a reference to the log stream.
 	std::ostringstream& getLogStream();
 
 	namespace Internal
@@ -24,8 +25,20 @@ namespace ssvu
 		using CoutType = std::basic_ostream<char, std::char_traits<char>>;
 		using StdEndLine = CoutType&(CoutType&);
 
-		struct LOut	{ };
-		struct LTitle { std::string str; };
+		struct LOut
+		{
+			std::string lastTitle;
+			template<typename T> inline LOut& operator()(const T& mValue)
+			{
+				#ifndef SSVU_LOG_DISABLE
+					lastTitle = "[" + toStr(mValue) + "] ";
+					std::cout << std::left << std::setw(38) << lastTitle;
+					getLogStream() << std::left << std::setw(38) << lastTitle;
+				#endif
+
+				return *this;
+			}
+		};
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
@@ -35,11 +48,10 @@ namespace ssvu
 
 			return mLOut;
 		}
-		template<> inline LOut& operator<<<LTitle>(LOut& mLOut, const LTitle& mValue)
+		template<> inline LOut& operator<<<LOut>(LOut& mLOut, const LOut& mValue)
 		{
 			#ifndef SSVU_LOG_DISABLE
-				std::cout << std::left << std::setw(38) << mValue.str;
-				getLogStream() << std::left << std::setw(38) << mValue.str;
+				std::cout << mValue.lastTitle; getLogStream() << mValue.lastTitle;
 			#endif
 
 			return mLOut;
@@ -54,15 +66,8 @@ namespace ssvu
 		}
 	}
 
+	/// @brief Global log stream instance. Used like std::cout.
 	static Internal::LOut lo;
-	template<typename T> inline Internal::LTitle lt(const T& mValue)
-	{
-		#ifndef SSVU_LOG_DISABLE
-			Internal::LTitle result; result.str = "[" + toStr(mValue) + "] ";
-		#endif
-
-		return result;
-	}
 
 	/// @brief Starts the benchmark timer.
 	void startBenchmark();
@@ -77,5 +82,3 @@ namespace ssvu
 }
 
 #endif
-
-// TODO: refactoring, cleanup and docs

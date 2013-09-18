@@ -93,8 +93,8 @@ namespace ssvu
 			inline std::ostream& operator<<(std::ostream& mOs, const Comment& mComment)		{ return mOs << (mComment ? " " + mComment.text : ""); }
 			inline std::ostream& operator<<(std::ostream& mOs, const Location& mLocation)	{ return mOs << mLocation.file << ":" << mLocation.line; }
 
-			inline void report(const Msg& mMsg, std::string mTest) { ssvu::lo << lt("ssvu::Test") << mMsg.location << std::endl << mMsg.type << mMsg.comment << ": " << std::move(mTest) << ": " << mMsg.what() << std::endl << std::endl; }
-			inline void report(const std::string& mError, std::string mTest) { ssvu::lo << lt("ssvu::Test") << mError << std::endl << ": " << std::move(mTest) << ": " << std::endl << std::endl; }
+			inline void report(const Msg& mMsg, std::string mTest) { ssvu::lo("ssvu::Test") << mMsg.location << std::endl << mMsg.type << mMsg.comment << ": " << std::move(mTest) << ": " << mMsg.what() << std::endl << std::endl; }
+			inline void report(const std::string& mError, std::string mTest) { ssvu::lo("ssvu::Test") << mError << std::endl << ": " << std::move(mTest) << ": " << std::endl << std::endl; }
 
 			inline int run(const std::vector<Test>& mTests)
 			{
@@ -107,7 +107,7 @@ namespace ssvu
 					catch(...) { ++fails; report("unexpected exception", t.name); }
 				}
 
-				if(fails > 0) ssvu::lo << lt("ssvu::Test") << "[" << fails << "/" << mTests.size() << "] " << "tests failed" << std::endl << std::endl;
+				if(fails > 0) ssvu::lo("ssvu::Test") << "[" << fails << "/" << mTests.size() << "] " << "tests failed" << std::endl << std::endl;
 				return fails;
 			}
 
@@ -129,10 +129,10 @@ namespace ssvu
 						if(Internal::run(tg) > 0)
 						{
 							fail = true;
-							ssvu::lo << lt("############################################################################################################") << std::endl << std::endl;
+							ssvu::lo("############################################################################################################") << std::endl << std::endl;
 						}
 					done = true;
-					if(!fail) ssvu::lo << lt("ssvu::Test") << "All tests passed!" << std::endl;
+					if(!fail) ssvu::lo("ssvu::Test") << "All tests passed!" << std::endl;
 				#endif
 			}
 		}
