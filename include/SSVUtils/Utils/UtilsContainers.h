@@ -85,6 +85,18 @@ namespace ssvu
 	/// @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
 	template<typename T, typename P> inline void sort(T& mContainer, const P& mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
 
+	/// @brief Sorts a container. (stable, no predicate)
+	/// @tparam T Type of the container.
+	/// @param mContainer Reference to the container.
+	template<typename T> void inline sortStable(T& mContainer) { std::stable_sort(std::begin(mContainer), std::end(mContainer)); }
+
+	/// @brief Sorts a container with a user-defined predicate. (stable)
+	/// @tparam T Type of the container.
+	/// @tparam P Type of the predicate.
+	/// @param mContainer Reference to the container.
+	/// @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
+	template<typename T, typename P> inline void sortStable(T& mContainer, const P& mPredicate) { std::stable_sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
+
 	/// @brief Gets all the keys from a map container.
 	/// @tparam TMap Type of map container.
 	/// @param mMap Const reference to the map container.
