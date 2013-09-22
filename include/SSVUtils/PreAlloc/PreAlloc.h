@@ -105,6 +105,7 @@ namespace ssvu
 				using MemRange = Internal::MemRange;
 				const Internal::MemBuffer buffer;
 				std::vector<MemRange> available;
+				bool mustUnify{false};
 
 				inline void joinRangesAt(int mIdx)
 				{
@@ -120,7 +121,7 @@ namespace ssvu
 					{
 						int nLast{newNLast};
 						newNLast = available.size() - 1;
-						for(int i(available.size() - 2); i >= nLast; --i)
+						for(int i{available.size() - 2}; i >= nLast; --i)
 						{
 							if(available[i].begin > available[i + 1].begin)
 							{
@@ -145,6 +146,7 @@ namespace ssvu
 				PreAllocDyn(MemSize mBufferSize) : buffer{mBufferSize} { available.push_back(buffer.getRange()); }
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
+					if(mustUnify) { unifyContiguous(); mustUnify = false; }
 					const auto& reqSize(sizeof(T));
 					for(auto itr(std::begin(available)); itr != std::end(available); ++itr)
 					{
@@ -157,7 +159,7 @@ namespace ssvu
 
 					throw std::runtime_error{"Dynamic preallocator could not allocate object"};
 				}
-				template<typename T> inline void destroy(T* mObj, MemSize mSize = sizeof(T)) { Internal::destroyReclaim(mObj, available, mSize); unifyContiguous(); }
+				template<typename T> inline void destroy(T* mObj, MemSize mSize = sizeof(T)) { Internal::destroyReclaim(mObj, available, mSize); mustUnify = true; }
 		};
 
 		class PreAllocChunk
