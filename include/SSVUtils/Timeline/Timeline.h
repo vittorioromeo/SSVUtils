@@ -88,3 +88,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: remove unique_ptr so that it can be copied, add more commands, move to SSVS?
