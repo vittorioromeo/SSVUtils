@@ -47,7 +47,7 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...); }
 
 		public:
-			inline Timeline(bool mStart = true) { if(!mStart) stop(); }
+			inline Timeline(bool mStart = true) noexcept { if(!mStart) stop(); }
 
 			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return insertImpl(commands.size(), create<T>(mArgs...)); }
 			template<typename T, typename... TArgs> inline T& insert(unsigned int mIdx, TArgs&&... mArgs)	{ return insertImpl(mIdx, create<T>(mArgs...)); }
@@ -92,4 +92,4 @@ namespace ssvu
 
 #endif
 
-// TODO: remove unique_ptr so that it can be copied, add more commands, move to SSVS?
+// TODO: add more commands, labeling, move to SSVS?
