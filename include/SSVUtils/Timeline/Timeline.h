@@ -47,6 +47,8 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...); }
 
 		public:
+			inline Timeline(bool mStart = true) { if(!mStart) stop(); }
+
 			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return insertImpl(commands.size(), create<T>(mArgs...)); }
 			template<typename T, typename... TArgs> inline T& insert(unsigned int mIdx, TArgs&&... mArgs)	{ return insertImpl(mIdx, create<T>(mArgs...)); }
 
@@ -54,6 +56,7 @@ namespace ssvu
 			inline void jumpTo(unsigned int mIdx)	{ currentCommand = commands[mIdx]; }
 			inline void start()	noexcept			{ finished = false; ready = true; }
 			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
+			inline void stop() noexcept				{ finished = true; ready = false; }
 
 			void update(float mFrameTime)
 			{
@@ -64,7 +67,7 @@ namespace ssvu
 
 				do
 				{
-					if(currentCommand == nullptr) { finished = true; ready = false; break; }
+					if(currentCommand == nullptr) { stop(); break; }
 					currentCommand->update(mFrameTime + remainder);
 					remainder = 0;
 				} while(ready);
