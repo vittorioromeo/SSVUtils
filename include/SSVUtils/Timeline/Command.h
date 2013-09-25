@@ -11,13 +11,22 @@ namespace ssvu
 {
 	class Timeline;
 
-	struct Command : public MemoryManageable
+	class Command : public MemoryManageable
 	{
-		Timeline& timeline;
-		Command(Timeline& mTimeline) : timeline(mTimeline) { }
-		inline virtual ~Command()			{ }
-		inline virtual void update(float)	{ }
-		inline virtual void reset()			{ }
+		friend class Timeline;
+
+		protected:
+			Timeline& timeline;
+			unsigned int index;
+
+		public:
+			Command(Timeline& mTimeline) : timeline(mTimeline) { }
+			inline virtual ~Command()			{ }
+			inline virtual void update(float)	{ }
+			inline virtual void reset()			{ }
+
+			inline unsigned int getIndex() const noexcept { return index; }
 	};
 }
+
 #endif
