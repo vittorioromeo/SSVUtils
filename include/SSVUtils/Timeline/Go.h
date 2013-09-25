@@ -19,7 +19,7 @@ namespace ssvu
 			inline void update(float) override
 			{
 				if(currentTimes == 0)		{ timeline.next(); }
-				else if(currentTimes > 0)	{ currentTimes--; timeline.jumpTo(targetIndex); }
+				else if(currentTimes > 0)	{ --currentTimes; timeline.jumpTo(targetIndex); }
 				else						{ timeline.jumpTo(targetIndex); }
 			}
 			inline void reset() override { currentTimes = times; }
