@@ -17,10 +17,10 @@ namespace ssvu
 
 		public:
 			inline Timeline& create() { return timelines.create(); }
-			inline void update(float mFrameTime)
+			inline void update(float mFT)
 			{
 				timelines.refresh();
-				for(const auto& t : timelines) { t->update(mFrameTime); if(t->isFinished()) timelines.del(*t); }
+				for(const auto& t : timelines) { t->update(mFT); if(t->isFinished()) timelines.del(*t); }
 			}
 			inline void clear() { timelines.clear(); }
 	};

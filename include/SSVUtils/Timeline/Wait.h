@@ -17,11 +17,11 @@ namespace ssvu
 			float time, currentTime;
 
 		protected:
-			inline void update(float mFrameTime) override
+			inline void update(float mFT) override
 			{
 				timeline.ready = false;
 
-				currentTime -= mFrameTime;
+				currentTime -= mFT;
 				if(currentTime > 0) return;
 
 				timeline.remainder = currentTime;
