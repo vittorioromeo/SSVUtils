@@ -56,6 +56,7 @@ namespace ssvu
 
 			inline void del(Command& mCommand)		{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); refreshIndices(); }
 			inline void jumpTo(unsigned int mIdx)	{ currentCommand = commands[mIdx]; }
+			inline void jumpTo(Command& mCommand)	{ currentCommand = &mCommand; }
 			inline void start()	noexcept			{ finished = false; ready = true; }
 			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
 			inline void stop() noexcept				{ finished = true; ready = false; }
@@ -94,4 +95,4 @@ namespace ssvu
 
 #endif
 
-// TODO: add more commands, labeling, move to SSVS?
+// TODO: add more commands, move to SSVS?
