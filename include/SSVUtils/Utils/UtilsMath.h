@@ -162,17 +162,35 @@ namespace ssvu
 	/// @param mY Y index.
 	/// @param mColumns Number of columns of the 2D array.
 	/// @return Returns a 1D index for an "implicit 2D" array with `mColumns` columns.
-	template<typename T> constexpr inline T get1DIndexFrom2D(const T& mX, const T& mY, const T& mColumns) noexcept { return mY * mColumns + mX; }
+	template<typename T> constexpr inline T get1DIndexFrom2D(T mX, T mY, T mColumns) noexcept { return mX + mY * mColumns; }
+
+	/// @brief Gets a 1D index from a 3D index.
+	/// @details Useful when dealing with "implicit 3D" arrays, that are stored as 1D arrays.
+	/// @tparam T Type of index value.
+	/// @param mX X index.
+	/// @param mY Y index.
+	/// @param mZ Z index.
+	/// @param mColumns Number of columns of the 3D array.
+	/// @param mRows Number of rows of the 3D array.
+	/// @return Returns a 1D index for an "implicit 3D" array.
+	template<typename T> constexpr inline T get1DIndexFrom3D(T mX, T mY, T mZ, T mColumns, T mRows) noexcept { return mX + mY * mColumns + mZ * mColumns * mRows; }
 
 	/// @brief Gets a 2D index from an 1D index.
-	///
-	/// Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
-	///
+	/// @details Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
 	/// @tparam T Type of index value.
 	/// @param mIdx 1D index.
 	/// @param mColumns Number of columns of the 2D array.
 	/// @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mColumns` columns.
-	template<typename T> inline std::array<T, 2> get2DIndexFrom1D(const T& mIdx, const T& mColumns) noexcept { T y{mIdx / mColumns}; return std::array<T, 2>{{mIdx - y * mColumns, y}}; }
+	template<typename T> inline std::array<T, 2> get2DIndexFrom1D(T mIdx, T mColumns) noexcept { assert(mIdx > 0); T y{mIdx / mColumns}; return {{mIdx - y * mColumns, y}}; }
+
+	/// @brief Gets a 3D index from an 1D index.
+	/// @details Useful when dealing with "implicit 3D" arrays, that are stored as 1D arrays.
+	/// @tparam T Type of index value.
+	/// @param mIdx 1D index.
+	/// @param mColumns Number of columns of the 2D array.
+	/// @param mRows Number of rows of the 3D array.
+	/// @return Returns a 3D index (under the form of an std::array<T, 3>) for an "implicit 3D" array.
+	template<typename T> inline std::array<T, 3> get3DIndexFrom1D(T mIdx, T mColumns, T mRows) noexcept { assert(mIdx > 0); return {{mIdx / mColumns, (mIdx / mColumns) % mRows, mIdx / (mColumns * mRows)}}; }
 
 	/// @brief Gets sign-indepedent modulo calculation.
 	/// @code
