@@ -54,15 +54,15 @@ namespace ssvu
 				return ret;
 			}
 
-			inline std::string Base64Decode(const std::string& mString)
+			inline std::string Base64Decode(const std::string& mStr)
 			{
-				int in_len(mString.size()), i{0}, j{0}, in_{0};
+				int in_len(mStr.size()), i{0}, j{0}, in_{0};
 				unsigned char char_array_4[4], char_array_3[3];
 				std::string ret;
 
-				while(in_len-- && (mString[in_] != '=') && is_base64(mString[in_]))
+				while(in_len-- && (mStr[in_] != '=') && is_base64(mStr[in_]))
 				{
-					char_array_4[i++] = mString[in_];
+					char_array_4[i++] = mStr[in_];
 					in_++;
 					if(i == 4)
 					{
@@ -92,7 +92,7 @@ namespace ssvu
 				return ret;
 			}
 
-			inline std::string Base64Encode(const std::string& mString) { return Base64Encode(reinterpret_cast<const unsigned char*>(mString.c_str()), mString.size()); }
+			inline std::string Base64Encode(const std::string& mStr) { return Base64Encode(reinterpret_cast<const unsigned char*>(mStr.c_str()), mStr.size()); }
 		}
 	}
 }

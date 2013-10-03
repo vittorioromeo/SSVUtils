@@ -20,9 +20,9 @@ namespace ssvu
 			constexpr const char* sectionEndLeft{"{{/"};
 			constexpr const char* sectionEndRight{"}}"};
 
-			inline static std::string getKey(const std::string& mString)			{ return keyLeft + mString + keyRight; }
-			inline static std::string getSectionStart(const std::string& mString)	{ return sectionStartLeft + mString + sectionStartRight; }
-			inline static std::string getSectionEnd(const std::string& mString)		{ return sectionEndLeft + mString + sectionEndRight; }
+			inline static std::string getKey(const std::string& mStr)			{ return keyLeft + mStr + keyRight; }
+			inline static std::string getSectionStart(const std::string& mStr)	{ return sectionStartLeft + mStr + sectionStartRight; }
+			inline static std::string getSectionEnd(const std::string& mStr)		{ return sectionEndLeft + mStr + sectionEndRight; }
 		}
 	}
 }

@@ -44,7 +44,7 @@ namespace ssvu
 
 		struct ArgBase : public ElementBase
 		{
-			virtual void set(const std::string& mString) = 0;
+			virtual void set(const std::string& mStr) = 0;
 			inline std::string getUsageStr() const override { return "(ARG " + getName() + ")"; }
 		};
 

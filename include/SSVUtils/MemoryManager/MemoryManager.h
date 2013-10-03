@@ -62,8 +62,8 @@ namespace ssvu
 		public:
 			inline void refreshImpl()
 			{
-				eraseRemoveIf(this->items, this->template isDead<Uptr<T, TDeleter>>);
 				for(const auto& i : this->toAdd) this->items.emplace_back(i); this->toAdd.clear();
+				eraseRemoveIf(this->items, this->template isDead<Uptr<T, TDeleter>>);
 			}
 			template<typename TType = T, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
 			{

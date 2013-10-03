@@ -26,7 +26,7 @@ namespace ssvu
 	/// @tparam V Type of the value.
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
-	template<typename T, typename V> inline typename T::size_type indexOf(const T& mContainer, const V& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
+	template<typename T, typename V> inline typename T::size_type idxOf(const T& mContainer, const V& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
 
 	/// @brief Finds a item that matches a specific predicate. Returns an interator (can be end iterator if the item is not found).
 	/// @tparam T Type of the container.

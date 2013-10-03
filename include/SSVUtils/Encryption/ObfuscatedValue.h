@@ -26,8 +26,8 @@ namespace ssvu
 
 			/// @brief Converts the encodedValue to the arithmetic type.
 			/// @details Used internally.
-			/// @param mString String to convert to arithmetic type.
-			T fromString(const std::string& mString) const { std::istringstream stream(mString); T t; stream >> t; return t; }
+			/// @param mStr String to convert to arithmetic type.
+			T fromString(const std::string& mStr) const { std::istringstream stream(mStr); T t; stream >> t; return t; }
 
 		public:
 			/// @brief Constructs an ObfuscatedValue from an arithmetic value

@@ -87,7 +87,7 @@ namespace ssvu
 			inline int getCurrentIndex() const
 			{
 				if(currentCommand == nullptr) return 0;
-				auto pos(indexOf(commands, currentCommand));
+				auto pos(idxOf(commands, currentCommand));
 				return pos < commands.size() ? pos : -1;
 			}
 	};

@@ -21,83 +21,83 @@ namespace ssvu
 	template<typename T> inline std::string toStr(const T& mValue) { static std::ostringstream oss; oss.str(""); oss << mValue; return oss.str(); }
 
 	/// @brief Replace the first occurrence of a string in a string with another string.
-	/// @param mString String to work with.
+	/// @param mStr String to work with.
 	/// @param mFrom String to replace.
 	/// @param mTo Replacement string.
-	inline void replace(std::string& mString, const std::string& mFrom, const std::string& mTo)
+	inline void replace(std::string& mStr, const std::string& mFrom, const std::string& mTo)
 	{
-		std::size_t startPos{mString.find(mFrom)};
+		std::size_t startPos{mStr.find(mFrom)};
 		if(startPos == std::string::npos) return;
-		mString.replace(startPos, mFrom.size(), mTo);
+		mStr.replace(startPos, mFrom.size(), mTo);
 	}
 
 	/// @brief Replace all occurrences of a string in a string with another string.
-	/// @param mString String to work with.
+	/// @param mStr String to work with.
 	/// @param mFrom String to replace.
 	/// @param mTo Replacement string.
-	inline void replaceAll(std::string& mString, const std::string& mFrom, const std::string& mTo)
+	inline void replaceAll(std::string& mStr, const std::string& mFrom, const std::string& mTo)
 	{
-		std::size_t startPos{mString.find(mFrom)};
+		std::size_t startPos{mStr.find(mFrom)};
 		while(startPos != std::string::npos)
 		{
-			mString.replace(startPos, mFrom.size(), mTo);
-			startPos = mString.find(mFrom);
+			mStr.replace(startPos, mFrom.size(), mTo);
+			startPos = mStr.find(mFrom);
 		}
 	}
 
 	/// @brief Returns whether a string starts with a specific string.
-	/// @param mString String to work with.
+	/// @param mStr String to work with.
 	/// @param mStart String to test.
-	/// @return Returns true if mString starts with mStart.
-	inline bool beginsWith(const std::string& mString, const std::string& mStart) noexcept { return mStart.size() <= mString.size() && mString.compare(0, mStart.size(), mStart) == 0; }
+	/// @return Returns true if mStr starts with mStart.
+	inline bool beginsWith(const std::string& mStr, const std::string& mStart) noexcept { return mStart.size() <= mStr.size() && mStr.compare(0, mStart.size(), mStart) == 0; }
 
 	/// @brief Returns whether a string starts with a specific char.
-	/// @param mString String to work with.
+	/// @param mStr String to work with.
 	/// @param mChar Char to test.
-	/// @return Returns true if mString starts with mChar.
-	inline bool beginsWith(const std::string& mString, char mChar) noexcept { return mString.size() > 0 && mString.front() == mChar; }
+	/// @return Returns true if mStr starts with mChar.
+	inline bool beginsWith(const std::string& mStr, char mChar) noexcept { return mStr.size() > 0 && mStr.front() == mChar; }
 
 	/// @brief Returns whether a string ends with a specific string.
-	/// @param mString String to work with.
+	/// @param mStr String to work with.
 	/// @param mEnding String to test.
-	/// @return Returns true if mString ends with mEnding.
-	inline bool endsWith(const std::string &mString, const std::string &mEnding) noexcept { return mString.size() >= mEnding.size() && mString.compare(mString.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
+	/// @return Returns true if mStr ends with mEnding.
+	inline bool endsWith(const std::string &mStr, const std::string &mEnding) noexcept { return mStr.size() >= mEnding.size() && mStr.compare(mStr.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
 
 	/// @brief Returns whether a string ends with a specific char.
-	/// @param mString String to work with.
+	/// @param mStr String to work with.
 	/// @param mChar Char to test.
-	/// @return Returns true if mString ends with mChar.
-	inline bool endsWith(const std::string& mString, char mChar) noexcept { return mString.size() > 0 && mString.back() == mChar; }
+	/// @return Returns true if mStr ends with mChar.
+	inline bool endsWith(const std::string& mStr, char mChar) noexcept { return mStr.size() > 0 && mStr.back() == mChar; }
 
 	/// @brief Converts a string to a lowercase string.
-	/// @param mString String to convert.
-	/// @return Returns a std::string that is a copy of mString, with all characters lowercase.
-	inline std::string toLower(std::string mString) { std::transform(std::begin(mString), std::end(mString), std::begin(mString), ::tolower); return mString; }
+	/// @param mStr String to convert.
+	/// @return Returns a std::string that is a copy of mStr, with all characters lowercase.
+	inline std::string toLower(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::tolower); return mStr; }
 
 	/// @brief Copies a string and replaces the first occurrence of a string in it with another string.
-	/// @param mString String to copy.
+	/// @param mStr String to copy.
 	/// @param mFrom String to replace.
 	/// @param mTo Replacement string.
 	/// @return Returns a std::string with mFrom replaced by mTo (first occurrence).
-	inline std::string getReplaced(std::string mString, const std::string& mFrom, const std::string& mTo) { replace(mString, mFrom, mTo); return mString; }
+	inline std::string getReplaced(std::string mStr, const std::string& mFrom, const std::string& mTo) { replace(mStr, mFrom, mTo); return mStr; }
 
 	/// @brief Copies a string and replaces the all occurences of a string in it with another string.
-	/// @param mString String to copy.
+	/// @param mStr String to copy.
 	/// @param mFrom String to replace.
 	/// @param mTo Replacement string.
 	/// @return Returns a std::string with mFrom replaced by mTo (all occurrences).
-	inline std::string getReplacedAll(std::string mString, const std::string& mFrom, const std::string& mTo) { replaceAll(mString, mFrom, mTo); return mString; }
+	inline std::string getReplacedAll(std::string mStr, const std::string& mFrom, const std::string& mTo) { replaceAll(mStr, mFrom, mTo); return mStr; }
 
 	/// @brief Counts the number of occurences of a certain char in a std::string.
-	/// @param mString String to work with.
+	/// @param mStr String to work with.
 	/// @param mChar Character to look for.
 	/// @return Returns an unsigned int which is the count of the character's occurrences.
-	inline std::size_t getCharCount(const std::string& mString, const char& mChar) { return std::count(std::begin(mString), std::end(mString), mChar); }
+	inline std::size_t getCharCount(const std::string& mStr, const char& mChar) { return std::count(std::begin(mStr), std::end(mStr), mChar); }
 
 	/// @brief Counts the number of newlines in a std::string.
-	/// @param mString String to work with.
+	/// @param mStr String to work with.
 	/// @return Returns an unsigned int which is the count of newlines.
-	inline std::size_t getNewLinesCount(const std::string& mString) { return getCharCount(mString, '\n'); }
+	inline std::size_t getNewLinesCount(const std::string& mStr) { return getCharCount(mStr, '\n'); }
 
 	/// @brief Calculates the levenshtein distance between two strings.
 	/// @details Levenshtein distance measures the "difference" between two strings.

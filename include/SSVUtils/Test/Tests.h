@@ -42,8 +42,8 @@ SSVU_TEST("UtilsMath tests")
 	EXPECT(getClamped(1000, 0, 500) == 500);
 	EXPECT(getClamped(1000, 1500, 2500) == 1500);
 
-	EXPECT(wrapDegrees(720) == 0);
-	EXPECT(wrapDegrees(720 + 180) == 180);
+	EXPECT(wrapDeg(720) == 0);
+	EXPECT(wrapDeg(720 + 180) == 180);
 
 	EXPECT(getSIMod(10, 9) == 1);
 	EXPECT(getSIMod(-10, 9) == 8);
@@ -151,7 +151,7 @@ SSVU_TEST("UtilsContainers tests")
 	std::vector<string> vec{"abc", "bcd", "efg", "ghi"};
 	EXPECT(ssvu::find(vec, "abc") == std::begin(vec));
 	EXPECT(ssvu::find(vec, "wut") == std::end(vec));
-	EXPECT(ssvu::indexOf(vec, "efg") == 2);
+	EXPECT(ssvu::idxOf(vec, "efg") == 2);
 	EXPECT(ssvu::findIf(vec, [](const string& s){ return beginsWith(s, "gh"); }) == std::begin(vec) + 3);
 	EXPECT(ssvu::contains(vec, "bcd") == true);
 	EXPECT(ssvu::contains(vec, "bcdnbdf") == false);

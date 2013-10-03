@@ -25,7 +25,7 @@ namespace ssvu
 			inline virtual void update(float)	{ }
 			inline virtual void reset()			{ }
 
-			inline unsigned int getIndex() const noexcept { return index; }
+			inline unsigned int getIdx() const noexcept { return index; }
 	};
 }
 

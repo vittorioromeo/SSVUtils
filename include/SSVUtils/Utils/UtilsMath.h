@@ -98,8 +98,7 @@ namespace ssvu
 	/// @return Returns the cycled value.
 	template<typename T> inline T getCycledValue(const T& mValue, const T& mMin, const T& mMax)
 	{
-		T result, delta{mMax - mMin};
-		result = std::fmod(mValue - mMin, delta);
+		T delta{mMax - mMin}, result{std::fmod(mValue - mMin, delta)};
 		if(result < 0) result += delta;
 		return mMin + result;
 	}
@@ -108,25 +107,25 @@ namespace ssvu
 	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the value in radians.
-	template<typename T> constexpr inline T toRadians(const T& mValue) noexcept { return mValue * degRadRatio; }
+	template<typename T> constexpr inline T toRad(const T& mValue) noexcept { return mValue * degRadRatio; }
 
 	/// @brief Converts radians to degrees.
 	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the value in degrees.
-	template<typename T> constexpr inline T toDegrees(const T& mValue) noexcept { return mValue / degRadRatio; }
+	template<typename T> constexpr inline T toDeg(const T& mValue) noexcept { return mValue / degRadRatio; }
 
 	/// @brief Restricts a radian value between 0 and 6.28f.
 	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the restricted value in radians.
-	template<typename T> inline T wrapRadians(T mValue) noexcept { mValue = std::fmod(mValue, 6.28f); if(mValue < 0) mValue += 6.28f; return mValue; }
+	template<typename T> inline T wrapRad(T mValue) noexcept { mValue = std::fmod(mValue, 6.28f); return mValue < 0 ? mValue + 6.28f : mValue; }
 
 	/// @brief Restricts a degree value between 0 and 360.f.
 	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the restricted value in degrees.
-	template<typename T> inline T wrapDegrees(T mValue) noexcept { mValue = std::fmod(mValue, 360.f); if(mValue < 0) mValue += 360.f; return mValue; }
+	template<typename T> inline T wrapDeg(T mValue) noexcept { mValue = std::fmod(mValue, 360.f); return mValue < 0 ? mValue + 360.f : mValue; }
 
 	/// @brief Gets a rotated angle in degrees.
 	/// @details Example use: a character slowly aiming towards the mouse position.
@@ -136,9 +135,9 @@ namespace ssvu
 	/// @param mEnd Target angle.
 	/// @param mSpeed Rotation speed.
 	/// @return Returns the rotated angle in degrees.
-	template<typename T, typename J> inline T getRotatedDegrees(const T& mStart, const T& mEnd, const J& mSpeed) noexcept
+	template<typename T, typename J> inline T getRotatedDeg(const T& mStart, const T& mEnd, const J& mSpeed) noexcept
 	{
-		T diff{getCycledValue(wrapDegrees(mEnd) - wrapDegrees(mStart), -T(180), T(180))};
+		T diff{getCycledValue(wrapDeg(mEnd) - wrapDeg(mStart), -T(180), T(180))};
 		if(diff < -mSpeed) return mStart - mSpeed;
 		if(diff > mSpeed) return mStart + mSpeed;
 		return mEnd;
@@ -152,7 +151,7 @@ namespace ssvu
 	/// @param mEnd Target angle.
 	/// @param mSpeed Rotation speed.
 	/// @return Returns the rotated angle in radians.
-	template<typename T, typename J> inline T getRotatedRadians(const T& mStart, const T& mEnd, const J& mSpeed) noexcept { return getRotatedDegrees(toDegrees(mStart), toDegrees(mEnd), mSpeed); }
+	template<typename T, typename J> inline T getRotatedRad(const T& mStart, const T& mEnd, const J& mSpeed) noexcept { return getRotatedDeg(toDeg(mStart), toDeg(mEnd), mSpeed); }
 
 	/// @brief Gets a 1D index from a 2D index.
 	/// @details Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
@@ -251,7 +250,7 @@ namespace ssvu
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
 	/// @return Returns the needed degrees.
-	template<typename T> inline T getRadiansTowards(T mX1, T mY1, T mX2, T mY2) noexcept { return std::atan2(mY2 - mY1, mX2 - mX1); }
+	template<typename T> inline T getRadTowards(T mX1, T mY1, T mX2, T mY2) noexcept { return std::atan2(mY2 - mY1, mX2 - mX1); }
 
 	/// @brief Calculates radians needed to turn towards a point.
 	/// @tparam T Type of value.
@@ -260,7 +259,7 @@ namespace ssvu
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
 	/// @return Returns the needed radians.
-	template<typename T> inline T getDegreesTowards(T mX1, T mY1, T mX2, T mY2) noexcept { return toDegrees(getRadiansTowards(mX1, mY1, mX2, mY2)); }
+	template<typename T> inline T getDegTowards(T mX1, T mY1, T mX2, T mY2) noexcept { return toDeg(getRadTowards(mX1, mY1, mX2, mY2)); }
 }
 
 #endif
