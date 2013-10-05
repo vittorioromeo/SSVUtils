@@ -163,7 +163,7 @@ SSVU_TEST("UtilsContainers tests")
 	std::map<string, int> m{{"abc", 0}, {"bcd", 1}, {"def", 2}, {"efg", 3}};
 	EXPECT(ssvu::getKeys(m)[2] == "def");
 }
-SSVU_TEST_END()
+SSVU_TEST_END();
 
 SSVU_TEST("String utils tests")
 {
@@ -187,7 +187,7 @@ SSVU_TEST("String utils tests")
 	EXPECT(getCharCount("AAA", 'A') == 3);
 	EXPECT(getLevenshteinDistance("AAA", "AAB") == 1);
 }
-SSVU_TEST_END()
+SSVU_TEST_END();
 
 SSVU_TEST("String split tests")
 {
@@ -219,7 +219,7 @@ SSVU_TEST("String split tests")
 	EXPECT(spks2[2] == "b,");
 	EXPECT(spks3[2] == "b##");
 }
-SSVU_TEST_END()
+SSVU_TEST_END();
 
 SSVU_TEST("Encryption tests")
 {
