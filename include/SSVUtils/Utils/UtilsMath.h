@@ -199,10 +199,10 @@ namespace ssvu
 	/// @param mA Left side of operation.
 	/// @param mB Right side of operation.
 	/// @return Returns the mathematically correct mA % mB.
-	template<typename T> inline T getSIMod(const T& mA, const T& mB)
+	template<typename T1, typename T2> inline auto getSIMod(T1 mA, T2 mB) -> decltype(mA % mB) // TODO: do this everywhere.
 	{
 		if(mB < 0) return getSIMod(-mA, -mB);
-		T result{mA % mB};
+		auto result(mA % mB);
 		if(result < 0) result += mB;
 		return result;
 	}
