@@ -5,6 +5,9 @@
 #ifndef SSVUTILS
 #define SSVUTILS
 
+// Global
+#include "SSVUtils/Global/Typedefs.h"
+
 // Test
 #include "SSVUtils/Test/Test.h"
 

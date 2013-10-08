@@ -7,7 +7,7 @@
 
 #include <string>
 #include <sstream>
-#include <type_traits>
+#include "SSVUtils/Global/Typedefs.h"
 #include "SSVUtils/Encryption/Encryption.h"
 
 namespace ssvu
@@ -18,7 +18,7 @@ namespace ssvu
 	/// @details Quick (but not really effective) way to protect a value against memory scanners (such as Cheat Engine).
 	/// Obviously introduces a runtime cost to get/set the internal value.
 	/// @tparam T Type of the underlying arithmetic value.
-	template<typename T, Encryption::Type TCrypto> class ObfuscatedValue<T, TCrypto, typename std::enable_if<std::is_arithmetic<T>::value>::type>
+	template<typename T, Encryption::Type TCrypto> class ObfuscatedValue<T, TCrypto, EnableIfType<std::is_arithmetic<T>::value>>
 	{
 		private:
 			T dummy; ///< Dummy value used to "fool" memory scanners.
