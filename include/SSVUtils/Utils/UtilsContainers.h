@@ -73,6 +73,13 @@ namespace ssvu
 		return false;
 	}
 
+	// TODO: docs
+	template<typename T, typename T2> inline bool containsAllOf(const T& mContainer, const T2& mValues)
+	{
+		for(const auto& v : mValues) if(!contains(mContainer, v)) return false;
+		return true;
+	}
+
 	/// @brief Sorts a container. (no predicate)
 	/// @tparam T Type of the container.
 	/// @param mContainer Reference to the container.
