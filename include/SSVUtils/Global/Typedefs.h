@@ -28,7 +28,7 @@ namespace ssvu
 {
 	template<typename> struct FuncHelper;
 
-	#ifdef SSVU_USE_STD_FUNCTION
+	#ifndef SSVU_USE_STD_FUNCTION
 		template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = FastFunc<T(TArgs...)>; };
 	#else
 		template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
