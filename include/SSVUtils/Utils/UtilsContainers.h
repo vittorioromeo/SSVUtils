@@ -73,7 +73,13 @@ namespace ssvu
 		return false;
 	}
 
-	// TODO: docs
+	/// @brief Checks if all items from a container are in another container.
+	/// @details This method calls "contains" on every item.
+	/// @tparam T Type of the container to check.
+	/// @tparam T2 Type of the container containing items to check.
+	/// @param mContainer Reference to the container to check.
+	/// @param mValues Const reference to the container containing the items to check.
+	/// @return Returns true if the container contains all of the items.
 	template<typename T, typename T2> inline bool containsAllOf(const T& mContainer, const T2& mValues)
 	{
 		for(const auto& v : mValues) if(!contains(mContainer, v)) return false;
