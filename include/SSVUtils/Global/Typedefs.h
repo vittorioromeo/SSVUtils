@@ -13,6 +13,7 @@ namespace std
 {
 	template<bool B, class T = void> using enable_if_t = typename std::enable_if<B, T>::type; // C++14: will be in standard
 	template<typename... TArgs> using common_type_t = typename std::common_type<TArgs...>::type; // C++14: will be in standard
+	template<typename T> using decay_t = typename std::decay<T>::type; // C++14: will be in standard
 }
 
 namespace ssvu
@@ -20,6 +21,7 @@ namespace ssvu
 	template<typename T, typename TDeleter = std::default_delete<T>> using Uptr = std::unique_ptr<T, TDeleter>;
 	template<typename... TArgs> using CommonType = std::common_type_t<TArgs...>;
 	template<bool TBool, typename T = void> using EnableIfType = std::enable_if_t<TBool, T>;
+	template<typename T> using DecayType = std::decay_t<T>;
 }
 
 #include "SSVUtils/Delegate/FastFunc.h"

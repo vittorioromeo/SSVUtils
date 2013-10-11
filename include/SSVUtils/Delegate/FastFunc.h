@@ -107,9 +107,9 @@ namespace ssvu
 		};
 	}
 
-	#define ENABLE_IF_CONV_TO_FUN_PTR(x)		EnableIfType<std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&std::decay<x>::type::operator())>::Type, x>::value>* = nullptr
-	#define ENABLE_IF_NOT_CONV_TO_FUN_PTR(x)	EnableIfType<!std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&std::decay<x>::type::operator())>::Type, x>::value>* = nullptr
-	#define ENABLE_IF_SAME_TYPE(x, y)			typename = EnableIfType<!std::is_same<x, typename std::decay<y>::type>{}>
+	#define ENABLE_IF_CONV_TO_FUN_PTR(x)		EnableIfType<std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&DecayType<x>::operator())>::Type, x>::value>* = nullptr
+	#define ENABLE_IF_NOT_CONV_TO_FUN_PTR(x)	EnableIfType<!std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&DecayType<x>::operator())>::Type, x>::value>* = nullptr
+	#define ENABLE_IF_SAME_TYPE(x, y)			typename = EnableIfType<!std::is_same<x, DecayType<y>>{}>
 
 	template<typename> class FastFunc;
 	template<typename TReturn, typename... TArgs> class FastFunc<TReturn(TArgs...)> : public Internal::FastFuncImpl<TReturn, TArgs...>
@@ -126,15 +126,13 @@ namespace ssvu
 
 			template<typename TFunc, ENABLE_IF_SAME_TYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLE_IF_CONV_TO_FUN_PTR(TFunc))
 			{
-				using FuncType = typename std::decay<TFunc>::type;
-				this->bind(&mFunc, &FuncType::operator());
+				this->bind(&mFunc, &DecayType<TFunc>::operator());
 			}
 			template<typename TFunc, ENABLE_IF_SAME_TYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLE_IF_NOT_CONV_TO_FUN_PTR(TFunc))
-				: storage(operator new(sizeof(TFunc)), funcDeleter<typename std::decay<TFunc>::type>)
+				: storage(operator new(sizeof(TFunc)), funcDeleter<DecayType<TFunc>>)
 			{
-				using FuncType = typename std::decay<TFunc>::type;
-				new (storage.get()) FuncType(std::forward<TFunc>(mFunc));
-				this->bind(storage.get(), &FuncType::operator());
+				new (storage.get()) DecayType<TFunc>(std::forward<TFunc>(mFunc));
+				this->bind(storage.get(), &DecayType<TFunc>::operator());
 			}
 	};
 
