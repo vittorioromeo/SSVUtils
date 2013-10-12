@@ -2,12 +2,9 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_STRING
-#define SSVU_STRING
+#ifndef SSVU_TEMPLATESYSTEM
+#define SSVU_TEMPLATESYSTEM
 
-#include "SSVUtils/String/Enums.h"
-#include "SSVUtils/String/Utils.h"
-#include "SSVUtils/String/Split.h"
+#include "SSVUtils/TemplateSystem/Dictionary.h"
 
 #endif
-

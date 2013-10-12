@@ -93,6 +93,12 @@ namespace ssvu
 	};
 }
 
+#include "SSVUtils/Timeline/Command.h"
+#include "SSVUtils/Timeline/Do.h"
+#include "SSVUtils/Timeline/Wait.h"
+#include "SSVUtils/Timeline/Go.h"
+#include "SSVUtils/Timeline/TimelineManager.h"
+
 #endif
 
 // TODO: add more commands, move to SSVS?

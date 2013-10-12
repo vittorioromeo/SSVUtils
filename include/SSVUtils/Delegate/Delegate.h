@@ -8,7 +8,6 @@
 
 #include <vector>
 #include <functional>
-#include "SSVUtils/Delegate/FastFunc.h"
 
 namespace ssvu
 {

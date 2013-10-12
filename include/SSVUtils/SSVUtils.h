@@ -5,66 +5,22 @@
 #ifndef SSVUTILS
 #define SSVUTILS
 
-// Global
 #include "SSVUtils/Global/Typedefs.h"
-
-// Test
 #include "SSVUtils/Test/Test.h"
-
-// Log
 #include "SSVUtils/Log/Log.h"
-
-// Timeline
 #include "SSVUtils/Timeline/Timeline.h"
-#include "SSVUtils/Timeline/Command.h"
-#include "SSVUtils/Timeline/Do.h"
-#include "SSVUtils/Timeline/Wait.h"
-#include "SSVUtils/Timeline/Go.h"
-
-// Utils
-#include "SSVUtils/Utils/UtilsMath.h"
-#include "SSVUtils/Utils/UtilsContainers.h"
-#include "SSVUtils/Utils/UtilsMakeUnique.h"
-#include "SSVUtils/Utils/UtilsTuple.h"
-
-// String
-#include "SSVUtils/String/Utils.h"
-#include "SSVUtils/String/Split.h"
-
-// Delegate
-#include "SSVUtils/Delegate/FastFunc.h"
+#include "SSVUtils/Utils/Utils.h"
+#include "SSVUtils/String/String.h"
 #include "SSVUtils/Delegate/Delegate.h"
-
-// FileSystem
+#include "SSVUtils/FastFunc/FastFunc.h"
 #include "SSVUtils/FileSystem/FileSystem.h"
-
-// MemoryManager
 #include "SSVUtils/MemoryManager/MemoryManager.h"
-
-// TemplateSystem
-#include "SSVUtils/TemplateSystem/Dictionary.h"
-
-// TimelineManager
+#include "SSVUtils/TemplateSystem/TemplateSystem.h"
 #include "SSVUtils/Timeline/TimelineManager.h"
-
-// Encryption
 #include "SSVUtils/Encryption/Encryption.h"
-#include "SSVUtils/Encryption/ObfuscatedValue.h"
-
-// PreAlloc
 #include "SSVUtils/PreAlloc/PreAlloc.h"
-
-// Bimap
 #include "SSVUtils/Bimap/Bimap.h"
-
-// CommandLine
 #include "SSVUtils/CommandLine/CommandLine.h"
-
-// Inl
-#include "SSVUtils/Log/Log.inl"
-#include "SSVUtils/Encryption/Internal/Base64.inl"
-#include "SSVUtils/Encryption/Internal/MD5.inl"
-#include "SSVUtils/CommandLine/CmdLine.inl"
 
 #ifndef SSVU_TEST_DISABLE
 	#include "SSVUtils/Test/Tests.h"

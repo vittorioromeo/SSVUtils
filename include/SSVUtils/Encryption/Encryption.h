@@ -35,11 +35,11 @@ namespace ssvu
 		/// @brief Decrypts a string.
 		/// @code
 		/// using namespace ssvu::Encrpytion;
-		/// 
+		///
 		/// string s{"test"};
 		/// string e{encrypt<Type::Base64>(s)};
 		/// strign d{decrypt<Type::Base64>(s)};
-		/// 
+		///
 		/// assert(s == d);
 		/// @endcode
 		/// @tparam T Type of encryption to use. (example ssvu::Encryption::Type::MD5)
@@ -49,5 +49,9 @@ namespace ssvu
 		template<> inline std::string decrypt<Type::Base64>(const std::string& mStr)	{ return Internal::Base64Decode(mStr); }
 	}
 }
+
+#include "SSVUtils/Encryption/ObfuscatedValue.h"
+#include "SSVUtils/Encryption/Internal/Base64.inl"
+#include "SSVUtils/Encryption/Internal/MD5.inl"
 
 #endif

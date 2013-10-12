@@ -24,7 +24,9 @@ namespace ssvu
 	template<typename T> using DecayType = std::decay_t<T>;
 }
 
-#include "SSVUtils/Delegate/FastFunc.h"
+#ifndef SSVU_USE_STD_FUNCTION
+	#include "SSVUtils/FastFunc/FastFunc.h"
+#endif
 
 namespace ssvu
 {
