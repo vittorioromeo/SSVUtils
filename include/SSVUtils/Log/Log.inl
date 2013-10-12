@@ -8,6 +8,7 @@
 #include <chrono>
 #include "SSVUtils/Log/Log.h"
 #include "SSVUtils/FileSystem/FileSystem.h"
+#include "SSVUtils/FileSystem/Path.h"
 
 namespace ssvu
 {

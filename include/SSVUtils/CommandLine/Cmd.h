@@ -9,6 +9,7 @@
 #include <vector>
 #include <functional>
 #include "SSVUtils/Global/Typedefs.h"
+#include "SSVUtils/Delegate/Delegate.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 #include "SSVUtils/CommandLine/Elements/Flag.h"
 #include "SSVUtils/CommandLine/Elements/Bases.h"

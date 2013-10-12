@@ -81,4 +81,6 @@ namespace ssvu
 	extern void saveLogToFile(const FileSystem::Path& mPath);
 }
 
+#include "SSVUtils/Log/Log.inl"
+
 #endif

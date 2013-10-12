@@ -13,5 +13,6 @@
 #include "SSVUtils/CommandLine/Elements/Flag.h"
 #include "SSVUtils/CommandLine/Cmd.h"
 #include "SSVUtils/CommandLine/CmdLine.h"
+#include "SSVUtils/CommandLine/CmdLine.inl"
 
 #endif
