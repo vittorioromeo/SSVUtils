@@ -9,5 +9,6 @@
 #include "SSVUtils/Utils/UtilsContainers.h"
 #include "SSVUtils/Utils/UtilsMakeUnique.h"
 #include "SSVUtils/Utils/UtilsTuple.h"
+#include "SSVUtils/Utils/UtilsIterator.h"
 
 #endif
