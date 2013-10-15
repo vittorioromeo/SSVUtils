@@ -91,7 +91,7 @@ namespace ssvu
 			inline std::ostream& operator<<(std::ostream& mOs, const Comment& mComment)		{ return mOs << (mComment ? " " + mComment.text : ""); }
 			inline std::ostream& operator<<(std::ostream& mOs, const Location& mLocation)	{ return mOs << mLocation.file << ":" << mLocation.line; }
 
-			inline void report(const Msg& mMsg, std::string mTest) { ssvu::lo("ssvu::Test") << mMsg.location << "\n" << mMsg.type << mMsg.comment << ": " << std::move(mTest) << ": " << mMsg.what() << std::endl << std::endl; }
+			inline void report(const Msg& mMsg, std::string mTest) { ssvu::lo("ssvu::Test") << mMsg.location << "\n" << mMsg.type << mMsg.comment << ": " << std::move(mTest) << ": " << mMsg.what() << "\n" << std::endl; }
 			inline void report(const std::string& mError, std::string mTest) { ssvu::lo("ssvu::Test") << mError << "\n" << ": " << std::move(mTest) << ": \n" << std::endl; }
 
 			inline int run(const std::vector<Test>& mTests)

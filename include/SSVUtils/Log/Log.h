@@ -38,6 +38,7 @@ namespace ssvu
 
 				return *this;
 			}
+			inline void flush() const { std::cout.flush(); }
 		};
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
