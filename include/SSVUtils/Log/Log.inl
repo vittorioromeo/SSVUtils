@@ -5,7 +5,6 @@
 #ifndef SSVU_LOG_INL
 #define SSVU_LOG_INL
 
-#include <chrono>
 #include "SSVUtils/Log/Log.h"
 #include "SSVUtils/FileSystem/FileSystem.h"
 #include "SSVUtils/FileSystem/Path.h"
@@ -35,6 +34,15 @@ namespace ssvu
 		#endif
 
 		return "";
+	}
+	inline std::chrono::milliseconds endBenchmarkAsMs()
+	{
+		#ifndef SSVU_LOG_DISABLE
+			Internal::benchEnd = std::chrono::high_resolution_clock::now();
+			return std::chrono::duration_cast<std::chrono::milliseconds>(Internal::benchEnd - Internal::benchStart);
+		#endif
+
+		return std::chrono::milliseconds(0);
 	}
 	inline void saveLogToFile(const FileSystem::Path& mPath)
 	{

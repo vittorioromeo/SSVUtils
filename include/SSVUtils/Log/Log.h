@@ -11,6 +11,7 @@
 #include <sstream>
 #include <ostream>
 #include <fstream>
+#include <chrono>
 #include "SSVUtils/String/Utils.h"
 
 namespace ssvu
@@ -76,6 +77,10 @@ namespace ssvu
 	/// @brief Ends the benchmark timer and returns the elapsed time.
 	/// @return Returns the elapsed time as a string.
 	std::string endBenchmark();
+
+	/// @brief Ends the benchmark timer and returns the elapsed time.
+	/// @return Returns the elapsed time as a std::chrono::milliseconds.
+	std::chrono::milliseconds endBenchmarkAsMs();
 
 	/// @brief Saves all the log entries to a file.
 	/// @param mPath File path (file will be created if it doesn't exist).
