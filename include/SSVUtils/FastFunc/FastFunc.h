@@ -107,9 +107,9 @@ namespace ssvu
 		};
 	}
 
-	#define ENABLE_IF_CONV_TO_FUN_PTR(x)		EnableIfType<std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&DecayType<x>::operator())>::Type, x>::value>* = nullptr
-	#define ENABLE_IF_NOT_CONV_TO_FUN_PTR(x)	EnableIfType<!std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&DecayType<x>::operator())>::Type, x>::value>* = nullptr
-	#define ENABLE_IF_SAME_TYPE(x, y)			typename = EnableIfType<!std::is_same<x, DecayType<y>>{}>
+	#define ENABLE_IF_CONV_TO_FUN_PTR(x)		EnableIf<std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&Decay<x>::operator())>::Type, x>::value>* = nullptr
+	#define ENABLE_IF_NOT_CONV_TO_FUN_PTR(x)	EnableIf<!std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&Decay<x>::operator())>::Type, x>::value>* = nullptr
+	#define ENABLE_IF_SAME_TYPE(x, y)			typename = EnableIf<!std::is_same<x, Decay<y>>{}>
 
 	template<typename> class FastFunc;
 	template<typename TReturn, typename... TArgs> class FastFunc<TReturn(TArgs...)> : public Internal::FastFuncImpl<TReturn, TArgs...>
@@ -126,13 +126,13 @@ namespace ssvu
 
 			template<typename TFunc, ENABLE_IF_SAME_TYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLE_IF_CONV_TO_FUN_PTR(TFunc))
 			{
-				this->bind(&mFunc, &DecayType<TFunc>::operator());
+				this->bind(&mFunc, &Decay<TFunc>::operator());
 			}
 			template<typename TFunc, ENABLE_IF_SAME_TYPE(FastFunc, TFunc)> inline FastFunc(TFunc&& mFunc, ENABLE_IF_NOT_CONV_TO_FUN_PTR(TFunc))
-				: storage(operator new(sizeof(TFunc)), funcDeleter<DecayType<TFunc>>)
+				: storage(operator new(sizeof(TFunc)), funcDeleter<Decay<TFunc>>)
 			{
-				new (storage.get()) DecayType<TFunc>(std::forward<TFunc>(mFunc));
-				this->bind(storage.get(), &DecayType<TFunc>::operator());
+				new (storage.get()) Decay<TFunc>(std::forward<TFunc>(mFunc));
+				this->bind(storage.get(), &Decay<TFunc>::operator());
 			}
 	};
 

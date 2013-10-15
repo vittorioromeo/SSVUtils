@@ -38,11 +38,11 @@ namespace std
 namespace ssvu
 {
 	template<typename T, typename TDeleter = std::default_delete<T>> using Uptr = std::unique_ptr<T, TDeleter>;
-	template<typename... TArgs> using CommonType = std::common_type_t<TArgs...>;
-	template<bool TBool, typename T = void> using EnableIfType = std::enable_if_t<TBool, T>;
-	template<typename T> using DecayType = std::decay_t<T>;
-	template<typename T> using RemoveReferenceType = std::remove_reference_t<T>;
-	template<typename T> using RemoveExtentType = std::remove_extent_t<T>;
+	template<typename... TArgs> using Common = std::common_type_t<TArgs...>;
+	template<bool TBool, typename T = void> using EnableIf = std::enable_if_t<TBool, T>;
+	template<typename T> using Decay = std::decay_t<T>;
+	template<typename T> using RemoveReference = std::remove_reference_t<T>;
+	template<typename T> using RemoveExtent = std::remove_extent_t<T>;
 }
 
 #ifndef SSVU_USE_STD_FUNCTION

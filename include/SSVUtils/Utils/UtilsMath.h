@@ -41,13 +41,13 @@ namespace ssvu
 	/// @tparam T Type of value.
 	/// @param mValue Value to use.
 	/// @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
-	template<typename T> constexpr inline int getSign(const T& mValue, EnableIfType<!std::is_signed<T>::value>* = nullptr) noexcept { return 0 < mValue; }
+	template<typename T> constexpr inline int getSign(const T& mValue, EnableIf<!std::is_signed<T>::value>* = nullptr) noexcept { return 0 < mValue; }
 
 	/// @brief Gets the sign of a numeric value. (signed version)
 	/// @tparam T Type of value.
 	/// @param mValue Value to use.
 	/// @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
-	template<typename T> constexpr inline int getSign(const T& mValue, EnableIfType<std::is_signed<T>::value>* = nullptr) noexcept { return (0 < mValue) - (mValue < 0); }
+	template<typename T> constexpr inline int getSign(const T& mValue, EnableIf<std::is_signed<T>::value>* = nullptr) noexcept { return (0 < mValue) - (mValue < 0); }
 
 	/// @brief Clamps a numeric value. (lower-bound only)
 	/// @tparam T Type of value.
@@ -73,14 +73,14 @@ namespace ssvu
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @param mMin Lower bound.
 	/// @return Returns mMin if mValue < mMin, mValue otherwise.
-	template<typename T1, typename T2> constexpr inline	CommonType<T1, T2> getClampedMin(const T1& mValue, const T2& mMin) noexcept { return mValue < mMin ? mMin : mValue; }
+	template<typename T1, typename T2> constexpr inline	Common<T1, T2> getClampedMin(const T1& mValue, const T2& mMin) noexcept { return mValue < mMin ? mMin : mValue; }
 
 	/// @brief Gets a clamped numeric value. (upper-bound only)
 	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @param mMax Upper bound.
 	/// @return Returns mMax if mValue > mMax, mValue otherwise.
-	template<typename T1, typename T2> constexpr inline CommonType<T1, T2> getClampedMax(const T1& mValue, const T2& mMax) noexcept { return mValue > mMax ? mMax : mValue; }
+	template<typename T1, typename T2> constexpr inline Common<T1, T2> getClampedMax(const T1& mValue, const T2& mMax) noexcept { return mValue > mMax ? mMax : mValue; }
 
 	/// @brief Gets a clamped numeric value.
 	/// @tparam T Type of value.
@@ -88,7 +88,7 @@ namespace ssvu
 	/// @param mMin Lower bound.
 	/// @param mMax Upper bound.
 	/// @return Returns mMax if mValue > mMax, mMin if mValue < mMin, mValue if mMin < mValue < mMax.
-	template<typename T1, typename T2, typename T3> constexpr inline CommonType<T1, T2, T3> getClamped(const T1& mValue, const T2& mMin, const T3& mMax) noexcept { /*assert(mMin <= mMax);*/ return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
+	template<typename T1, typename T2, typename T3> constexpr inline Common<T1, T2, T3> getClamped(const T1& mValue, const T2& mMin, const T3& mMax) noexcept { /*assert(mMin <= mMax);*/ return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
 
 	/// @brief Cycles a value in a range.
 	/// @tparam T Type of value.
@@ -96,9 +96,9 @@ namespace ssvu
 	/// @param mMin Range min.
 	/// @param mMax Range max.
 	/// @return Returns the cycled value.
-	template<typename T1, typename T2, typename T3> inline CommonType<T1, T2, T3> getCycledValue(const T1& mValue, const T2& mMin, const T3& mMax)
+	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getCycledValue(const T1& mValue, const T2& mMin, const T3& mMax)
 	{
-		using CT = CommonType<T1, T2, T3>;
+		using CT = Common<T1, T2, T3>;
 		CT delta{mMax - mMin}, result{std::fmod(mValue - mMin, delta)};
 		if(result < 0) result += delta;
 		return mMin + result;
@@ -136,9 +136,9 @@ namespace ssvu
 	/// @param mEnd Target angle.
 	/// @param mSpeed Rotation speed.
 	/// @return Returns the rotated angle in degrees.
-	template<typename T1, typename T2, typename T3> inline CommonType<T1, T2, T3> getRotatedDeg(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept
+	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getRotatedDeg(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept
 	{
-		using CT = CommonType<T1, T2, T3>;
+		using CT = Common<T1, T2, T3>;
 		CT diff{getCycledValue(wrapDeg(mEnd) - wrapDeg(mStart), -CT(180), CT(180))};
 		if(diff < -mSpeed) return mStart - mSpeed;
 		if(diff > mSpeed) return mStart + mSpeed;
@@ -153,7 +153,7 @@ namespace ssvu
 	/// @param mEnd Target angle.
 	/// @param mSpeed Rotation speed.
 	/// @return Returns the rotated angle in radians.
-	template<typename T1, typename T2, typename T3> inline CommonType<T1, T2, T3> getRotatedRad(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept { return getRotatedDeg(toDeg(mStart), toDeg(mEnd), mSpeed); }
+	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getRotatedRad(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept { return getRotatedDeg(toDeg(mStart), toDeg(mEnd), mSpeed); }
 
 	/// @brief Gets a 1D index from a 2D index.
 	/// @details Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
@@ -201,7 +201,7 @@ namespace ssvu
 	/// @param mA Left side of operation.
 	/// @param mB Right side of operation.
 	/// @return Returns the mathematically correcconst T& mA % mB.
-	template<typename T1, typename T2> inline CommonType<T1, T2> getSIMod(const T1& mA, const T2& mB)
+	template<typename T1, typename T2> inline Common<T1, T2> getSIMod(const T1& mA, const T2& mB)
 	{
 		if(mB < 0) return getSIMod(-mA, -mB);
 		auto result(mA % mB);
@@ -216,7 +216,7 @@ namespace ssvu
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
 	/// @return Returns the calculated distance (squared).
-	template<typename T1, typename T2, typename T3, typename T4> inline CommonType<T1, T2, T3, T4> getDistSquaredEuclidean(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return (mX1 - mX2) * (mX1 - mX2) + (mY1 - mY2) * (mY1 - mY2); }
+	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDistSquaredEuclidean(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return (mX1 - mX2) * (mX1 - mX2) + (mY1 - mY2) * (mY1 - mY2); }
 
 	/// @brief Calculates Euclidean distance between two points.
 	/// @tparam T Type of value.
@@ -225,7 +225,7 @@ namespace ssvu
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
 	/// @return Returns the calculated distance.
-	template<typename T1, typename T2, typename T3, typename T4> inline CommonType<T1, T2, T3, T4> getDistEuclidean(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::sqrt(getDistSquaredEuclidean(mX1, mY1, mX2, mY2)); }
+	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDistEuclidean(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::sqrt(getDistSquaredEuclidean(mX1, mY1, mX2, mY2)); }
 
 	/// @brief Calculates Manhattan distance between two points.
 	/// @tparam T Type of value.
@@ -234,7 +234,7 @@ namespace ssvu
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
 	/// @return Returns the calculated distance.
-	template<typename T1, typename T2, typename T3, typename T4> inline CommonType<T1, T2, T3, T4> getDistManhattan(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::abs(mX1 - mX2) + std::abs(mY1 - mY2); }
+	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDistManhattan(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::abs(mX1 - mX2) + std::abs(mY1 - mY2); }
 
 	/// @brief Calculates Chebyshev distance between two points.
 	/// @tparam T Type of value.
@@ -243,7 +243,7 @@ namespace ssvu
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
 	/// @return Returns the calculated distance.
-	template<typename T1, typename T2, typename T3, typename T4> inline CommonType<T1, T2, T3, T4> getDistChebyshev(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::max(std::abs(mX2 - mX1), std::abs(mY2 - mY1)); }
+	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDistChebyshev(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::max(std::abs(mX2 - mX1), std::abs(mY2 - mY1)); }
 
 	/// @brief Calculates degrees needed to turn towards a point.
 	/// @tparam T Type of value.
@@ -252,7 +252,7 @@ namespace ssvu
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
 	/// @return Returns the needed degrees.
-	template<typename T1, typename T2, typename T3, typename T4> inline CommonType<T1, T2, T3, T4> getRadTowards(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::atan2(mY2 - mY1, mX2 - mX1); }
+	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getRadTowards(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::atan2(mY2 - mY1, mX2 - mX1); }
 
 	/// @brief Calculates radians needed to turn towards a point.
 	/// @tparam T Type of value.
@@ -261,7 +261,7 @@ namespace ssvu
 	/// @param mX2 Second point X.
 	/// @param mY2 Second point Y.
 	/// @return Returns the needed radians.
-	template<typename T1, typename T2, typename T3, typename T4> inline CommonType<T1, T2, T3, T4> getDegTowards(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return toDeg(getRadTowards(mX1, mY1, mX2, mY2)); }
+	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDegTowards(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return toDeg(getRadTowards(mX1, mY1, mX2, mY2)); }
 }
 
 #endif

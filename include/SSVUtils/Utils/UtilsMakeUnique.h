@@ -18,7 +18,7 @@ namespace std
 	template<typename T, typename... TArgs> inline ssvu::Uptr<T> make_unique_helper(std::true_type, TArgs&&... mArgs)
 	{
 		static_assert(std::extent<T>::value == 0, "make_unique<T[N]>() is forbidden, please use make_unique<T[]>().");
-		using U = ssvu::RemoveExtentType<T>;
+		using U = ssvu::RemoveExtent<T>;
 		return ssvu::Uptr<T>(new U[sizeof...(TArgs)]{std::forward<TArgs>(mArgs)...});
 	}
 	template<typename T, typename... TArgs> inline ssvu::Uptr<T> make_unique(TArgs&&... mArgs) { return make_unique_helper<T>(std::is_array<T>(), std::forward<TArgs>(mArgs)...); }
