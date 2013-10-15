@@ -32,13 +32,13 @@ namespace ssvu
 
 			 public:
 				inline void clear()	{ items.clear(); toAdd.clear(); }
-				inline void del(TItem& mItem) noexcept { mItem.mmAlive = false; }
+				inline void del(TItem& mItem) const noexcept { mItem.mmAlive = false; }
 
 				// Statically polymorphic methods
-				inline void refresh() { static_cast<TDerived*>(this)->refreshImpl(); }
+				inline void refresh() { reinterpret_cast<TDerived*>(this)->refreshImpl(); }
 				template<typename TType = TItem, typename... TArgs> inline TType& create(TArgs&&... mArgs)
 				{
-					return static_cast<TDerived*>(this)->template createTImpl<TType, TArgs...>(std::forward<TArgs>(mArgs)...);
+					return reinterpret_cast<TDerived*>(this)->template createTImpl<TType, TArgs...>(std::forward<TArgs>(mArgs)...);
 				}
 
 				inline Container& getItems() noexcept				{ return items; }
