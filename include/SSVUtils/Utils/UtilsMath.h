@@ -8,6 +8,7 @@
 #include <cassert>
 #include <array>
 #include <random>
+#include "SSVUtils/Global/Typedefs.h"
 
 namespace ssvu
 {
@@ -193,9 +194,10 @@ namespace ssvu
 	/// @return Returns a 3D index (under the form of an std::array<T, 3>) for an "implicit 3D" array.
 	template<typename T> inline std::array<T, 3> get3DIdxFrom1D(const T& mIdx, const T& mColumns, const T& mRows) noexcept { assert(mIdx > 0); return {{mIdx / mColumns, (mIdx / mColumns) % mRows, mIdx / (mColumns * mRows)}}; }
 
-	/// @brief Gets sign-indepedenconst T& modulo calculation.
+	/// @brief Gets sign-indepedent modulo calculation.
 	/// @code
 	/// assert(getSIMod(-2, 12) == 10);
+	/// assert(getSIMod(2, -12) == -10);
 	/// @endcode
 	/// @tparam T Type of value.
 	/// @param mA Left side of operation.
@@ -203,11 +205,22 @@ namespace ssvu
 	/// @return Returns the mathematically correcconst T& mA % mB.
 	template<typename T1, typename T2> inline Common<T1, T2> getSIMod(const T1& mA, const T2& mB)
 	{
+		assert(mB != 0);
 		if(mB < 0) return getSIMod(-mA, -mB);
 		auto result(mA % mB);
 		if(result < 0) result += mB;
 		return result;
 	}
+
+	// TODO: docs
+	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getWrapIdx(T1 mVal, const T2& mLowerBound, const T3& mUpperBound) noexcept
+	{
+		assert(mLowerBound < mUpperBound);
+		const auto& rangeSize(mUpperBound - 1 - mLowerBound + 1);
+		if(mVal < mLowerBound) mVal += rangeSize * ((mLowerBound - mVal) / rangeSize + 1);
+		return mLowerBound + (mVal - mLowerBound) % rangeSize;
+	}
+	template<typename T1, typename T2> inline Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept { return getWrapIdx(mVal, T2(0), mUpperBound); }
 
 	/// @brief Calculates Euclidean distance (squared) between two points.
 	/// @tparam T Type of value.

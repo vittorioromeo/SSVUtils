@@ -48,6 +48,17 @@ SSVU_TEST("UtilsMath tests")
 	EXPECT(getSIMod(10, 9) == 1);
 	EXPECT(getSIMod(-10, 9) == 8);
 	EXPECT(getSIMod(10, -9) == 8);
+
+	EXPECT(getWrapIdx(10, 5) == 0);
+	EXPECT(getWrapIdx(10, 10) == 0);
+	EXPECT(getWrapIdx(10, 15) == 10);
+	EXPECT(getWrapIdx(4, 3) == 1);
+	EXPECT(getWrapIdx(5, 3) == 2);
+	EXPECT(getWrapIdx(6, 3) == 0);
+	EXPECT(getWrapIdx(-1, 3) == 2);
+	EXPECT(getWrapIdx(-2, 3) == 1);
+	EXPECT(getWrapIdx(-3, 3) == 0);
+	EXPECT(getWrapIdx(-4, 3) == 2);
 }
 SSVU_TEST_END();
 

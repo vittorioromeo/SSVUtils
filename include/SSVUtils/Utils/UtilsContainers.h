@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include "SSVUtils/Utils/UtilsMath.h"
 
 namespace ssvu
 {
@@ -127,6 +128,10 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Const reference to the predicate.
 	template<typename T, typename P> inline void eraseRemoveIf(T& mContainer, const P& mPredicate) { mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer)); }
+
+	// TODO: docs
+	template<typename T, typename TIdx> inline typename T::value_type& getByWrapIdx(T& mContainer, const TIdx& mIdx) { return mContainer[getWrapIdx(mIdx, mContainer.size())]; }
+	template<typename T, typename TIdx> inline const typename T::value_type& getByWrapIdx(const T& mContainer, const TIdx& mIdx) { return mContainer.at(getWrapIdx(mIdx, mContainer.size())); }
 }
 
 #endif
