@@ -34,7 +34,7 @@ namespace ssvu
 			/// delegate += [](int mParameter){ return mParameter * 2; };
 			/// @endcode
 			/// @param mFunc Function to add - can be a std::function or a lambda
-			template<typename T> inline Delegate& operator+=(T mFunc) { funcs.emplace_back(mFunc); return *this; }
+			template<typename T> inline Delegate& operator+=(T mFunc) { funcs.push_back(mFunc); return *this; }
 
 			/// @brief Call all the functions in the delegate.
 			/// @code
