@@ -22,7 +22,7 @@ namespace ssvu
 
 			inline static std::string getKey(const std::string& mStr)			{ return keyLeft + mStr + keyRight; }
 			inline static std::string getSectionStart(const std::string& mStr)	{ return sectionStartLeft + mStr + sectionStartRight; }
-			inline static std::string getSectionEnd(const std::string& mStr)		{ return sectionEndLeft + mStr + sectionEndRight; }
+			inline static std::string getSectionEnd(const std::string& mStr)	{ return sectionEndLeft + mStr + sectionEndRight; }
 		}
 	}
 }
