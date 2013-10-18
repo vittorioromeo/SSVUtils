@@ -129,8 +129,22 @@ namespace ssvu
 	/// @param mPredicate Const reference to the predicate.
 	template<typename T, typename P> inline void eraseRemoveIf(T& mContainer, const P& mPredicate) { mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer)); }
 
-	// TODO: docs
+	/// @brief Cyclically gets items from a container.
+	/// @details Interally uses getWrapIdx to correctly wrap the entered index.
+	/// @tparam T Type of the container.
+	/// @tparam TIdx Type of the index.
+	/// @param mContainer Reference to the container.
+	/// @param mIdx Index to use (may get wrapped).
+	/// @return Non-const reference to the item at the wrapped index mIdx.
 	template<typename T, typename TIdx> inline typename T::value_type& getByWrapIdx(T& mContainer, const TIdx& mIdx) { return mContainer[getWrapIdx(mIdx, mContainer.size())]; }
+
+	/// @brief Cyclically gets items from a container. (const version)
+	/// @details Interally uses getWrapIdx to correctly wrap the entered index.
+	/// @tparam T Type of the container.
+	/// @tparam TIdx Type of the index.
+	/// @param mContainer Const reference to the container.
+	/// @param mIdx Index to use (may get wrapped).
+	/// @return Cconst reference to the item at the wrapped index mIdx.
 	template<typename T, typename TIdx> inline const typename T::value_type& getByWrapIdx(const T& mContainer, const TIdx& mIdx) { return mContainer.at(getWrapIdx(mIdx, mContainer.size())); }
 }
 

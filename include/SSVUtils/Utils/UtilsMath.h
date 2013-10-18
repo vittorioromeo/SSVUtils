@@ -39,52 +39,44 @@ namespace ssvu
 	template<typename T = int> inline T getRndSign() { return RndDistributionI<T>{0, 1}(rndEngine) > 0 ? -1 : 1; }
 
 	/// @brief Gets the sign of a numeric value. (unsigned version)
-	/// @tparam T Type of value.
 	/// @param mValue Value to use.
 	/// @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
 	template<typename T> constexpr inline int getSign(const T& mValue, EnableIf<!std::is_signed<T>::value>* = nullptr) noexcept { return 0 < mValue; }
 
 	/// @brief Gets the sign of a numeric value. (signed version)
-	/// @tparam T Type of value.
 	/// @param mValue Value to use.
 	/// @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
 	template<typename T> constexpr inline int getSign(const T& mValue, EnableIf<std::is_signed<T>::value>* = nullptr) noexcept { return (0 < mValue) - (mValue < 0); }
 
 	/// @brief Clamps a numeric value. (lower-bound only)
-	/// @tparam T Type of value.
 	/// @param mValue Reference to the value. (will be modified)
 	/// @param mMin Lower bound.
 	template<typename T1, typename T2> inline void clampMin(T1& mValue, const T2& mMin) noexcept { if(mValue < mMin) mValue = mMin; }
 
 	/// @brief Clamps a numeric value. (upper-bound only)
-	/// @tparam T Type of value.
 	/// @param mValue Reference to the value. (will be modified)
 	/// @param mMax Upper bound.
 	template<typename T1, typename T2> inline void clampMax(T1& mValue, const T2& mMax) noexcept { if(mValue > mMax) mValue = mMax; }
 
 	/// @brief Clamps a numeric value.
-	/// @tparam T Type of value.
 	/// @param mValue Reference to the value. (will be modified)
 	/// @param mMin Lower bound.
 	/// @param mMax Upper bound.
 	template<typename T1, typename T2, typename T3> inline void clamp(T1& mValue, const T2& mMin, const T3& mMax) noexcept { assert(mMin <= mMax); if(mValue < mMin) mValue = mMin; else if(mValue > mMax) mValue = mMax; }
 
 	/// @brief Gets a clamped numeric value. (lower-bound only)
-	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @param mMin Lower bound.
 	/// @return Returns mMin if mValue < mMin, mValue otherwise.
 	template<typename T1, typename T2> constexpr inline	Common<T1, T2> getClampedMin(const T1& mValue, const T2& mMin) noexcept { return mValue < mMin ? mMin : mValue; }
 
 	/// @brief Gets a clamped numeric value. (upper-bound only)
-	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @param mMax Upper bound.
 	/// @return Returns mMax if mValue > mMax, mValue otherwise.
 	template<typename T1, typename T2> constexpr inline Common<T1, T2> getClampedMax(const T1& mValue, const T2& mMax) noexcept { return mValue > mMax ? mMax : mValue; }
 
 	/// @brief Gets a clamped numeric value.
-	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @param mMin Lower bound.
 	/// @param mMax Upper bound.
@@ -92,7 +84,6 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3> constexpr inline Common<T1, T2, T3> getClamped(const T1& mValue, const T2& mMin, const T3& mMax) noexcept { /*assert(mMin <= mMax);*/ return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue); }
 
 	/// @brief Cycles a value in a range.
-	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @param mMin Range min.
 	/// @param mMax Range max.
@@ -106,32 +97,27 @@ namespace ssvu
 	}
 
 	/// @brief Converts degrees to radians.
-	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the value in radians.
 	template<typename T> constexpr inline T toRad(const T& mValue) noexcept { return mValue * degRadRatio; }
 
 	/// @brief Converts radians to degrees.
-	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the value in degrees.
 	template<typename T> constexpr inline T toDeg(const T& mValue) noexcept { return mValue / degRadRatio; }
 
 	/// @brief Restricts a radian value between 0 and 6.28f.
-	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the restricted value in radians.
 	template<typename T> inline T wrapRad(T mValue) noexcept { mValue = std::fmod(mValue, 6.28f); return mValue < 0 ? mValue + 6.28f : mValue; }
 
 	/// @brief Restricts a degree value between 0 and 360.f.
-	/// @tparam T Type of value.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the restricted value in degrees.
 	template<typename T> inline T wrapDeg(T mValue) noexcept { mValue = std::fmod(mValue, 360.f); return mValue < 0 ? mValue + 360.f : mValue; }
 
 	/// @brief Gets a rotated angle in degrees.
 	/// @details Example use: a character slowly aiming towards the mouse position.
-	/// @tparam T Type of value.
 	/// @tparam J Type of rotation value.
 	/// @param mStart Angle to start from.
 	/// @param mEnd Target angle.
@@ -148,7 +134,6 @@ namespace ssvu
 
 	/// @brief Gets a rotated angle in radians.
 	/// @details Example use: a character slowly aiming towards the mouse position.
-	/// @tparam T Type of value.
 	/// @tparam J Type of rotation value.
 	/// @param mStart Angle to start from.
 	/// @param mEnd Target angle.
@@ -199,10 +184,9 @@ namespace ssvu
 	/// assert(getSIMod(-2, 12) == 10);
 	/// assert(getSIMod(2, -12) == -10);
 	/// @endcode
-	/// @tparam T Type of value.
 	/// @param mA Left side of operation.
 	/// @param mB Right side of operation.
-	/// @return Returns the mathematically correcconst T& mA % mB.
+	/// @return Returns the mathematically correct mA % mB.
 	template<typename T1, typename T2> inline Common<T1, T2> getSIMod(const T1& mA, const T2& mB)
 	{
 		assert(mB != 0);
@@ -212,7 +196,14 @@ namespace ssvu
 		return result;
 	}
 
-	// TODO: docs
+	/// @brief Gets a wrapped index value.
+	/// @code
+	/// assert(getWrapIdx(-2, 0, 12) == 9);
+	/// @endcode
+	/// @param mVal Index value to wrap.
+	/// @param mLowerBound Lower bound of possible indices (inclusive).
+	/// @param mUpperBound Upper bound of possible indices (exclusive).
+	/// @return Returns the wrapped index value.
 	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getWrapIdx(T1 mVal, const T2& mLowerBound, const T3& mUpperBound) noexcept
 	{
 		assert(mLowerBound < mUpperBound);
@@ -220,10 +211,17 @@ namespace ssvu
 		if(mVal < mLowerBound) mVal += rangeSize * ((mLowerBound - mVal) / rangeSize + 1);
 		return mLowerBound + (mVal - mLowerBound) % rangeSize;
 	}
+
+	/// @brief Gets a wrapped index value. (Default inclusive lower bound: 0)
+	/// @code
+	/// assert(getWrapIdx(-2, 12) == 9);
+	/// @endcode
+	/// @param mVal Index value to wrap.
+	/// @param mUpperBound Upper bound of possible indices (exclusive).
+	/// @return Returns the wrapped index value.
 	template<typename T1, typename T2> inline Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept { return getWrapIdx(mVal, T2(0), mUpperBound); }
 
 	/// @brief Calculates Euclidean distance (squared) between two points.
-	/// @tparam T Type of value.
 	/// @param mX1 First point X.
 	/// @param mY1 First point Y.
 	/// @param mX2 Second point X.
@@ -232,7 +230,6 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDistSquaredEuclidean(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return (mX1 - mX2) * (mX1 - mX2) + (mY1 - mY2) * (mY1 - mY2); }
 
 	/// @brief Calculates Euclidean distance between two points.
-	/// @tparam T Type of value.
 	/// @param mX1 First point X.
 	/// @param mY1 First point Y.
 	/// @param mX2 Second point X.
@@ -241,7 +238,6 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDistEuclidean(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::sqrt(getDistSquaredEuclidean(mX1, mY1, mX2, mY2)); }
 
 	/// @brief Calculates Manhattan distance between two points.
-	/// @tparam T Type of value.
 	/// @param mX1 First point X.
 	/// @param mY1 First point Y.
 	/// @param mX2 Second point X.
@@ -250,7 +246,6 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDistManhattan(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::abs(mX1 - mX2) + std::abs(mY1 - mY2); }
 
 	/// @brief Calculates Chebyshev distance between two points.
-	/// @tparam T Type of value.
 	/// @param mX1 First point X.
 	/// @param mY1 First point Y.
 	/// @param mX2 Second point X.
@@ -259,7 +254,6 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDistChebyshev(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::max(std::abs(mX2 - mX1), std::abs(mY2 - mY1)); }
 
 	/// @brief Calculates degrees needed to turn towards a point.
-	/// @tparam T Type of value.
 	/// @param mX1 First point X.
 	/// @param mY1 First point Y.
 	/// @param mX2 Second point X.
@@ -268,7 +262,6 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getRadTowards(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return std::atan2(mY2 - mY1, mX2 - mX1); }
 
 	/// @brief Calculates radians needed to turn towards a point.
-	/// @tparam T Type of value.
 	/// @param mX1 First point X.
 	/// @param mY1 First point Y.
 	/// @param mX2 Second point X.
