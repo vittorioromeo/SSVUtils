@@ -65,7 +65,7 @@ namespace ssvu
 		{
 			inline static std::vector<TReturn> exec(Delegate<TReturn(TArgs...)>& mDelegate, TArgs... mArgs)
 			{
-				std::vector<TReturn> result; result.reserve(mDelegate.funcs.size()); // TODO: consider caching result vector?
+				std::vector<TReturn> result; result.reserve(mDelegate.funcs.size());
 				for(const auto& f : mDelegate.funcs) result.push_back(f(std::forward<TArgs>(mArgs)...));
 				return result;
 			}
