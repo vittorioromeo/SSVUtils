@@ -17,15 +17,12 @@ namespace ssvu
 
 		protected:
 			Timeline& timeline;
-			unsigned int index;
 
 		public:
 			Command(Timeline& mTimeline) : timeline(mTimeline) { }
 			inline virtual ~Command()			{ }
 			inline virtual void update(float)	{ }
 			inline virtual void reset()			{ }
-
-			inline unsigned int getIdx() const noexcept { return index; }
 	};
 }
 
