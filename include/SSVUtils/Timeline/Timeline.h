@@ -13,14 +13,18 @@
 
 namespace ssvu
 {
-	namespace Internal { template<bool> class WaitLoop; }
+	namespace Internal
+	{
+		template<bool> class WaitLoop;
+		template<typename> class GoImpl;
+	}
 
 	class Timeline : public MemoryManageable
 	{
 		friend class Wait;
 		template<bool> friend class Internal::WaitLoop;
+		template<typename> friend class Internal::GoImpl;
 		friend class Do;
-		friend class Go;
 
 		private:
 			MemoryManager<Command> commandManager;

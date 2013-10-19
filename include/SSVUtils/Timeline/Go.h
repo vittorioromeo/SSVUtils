@@ -11,22 +11,29 @@
 
 namespace ssvu
 {
-	class Go : public Command
+	namespace Internal
 	{
-		protected:
-			int targetIndex, times, currentTimes;
+		template<typename T> class GoImpl : public Command
+		{
+			protected:
+				T target;
+				int times, currentTimes;
 
-			inline void update(float) override
-			{
-				if(currentTimes == 0)		{ timeline.next(); }
-				else if(currentTimes > 0)	{ --currentTimes; timeline.jumpTo(targetIndex); }
-				else						{ timeline.jumpTo(targetIndex); }
-			}
-			inline void reset() override { currentTimes = times; }
+				inline void update(float) override
+				{
+					if(currentTimes == 0)		{ timeline.next(); }
+					else if(currentTimes > 0)	{ --currentTimes; timeline.jumpTo(target); }
+					else						{ timeline.jumpTo(target); }
+				}
+				inline void reset() override { currentTimes = times; }
 
-		public:
-			Go(Timeline& mTimeline, int mTargetIndex, int mTimes = -1) : Command{mTimeline}, targetIndex{mTargetIndex}, times{mTimes}, currentTimes{mTimes} { assert(targetIndex >= 0); }
-	};
+			public:
+				GoImpl(Timeline& mTimeline, T mTarget, int mTimes = -1) : Command{mTimeline}, target(mTarget), times{mTimes}, currentTimes{mTimes} { }
+		};
+	}
+
+	using Go = Internal::GoImpl<int>;
+	using Goto = Internal::GoImpl<Command&>;
 }
 
 #endif
