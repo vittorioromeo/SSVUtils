@@ -38,7 +38,7 @@ namespace ssvu
 		{
 			if(mArgs.empty()) return;
 
-			std::deque<std::string> entered{begin(mArgs), end(mArgs)};
+			std::deque<std::string> entered{std::begin(mArgs), std::end(mArgs)};
 
 			// args.front() is expected to be the command name
 			Cmd& cmd(findCmd(entered.front()));

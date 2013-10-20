@@ -28,9 +28,7 @@ namespace ssvu
 	inline std::string endBenchmark()
 	{
 		#ifndef SSVU_LOG_DISABLE
-			Internal::benchEnd = std::chrono::high_resolution_clock::now();
-			auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(Internal::benchEnd - Internal::benchStart).count();
-			return toStr(elapsed) + toStr(" ms");
+			return toStr(endBenchmarkAsMs().count()) + toStr(" ms");
 		#endif
 
 		return "";
