@@ -16,8 +16,7 @@ namespace ssvu
 	namespace TemplateSystem
 	{
 		/// @brief Dictionary used for string-template replacements.
-		///
-		/// Inspired by CTemplate. It's used to generate data from string templates.
+		/// @details Inspired by CTemplate. It's used to generate data from string templates.
 		class Dictionary
 		{
 			private:

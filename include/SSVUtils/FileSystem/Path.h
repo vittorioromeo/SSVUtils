@@ -104,7 +104,7 @@ namespace ssvu
 				inline operator const std::string&() const { return getStr(); }
 		};
 
-		inline std::ostream& operator<<(std::ostream& mOStream, const Path& mPath) { return mOStream << mPath.getStr(); }
+		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath) { return mStream << mPath.getStr(); }
 	}
 }
 
