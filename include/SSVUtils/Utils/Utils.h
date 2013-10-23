@@ -10,5 +10,6 @@
 #include "SSVUtils/Utils/UtilsMakeUnique.h"
 #include "SSVUtils/Utils/UtilsTuple.h"
 #include "SSVUtils/Utils/UtilsIterator.h"
+#include "SSVUtils/Utils/UtilsMacros.h"
 
 #endif
