@@ -5,6 +5,8 @@
 #ifndef SSVU_UTILS_MACROS
 #define SSVU_UTILS_MACROS
 
+namespace ssvu
+{
 	#define SSVU_DEFINE_HAS_MEMBER_CHECKER(name, memberName) \
 		template<typename, typename T> class name; \
 		template<typename C, typename TReturn, typename... TArgs> class name<C, TReturn(TArgs...)> \
@@ -21,5 +23,6 @@
 		template<typename T, typename... TArgs> struct _ ## name ## Impl<T, false, TArgs...> { inline static void call(T&, TArgs&&...) { } }; } \
 		template<typename T, typename... TArgs> inline void name(T& mArg, TArgs&&... mArgs)	{ _ssvuMacroImpl::_ ## name ## Impl<T, checker, TArgs...>::call(mArg, std::forward<TArgs>(mArgs)...); } \
 		struct _dummy ## name ## memberName { }
+}
 
 #endif
