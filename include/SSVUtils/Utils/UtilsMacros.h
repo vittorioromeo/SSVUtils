@@ -21,9 +21,9 @@ namespace ssvu
 			template<typename T, bool TCheck, typename... TArgs> struct _ ## name ## Impl; \
 			template<typename T, typename... TArgs> struct _ ## name ## Impl<T, true, TArgs...> { inline static void call(T& mArg, TArgs&&... mArgs) { mArg.memberName(std::forward<TArgs>(mArgs)...); } }; \
 			template<typename T, typename... TArgs> struct _ ## name ## Impl<T, false, TArgs...> { inline static void call(T&, TArgs&&...) { } }; } \
-			template<typename T, typename... TArgs> inline void name(T& mArg, TArgs&&... mArgs)	{ _ssvuMacroImpl::_ ## name ## Impl<T, checker, TArgs...>::call(mArg, std::forward<TArgs>(mArgs)...); \
+			template<typename T, typename... TArgs> inline void name(T& mArg, TArgs&&... mArgs) { _ssvuMacroImpl::_ ## name ## Impl<T, checker, TArgs...>::call(mArg, std::forward<TArgs>(mArgs)...); \
 		} \
-		struct _dummy ## name ## memberName { }
+		struct _dummy ## name ## memberName { } __attribute__ ((unused))
 }
 
 #endif

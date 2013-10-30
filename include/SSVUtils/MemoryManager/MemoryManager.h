@@ -11,7 +11,7 @@
 
 namespace ssvu
 {
-	struct MemoryManageable { bool mmAlive{true}; };
+	struct MemoryManageable { bool ssvu_mmAlive{true}; };
 
 	namespace Internal
 	{
@@ -32,7 +32,7 @@ namespace ssvu
 
 			 public:
 				inline void clear()	{ items.clear(); toAdd.clear(); }
-				inline void del(TItem& mItem) const noexcept { mItem.mmAlive = false; }
+				inline void del(TItem& mItem) const noexcept { mItem.ssvu_mmAlive = false; }
 
 				// Statically polymorphic methods
 				inline void refresh() { reinterpret_cast<TDerived*>(this)->refreshImpl(); }
@@ -44,8 +44,8 @@ namespace ssvu
 				inline Container& getItems() noexcept				{ return items; }
 				inline const Container& getItems() const noexcept	{ return items; }
 
-				template<typename TType> inline static bool isAlive(const TType& mItem) noexcept { return mItem->mmAlive; }
-				template<typename TType> inline static bool isDead(const TType& mItem) noexcept	{ return !mItem->mmAlive; }
+				template<typename TType> inline static bool isAlive(const TType& mItem) noexcept { return mItem->ssvu_mmAlive; }
+				template<typename TType> inline static bool isDead(const TType& mItem) noexcept	{ return !mItem->ssvu_mmAlive; }
 
 				// Foreach loop/algorithms iterator support
 				Iterator begin() noexcept				{ return items.begin(); }
