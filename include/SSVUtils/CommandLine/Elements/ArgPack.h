@@ -12,7 +12,7 @@ namespace ssvu
 {
 	namespace CommandLine
 	{
-		template<typename T> class ArgPack : public ArgPackBase
+		template<typename T> class ArgPack final : public ArgPackBase
 		{
 			private:
 				using Iterator = typename std::vector<T>::iterator;

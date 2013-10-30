@@ -11,7 +11,7 @@
 
 namespace ssvu
 {
-	class Do : public Command
+	class Do final : public Command
 	{
 		protected:
 			Action action;

@@ -14,7 +14,7 @@ namespace ssvu
 		constexpr const char* flagPrefixShort{"-"};
 		constexpr const char* flagPrefixLong{"--"};
 
-		class Flag : public ElementBase
+		class Flag final : public ElementBase
 		{
 			private:
 				std::string shortName, longName;

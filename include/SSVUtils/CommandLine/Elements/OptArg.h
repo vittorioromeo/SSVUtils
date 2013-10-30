@@ -11,7 +11,7 @@ namespace ssvu
 {
 	namespace CommandLine
 	{
-		template<typename T> class OptArg : public Arg<T>
+		template<typename T> class OptArg final : public Arg<T>
 		{
 			private:
 				T defaultValue;

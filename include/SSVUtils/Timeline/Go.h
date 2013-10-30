@@ -13,7 +13,7 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<typename T> class GoImpl : public Command
+		template<typename T> class GoImpl final : public Command
 		{
 			protected:
 				T target;

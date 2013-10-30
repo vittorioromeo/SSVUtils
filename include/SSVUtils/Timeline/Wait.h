@@ -11,7 +11,7 @@
 
 namespace ssvu
 {
-	class Wait : public Command
+	class Wait final : public Command
 	{
 		private:
 			float time, currentTime;
@@ -35,7 +35,7 @@ namespace ssvu
 
 	namespace Internal
 	{
-		template<bool TWhile> class WaitLoop : public Command
+		template<bool TWhile> class WaitLoop final : public Command
 		{
 			private:	Predicate predicate;
 			protected:	inline void update(float) override { timeline.ready = false; if(predicate() != TWhile) timeline.next(); }
