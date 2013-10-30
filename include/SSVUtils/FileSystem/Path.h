@@ -22,10 +22,10 @@ namespace ssvu
 		class Path
 		{
 			private:
-				std::string path;
-				bool mustNormalize{true};
+				mutable std::string path;
+				mutable bool mustNormalize{true};
 
-				inline void normalize()
+				inline void normalize() const
 				{
 					if(!mustNormalize) return;
 					mustNormalize = false;
@@ -40,7 +40,7 @@ namespace ssvu
 				inline Path(const char* mPath) : path{mPath} { }
 				inline Path(const std::string& mPath) : path{mPath} { }
 
-				inline const std::string& getStr() const	{ const_cast<Path*>(this)->normalize(); return path; }
+				inline const std::string& getStr() const	{ normalize(); return path; }
 				inline const char* getCStr() const noexcept	{ return getStr().c_str(); }
 
 				inline bool isFolder() const
