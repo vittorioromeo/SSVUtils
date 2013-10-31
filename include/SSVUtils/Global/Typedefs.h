@@ -43,6 +43,22 @@ namespace ssvu
 	template<typename T> using Decay = std::decay_t<T>;
 	template<typename T> using RemoveReference = std::remove_reference_t<T>;
 	template<typename T> using RemoveExtent = std::remove_extent_t<T>;
+	template<typename T> using RemoveVolatile = std::remove_volatile_t<T>;
+	template<typename T> using RemoveConst = std::remove_const_t<T>;
+	template<typename T> using RemoveCv = std::remove_cv_t<T>;
+	template<typename T> using AddVolatile = std::add_volatile_t<T>;
+	template<typename T> using AddConst = std::add_const_t<T>;
+	template<typename T> using AddCv = std::add_cv_t<T>;
+	template<typename T> using AddLValueRef = std::add_lvalue_reference_t<T>;
+	template<typename T> using AddRValueRef = std::add_rvalue_reference_t<T>;
+	template<typename T> using RemovePtr = std::remove_pointer_t<T>;
+	template<typename T> using AddPtr = std::add_pointer_t<T>;
+	template<typename T> using MakeUnsigned = std::make_unsigned_t<T>;
+	template<typename T> using MakeSigned = std::make_signed_t<T>;
+	template<typename T> using RemovellExtents = std::remove_all_extents_t<T>;
+	template<std::size_t Len, std::size_t Align> using AlignedStorage = std::aligned_storage_t<Len, Align>;
+	template<bool B, typename T, typename F> using Conditional = std::conditional_t<B, T, F>;
+	template<typename T> using Underlying = std::underlying_type_t<T>;
 }
 
 #ifndef SSVU_USE_STD_FUNCTION
