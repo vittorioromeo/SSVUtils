@@ -118,7 +118,6 @@ namespace ssvu
 
 	/// @brief Gets a rotated angle in degrees.
 	/// @details Example use: a character slowly aiming towards the mouse position.
-	/// @tparam J Type of rotation value.
 	/// @param mStart Angle to start from.
 	/// @param mEnd Target angle.
 	/// @param mSpeed Rotation speed.
@@ -134,7 +133,6 @@ namespace ssvu
 
 	/// @brief Gets a rotated angle in radians.
 	/// @details Example use: a character slowly aiming towards the mouse position.
-	/// @tparam J Type of rotation value.
 	/// @param mStart Angle to start from.
 	/// @param mEnd Target angle.
 	/// @param mSpeed Rotation speed.
@@ -143,13 +141,12 @@ namespace ssvu
 
 	/// @brief Gets a 1D index from a 2D index.
 	/// @details Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
-	/// Internally, it calculates and returns `mY * mColumns + mX`.
-	/// @tparam T Type of index value.
+	/// Internally, it calculates and returns `mY * mCols + mX`.
 	/// @param mX X index.
 	/// @param mY Y index.
-	/// @param mColumns Number of columns of the 2D array.
-	/// @return Returns a 1D index for an "implicit 2D" array with `mColumns` columns.
-	template<typename T> constexpr inline T get1DIdxFrom2D(const T& mX, const T& mY, const T& mColumns) noexcept { return mX + mY * mColumns; }
+	/// @param mCols Number of columns of the 2D array.
+	/// @return Returns a 1D index for an "implicit 2D" array with `mCols` columns.
+	template<typename T> constexpr inline T get1DIdxFrom2D(const T& mX, const T& mY, const T& mCols) noexcept { return mX + mY * mCols; }
 
 	/// @brief Gets a 1D index from a 3D index.
 	/// @details Useful when dealing with "implicit 3D" arrays, that are stored as 1D arrays.
@@ -157,27 +154,27 @@ namespace ssvu
 	/// @param mX X index.
 	/// @param mY Y index.
 	/// @param mZ Z index.
-	/// @param mColumns Number of columns of the 3D array.
+	/// @param mCols Number of columns of the 3D array.
 	/// @param mRows Number of rows of the 3D array.
 	/// @return Returns a 1D index for an "implicit 3D" array.
-	template<typename T> constexpr inline T get1DIdxFrom3D(const T& mX, const T& mY, const T& mZ, const T& mColumns, const T& mRows) noexcept { return mX + mY * mColumns + mZ * mColumns * mRows; }
+	template<typename T> constexpr inline T get1DIdxFrom3D(const T& mX, const T& mY, const T& mZ, const T& mCols, const T& mRows) noexcept { return mX + mY * mCols + mZ * mCols * mRows; }
 
 	/// @brief Gets a 2D index from an 1D index.
 	/// @details Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
 	/// @tparam T Type of index value.
 	/// @param mIdx 1D index.
-	/// @param mColumns Number of columns of the 2D array.
-	/// @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mColumns` columns.
-	template<typename T> inline std::array<T, 2> get2DIdxFrom1D(const T& mIdx, const T& mColumns) noexcept { assert(mIdx > 0); T y{mIdx / mColumns}; return {{mIdx - y * mColumns, y}}; }
+	/// @param mCols Number of columns of the 2D array.
+	/// @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mCols` columns.
+	template<typename T> inline std::array<T, 2> get2DIdxFrom1D(const T& mIdx, const T& mCols) noexcept { assert(mIdx > 0); T y{mIdx / mCols}; return {{mIdx - y * mCols, y}}; }
 
 	/// @brief Gets a 3D index from an 1D index.
 	/// @details Useful when dealing with "implicit 3D" arrays, that are stored as 1D arrays.
 	/// @tparam T Type of index value.
 	/// @param mIdx 1D index.
-	/// @param mColumns Number of columns of the 2D array.
+	/// @param mCols Number of columns of the 2D array.
 	/// @param mRows Number of rows of the 3D array.
 	/// @return Returns a 3D index (under the form of an std::array<T, 3>) for an "implicit 3D" array.
-	template<typename T> inline std::array<T, 3> get3DIdxFrom1D(const T& mIdx, const T& mColumns, const T& mRows) noexcept { assert(mIdx > 0); return {{mIdx / mColumns, (mIdx / mColumns) % mRows, mIdx / (mColumns * mRows)}}; }
+	template<typename T> inline std::array<T, 3> get3DIdxFrom1D(const T& mIdx, const T& mCols, const T& mRows) noexcept { assert(mIdx > 0); return {{mIdx / mCols, (mIdx / mCols) % mRows, mIdx / (mCols * mRows)}}; }
 
 	/// @brief Gets sign-indepedent modulo calculation.
 	/// @code
@@ -268,6 +265,18 @@ namespace ssvu
 	/// @param mY2 Second point Y.
 	/// @return Returns the needed radians.
 	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDegTowards(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return toDeg(getRadTowards(mX1, mY1, mX2, mY2)); }
+
+	// TODO: docs
+	template<typename T1, typename T2> inline Common<T1, T2> getDiffRad(const T1& mA, const T2& mB) noexcept
+	{
+		auto result(std::fmod(std::abs(mB - mA), ssvu::pi * 2.f));
+		return result > ssvu::pi ? ssvu::pi * 2.f - result : result;
+	}
+	template<typename T1, typename T2> inline Common<T1, T2> getDiffDeg(const T1& mA, const T2& mB) noexcept
+	{
+		auto result(std::fmod(std::abs(mB - mA), 360.f));
+		return result > 180.f ? 360.f - result : result;
+	}
 }
 
 #endif
