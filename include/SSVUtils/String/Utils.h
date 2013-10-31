@@ -74,6 +74,11 @@ namespace ssvu
 	/// @return Returns a std::string that is a copy of mStr, with all characters lowercase.
 	inline std::string toLower(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::tolower); return mStr; }
 
+	/// @brief Converts a string to an uppercase string.
+	/// @param mStr String to convert.
+	/// @return Returns a std::string that is a copy of mStr, with all characters uppercase.
+	inline std::string toUpper(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::toupper); return mStr; }
+
 	/// @brief Copies a string and replaces the first occurrence of a string in it with another string.
 	/// @param mStr String to copy.
 	/// @param mFrom String to replace.
