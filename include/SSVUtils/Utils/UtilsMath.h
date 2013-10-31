@@ -32,6 +32,7 @@ namespace ssvu
 	/// @param mMax Upper exclusive bound.
 	/// @return Returns a random real value, between [mMin and mMax).
 	template<typename T = float> inline T getRndR(const T& mMin, const T& mMax) { assert(mMin < mMax); return RndDistributionR<T>{mMin, mMax - 1}(rndEngine); }
+	// TODO: think about getRndR inclusiveness
 
 	/// @brief Gets a random sign.
 	/// @tparam T Type of integer value. (default int)
@@ -216,7 +217,7 @@ namespace ssvu
 	/// @param mVal Index value to wrap.
 	/// @param mUpperBound Upper bound of possible indices (exclusive).
 	/// @return Returns the wrapped index value.
-	template<typename T1, typename T2> inline Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept { return getWrapIdx(mVal, T2(0), mUpperBound); }
+	template<typename T1, typename T2> inline Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept { return ((mVal % mUpperBound) + mUpperBound) % mUpperBound; }
 
 	/// @brief Calculates Euclidean distance (squared) between two points.
 	/// @param mX1 First point X.
@@ -267,16 +268,8 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDegTowards(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return toDeg(getRadTowards(mX1, mY1, mX2, mY2)); }
 
 	// TODO: docs
-	template<typename T1, typename T2> inline Common<T1, T2> getDiffRad(const T1& mA, const T2& mB) noexcept
-	{
-		auto result(std::fmod(std::abs(mB - mA), ssvu::pi * 2.f));
-		return result > ssvu::pi ? ssvu::pi * 2.f - result : result;
-	}
-	template<typename T1, typename T2> inline Common<T1, T2> getDiffDeg(const T1& mA, const T2& mB) noexcept
-	{
-		auto result(std::fmod(std::abs(mB - mA), 360.f));
-		return result > 180.f ? 360.f - result : result;
-	}
+	template<typename T1, typename T2> inline Common<T1, T2> getDistRad(const T1& mA, const T2& mB) noexcept { return pi - std::abs(std::fmod(std::abs(mA - mB), pi * 2.f) - pi); }
+	template<typename T1, typename T2> inline Common<T1, T2> getDistDeg(const T1& mA, const T2& mB) noexcept { return 180.f - std::abs(std::fmod(std::abs(mA - mB), 360.f) - 180.f); }
 }
 
 #endif
