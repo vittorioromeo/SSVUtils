@@ -107,7 +107,7 @@ namespace ssvu
 				std::vector<MemRange> available;
 				bool mustUnify{false};
 
-				inline void joinRangesAt(int mIdx)
+				inline void joinRangesAt(std::size_t mIdx)
 				{
 					if(mIdx + 1 != available.size() - 1) available[mIdx + 1] = available.back();
 					available.pop_back();
