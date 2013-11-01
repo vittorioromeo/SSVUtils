@@ -119,9 +119,9 @@ namespace ssvu
 
 					do
 					{
-						int nLast{newNLast};
+						auto nLast(newNLast);
 						newNLast = available.size() - 1;
-						for(int i{available.size() - 2}; i >= nLast; --i)
+						for(auto i(available.size() - 2); i >= nLast; --i)
 						{
 							if(available[i].begin > available[i + 1].begin)
 							{

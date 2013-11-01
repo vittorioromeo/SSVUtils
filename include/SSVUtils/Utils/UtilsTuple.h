@@ -25,7 +25,7 @@ namespace ssvu
 
 		template<class F, class Tup> struct Expander<0, F, Tup>
 		{
-			template<class... Us> static auto expand(F&& f, Tup&& t, Us&&... args) -> decltype(f(std::forward<Us>(args)...)) { return f(std::forward<Us>(args)...); }
+			template<class... Us> static auto expand(F&& f, Tup&&, Us&&... args) -> decltype(f(std::forward<Us>(args)...)) { return f(std::forward<Us>(args)...); }
 		};
 	}
 

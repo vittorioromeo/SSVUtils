@@ -3,8 +3,8 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 // Adaptation of lest: https://github.com/martinmoene/lest
 
-#ifndef SSVU_TEST
-#define SSVU_TEST
+#ifndef SSVU_TEST_H
+#define SSVU_TEST_H
 
 #include <string>
 #include <vector>
