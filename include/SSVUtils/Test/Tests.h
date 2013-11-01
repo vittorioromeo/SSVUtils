@@ -138,14 +138,14 @@ SSVU_TEST("Path tests")
 	EXPECT(path.getStr() == "/usr/");
 	EXPECT(path.getFolderName() == "usr");
 
-	path = "/////\\\//\\\usr///\\\//test//test2/////test4.png";
+	path = "/////\\//\\usr///\\//test//test2/////test4.png";
 	EXPECT(path.getStr() == "/usr/test/test2/test4.png");
 	EXPECT(path.getExtension() == ".png");
 	EXPECT(path.getAllExtensions() == ".png");
 	EXPECT(path.getFileName() == "test4.png");
 	EXPECT(path.getFileNameNoExtensions() == "test4");
 
-	path = "/////\\\//\\\usr///\\\//test//test2/////test4.png.bak";
+	path = "/////\\//\\usr///\\//test//test2/////test4.png.bak";
 	EXPECT(path.getStr() == "/usr/test/test2/test4.png.bak");
 	EXPECT(path.getExtension() == ".bak");
 	EXPECT(path.getAllExtensions() == ".png.bak");
