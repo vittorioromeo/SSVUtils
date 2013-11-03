@@ -11,7 +11,7 @@ namespace ssvu
 		template<typename, typename T> class name; \
 		template<typename C, typename TReturn, typename... TArgs> class name<C, TReturn(TArgs...)> \
 		{ \
-			template<typename T> static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().memberName(std::declval<TArgs>()...)), TReturn>::type { return {}; }; \
+			template<typename T> static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().memberName(std::declval<TArgs>()...)), TReturn>::type { return {}; } \
 			template<typename> static constexpr std::false_type check(...) { return {}; } \
 			public: static constexpr bool Value = decltype(check<C>(0))::value; \
 		} \
