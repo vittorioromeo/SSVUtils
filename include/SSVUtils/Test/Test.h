@@ -109,7 +109,7 @@ namespace ssvu
 				return fails;
 			}
 
-			static std::vector<std::vector<Test>>& getTestGroups() { static std::vector<std::vector<Test>> testGroups; return testGroups; }
+			inline std::vector<std::vector<Test>>& getTestGroups() { static std::vector<std::vector<Test>> testGroups; return testGroups; }
 			struct Runner
 			{
 				#ifndef SSVU_TEST_DISABLE
