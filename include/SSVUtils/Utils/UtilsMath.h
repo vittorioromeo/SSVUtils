@@ -151,7 +151,6 @@ namespace ssvu
 
 	/// @brief Gets a 1D index from a 3D index.
 	/// @details Useful when dealing with "implicit 3D" arrays, that are stored as 1D arrays.
-	/// @tparam T Type of index value.
 	/// @param mX X index.
 	/// @param mY Y index.
 	/// @param mZ Z index.
@@ -162,7 +161,6 @@ namespace ssvu
 
 	/// @brief Gets a 2D index from an 1D index.
 	/// @details Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
-	/// @tparam T Type of index value.
 	/// @param mIdx 1D index.
 	/// @param mCols Number of columns of the 2D array.
 	/// @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mCols` columns.
@@ -170,7 +168,6 @@ namespace ssvu
 
 	/// @brief Gets a 3D index from an 1D index.
 	/// @details Useful when dealing with "implicit 3D" arrays, that are stored as 1D arrays.
-	/// @tparam T Type of index value.
 	/// @param mIdx 1D index.
 	/// @param mCols Number of columns of the 2D array.
 	/// @param mRows Number of rows of the 3D array.
@@ -267,8 +264,16 @@ namespace ssvu
 	/// @return Returns the needed radians.
 	template<typename T1, typename T2, typename T3, typename T4> inline Common<T1, T2, T3, T4> getDegTowards(const T1& mX1, const T2& mY1, const T3& mX2, const T4& mY2) noexcept { return toDeg(getRadTowards(mX1, mY1, mX2, mY2)); }
 
-	// TODO: docs
+	/// @brief Gets the smallest distance between two angles. (radians)
+	/// @param mA First angle.
+	/// @param mB Second angle.
+	/// @return Returns the smallest distance in radians between mA and mB.
 	template<typename T1, typename T2> inline Common<T1, T2> getDistRad(const T1& mA, const T2& mB) noexcept { return pi - std::abs(std::fmod(std::abs(mA - mB), pi * 2.f) - pi); }
+
+	/// @brief Gets the smallest distance between two angles. (degrees)
+	/// @param mA First angle.
+	/// @param mB Second angle.
+	/// @return Returns the smallest distance in degrees between mA and mB.
 	template<typename T1, typename T2> inline Common<T1, T2> getDistDeg(const T1& mA, const T2& mB) noexcept { return 180.f - std::abs(std::fmod(std::abs(mA - mB), 360.f) - 180.f); }
 }
 
