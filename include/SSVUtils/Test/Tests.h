@@ -15,11 +15,13 @@ SSVU_TEST("UtilsMath tests")
 		auto r(getRnd<int>(-10, 10));
 		EXPECT(r >= -10 && r < 10);
 
+		// getRnd is [a, b)
 		auto ru(getRnd<unsigned int>(0, 10));
 		EXPECT(ru >= 0 && ru < 10);
 
+		// getRndR is [a, b]
 		auto rf(getRndR<float>(0.f, 2.f));
-		EXPECT(rf >= 0.f && rf < 2.f);
+		EXPECT(rf >= 0.f && rf <= 2.f);
 	}
 
 	EXPECT(getSign(-1) == -1);
