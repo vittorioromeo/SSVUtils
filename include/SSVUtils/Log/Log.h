@@ -19,12 +19,16 @@ namespace ssvu
 	namespace FileSystem { class Path; }
 
 	/// @brief Returns a reference to the log stream.
-	std::ostringstream& getLogStream();
+	inline std::ostringstream& getLogStream() noexcept	{ static std::ostringstream logStream; return logStream; }
 
 	namespace Internal
 	{
+		using TimePointHR = std::chrono::time_point<std::chrono::high_resolution_clock>;
 		using CoutType = std::basic_ostream<char, std::char_traits<char>>;
 		using StdEndLine = CoutType&(CoutType&);
+
+		inline TimePointHR& getBenchStart() noexcept	{ static TimePointHR benchStart; return benchStart; }
+		inline TimePointHR& getBenchEnd() noexcept		{ static TimePointHR benchEnd; return benchEnd; }
 
 		struct LOut
 		{
@@ -39,7 +43,7 @@ namespace ssvu
 
 				return *this;
 			}
-			inline void flush() const { std::cout.flush(); }
+			inline void flush() const { std::cout.flush(); getLogStream().flush(); }
 		};
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
@@ -72,21 +76,49 @@ namespace ssvu
 	static Internal::LOut lo;
 
 	/// @brief Starts the benchmark timer.
-	void startBenchmark();
-
-	/// @brief Ends the benchmark timer and returns the elapsed time.
-	/// @return Returns the elapsed time as a string.
-	std::string endBenchmark();
+	inline void startBenchmark()
+	{
+		#ifndef SSVU_LOG_DISABLE
+			Internal::getBenchStart() = std::chrono::high_resolution_clock::now();
+		#endif
+	}
 
 	/// @brief Ends the benchmark timer and returns the elapsed time.
 	/// @return Returns the elapsed time as a std::chrono::milliseconds.
-	std::chrono::milliseconds endBenchmarkAsMs();
+	inline std::chrono::milliseconds endBenchmarkAsMs()
+	{
+		#ifndef SSVU_LOG_DISABLE
+			Internal::getBenchEnd() = std::chrono::high_resolution_clock::now();
+			return std::chrono::duration_cast<std::chrono::milliseconds>(Internal::getBenchEnd() - Internal::getBenchStart());
+		#endif
+
+		return std::chrono::milliseconds(0);
+	}
+
+	/// @brief Ends the benchmark timer and returns the elapsed time.
+	/// @return Returns the elapsed time as a string.
+	inline std::string endBenchmark()
+	{
+		#ifndef SSVU_LOG_DISABLE
+			return toStr(endBenchmarkAsMs().count()) + toStr(" ms");
+		#endif
+
+		return "";
+	}
 
 	/// @brief Saves all the log entries to a file.
 	/// @param mPath File path (file will be created if it doesn't exist).
-	extern void saveLogToFile(const FileSystem::Path& mPath);
+	void saveLogToFile(const FileSystem::Path& mPath);
 }
 
-#include "SSVUtils/Log/Log.inl"
+#include "SSVUtils/FileSystem/FileSystem.h"
+#include "SSVUtils/FileSystem/Path.h"
+
+inline void ssvu::saveLogToFile(const ssvu::FileSystem::Path& mPath)
+{
+	#ifndef SSVU_LOG_DISABLE
+		std::ofstream o; o.open(mPath); o << ssvu::getLogStream().str(); o.flush(); o.close();
+	#endif
+}
 
 #endif
