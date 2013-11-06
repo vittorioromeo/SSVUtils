@@ -98,13 +98,24 @@ namespace ssvu
 					return extBegin == std::string::npos ? "" : str.substr(extBegin, str.size() - extBegin);
 				}
 
-				inline Path operator+(const std::string& mPath) const	{ return {path + mPath}; }
 				inline bool operator<(const Path& mPath) const			{ return getStr() < mPath.getStr(); }
 
 				inline operator const std::string&() const { return getStr(); }
 		};
 
-		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath) { return mStream << mPath.getStr(); }
+		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath)	{ return mStream << mPath.getStr(); }
+
+		inline Path operator+(const std::string& mLhs, const Path& mRhs)			{ return {mLhs + mRhs.getStr()}; }
+		inline Path operator+(const Path& mLhs, const std::string& mRhs)			{ return {mLhs.getStr() + mRhs}; }
+		inline Path operator+(const Path& mLhs, const Path& mRhs)					{ return {mLhs.getStr() + mRhs.getStr()}; }
+		inline Path operator+(const char* mLhs, const Path& mRhs)					{ return {std::string(mLhs) + mRhs.getStr()}; }
+		inline Path operator+(const Path& mLhs, const char* mRhs)					{ return {mLhs.getStr() + std::string(mRhs)}; }
+
+		inline bool operator==(const std::string& mLhs, const Path& mRhs)			{ return mLhs == mRhs.getStr(); }
+		inline bool operator==(const Path& mLhs, const std::string& mRhs)			{ return mLhs.getStr() == mRhs; }
+		inline bool operator==(const Path& mLhs, const Path& mRhs)					{ return mLhs.getStr() == mRhs.getStr(); }
+		inline bool operator==(const char* mLhs, const Path& mRhs)					{ return std::string(mLhs) == mRhs.getStr(); }
+		inline bool operator==(const Path& mLhs, const char* mRhs)					{ return mLhs.getStr() == std::string(mRhs); }
 	}
 }
 
