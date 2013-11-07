@@ -26,6 +26,8 @@ namespace ssvu
 			protected:
 				using Iterator = typename Container::iterator;
 				using ConstIterator = typename Container::const_iterator;
+				using ReverseIterator = typename Container::reverse_iterator;
+				using ConstReverseIterator = typename Container::const_reverse_iterator;
 
 				Container items;
 				std::vector<TItem*> toAdd;
@@ -48,12 +50,16 @@ namespace ssvu
 				template<typename TType> inline static bool isDead(const TType& mItem) noexcept	{ return !mItem->ssvu_mmAlive; }
 
 				// Foreach loop/algorithms iterator support
-				Iterator begin() noexcept				{ return items.begin(); }
-				ConstIterator begin() const noexcept	{ return items.begin(); }
-				const Iterator cbegin() const noexcept	{ return items.cbegin(); }
-				Iterator end() noexcept					{ return items.end(); }
-				ConstIterator end() const noexcept		{ return items.end(); }
-				const Iterator cend() const noexcept	{ return items.cend(); }
+				Iterator begin() noexcept						{ return items.begin(); }
+				ConstIterator begin() const noexcept			{ return items.begin(); }
+				ReverseIterator rbegin() noexcept				{ return items.rbegin(); }
+				ConstReverseIterator rbegin() const noexcept	{ return items.rbegin(); }
+				const Iterator cbegin() const noexcept			{ return items.cbegin(); }
+				Iterator end() noexcept							{ return items.end(); }
+				ConstIterator end() const noexcept				{ return items.end(); }
+				ReverseIterator rend() noexcept					{ return items.rend(); }
+				ConstReverseIterator rend() const noexcept		{ return items.rend(); }
+				const Iterator cend() const noexcept			{ return items.cend(); }
 		 };
 	}
 
