@@ -5,6 +5,7 @@
 #ifndef SSVU_UTILS
 #define SSVU_UTILS
 
+#include "SSVUtils/Utils/UtilsClasses.h"
 #include "SSVUtils/Utils/UtilsMath.h"
 #include "SSVUtils/Utils/UtilsContainers.h"
 #include "SSVUtils/Utils/UtilsMakeUnique.h"
