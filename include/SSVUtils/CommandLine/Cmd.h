@@ -58,8 +58,8 @@ namespace ssvu
 					throw std::runtime_error("No flag with name '" + mName + "' in command " + getNamesStr());
 				}
 
-				inline void setArgValue(unsigned int mIdx, const std::string& mValue)		{ args[mIdx]->set(mValue); }
-				inline void setOptArgValue(unsigned int mIdx, const std::string& mValue)	{ optArgs[mIdx]->set(mValue); }
+				inline void setArgValue(unsigned int mIdx, std::string mValue)		{ args[mIdx]->set(std::move(mValue)); }
+				inline void setOptArgValue(unsigned int mIdx, std::string mValue)	{ optArgs[mIdx]->set(std::move(mValue)); }
 
 			public:
 				Cmd(const std::initializer_list<std::string>& mNames) : names{mNames} { }
