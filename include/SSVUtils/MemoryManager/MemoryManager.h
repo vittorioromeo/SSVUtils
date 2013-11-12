@@ -11,11 +11,7 @@
 
 namespace ssvu
 {
-	struct MemoryManageable
-	{
-		bool ssvu_mmAlive{true};
-		inline static void destroy(MemoryManageable& mValue) noexcept { mValue.ssvu_mmAlive = false; }
-	};
+	struct MemoryManageable { bool ssvu_mmAlive{true}; };
 
 	namespace Internal
 	{
