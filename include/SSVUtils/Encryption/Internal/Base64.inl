@@ -6,7 +6,7 @@
 #define SSVU_ENCRYPTION_INTERNAL_BASE64_INL
 
 #include <iostream>
-#include "SSVUtils/Encryption/Internal/Base64.h"
+#include "SSVUtils/Encryption/Internal/Base64.hpp"
 
 namespace ssvu
 {

@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <climits>
-#include "SSVUtils/Encryption/Internal/MD5.h"
+#include "SSVUtils/Encryption/Internal/MD5.hpp"
 
 namespace ssvu
 {

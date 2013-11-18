@@ -8,11 +8,11 @@
 #include <deque>
 #include <stdexcept>
 #include <limits>
-#include "SSVUtils/Utils/UtilsMath.h"
-#include "SSVUtils/CommandLine/Cmd.h"
-#include "SSVUtils/CommandLine/Elements/Flag.h"
-#include "SSVUtils/CommandLine/CmdLine.h"
-#include "SSVUtils/CommandLine/Elements/Bases.h"
+#include "SSVUtils/Utils/UtilsMath.hpp"
+#include "SSVUtils/CommandLine/Cmd.hpp"
+#include "SSVUtils/CommandLine/Elements/Flag.hpp"
+#include "SSVUtils/CommandLine/CmdLine.hpp"
+#include "SSVUtils/CommandLine/Elements/Bases.hpp"
 
 namespace ssvu
 {
