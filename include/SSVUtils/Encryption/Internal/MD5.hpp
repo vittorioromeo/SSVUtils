@@ -28,7 +28,7 @@ documentation and/or software. */
 
 #include <string>
 #include <fstream>
-#include <stdint.h>
+#include <cstdint>
 
 namespace ssvu
 {
