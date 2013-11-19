@@ -17,6 +17,8 @@ namespace ssvu
 	template<typename T> using RndDistributionR = std::uniform_real_distribution<T>;
 
 	constexpr float pi{3.14159265f};
+	constexpr float piHalf{pi / 2.f};
+	constexpr float tau{pi * 2.f};
 	constexpr float degRadRatio{pi / 180.f}; // C++14: templatized values
 
 	/// @brief Gets a random integer value between [mMin and mMax).
