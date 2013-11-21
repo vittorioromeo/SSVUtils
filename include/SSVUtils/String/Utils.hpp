@@ -10,6 +10,8 @@
 #include <vector>
 #include <algorithm>
 #include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Utils/UtilsContainers.hpp"
+#include "SSVUtils/Utils/UtilsIterator.hpp"
 
 namespace ssvu
 {
@@ -61,7 +63,7 @@ namespace ssvu
 	/// @param mStr String to work with.
 	/// @param mEnding String to test.
 	/// @return Returns true if mStr ends with mEnding.
-	inline bool endsWith(const std::string &mStr, const std::string &mEnding) noexcept { return mStr.size() >= mEnding.size() && mStr.compare(mStr.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
+	inline bool endsWith(const std::string& mStr, const std::string& mEnding) noexcept { return mStr.size() >= mEnding.size() && mStr.compare(mStr.size() - mEnding.size(), mEnding.size(), mEnding) == 0; }
 
 	/// @brief Returns whether a string ends with a specific char.
 	/// @param mStr String to work with.
@@ -142,6 +144,39 @@ namespace ssvu
 		}
 		return costs[n];
 	}
+
+	/// @brief Trims all characters of a certain type from the string's left.
+	/// @param mStr String to trim. (will be modified)
+	/// @param mChar Character to trim.
+	inline void trimStrL(std::string& mStr, char mChar = ' ') { trimL<std::string>(mStr, [mChar](char mC){ return mC == mChar; }); }
+
+	/// @brief Trims all characters of a certain type from the string's right.
+	/// @param mStr String to trim. (will be modified)
+	/// @param mChar Character to trim.
+	inline void trimStrR(std::string& mStr, char mChar = ' ') { trimR<std::string>(mStr, [mChar](char mC){ return mC == mChar; }); }
+
+	/// @brief Trims all characters of a certain type both from the string's left and right.
+	/// @param mStr String to trim. (will be modified)
+	/// @param mChar Character to trim.
+	inline void trimStrLR(std::string& mStr, char mChar = ' ') { trimLR<std::string>(mStr, [mChar](char mC){ return mC == mChar; }); }
+
+	/// @brief Gets a copy of a string with characters of a certain type trimmed from the left.
+	/// @param mStr String to trim. (will not be modified)
+	/// @param mChar Character to trim.
+	/// @return Returns a copy of the string, trimmed.
+	inline std::string getTrimmedStrL(std::string mStr, char mChar = ' ') { trimStrL(mStr, mChar); return mStr; }
+
+	/// @brief Gets a copy of a string with characters of a certain type trimmed from the right.
+	/// @param mStr String to trim. (will not be modified)
+	/// @param mChar Character to trim.
+	/// @return Returns a copy of the string, trimmed.
+	inline std::string getTrimmedStrR(std::string mStr, char mChar = ' ') { trimStrR(mStr, mChar); return mStr; }
+
+	/// @brief Gets a copy of a string with characters of a certain type trimmed both from the left and right.
+	/// @param mStr String to trim. (will not be modified)
+	/// @param mChar Character to trim.
+	/// @return Returns a copy of the string, trimmed.
+	inline std::string getTrimmedStrLR(std::string mStr, char mChar = ' ') { trimStrLR(mStr, mChar); return mStr; }
 }
 
 #endif

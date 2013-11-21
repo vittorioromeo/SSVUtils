@@ -199,6 +199,19 @@ SSVU_TEST("String utils tests")
 	EXPECT(toLower("AAA") == "aaa");
 	EXPECT(getCharCount("AAA", 'A') == 3);
 	EXPECT(getLevenshteinDistance("AAA", "AAB") == 1);
+
+	EXPECT(getTrimmedStrL("   AAA") == "AAA");
+	EXPECT(getTrimmedStrL("   AA  A") == "AA  A");
+	EXPECT(getTrimmedStrL("A A A") == "A A A");
+	EXPECT(getTrimmedStrL("  A A A") == "A A A");
+
+	EXPECT(getTrimmedStrR("AAA   ") == "AAA");
+	EXPECT(getTrimmedStrR("AA  A   ") == "AA  A");
+	EXPECT(getTrimmedStrR("A A A") == "A A A");
+	EXPECT(getTrimmedStrR("A A A  ") == "A A A");
+
+	EXPECT(getTrimmedStrLR("   A A A  ") == "A A A");
+	EXPECT(getTrimmedStrLR("      AaA  ") == "AaA");
 }
 SSVU_TEST_END();
 
