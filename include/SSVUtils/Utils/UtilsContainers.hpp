@@ -107,7 +107,10 @@ namespace ssvu
 	/// @brief Removes all items that satisfy a predicate from a container.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Const reference to the predicate.
-	template<typename T, typename P> inline void eraseRemoveIf(T& mContainer, const P& mPredicate) { mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer)); }
+	template<typename T, typename P> inline void eraseRemoveIf(T& mContainer, const P& mPredicate)
+	{
+		mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer));
+	}
 
 	/// @brief Cyclically gets items from a container.
 	/// @details Interally uses getWrapIdx to correctly wrap the entered index.

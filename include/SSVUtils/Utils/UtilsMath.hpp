@@ -12,40 +12,34 @@
 
 namespace ssvu
 {
-	static std::minstd_rand rndEngine;
+	inline std::minstd_rand& getRndEngine()	noexcept { static std::minstd_rand rndEngine; return rndEngine; }
 	template<typename T> using RndDistributionI = std::uniform_int_distribution<T>;
 	template<typename T> using RndDistributionR = std::uniform_real_distribution<T>;
 
-	/// @brief Value of pi. (pi radians = 180 degrees)
-	constexpr float pi{3.14159265f};
-
-	/// @brief Value of pi / 2. (half pi radians = 90 degrees)
-	constexpr float piHalf{pi / 2.f};
-
-	/// @brief Value of pi * 2. (tau radians = 360 degrees)
-	constexpr float tau{pi * 2.f};
-
-	/// @brief Ratio between radians and degrees.
-	constexpr float radDegRatio{pi / 180.f}; // C++14: templatized values
+	// C++14: templatized values
+	constexpr float pi{3.14159265f};			///< @brief Value of pi. (pi radians = 180 degrees)
+	constexpr float piHalf{pi / 2.f};			///< @brief Value of pi / 2. (half pi radians = 90 degrees)
+	constexpr float tau{pi * 2.f};				///< @brief Value of pi * 2. (tau radians = 360 degrees)
+	constexpr float radDegRatio{pi / 180.f};	///< @brief Ratio between radians and degrees.
 
 	/// @brief Gets a random integer value between [mMin and mMax).
 	/// @tparam T Type of integer value. (default int)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper exclusive bound.
 	/// @return Returns a random integer value, between [mMin and mMax).
-	template<typename T = int> inline T getRnd(const T& mMin, const T& mMax) { assert(mMin < mMax); return RndDistributionI<T>(mMin, mMax - 1)(rndEngine); }
+	template<typename T = int> inline T getRnd(const T& mMin, const T& mMax) { assert(mMin < mMax); return RndDistributionI<T>(mMin, mMax - 1)(getRndEngine()); }
 
 	/// @brief Gets a random real value between [mMin and mMax].
 	/// @tparam T Type of real value. (default float)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper inclusive bound.
 	/// @return Returns a random real value, between [mMin and mMax].
-	template<typename T = float> inline T getRndR(const T& mMin, const T& mMax) { assert(mMin < mMax); return RndDistributionR<T>{mMin, mMax}(rndEngine); }
+	template<typename T = float> inline T getRndR(const T& mMin, const T& mMax) { assert(mMin < mMax); return RndDistributionR<T>{mMin, mMax}(getRndEngine()); }
 
 	/// @brief Gets a random sign.
 	/// @tparam T Type of integer value. (default int)
 	/// @return Returns -1 or 1.
-	template<typename T = int> inline T getRndSign() { return RndDistributionI<T>{0, 1}(rndEngine) > 0 ? -1 : 1; }
+	template<typename T = int> inline T getRndSign() { return RndDistributionI<T>{0, 1}(getRndEngine()) > 0 ? -1 : 1; }
 
 	/// @brief Gets the sign of a numeric value. (unsigned version)
 	/// @param mValue Value to use.
@@ -108,8 +102,7 @@ namespace ssvu
 	/// @return Returns the cycled value.
 	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getCycledValue(const T1& mValue, const T2& mMin, const T3& mMax)
 	{
-		using CT = Common<T1, T2, T3>;
-		CT delta{mMax - mMin}, result{std::fmod(mValue - mMin, delta)};
+		Common<T1, T2, T3> delta{mMax - mMin}, result{std::fmod(mValue - mMin, delta)};
 		if(result < 0) result += delta;
 		return mMin + result;
 	}
@@ -127,7 +120,7 @@ namespace ssvu
 	/// @brief Restricts a radian value between 0 and 6.28f.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the restricted value in radians.
-	template<typename T> inline T wrapRad(T mValue) noexcept { mValue = std::fmod(mValue, 6.28f); return mValue < 0 ? mValue + 6.28f : mValue; }
+	template<typename T> inline T wrapRad(T mValue) noexcept { mValue = std::fmod(mValue, tau); return mValue < 0 ? mValue + tau : mValue; }
 
 	/// @brief Restricts a degree value between 0 and 360.f.
 	/// @param mValue Const reference to the value. (original value won't be changed)
