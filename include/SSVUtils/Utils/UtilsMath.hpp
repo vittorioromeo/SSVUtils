@@ -170,25 +170,36 @@ namespace ssvu
 	/// @param mCols Number of columns of the 3D array.
 	/// @param mRows Number of rows of the 3D array.
 	/// @return Returns a 1D index for an "implicit 3D" array.
-	template<typename T> constexpr inline T get1DIdxFrom3D(const T& mX, const T& mY, const T& mZ, const T& mCols, const T& mRows) noexcept { return mX + mY * mCols + mZ * mCols * mRows; }
+	// TODO: Common<...>
+	template<typename T> constexpr inline T get1DIdxFrom3D(const T& mX, const T& mY, const T& mZ, const T& mCols, const T& mRows) noexcept
+	{
+		return mX + mY * mCols + mZ * mCols * mRows;
+	}
 
 	/// @brief Gets a 2D index from an 1D index.
 	/// @details Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
 	/// @param mIdx 1D index.
 	/// @param mCols Number of columns of the 2D array.
-	/// @return Returns a 2D index (under the form of an std::array<T, 2>) for a 2D array with `mCols` columns.
-	template<typename T> inline std::array<T, 2> get2DIdxFrom1D(const T& mIdx, const T& mCols) noexcept { assert(mIdx > 0); T y{mIdx / mCols}; return {{mIdx - y * mCols, y}}; }
+	/// @return Returns a 2D index (under the form of an std::tuple) for a 2D array with `mCols` columns.
+	template<typename T1, typename T2> inline std::tuple<Common<T1, T2>, Common<T1, T2>> get2DIdxFrom1D(const T1& mIdx, const T2& mCols) noexcept
+	{
+		assert(mIdx > 0 && mCols != 0);
+		Common<T1, T2> y{mIdx / mCols};
+		return std::make_tuple(mIdx - y * mCols, y);
+	}
 
 	/// @brief Gets a 3D index from an 1D index.
 	/// @details Useful when dealing with "implicit 3D" arrays, that are stored as 1D arrays.
 	/// @param mIdx 1D index.
 	/// @param mCols Number of columns of the 2D array.
 	/// @param mRows Number of rows of the 3D array.
-	/// @return Returns a 3D index (under the form of an std::array<T, 3>) for an "implicit 3D" array.
-	template<typename T> inline std::array<T, 3> get3DIdxFrom1D(const T& mIdx, const T& mCols, const T& mRows) noexcept
+	/// @return Returns a 3D index (under the form of an std::tuple) for an "implicit 3D" array.
+	template<typename T1, typename T2, typename T3> inline std::tuple<Common<T1, T2, T3>, Common<T1, T2, T3>, Common<T1, T2, T3>>
+		get3DIdxFrom1D(const T1& mIdx, const T2& mCols, const T3& mRows) noexcept
 	{
-		assert(mIdx > 0);
-		return {{mIdx / mCols, (mIdx / mCols) % mRows, mIdx / (mCols * mRows)}};
+		assert(mIdx > 0 && mCols != 0);
+		Common<T1, T2, T3> y{mIdx / mCols};
+		return std::make_tuple(y, y % mRows, mIdx / (mCols * mRows));
 	}
 
 	/// @brief Gets sign-indepedent modulo calculation.
