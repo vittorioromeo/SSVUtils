@@ -20,8 +20,9 @@ namespace ssvu
 			template<typename T, typename P> friend void ssvu::eraseRemoveIf(T&, const P&);
 
 			protected:
-				using Container = std::vector<Uptr<TItem, TDeleter>>;
-				std::vector<TItem*> toAdd;
+				using TUptr = Uptr<TItem, TDeleter>;
+				using Container = std::vector<TUptr>;
+				std::vector<TUptr> toAdd;
 
 			public:
 				using Container::begin;
@@ -48,12 +49,12 @@ namespace ssvu
 		public:
 			inline void refreshImpl()
 			{
-				for(const auto& i : this->toAdd) this->emplace_back(i); this->toAdd.clear();
+				for(auto& i : this->toAdd) this->emplace_back(std::move(i)); this->toAdd.clear();
 				eraseRemoveIf(*this, this->template isDead<Uptr<T, TDeleter>>);
 			}
 			template<typename TType = T, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
 			{
-				auto result(new TType(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
+				auto result(new TType(std::forward<TArgs>(mArgs)...)); this->toAdd.emplace_back(result); return *result;
 			}
 	};
 }
