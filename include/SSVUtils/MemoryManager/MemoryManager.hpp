@@ -22,7 +22,7 @@ namespace ssvu
 			protected:
 				using TUptr = Uptr<TItem, TDeleter>;
 				using Container = std::vector<TUptr>;
-				std::vector<TUptr> toAdd;
+				Container toAdd;
 
 			public:
 				using Container::begin;
