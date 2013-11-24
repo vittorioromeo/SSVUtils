@@ -32,13 +32,13 @@ namespace ssvu
 					replaceAll(path, R"(\)", "/");
 					replaceAll(path, R"(\\)", "/");
 					replaceAll(path, "//", "/");
-					if(!endsWith(path, "/") && isFolder()) path += ("/");
+					if(!endsWith(path, "/") && isFolder()) path += "/";
 				}
 
 			public:
 				inline Path() = default;
 				inline Path(const char* mPath) : path{mPath} { }
-				inline Path(const std::string& mPath) : path{mPath} { }
+				inline Path(std::string mPath) : path{std::move(mPath)} { }
 
 				inline const std::string& getStr() const	{ normalize(); return path; }
 				inline const char* getCStr() const noexcept	{ return getStr().c_str(); }
@@ -51,12 +51,12 @@ namespace ssvu
 					return (fileStat.st_mode & S_IFMT) == S_IFDIR;
 				}
 
-				inline bool hasExtension(const std::string& mExtension) const	{ return endsWith(toLower(getStr()), toLower(mExtension)); }
-				inline bool exists() const										{ struct stat buf; return stat(getCStr(), &buf) != -1; }
-				inline bool isRootOrParent() const								{ return endsWith(getStr(), "./") || endsWith(getStr(), "../"); }
+				inline bool hasExtension(const std::string& mExt) const	{ return endsWith(toLower(getStr()), toLower(mExt)); }
+				inline bool exists() const								{ struct stat buf; return stat(getCStr(), &buf) != -1; }
+				inline bool isRootOrParent() const						{ return endsWith(getStr(), "./") || endsWith(getStr(), "../"); }
 				inline Path getParent() const
 				{
-					auto str(getStr());
+					const auto& str(getStr());
 					for(auto i(str.size() - 1); i > 0; --i) if(str[i] == '/') return {str.substr(0, i + 1)};
 					return {""};
 				}
@@ -64,13 +64,13 @@ namespace ssvu
 				{
 					assert(!isFolder());
 
-					auto str(getStr());
+					const auto& str(getStr());
 					auto nameBegin(str.find_last_of('/') + 1);
 					return str.substr(nameBegin, str.size() - nameBegin);
 				}
 				inline std::string getFileNameNoExtensions() const
 				{
-					auto str(getFileName());
+					const auto& str(getFileName());
 					auto extBegin(str.find_first_of('.', beginsWith(str, '.') ? 1 : 0));
 					return str.substr(0, extBegin);
 				}
@@ -78,7 +78,7 @@ namespace ssvu
 				{
 					assert(isFolder());
 
-					std::string str(getStr());
+					auto str(getStr());
 					assert(endsWith(str, '/'));
 
 					str.erase(std::end(str) - 1);
@@ -93,12 +93,12 @@ namespace ssvu
 				}
 				inline std::string getAllExtensions() const
 				{
-					auto str(getFileName());
+					const auto& str(getFileName());
 					auto extBegin(str.find_first_of('.', beginsWith(str, '.') ? 1 : 0));
 					return extBegin == std::string::npos ? "" : str.substr(extBegin, str.size() - extBegin);
 				}
 
-				inline bool operator<(const Path& mPath) const			{ return getStr() < mPath.getStr(); }
+				inline bool operator<(const Path& mPath) const { return getStr() < mPath.getStr(); }
 
 				inline operator const std::string&() const { return getStr(); }
 		};

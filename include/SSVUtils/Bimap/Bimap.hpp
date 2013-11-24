@@ -18,7 +18,7 @@ namespace ssvu
 	{
 		private:
 			TContainer<T, U> map1; /*!< Map container 1. */
-			TContainer<U, T> map2; /*!< Container 2. */
+			TContainer<U, T> map2; /*!< Map container 2. */
 
 		public:
 			/// @brief Default constructor.

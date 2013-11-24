@@ -3,7 +3,6 @@
 
 #include <iterator>
 
-// C++14: remove, will be obsolete
 namespace std
 {
 	template<typename T> auto cbegin(const T& mContainer) noexcept -> decltype(std::begin(mContainer)) 	{ return std::begin(mContainer); }
@@ -17,3 +16,5 @@ namespace std
 }
 
 #endif
+
+// C++14: remove, will be obsolete

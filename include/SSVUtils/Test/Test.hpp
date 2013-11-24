@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include "SSVUtils/Global/Typedefs.hpp"
 #include "SSVUtils/Log/Log.hpp"
+#include "SSVUtils/Utils/UtilsMacros.hpp"
 
 #define EXPECT(expr) \
 	for(;;) \
@@ -39,15 +40,14 @@
 		throw stInternal::Expect{stInternal::Location{__FILE__, __LINE__}, #expr, stInternal::getOfType(#excpt)}; \
 	}
 
-#define TOKENPASTE(x, y) x ## y
-#define TOKENPASTE2(x, y) TOKENPASTE(x, y)
+
 
 #ifndef SSVU_TEST_DISABLE
-	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner TOKENPASTE2(Unique_, __LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
+	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVU_TOKENPASTE2(Unique_, __LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
 	#define SSVU_TEST_END() }});}}
 	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
 #else
-	#define SSVU_TEST(name) struct TOKENPASTE2(Unique_, __LINE__) { void f() __attribute__ ((unused)) {
+	#define SSVU_TEST(name) struct SSVU_TOKENPASTE2(Unique_, __LINE__) { void f() __attribute__ ((unused)) {
 	#define SSVU_TEST_END() }} __attribute__ ((unused));
 	#define SSVU_TEST_RUN_ALL()
 #endif

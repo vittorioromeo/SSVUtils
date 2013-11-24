@@ -160,7 +160,10 @@ namespace ssvu
 	/// @param mY Y index.
 	/// @param mCols Number of columns of the 2D array.
 	/// @return Returns a 1D index for an "implicit 2D" array with `mCols` columns.
-	template<typename T> constexpr inline T get1DIdxFrom2D(const T& mX, const T& mY, const T& mCols) noexcept { return mX + mY * mCols; }
+	template<typename T1, typename T2, typename T3> constexpr inline Common<T1, T2, T3> get1DIdxFrom2D(const T1& mX, const T2& mY, const T3& mCols) noexcept
+	{
+		return mX + mY * mCols;
+	}
 
 	/// @brief Gets a 1D index from a 3D index.
 	/// @details Useful when dealing with "implicit 3D" arrays, that are stored as 1D arrays.
@@ -170,8 +173,8 @@ namespace ssvu
 	/// @param mCols Number of columns of the 3D array.
 	/// @param mRows Number of rows of the 3D array.
 	/// @return Returns a 1D index for an "implicit 3D" array.
-	// TODO: Common<...>
-	template<typename T> constexpr inline T get1DIdxFrom3D(const T& mX, const T& mY, const T& mZ, const T& mCols, const T& mRows) noexcept
+	template<typename T1, typename T2, typename T3, typename T4, typename T5>
+		constexpr inline Common<T1, T2, T3, T4, T5> get1DIdxFrom3D(const T1& mX, const T2& mY, const T3& mZ, const T4& mCols, const T5& mRows) noexcept
 	{
 		return mX + mY * mCols + mZ * mCols * mRows;
 	}

@@ -7,6 +7,9 @@
 
 namespace ssvu
 {
+	#define SSVU_TOKENPASTE(x, y) x ## y
+	#define SSVU_TOKENPASTE2(x, y) SSVU_TOKENPASTE(x, y)
+
 	#define SSVU_DEFINE_HAS_MEMBER_CHECKER(name, memberName) \
 		template<typename, typename T> class name; \
 		template<typename C, typename TReturn, typename... TArgs> class name<C, TReturn(TArgs...)> \

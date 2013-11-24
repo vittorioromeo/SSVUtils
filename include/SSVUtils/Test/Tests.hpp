@@ -22,6 +22,9 @@ SSVU_TEST("UtilsMath tests")
 		// getRndR is [a, b]
 		auto rf(getRndR<float>(0.f, 2.f));
 		EXPECT(rf >= 0.f && rf <= 2.f);
+
+		auto rs(getRndSign());
+		EXPECT(rs == 1 || rs == -1);
 	}
 
 	EXPECT(getSign(-1) == -1);

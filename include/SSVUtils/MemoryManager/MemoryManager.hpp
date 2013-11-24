@@ -39,8 +39,8 @@ namespace ssvu
 					return reinterpret_cast<TDerived*>(this)->template createTImpl<TType, TArgs...>(std::forward<TArgs>(mArgs)...);
 				}
 
-				template<typename TType> inline static bool isAlive(const TType& mItem) noexcept { return mItem->ssvu_mmAlive; }
-				template<typename TType> inline static bool isDead(const TType& mItem) noexcept	{ return !mItem->ssvu_mmAlive; }
+				template<typename TType> inline static bool isAlive(const TType& mItem) noexcept	{ return mItem->ssvu_mmAlive; }
+				template<typename TType> inline static bool isDead(const TType& mItem) noexcept		{ return !isAlive(mItem); }
 		 };
 	}
 
