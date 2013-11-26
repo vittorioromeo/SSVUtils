@@ -15,7 +15,7 @@ namespace ssvu
 	{
 		protected:
 			Action action;
-			inline void update(float) override { action(); timeline.next(); }
+			inline void update(FT) override { action(); timeline.next(); }
 
 		public:
 			Do(Timeline& mTimeline, Action mAction) : Command{mTimeline}, action{mAction} { }

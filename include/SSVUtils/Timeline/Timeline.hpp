@@ -31,7 +31,7 @@ namespace ssvu
 			std::vector<Command*> commands;
 			Command* currentCommand{nullptr};
 			bool ready{true}, finished{false};
-			float remainder{0.f};
+			FT remainder{0.f};
 
 			template<typename T> inline T& insertImpl(unsigned int mIdx, T& mCommand)
 			{
@@ -63,7 +63,7 @@ namespace ssvu
 			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
 			inline void stop() noexcept				{ finished = true; ready = false; }
 
-			void update(float mFT)
+			void update(FT mFT)
 			{
 				commandManager.refresh();
 

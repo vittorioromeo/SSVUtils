@@ -17,7 +17,7 @@ namespace ssvu
 
 		public:
 			inline Timeline& create() { return timelines.create(); }
-			inline void update(float mFT)
+			inline void update(FT mFT)
 			{
 				timelines.refresh();
 				for(const auto& t : timelines) { t->update(mFT); if(t->isFinished()) timelines.del(*t); }

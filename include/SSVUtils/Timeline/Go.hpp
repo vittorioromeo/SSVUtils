@@ -18,7 +18,7 @@ namespace ssvu
 				T target;
 				int times, currentTimes;
 
-				inline void update(float) override
+				inline void update(FT) override
 				{
 					if(currentTimes == 0)		{ timeline.next(); }
 					else if(currentTimes > 0)	{ --currentTimes; timeline.jumpTo(target); }

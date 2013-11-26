@@ -14,10 +14,10 @@ namespace ssvu
 	class Wait final : public Command
 	{
 		private:
-			float time, currentTime;
+			FT time, currentTime;
 
 		protected:
-			inline void update(float mFT) override
+			inline void update(FT mFT) override
 			{
 				timeline.ready = false;
 
@@ -30,7 +30,7 @@ namespace ssvu
 			inline void reset() override { currentTime = time; }
 
 		public:
-			Wait(Timeline& mTimeline, float mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { assert(time > 0); }
+			Wait(Timeline& mTimeline, FT mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { assert(time > 0); }
 	};
 
 	namespace Internal
@@ -38,7 +38,7 @@ namespace ssvu
 		template<bool TWhile> class WaitLoop final : public Command
 		{
 			private:	Predicate predicate;
-			protected:	inline void update(float) override { timeline.ready = false; if(predicate() != TWhile) timeline.next(); }
+			protected:	inline void update(FT) override { timeline.ready = false; if(predicate() != TWhile) timeline.next(); }
 			public:		WaitLoop(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
 		};
 	}

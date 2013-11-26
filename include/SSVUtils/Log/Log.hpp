@@ -23,7 +23,7 @@ namespace ssvu
 
 	namespace Internal
 	{
-		using TimePointHR = std::chrono::time_point<std::chrono::high_resolution_clock>;
+		using TimePointHR = std::chrono::time_point<HRClock>;
 		using CoutType = std::basic_ostream<char, std::char_traits<char>>;
 		using StdEndLine = CoutType&(CoutType&);
 
@@ -79,7 +79,7 @@ namespace ssvu
 	inline void startBenchmark()
 	{
 		#ifndef SSVU_LOG_DISABLE
-			Internal::getBenchStart() = std::chrono::high_resolution_clock::now();
+			Internal::getBenchStart() = HRClock::now();
 		#endif
 	}
 
@@ -88,7 +88,7 @@ namespace ssvu
 	inline std::chrono::milliseconds endBenchmarkAsMs()
 	{
 		#ifndef SSVU_LOG_DISABLE
-			Internal::getBenchEnd() = std::chrono::high_resolution_clock::now();
+			Internal::getBenchEnd() = HRClock::now();
 			return std::chrono::duration_cast<std::chrono::milliseconds>(Internal::getBenchEnd() - Internal::getBenchStart());
 		#endif
 

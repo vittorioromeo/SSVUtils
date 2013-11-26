@@ -5,6 +5,7 @@
 #ifndef SSVU_GLOBAL_TYPEDEFS
 #define SSVU_GLOBAL_TYPEDEFS
 
+#include <chrono>
 #include <memory>
 #include <functional>
 #include <type_traits>
@@ -81,6 +82,10 @@ namespace ssvu
 
 	using Action = Func<void()>;
 	using Predicate = Func<bool()>;
+
+	using HRClock = std::chrono::high_resolution_clock;
+	using FT = float;
+	using FTDuration = std::chrono::duration<FT, std::milli>;
 }
 
 #endif
