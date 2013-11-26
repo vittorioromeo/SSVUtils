@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <cassert>
-#include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Utils/UtilsContainers.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 

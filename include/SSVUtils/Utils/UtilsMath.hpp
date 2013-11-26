@@ -8,7 +8,7 @@
 #include <cassert>
 #include <array>
 #include <random>
-#include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Global/Common.hpp"
 
 namespace ssvu
 {

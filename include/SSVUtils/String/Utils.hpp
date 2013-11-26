@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Utils/UtilsContainers.hpp"
 #include "SSVUtils/Utils/UtilsIterator.hpp"
 

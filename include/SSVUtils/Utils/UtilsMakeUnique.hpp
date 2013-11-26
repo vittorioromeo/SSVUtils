@@ -10,7 +10,7 @@
 #include <memory>
 #include <type_traits>
 #include <utility>
-#include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Global/Common.hpp"
 
 namespace std
 {

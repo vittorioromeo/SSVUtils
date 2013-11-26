@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_GLOBAL_TYPEDEFS
-#define SSVU_GLOBAL_TYPEDEFS
+#ifndef SSVU_GLOBAL_COMMON
+#define SSVU_GLOBAL_COMMON
 
 #include <chrono>
 #include <memory>
@@ -38,6 +38,7 @@ namespace std
 
 namespace ssvu
 {
+	// Type traits shortcuts
 	template<typename T, typename TDeleter = std::default_delete<T>> using Uptr = std::unique_ptr<T, TDeleter>;
 	template<typename... TArgs> using Common = std::common_type_t<TArgs...>;
 	template<bool TBool, typename T = void> using EnableIf = std::enable_if_t<TBool, T>;
@@ -64,27 +65,44 @@ namespace ssvu
 	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept { return std::is_base_of<T1, T2>::value; }
 }
 
+/// @macro If this macro is defined, `std::function` will be used instead of `ssvu::FastFunc`.
 #ifndef SSVU_USE_STD_FUNCTION
 	#include "SSVUtils/FastFunc/FastFunc.hpp"
 #endif
 
 namespace ssvu
 {
-	template<typename> struct FuncHelper;
+	namespace Internal
+	{
+		template<typename> struct FuncHelper;
 
-	#ifndef SSVU_USE_STD_FUNCTION
-		template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = FastFunc<T(TArgs...)>; };
-	#else
-		template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
-	#endif
+		#ifndef SSVU_USE_STD_FUNCTION
+			template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = FastFunc<T(TArgs...)>; };
+		#else
+			template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
+		#endif
+	}
 
-	template<typename T> using Func = typename FuncHelper<T>::FuncType;
+	/// @typedef Func is `std::function` if `SSVU_USE_STD_FUNCTION` is defined,
+	/// `ssvu::FastFunc` otherwise.
+	template<typename T> using Func = typename Internal::FuncHelper<T>::FuncType;
 
+	/// @typedef Action represents a `void()` function,
 	using Action = Func<void()>;
+
+	/// @typedef Predicate represents a `bool()` function,
 	using Predicate = Func<bool()>;
 
+	/// @typedef HRClock is a simple shortcut for `std::chrono::high_resolution_clock`.
 	using HRClock = std::chrono::high_resolution_clock;
+
+	/// @typedef FT is a shortcut for `float` intended to be used in frametime related
+	/// contexts. It can be read both as "frametime" and "float time", and should be
+	/// used instead of plain float for frametime-driven timers, delays and durations.
 	using FT = float;
+
+	/// @typedef FTDuration is a millisecond-precision `std::chrono::duration` intended
+	/// for use in frametime-related contexts.
 	using FTDuration = std::chrono::duration<FT, std::milli>;
 }
 

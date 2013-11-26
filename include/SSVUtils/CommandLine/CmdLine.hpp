@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Global/Common.hpp"
 
 namespace ssvu
 {

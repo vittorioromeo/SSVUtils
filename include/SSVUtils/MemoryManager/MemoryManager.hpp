@@ -6,7 +6,7 @@
 #define SSVU_MEMORYMANAGER
 
 #include <vector>
-#include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Utils/UtilsContainers.hpp"
 
 namespace ssvu

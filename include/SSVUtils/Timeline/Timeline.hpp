@@ -6,7 +6,7 @@
 #define SSVU_TIMELINE
 
 #include <vector>
-#include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/Timeline/Command.hpp"
 #include "SSVUtils/Utils/UtilsContainers.hpp"

@@ -5,7 +5,7 @@
 #ifndef SSVUTILS
 #define SSVUTILS
 
-#include "SSVUtils/Global/Typedefs.hpp"
+#include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Test/Test.hpp"
 #include "SSVUtils/Log/Log.hpp"
 #include "SSVUtils/Timeline/Timeline.hpp"
