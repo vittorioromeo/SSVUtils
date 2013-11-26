@@ -21,10 +21,10 @@ namespace ssvu
 
 	class Timeline : public MemoryManageable
 	{
+		friend class Do;
 		friend class Wait;
 		template<bool> friend class Internal::WaitLoop;
 		template<typename> friend class Internal::GoImpl;
-		friend class Do;
 
 		private:
 			MemoryManager<Command> commandManager;
@@ -33,7 +33,7 @@ namespace ssvu
 			bool ready{true}, finished{false};
 			FT remainder{0.f};
 
-			template<typename T> inline T& insertImpl(unsigned int mIdx, T& mCommand)
+			template<typename T> inline T& insertImpl(std::size_t mIdx, T& mCommand)
 			{
 				commands.insert(std::begin(commands) + mIdx, &mCommand);
 				if(currentCommand == nullptr) currentCommand = &mCommand;
@@ -57,13 +57,13 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline T& insert(unsigned int mIdx, TArgs&&... mArgs)	{ return insertImpl(mIdx, create<T>(mArgs...)); }
 
 			inline void del(Command& mCommand)		{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
-			inline void jumpTo(unsigned int mIdx)	{ currentCommand = commands[mIdx]; }
+			inline void jumpTo(std::size_t mIdx)	{ currentCommand = commands[mIdx]; }
 			inline void jumpTo(Command& mCommand)	{ currentCommand = &mCommand; }
 			inline void start()	noexcept			{ finished = false; ready = true; }
 			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
 			inline void stop() noexcept				{ finished = true; ready = false; }
 
-			void update(FT mFT)
+			inline void update(FT mFT)
 			{
 				commandManager.refresh();
 
