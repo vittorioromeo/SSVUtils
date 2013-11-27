@@ -234,9 +234,8 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getWrapIdx(T1 mVal, const T2& mLowerBound, const T3& mUpperBound) noexcept
 	{
 		assert(mLowerBound < mUpperBound);
-		const auto& rangeSize(mUpperBound - 1 - mLowerBound + 1);
-		assert(rangeSize != 0);
-		assert(rangeSize + 1 != 0);
+		const auto& rangeSize(mUpperBound - mLowerBound);
+		assert(rangeSize != 0 && rangeSize + 1 != 0);
 		if(mVal < mLowerBound) mVal += rangeSize * ((mLowerBound - mVal) / rangeSize + 1);
 		return mLowerBound + (mVal - mLowerBound) % rangeSize;
 	}
