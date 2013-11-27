@@ -235,6 +235,8 @@ namespace ssvu
 	{
 		assert(mLowerBound < mUpperBound);
 		const auto& rangeSize(mUpperBound - 1 - mLowerBound + 1);
+		assert(rangeSize != 0);
+		assert(rangeSize + 1 != 0);
 		if(mVal < mLowerBound) mVal += rangeSize * ((mLowerBound - mVal) / rangeSize + 1);
 		return mLowerBound + (mVal - mLowerBound) % rangeSize;
 	}
@@ -246,7 +248,11 @@ namespace ssvu
 	/// @param mVal Index value to wrap.
 	/// @param mUpperBound Upper bound of possible indices (exclusive).
 	/// @return Returns the wrapped index value.
-	template<typename T1, typename T2> inline constexpr Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept { return ((mVal % mUpperBound) + mUpperBound) % mUpperBound; }
+	template<typename T1, typename T2> inline constexpr Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept
+	{
+		assert(mUpperBound != 0);
+		return ((mVal % mUpperBound) + mUpperBound) % mUpperBound;
+	}
 
 	/// @brief Calculates Euclidean distance (squared) between two points.
 	/// @param mX1 First point X.
