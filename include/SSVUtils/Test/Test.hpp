@@ -49,7 +49,7 @@
 #else
 	#define SSVU_TEST(name) struct SSVU_TOKENPASTE2(Unique_, __LINE__) { void f() __attribute__ ((unused)) {
 	#define SSVU_TEST_END() }} __attribute__ ((unused));
-	#define SSVU_TEST_RUN_ALL()
+	#define SSVU_TEST_RUN_ALL() { }
 #endif
 
 namespace ssvu

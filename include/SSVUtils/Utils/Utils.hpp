@@ -5,12 +5,12 @@
 #ifndef SSVU_UTILS
 #define SSVU_UTILS
 
+#include "SSVUtils/Utils/UtilsMacros.hpp"
 #include "SSVUtils/Utils/UtilsClasses.hpp"
 #include "SSVUtils/Utils/UtilsMath.hpp"
 #include "SSVUtils/Utils/UtilsContainers.hpp"
 #include "SSVUtils/Utils/UtilsMakeUnique.hpp"
 #include "SSVUtils/Utils/UtilsTuple.hpp"
 #include "SSVUtils/Utils/UtilsIterator.hpp"
-#include "SSVUtils/Utils/UtilsMacros.hpp"
 
 #endif

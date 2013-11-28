@@ -9,6 +9,7 @@
 #include <array>
 #include <random>
 #include "SSVUtils/Global/Common.hpp"
+#include "SSVUtils/Utils/UtilsMacros.hpp"
 
 namespace ssvu
 {
@@ -91,7 +92,7 @@ namespace ssvu
 	/// @return Returns mMax if mValue > mMax, mMin if mValue < mMin, mValue if mMin < mValue < mMax.
 	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> getClamped(const T1& mValue, const T2& mMin, const T3& mMax) noexcept
 	{
-		/*assert(mMin <= mMax);*/
+		SSVU_CONSTEXPR_ASSERT(mMin <= mMax);
 		return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue);
 	}
 
@@ -162,6 +163,7 @@ namespace ssvu
 	/// @return Returns a 1D index for an "implicit 2D" array with `mCols` columns.
 	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> get1DIdxFrom2D(const T1& mX, const T2& mY, const T3& mCols) noexcept
 	{
+		SSVU_CONSTEXPR_ASSERT(mCols >= 0);
 		return mX + mY * mCols;
 	}
 
@@ -176,6 +178,7 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4, typename T5>
 		inline constexpr Common<T1, T2, T3, T4, T5> get1DIdxFrom3D(const T1& mX, const T2& mY, const T3& mZ, const T4& mCols, const T5& mRows) noexcept
 	{
+		SSVU_CONSTEXPR_ASSERT(mCols >= 0 && mRows >= 0);
 		return mX + mY * mCols + mZ * mCols * mRows;
 	}
 
@@ -249,7 +252,7 @@ namespace ssvu
 	/// @return Returns the wrapped index value.
 	template<typename T1, typename T2> inline constexpr Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept
 	{
-		assert(mUpperBound != 0);
+		SSVU_CONSTEXPR_ASSERT(mCols >= 0 && mRows >= 0);
 		return ((mVal % mUpperBound) + mUpperBound) % mUpperBound;
 	}
 

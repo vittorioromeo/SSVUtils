@@ -8,13 +8,13 @@
 namespace ssvu
 {
 	/// @macro Pastes two tokens togheter to create a single token. (1 layer of indirection)
-	#define SSVU_TOKENPASTE(x, y) x ## y
+	#define SSVU_TOKENPASTE(mA, mB) mA ## mB
 
 	/// @macro Pastes two tokens togheter to create a single token. (2 layers of indirection)
-	#define SSVU_TOKENPASTE2(x, y) SSVU_TOKENPASTE(x, y)
+	#define SSVU_TOKENPASTE2(mA, mB) SSVU_TOKENPASTE(mA, mB)
 
 	/// @macro Define a template class with name `name` that checks if a certain type T has
-	/// a member of name `memberName`.
+	/// a member of name `mMemberName`.
 	/// @code
 	/// struct Example { void testMethod() { } };
 	/// SSVU_DEFINE_HAS_MEMBER_CHECKER(HasTestMethod, testMethod);
@@ -22,26 +22,34 @@ namespace ssvu
 	/// Example example{};
 	/// callTestMethod(example);
 	/// @endcode
-	#define SSVU_DEFINE_HAS_MEMBER_CHECKER(name, memberName) \
-		template<typename, typename T> class name; \
-		template<typename C, typename TReturn, typename... TArgs> class name<C, TReturn(TArgs...)> \
+	#define SSVU_DEFINE_HAS_MEMBER_CHECKER(mName, mMemberName) \
+		template<typename, typename T> class mName; \
+		template<typename C, typename TReturn, typename... TArgs> class mName<C, TReturn(TArgs...)> \
 		{ \
-			template<typename T> static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().memberName(std::declval<TArgs>()...)), TReturn>::type { return {}; } \
+			template<typename T> static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().mMemberName(std::declval<TArgs>()...)), TReturn>::type { return {}; } \
 			template<typename> static constexpr std::false_type check(...) { return {}; } \
 			public: static constexpr bool Value = decltype(check<C>(0))::value; \
 		} \
 
-	/// @macro Define a template function with name `name` that invokes `memberName` on objects
-	/// if those objects have a `memberName` member, otherwise does nothing. Must be used with
-	/// a valid `checker`, which must be a previously defined `SSVU_DEFINE_HAS_MEMBER_CHECKER`.
-	#define SSVU_DEFINE_HAS_MEMBER_INVOKER(name, memberName, checker) \
+	/// @macro Define a template function with name `name` that invokes `mMemberName` on objects
+	/// if those objects have a `mMemberName` member, otherwise does nothing. Must be used with
+	/// a valid `mChecker`, which must be a previously defined `SSVU_DEFINE_HAS_MEMBER_CHECKER`.
+	#define SSVU_DEFINE_HAS_MEMBER_INVOKER(mName, mMemberName, mChecker) \
 		namespace _ssvuMacroImpl { \
-			template<typename T, bool TCheck, typename... TArgs> struct _ ## name ## Impl; \
-			template<typename T, typename... TArgs> struct _ ## name ## Impl<T, true, TArgs...> { inline static void call(T& mArg, TArgs&&... mArgs) { mArg.memberName(std::forward<TArgs>(mArgs)...); } }; \
-			template<typename T, typename... TArgs> struct _ ## name ## Impl<T, false, TArgs...> { inline static void call(T&, TArgs&&...) { } }; } \
-			template<typename T, typename... TArgs> inline void name(T& mArg, TArgs&&... mArgs) { _ssvuMacroImpl::_ ## name ## Impl<T, checker, TArgs...>::call(mArg, std::forward<TArgs>(mArgs)...); \
+			template<typename T, bool TCheck, typename... TArgs> struct _ ## mName ## Impl; \
+			template<typename T, typename... TArgs> struct _ ## mName ## Impl<T, true, TArgs...> { inline static void call(T& mArg, TArgs&&... mArgs) { mArg.mMemberName(std::forward<TArgs>(mArgs)...); } }; \
+			template<typename T, typename... TArgs> struct _ ## mName ## Impl<T, false, TArgs...> { inline static void call(T&, TArgs&&...) { } }; } \
+			template<typename T, typename... TArgs> inline void mName(T& mArg, TArgs&&... mArgs) { _ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, std::forward<TArgs>(mArgs)...); \
 		} \
-		struct _dummy ## name ## memberName { } __attribute__ ((unused))
+		struct _dummy ## mName ## mMemberName { } __attribute__ ((unused))
+
+	#ifdef __clang__
+		/// @macro When compiling with clang, using `assert` in constexpr functions seems to be allowed.
+		#define SSVU_CONSTEXPR_ASSERT(mTest) assert(mTest)
+	#else
+		/// @macro When compiling with g++, using `assert` in constexpr functions causes an error.
+		#define SSVU_CONSTEXPR_ASSERT(mTest) { }
+	#endif
 }
 
 #endif
