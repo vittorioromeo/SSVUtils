@@ -203,7 +203,7 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3> inline std::tuple<Common<T1, T2, T3>, Common<T1, T2, T3>, Common<T1, T2, T3>>
 		get3DIdxFrom1D(const T1& mIdx, const T2& mCols, const T3& mRows) noexcept
 	{
-		assert(mIdx > 0 && mCols != 0);
+		assert(mIdx > 0 && mRows != 0 && mCols != 0);
 		Common<T1, T2, T3> y{mIdx / mCols};
 		return std::make_tuple(y, y % mRows, mIdx / (mCols * mRows));
 	}
@@ -252,7 +252,7 @@ namespace ssvu
 	/// @return Returns the wrapped index value.
 	template<typename T1, typename T2> inline constexpr Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept
 	{
-		SSVU_CONSTEXPR_ASSERT(mCols >= 0 && mRows >= 0);
+		SSVU_CONSTEXPR_ASSERT(mCols >= 0 && mRows >= 0 && mUpperBound != 0);
 		return ((mVal % mUpperBound) + mUpperBound) % mUpperBound;
 	}
 

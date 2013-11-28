@@ -32,7 +32,7 @@ namespace ssvu
 					replaceAll(path, R"(\)", "/");
 					replaceAll(path, R"(\\)", "/");
 					replaceAll(path, "//", "/");
-					if(!endsWith(path, "/") && isFolder()) path += "/";
+					if(!endsWith(path, "/") && existsAsFolder()) path += "/";
 				}
 
 			public:
@@ -43,7 +43,7 @@ namespace ssvu
 				inline const std::string& getStr() const	{ normalize(); return path; }
 				inline const char* getCStr() const noexcept	{ return getStr().c_str(); }
 
-				inline bool isFolder() const
+				inline bool existsAsFolder() const
 				{
 					struct stat fileStat;
 					int err{stat(getCStr(), &fileStat)};
@@ -62,8 +62,6 @@ namespace ssvu
 				}
 				inline std::string getFileName() const
 				{
-					assert(!isFolder());
-
 					const auto& str(getStr());
 					auto nameBegin(str.find_last_of('/') + 1);
 					return str.substr(nameBegin, str.size() - nameBegin);
@@ -76,8 +74,6 @@ namespace ssvu
 				}
 				inline std::string getFolderName() const
 				{
-					assert(isFolder());
-
 					auto str(getStr());
 					assert(endsWith(str, '/'));
 
