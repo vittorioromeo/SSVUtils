@@ -20,7 +20,7 @@ namespace ssvu
 		{
 			template<Mode TM, Type TT, Pick TP, Sort TS> void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired)
 			{
-				if(!mPath.existsAsFolder()) { lo("ssvu::FileSystem::ScanHelper") << "Directory \"" << mPath << "\" not found" << std::endl; return; }
+				if(!mPath.existsAsFolder()) { lo("ssvufs::ScanHelper") << "Directory \"" << mPath << "\" not found" << std::endl; return; }
 
 				DIR* dir{opendir(mPath.getCStr())};
 				dirent* entry{readdir(dir)};

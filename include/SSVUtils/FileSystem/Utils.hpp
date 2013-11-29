@@ -46,7 +46,7 @@ namespace ssvu
 
 		/// @brief Removes a file from the user's filesystem.
 		/// @param mPath Path to existing file.
-		inline void removeFile(const Path& mPath) { if(remove(mPath.getCStr()) != 0) ssvu::lo("ssvu::FileSystem::removeFile") << "Error removing file: " << mPath; }
+		inline void removeFile(const Path& mPath) { if(remove(mPath.getCStr()) != 0) ssvu::lo("ssvufs::removeFile") << "Error removing file: " << mPath; }
 
 		/// @brief Expands the `~` symbol in a path with the user's home path.
 		/// @details Uses environment variables. Same logic as python's `os.path.expanduserpath`.

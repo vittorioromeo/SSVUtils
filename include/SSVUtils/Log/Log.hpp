@@ -111,6 +111,7 @@ namespace ssvu
 	void saveLogToFile(const FileSystem::Path& mPath);
 }
 
+// TODO: include hell (if I remove line 116 everything breaks!)
 #include "SSVUtils/FileSystem/FileSystem.hpp"
 #include "SSVUtils/FileSystem/Path.hpp"
 
