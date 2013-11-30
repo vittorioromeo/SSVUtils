@@ -32,32 +32,21 @@ namespace ssvu
 
 		struct LOut
 		{
-			std::string lastTitle;
-			template<typename T> inline LOut& operator()(const T& mValue)
-			{
-				#ifndef SSVU_LOG_DISABLE
-					lastTitle = "[" + toStr(mValue) + "] ";
-					std::cout << std::left << std::setw(38) << lastTitle;
-					getLogStream() << std::left << std::setw(38) << lastTitle;
-				#endif
-
-				return *this;
-			}
+			std::string title;
 			inline void flush() const { std::cout.flush(); getLogStream().flush(); }
 		};
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
 			#ifndef SSVU_LOG_DISABLE
-				std::cout << mValue; getLogStream() << mValue;
-			#endif
+				if(mLOut.title != "")
+				{
+					std::cout << std::left << std::setw(38) <<  "[" + mLOut.title + "] ";
+					getLogStream() << std::left << std::setw(38) <<  "[" + mLOut.title + "] ";
+					mLOut.title = "";
+				}
 
-			return mLOut;
-		}
-		template<> inline LOut& operator<<<LOut>(LOut& mLOut, const LOut& mValue)
-		{
-			#ifndef SSVU_LOG_DISABLE
-				std::cout << mValue.lastTitle; getLogStream() << mValue.lastTitle;
+				std::cout << mValue; getLogStream() << mValue;
 			#endif
 
 			return mLOut;
@@ -72,8 +61,13 @@ namespace ssvu
 		}
 	}
 
-	/// @brief Global log stream instance. Used like std::cout.
-	static Internal::LOut lo;
+	// TODO: docs
+	inline Internal::LOut& lo(const std::string& mTitle = "")
+	{
+		static Internal::LOut loInstance;
+		loInstance.title = mTitle;
+		return loInstance;
+	}
 
 	/// @brief Starts the benchmark timer.
 	inline void startBenchmark()
