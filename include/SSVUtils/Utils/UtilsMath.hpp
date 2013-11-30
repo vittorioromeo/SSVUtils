@@ -252,7 +252,7 @@ namespace ssvu
 	/// @return Returns the wrapped index value.
 	template<typename T1, typename T2> inline constexpr Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept
 	{
-		SSVU_CONSTEXPR_ASSERT(mCols >= 0 && mRows >= 0 && mUpperBound != 0);
+		SSVU_CONSTEXPR_ASSERT(mUpperBound != 0);
 		return ((mVal % mUpperBound) + mUpperBound) % mUpperBound;
 	}
 
