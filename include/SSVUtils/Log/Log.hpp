@@ -61,7 +61,8 @@ namespace ssvu
 		}
 	}
 
-	// TODO: docs
+	/// @brief Returns a reference to the "log stream" singleton.
+	/// @param mTitle Title of the next log message.
 	inline Internal::LOut& lo(const std::string& mTitle = "")
 	{
 		static Internal::LOut loInstance;
