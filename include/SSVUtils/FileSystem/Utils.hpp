@@ -9,8 +9,9 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <string>
+#include <iostream>
+#include <fstream>
 #include "SSVUtils/String/Utils.hpp"
-#include "SSVUtils/Log/Log.hpp"
 #include "SSVUtils/FileSystem/Path.hpp"
 
 namespace ssvu
@@ -46,7 +47,7 @@ namespace ssvu
 
 		/// @brief Removes a file from the user's filesystem.
 		/// @param mPath Path to existing file.
-		inline void removeFile(const Path& mPath) { if(remove(mPath.getCStr()) != 0) ssvu::lo("ssvufs::removeFile") << "Error removing file: " << mPath; }
+		inline bool removeFile(const Path& mPath) { return remove(mPath.getCStr()); }
 
 		/// @brief Expands the `~` symbol in a path with the user's home path.
 		/// @details Uses environment variables. Same logic as python's `os.path.expanduserpath`.

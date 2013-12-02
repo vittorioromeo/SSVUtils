@@ -105,11 +105,9 @@ namespace ssvu
 	void saveLogToFile(const FileSystem::Path& mPath);
 }
 
-// TODO: include hell (if I remove line 116 everything breaks!)
 #include "SSVUtils/FileSystem/FileSystem.hpp"
-#include "SSVUtils/FileSystem/Path.hpp"
 
-inline void ssvu::saveLogToFile(const ssvu::FileSystem::Path& mPath)
+inline void ssvu::saveLogToFile(const ssvufs::Path& mPath)
 {
 	#ifndef SSVU_LOG_DISABLE
 		std::ofstream o; o.open(mPath); o << ssvu::getLogStream().str(); o.flush(); o.close();
