@@ -21,6 +21,14 @@ namespace ssvu
 		return std::find(std::begin(mContainer), std::end(mContainer), mValue);
 	}
 
+	/// @brief Wrapper around std::rotate that takes a container instead of two iterators.
+	/// @param mContainer Reference to the container.
+	/// @param mNewBegin New begin iterator after the rotation.
+	template<typename T, typename I> inline auto rotate(T& mContainer, const I& mNewBegin) -> decltype(std::rotate(std::begin(mContainer), mNewBegin, std::end(mContainer)))
+	{
+		return std::rotate(std::begin(mContainer), mNewBegin, std::end(mContainer));
+	}
+
 	/// @brief Gets the index of a item in the container, using find and subtracting the begin iterator.
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
