@@ -94,6 +94,7 @@ namespace ssvu
 					return extBegin == std::string::npos ? "" : str.substr(extBegin, str.size() - extBegin);
 				}
 
+				inline bool isNull() const noexcept { return path == ""; }
 				inline bool operator<(const Path& mPath) const { return getStr() < mPath.getStr(); }
 
 				inline operator const std::string&() const { return getStr(); }
@@ -116,3 +117,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: docs
