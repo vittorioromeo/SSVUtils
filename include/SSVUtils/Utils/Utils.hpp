@@ -12,5 +12,6 @@
 #include "SSVUtils/Utils/UtilsMakeUnique.hpp"
 #include "SSVUtils/Utils/UtilsTuple.hpp"
 #include "SSVUtils/Utils/UtilsIterator.hpp"
+#include "SSVUtils/Utils/UtilsConsole.hpp"
 
 #endif
