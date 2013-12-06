@@ -13,7 +13,6 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			// TODO: implement
 			inline const std::string& getStrResetFmt() noexcept				{ return ""; }
 			inline const std::string& getStrStyle(Style mStyle) noexcept	{ return ""; }
 			inline const std::string& getStrColorFG(Color mColor) noexcept	{ return ""; }
