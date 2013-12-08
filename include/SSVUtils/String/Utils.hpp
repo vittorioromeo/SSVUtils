@@ -15,11 +15,65 @@
 
 namespace ssvu
 {
+	template<typename> struct Stringifier;
+
+	namespace Internal
+	{
+		void resetFmt(std::ostream& mStream);
+		inline std::ostringstream& getStringifyStream() noexcept { static std::ostringstream oss; return oss; }
+		template<bool TLogify, bool TResetFmt, typename T> inline void callStringifyImpl(const T& mValue, std::ostream& mStream)
+		{
+			if(TResetFmt) Internal::resetFmt(mStream);
+			Stringifier<T>::template impl<TLogify>(mValue, mStream);
+			if(TResetFmt) Internal::resetFmt(mStream);
+		}
+	}
+
+	template<typename T> struct Stringifier
+	{
+		template<bool TLogify> inline static void impl(const T& mValue, std::ostream& mStream) { mStream << mValue; }
+	};
+
 	/// @brief Converts a value to a std::string
 	/// @details Uses std::ostringstream internally.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns a std::string representing the converted value.
-	template<typename T> inline std::string toStr(const T& mValue) { static std::ostringstream oss; oss.str(""); oss << mValue; return oss.str(); }
+	template<typename T> inline std::string toStr(const T& mValue)
+	{
+		Internal::getStringifyStream().str("");
+		Internal::callStringifyImpl<false, false>(mValue, Internal::getStringifyStream());
+		return Internal::getStringifyStream().str();
+	}
+}
+
+#include "SSVUtils/Utils/UtilsConsole.hpp"
+
+#define SSVU_FLAVORED_STRINGIFIER(mType, mColor, mStyle, mPostfix) \
+	template<> struct Stringifier<mType> \
+	{ \
+		template<bool TLogify> inline static void impl(const mType& mValue, std::ostream& mStream) \
+		{ \
+			if(TLogify) mStream << Console::setStyle(mStyle) << Console::setColorFG(mColor); \
+			mStream << mValue; \
+			if(TLogify) mStream << mPostfix; \
+		} \
+	} \
+
+namespace ssvu
+{
+	namespace Internal
+	{
+		inline void resetFmt(std::ostream& mStream) { mStream << Console::resetFmt(); }
+	}
+
+	// TODO: docs
+	SSVU_FLAVORED_STRINGIFIER(int,				Console::Color::LightBlue,		Console::Style::ReverseFGBG,	"");
+	SSVU_FLAVORED_STRINGIFIER(long,				Console::Color::LightBlue,		Console::Style::ReverseFGBG,	"l");
+	SSVU_FLAVORED_STRINGIFIER(unsigned int,		Console::Color::LightBlue,		Console::Style::ReverseFGBG,	"u");
+	SSVU_FLAVORED_STRINGIFIER(unsigned long,	Console::Color::LightBlue,		Console::Style::ReverseFGBG,	"ul");
+	SSVU_FLAVORED_STRINGIFIER(float,			Console::Color::LightRed,		Console::Style::ReverseFGBG,	"f");
+	SSVU_FLAVORED_STRINGIFIER(double,			Console::Color::LightRed,		Console::Style::ReverseFGBG,	"d");
+	SSVU_FLAVORED_STRINGIFIER(std::string,		Console::Color::LightYellow,	Console::Style::Underline,		"");
 
 	/// @brief Replace the first occurrence of a string in a string with another string.
 	/// @param mStr String to work with.

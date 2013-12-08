@@ -61,12 +61,15 @@ namespace ssvu
 				if(mLOut.title != "")
 				{
 					const auto& fmt(Internal::getUniqueColor(mLOut.title) + Console::setStyle(Console::Style::Bold));
-					std::cout << fmt << std::left << std::setw(38) <<  "[" + mLOut.title + "] " << Console::setStyle(Console::Style::None);
+					std::cout << fmt << std::left << std::setw(38) <<  "[" + mLOut.title + "] " << Console::resetFmt();
 					getLogStream() << std::left << std::setw(38) <<  "[" + mLOut.title + "] ";
 					mLOut.title = "";
 				}
 
-				std::cout << mValue; getLogStream() << mValue;
+				Stringifier<T>::template impl<true>(mValue, std::cout);
+				std::cout << Console::resetFmt();
+
+				Stringifier<T>::template impl<false>(mValue, getLogStream());
 			#endif
 
 			return mLOut;
