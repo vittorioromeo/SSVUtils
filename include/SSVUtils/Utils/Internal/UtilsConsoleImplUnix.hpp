@@ -41,9 +41,7 @@ namespace ssvu
 
 				return codes[mIdx];
 			}
-
 			inline int getColorBGCode(std::size_t mIdx) noexcept { return getColorFGCode(mIdx) + 10; }
-
 			inline int getModCode(std::size_t mIdx) noexcept
 			{
 				static int codes[]
@@ -68,24 +66,30 @@ namespace ssvu
 
 			struct StrStorage
 			{
-				std::string styles[styleCount];
-				std::string colorsFG[colorCount];
-				std::string colorsBG[colorCount];
+				Style lastStyle{Style::None};
+				Color lastColorFG{Color::Default};
+				Color lastColorBG{Color::Default};
+				std::string lastFmtString;
 
-				inline StrStorage()
+				inline const std::string& getFmtString()
 				{
-					for(int i{0}; i < styleCount; ++i) styles[i] = {prefix + toStr(getModCode(i)) + postfix};
-					for(int i{0}; i < colorCount; ++i) colorsFG[i] = {prefix + toStr(getModCode(0)) + ";" + toStr(getColorFGCode(i)) + postfix};
-					for(int i{0}; i < colorCount; ++i) colorsBG[i] = {prefix + toStr(getModCode(0)) + ";" + toStr(getColorFGCode(0)) + ";" + toStr(getColorBGCode(i)) + postfix};
+					lastFmtString = {prefix + toStr(getModCode(int(lastStyle))) + ";" + toStr(getColorFGCode(int(lastColorFG))) + ";" + toStr(getColorBGCode(int(lastColorBG))) + postfix};
+					return lastFmtString;
 				}
 			};
 
 			inline StrStorage& getStorage() noexcept { static StrStorage storage; return storage; }
 
-			inline const std::string& getStrResetFmt() noexcept				{ static std::string result{std::string{prefix} + postfix}; return result; }
-			inline const std::string& getStrStyle(Style mStyle) noexcept	{ return getStorage().styles[int(mStyle)]; }
-			inline const std::string& getStrColorFG(Color mColor) noexcept	{ return getStorage().colorsFG[int(mColor)]; }
-			inline const std::string& getStrColorBG(Color mColor) noexcept	{ return getStorage().colorsBG[int(mColor)]; }
+			inline const std::string& getStrResetFmt() noexcept
+			{
+				getStorage().lastStyle = Style::None;
+				getStorage().lastColorFG = Color::Default;
+				getStorage().lastColorBG = Color::Default;
+				return getStorage().getFmtString();
+			}
+			inline const std::string& getStrStyle(Style mStyle) noexcept	{ getStorage().lastStyle = mStyle; return getStorage().getFmtString(); }
+			inline const std::string& getStrColorFG(Color mColor) noexcept	{ getStorage().lastColorFG = mColor; return getStorage().getFmtString(); }
+			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getStorage().lastColorBG = mColor; return getStorage().getFmtString(); }
 		}
 	}
 }
