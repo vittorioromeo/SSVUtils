@@ -75,6 +75,78 @@ namespace ssvu
 	SSVU_FLAVORED_STRINGIFIER(double,			Console::Color::LightRed,		Console::Style::ReverseFGBG,	"d");
 	SSVU_FLAVORED_STRINGIFIER(std::string,		Console::Color::LightYellow,	Console::Style::Underline,		"");
 
+	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>>
+	{
+		using T = std::pair<T1, T2>;
+		template<bool TLogify> inline static void impl(const T& mValue, std::ostream& mStream)
+		{
+			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+			mStream << "{";
+
+			Internal::callStringifyImpl<TLogify, true>(std::get<0>(mValue), mStream);
+
+			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+			mStream << ", ";
+
+			Internal::callStringifyImpl<TLogify, true>(std::get<1>(mValue), mStream);
+
+			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+			mStream << "}";
+		}
+	};
+
+	namespace Internal
+	{
+		template<bool TLogify, std::size_t I = 0, typename... TArgs> inline EnableIf<I == sizeof...(TArgs), void> implTpl(const std::tuple<TArgs...>&, std::ostream&) { }
+		template<bool TLogify, std::size_t I = 0, typename... TArgs> inline EnableIf<I < sizeof...(TArgs), void> implTpl(const std::tuple<TArgs...>& mTpl, std::ostream& mStream)
+		{
+			Internal::callStringifyImpl<TLogify, true>(std::get<I>(mTpl), mStream);
+
+			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+			mStream << ", ";
+
+			implTpl<I + 1, TArgs...>(mTpl, mStream);
+		}
+	}
+
+	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>>
+	{
+		using T = std::tuple<TArgs...>;
+		template<bool TLogify> inline static void impl(const T& mValue, std::ostream& mStream)
+		{
+			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+			mStream << "{";
+
+			Internal::implTpl<TLogify>(mValue, mStream);
+
+			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+			mStream << "}";
+		}
+	};
+
+	template<template<typename, typename...> class TContainer, typename TType, typename... TArgs> struct Stringifier<TContainer<TType, TArgs...>>
+	{
+		using T = TContainer<TType, TArgs...>;
+		template<bool TLogify> inline static void impl(const T& mValue, std::ostream& mStream)
+		{
+			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+			mStream << "{";
+
+			for(auto itr(std::begin(mValue)); itr < std::end(mValue) - 1; ++itr)
+			{
+				Internal::callStringifyImpl<TLogify, true>(*itr, mStream);
+
+				if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+				mStream << ", ";
+			}
+
+			Internal::callStringifyImpl<TLogify, true>(*(std::end(mValue) - 1), mStream);
+
+			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
+			mStream << "}";
+		}
+	};
+
 	/// @brief Replace the first occurrence of a string in a string with another string.
 	/// @param mStr String to work with.
 	/// @param mFrom String to replace.
