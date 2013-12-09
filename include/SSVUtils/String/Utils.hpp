@@ -21,10 +21,10 @@ namespace ssvu
 	{
 		void resetFmt(std::ostream& mStream);
 		inline std::ostringstream& getStringifyStream() noexcept { static std::ostringstream oss; return oss; }
-		template<bool TFmt, bool TResetFmt, typename T> inline void callStringifyImpl(const T& mValue, std::ostream& mStream)
+		template<bool TFmt, bool TResetFmt = true, typename T> inline void callStringifyImpl(std::ostream& mStream, const T& mValue)
 		{
 			if(TResetFmt) resetFmt(mStream);
-			Stringifier<T>::template impl<TFmt>(mValue, mStream);
+			Stringifier<T>::template impl<TFmt>(mStream, mValue);
 			if(TResetFmt) resetFmt(mStream);
 		}
 	}
@@ -36,7 +36,7 @@ namespace ssvu
 	template<typename T> inline std::string toStr(const T& mValue)
 	{
 		Internal::getStringifyStream().str("");
-		Internal::callStringifyImpl<false, false>(mValue, Internal::getStringifyStream());
+		Internal::callStringifyImpl<false, false>(Internal::getStringifyStream(), mValue);
 		return Internal::getStringifyStream().str();
 	}
 }
@@ -48,7 +48,7 @@ namespace ssvu
 {
 	template<typename T> struct Stringifier
 	{
-		template<bool TFmt> inline static void impl(const T& mValue, std::ostream& mStream) { mStream << mValue; }
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const T& mValue) { mStream << mValue; }
 	};
 
 	namespace Internal
@@ -59,7 +59,7 @@ namespace ssvu
 	#define SSVU_DEFINE_FLAVORED_STRINGIFIER(mType, mColor, mStyle, mPostfix) \
 		template<> struct Stringifier<mType> \
 		{ \
-			template<bool TFmt> inline static void impl(const mType& mValue, std::ostream& mStream) \
+			template<bool TFmt> inline static void impl(std::ostream& mStream, const mType& mValue) \
 			{ \
 				if(TFmt) mStream << Console::setStyle(mStyle) << Console::setColorFG(mColor); \
 				mStream << mValue; \
@@ -100,23 +100,23 @@ namespace ssvu
 			printFmt<TFmt>(mStream, mValue, mColor, Console::Style::None);
 		}
 
-		template<bool TFmt, std::size_t I = 0, typename... TArgs> inline EnableIf<I == sizeof...(TArgs), void> implTpl(const std::tuple<TArgs...>&, std::ostream&) { }
-		template<bool TFmt, std::size_t I = 0, typename... TArgs> inline EnableIf<I < sizeof...(TArgs), void> implTpl(const std::tuple<TArgs...>& mTpl, std::ostream& mStream)
+		template<bool TFmt, std::size_t I = 0, typename... TArgs> inline EnableIf<I == sizeof...(TArgs), void> implTpl(std::ostream&, const std::tuple<TArgs...>&) { }
+		template<bool TFmt, std::size_t I = 0, typename... TArgs> inline EnableIf<I < sizeof...(TArgs), void> implTpl(std::ostream& mStream, const std::tuple<TArgs...>& mTpl)
 		{
-			callStringifyImpl<TFmt, true>(std::get<I>(mTpl), mStream);
+			callStringifyImpl<TFmt>(mStream, std::get<I>(mTpl));
 			if(I < sizeof...(TArgs) - 1) printBold<TFmt>(mStream, ", ");
-			implTpl<TFmt, I + 1, TArgs...>(mTpl, mStream);
+			implTpl<TFmt, I + 1, TArgs...>(mStream, mTpl);
 		}
 
-		template<bool TFmt, typename T> inline void implContainer(const T& mValue, std::ostream& mStream)
+		template<bool TFmt, typename T> inline void implContainer(std::ostream& mStream, const T& mValue)
 		{
 			printBold<TFmt>(mStream, "{");
 			for(auto itr(std::begin(mValue)); itr < std::end(mValue) - 1; ++itr)
 			{
-				callStringifyImpl<TFmt, true>(*itr, mStream);
+				callStringifyImpl<TFmt>(mStream, *itr);
 				printBold<TFmt>(mStream, ", ");
 			}
-			callStringifyImpl<TFmt, true>(*(std::end(mValue) - 1), mStream);
+			callStringifyImpl<TFmt>(mStream, *(std::end(mValue) - 1));
 			printBold<TFmt>(mStream, "}");
 		}
 	}
@@ -124,12 +124,12 @@ namespace ssvu
 	// Stringify pair
 	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>>
 	{
-		template<bool TFmt> inline static void impl(const std::pair<T1, T2>& mValue, std::ostream& mStream)
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const std::pair<T1, T2>& mValue)
 		{
 			Internal::printBold<TFmt>(mStream, "{");
-			Internal::callStringifyImpl<TFmt, true>(std::get<0>(mValue), mStream);
+			Internal::callStringifyImpl<TFmt>(mStream, std::get<0>(mValue));
 			Internal::printBold<TFmt>(mStream, ", ");
-			Internal::callStringifyImpl<TFmt, true>(std::get<1>(mValue), mStream);
+			Internal::callStringifyImpl<TFmt>(mStream, std::get<1>(mValue));
 			Internal::printBold<TFmt>(mStream, "}");
 		}
 	};
@@ -137,7 +137,7 @@ namespace ssvu
 	// Stringify tuple
 	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>>
 	{
-		template<bool TFmt> inline static void impl(const std::tuple<TArgs...>& mValue, std::ostream& mStream)
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const std::tuple<TArgs...>& mValue)
 		{
 			Internal::printBold<TFmt>(mStream, "{");
 			Internal::implTpl<TFmt>(mValue, mStream);
@@ -148,7 +148,7 @@ namespace ssvu
 	// Stringify pointer
 	template<typename T> struct Stringifier<T*>
 	{
-		template<bool TFmt> inline static void impl(const T* mValue, std::ostream& mStream)
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const T* mValue)
 		{
 			Internal::printBold<TFmt>(mStream, "[", Console::Color::Blue);
 			Internal::printFmt<TFmt>(mStream, mValue != nullptr ? reinterpret_cast<const void*>(mValue) : "nullptr", Console::Color::Cyan, Console::Style::Underline);
@@ -159,19 +159,19 @@ namespace ssvu
 	// Stringify C-style string
 	template<std::size_t TN> struct Stringifier<char[TN]>
 	{
-		template<bool TFmt> inline static void impl(const char(&mValue)[TN], std::ostream& mStream) { mStream << mValue; }
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const char(&mValue)[TN]) { mStream << mValue; }
 	};
 
 	// Stringify array
 	template<typename T, std::size_t TN> struct Stringifier<T[TN]>
 	{
-		template<bool TFmt> inline static void impl(const T(&mValue)[TN], std::ostream& mStream) { Internal::implContainer<TFmt>(mValue, mStream); }
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const T(&mValue)[TN]) { Internal::implContainer<TFmt>(mStream, mValue); }
 	};
 
 	// Stringify linear containers
 	template<template<typename, typename...> class T, typename TType, typename... TArgs> struct Stringifier<T<TType, TArgs...>>
 	{
-		template<bool TFmt> inline static void impl(const T<TType, TArgs...>& mValue, std::ostream& mStream) { Internal::implContainer<TFmt>(mValue, mStream); }
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const T<TType, TArgs...>& mValue) { Internal::implContainer<TFmt>(mStream, mValue); }
 	};
 
 	/// @brief Replace the first occurrence of a string in a string with another string.

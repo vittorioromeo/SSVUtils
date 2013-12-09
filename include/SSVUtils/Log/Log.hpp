@@ -66,10 +66,10 @@ namespace ssvu
 					mLOut.title = "";
 				}
 
-				Stringifier<T>::template impl<true>(mValue, std::cout);
+				Stringifier<T>::template impl<true>(std::cout, mValue);
 				std::cout << Console::resetFmt();
 
-				Stringifier<T>::template impl<false>(mValue, getLogStream());
+				Stringifier<T>::template impl<false>(getLogStream(), mValue);
 			#endif
 
 			return mLOut;
