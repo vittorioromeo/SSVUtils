@@ -21,18 +21,13 @@ namespace ssvu
 	{
 		void resetFmt(std::ostream& mStream);
 		inline std::ostringstream& getStringifyStream() noexcept { static std::ostringstream oss; return oss; }
-		template<bool TLogify, bool TResetFmt, typename T> inline void callStringifyImpl(const T& mValue, std::ostream& mStream)
+		template<bool TFmt, bool TResetFmt, typename T> inline void callStringifyImpl(const T& mValue, std::ostream& mStream)
 		{
 			if(TResetFmt) Internal::resetFmt(mStream);
-			Stringifier<T>::template impl<TLogify>(mValue, mStream);
+			Stringifier<T>::template impl<TFmt>(mValue, mStream);
 			if(TResetFmt) Internal::resetFmt(mStream);
 		}
 	}
-
-	template<typename T> struct Stringifier
-	{
-		template<bool TLogify> inline static void impl(const T& mValue, std::ostream& mStream) { mStream << mValue; }
-	};
 
 	/// @brief Converts a value to a std::string
 	/// @details Uses std::ostringstream internally.
@@ -51,16 +46,21 @@ namespace ssvu
 #define SSVU_FLAVORED_STRINGIFIER(mType, mColor, mStyle, mPostfix) \
 	template<> struct Stringifier<mType> \
 	{ \
-		template<bool TLogify> inline static void impl(const mType& mValue, std::ostream& mStream) \
+		template<bool TFmt> inline static void impl(const mType& mValue, std::ostream& mStream) \
 		{ \
-			if(TLogify) mStream << Console::setStyle(mStyle) << Console::setColorFG(mColor); \
+			if(TFmt) mStream << Console::setStyle(mStyle) << Console::setColorFG(mColor); \
 			mStream << mValue; \
-			if(TLogify) mStream << mPostfix; \
+			if(TFmt) mStream << mPostfix; \
 		} \
 	} \
 
 namespace ssvu
 {
+	template<typename T> struct Stringifier
+	{
+		template<bool TFmt> inline static void impl(const T& mValue, std::ostream& mStream) { mStream << mValue; }
+	};
+
 	namespace Internal
 	{
 		inline void resetFmt(std::ostream& mStream) { mStream << Console::resetFmt(); }
@@ -75,76 +75,106 @@ namespace ssvu
 	SSVU_FLAVORED_STRINGIFIER(double,			Console::Color::LightRed,		Console::Style::ReverseFGBG,	"d");
 	SSVU_FLAVORED_STRINGIFIER(std::string,		Console::Color::LightYellow,	Console::Style::Underline,		"");
 
-	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>>
-	{
-		using T = std::pair<T1, T2>;
-		template<bool TLogify> inline static void impl(const T& mValue, std::ostream& mStream)
-		{
-			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-			mStream << "{";
-
-			Internal::callStringifyImpl<TLogify, true>(std::get<0>(mValue), mStream);
-
-			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-			mStream << ", ";
-
-			Internal::callStringifyImpl<TLogify, true>(std::get<1>(mValue), mStream);
-
-			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-			mStream << "}";
-		}
-	};
-
 	namespace Internal
 	{
-		template<bool TLogify, std::size_t I = 0, typename... TArgs> inline EnableIf<I == sizeof...(TArgs), void> implTpl(const std::tuple<TArgs...>&, std::ostream&) { }
-		template<bool TLogify, std::size_t I = 0, typename... TArgs> inline EnableIf<I < sizeof...(TArgs), void> implTpl(const std::tuple<TArgs...>& mTpl, std::ostream& mStream)
+		template<bool TFmt, typename T> inline void printBold(std::ostream& mStream, const T& mStr, Console::Color mColor = Console::Color::Default)
 		{
-			Internal::callStringifyImpl<TLogify, true>(std::get<I>(mTpl), mStream);
+			if(TFmt)
+			{
+				Internal::resetFmt(mStream);
+				mStream << Console::setColorFG(mColor) << Console::setStyle(Console::Style::Bold);
+			}
 
-			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-			mStream << ", ";
+			mStream << mStr;
+		}
+		template<bool TFmt, typename T> inline void printNonBold(std::ostream& mStream, const T& mStr, Console::Color mColor = Console::Color::Default)
+		{
+			if(TFmt)
+			{
+				Internal::resetFmt(mStream);
+				mStream << Console::setColorFG(mColor);
+			}
 
-			implTpl<I + 1, TArgs...>(mTpl, mStream);
+			mStream << mStr;
+		}
+
+		template<template<typename...> class T, bool TFmt, std::size_t I = 0, typename... TArgs> inline EnableIf<I == sizeof...(TArgs), void> implTpl(const T<TArgs...>&, std::ostream&) { }
+		template<template<typename...> class T, bool TFmt, std::size_t I = 0, typename... TArgs> inline EnableIf<I < sizeof...(TArgs), void> implTpl(const T<TArgs...>& mTpl, std::ostream& mStream)
+		{
+			Internal::callStringifyImpl<TFmt, true>(std::get<I>(mTpl), mStream);
+			if(I < sizeof...(TArgs) - 1) Internal::printBold<TFmt>(mStream, ", ");
+			implTpl<T, TFmt, I + 1, TArgs...>(mTpl, mStream);
+		}
+
+		template<typename T, bool TFmt> inline void implContainer(const T& mValue, std::ostream& mStream)
+		{
+			Internal::printBold<TFmt>(mStream, "{");
+			for(auto itr(std::begin(mValue)); itr < std::end(mValue) - 1; ++itr)
+			{
+				Internal::callStringifyImpl<TFmt, true>(*itr, mStream);
+				Internal::printBold<TFmt>(mStream, ", ");
+			}
+			Internal::callStringifyImpl<TFmt, true>(*(std::end(mValue) - 1), mStream);
+			Internal::printBold<TFmt>(mStream, "}");
 		}
 	}
 
-	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>>
+	// Stringify pair
+	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>>
 	{
-		using T = std::tuple<TArgs...>;
-		template<bool TLogify> inline static void impl(const T& mValue, std::ostream& mStream)
+		template<bool TFmt> inline static void impl(const std::pair<T1, T2>& mValue, std::ostream& mStream)
 		{
-			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-			mStream << "{";
-
-			Internal::implTpl<TLogify>(mValue, mStream);
-
-			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-			mStream << "}";
+			Internal::printBold<TFmt>(mStream, "{");
+			Internal::implTpl<std::pair, TFmt, 0, T1, T2>(mValue, mStream);
+			Internal::printBold<TFmt>(mStream, "}");
 		}
 	};
 
+	// Stringify tuple
+	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>>
+	{
+		template<bool TFmt> inline static void impl(const std::tuple<TArgs...>& mValue, std::ostream& mStream)
+		{
+			Internal::printBold<TFmt>(mStream, "{");
+			Internal::implTpl<std::tuple, TFmt, 0, TArgs...>(mValue, mStream);
+			Internal::printBold<TFmt>(mStream, "}");
+		}
+	};
+
+	// Stringify pointer
+	template<typename T> struct Stringifier<T*>
+	{
+		template<bool TFmt> inline static void impl(const T* mValue, std::ostream& mStream)
+		{
+			Internal::printBold<TFmt>(mStream, "[", Console::Color::Blue);
+
+			if(TFmt) mStream << Console::setColorFG(Console::Color::Cyan) << Console::setStyle(Console::Style::Underline);
+			if(mValue != nullptr) mStream << reinterpret_cast<const void*>(mValue);
+			else mStream << "nullptr";
+
+			Internal::printBold<TFmt>(mStream, "]", Console::Color::Blue);
+		}
+	};
+
+	// Stringify C-style string
+	template<std::size_t TN> struct Stringifier<char[TN]>
+	{
+		using T = char[TN];
+		template<bool TFmt> inline static void impl(const T& mValue, std::ostream& mStream) { mStream << mValue; }
+	};
+
+	// Stringify array
+	template<typename TType, std::size_t TN> struct Stringifier<TType[TN]>
+	{
+		using T = TType[TN];
+		template<bool TFmt> inline static void impl(const T& mValue, std::ostream& mStream) { Internal::implContainer<T, TFmt>(mValue, mStream); }
+	};
+
+	// Stringify linear containers
 	template<template<typename, typename...> class TContainer, typename TType, typename... TArgs> struct Stringifier<TContainer<TType, TArgs...>>
 	{
 		using T = TContainer<TType, TArgs...>;
-		template<bool TLogify> inline static void impl(const T& mValue, std::ostream& mStream)
-		{
-			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-			mStream << "{";
-
-			for(auto itr(std::begin(mValue)); itr < std::end(mValue) - 1; ++itr)
-			{
-				Internal::callStringifyImpl<TLogify, true>(*itr, mStream);
-
-				if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-				mStream << ", ";
-			}
-
-			Internal::callStringifyImpl<TLogify, true>(*(std::end(mValue) - 1), mStream);
-
-			if(TLogify) mStream << Console::setColorFG(Console::Color::LightGray) << Console::setStyle(Console::Style::Bold);
-			mStream << "}";
-		}
+		template<bool TFmt> inline static void impl(const T& mValue, std::ostream& mStream) { Internal::implContainer<T, TFmt>(mValue, mStream); }
 	};
 
 	/// @brief Replace the first occurrence of a string in a string with another string.
