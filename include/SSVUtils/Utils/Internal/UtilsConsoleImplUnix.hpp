@@ -20,23 +20,23 @@ namespace ssvu
 			{
 				static int codes[]
 				{
-					39,		// Default
-					30,		// Black
-					31,		// Red
-					32,		// Green
-					33,		// Yellow
-					34,		// Blue
-					35,		// Magenta
-					36,		// Cyan
-					37,		// Light gray
-					90,		// Dark gray
-					91,		// Light red
-					92,		// Light green
-					93,		// Light yellow
-					94,		// Light blue
-					95,		// Light magenta
-					96,		// Light cyan
-					97		// Light white
+					39,		// 0 = Color::Default
+					30,		// 1 = Color::Black
+					31,		// 2 = Color::Red
+					32,		// 3 = Color::Green
+					33,		// 4 = Color::Yellow
+					34,		// 5 = Color::Blue
+					35,		// 6 = Color::Magenta
+					36,		// 7 = Color::Cyan
+					37,		// 8 = Color::LightGray
+					90,		// 9 = Color::DarkGray
+					91,		// 10 = Color::LightRed
+					92,		// 11 = Color::LightGreen
+					93,		// 12 = Color::LightYellow
+					94,		// 13 = Color::LightBlue
+					95,		// 14 = Color::LightMagenta
+					96,		// 15 = Color::LightCyan
+					97		// 16 = Color::LightWhite
 				};
 
 				return codes[mIdx];
@@ -46,19 +46,19 @@ namespace ssvu
 			{
 				static int codes[]
 				{
-					0,	// None
-					1,	// Bold
-					2,	// Dim
-					4,	// Underline
-					5,	// Blink
-					7,	// Reverse
-					8,	// Hidden
-					21,	// Reset bold
-					22,	// Reset dim
-					24,	// Reset underline
-					25,	// Reset blink
-					27,	// Reset reverse
-					28	// Reset hidden
+					0,	// 0 = Style::None
+					1,	// 1 = Style::Bold
+					2,	// 2 = Style::Dim
+					4,	// 3 = Style::Underline
+					5,	// 4 = Style::Blink
+					7,	// 5 = Style::Reverse
+					8,	// 6 = Style::Hidden
+					21,	// 7 = Style::ResetBold
+					22,	// 8 = Style::ResetDim
+					24,	// 9 = Style::ResetUnderline
+					25,	// 10 = Style::ResetBlink
+					27,	// 11 = Style::ResetReverse
+					28	// 12 = Style::ResetHidden
 				};
 
 				return codes[mIdx];

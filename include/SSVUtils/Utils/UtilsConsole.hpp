@@ -16,13 +16,39 @@ namespace ssvu
 
 		enum class Style : int
 		{
-			None = 0, Bold = 1, Dim = 2, Underline = 3, Blink = 4, ReverseFGBG = 5, Hidden = 6,
-			ResetBold = 7, ResetDim = 8, ResetUnderline = 9, ResetBlink = 10, ResetReverse = 11, ResetHidden = 12
+			None = 0,
+			Bold = 1,
+			Dim = 2,
+			Underline = 3,
+			Blink = 4,
+			ReverseFGBG = 5,
+			Hidden = 6,
+			ResetBold = 7,
+			ResetDim = 8,
+			ResetUnderline = 9,
+			ResetBlink = 10,
+			ResetReverse = 11,
+			ResetHidden = 12
 		};
 		enum class Color : int
 		{
-			Default = 0, Black = 1, Red = 2, Green = 3, Yellow = 4, Blue = 5, Magenta = 6, Cyan = 7, LightGray = 8,
-			DarkGray = 9, LightRed = 10, LightGreen = 11, LightYellow = 12, LightBlue = 13, LightMagenta = 14, LightCyan = 15, LightWhite = 16
+			Default = 0,
+			Black = 1,
+			Red = 2,
+			Green = 3,
+			Yellow = 4,
+			Blue = 5,
+			Magenta = 6,
+			Cyan = 7,
+			LightGray = 8,
+			DarkGray = 9,
+			LightRed = 10,
+			LightGreen = 11,
+			LightYellow = 12,
+			LightBlue = 13,
+			LightMagenta = 14,
+			LightCyan = 15,
+			LightWhite = 16
 		};
 	}
 }
