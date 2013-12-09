@@ -100,12 +100,12 @@ namespace ssvu
 			printFmt<TFmt>(mStream, mValue, mColor, Console::Style::None);
 		}
 
-		template<bool TFmt, template<typename...> class T, std::size_t I = 0, typename... TArgs> inline EnableIf<I == sizeof...(TArgs), void> implTpl(const T<TArgs...>&, std::ostream&) { }
-		template<bool TFmt, template<typename...> class T, std::size_t I = 0, typename... TArgs> inline EnableIf<I < sizeof...(TArgs), void> implTpl(const T<TArgs...>& mTpl, std::ostream& mStream)
+		template<bool TFmt, std::size_t I = 0, typename... TArgs> inline EnableIf<I == sizeof...(TArgs), void> implTpl(const std::tuple<TArgs...>&, std::ostream&) { }
+		template<bool TFmt, std::size_t I = 0, typename... TArgs> inline EnableIf<I < sizeof...(TArgs), void> implTpl(const std::tuple<TArgs...>& mTpl, std::ostream& mStream)
 		{
 			callStringifyImpl<TFmt, true>(std::get<I>(mTpl), mStream);
 			if(I < sizeof...(TArgs) - 1) printBold<TFmt>(mStream, ", ");
-			implTpl<TFmt, T, I + 1, TArgs...>(mTpl, mStream);
+			implTpl<TFmt, I + 1, TArgs...>(mTpl, mStream);
 		}
 
 		template<bool TFmt, typename T> inline void implContainer(const T& mValue, std::ostream& mStream)
@@ -127,7 +127,9 @@ namespace ssvu
 		template<bool TFmt> inline static void impl(const std::pair<T1, T2>& mValue, std::ostream& mStream)
 		{
 			Internal::printBold<TFmt>(mStream, "{");
-			Internal::implTpl<TFmt>(mValue, mStream);
+			Internal::callStringifyImpl<TFmt, true>(std::get<0>(mValue), mStream);
+			Internal::printBold<TFmt>(mStream, ", ");
+			Internal::callStringifyImpl<TFmt, true>(std::get<1>(mValue), mStream);
 			Internal::printBold<TFmt>(mStream, "}");
 		}
 	};
