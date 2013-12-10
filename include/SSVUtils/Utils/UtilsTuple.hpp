@@ -9,6 +9,7 @@
 #include <tuple>
 #include <utility>
 #include <typeinfo>
+#include <type_traits>
 
 namespace ssvu
 {
@@ -27,6 +28,18 @@ namespace ssvu
 		{
 			template<typename... Us> inline constexpr static auto expand(F&& f, Tup&&, Us&&... args) -> decltype(f(std::forward<Us>(args)...)) { return f(std::forward<Us>(args)...); }
 		};
+
+		template<std::size_t TIdx, typename TSearch, typename First, typename... TArgs> struct GetImpl
+		{
+			using type = typename GetImpl<TIdx + 1, TSearch, TArgs...>::type;
+			static constexpr int idx = TIdx;
+		};
+
+		template<std::size_t TIdx, typename TSearch, typename... TArgs> struct GetImpl<TIdx, TSearch, TSearch, TArgs...>
+		{
+			using type = GetImpl;
+			static constexpr int idx = TIdx;
+		};
 	}
 
 	template<typename F, typename... TArgs> inline constexpr auto explode(F&& f, const std::tuple<TArgs...>& t) -> decltype(Internal::Expander<sizeof...(TArgs), F, const std::tuple<TArgs...>&>::expand(std::forward<F>(f), t))
@@ -43,6 +56,16 @@ namespace ssvu
 	}
 }
 
+namespace std
+{
+	template<typename T, typename... TArgs> inline auto get(const std::tuple<TArgs...>& mTpl) noexcept
+		-> decltype(std::get<ssvu::Internal::GetImpl<0, T, TArgs...>::type::idx>(mTpl))
+	{
+		return std::get<ssvu::Internal::GetImpl<0, T, TArgs...>::type::idx>(mTpl);
+	}
+}
+
 #endif
 
 // C++14: replace with STL's solution
+// C++14: remove get
