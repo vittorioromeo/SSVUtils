@@ -29,11 +29,6 @@ namespace ssvu
 		return std::rotate(std::begin(mContainer), mNewBegin, std::end(mContainer));
 	}
 
-	/// @brief Gets the index of a item in the container, using find and subtracting the begin iterator.
-	/// @param mContainer Reference to the container.
-	/// @param mValue Const reference to the value.
-	template<typename T, typename V> inline typename T::size_type idxOf(const T& mContainer, const V& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
-
 	/// @brief Finds a item that matches a specific predicate.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate used for checking. Can be std::function, a lambda, a functor, etc...
@@ -42,6 +37,47 @@ namespace ssvu
 	{
 		return std::find_if(std::begin(mContainer), std::end(mContainer), mPredicate);
 	}
+
+	/// @brief Shifts an item towards the end of the container.
+	/// @param mContainer Reference to the container.
+	/// @param mValue Const reference to the value.
+	/// @return Returns a past-the-end iterator for the new end of the range.
+	template<typename T, typename V> inline auto remove(T& mContainer, const V& mValue) -> decltype(std::remove(std::begin(mContainer), std::end(mContainer), mValue))
+	{
+		return std::remove(std::begin(mContainer), std::end(mContainer), mValue);
+	}
+
+	/// @brief Shifts items not matching the predicate towards the beginning of the container.
+	/// @param mContainer Reference to the container.
+	/// @param mValue Const reference to the value.
+	/// @return Returns a past-the-end iterator for the new end of the range.
+	template<typename T, typename P> inline auto removeIf(T& mContainer, const P& mPredicate) -> decltype(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate))
+	{
+		return std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate);
+	}
+
+	/// @brief Sorts a container. (no predicate)
+	/// @param mContainer Reference to the container.
+	template<typename T> inline void sort(T& mContainer) { std::sort(std::begin(mContainer), std::end(mContainer)); }
+
+	/// @brief Sorts a container with a user-defined predicate.
+	/// @param mContainer Reference to the container.
+	/// @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
+	template<typename T, typename P> inline void sort(T& mContainer, const P& mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
+
+	/// @brief Sorts a container. (stable, no predicate)
+	/// @param mContainer Reference to the container.
+	template<typename T> inline void sortStable(T& mContainer) { std::stable_sort(std::begin(mContainer), std::end(mContainer)); }
+
+	/// @brief Sorts a container with a user-defined predicate. (stable)
+	/// @param mContainer Reference to the container.
+	/// @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
+	template<typename T, typename P> inline void sortStable(T& mContainer, const P& mPredicate) { std::stable_sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
+
+	/// @brief Gets the index of a item in the container, using find and subtracting the begin iterator.
+	/// @param mContainer Reference to the container.
+	/// @param mValue Const reference to the value.
+	template<typename T, typename V> inline typename T::size_type idxOf(const T& mContainer, const V& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
 
 	/// @brief Checks if a container contains any item that matches a specific predicate.
 	/// @param mContainer Reference to the container.
@@ -53,7 +89,7 @@ namespace ssvu
 	/// @param mValue Const reference to the value.
 	template<typename T, typename V> inline void eraseRemove(T& mContainer, const V& mValue)
 	{
-		mContainer.erase(std::remove(std::begin(mContainer), std::end(mContainer), mValue), std::end(mContainer));
+		mContainer.erase(remove(mContainer, mValue), std::end(mContainer));
 	}
 
 	/// @brief Checks if a specific item is in a container.
@@ -84,24 +120,6 @@ namespace ssvu
 		return true;
 	}
 
-	/// @brief Sorts a container. (no predicate)
-	/// @param mContainer Reference to the container.
-	template<typename T> void inline sort(T& mContainer) { std::sort(std::begin(mContainer), std::end(mContainer)); }
-
-	/// @brief Sorts a container with a user-defined predicate.
-	/// @param mContainer Reference to the container.
-	/// @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
-	template<typename T, typename P> inline void sort(T& mContainer, const P& mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
-
-	/// @brief Sorts a container. (stable, no predicate)
-	/// @param mContainer Reference to the container.
-	template<typename T> void inline sortStable(T& mContainer) { std::stable_sort(std::begin(mContainer), std::end(mContainer)); }
-
-	/// @brief Sorts a container with a user-defined predicate. (stable)
-	/// @param mContainer Reference to the container.
-	/// @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
-	template<typename T, typename P> inline void sortStable(T& mContainer, const P& mPredicate) { std::stable_sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
-
 	/// @brief Gets all the keys from a map container.
 	/// @param mMap Const reference to the map container.
 	/// @return Returns a std::vector containing all the keys.
@@ -117,7 +135,7 @@ namespace ssvu
 	/// @param mPredicate Const reference to the predicate.
 	template<typename T, typename P> inline void eraseRemoveIf(T& mContainer, const P& mPredicate)
 	{
-		mContainer.erase(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate), std::end(mContainer));
+		mContainer.erase(removeIf(mContainer, mPredicate), std::end(mContainer));
 	}
 
 	/// @brief Cyclically gets items from a container.
