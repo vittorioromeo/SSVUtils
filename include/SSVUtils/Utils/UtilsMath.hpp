@@ -35,7 +35,7 @@ namespace ssvu
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper inclusive bound.
 	/// @return Returns a random real value, between [mMin and mMax].
-	template<typename T = float> inline T getRndR(const T& mMin, const T& mMax) { assert(mMin < mMax); return RndDistributionR<T>{mMin, mMax}(getRndEngine()); }
+	template<typename T = float> inline T getRndR(const T& mMin, const T& mMax) { assert(mMin <= mMax); return RndDistributionR<T>{mMin, mMax}(getRndEngine()); }
 
 	/// @brief Gets a random sign.
 	/// @tparam T Type of integer value. (default int)
