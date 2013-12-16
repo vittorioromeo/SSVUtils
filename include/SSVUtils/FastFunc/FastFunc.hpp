@@ -107,7 +107,6 @@ namespace ssvu
 		};
 	}
 
-	// TODO: ssvu::isConstructible
 	#define ENABLE_IF_CONV_TO_FUN_PTR(mA)		EnableIf<std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&Decay<mA>::operator())>::Type, mA>::value>* = nullptr
 	#define ENABLE_IF_NOT_CONV_TO_FUN_PTR(mA)	EnableIf<!std::is_constructible<typename Internal::MemFuncPtrToFuncPtr<decltype(&Decay<mA>::operator())>::Type, mA>::value>* = nullptr
 	#define ENABLE_IF_SAME_TYPE(mA, mB)			typename = EnableIf<!std::is_same<mA, Decay<mB>>{}>
