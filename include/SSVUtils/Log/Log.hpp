@@ -60,8 +60,8 @@ namespace ssvu
 			#ifndef SSVU_LOG_DISABLE
 				if(mLOut.title != "")
 				{
-					const auto& fmt(Internal::getUniqueColor(mLOut.title) + Console::setStyle(Console::Style::Bold));
-					std::cout << fmt << std::left << std::setw(38) <<  "[" + mLOut.title + "] " << Console::resetFmt();
+					std::cout	<< Internal::getUniqueColor(mLOut.title) << Console::setStyle(Console::Style::Bold)
+								<< std::left << std::setw(38) <<  "[" + mLOut.title + "] " << Console::resetFmt();
 					getLogStream() << std::left << std::setw(38) <<  "[" + mLOut.title + "] ";
 					mLOut.title = "";
 				}
