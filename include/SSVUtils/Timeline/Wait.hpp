@@ -30,7 +30,7 @@ namespace ssvu
 			inline void reset() override { currentTime = time; }
 
 		public:
-			Wait(Timeline& mTimeline, FT mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { assert(time > 0); }
+			Wait(Timeline& mTimeline, FT mTime) : Command{mTimeline}, time{mTime}, currentTime{mTime} { assert(time >= 0); }
 	};
 
 	namespace Internal
