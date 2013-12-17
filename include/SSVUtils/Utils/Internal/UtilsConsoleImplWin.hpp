@@ -75,10 +75,13 @@ namespace ssvu
 			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getStorage().lastColorBG = mColor; getStorage().apply(); return getStorage().emptyString; }
 			*/
 
-			inline const std::string& getStrResetFmt() noexcept				{ return getStorage().emptyString; }
-			inline const std::string& getStrStyle(Style) noexcept			{ return getStorage().emptyString; }
-			inline const std::string& getStrColorFG(Color mColor) noexcept	{ return getStorage().emptyString; }
-			inline const std::string& getStrColorBG(Color mColor) noexcept	{ return getStorage().emptyString; }
+			inline const std::string& getStrEmpty() noexcept		{ static std::string result; return result; }
+
+			inline const std::string& getStrResetFmt() noexcept		{ return getStrEmpty(); }
+			inline const std::string& getStrStyle(Style) noexcept	{ return getStrEmpty(); }
+			inline const std::string& getStrColorFG(Color) noexcept	{ return getStrEmpty(); }
+			inline const std::string& getStrColorBG(Color) noexcept	{ return getStrEmpty(); }
+			inline const std::string& getStrClear() noexcept		{ return getStrEmpty(); }
 		}
 	}
 }

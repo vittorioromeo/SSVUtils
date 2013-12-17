@@ -15,8 +15,9 @@ namespace ssvu
 		{
 			constexpr const char* prefix{"\033["};
 			constexpr const char* postfix{"m"};
+			constexpr const char* ansiClearSequence{"\e[1;1H\e[2J"};
 
-			inline int getColorFGCode(std::size_t mIdx) noexcept
+			inline int getColorFGCode(Color mColor) noexcept
 			{
 				static int codes[]
 				{
@@ -39,10 +40,10 @@ namespace ssvu
 					97		// 16 = Color::LightWhite
 				};
 
-				return codes[mIdx];
+				return codes[int(mColor)];
 			}
-			inline int getColorBGCode(std::size_t mIdx) noexcept { return getColorFGCode(mIdx) + 10; }
-			inline int getModCode(std::size_t mIdx) noexcept
+			inline int getColorBGCode(Color mColor) noexcept { return getColorFGCode(mColor) + 10; }
+			inline int getModCode(Style mStyle) noexcept
 			{
 				static int codes[]
 				{
@@ -61,7 +62,7 @@ namespace ssvu
 					28	// 12 = Style::ResetHidden
 				};
 
-				return codes[mIdx];
+				return codes[int(mStyle)];
 			}
 
 			struct StrStorage
@@ -71,9 +72,9 @@ namespace ssvu
 				Color lastColorBG{Color::Default};
 				std::string lastFmtString;
 
-				inline const std::string& getFmtString()
+				inline const std::string& getFmtString() noexcept
 				{
-					lastFmtString = {prefix + toStr(getModCode(int(lastStyle))) + ";" + toStr(getColorFGCode(int(lastColorFG))) + ";" + toStr(getColorBGCode(int(lastColorBG))) + postfix};
+					lastFmtString = {prefix + toStr(getModCode(lastStyle)) + ";" + toStr(getColorFGCode(lastColorFG)) + ";" + toStr(getColorBGCode(lastColorBG)) + postfix};
 					return lastFmtString;
 				}
 			};
@@ -83,13 +84,13 @@ namespace ssvu
 			inline const std::string& getStrResetFmt() noexcept
 			{
 				getStorage().lastStyle = Style::None;
-				getStorage().lastColorFG = Color::Default;
-				getStorage().lastColorBG = Color::Default;
+				getStorage().lastColorFG = getStorage().lastColorBG = Color::Default;
 				return getStorage().getFmtString();
 			}
 			inline const std::string& getStrStyle(Style mStyle) noexcept	{ getStorage().lastStyle = mStyle; return getStorage().getFmtString(); }
 			inline const std::string& getStrColorFG(Color mColor) noexcept	{ getStorage().lastColorFG = mColor; return getStorage().getFmtString(); }
 			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getStorage().lastColorBG = mColor; return getStorage().getFmtString(); }
+			inline const std::string& getStrClear() noexcept				{ static std::string result{ansiClearSequence}; return result; }
 		}
 	}
 }
