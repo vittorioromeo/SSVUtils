@@ -32,13 +32,13 @@ namespace ssvu
 		template<std::size_t TIdx, typename TSearch, typename First, typename... TArgs> struct GetImpl
 		{
 			using type = typename GetImpl<TIdx + 1, TSearch, TArgs...>::type;
-			static constexpr int idx = TIdx;
+			static constexpr int idx{TIdx};
 		};
 
 		template<std::size_t TIdx, typename TSearch, typename... TArgs> struct GetImpl<TIdx, TSearch, TSearch, TArgs...>
 		{
 			using type = GetImpl;
-			static constexpr int idx = TIdx;
+			static constexpr int idx{TIdx};
 		};
 	}
 
