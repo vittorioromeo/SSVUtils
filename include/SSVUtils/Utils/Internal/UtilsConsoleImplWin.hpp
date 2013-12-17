@@ -6,6 +6,7 @@
 #define SSVU_UTILS_CONSOLE_IMPL
 
 #include <string>
+#include <cstdlib>
 #include <windows.h>
 
 namespace ssvu
@@ -14,13 +15,13 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			// TODO: implement
+			// TODO: fix (http://www.cplusplus.com/articles/2ywTURfi/)
 
 			inline char getColorCode(std::size_t mIdx) noexcept
 			{
-				static int codes[]
+				static char codes[]
 				{
-					' ',	// 0 = Color::Default
+					'0',	// 0 = Color::Default
 					'0',	// 1 = Color::Black
 					'4',	// 2 = Color::Red
 					'2',	// 3 = Color::Green
@@ -44,26 +45,40 @@ namespace ssvu
 
 			struct StrStorage
 			{
+				HANDLE hConsole;
+
+				inline StrStorage() { hConsole = GetStdHandle(STD_OUTPUT_HANDLE); }
+
 				Color lastColorFG{Color::Default};
 				Color lastColorBG{Color::Default};
 				std::string lastFmtString;
+				std::string emptyString;
 
-				inline const std::string& getFmtString()
+				inline void apply()
 				{
-					lastFmtString = "COLOR " + toStr(getColorCode(int(lastColorFG))) + toStr(getColorCode(int(lastColorBG)));
-					return lastFmtString;
+					WORD word(getColorCode(int(lastColorFG)) + getColorCode(int(lastColorBG)));
+					SetConsoleTextAttribute(hConsole, word);
 				}
 			};
 
+			inline StrStorage& getStorage() noexcept { static StrStorage storage; return storage; }
+/*
 			inline const std::string& getStrResetFmt() noexcept
 			{
 				getStorage().lastColorFG = Color::Default;
 				getStorage().lastColorBG = Color::Default;
-				return getStorage().getFmtString();
+				getStorage().apply();
+				return getStorage().emptyString;
 			}
-			inline const std::string& getStrStyle(Style) noexcept			{ system(getStorage().getFmtString()); return ""; }
-			inline const std::string& getStrColorFG(Color mColor) noexcept	{ getStorage().lastColorFG = mColor; system(getStorage().getFmtString()); return ""; }
-			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getStorage().lastColorBG = mColor; system(getStorage().getFmtString()); return ""; }
+			inline const std::string& getStrStyle(Style) noexcept			{ getStorage().apply(); return getStorage().emptyString; }
+			inline const std::string& getStrColorFG(Color mColor) noexcept	{ getStorage().lastColorFG = mColor; getStorage().apply(); return getStorage().emptyString; }
+			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getStorage().lastColorBG = mColor; getStorage().apply(); return getStorage().emptyString; }
+			*/
+
+			inline const std::string& getStrResetFmt() noexcept				{ return getStorage().emptyString; }
+			inline const std::string& getStrStyle(Style) noexcept			{ return getStorage().emptyString; }
+			inline const std::string& getStrColorFG(Color mColor) noexcept	{ return getStorage().emptyString; }
+			inline const std::string& getStrColorBG(Color mColor) noexcept	{ return getStorage().emptyString; }
 		}
 	}
 }
