@@ -5,6 +5,14 @@
 #ifndef SSVU_GLOBAL_COMMON
 #define SSVU_GLOBAL_COMMON
 
+#if (__linux || __unix || __posix)
+	#define SSVU_OS_LINUX
+#elif (_WIN64 || _WIN32)
+	#define SSVU_OS_WINDOWS
+#else
+	#define SSVU_OS_UNKNOWN
+#endif
+
 #include <chrono>
 #include <memory>
 #include <functional>
