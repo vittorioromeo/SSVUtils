@@ -17,6 +17,27 @@ namespace ssvu
 			constexpr const char* postfix{"m"};
 			constexpr const char* clear{"\e[1;1H\e[2J"};
 
+			inline int getStyleCode(Style mStyle) noexcept
+			{
+				static int codes[]
+				{
+					0,		// 0 = Style::None
+					1,		// 1 = Style::Bold
+					2,		// 2 = Style::Dim
+					4,		// 3 = Style::Underline
+					5,		// 4 = Style::Blink
+					7,		// 5 = Style::Reverse
+					8,		// 6 = Style::Hidden
+					21,		// 7 = Style::ResetBold
+					22,		// 8 = Style::ResetDim
+					24,		// 9 = Style::ResetUnderline
+					25,		// 10 = Style::ResetBlink
+					27,		// 11 = Style::ResetReverse
+					28		// 12 = Style::ResetHidden
+				};
+
+				return codes[int(mStyle)];
+			}
 			inline int getColorFGCode(Color mColor) noexcept
 			{
 				static int codes[]
@@ -43,27 +64,6 @@ namespace ssvu
 				return codes[int(mColor)];
 			}
 			inline int getColorBGCode(Color mColor) noexcept { return getColorFGCode(mColor) + 10; }
-			inline int getModCode(Style mStyle) noexcept
-			{
-				static int codes[]
-				{
-					0,		// 0 = Style::None
-					1,		// 1 = Style::Bold
-					2,		// 2 = Style::Dim
-					4,		// 3 = Style::Underline
-					5,		// 4 = Style::Blink
-					7,		// 5 = Style::Reverse
-					8,		// 6 = Style::Hidden
-					21,		// 7 = Style::ResetBold
-					22,		// 8 = Style::ResetDim
-					24,		// 9 = Style::ResetUnderline
-					25,		// 10 = Style::ResetBlink
-					27,		// 11 = Style::ResetReverse
-					28		// 12 = Style::ResetHidden
-				};
-
-				return codes[int(mStyle)];
-			}
 
 			inline Style& getLastStyle() noexcept	{ static Style result{Style::None};		return result; }
 			inline Color& getLastColorFG() noexcept	{ static Color result{Color::Default};	return result; }
@@ -71,7 +71,7 @@ namespace ssvu
 			inline const std::string& getFmtStr() noexcept
 			{
 				static std::string result;
-				result = {prefix + toStr(getModCode(getLastStyle())) + ";" + toStr(getColorFGCode(getLastColorFG())) + ";" + toStr(getColorBGCode(getLastColorBG())) + postfix};
+				result = {prefix + toStr(getStyleCode(getLastStyle())) + ";" + toStr(getColorFGCode(getLastColorFG())) + ";" + toStr(getColorBGCode(getLastColorBG())) + postfix};
 				return result;
 			}
 
