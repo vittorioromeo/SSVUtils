@@ -26,7 +26,7 @@ namespace ssvu
 
 		template<typename F, typename Tup> struct Expander<0, F, Tup>
 		{
-			template<typename... Us> inline constexpr static auto expand(F&& f, Tup&&, Us&&... args) -> decltype(f(std::forward<Us>(args)...)) { return f(std::forward<Us>(args)...); }
+			template<typename... TArgs> inline constexpr static auto expand(F&& f, Tup&&, TArgs&&... mArgs) -> decltype(f(std::forward<TArgs>(mArgs)...)) { return f(std::forward<TArgs>(mArgs)...); }
 		};
 
 		template<std::size_t TIdx, typename TSearch, typename First, typename... TArgs> struct GetImpl
