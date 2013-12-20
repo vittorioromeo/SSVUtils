@@ -18,7 +18,7 @@ namespace ssvu
 	/// @param mTarget Vector to fill with the splitted strings.
 	/// @param mStr String to split.
 	/// @param mSeparator Separator to split at. Every occurrence of the separator will cause a split.
-	template<typename T, Split TM = Split::Normal> inline void split(std::vector<std::string>& mTarget, const std::string& mStr, const T& mSeparator)
+	template<Split TM = Split::Normal, typename T> inline void split(std::vector<std::string>& mTarget, const std::string& mStr, const T& mSeparator)
 	{
 		Internal::SplitHelper<T, TM>::split(mTarget, mStr, mSeparator);
 	}
@@ -29,10 +29,10 @@ namespace ssvu
 	/// @param mStr String to split.
 	/// @param mSeparator Separator to split at. Every occurrence of the separator will cause a split.
 	/// @return Returns a std::vector containing all splitted strings.
-	template<typename T, Split TM = Split::Normal> inline std::vector<std::string> getSplit(const std::string& mStr, const T& mSeparator)
+	template<Split TM = Split::Normal, typename T> inline std::vector<std::string> getSplit(const std::string& mStr, const T& mSeparator)
 	{
 		std::vector<std::string> result;
-		split<T, TM>(result, mStr, mSeparator);
+		split<TM, T>(result, mStr, mSeparator);
 		return result;
 	}
 }

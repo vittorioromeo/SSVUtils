@@ -78,7 +78,8 @@ namespace ssvu
 			inline const std::string& getStrResetFmt() noexcept
 			{
 				getLastStyle() = Style::None;
-				getLastColorFG() = getLastColorBG() = Color::Default;
+				getLastColorFG() = Color::Default;
+				getLastColorBG() = Color::Default;
 				return getFmtStr();
 			}
 			inline const std::string& getStrStyle(Style mStyle) noexcept	{ getLastStyle() = mStyle;				return getFmtStr(); }

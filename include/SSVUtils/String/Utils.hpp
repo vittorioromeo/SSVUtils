@@ -87,6 +87,8 @@ namespace ssvu
 		{
 			template<bool TFmt> inline static void impl(std::ostream& mStream, const T& mValue)
 			{
+				if(std::begin(mValue) == std::end(mValue)) { printBold<TFmt>(mStream, "{ EMPTY }"); return; }
+
 				printBold<TFmt>(mStream, "{");
 				for(auto itr(std::begin(mValue)); itr < std::end(mValue) - 1; ++itr)
 				{
@@ -127,13 +129,13 @@ namespace ssvu
 				if(TFmt) mStream << mPostfix; \
 			} \
 		}
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(int,				Console::Color::LightBlue,		Console::Style::ReverseFGBG,	"");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(long,				Console::Color::LightBlue,		Console::Style::ReverseFGBG,	"l");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(unsigned int,		Console::Color::LightBlue,		Console::Style::ReverseFGBG,	"u");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(unsigned long,		Console::Color::LightBlue,		Console::Style::ReverseFGBG,	"ul");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(float,				Console::Color::LightRed,		Console::Style::ReverseFGBG,	"f");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(double,			Console::Color::LightRed,		Console::Style::ReverseFGBG,	"d");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(std::string,		Console::Color::LightYellow,	Console::Style::Underline,		"");
+	SSVU_DEFINE_FLAVORED_STRINGIFIER(int,				Console::Color::LightBlue,		Console::Style::Bold,		"");
+	SSVU_DEFINE_FLAVORED_STRINGIFIER(long,				Console::Color::LightBlue,		Console::Style::Bold,		"l");
+	SSVU_DEFINE_FLAVORED_STRINGIFIER(unsigned int,		Console::Color::LightBlue,		Console::Style::Bold,		"u");
+	SSVU_DEFINE_FLAVORED_STRINGIFIER(unsigned long,		Console::Color::LightBlue,		Console::Style::Bold,		"ul");
+	SSVU_DEFINE_FLAVORED_STRINGIFIER(float,				Console::Color::LightRed,		Console::Style::Bold,		"f");
+	SSVU_DEFINE_FLAVORED_STRINGIFIER(double,			Console::Color::LightRed,		Console::Style::Bold,		"d");
+	SSVU_DEFINE_FLAVORED_STRINGIFIER(std::string,		Console::Color::LightYellow,	Console::Style::Underline,	"");
 	#undef SSVU_DEFINE_FLAVORED_STRINGIFIER
 
 	// Stringify tuples

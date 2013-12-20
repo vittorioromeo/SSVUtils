@@ -42,6 +42,14 @@ namespace ssvu
 				return mStr.find(mSeparator, mStart);
 			}
 		};
+		template<std::size_t TN> struct SplitFindHelper<char[TN]>
+		{
+			inline static StringSize getNextIdx(const std::string& mStr, const char(&mSeparator)[TN], StringSize mStart)
+			{
+				std::string separator(&mSeparator[0], &mSeparator[TN - 1]);
+				return mStr.find(separator, mStart);
+			}
+		};
 		template<> struct SplitFindHelper<std::vector<char>>
 		{
 			inline static StringSize getNextIdx(const std::string& mStr, const std::vector<char>& mSeparator, StringSize mStart)
@@ -64,10 +72,32 @@ namespace ssvu
 
 					std::string token{mStr, p, tokenLength};
 					if(!token.empty()) mTarget.push_back(token);
+					if(TM == Split::KeepSeparatorAsToken) mTarget.push_back(std::string(mStr, p - 1, 1));
 					p = q + 1;
 				}
 				std::string remaining{mStr, p};
 				if(!remaining.empty()) mTarget.push_back(remaining);
+			}
+		};
+		template<Split TM, std::size_t TN> struct SplitHelper<char[TN], TM>
+		{
+			inline static void split(std::vector<std::string>& mTarget, std::string mStr, const std::string& mSeparator)
+			{
+				StringSize pos{0};
+				std::string token;
+				while((pos = mStr.find(mSeparator)) != std::string::npos)
+				{
+					auto tokenLength(pos);
+
+					// If we need to keep the separator in the splitted strings, add the separator's length to the token length
+					if(TM == Split::KeepSeparator) tokenLength += mSeparator.size();
+
+					token = mStr.substr(0, tokenLength);
+					if(!token.empty()) mTarget.push_back(token);
+					if(TM == Split::KeepSeparatorAsToken) mTarget.push_back(std::string(mStr, pos - 1, mSeparator.size()));
+					mStr.erase(0, pos + mSeparator.size());
+				}
+				if(!mStr.empty()) mTarget.push_back(mStr);
 			}
 		};
 		template<Split TM> struct SplitHelper<std::string, TM>
@@ -85,6 +115,7 @@ namespace ssvu
 
 					token = mStr.substr(0, tokenLength);
 					if(!token.empty()) mTarget.push_back(token);
+					if(TM == Split::KeepSeparatorAsToken) mTarget.push_back(std::string(mStr, pos - 1, mSeparator.size()));
 					mStr.erase(0, pos + mSeparator.size());
 				}
 				if(!mStr.empty()) mTarget.push_back(mStr);
@@ -105,6 +136,7 @@ namespace ssvu
 
 					token = mStr.substr(0, tokenLength);
 					if(!token.empty()) mTarget.push_back(token);
+					if(TM == Split::KeepSeparatorAsToken) mTarget.push_back(std::string(mStr, pos, lastLength));
 					mStr.erase(0, pos + lastLength);
 				}
 				if(!mStr.empty()) mTarget.push_back(mStr);
@@ -114,3 +146,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: test keepseparator as token and simplify!

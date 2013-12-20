@@ -228,16 +228,17 @@ SSVU_TEST("String split tests")
 
 	auto sp1 = getSplit(s1, ' ');
 	auto sp2 = getSplit(s2, ',');
-	auto sp3 = getSplit<string>(s3, "##");
+	auto sp3 = getSplit(s3, "##");
 
-	auto spks1 = getSplit<char, Split::KeepSeparator>(s1, ' ');
-	auto spks2 = getSplit<char, Split::KeepSeparator>(s2, ',');
-	auto spks3 = getSplit<string, Split::KeepSeparator>(s3, "##");
+	auto spks1 = getSplit<Split::KeepSeparator>(s1, ' ');
+	auto spks2 = getSplit<Split::KeepSeparator>(s2, ',');
+	auto spks3 = getSplit<Split::KeepSeparator>(s3, "##");
 
 	EXPECT((sp1.size() == sp2.size()) == (sp3.size() == 6));
 	EXPECT((spks1.size() == spks2.size()) == (spks3.size() == 6));
 
 	EXPECT((sp1[0] == sp2[0]) == (sp3[0] == "test"));
+
 	EXPECT((sp1[1] == sp2[1]) == (sp3[1] == "a"));
 	EXPECT((sp1[2] == sp2[2]) == (sp3[2] == "b"));
 	EXPECT((sp1[3] == sp2[3]) == (sp3[3] == "c"));
