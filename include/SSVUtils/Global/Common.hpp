@@ -74,6 +74,7 @@ namespace ssvu
 }
 
 /// @macro If this macro is defined, `std::function` will be used instead of `ssvu::FastFunc`.
+#define SSVU_USE_STD_FUNCTION
 #ifndef SSVU_USE_STD_FUNCTION
 	#include "SSVUtils/FastFunc/FastFunc.hpp"
 #endif

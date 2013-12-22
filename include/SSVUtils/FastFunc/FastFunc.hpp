@@ -76,6 +76,36 @@ namespace ssvu
 				inline PtrStaticFuncT getStaticFunc() const noexcept		{ return horrible_cast<PtrStaticFuncT>(this); }
 		};
 
+		template<typename TReturn> struct CallerHelper
+		{
+			template<typename... TArgs> inline static TReturn call(const Closure<TReturn, TArgs...>& mClosure, TArgs... mArgs)
+			{
+				TReturn ret((mClosure.getPtrThis()->*(mClosure.getPtrFunction()))(std::forward<TArgs>(mArgs)...));
+				return ret;
+			}
+		};
+
+		template<> struct CallerHelper<bool>
+		{
+			template<typename... TArgs> inline static bool call(const Closure<bool, TArgs...>& mClosure, TArgs... mArgs)
+			{
+					printf("diobello");
+				bool ret((mClosure.getPtrThis()->*(mClosure.getPtrFunction()))(mArgs...));
+				printf("%d", ret);
+				return ret;
+			}
+		};
+
+		template<> struct CallerHelper<void>
+		{
+			template<typename... TArgs> inline static void call(const Closure<void, TArgs...>& mClosure, TArgs... mArgs)
+			{
+				printf("porco dio");
+				(mClosure.getPtrThis()->*(mClosure.getPtrFunction()))(std::forward<TArgs>(mArgs)...);
+			}
+		};
+
+
 		template<typename TReturn, typename... TArgs> class FastFuncImpl
 		{
 			private:
@@ -94,7 +124,10 @@ namespace ssvu
 				template<typename X, typename Y> inline FastFuncImpl(X* mThis, Y mFunc) noexcept { bind(mThis, mFunc); }
 
 				inline FastFuncImpl& operator=(PtrStaticFuncT mFunc) noexcept	{ bind(mFunc); }
-				inline TReturn operator()(TArgs... mArgs) const					{ return (closure.getPtrThis()->*(closure.getPtrFunction()))(std::forward<TArgs>(mArgs)...); }
+				inline TReturn operator()(TArgs... mArgs) const
+				{
+					CallerHelper<TReturn>::template call<TArgs...>(closure, mArgs...);
+				}
 
 				inline bool operator==(std::nullptr_t) const noexcept				{ return closure == nullptr; }
 				inline bool operator==(const FastFuncImpl& mImpl) const noexcept	{ return closure == mImpl.closure; }
