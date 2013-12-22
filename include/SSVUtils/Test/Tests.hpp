@@ -230,24 +230,77 @@ SSVU_TEST("String split tests")
 	auto sp2 = getSplit(s2, ',');
 	auto sp3 = getSplit(s3, "##");
 
-	auto spks1 = getSplit<Split::KeepSeparator>(s1, ' ');
-	auto spks2 = getSplit<Split::KeepSeparator>(s2, ',');
-	auto spks3 = getSplit<Split::KeepSeparator>(s3, "##");
+	auto sps1 = getSplit(s1, std::string{" "});
+	auto sps2 = getSplit(s2, std::string{","});
+	auto sps3 = getSplit(s3, std::string{"##"});
+
+	auto spks1 = getSplit<Split::TrailingSeparator>(s1, ' ');
+	auto spks2 = getSplit<Split::TrailingSeparator>(s2, ',');
+	auto spks3 = getSplit<Split::TrailingSeparator>(s3, "##");
+
+	auto spksat1 = getSplit<Split::TokenizeSeparator>(s1, ' ');
+	auto spksat2 = getSplit<Split::TokenizeSeparator>(s2, ',');
+	auto spksat3 = getSplit<Split::TokenizeSeparator>(s3, "##");
 
 	EXPECT((sp1.size() == sp2.size()) == (sp3.size() == 6));
+	EXPECT((sps1.size() == sps2.size()) == (sps3.size() == 6));
 	EXPECT((spks1.size() == spks2.size()) == (spks3.size() == 6));
+	EXPECT((spksat1.size() == spksat2.size()) == (spksat3.size() == 11));
 
 	EXPECT((sp1[0] == sp2[0]) == (sp3[0] == "test"));
-
 	EXPECT((sp1[1] == sp2[1]) == (sp3[1] == "a"));
 	EXPECT((sp1[2] == sp2[2]) == (sp3[2] == "b"));
 	EXPECT((sp1[3] == sp2[3]) == (sp3[3] == "c"));
 	EXPECT((sp1[4] == sp2[4]) == (sp3[4] == "d"));
 	EXPECT((sp1[5] == sp2[5]) == (sp3[5] == "e"));
 
+	EXPECT((sps1[0] == sps2[0]) == (sps3[0] == "test"));
+	EXPECT((sps1[1] == sps2[1]) == (sps3[1] == "a"));
+	EXPECT((sps1[2] == sps2[2]) == (sps3[2] == "b"));
+	EXPECT((sps1[3] == sps2[3]) == (sps3[3] == "c"));
+	EXPECT((sps1[4] == sps2[4]) == (sps3[4] == "d"));
+	EXPECT((sps1[5] == sps2[5]) == (sps3[5] == "e"));
+
+	EXPECT((spksat1[0] == spksat2[0]) == (spksat3[0] == "test"));
+	EXPECT((spksat1[2] == spksat2[2]) == (spksat3[2] == "a"));
+	EXPECT((spksat1[4] == spksat2[4]) == (spksat3[4] == "b"));
+	EXPECT((spksat1[6] == spksat2[6]) == (spksat3[6] == "c"));
+	EXPECT((spksat1[8] == spksat2[8]) == (spksat3[8] == "d"));
+	EXPECT((spksat1[10] == spksat2[10]) == (spksat3[10] == "e"));
+
 	EXPECT(spks1[2] == "b ");
 	EXPECT(spks2[2] == "b,");
 	EXPECT(spks3[2] == "b##");
+
+	string s4{"test##a,b##c,d##efg"};
+	vector<string> splits{"##", ","};
+
+	auto spv1 = getSplit(s4, splits);
+	auto spv2 = getSplit<Split::TrailingSeparator>(s4, splits);
+	auto spv3 = getSplit<Split::TokenizeSeparator>(s4, splits);
+
+	EXPECT(spv1.size() == 6);
+	EXPECT(spv2.size() == 6);
+	EXPECT(spv3.size() == 11);
+
+	EXPECT((spv1[0] == "test") && spv2[0] == "test##");
+	EXPECT((spv1[1] == "a") && spv2[1] == "a,");
+	EXPECT((spv1[2] == "b") && spv2[2] == "b##");
+	EXPECT((spv1[3] == "c") && spv2[3] == "c,");
+	EXPECT((spv1[4] == "d") && spv2[4] == "d##");
+	EXPECT((spv1[5] == "efg") && spv2[5] == "efg");
+
+	EXPECT(spv3[0] == "test");
+	EXPECT(spv3[1] == "##");
+	EXPECT(spv3[2] == "a");
+	EXPECT(spv3[3] == ",");
+	EXPECT(spv3[4] == "b");
+	EXPECT(spv3[5] == "##");
+	EXPECT(spv3[6] == "c");
+	EXPECT(spv3[7] == ",");
+	EXPECT(spv3[8] == "d");
+	EXPECT(spv3[9] == "##");
+	EXPECT(spv3[10] == "efg");
 }
 SSVU_TEST_END();
 
