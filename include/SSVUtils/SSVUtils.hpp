@@ -12,7 +12,6 @@
 #include "SSVUtils/Utils/Utils.hpp"
 #include "SSVUtils/String/String.hpp"
 #include "SSVUtils/Delegate/Delegate.hpp"
-#include "SSVUtils/FastFunc/FastFunc.hpp"
 #include "SSVUtils/FileSystem/FileSystem.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/TemplateSystem/TemplateSystem.hpp"

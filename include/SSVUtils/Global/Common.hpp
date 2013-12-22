@@ -73,27 +73,15 @@ namespace ssvu
 	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept { return std::is_base_of<T1, T2>::value; }
 }
 
-/// @macro If this macro is defined, `std::function` will be used instead of `ssvu::FastFunc`.
-#define SSVU_USE_STD_FUNCTION
-#ifndef SSVU_USE_STD_FUNCTION
-	#include "SSVUtils/FastFunc/FastFunc.hpp"
-#endif
-
 namespace ssvu
 {
 	namespace Internal
 	{
 		template<typename> struct FuncHelper;
-
-		#ifndef SSVU_USE_STD_FUNCTION
-			template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = FastFunc<T(TArgs...)>; };
-		#else
-			template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
-		#endif
+		template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
 	}
 
-	/// @typedef Func is `std::function` if `SSVU_USE_STD_FUNCTION` is defined,
-	/// `ssvu::FastFunc` otherwise.
+	/// @typedef Func is an `std::function` alias.
 	template<typename T> using Func = typename Internal::FuncHelper<T>::FuncType;
 
 	/// @typedef Action represents a `void()` function,
