@@ -13,34 +13,29 @@
 #include "SSVUtils/Log/Log.hpp"
 #include "SSVUtils/Utils/UtilsMacros.hpp"
 
-#define EXPECT(expr) \
-	for(;;) \
+#define EXPECT(mExpr) \
+	while(true) \
 	{ \
-		namespace stInternal = ssvu::Test::Internal; \
-		try { if(!stInternal::suppress(expr)) throw stInternal::Fail{stInternal::Location{__FILE__, __LINE__}, #expr}; } \
-		catch(const stInternal::Fail&) { throw; } \
-		catch(const std::exception& e) { throw stInternal::Unexpect{stInternal::Location{__FILE__, __LINE__}, #expr, stInternal::getWithMsg(e.what())}; } \
-		catch(...) { throw stInternal::Unexpect{stInternal::Location{__FILE__, __LINE__}, #expr, "of unknown type"}; } \
+		try { if(!ssvu::Test::Internal::suppress(mExpr)) throw ssvu::Test::Internal::Fail{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr}; } \
+		catch(const ssvu::Test::Internal::Fail&) { throw; } \
+		catch(const std::exception& e) { throw ssvu::Test::Internal::Unexpect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr, ssvu::Test::Internal::getWithMsg(e.what())}; } \
+		catch(...) { throw ssvu::Test::Internal::Unexpect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr, "of unknown type"}; } \
 		break; \
 	}
 
-#define EXPECT_THROWS(expr) \
-	for(;;) \
+#define EXPECT_THROWS(mExpr) \
+	while(true) \
 	{ \
-		namespace stInternal = ssvu::Test::Internal; \
-		try { stInternal::suppress(expr); } catch(...) { break; } \
-		throw stInternal::Expect{stInternal::Location{__FILE__, __LINE__}, #expr}; \
+		try { ssvu::Test::Internal::suppress(mExpr); } catch(...) { break; } \
+		throw ssvu::Test::Internal::Expect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr}; \
 	}
 
-#define EXPECT_THROWS_AS(expr, excpt) \
-	for(;;) \
+#define EXPECT_THROWS_AS(mExpr, mException) \
+	while(true) \
 	{ \
-		namespace stInternal = ssvu::Test::Internal; \
-		try { stInternal::suppress(expr); } catch(excpt&) { break; } catch(...) { } \
-		throw stInternal::Expect{stInternal::Location{__FILE__, __LINE__}, #expr, stInternal::getOfType(#excpt)}; \
+		try { ssvu::Test::Internal::suppress(mExpr); } catch(mException&) { break; } catch(...) { } \
+		throw ssvu::Test::Internal::Expect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr, ssvu::Test::Internal::getOfType(#mException)}; \
 	}
-
-
 
 #ifndef SSVU_TEST_DISABLE
 	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVU_TOKENPASTE2(Unique_, __LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
@@ -80,9 +75,9 @@ namespace ssvu
 				Msg(std::string mType, Location mLocation, std::string mExpr, std::string mNote = "")
 					: std::runtime_error{std::move(mExpr)}, type{std::move(mType)}, location{std::move(mLocation)}, comment{std::move(mNote)} { }
 			};
-			struct Fail : Msg		{ Fail(Location mLocation, std::string mExpr) :									Msg{"fail", std::move(mLocation), std::move(mExpr)} { } };
-			struct Expect : Msg		{ Expect(Location mLocation, std::string mExpr, std::string mException = "") :	Msg{"fail: no wanted exception", std::move(mLocation), std::move(mExpr), std::move(mException)} { } };
-			struct Unexpect : Msg	{ Unexpect(Location mLocation, std::string mExpr, std::string mNote) :			Msg{"unwanted exception:", std::move(mLocation), std::move(mExpr), std::move(mNote)} { } };
+			struct Fail : Msg		{ Fail(Location mLocation, std::string mExpr) :									Msg{"fail",							std::move(mLocation), std::move(mExpr)							} { } };
+			struct Expect : Msg		{ Expect(Location mLocation, std::string mExpr, std::string mException = "") :	Msg{"fail: no wanted exception",	std::move(mLocation), std::move(mExpr), std::move(mException)	} { } };
+			struct Unexpect : Msg	{ Unexpect(Location mLocation, std::string mExpr, std::string mNote) :			Msg{"unwanted exception:",			std::move(mLocation), std::move(mExpr), std::move(mNote)		} { } };
 
 			inline bool suppress(bool mValue) { return mValue; }
 
@@ -105,7 +100,7 @@ namespace ssvu
 					catch(...) { ++fails; report("unexpected exception", t.name); }
 				}
 
-				if(fails > 0) ssvu::lo("ssvu::Test") << "[" << fails << "/" << mTests.size() << "] " << "tests failed\n" << std::endl;
+				if(fails > 0) ssvu::lo("ssvu::Test") << "[" << fails << "/" << mTests.size() << "] " << "tests failed\n\n";
 				return fails;
 			}
 
@@ -122,15 +117,20 @@ namespace ssvu
 				#ifndef SSVU_TEST_DISABLE
 					static bool done{false};
 					if(done) return;
+
+					done = true;
+
 					bool fail{false};
 					for(auto& tg : Internal::getTestGroups())
 						if(Internal::run(tg) > 0)
 						{
 							fail = true;
-							ssvu::lo("############################################################################################################\n") << std::endl;
+							ssvu::lo("############################################################################################################\n\n");
 						}
-					done = true;
-					if(!fail) ssvu::lo("ssvu::Test") << "All tests passed!" << std::endl;
+
+					if(!fail) ssvu::lo("ssvu::Test") << "All tests passed!\n";
+
+					ssvu::lo().flush();
 				#endif
 			}
 		}
