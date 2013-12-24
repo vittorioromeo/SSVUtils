@@ -78,15 +78,19 @@ namespace ssvu
 
 			return mLOut;
 		}
+
+		inline LOut& getLOutInstance() noexcept { static LOut loInstance; return loInstance; }
 	}
 
-	/// @brief Returns a reference to the "log stream" singleton.
+	/// @brief Returns a reference to the "log stream" singleton. (no title)
+	inline Internal::LOut& lo() noexcept { return Internal::getLOutInstance(); }
+
+	/// @brief Returns a reference to the "log stream" singleton. (sets title)
 	/// @param mTitle Title of the next log message.
-	inline Internal::LOut& lo(const std::string& mTitle = "")
+	template<typename T> inline Internal::LOut& lo(const T& mTitle)
 	{
-		static Internal::LOut loInstance;
-		loInstance.title = mTitle;
-		return loInstance;
+		lo().title = toStr(mTitle);
+		return lo();
 	}
 
 	/// @brief Starts the benchmark timer.
