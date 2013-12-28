@@ -5,6 +5,7 @@
 #ifndef SSVU_MEMORYMANAGER
 #define SSVU_MEMORYMANAGER
 
+#include <algorithm>
 #include <vector>
 #include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Utils/UtilsContainers.hpp"
@@ -29,7 +30,7 @@ namespace ssvu
 				using Container::end;
 				using Container::size;
 
-				inline void clear()	{ Container::clear(); toAdd.clear(); }
+				inline void clear()	noexcept { Container::clear(); toAdd.clear(); }
 				inline void del(TItem& mItem) const noexcept { mItem.ssvu_mmAlive = false; }
 
 				// Statically polymorphic methods

@@ -18,7 +18,7 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<Mode TM, Type TT, Pick TP, Sort TS> void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired)
+			template<Mode TM, Type TT, Pick TP, Sort TS> inline void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired)
 			{
 				if(!mPath.existsAsFolder()) { lo("ssvufs::ScanHelper") << "Directory \"" << mPath << "\" not found" << std::endl; return; }
 

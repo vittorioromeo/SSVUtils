@@ -89,12 +89,12 @@ namespace ssvu
 
 					inline void refreshImpl()
 					{
-						for(const auto& i : this->toAdd) this->emplace_back(i, uptrDeleter); this->toAdd.clear();
+						for(auto& i : this->toAdd) this->emplace_back(std::move(i)); this->toAdd.clear();
 						eraseRemoveIf(*this, this->template isDead<Uptr<T, UptrDeleter>>);
 					}
 					template<typename TType, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
 					{
-						auto result(this->preAlloc.template create<TType>(std::forward<TArgs>(mArgs)...)); this->toAdd.push_back(result); return *result;
+						auto result(this->preAlloc.template create<TType>(std::forward<TArgs>(mArgs)...)); this->toAdd.emplace_back(result, uptrDeleter); return *result;
 					}
 			};
 		}
@@ -115,13 +115,13 @@ namespace ssvu
 
 				inline void unifyContiguous()
 				{
-					std::size_t newNLast{0};
+					std::size_t newNLast{0u};
 
 					do
 					{
-						auto nLast(newNLast);
+						int nLast{newNLast};
 						newNLast = available.size() - 1;
-						for(auto i(available.size() - 2); i >= nLast; --i)
+						for(int i(available.size() - 2); i >= nLast; --i)
 						{
 							if(available[i].begin > available[i + 1].begin)
 							{

@@ -22,7 +22,7 @@ namespace ssvu
 				timelines.refresh();
 				for(const auto& t : timelines) { t->update(mFT); if(t->isFinished()) timelines.del(*t); }
 			}
-			inline void clear() { timelines.clear(); }
+			inline void clear() noexcept { timelines.clear(); }
 	};
 }
 

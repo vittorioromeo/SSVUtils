@@ -56,12 +56,12 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return insertImpl(commands.size(), create<T>(mArgs...)); }
 			template<typename T, typename... TArgs> inline T& insert(unsigned int mIdx, TArgs&&... mArgs)	{ return insertImpl(mIdx, create<T>(mArgs...)); }
 
-			inline void del(Command& mCommand)		{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
-			inline void jumpTo(std::size_t mIdx)	{ currentCommand = commands[mIdx]; }
-			inline void jumpTo(Command& mCommand)	{ currentCommand = &mCommand; }
-			inline void start()	noexcept			{ finished = false; ready = true; }
-			inline void clear()						{ currentCommand = nullptr; commands.clear(); finished = true; }
-			inline void stop() noexcept				{ finished = true; ready = false; }
+			inline void del(Command& mCommand)				{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
+			inline void jumpTo(std::size_t mIdx) noexcept	{ currentCommand = commands[mIdx]; }
+			inline void jumpTo(Command& mCommand) noexcept	{ currentCommand = &mCommand; }
+			inline void start()	noexcept					{ finished = false; ready = true; }
+			inline void clear()	noexcept					{ currentCommand = nullptr; commands.clear(); finished = true; }
+			inline void stop() noexcept						{ finished = true; ready = false; }
 
 			inline void update(FT mFT)
 			{

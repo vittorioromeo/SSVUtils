@@ -13,13 +13,11 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			inline const std::string& getStrEmpty() noexcept		{ static std::string result; return result; }
-
-			inline const std::string& getStrResetFmt() noexcept		{ return getStrEmpty(); }
-			inline const std::string& getStrStyle(Style) noexcept	{ return getStrEmpty(); }
-			inline const std::string& getStrColorFG(Color) noexcept	{ return getStrEmpty(); }
-			inline const std::string& getStrColorBG(Color) noexcept	{ return getStrEmpty(); }
-			inline const std::string& getStrClear() noexcept		{ return getStrEmpty(); }
+			inline const std::string& getStrResetFmt() noexcept		{ return getEmptyString(); }
+			inline const std::string& getStrStyle(Style) noexcept	{ return getEmptyString(); }
+			inline const std::string& getStrColorFG(Color) noexcept	{ return getEmptyString(); }
+			inline const std::string& getStrColorBG(Color) noexcept	{ return getEmptyString(); }
+			inline const std::string& getStrClear() noexcept		{ return getEmptyString(); }
 		}
 	}
 }

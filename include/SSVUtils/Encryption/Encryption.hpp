@@ -30,7 +30,7 @@ namespace ssvu
 		/// @return Returns a string containing the encrypted value.
 		template<Type TT> inline std::string encrypt(const std::string& mStr);
 		template<> inline std::string encrypt<Type::Base64>(const std::string& mStr)	{ return Internal::Base64Encode(mStr); }
-		template<> inline std::string encrypt<Type::MD5>(const std::string& mStr)	{ return Internal::MD5{mStr}.GetHash(); }
+		template<> inline std::string encrypt<Type::MD5>(const std::string& mStr)		{ return Internal::MD5{mStr}.GetHash(); }
 
 		/// @brief Decrypts a string.
 		/// @code

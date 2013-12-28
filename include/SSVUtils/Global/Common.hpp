@@ -75,14 +75,9 @@ namespace ssvu
 
 namespace ssvu
 {
-	namespace Internal
-	{
-		template<typename> struct FuncHelper;
-		template<typename T, typename... TArgs> struct FuncHelper<T(TArgs...)> { using FuncType = std::function<T(TArgs...)>; };
-	}
 
 	/// @typedef Func is an `std::function` alias.
-	template<typename T> using Func = typename Internal::FuncHelper<T>::FuncType;
+	template<typename T> using Func = std::function<T>;
 
 	/// @typedef Action represents a `void()` function,
 	using Action = Func<void()>;

@@ -56,7 +56,7 @@ namespace ssvu
 			}
 
 			/// @brief Clears all the functions from the delegate.
-			inline void clear() { funcs.clear(); }
+			inline void clear() noexcept { funcs.clear(); }
 
 			/// @brief Returns whether the delegate has any callback or not.
 			inline bool isEmpty() const noexcept { return funcs.empty(); }
