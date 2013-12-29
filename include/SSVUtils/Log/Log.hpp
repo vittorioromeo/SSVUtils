@@ -14,7 +14,7 @@
 #include <chrono>
 #include <unordered_map>
 #include "SSVUtils/String/Utils.hpp"
-#include "SSVUtils/Utils/UtilsConsole.hpp"
+#include "SSVUtils/Utils/Console.hpp"
 #include "SSVUtils/String/Stringifier.hpp"
 
 namespace ssvu

@@ -8,8 +8,8 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include "SSVUtils/Utils/UtilsMath.hpp"
-#include "SSVUtils/Utils/UtilsIterator.hpp"
+#include "SSVUtils/Utils/Math.hpp"
+#include "SSVUtils/Utils/Iterator.hpp"
 
 namespace ssvu
 {

@@ -54,11 +54,11 @@ namespace ssvu
 }
 
 #ifdef SSVU_OS_LINUX
-	#include "SSVUtils/Utils/Internal/UtilsConsoleImplUnix.hpp"
+	#include "SSVUtils/Utils/Internal/ConsoleImplUnix.hpp"
 #elif SSVU_OS_WINDOWS
-	#include "SSVUtils/Utils/Internal/UtilsConsoleImplWin.hpp"
+	#include "SSVUtils/Utils/Internal/ConsoleImplWin.hpp"
 #else
-	#include "SSVUtils/Utils/Internal/UtilsConsoleImplNull.hpp"
+	#include "SSVUtils/Utils/Internal/ConsoleImplNull.hpp"
 #endif
 
 namespace ssvu

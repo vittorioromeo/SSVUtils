@@ -8,7 +8,7 @@
 #include <deque>
 #include <stdexcept>
 #include <limits>
-#include "SSVUtils/Utils/UtilsMath.hpp"
+#include "SSVUtils/Utils/Math.hpp"
 #include "SSVUtils/CommandLine/Cmd.hpp"
 #include "SSVUtils/CommandLine/Elements/Flag.hpp"
 #include "SSVUtils/CommandLine/CmdLine.hpp"

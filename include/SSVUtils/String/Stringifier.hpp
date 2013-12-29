@@ -11,9 +11,9 @@
 #include <algorithm>
 #include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/String/Utils.hpp"
-#include "SSVUtils/Utils/UtilsContainers.hpp"
-#include "SSVUtils/Utils/UtilsIterator.hpp"
-#include "SSVUtils/Utils/UtilsConsole.hpp"
+#include "SSVUtils/Utils/Containers.hpp"
+#include "SSVUtils/Utils/Iterator.hpp"
+#include "SSVUtils/Utils/Console.hpp"
 
 // TODO: docs
 namespace ssvu

@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Log/Log.hpp"
-#include "SSVUtils/Utils/UtilsMacros.hpp"
+#include "SSVUtils/Utils/Macros.hpp"
 
 #define EXPECT(mExpr) \
 	while(true) \

@@ -9,7 +9,7 @@
 #include <array>
 #include <random>
 #include "SSVUtils/Global/Common.hpp"
-#include "SSVUtils/Utils/UtilsMacros.hpp"
+#include "SSVUtils/Utils/Macros.hpp"
 
 namespace ssvu
 {
