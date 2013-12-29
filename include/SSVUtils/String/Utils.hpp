@@ -43,6 +43,20 @@ namespace ssvu
 	// TODO: docs
 	inline const std::string& getEmptyString() noexcept { static std::string result; return result; }
 
+	// TODO: docs
+	inline bool isDigit(char mChar) noexcept			{ return std::isdigit(mChar); }
+	inline bool isSpace(char mChar) noexcept			{ return std::isspace(mChar); }
+	inline bool isControl(char mChar) noexcept			{ return std::iscntrl(mChar); }
+	inline bool isPrintable(char mChar) noexcept		{ return std::isprint(mChar); }
+	inline bool isGraphical(char mChar) noexcept		{ return std::isgraph(mChar); }
+	inline bool isPunctuation(char mChar) noexcept		{ return std::ispunct(mChar); }
+	inline bool isBlank(char mChar) noexcept			{ return std::isblank(mChar); }
+	inline bool isAlphanumeric(char mChar) noexcept		{ return std::isalnum(mChar); }
+	inline bool isAlphabetical(char mChar) noexcept		{ return std::isalpha(mChar); }
+	inline bool isUppercase(char mChar) noexcept		{ return std::isupper(mChar); }
+	inline bool isLowercase(char mChar) noexcept		{ return std::islower(mChar); }
+	inline bool isDigitHexadecimal(char mChar) noexcept	{ return std::isxdigit(mChar); }
+
 	/// @brief Replace the first occurrence of a string in a string with another string.
 	/// @param mStr String to work with.
 	/// @param mFrom String to replace.
