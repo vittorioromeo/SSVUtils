@@ -119,7 +119,7 @@ namespace ssvu
 
 					do
 					{
-						int nLast{newNLast};
+						int nLast(newNLast); // Intentional cast to int (also in the for)
 						newNLast = available.size() - 1;
 						for(int i(available.size() - 2); i >= nLast; --i)
 						{

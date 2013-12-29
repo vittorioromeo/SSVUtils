@@ -48,7 +48,7 @@ namespace ssvu
 		#define SSVU_CONSTEXPR_ASSERT(mTest) assert(mTest)
 	#else
 		/// @macro When compiling with g++, using `assert` in constexpr functions causes an error.
-		#define SSVU_CONSTEXPR_ASSERT(mTest) { }
+		#define SSVU_CONSTEXPR_ASSERT(mTest)
 	#endif
 }
 

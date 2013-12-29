@@ -15,7 +15,7 @@ namespace ssvu
 		{
 			constexpr const char* prefix{"\033["};
 			constexpr const char* postfix{"m"};
-			constexpr const char* clear{"\e[1;1H\e[2J"};
+			constexpr const char* clear{"\033[1;1H\e[2J"};
 
 			inline int getStyleCode(Style mStyle) noexcept
 			{
