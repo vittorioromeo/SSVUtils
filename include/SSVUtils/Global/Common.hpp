@@ -70,7 +70,8 @@ namespace ssvu
 	template<bool B, typename T, typename F> using Conditional = std::conditional_t<B, T, F>;
 	template<typename T> using Underlying = std::underlying_type_t<T>;
 
-	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept { return std::is_base_of<T1, T2>::value; }
+	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept	{ return std::is_base_of<T1, T2>::value; }
+	template<typename T> inline constexpr bool isEnum() noexcept					{ return std::is_enum<T>::value; }
 }
 
 namespace ssvu
