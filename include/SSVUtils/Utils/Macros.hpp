@@ -7,12 +7,6 @@
 
 namespace ssvu
 {
-	/// @macro Pastes two tokens togheter to create a single token. (1 layer of indirection)
-	#define SSVU_TOKENPASTE(mA, mB) mA ## mB
-
-	/// @macro Pastes two tokens togheter to create a single token. (2 layers of indirection)
-	#define SSVU_TOKENPASTE2(mA, mB) SSVU_TOKENPASTE(mA, mB)
-
 	/// @macro Define a template class with name `name` that checks if a certain type T has
 	/// a member of name `mMemberName`.
 	/// @code
