@@ -5,7 +5,7 @@
 #ifndef SSVU_PREPROCESSOR_VARARGSCOUNT
 #define SSVU_PREPROCESSOR_VARARGSCOUNT
 
-#include <SSVUtils/Preprocessor/Utils.hpp>
+#include "SSVUtils/Preprocessor/Utils.hpp"
 
 namespace ssvu
 {

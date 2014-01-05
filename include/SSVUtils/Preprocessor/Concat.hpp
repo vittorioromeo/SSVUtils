@@ -5,7 +5,7 @@
 #ifndef SSVU_PREPROCESSOR_CONCAT
 #define SSVU_PREPROCESSOR_CONCAT
 
-#include <SSVUtils/Preprocessor/Utils.hpp>
+#include "SSVUtils/Preprocessor/Utils.hpp"
 
 namespace ssvu
 {

@@ -3,8 +3,8 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 // Adaptation of lest: https://github.com/martinmoene/lest
 
-#ifndef SSVU_TEST_H
-#define SSVU_TEST_H
+#ifndef SSVU_TEST
+#define SSVU_TEST
 
 #include <string>
 #include <vector>
@@ -12,6 +12,7 @@
 #include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Log/Log.hpp"
 #include "SSVUtils/Utils/Macros.hpp"
+#include "SSVUtils/Preprocessor/Preprocessor.hpp"
 
 #define EXPECT(mExpr) \
 	while(true) \
@@ -38,11 +39,11 @@
 	}
 
 #ifndef SSVU_TEST_DISABLE
-	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVU_PP_CONCAT(Unique_, __LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
+	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVU_PP_CONCAT(Unique_,__LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
 	#define SSVU_TEST_END() }});}}
 	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
 #else
-	#define SSVU_TEST(name) struct SSVU_PP_CONCAT(Unique_, __LINE__) { void f() __attribute__ ((unused)) {
+	#define SSVU_TEST(name) struct SSVU_PP_CONCAT(Unique_,__LINE__) { void f() __attribute__ ((unused)) {
 	#define SSVU_TEST_END() }} __attribute__ ((unused));
 	#define SSVU_TEST_RUN_ALL() { }
 #endif

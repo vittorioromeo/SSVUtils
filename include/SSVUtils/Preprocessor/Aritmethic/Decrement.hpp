@@ -5,7 +5,7 @@
 #ifndef SSVU_PREPROCESSOR_ARITHMETIC_DECREMENT
 #define SSVU_PREPROCESSOR_ARITHMETIC_DECREMENT
 
-#include <SSVUtils/Preprocessor/Utils.hpp>
+#include "SSVUtils/Preprocessor/Utils.hpp"
 
 namespace ssvu
 {

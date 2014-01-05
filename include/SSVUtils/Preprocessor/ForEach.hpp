@@ -5,7 +5,7 @@
 #ifndef SSVU_PREPROCESSOR_FOREACH
 #define SSVU_PREPROCESSOR_FOREACH
 
-#include <SSVUtils/Preprocessor/Utils.hpp>
+#include "SSVUtils/Preprocessor/Utils.hpp"
 
 namespace ssvu
 {
