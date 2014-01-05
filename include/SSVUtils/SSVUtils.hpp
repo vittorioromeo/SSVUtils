@@ -5,6 +5,7 @@
 #ifndef SSVUTILS
 #define SSVUTILS
 
+#include "SSVUtils/Preprocessor/Preprocessor.hpp"
 #include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Test/Test.hpp"
 #include "SSVUtils/Log/Log.hpp"
