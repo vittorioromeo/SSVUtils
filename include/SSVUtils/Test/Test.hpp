@@ -38,11 +38,11 @@
 	}
 
 #ifndef SSVU_TEST_DISABLE
-	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVU_TOKENPASTE2(Unique_, __LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
+	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVU_PP_CONCAT(Unique_, __LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
 	#define SSVU_TEST_END() }});}}
 	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
 #else
-	#define SSVU_TEST(name) struct SSVU_TOKENPASTE2(Unique_, __LINE__) { void f() __attribute__ ((unused)) {
+	#define SSVU_TEST(name) struct SSVU_PP_CONCAT(Unique_, __LINE__) { void f() __attribute__ ((unused)) {
 	#define SSVU_TEST_END() }} __attribute__ ((unused));
 	#define SSVU_TEST_RUN_ALL() { }
 #endif
@@ -117,15 +117,15 @@ namespace ssvu
 				#ifndef SSVU_TEST_DISABLE
 					static bool done{false};
 					if(done) return;
-
 					done = true;
 
 					bool fail{false};
+
 					for(auto& tg : Internal::getTestGroups())
 						if(Internal::run(tg) > 0)
 						{
 							fail = true;
-							ssvu::lo("############################################################################################################\n\n");
+							ssvu::lo("########################################################################################################\n\n");
 						}
 
 					if(!fail) ssvu::lo("ssvu::Test") << "All tests passed!\n";
@@ -138,3 +138,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: since Runners are static, they are exectuted twice. Use a map or something to prevent it
