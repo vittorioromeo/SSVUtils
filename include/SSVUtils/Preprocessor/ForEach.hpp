@@ -51,55 +51,18 @@ namespace ssvu
 	#define SSVU_PP_IMPL_FOREACH_39(mAction, mArg, ...)	mAction(mArg) SSVU_PP_IMPL_FOREACH_38(mAction, __VA_ARGS__)
 	#define SSVU_PP_IMPL_FOREACH_40(mAction, mArg, ...)	mAction(mArg) SSVU_PP_IMPL_FOREACH_39(mAction, __VA_ARGS__)
 
-	#define SSVU_PP_IMPL_FOREACH_REVERSE_SEQUENCE()	SSVU_PP_IMPL_FOREACH_40, \
-													SSVU_PP_IMPL_FOREACH_39, \
-													SSVU_PP_IMPL_FOREACH_38, \
-													SSVU_PP_IMPL_FOREACH_37, \
-													SSVU_PP_IMPL_FOREACH_36, \
-													SSVU_PP_IMPL_FOREACH_35, \
-													SSVU_PP_IMPL_FOREACH_34, \
-													SSVU_PP_IMPL_FOREACH_33, \
-													SSVU_PP_IMPL_FOREACH_32, \
-													SSVU_PP_IMPL_FOREACH_31, \
-													SSVU_PP_IMPL_FOREACH_30, \
-													SSVU_PP_IMPL_FOREACH_29, \
-													SSVU_PP_IMPL_FOREACH_28, \
-													SSVU_PP_IMPL_FOREACH_27, \
-													SSVU_PP_IMPL_FOREACH_26, \
-													SSVU_PP_IMPL_FOREACH_25, \
-													SSVU_PP_IMPL_FOREACH_24, \
-													SSVU_PP_IMPL_FOREACH_23, \
-													SSVU_PP_IMPL_FOREACH_22, \
-													SSVU_PP_IMPL_FOREACH_21, \
-													SSVU_PP_IMPL_FOREACH_20, \
-													SSVU_PP_IMPL_FOREACH_19, \
-													SSVU_PP_IMPL_FOREACH_18, \
-													SSVU_PP_IMPL_FOREACH_17, \
-													SSVU_PP_IMPL_FOREACH_16, \
-													SSVU_PP_IMPL_FOREACH_15, \
-													SSVU_PP_IMPL_FOREACH_14, \
-													SSVU_PP_IMPL_FOREACH_13, \
-													SSVU_PP_IMPL_FOREACH_12, \
-													SSVU_PP_IMPL_FOREACH_11, \
-													SSVU_PP_IMPL_FOREACH_10, \
-													SSVU_PP_IMPL_FOREACH_9, \
-													SSVU_PP_IMPL_FOREACH_8, \
-													SSVU_PP_IMPL_FOREACH_7, \
-													SSVU_PP_IMPL_FOREACH_6, \
-													SSVU_PP_IMPL_FOREACH_5, \
-													SSVU_PP_IMPL_FOREACH_4, \
-													SSVU_PP_IMPL_FOREACH_3, \
-													SSVU_PP_IMPL_FOREACH_2, \
-													SSVU_PP_IMPL_FOREACH_1, \
-													SSVU_PP_IMPL_FOREACH_0
+	#define SSVU_PP_IMPL_FOREACH_REVERSE_SEQUENCE()	40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, \
+													20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10,  9,  8,  7,  6,  5,  4,  3,  2,  1, \
+													 0
 
 	#define SSVU_PP_IMPL_FOREACH_DISPATCH_IMPL(	m01, m02, m03, m04, m05, m06, m07, m08, m09, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, \
-												m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, mN, ...) mN
+												m21, m22, m23, m24, m25, m26, m27, m28, m29, m30, m31, m32, m33, m34, m35, m36, m37, m38, m39, m40, \
+												mN, ...) SSVU_PP_TOKENPASTE_2(SSVU_PP_IMPL_FOREACH_, mN)
 
-	#define SSVU_PP_IMPL_FOREACH_DISPATCH(...)		SSVU_PP_IMPL_FOREACH_DISPATCH_IMPL(__VA_ARGS__)
-	#define SSVU_PP_IMPL_FOREACH_IMPL(mAction, ...)	SSVU_PP_IMPL_FOREACH_DISPATCH(__VA_ARGS__, SSVU_PP_IMPL_FOREACH_REVERSE_SEQUENCE()) (mAction, __VA_ARGS__)
+	#define SSVU_PP_IMPL_FOREACH_DISPATCH(...)	SSVU_PP_IMPL_FOREACH_DISPATCH_IMPL(__VA_ARGS__)
+	#define SSVU_PP_IMPL_FOREACH(mAction, ...)	SSVU_PP_IMPL_FOREACH_DISPATCH(__VA_ARGS__, SSVU_PP_IMPL_FOREACH_REVERSE_SEQUENCE()) (mAction, __VA_ARGS__)
 
-	#define SSVU_PP_FOREACH(...)					SSVU_PP_IMPL_FOREACH_IMPL(__VA_ARGS__)
+	#define SSVU_PP_FOREACH(...)				SSVU_PP_IMPL_FOREACH(__VA_ARGS__)
 }
 
 #endif

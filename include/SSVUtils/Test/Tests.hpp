@@ -5,6 +5,8 @@
 #ifndef SSVU_TEST_TESTS
 #define SSVU_TEST_TESTS
 
+#include "SSVUtils/Preprocessor/Preprocessor.hpp"
+
 SSVU_TEST("UtilsMath tests")
 {
 	using namespace std;
@@ -343,11 +345,13 @@ SSVU_TEST("Preprocessor tests")
 	EXPECT(SSVU_PP_VA_NUM_ARGS(1, 1, 1, 1, 1) == 5);
 	EXPECT(SSVU_PP_VA_NUM_ARGS(1, 1, 1, 1, 1, 1) == 6);
 
-	int k{0};
-	#define SSVU_TEST_TESTMACRO(mX) k += mX;
-	SSVU_PP_FOREACH(SSVU_TEST_TESTMACRO, 1, 2, 3, 4);
-	#undef SSVU_TEST_TESTMACRO
-	EXPECT(k == 10);
+	{
+		int k{0};
+		#define SSVU_TEST_TESTMACRO(mX) k += mX;
+		SSVU_PP_FOREACH(SSVU_TEST_TESTMACRO, 1, 2, 3, 4);
+		#undef SSVU_TEST_TESTMACRO
+		EXPECT(k == 10);
+	}
 
 	EXPECT(SSVU_PP_STRINGIFY(SSVU_PP_CONCAT()) == "");
 	EXPECT(SSVU_PP_CONCAT(15) == 15);
@@ -358,6 +362,62 @@ SSVU_TEST("Preprocessor tests")
 	EXPECT(SSVU_PP_INCREMENT(100) == 101);
 	EXPECT(SSVU_PP_DECREMENT(1) == 0);
 	EXPECT(SSVU_PP_DECREMENT(100) == 99);
+
+	EXPECT(SSVU_PP_BOOL(0) == 0);
+	EXPECT(SSVU_PP_BOOL(1) == 1);
+	EXPECT(SSVU_PP_BOOL(2) == 1);
+	EXPECT(SSVU_PP_BOOL(3) == 1);
+
+	EXPECT(SSVU_PP_AND(0, 0) == 0);
+	EXPECT(SSVU_PP_AND(0, 53) == 0);
+	EXPECT(SSVU_PP_AND(22, 0) == 0);
+	EXPECT(SSVU_PP_AND(35, 11) == 1);
+
+	EXPECT(SSVU_PP_OR(0, 0) == 0);
+	EXPECT(SSVU_PP_OR(0, 53) == 1);
+	EXPECT(SSVU_PP_OR(22, 0) == 1);
+	EXPECT(SSVU_PP_OR(35, 11) == 1);
+
+	EXPECT(SSVU_PP_NOR(0, 0) == 1);
+	EXPECT(SSVU_PP_NOR(0, 53) == 0);
+	EXPECT(SSVU_PP_NOR(22, 0) == 0);
+	EXPECT(SSVU_PP_NOR(35, 11) == 0);
+
+	EXPECT(SSVU_PP_XOR(0, 0) == 0);
+	EXPECT(SSVU_PP_XOR(0, 53) == 1);
+	EXPECT(SSVU_PP_XOR(22, 0) == 1);
+	EXPECT(SSVU_PP_XOR(35, 11) == 0);
+
+	EXPECT(SSVU_PP_NOT(35) == 0);
+	EXPECT(SSVU_PP_NOT(0) == 1);
+
+	EXPECT(SSVU_PP_IF(SSVU_PP_XOR(35, 11), 10, 20) == 20);
+	EXPECT(SSVU_PP_IF(1, 10, 20) == 10);
+
+	{
+		int k{0};
+
+		#define SSVU_TEST_FOREFFECT(mIdx, mX)	k += mIdx; k += mX;
+		SSVU_PP_FOREACH_IDX(SSVU_TEST_FOREFFECT, 1, 2, 3, 4)
+		#undef SSVU_TEST_FOREFFECT
+
+		EXPECT(k == 16);
+	}
+
+	{
+		std::string s(SSVU_PP_STRINGIFYWITHCOMMAS(1, 2, 3));
+		EXPECT(s == "1, 2, 3");
+	}
+
+	{
+		#define SSVU_PP_COMMA_IF(mCondition) SSVU_PP_IF(mCondition, SSVU_PP_COMMA, SSVU_PP_EMPTY)()
+
+		#define ADDTEN(mX)					SSVU_PP_CONCAT(1, mX)
+		#define FOREFFECT(mIdx, mX)			ADDTEN(mX)SSVU_PP_COMMA_IF(mIdx)
+
+		std::string s(SSVU_PP_STRINGIFYWITHCOMMAS(SSVU_PP_FOREACH_IDX(FOREFFECT, 1, 2, 3, 4)));
+		ssvu::lo() << s <<std::endl;
+	}
 }
 SSVU_TEST_END();
 
