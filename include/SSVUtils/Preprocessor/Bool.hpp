@@ -316,6 +316,8 @@ namespace ssvu
 	#define SSVU_PP_IMPL_IF_0(mTrue, mFalse)		mFalse
 	#define SSVU_PP_IMPL_IF_1(mTrue, mFalse)		mTrue
 	#define SSVU_PP_IF(mCondition, mTrue, mFalse)	SSVU_PP_TOKENPASTE_2(SSVU_PP_IMPL_IF_, SSVU_PP_BOOL(mCondition)) (mTrue, mFalse)
+
+	#define SSVU_PP_COMMA_IF(mCondition)			SSVU_PP_IF(mCondition, SSVU_PP_COMMA, SSVU_PP_EMPTY)()
 }
 
 #endif

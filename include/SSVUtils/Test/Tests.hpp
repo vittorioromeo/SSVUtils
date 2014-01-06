@@ -397,8 +397,9 @@ SSVU_TEST("Preprocessor tests")
 	{
 		int k{0};
 
-		#define SSVU_TEST_FOREFFECT(mIdx, mX)	k += mIdx; k += mX;
-		SSVU_PP_FOREACH_IDX(SSVU_TEST_FOREFFECT, 1, 2, 3, 4)
+		#define SSVU_TEST_FOREFFECT(mIdx, mData, mArg)	k += mIdx; k += mArg;
+		//					v action(idx, data, arg)	v data				v vargs
+		SSVU_PP_FOREACH_IDX(SSVU_TEST_FOREFFECT,		SSVU_PP_EMPTY(),	1, 2, 3, 4)
 		#undef SSVU_TEST_FOREFFECT
 
 		EXPECT(k == 16);
@@ -410,13 +411,30 @@ SSVU_TEST("Preprocessor tests")
 	}
 
 	{
-		#define SSVU_PP_COMMA_IF(mCondition) SSVU_PP_IF(mCondition, SSVU_PP_COMMA, SSVU_PP_EMPTY)()
+		#define SSVU_TEST_ADDTEN(mX)					SSVU_PP_CONCAT(1, mX)
+		#define SSVU_TEST_FOREFFECT(mIdx, mData, mArg)	SSVU_TEST_ADDTEN(mArg)SSVU_PP_COMMA_IF(mIdx)
 
-		#define ADDTEN(mX)					SSVU_PP_CONCAT(1, mX)
-		#define FOREFFECT(mIdx, mX)			ADDTEN(mX)SSVU_PP_COMMA_IF(mIdx)
+		std::string s(SSVU_PP_STRINGIFYWITHCOMMAS(SSVU_PP_FOREACH_IDX(SSVU_TEST_FOREFFECT, SSVU_PP_EMPTY(), 1, 2, 3, 4)));
+		EXPECT(s == "11, 12, 13, 14");
 
-		std::string s(SSVU_PP_STRINGIFYWITHCOMMAS(SSVU_PP_FOREACH_IDX(FOREFFECT, 1, 2, 3, 4)));
-		ssvu::lo() << s <<std::endl;
+		#undef SSVU_TEST_ADDTEN
+		#undef SSVU_TEST_FOREFFECT
+	}
+
+	{
+		EXPECT(SSVU_PP_TPL_ELEM(0, (1, 2, 3)) == 1);
+		EXPECT(SSVU_PP_TPL_ELEM(1, (1, 2, 3)) == 2);
+		EXPECT(SSVU_PP_TPL_ELEM(2, (1, 2, 3)) == 3);
+
+		EXPECT(SSVU_PP_TPL_ELEM(0, SSVU_PP_TPL(1, 2, 3)) == 1);
+		EXPECT(SSVU_PP_TPL_ELEM(1, SSVU_PP_TPL(1, 2, 3)) == 2);
+		EXPECT(SSVU_PP_TPL_ELEM(2, SSVU_PP_TPL(1, 2, 3)) == 3);
+
+		EXPECT(SSVU_PP_TPL_ELEM(0, SSVU_PP_TPL_BREAK(((1, 2)))) == 1);
+		EXPECT(SSVU_PP_STRINGIFYWITHCOMMAS(SSVU_PP_TPL_BREAK((1, 2))) == "1, 2");
+
+		EXPECT(SSVU_PP_TPL_ELEM(0, SSVU_PP_TPL_PREPEND(99, (1, 2, 3))) == 99);
+		EXPECT(SSVU_PP_TPL_ELEM(3, SSVU_PP_TPL_APPEND(99, (1, 2, 3))) == 99);
 	}
 }
 SSVU_TEST_END();

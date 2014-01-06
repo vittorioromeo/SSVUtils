@@ -27,6 +27,7 @@ namespace ssvu
 	#define SSVU_PP_TOKENPASTE_4(m0, m1, m2, m3)			SSVU_PP_IMPL_TOKENPASTE_4(m0, m1, m2, m3)
 	#define SSVU_PP_TOKENPASTE_5(m0, m1, m2, m3, m4)		SSVU_PP_IMPL_TOKENPASTE_5(m0, m1, m2, m3, m4)
 
+	//#define SSVU_PP_IMPL_WHILE(mPredicate, mOp
 
 	/*
 		#define SSVU_PP_IMPL_WHILE_IMPL(pred, op, ...) \
