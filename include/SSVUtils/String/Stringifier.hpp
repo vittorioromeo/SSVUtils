@@ -18,6 +18,9 @@
 // TODO: docs
 namespace ssvu
 {
+	//template<typename, typename, template<typename...> class> class Bimap;
+	// TODO: stringify map/bimap
+
 	namespace Internal
 	{
 		inline void resetFmt(std::ostream& mStream) { mStream << Console::resetFmt(); }

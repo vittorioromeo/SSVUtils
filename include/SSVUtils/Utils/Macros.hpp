@@ -5,8 +5,12 @@
 #ifndef SSVU_UTILS_MACROS
 #define SSVU_UTILS_MACROS
 
+#include "SSVUtils/Preprocessor/Preprocessor.hpp"
+
 namespace ssvu
 {
+	#define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVU_PP_CONCAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))
+
 	/// @macro Define a template class with name `name` that checks if a certain type T has
 	/// a member of name `mMemberName`.
 	/// @code
@@ -35,7 +39,7 @@ namespace ssvu
 			template<typename T, typename... TArgs> struct _ ## mName ## Impl<T, false, TArgs...> { inline static void call(T&, TArgs&&...) { } }; } \
 			template<typename T, typename... TArgs> inline void mName(T& mArg, TArgs&&... mArgs) { _ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, std::forward<TArgs>(mArgs)...); \
 		} \
-		struct _dummy ## mName ## mMemberName { } __attribute__ ((unused))
+		SSVU_DEFINE_DUMMY_STRUCT(mName, mMemberName)
 
 	#ifdef __clang__
 		/// @macro When compiling with clang, using `assert` in constexpr functions seems to be allowed.
