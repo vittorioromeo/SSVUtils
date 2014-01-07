@@ -6,6 +6,8 @@
 #define SSVU_PREPROCESSOR_CONCAT
 
 #include "SSVUtils/Preprocessor/Utils.hpp"
+#include "SSVUtils/Preprocessor/Bool.hpp"
+#include "SSVUtils/Preprocessor/ForEach.hpp"
 
 namespace ssvu
 {

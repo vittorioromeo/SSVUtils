@@ -13,8 +13,6 @@ namespace ssvu
 	#define SSVU_PP_STRINGIFY_IMPL(mX)	#mX
 	#define SSVU_PP_STRINGIFY(mX)		SSVU_PP_STRINGIFY_IMPL(mX)
 
-	#define SSVU_PP_DEFER(mX) mX SSVU_PP_EMPTY()
-
 	#define SSVU_PP_EXPAND(mX) mX
 
 	#define SSVU_PP_IMPL_TOKENPASTE_2(m0, m1)				m0 ## m1
