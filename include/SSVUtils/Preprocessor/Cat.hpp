@@ -54,8 +54,8 @@ namespace ssvu
 	#define SSVPP_IMPL_CAT_39(m0, m1, ...)	SSVPP_IMPL_CAT_38(SSVPP_TKNCAT_2(m0, m1), __VA_ARGS__)
 	#define SSVPP_IMPL_CAT_40(m0, m1, ...)	SSVPP_IMPL_CAT_39(SSVPP_TKNCAT_2(m0, m1), __VA_ARGS__)
 
-	#define SSVPP_IMPL_CAT(...)				SSVPP_TKNCAT_2(SSVPP_IMPL_CAT_, SSVPP_VA_NUM_ARGS(__VA_ARGS__)) (__VA_ARGS__)
-	#define SSVPP_CAT(...)					SSVPP_IMPL_CAT(__VA_ARGS__)
+	#define SSVPP_IMPL_CAT(...)	SSVPP_TKNCAT_2(SSVPP_IMPL_CAT_, SSVPP_VA_NUM_ARGS(__VA_ARGS__)) (__VA_ARGS__)
+	#define SSVPP_CAT(...)		SSVPP_IMPL_CAT(__VA_ARGS__)
 }
 
 #endif
