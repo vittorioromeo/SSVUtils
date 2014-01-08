@@ -143,7 +143,7 @@ namespace ssvu
 				}
 
 			public:
-				PreAllocDyn(MemSize mBufferSize) : buffer{mBufferSize} { available.push_back(buffer.getRange()); }
+				PreAllocDyn(MemSize mBufferSize) : buffer{mBufferSize} { available.emplace_back(buffer.getRange()); }
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					if(mustUnify) { unifyContiguous(); mustUnify = false; }

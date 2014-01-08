@@ -126,7 +126,7 @@ namespace ssvu
 	template<typename TMap> inline std::vector<typename TMap::key_type> getKeys(const TMap& mMap)
 	{
 		std::vector<typename TMap::key_type> result;
-		for(const auto& p : mMap) result.push_back(p.first);
+		for(const auto& p : mMap) result.emplace_back(p.first);
 		return result;
 	}
 

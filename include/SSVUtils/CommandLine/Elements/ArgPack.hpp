@@ -26,7 +26,7 @@ namespace ssvu
 
 				inline void set(const std::vector<std::string>& mValues) override
 				{
-					for(const auto& v : mValues) values.push_back(Parser<T>::parse(v));
+					for(const auto& v : mValues) values.emplace_back(Parser<T>::parse(v));
 				}
 
 				inline Iterator begin() noexcept				{ return values.begin(); }

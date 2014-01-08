@@ -62,13 +62,13 @@ namespace ssvu
 					if(TM == Split::TrailingSeparator) tokenLength += mSeparatorSize;
 
 					token = mStr.substr(startAt, tokenLength);
-					if(!token.empty()) mTarget.push_back(token);
+					if(!token.empty()) mTarget.emplace_back(token);
 					if(TM == Split::TokenizeSeparator) mTarget.emplace_back(mStr, pos - 1, mSeparatorSize);
 					startAt = pos + mSeparatorSize;
 				}
 
 				std::string reimaining(mStr.substr(startAt, mStr.size() - startAt));
-				if(!reimaining.empty()) mTarget.push_back(reimaining);
+				if(!reimaining.empty()) mTarget.emplace_back(reimaining);
 			}
 		};
 
@@ -108,13 +108,13 @@ namespace ssvu
 					if(TM == Split::TrailingSeparator) tokenLength += lastLength;
 
 					token = mStr.substr(startAt, tokenLength);
-					if(!token.empty()) mTarget.push_back(token);
+					if(!token.empty()) mTarget.emplace_back(token);
 					if(TM == Split::TokenizeSeparator) mTarget.emplace_back(mStr, pos, lastLength);
 					startAt = pos + lastLength;
 				}
 
 				std::string reimaining(mStr.substr(startAt, mStr.size() - startAt));
-				if(!reimaining.empty()) mTarget.push_back(reimaining);;
+				if(!reimaining.empty()) mTarget.emplace_back(reimaining);;
 			}
 		};
 	}

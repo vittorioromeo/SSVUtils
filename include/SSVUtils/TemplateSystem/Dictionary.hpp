@@ -107,7 +107,7 @@ namespace ssvu
 				/// assert(dict.getExpanded(toExpand) == ".value1..value2.");
 				/// @endcode
 				/// @param mPair Pair containing the key of the section name and the subdictionary to use in the replacement.
-				inline void operator+=(const std::pair<std::string, Dictionary>& mPair) { sectionDictionaries[mPair.first].push_back(mPair.second); }
+				inline void operator+=(const std::pair<std::string, Dictionary>& mPair) { sectionDictionaries[mPair.first].emplace_back(mPair.second); }
 		};
 	}
 }

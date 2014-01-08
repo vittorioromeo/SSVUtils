@@ -34,7 +34,7 @@ namespace ssvu
 			/// delegate += [](int mParameter){ return mParameter * 2; };
 			/// @endcode
 			/// @param mFunc Function to add - can be a std::function or a lambda
-			template<typename T> inline Delegate& operator+=(const T& mFunc) { funcs.push_back(mFunc); return *this; }
+			template<typename T> inline Delegate& operator+=(const T& mFunc) { funcs.emplace_back(mFunc); return *this; }
 
 			/// @brief Call all the functions in the delegate.
 			/// @code
@@ -69,7 +69,7 @@ namespace ssvu
 			inline static std::vector<TReturn> exec(Delegate<TReturn(TArgs...)>& mDelegate, TArgs... mArgs)
 			{
 				std::vector<TReturn> result; result.reserve(mDelegate.funcs.size());
-				for(const auto& f : mDelegate.funcs) result.push_back(f(std::forward<TArgs>(mArgs)...));
+				for(const auto& f : mDelegate.funcs) result.emplace_back(f(std::forward<TArgs>(mArgs)...));
 				return result;
 			}
 		};

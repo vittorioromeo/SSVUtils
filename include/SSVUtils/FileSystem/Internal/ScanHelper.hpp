@@ -33,14 +33,14 @@ namespace ssvu
 					{
 						if(path.existsAsFolder())
 						{
-							if(TT == Type::All || TT == Type::Folder) { mTarget.push_back(path); }
+							if(TT == Type::All || TT == Type::Folder) { mTarget.emplace_back(path); }
 							if(TM == Mode::Recurse) { Internal::scan<Mode::Recurse, TT, TP, TS>(mTarget, path, mDesired); }
 						}
 						else if(TT == Type::All || TT == Type::File)
 						{
-							if(TP == Pick::Any)			{ mTarget.push_back(path); }
-							else if(TP == Pick::ByExt)	{ if(endsWith(name, mDesired)) mTarget.push_back(path); }
-							else if(TP == Pick::ByName)	{ if(name == mDesired) mTarget.push_back(path); }
+							if(TP == Pick::Any)			{ mTarget.emplace_back(path); }
+							else if(TP == Pick::ByExt)	{ if(endsWith(name, mDesired)) mTarget.emplace_back(path); }
+							else if(TP == Pick::ByName)	{ if(name == mDesired) mTarget.emplace_back(path); }
 						}
 					}
 

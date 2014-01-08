@@ -50,7 +50,7 @@ namespace ssvu
 			{
 				if(beginsWith(s, flagPrefixShort) || beginsWith(s, flagPrefixLong))
 				{
-					cFlags.push_back(s);
+					cFlags.emplace_back(s);
 					if(cFlags.size() > cmd.getFlagCount()) throw std::runtime_error("Incorrect number of flags for command " + cmd.getNamesStr() + " , correct number is '" + toStr(cmd.getFlagCount()) + "'");
 				}
 			}
@@ -61,7 +61,7 @@ namespace ssvu
 			for(auto i(cmd.getArgCount()); i > 0; --i)
 			{
 				if(entered.empty()) throw std::runtime_error("Incorrect number of args for command " + cmd.getNamesStr() + " , correct number is '" + toStr(cmd.getArgCount()) + "'");
-				cArgs.push_back(entered.front());
+				cArgs.emplace_back(entered.front());
 				entered.pop_front();
 			}
 
@@ -70,7 +70,7 @@ namespace ssvu
 			for(auto i(cmd.getOptArgCount()); i > 0; --i)
 			{
 				if(entered.empty()) break;
-				cOptArgs.push_back(entered.front());
+				cOptArgs.emplace_back(entered.front());
 				if(cOptArgs.size() > cmd.getOptArgCount()) throw std::runtime_error("Incorrect number of optargs for command " + cmd.getNamesStr() + " , correct number is '" + toStr(cmd.getOptArgCount()) + "'");
 				entered.pop_front();
 			}
@@ -84,14 +84,14 @@ namespace ssvu
 				if(argPack.isInfinite())
 				{
 					if(i != cmd.getArgPackCount() -1) throw std::runtime_error("Infinite argpacks must be last");
-					while(!entered.empty()) { toPack.push_back(entered.front()); entered.pop_front(); }
+					while(!entered.empty()) { toPack.emplace_back(entered.front()); entered.pop_front(); }
 				}
 				else
 				{
 					if(entered.size() < argPack.getMin()) throw std::runtime_error("Not enough args for finite argpack");
 
 					auto clampedCount(getClamped(entered.size(), 0u, argPack.getMax()));
-					for(auto iS(0u); iS < clampedCount; ++iS) { toPack.push_back(entered.front()); entered.pop_front(); }
+					for(auto iS(0u); iS < clampedCount; ++iS) { toPack.emplace_back(entered.front()); entered.pop_front(); }
 				}
 
 				argPack.set(toPack);
