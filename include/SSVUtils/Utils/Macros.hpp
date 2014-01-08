@@ -9,7 +9,7 @@
 
 namespace ssvu
 {
-	#define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVU_PP_CONCAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))
+	#define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVPP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))
 
 	/// @macro Define a template class with name `name` that checks if a certain type T has
 	/// a member of name `mMemberName`.

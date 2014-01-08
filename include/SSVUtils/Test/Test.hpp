@@ -39,11 +39,11 @@
 	}
 
 #ifndef SSVU_TEST_DISABLE
-	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVU_PP_CONCAT(Unique_,__LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
+	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVPP_CAT(Unique_,__LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
 	#define SSVU_TEST_END() }});}}
 	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
 #else
-	#define SSVU_TEST(name) struct SSVU_PP_CONCAT(Unique_,__LINE__) { void f() __attribute__ ((unused)) {
+	#define SSVU_TEST(name) struct SSVPP_CAT(Unique_,__LINE__) { void f() __attribute__ ((unused)) {
 	#define SSVU_TEST_END() }} __attribute__ ((unused));
 	#define SSVU_TEST_RUN_ALL() { }
 #endif
