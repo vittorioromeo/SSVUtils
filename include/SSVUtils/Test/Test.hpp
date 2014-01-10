@@ -14,6 +14,9 @@
 #include "SSVUtils/Utils/Macros.hpp"
 #include "SSVUtils/Preprocessor/Preprocessor.hpp"
 
+// TODO: use delegate?
+// TODO: check delegate usage and check if a vector of fnptrs would be better
+
 #define EXPECT(mExpr) \
 	while(true) \
 	{ \
