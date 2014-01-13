@@ -42,7 +42,7 @@
 	}
 
 #ifndef SSVU_TEST_DISABLE
-	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVPP_CAT(Unique_,__LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {name, []
+	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVPP_CAT(Unique_, name, __LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {SSVPP_STRINGIFY(name), []
 	#define SSVU_TEST_END() }});}}
 	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
 #else

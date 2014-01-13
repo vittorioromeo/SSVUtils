@@ -8,7 +8,7 @@
 #include "SSVUtils/Test/Test.hpp"
 #include "SSVUtils/Preprocessor/Preprocessor.hpp"
 
-SSVU_TEST("UtilsMath tests")
+SSVU_TEST(UtilsMathTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -70,7 +70,7 @@ SSVU_TEST("UtilsMath tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("Bimap tests")
+SSVU_TEST(BimapTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -93,7 +93,7 @@ SSVU_TEST("Bimap tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("Delegate tests")
+SSVU_TEST(DelegateTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -120,7 +120,7 @@ SSVU_TEST("Delegate tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("Path tests")
+SSVU_TEST(PathTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -162,7 +162,7 @@ SSVU_TEST("Path tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("UtilsContainers tests")
+SSVU_TEST(UtilsContainersTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -184,7 +184,7 @@ SSVU_TEST("UtilsContainers tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("String utils tests")
+SSVU_TEST(StringUtilsTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -221,7 +221,7 @@ SSVU_TEST("String utils tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("String split tests")
+SSVU_TEST(StringSplitTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -307,7 +307,7 @@ SSVU_TEST("String split tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("Encryption tests")
+SSVU_TEST(EncryptionTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -321,7 +321,7 @@ SSVU_TEST("Encryption tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("ObfuscatedValue tests")
+SSVU_TEST(ObfuscatedValueTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -336,7 +336,7 @@ SSVU_TEST("ObfuscatedValue tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("Preprocessor tests")
+SSVU_TEST(PreprocessorTests)
 {
 	EXPECT(SSVPP_VA_NUM_ARGS() == 0);
 	EXPECT(SSVPP_VA_NUM_ARGS(1) == 1);
