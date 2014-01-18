@@ -42,7 +42,11 @@
 	}
 
 #ifndef SSVU_TEST_DISABLE
-	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVPP_CAT(Unique_, name, __LINE__) { []{ ssvu::Test::Internal::getTestGroups().push_back({ {SSVPP_STRINGIFY(name), []
+	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVPP_CAT(Unique_, name, __LINE__) { []{ \
+		if(ssvu::Test::Internal::isRunnerExecuted(SSVPP_STRINGIFY(SSVPP_CAT(Unique_, name, __LINE__)))) return; \
+		ssvu::Test::Internal::setRunnerExecuted(SSVPP_STRINGIFY(SSVPP_CAT(Unique_, name, __LINE__))); \
+		ssvu::Test::Internal::getTestGroups().push_back({ {SSVPP_STRINGIFY(name), []
+
 	#define SSVU_TEST_END() }});}}
 	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
 #else
@@ -108,6 +112,10 @@ namespace ssvu
 				return fails;
 			}
 
+			inline std::map<std::string, bool>& getRunnerMap() noexcept			{ static std::map<std::string, bool> result; return result; }
+			inline bool isRunnerExecuted(const std::string& mKey) noexcept		{ return getRunnerMap()[mKey]; }
+			inline void setRunnerExecuted(const std::string& mKey) noexcept		{ getRunnerMap()[mKey] = true; }
+
 			inline std::vector<std::vector<Test>>& getTestGroups() { static std::vector<std::vector<Test>> testGroups; return testGroups; }
 			struct Runner
 			{
@@ -142,5 +150,3 @@ namespace ssvu
 }
 
 #endif
-
-// TODO: since Runners are static, they are exectuted twice. Use a map or something to prevent it

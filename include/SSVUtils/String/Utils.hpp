@@ -40,22 +40,44 @@ namespace ssvu
 		return Internal::getStringifyStream().str();
 	}
 
-	// TODO: docs
+	/// @brief Returns a const reference to a statically instantiated empty std::string.
 	inline const std::string& getEmptyString() noexcept { static std::string result; return result; }
 
-	// TODO: docs
-	inline bool isDigit(char mChar) noexcept			{ return std::isdigit(mChar); }
-	inline bool isSpace(char mChar) noexcept			{ return std::isspace(mChar); }
-	inline bool isControl(char mChar) noexcept			{ return std::iscntrl(mChar); }
-	inline bool isPrintable(char mChar) noexcept		{ return std::isprint(mChar); }
-	inline bool isGraphical(char mChar) noexcept		{ return std::isgraph(mChar); }
-	inline bool isPunctuation(char mChar) noexcept		{ return std::ispunct(mChar); }
-	inline bool isBlank(char mChar) noexcept			{ return std::isblank(mChar); }
-	inline bool isAlphanumeric(char mChar) noexcept		{ return std::isalnum(mChar); }
-	inline bool isAlphabetical(char mChar) noexcept		{ return std::isalpha(mChar); }
-	inline bool isUppercase(char mChar) noexcept		{ return std::isupper(mChar); }
-	inline bool isLowercase(char mChar) noexcept		{ return std::islower(mChar); }
-	inline bool isDigitHexadecimal(char mChar) noexcept	{ return std::isxdigit(mChar); }
+	/// @brief Returns true if mChar is a digit. (Wraps std::isdigit)
+	inline bool isDigit(char mChar) noexcept { return std::isdigit(mChar); }
+
+	/// @brief Returns true if mChar is a space. (Wraps std::isspace)
+	inline bool isSpace(char mChar) noexcept { return std::isspace(mChar); }
+
+	/// @brief Returns true if mChar is a control. (Wraps std::iscntrl)
+	inline bool isControl(char mChar) noexcept { return std::iscntrl(mChar); }
+
+	/// @brief Returns true if mChar is printable. (Wraps std::isprint)
+	inline bool isPrintable(char mChar) noexcept { return std::isprint(mChar); }
+
+	/// @brief Returns true if mChar is graphical. (Wraps std::isgraph)
+	inline bool isGraphical(char mChar) noexcept { return std::isgraph(mChar); }
+
+	/// @brief Returns true if mChar is a punctuation. (Wraps std::ispunct)
+	inline bool isPunctuation(char mChar) noexcept { return std::ispunct(mChar); }
+
+	/// @brief Returns true if mChar is blank. (Wraps std::isblank)
+	inline bool isBlank(char mChar) noexcept { return std::isblank(mChar); }
+
+	/// @brief Returns true if mChar is alphanumeric. (Wraps std::isalnum)
+	inline bool isAlphanumeric(char mChar) noexcept { return std::isalnum(mChar); }
+
+	/// @brief Returns true if mChar is alphabetical. (Wraps std::isalpha)
+	inline bool isAlphabetical(char mChar) noexcept { return std::isalpha(mChar); }
+
+	/// @brief Returns true if mChar is uppercase. (Wraps std::isupper)
+	inline bool isUppercase(char mChar) noexcept { return std::isupper(mChar); }
+
+	/// @brief Returns true if mChar is lowercase. (Wraps std::islower)
+	inline bool isLowercase(char mChar) noexcept { return std::islower(mChar); }
+
+	/// @brief Returns true if mChar is an hexadecimal digit. (Wraps std::isxdigit)
+	inline bool isDigitHexadecimal(char mChar) noexcept { return std::isxdigit(mChar); }
 
 	/// @brief Replace the first occurrence of a string in a string with another string.
 	/// @param mStr String to work with.

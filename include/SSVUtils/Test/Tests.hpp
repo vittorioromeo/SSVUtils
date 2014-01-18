@@ -218,6 +218,34 @@ SSVU_TEST(StringUtilsTests)
 
 	EXPECT(getTrimmedStrLR("   A A A  ") == "A A A");
 	EXPECT(getTrimmedStrLR("      AaA  ") == "AaA");
+
+	EXPECT(isDigit('0'));
+	EXPECT(isDigit('1'));
+	EXPECT(isDigit('2'));
+	EXPECT(isDigit('3'));
+	EXPECT(isDigit('4'));
+	EXPECT(isDigit('5'));
+	EXPECT(isDigit('6'));
+	EXPECT(isDigit('7'));
+	EXPECT(isDigit('8'));
+	EXPECT(isDigit('9'));
+
+	EXPECT(isUppercase('A'));
+	EXPECT(isUppercase('B'));
+	EXPECT(isUppercase('C'));
+
+	EXPECT(isLowercase('a'));
+	EXPECT(isLowercase('b'));
+	EXPECT(isLowercase('c'));
+
+	EXPECT(isControl('\n'));
+	EXPECT(isBlank(' '));
+	EXPECT(isSpace(' '));
+	EXPECT(isSpace('\t'));
+
+	EXPECT(isPunctuation('.'));
+	EXPECT(isPunctuation(','));
+	EXPECT(isPunctuation('!'));
 }
 SSVU_TEST_END();
 
