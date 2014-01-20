@@ -9,6 +9,8 @@ namespace ssvu
 {
 	#define SSVPP_EMPTY()
 	#define SSVPP_COMMA() ,
+	#define SSVPP_RAW(...) __VA_ARGS__
+	#define __R(...) SSVPP_RAW(__VA_ARGS__)
 
 	#define SSVPP_STRINGIFY_IMPL(mX)	#mX
 	#define SSVPP_STRINGIFY(mX)			SSVPP_STRINGIFY_IMPL(mX)
@@ -24,22 +26,6 @@ namespace ssvu
 	#define SSVPP_TKNCAT_3(m0, m1, m2)				SSVPP_IMPL_TKNCAT_3(m0, m1, m2)
 	#define SSVPP_TKNCAT_4(m0, m1, m2, m3)			SSVPP_IMPL_TKNCAT_4(m0, m1, m2, m3)
 	#define SSVPP_TKNCAT_5(m0, m1, m2, m3, m4)		SSVPP_IMPL_TKNCAT_5(m0, m1, m2, m3, m4)
-
-	//#define SSVPP_IMPL_WHILE(mPredicate, mOp
-
-	/*
-		#define SSVPP_IMPL_WHILE_IMPL(pred, op, ...) \
-			SSVPP_IF(pred(__VA_ARGS__)) \
-			( \
-				SSVPP_DEFER(SSVPP_IMPL_WHILE_IMPL) () \
-				( \
-					pred, op, op(__VA_ARGS__) \
-				), \
-				__VA_ARGS__ \
-			)
-
-		#define SSVPP_WHILE(...) SSVPP_IMPL_WHILE_IMPL(__VA_ARGS__)
-	*/
 }
 
 #endif

@@ -93,7 +93,6 @@ namespace ssvu
 				inline std::string& operator[](const std::string& mKey) { return replacements[mKey]; }
 
 				/// @brief Adds a "key -> subdictionary" replacement
-				/// @details Works similarly to ssvu::Delegate::operator+=.
 				/// @code
 				/// using namespace ssvu::TemplateSystem;
 				/// Dictionary dict;

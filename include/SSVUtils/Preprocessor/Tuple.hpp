@@ -13,53 +13,102 @@ namespace ssvu
 	#define SSVPP_TPL_MAX_SIZE 20
 
 	#define SSVPP_IMPL_TPL_FILL_20(m0) SSVPP_TPL_EXPLODE(m0)
-	#define SSVPP_IMPL_TPL_FILL_19(m0) SSVPP_TPL_EXPLODE(m0),		0
-	#define SSVPP_IMPL_TPL_FILL_18(m0) SSVPP_TPL_EXPLODE(m0),		0, 0
-	#define SSVPP_IMPL_TPL_FILL_17(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_16(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0 ,0
-	#define SSVPP_IMPL_TPL_FILL_15(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_14(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_13(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_12(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_11(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_10(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_9(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_8(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_7(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_6(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_5(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_4(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_3(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_2(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_1(m0) SSVPP_TPL_EXPLODE(m0),		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	#define SSVPP_IMPL_TPL_FILL_0(m0)								0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_19(m0) SSVPP_TPL_EXPLODE(m0),	0
+	#define SSVPP_IMPL_TPL_FILL_18(m0) SSVPP_TPL_EXPLODE(m0),	0, 0
+	#define SSVPP_IMPL_TPL_FILL_17(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_16(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0 ,0
+	#define SSVPP_IMPL_TPL_FILL_15(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_14(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_13(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_12(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_11(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_10(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_9(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_8(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_7(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_6(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_5(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_4(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_3(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_2(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_1(m0) SSVPP_TPL_EXPLODE(m0),	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	#define SSVPP_IMPL_TPL_FILL_0(m0)							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
-	#define SSVPP_IMPL_TPL_GET_0(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m0
-	#define SSVPP_IMPL_TPL_GET_1(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m1
-	#define SSVPP_IMPL_TPL_GET_2(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m2
-	#define SSVPP_IMPL_TPL_GET_3(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m3
-	#define SSVPP_IMPL_TPL_GET_4(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m4
-	#define SSVPP_IMPL_TPL_GET_5(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m5
-	#define SSVPP_IMPL_TPL_GET_6(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m6
-	#define SSVPP_IMPL_TPL_GET_7(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m7
-	#define SSVPP_IMPL_TPL_GET_8(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m8
-	#define SSVPP_IMPL_TPL_GET_9(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m9
-	#define SSVPP_IMPL_TPL_GET_10(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m10
-	#define SSVPP_IMPL_TPL_GET_11(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m11
-	#define SSVPP_IMPL_TPL_GET_12(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m12
-	#define SSVPP_IMPL_TPL_GET_13(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m13
-	#define SSVPP_IMPL_TPL_GET_14(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m14
-	#define SSVPP_IMPL_TPL_GET_15(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m15
-	#define SSVPP_IMPL_TPL_GET_16(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m16
-	#define SSVPP_IMPL_TPL_GET_17(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m17
-	#define SSVPP_IMPL_TPL_GET_18(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m18
-	#define SSVPP_IMPL_TPL_GET_19(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m19
-	#define SSVPP_IMPL_TPL_GET_20(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m20
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_20(m0)	SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_19(m0)	0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_18(m0)	0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_17(m0)	0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_16(m0)	0, 0, 0 ,0,	SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_15(m0)	0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_14(m0)	0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_13(m0)	0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_12(m0)	0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_11(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_10(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_9(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_8(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_7(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_6(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_5(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_4(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_3(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_2(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_1(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SSVPP_TPL_EXPLODE(m0)
+	#define SSVPP_IMPL_TPL_FILL_REVERSE_0(m0)	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+	#define SSVPP_IMPL_TPL_ELEM_0(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m0
+	#define SSVPP_IMPL_TPL_ELEM_1(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m1
+	#define SSVPP_IMPL_TPL_ELEM_2(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m2
+	#define SSVPP_IMPL_TPL_ELEM_3(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m3
+	#define SSVPP_IMPL_TPL_ELEM_4(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m4
+	#define SSVPP_IMPL_TPL_ELEM_5(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m5
+	#define SSVPP_IMPL_TPL_ELEM_6(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m6
+	#define SSVPP_IMPL_TPL_ELEM_7(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m7
+	#define SSVPP_IMPL_TPL_ELEM_8(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m8
+	#define SSVPP_IMPL_TPL_ELEM_9(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m9
+	#define SSVPP_IMPL_TPL_ELEM_10(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m10
+	#define SSVPP_IMPL_TPL_ELEM_11(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m11
+	#define SSVPP_IMPL_TPL_ELEM_12(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m12
+	#define SSVPP_IMPL_TPL_ELEM_13(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m13
+	#define SSVPP_IMPL_TPL_ELEM_14(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m14
+	#define SSVPP_IMPL_TPL_ELEM_15(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m15
+	#define SSVPP_IMPL_TPL_ELEM_16(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m16
+	#define SSVPP_IMPL_TPL_ELEM_17(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m17
+	#define SSVPP_IMPL_TPL_ELEM_18(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m18
+	#define SSVPP_IMPL_TPL_ELEM_19(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m19
+
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_0(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m19
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_1(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m18
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_2(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m17
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_3(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m16
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_4(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m15
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_5(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m14
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_6(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m13
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_7(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m12
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_8(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m11
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_9(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m10
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_10(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m9
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_11(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m8
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_12(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m7
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_13(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m6
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_14(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m5
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_15(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m4
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_16(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m3
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_17(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m2
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_18(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m1
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE_19(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19) m0
 
 	#define SSVPP_TPL_FILL_IMPL(mTpl)		SSVPP_TKNCAT_2(SSVPP_IMPL_TPL_FILL_, SSVPP_TPL_SIZE(mTpl)) (mTpl)
 	#define SSVPP_TPL_FILL(mTpl)			( SSVPP_TPL_FILL_IMPL(mTpl) )
-	#define SSVPP_IMPL_TPL_GET(mIdx, mTpl)	SSVPP_TKNCAT_2(SSVPP_IMPL_TPL_GET_, mIdx) SSVPP_EXPAND(SSVPP_TPL_FILL(mTpl))
-	#define SSVPP_TPL_GET(mIdx, mTpl)		SSVPP_EXPAND(SSVPP_IMPL_TPL_GET(mIdx, mTpl))
+
+	#define SSVPP_TPL_FILL_REVERSE_IMPL(mTpl)		SSVPP_TKNCAT_2(SSVPP_IMPL_TPL_FILL_REVERSE_, SSVPP_TPL_SIZE(mTpl)) (mTpl)
+	#define SSVPP_TPL_FILL_REVERSE(mTpl)			( SSVPP_TPL_FILL_REVERSE_IMPL(mTpl) )
+
+	#define SSVPP_IMPL_TPL_ELEM(mTpl, mIdx)	SSVPP_TKNCAT_2(SSVPP_IMPL_TPL_ELEM_, mIdx) SSVPP_EXPAND(SSVPP_TPL_FILL(mTpl))
+	#define SSVPP_TPL_ELEM(mTpl, mIdx)		SSVPP_EXPAND(SSVPP_IMPL_TPL_ELEM(mTpl, mIdx))
+
+	#define SSVPP_IMPL_TPL_ELEM_REVERSE(mTpl, mIdx)	SSVPP_TKNCAT_2(SSVPP_IMPL_TPL_ELEM_REVERSE_, mIdx) SSVPP_EXPAND(SSVPP_TPL_FILL_REVERSE(mTpl))
+	#define SSVPP_TPL_ELEM_REVERSE(mTpl, mIdx)		SSVPP_EXPAND(SSVPP_IMPL_TPL_ELEM_REVERSE(mTpl, mIdx))
 
 	#define SSVPP_IMPL_TPL_MAKE(...)		(__VA_ARGS__)
 	#define SSVPP_TPL_MAKE(...)				SSVPP_IMPL_TPL_MAKE(__VA_ARGS__)
@@ -115,8 +164,18 @@ namespace ssvu
 	#define SSVPP_TPL_CAT(...)		SSVPP_IMPL_TPL_CAT(__VA_ARGS__)
 
 	#define SSVPP_TPL_SIZE(mTpl)	SSVPP_VA_NUM_ARGS(SSVPP_TPL_EXPLODE(mTpl))
+
+	#define SSVPP_IMPL_TPL_HEAD(mTpl)	SSVPP_EXPAND(SSVPP_TPL_ELEM(mTpl, 0))
+	#define SSVPP_TPL_HEAD(mTpl)		SSVPP_IMPL_TPL_HEAD(mTpl)
+
+	#define SSVPP_IMPL_TPL_TAIL(mTpl)	SSVPP_EXPAND(SSVPP_TPL_ELEM_REVERSE(mTpl, 0))
+	#define SSVPP_TPL_TAIL(mTpl)		SSVPP_IMPL_TPL_TAIL(mTpl)
+
+	#define SSVPP_IMPL_TPL_PUSH_BACK(mTpl, mArg)	SSVPP_EXPAND(SSVPP_TPL_MAKE(SSVPP_TPL_EXPLODE(mTpl), mArg))
+	#define SSVPP_TPL_PUSH_BACK(mTpl, mArg)			SSVPP_IMPL_TPL_PUSH_BACK(mTpl, mArg)
+
+	#define SSVPP_IMPL_TPL_PUSH_FRONT(mTpl, mArg)	SSVPP_EXPAND(SSVPP_TPL_MAKE(mArg, SSVPP_TPL_EXPLODE(mTpl)))
+	#define SSVPP_TPL_PUSH_FRONT(mTpl, mArg)		SSVPP_IMPL_TPL_PUSH_FRONT(mTpl, mArg)
 }
 
 #endif
-
-// TODO: MPL List stuff here
