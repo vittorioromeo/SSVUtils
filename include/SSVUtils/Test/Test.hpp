@@ -14,7 +14,7 @@
 #include "SSVUtils/Utils/Macros.hpp"
 #include "SSVUtils/Preprocessor/Preprocessor.hpp"
 
-#define EXPECT(mExpr) \
+#define SSVUT_EXPECT(mExpr) \
 	while(true) \
 	{ \
 		try { if(!ssvu::Test::Internal::suppress(mExpr)) throw ssvu::Test::Internal::Fail{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr}; } \
@@ -24,14 +24,14 @@
 		break; \
 	}
 
-#define EXPECT_THROWS(mExpr) \
+#define SSVUT_EXPECT_THROWS(mExpr) \
 	while(true) \
 	{ \
 		try { ssvu::Test::Internal::suppress(mExpr); } catch(...) { break; } \
 		throw ssvu::Test::Internal::Expect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr}; \
 	}
 
-#define EXPECT_THROWS_AS(mExpr, mException) \
+#define SSVUT_EXPECT_THROWS_AS(mExpr, mException) \
 	while(true) \
 	{ \
 		try { ssvu::Test::Internal::suppress(mExpr); } catch(mException&) { break; } catch(...) { } \
@@ -48,8 +48,8 @@
 	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
 #else
 	#define SSVU_TEST(name) struct SSVPP_CAT(Unique_,__LINE__) { void f() __attribute__ ((unused)) {
-	#define SSVU_TEST_END() }} __attribute__ ((unused));
-	#define SSVU_TEST_RUN_ALL() { }
+	#define SSVU_TEST_END() }} __attribute__ ((unused))
+	#define SSVU_TEST_RUN_ALL()
 #endif
 
 namespace ssvu

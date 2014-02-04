@@ -18,7 +18,7 @@ namespace ssvu
 	/// @details Quick (but not really effective) way to protect a value against memory scanners (such as Cheat Engine).
 	/// Obviously introduces a runtime cost to get/set the internal value.
 	/// @tparam T Type of the underlying arithmetic value.
-	template<typename T, Encryption::Type TCrypto> class ObfuscatedValue<T, TCrypto, EnableIf<std::is_arithmetic<T>::value>>
+	template<typename T, Encryption::Type TCrypto> class ObfuscatedValue<T, TCrypto, EnableIf<isArithmetic<T>()>>
 	{
 		private:
 			T dummy; ///< Dummy value used to "fool" memory scanners.

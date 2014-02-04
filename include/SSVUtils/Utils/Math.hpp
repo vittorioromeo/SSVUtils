@@ -45,12 +45,12 @@ namespace ssvu
 	/// @brief Gets the sign of a numeric value. (unsigned version)
 	/// @param mValue Value to use.
 	/// @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
-	template<typename T> inline constexpr int getSign(const T& mValue, EnableIf<!std::is_signed<T>::value>* = nullptr) noexcept { return 0 < mValue; }
+	template<typename T> inline constexpr int getSign(const T& mValue, EnableIf<!isSigned<T>()>* = nullptr) noexcept { return 0 < mValue; }
 
 	/// @brief Gets the sign of a numeric value. (signed version)
 	/// @param mValue Value to use.
 	/// @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
-	template<typename T> inline constexpr int getSign(const T& mValue, EnableIf<std::is_signed<T>::value>* = nullptr) noexcept { return (0 < mValue) - (mValue < 0); }
+	template<typename T> inline constexpr int getSign(const T& mValue, EnableIf<isSigned<T>()>* = nullptr) noexcept { return (0 < mValue) - (mValue < 0); }
 
 	/// @brief Clamps a numeric value. (lower-bound only)
 	/// @param mValue Reference to the value. (will be modified)
