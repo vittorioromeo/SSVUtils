@@ -42,6 +42,7 @@ namespace std
 	template<std::size_t Len, std::size_t Align> using aligned_storage_t = typename std::aligned_storage<Len, Align>::type;
 	template<bool B, typename T, typename F> using conditional_t = typename std::conditional<B, T, F>::type;
 	template<typename T> using underlying_type_t = typename std::underlying_type<T>::type;
+	template<std::size_t TS, typename T> using tuple_element_t = typename std::tuple_element<TS, T>::type;
 }
 
 namespace ssvu
@@ -69,7 +70,12 @@ namespace ssvu
 	template<std::size_t Len, std::size_t Align> using AlignedStorage = std::aligned_storage_t<Len, Align>;
 	template<bool B, typename T, typename F> using Conditional = std::conditional_t<B, T, F>;
 	template<typename T> using Underlying = std::underlying_type_t<T>;
+	template<typename T1, typename T2> using IsSame = typename std::is_same<T1, T2>::type;
+	template<std::size_t TS, typename T> using TupleElement = std::tuple_element_t<TS, T>;
 
+
+	template<typename T> inline constexpr bool isArithmetic() noexcept				{ return std::is_arithmetic<T>::value; }
+	template<typename T> inline constexpr bool isSigned() noexcept					{ return std::is_signed<T>::value; }
 	template<typename T1, typename T2> inline constexpr bool isSame() noexcept		{ return std::is_same<T1, T2>::value; }
 	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept	{ return std::is_base_of<T1, T2>::value; }
 	template<typename T> inline constexpr bool isEnum() noexcept					{ return std::is_enum<T>::value; }
