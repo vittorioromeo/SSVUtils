@@ -51,7 +51,7 @@ namespace ssvu
 	#define SSVPP_IMPL_FOREACH_39(mAction, mData, mA0, mA1, ...)	mAction(38, mData, mA0) SSVPP_IMPL_FOREACH_38(mAction, mData, mA1, __VA_ARGS__)
 	#define SSVPP_IMPL_FOREACH_40(mAction, mData, mA0, mA1, ...)	mAction(39, mData, mA0) SSVPP_IMPL_FOREACH_39(mAction, mData, mA1, __VA_ARGS__)
 
-	#define SSVPP_IMPL_FOREACH(mAction, mData, ...)	SSVPP_TKNCAT_2(SSVPP_IMPL_FOREACH_, SSVPP_VA_NUM_ARGS(__VA_ARGS__)) (mAction, mData, __VA_ARGS__)
+	#define SSVPP_IMPL_FOREACH(mAction, mData, ...)	SSVPP_TKNCAT_2(SSVPP_IMPL_FOREACH_, SSVPP_ARGCOUNT(__VA_ARGS__)) (mAction, mData, __VA_ARGS__)
 	#define SSVPP_FOREACH(...)						SSVPP_IMPL_FOREACH(__VA_ARGS__)
 }
 

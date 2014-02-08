@@ -14,8 +14,8 @@ namespace ssvu
 	#define SSVPP_RAW(...)	__VA_ARGS__
 	#define __R(...)		SSVPP_RAW(__VA_ARGS__)
 
-	#define SSVPP_STRINGIFY_IMPL(mX)	#mX
-	#define SSVPP_STRINGIFY(mX)			SSVPP_STRINGIFY_IMPL(mX)
+	#define SSVPP_TOSTR_IMPL(mX)	#mX
+	#define SSVPP_TOSTR(mX)			SSVPP_TOSTR_IMPL(mX)
 
 	#define SSVPP_IMPL_TKNCAT_2(m0, m1)				m0 ## m1
 	#define SSVPP_IMPL_TKNCAT_3(m0, m1, m2)			m0 ## m1 ## m2

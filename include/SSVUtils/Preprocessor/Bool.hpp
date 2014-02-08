@@ -311,11 +311,11 @@ namespace ssvu
 	#define SSVPP_NOR(m0, m1)		SSVPP_IMPL_NOR(m0, m1)
 	#define SSVPP_XOR(m0, m1)		SSVPP_IMPL_XOR(m0, m1)
 
-	#define SSVPP_IMPL_IF_0(mTrue, mFalse)		mFalse
-	#define SSVPP_IMPL_IF_1(mTrue, mFalse)		mTrue
-	#define SSVPP_IF(mCondition, mTrue, mFalse)	SSVPP_TKNCAT_2(SSVPP_IMPL_IF_, SSVPP_BOOL(mCondition)) (mTrue, mFalse)
+	#define SSVPP_IMPL_IF_0(mTrue, mFalse)	mFalse
+	#define SSVPP_IMPL_IF_1(mTrue, mFalse)	mTrue
+	#define SSVPP_IF(mCond, mTrue, mFalse)	SSVPP_TKNCAT_2(SSVPP_IMPL_IF_, SSVPP_BOOL(mCond)) (mTrue, mFalse)
 
-	#define SSVPP_COMMA_IF(mCondition)			SSVPP_IF(mCondition, SSVPP_COMMA, SSVPP_EMPTY)()
+	#define SSVPP_COMMA_IF(mCond)			SSVPP_IF(mCond, SSVPP_COMMA, SSVPP_EMPTY)()
 }
 
 #endif

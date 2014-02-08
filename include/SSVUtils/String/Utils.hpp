@@ -79,6 +79,12 @@ namespace ssvu
 	/// @brief Returns true if mChar is an hexadecimal digit. (Wraps std::isxdigit)
 	inline bool isDigitHexadecimal(char mChar) noexcept { return std::isxdigit(mChar); }
 
+	/// @brief Returns mChar, converted to lowercase. (Wraps std::tolower)
+	inline char toLowercase(char mChar) noexcept { return std::tolower(mChar); }
+
+	/// @brief Returns mChar, converted to uppercase. (Wraps std::tolower)
+	inline char toUppercase(char mChar) noexcept { return std::toupper(mChar); }
+
 	/// @brief Replace the first occurrence of a string in a string with another string.
 	/// @param mStr String to work with.
 	/// @param mFrom String to replace.

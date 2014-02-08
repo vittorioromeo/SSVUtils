@@ -40,9 +40,9 @@
 
 #ifndef SSVU_TEST_DISABLE
 	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVPP_CAT(Unique_, name, __LINE__) { []{ \
-		if(ssvu::Test::Internal::isRunnerExecuted(SSVPP_STRINGIFY(SSVPP_CAT(Unique_, name, __LINE__)))) return; \
-		ssvu::Test::Internal::setRunnerExecuted(SSVPP_STRINGIFY(SSVPP_CAT(Unique_, name, __LINE__))); \
-		ssvu::Test::Internal::getTestGroups().push_back({ {SSVPP_STRINGIFY(name), []
+		if(ssvu::Test::Internal::isRunnerExecuted(SSVPP_TOSTR(SSVPP_CAT(Unique_, name, __LINE__)))) return; \
+		ssvu::Test::Internal::setRunnerExecuted(SSVPP_TOSTR(SSVPP_CAT(Unique_, name, __LINE__))); \
+		ssvu::Test::Internal::getTestGroups().push_back({ {SSVPP_TOSTR(name), []
 
 	#define SSVU_TEST_END() }});}}
 	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
@@ -91,8 +91,8 @@ namespace ssvu
 			inline std::ostream& operator<<(std::ostream& mOs, const Comment& mComment)		{ return mOs << (mComment ? " " + mComment.text : ""); }
 			inline std::ostream& operator<<(std::ostream& mOs, const Location& mLocation)	{ return mOs << mLocation.file << ":" << mLocation.line; }
 
-			inline void report(const Msg& mMsg, std::string mTest) { ssvu::lo("ssvu::Test") << mMsg.location << "\n" << mMsg.type << mMsg.comment << ": " << std::move(mTest) << ": " << mMsg.what() << "\n" << std::endl; }
-			inline void report(const std::string& mError, std::string mTest) { ssvu::lo("ssvu::Test") << mError << "\n" << ": " << std::move(mTest) << ": \n" << std::endl; }
+			inline void report(const Msg& mMsg, const std::string& mTest) { ssvu::lo("ssvu::Test") << mMsg.location << "\n" << mMsg.type << mMsg.comment << ": " << mTest << ": " << mMsg.what() << "\n" << std::endl; }
+			inline void report(const std::string& mError, const std::string& mTest) { ssvu::lo("ssvu::Test") << mError << "\n" << ": " << mTest << ": \n" << std::endl; }
 
 			inline int run(const std::vector<Test>& mTests)
 			{
