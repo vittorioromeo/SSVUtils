@@ -17,6 +17,11 @@ namespace ssvu
 {
 	template<typename> struct Stringifier;
 
+	template<bool TFmt, typename TStream, typename T> inline void stringify(TStream& mStream, const T& mValue)
+	{
+		Stringifier<T>::template impl<TFmt>(mStream, mValue);
+	}
+
 	namespace Internal
 	{
 		void resetFmt(std::ostream& mStream);
@@ -24,7 +29,7 @@ namespace ssvu
 		template<bool TFmt, bool TResetFmt = true, typename T> inline void callStringifyImpl(std::ostream& mStream, const T& mValue)
 		{
 			if(TResetFmt) resetFmt(mStream);
-			Stringifier<T>::template impl<TFmt>(mStream, mValue);
+			stringify<TFmt>(mStream, mValue);
 			if(TResetFmt) resetFmt(mStream);
 		}
 	}

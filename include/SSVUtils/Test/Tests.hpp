@@ -5,6 +5,8 @@
 #ifndef SSVU_TEST_TESTS
 #define SSVU_TEST_TESTS
 
+#include <list>
+#include <forward_list>
 #include <map>
 #include <unordered_map>
 #include "SSVUtils/Test/Test.hpp"
@@ -582,6 +584,34 @@ SSVU_TEST(MacrosTests)
 	SSVUT_EXPECT(__R(SsvuTestMacroTestChecker3<MacroTestStruct, float(int)>()) == false);
 	SSVUT_EXPECT(SsvuTestMacroTestCallGoodbye1(mts) == 2);
 	SSVUT_EXPECT(SsvuTestMacroTestCallGoodbye2(mts) == 4);
+}
+SSVU_TEST_END();
+
+SSVU_TEST(StringifierTests)
+{
+	auto nothing([]{ });
+	std::ostringstream trash;
+	#define SSVUT_STRINGIFY_TEST(mValue) { auto k(mValue); ssvu::stringify<true>(trash, k); ssvu::stringify<false>(trash, k); } nothing()
+
+	SSVUT_STRINGIFY_TEST(0);
+	SSVUT_STRINGIFY_TEST(0l);
+	SSVUT_STRINGIFY_TEST(0u);
+	SSVUT_STRINGIFY_TEST(0ul);
+	SSVUT_STRINGIFY_TEST(0.f);
+	SSVUT_STRINGIFY_TEST(0.0);
+	SSVUT_STRINGIFY_TEST(&trash);
+	SSVUT_STRINGIFY_TEST("abc");
+	SSVUT_STRINGIFY_TEST(std::string{"abc"});
+	SSVUT_STRINGIFY_TEST(__R((int[]){1, 2, 3}));
+	SSVUT_STRINGIFY_TEST(__R(std::array<int, 3>{1, 2, 3}));
+	SSVUT_STRINGIFY_TEST(__R(std::vector<int>{1, 2, 3}));
+	SSVUT_STRINGIFY_TEST(__R(std::list<int>{1, 2, 3}));
+	SSVUT_STRINGIFY_TEST(__R(std::forward_list<int>{1, 2, 3}));
+	SSVUT_STRINGIFY_TEST(__R(std::map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
+	SSVUT_STRINGIFY_TEST(__R(std::unordered_map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
+	SSVUT_STRINGIFY_TEST(__R(ssvu::Bimap<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
+	SSVUT_STRINGIFY_TEST(__R(std::tuple<int, int, int>{1, 2, 3}));
+	SSVUT_STRINGIFY_TEST(__R(std::pair<int, int>{2, 3}));
 }
 SSVU_TEST_END();
 
