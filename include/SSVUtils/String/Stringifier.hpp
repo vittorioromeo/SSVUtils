@@ -14,17 +14,18 @@
 #include "SSVUtils/Utils/Containers.hpp"
 #include "SSVUtils/Utils/Iterator.hpp"
 #include "SSVUtils/Utils/Console.hpp"
+#include "SSVUtils/Bimap/Bimap.hpp"
 
-// TODO: docs
 namespace ssvu
 {
-	//template<typename, typename, template<typename...> class> class Bimap;
-	// TODO: stringify map/bimap
-
 	namespace Internal
 	{
+		/// @brief Streams a "formatting reset sequence" to mStream.
 		inline void resetFmt(std::ostream& mStream) { mStream << Console::resetFmt(); }
 
+		/// @brief Prints a value to a stream, with optional formatting parameters.
+		/// @tparam TFmt If true, applies formatting.
+		/// @tparam TResetFmt If true, resets current formatting before applying new one.
 		template<bool TFmt, bool TResetFmt = true, typename T> inline void printFmt(std::ostream& mStream, const T& mValue,
 			Console::Color mColor = Console::Color::Default, Console::Style mStyle = Console::Style::None)
 		{
@@ -37,43 +38,76 @@ namespace ssvu
 			mStream << mValue;
 		}
 
+		/// @brief Shortcut to `printFmt`, using optional bold formatting.
 		template<bool TFmt, typename T> inline void printBold(std::ostream& mStream, const T& mValue, Console::Color mColor = Console::Color::Default)
 		{
 			printFmt<TFmt>(mStream, mValue, mColor, Console::Style::Bold);
 		}
+
+		/// @brief Shortcut to `printFmt`, using optional non-bold formatting.
 		template<bool TFmt, typename T> inline void printNonBold(std::ostream& mStream, const T& mValue, Console::Color mColor = Console::Color::Default)
 		{
 			printFmt<TFmt>(mStream, mValue, mColor, Console::Style::None);
 		}
 
-		template<bool TFmt, std::size_t I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I == sizeof...(TArgs), void> implTpl(std::ostream&, const T<TArgs...>&) { }
-		template<bool TFmt, std::size_t I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I < sizeof...(TArgs), void> implTpl(std::ostream& mStream, const T<TArgs...>& mTpl)
+		/// @brief Tuple-printing implementation. (base of the recursion)
+		template<bool TFmt, std::size_t I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I == sizeof...(TArgs)> implTpl(std::ostream&, const T<TArgs...>&) { }
+
+		/// @brief Tuple-printing implementation. (recursive step)
+		template<bool TFmt, std::size_t I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I < sizeof...(TArgs)> implTpl(std::ostream& mStream, const T<TArgs...>& mTpl)
 		{
 			callStringifyImpl<TFmt>(mStream, std::get<I>(mTpl));
 			if(I < sizeof...(TArgs) - 1) printBold<TFmt>(mStream, ", ");
 			implTpl<TFmt, I + 1>(mStream, mTpl);
+
 		}
 
+		/// @brief Utility function to avoid repetition. (implementation for BidirectionalIterator)
+		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, const TFunc1& mFunc, const TFunc2& mFuncSeparator, std::bidirectional_iterator_tag)
+		{
+			auto itrPenultimate(--mEnd);
+			while(mBegin != itrPenultimate) { mFunc(*mBegin); mFuncSeparator(*mBegin); ++mBegin; }
+			mFunc(*itrPenultimate);
+		}
+
+		/// @brief Utility function to avoid repetition. (implementation for ForwardIterator)
+		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, const TFunc1& mFunc, const TFunc2& mFuncSeparator, std::forward_iterator_tag)
+		{
+			auto count(std::distance(mBegin, mEnd));
+			for(auto i(0u); i < count; ++i) { mFunc(*mBegin); if(i < count - 1) mFuncSeparator(*mBegin); ++mBegin; }
+		}
+
+		/// @brief Utility function to avoid repetition.
+		/// @details Calls mFunc on each element, and mFuncSeparator on each element except the last. Dispatches `repeatPenultimateImpl`.
+		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimate(TItr mBegin, TItr mEnd, const TFunc1& mFunc, const TFunc2& mFuncSeparator)
+		{
+			repeatPenultimateImpl(mBegin, mEnd, mFunc, mFuncSeparator, typename std::iterator_traits<TItr>::iterator_category());
+		}
+
+		/// @brief Default stringifier. Simply streams the value.
 		template<typename T> struct StringifierDefault
 		{
 			template<bool TFmt> inline static void impl(std::ostream& mStream, const T& mValue) { mStream << mValue; }
 		};
+
+		/// @brief Linear container stringifier. Simply streams each element, separated by commas.
 		template<typename T> struct StringifierContainer
 		{
 			template<bool TFmt> inline static void impl(std::ostream& mStream, const T& mValue)
 			{
-				if(std::begin(mValue) == std::end(mValue)) { printBold<TFmt>(mStream, "{ EMPTY }"); return; }
+				auto itrBegin(std::begin(mValue));
+				if(itrBegin == std::end(mValue)) { printBold<TFmt>(mStream, "{ EMPTY }"); return; }
 
 				printBold<TFmt>(mStream, "{");
-				for(auto itr(std::begin(mValue)); itr < std::end(mValue) - 1; ++itr)
-				{
-					callStringifyImpl<TFmt>(mStream, *itr);
-					printBold<TFmt>(mStream, ", ");
-				}
-				callStringifyImpl<TFmt>(mStream, *(std::end(mValue) - 1));
+
+				// C++14: `auto` lambda
+				repeatPenultimate(itrBegin, std::end(mValue), [&mStream](decltype(*itrBegin) mE){ callStringifyImpl<TFmt>(mStream, mE); }, [&mStream](decltype(*itrBegin)){ printBold<TFmt>(mStream, ", "); });
+
 				printBold<TFmt>(mStream, "}");
 			}
 		};
+
+		/// @brief Tuple stringifier. Calls `implTpl` to stringify the elements.
 		template<typename T> struct StringifierTuple
 		{
 			template<bool TFmt> inline static void impl(std::ostream& mStream, const T& mValue)
@@ -83,6 +117,25 @@ namespace ssvu
 				printBold<TFmt>(mStream, "}");
 			}
 		};
+
+		/// @brief Map stringifier. Streams each key <separator> value pair, separated by commas.
+		template<bool TFmt, typename T, typename TSep> inline void stringifyMapImpl(std::ostream& mStream, const T& mValue, const TSep& mSeparator)
+		{
+			auto itrBegin(std::begin(mValue));
+			if(std::begin(mValue) == std::end(mValue)) { printBold<TFmt>(mStream, "{ EMPTY }"); return; }
+
+			printBold<TFmt>(mStream, "{");
+
+			// C++14: `auto` lambda
+			repeatPenultimate(itrBegin, std::end(mValue), [&mStream, &mSeparator](decltype(*itrBegin) mE)
+			{
+				callStringifyImpl<TFmt>(mStream, mE.first);
+				printBold<TFmt>(mStream, mSeparator);
+				callStringifyImpl<TFmt>(mStream, mE.second);
+			}, [&mStream](decltype(*itrBegin)){ printBold<TFmt>(mStream, ", "); });
+
+			printBold<TFmt>(mStream, "}");
+		}
 	}
 
 	// Stringify common types
@@ -117,9 +170,29 @@ namespace ssvu
 	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>> : public Internal::StringifierTuple<std::pair<T1, T2>> { };
 	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>> : public Internal::StringifierTuple<std::tuple<TArgs...>> { };
 
-	// Stringify containers
+	// Stringify arrays
 	template<typename T, std::size_t TN> struct Stringifier<T[TN]> : public Internal::StringifierContainer<T[TN]> { };
-	template<template<typename, typename...> class T, typename TV, typename... TArgs> struct Stringifier<T<TV, TArgs...>> : public Internal::StringifierContainer<T<TV, TArgs...>> { };
+
+	// Stringify linear containers (value type and allocator type)
+	template<template<typename, typename> class T, typename TV, typename TAlloc> struct Stringifier<T<TV, TAlloc>> : public Internal::StringifierContainer<T<TV, TAlloc>> { };
+
+	// Stringify map-like containers
+	template<template<typename, typename, typename, typename...> class TM, typename TK, typename TV, typename TComp, typename TAlloc, typename... TArgs> struct Stringifier<TM<TK, TV, TComp, TAlloc, TArgs...>>
+	{
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const TM<TK, TV, TComp, TAlloc, TArgs...>& mValue)
+		{
+			Internal::stringifyMapImpl<TFmt>(mStream, mValue, " -> ");
+		}
+	};
+
+	// Stringify bimap
+	template<typename T1, typename T2, template<typename...> class TM> struct Stringifier<Bimap<T1, T2, TM>>
+	{
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const Bimap<T1, T2, TM>& mValue)
+		{
+			Internal::stringifyMapImpl<TFmt>(mStream, mValue.getMap1(), " <-> ");
+		}
+	};
 
 	// Stringify pointer
 	template<typename T> struct Stringifier<T*>
