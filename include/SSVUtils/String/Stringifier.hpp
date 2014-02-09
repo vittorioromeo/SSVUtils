@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <array>
 #include <algorithm>
 #include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/String/Utils.hpp"
@@ -172,6 +173,7 @@ namespace ssvu
 
 	// Stringify arrays
 	template<typename T, std::size_t TN> struct Stringifier<T[TN]> : public Internal::StringifierContainer<T[TN]> { };
+	template<typename T, std::size_t TN> struct Stringifier<std::array<T, TN>> : public Internal::StringifierContainer<std::array<T, TN>> { };
 
 	// Stringify linear containers (value type and allocator type)
 	template<template<typename, typename> class T, typename TV, typename TAlloc> struct Stringifier<T<TV, TAlloc>> : public Internal::StringifierContainer<T<TV, TAlloc>> { };
