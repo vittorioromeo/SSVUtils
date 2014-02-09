@@ -5,6 +5,8 @@
 #ifndef SSVU_TEST_TESTS
 #define SSVU_TEST_TESTS
 
+#include <map>
+#include <unordered_map>
 #include "SSVUtils/Test/Test.hpp"
 #include "SSVUtils/Preprocessor/Preprocessor.hpp"
 
@@ -75,21 +77,41 @@ SSVU_TEST(BimapTests)
 	using namespace std;
 	using namespace ssvu;
 
-	Bimap<string, int> bimap;
-	bimap.insert({"hi", 10});
-	SSVUT_EXPECT(bimap[10] == "hi");
-	SSVUT_EXPECT(bimap["hi"] == 10);
+	{
+		Bimap<string, int> bimap;
+		bimap.insert({"hi", 10});
+		SSVUT_EXPECT(bimap[10] == "hi");
+		SSVUT_EXPECT(bimap["hi"] == 10);
 
-	bimap.insert({"hi", 1000});
-	SSVUT_EXPECT(bimap[10] == "hi");
-	SSVUT_EXPECT(bimap["hi"] != 10);
-	SSVUT_EXPECT(bimap[1000] == "hi");
-	SSVUT_EXPECT(bimap["hi"] == 1000);
+		bimap.insert({"hi", 1000});
+		SSVUT_EXPECT(bimap[10] == "hi");
+		SSVUT_EXPECT(bimap["hi"] != 10);
+		SSVUT_EXPECT(bimap[1000] == "hi");
+		SSVUT_EXPECT(bimap["hi"] == 1000);
 
-	bimap.erase(10);
-	SSVUT_EXPECT(!bimap.has(10));
-	SSVUT_EXPECT(!bimap.has("hi"));
-	SSVUT_EXPECT(bimap.has(1000));
+		bimap.erase(10);
+		SSVUT_EXPECT(!bimap.has(10));
+		SSVUT_EXPECT(!bimap.has("hi"));
+		SSVUT_EXPECT(bimap.has(1000));
+	}
+
+	{
+		Bimap<string, int, std::unordered_map> bimap;
+		bimap.insert({"hi", 10});
+		SSVUT_EXPECT(bimap[10] == "hi");
+		SSVUT_EXPECT(bimap["hi"] == 10);
+
+		bimap.insert({"hi", 1000});
+		SSVUT_EXPECT(bimap[10] == "hi");
+		SSVUT_EXPECT(bimap["hi"] != 10);
+		SSVUT_EXPECT(bimap[1000] == "hi");
+		SSVUT_EXPECT(bimap["hi"] == 1000);
+
+		bimap.erase(10);
+		SSVUT_EXPECT(!bimap.has(10));
+		SSVUT_EXPECT(!bimap.has("hi"));
+		SSVUT_EXPECT(bimap.has(1000));
+	}
 }
 SSVU_TEST_END();
 
