@@ -13,7 +13,7 @@
 
 namespace ssvu
 {
-	inline std::minstd_rand& getRndEngine()	noexcept { static std::minstd_rand rndEngine{std::time(0)}; return rndEngine; }
+	inline std::minstd_rand& getRndEngine()	noexcept { static std::minstd_rand rndEngine(std::time(0)); return rndEngine; }
 	template<typename T> using RndDistributionI = std::uniform_int_distribution<T>;
 	template<typename T> using RndDistributionR = std::uniform_real_distribution<T>;
 
