@@ -590,6 +590,7 @@ SSVU_TEST_END();
 SSVU_TEST(StringifierTests)
 {
 	auto nothing([]{ });
+	int testArray[]{1, 2, 3};
 	std::ostringstream trash;
 	#define SSVUT_STRINGIFY_TEST(mValue) { auto k(mValue); ssvu::stringify<true>(trash, k); ssvu::stringify<false>(trash, k); } nothing()
 
@@ -602,7 +603,7 @@ SSVU_TEST(StringifierTests)
 	SSVUT_STRINGIFY_TEST(&trash);
 	SSVUT_STRINGIFY_TEST("abc");
 	SSVUT_STRINGIFY_TEST(std::string{"abc"});
-	SSVUT_STRINGIFY_TEST(__R((int[]){1, 2, 3}));
+	ssvu::stringify<true>(trash, testArray); ssvu::stringify<false>(trash, testArray);
 	SSVUT_STRINGIFY_TEST(__R(std::array<int, 3>{1, 2, 3}));
 	SSVUT_STRINGIFY_TEST(__R(std::vector<int>{1, 2, 3}));
 	SSVUT_STRINGIFY_TEST(__R(std::list<int>{1, 2, 3}));
