@@ -23,12 +23,12 @@ namespace ssvu
 		public:
 			/// @brief Default constructor.
 			/// @details Initializes an empty Bimap.
-			Bimap() = default;
+			inline Bimap() = default;
 
 			/// @brief Initializer list constructor.
 			/// @details Initializes a Bimap from a std::initalizer_list of pairs.
 			/// @param mPairs Initializer list of std::pair<T, U>.
-			Bimap(const std::initializer_list<std::pair<T1, T2>>& mPairs) { for(const auto& p : mPairs) insert(p); }
+			inline Bimap(const std::initializer_list<std::pair<T1, T2>>& mPairs) { for(const auto& p : mPairs) insert(p); }
 
 			/// @brief Insert a pair in the Bimap.
 			/// @param mPair std::pair<T, U> to insert.
@@ -68,11 +68,11 @@ namespace ssvu
 
 			/// @brief Checks if a value is in the Bimap.
 			/// @param mValue Key of the value to find.
-			inline bool has(const T1& mValue) const { return find(mValue) != end(map1); }
+			inline bool has(const T1& mValue) const { return this->find(mValue) != std::end(map1); }
 
 			/// @brief Checks if a value is in the Bimap.
 			/// @param mValue Key of the value to find.
-			inline bool has(const T2& mValue) const { return find(mValue) != end(map2); }
+			inline bool has(const T2& mValue) const { return this->find(mValue) != std::end(map2); }
 
 			/// @brief Returns the first map container.
 			inline decltype(map1)& getMap1() noexcept { return map1; }
