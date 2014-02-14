@@ -81,38 +81,44 @@ SSVU_TEST(BimapTests)
 
 	{
 		Bimap<string, int> bimap;
-		bimap.insert({"hi", 10});
+		bimap.emplace("hi", 10);
 		SSVUT_EXPECT(bimap[10] == "hi");
 		SSVUT_EXPECT(bimap["hi"] == 10);
+		SSVUT_EXPECT(bimap.at(10) == "hi");
+		SSVUT_EXPECT(bimap.at("hi") == 10);
 
-		bimap.insert({"hi", 1000});
-		SSVUT_EXPECT(bimap[10] == "hi");
-		SSVUT_EXPECT(bimap["hi"] != 10);
-		SSVUT_EXPECT(bimap[1000] == "hi");
-		SSVUT_EXPECT(bimap["hi"] == 1000);
-
-		bimap.erase(10);
+		bimap.replace("hi", 1000);
 		SSVUT_EXPECT(!bimap.has(10));
-		SSVUT_EXPECT(!bimap.has("hi"));
 		SSVUT_EXPECT(bimap.has(1000));
+		SSVUT_EXPECT(bimap.has("hi"));
+		SSVUT_EXPECT(bimap["hi"] == 1000);
+		SSVUT_EXPECT(bimap[1000] == "hi");
+		SSVUT_EXPECT(bimap["hi"] != 10);
+
+		bimap.erase(1000);
+		SSVUT_EXPECT(!bimap.has(1000));
+		SSVUT_EXPECT(!bimap.has("hi"));
 	}
 
 	{
 		Bimap<string, int, std::unordered_map> bimap;
-		bimap.insert({"hi", 10});
+		bimap.emplace("hi", 10);
 		SSVUT_EXPECT(bimap[10] == "hi");
 		SSVUT_EXPECT(bimap["hi"] == 10);
+		SSVUT_EXPECT(bimap.at(10) == "hi");
+		SSVUT_EXPECT(bimap.at("hi") == 10);
 
-		bimap.insert({"hi", 1000});
-		SSVUT_EXPECT(bimap[10] == "hi");
-		SSVUT_EXPECT(bimap["hi"] != 10);
-		SSVUT_EXPECT(bimap[1000] == "hi");
-		SSVUT_EXPECT(bimap["hi"] == 1000);
-
-		bimap.erase(10);
+		bimap.replace("hi", 1000);
 		SSVUT_EXPECT(!bimap.has(10));
-		SSVUT_EXPECT(!bimap.has("hi"));
 		SSVUT_EXPECT(bimap.has(1000));
+		SSVUT_EXPECT(bimap.has("hi"));
+		SSVUT_EXPECT(bimap["hi"] == 1000);
+		SSVUT_EXPECT(bimap[1000] == "hi");
+		SSVUT_EXPECT(bimap["hi"] != 10);
+
+		bimap.erase(1000);
+		SSVUT_EXPECT(!bimap.has(1000));
+		SSVUT_EXPECT(!bimap.has("hi"));
 	}
 }
 SSVU_TEST_END();
