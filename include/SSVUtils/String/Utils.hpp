@@ -180,7 +180,7 @@ namespace ssvu
 	/// @param mA First string.
 	/// @param mB Second string.
 	/// @return Returns the levenshtein distance between two strings as an std::size_t.
-	inline std::size_t getLevenshteinDistance(const std::string& mA, const std::string& mB)
+	inline std::size_t getDistLevenshtein(const std::string& mA, const std::string& mB)
 	{
 		const auto& m(mA.size());
 		const auto& n(mB.size());
