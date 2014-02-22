@@ -10,6 +10,7 @@
 #include <algorithm>
 #include "SSVUtils/Utils/Math.hpp"
 #include "SSVUtils/Utils/Iterator.hpp"
+#include "SSVUtils/Utils/MakeUnique.hpp"
 
 namespace ssvu
 {
@@ -196,6 +197,16 @@ namespace ssvu
 	/// @param mPredicate Predicate to use.
 	/// @return Returns a copy of the container, trimmed.
 	template<typename T, typename P> inline T getTrimmedLR(T mContainer, const P& mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
+
+	// TODO: docs, maybe move?
+	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceUptr(TC& mContainer, TArgs&&... mArgs)
+	{
+		auto uptr(std::make_unique<T>(std::forward<TArgs>(mArgs)...));
+		auto result(uptr.get());
+		mContainer.emplace_back(std::move(uptr));
+		return *result;
+	}
+
 }
 
 #endif
