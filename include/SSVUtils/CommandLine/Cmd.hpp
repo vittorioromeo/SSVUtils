@@ -67,11 +67,11 @@ namespace ssvu
 				inline Cmd& operator+=(const Action& mFunc) { onAction += mFunc; return *this; }
 				inline Cmd& operator()() { onAction(); return *this; }
 
-				template<typename T> inline Arg<T>& createArg()												{ auto result(new Arg<T>()); args.emplace_back(result); return *result; }
-				template<typename T> inline OptArg<T>& createOptArg(const T& mDefaultValue)					{ auto result(new OptArg<T>(mDefaultValue)); optArgs.emplace_back(result); return *result; }
-				template<typename T> inline ArgPack<T>& createArgPack(unsigned int mMin, unsigned int mMax)	{ auto result(new ArgPack<T>(mMin, mMax)); argPacks.emplace_back(result); return *result; }
-				template<typename T> inline ArgPack<T>& createInfiniteArgPack()								{ auto result(new ArgPack<T>); argPacks.emplace_back(result); return *result; }
-				inline Flag& createFlag(std::string mShortName, std::string mLongName)						{ auto result(new Flag{std::move(mShortName), std::move(mLongName)}); flags.emplace_back(result); return *result; }
+				template<typename T> inline Arg<T>& createArg()												{ return ssvu::getEmplaceUptr<Arg<T>>(args); }
+				template<typename T> inline OptArg<T>& createOptArg(const T& mDefaultValue)					{ return ssvu::getEmplaceUptr<OptArg<T>>(optArgs, mDefaultValue); }
+				template<typename T> inline ArgPack<T>& createArgPack(unsigned int mMin, unsigned int mMax)	{ return ssvu::getEmplaceUptr<ArgPack<T>>(argPacks, mMin, mMax); }
+				template<typename T> inline ArgPack<T>& createInfiniteArgPack()								{ return ssvu::getEmplaceUptr<ArgPack<T>>(argPacks); }
+				inline Flag& createFlag(std::string mShortName, std::string mLongName)						{ return ssvu::getEmplaceUptr<Flag>(flags, std::move(mShortName), std::move(mLongName)); }
 
 				inline bool isFlagActive(unsigned int mIdx) const	{ return *flags[mIdx]; }
 				inline void activateFlag(const std::string& mName)	{ findFlag(mName) = true; }

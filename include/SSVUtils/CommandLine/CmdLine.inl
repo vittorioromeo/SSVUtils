@@ -27,13 +27,13 @@ namespace ssvu
 			for(const auto& c : cmds)
 				for(const auto& n : c->getNames())
 				{
-					const auto& dist(getLevenshteinDistance(n, mName));
+					const auto& dist(getDistLevenshtein(n, mName));
 					if(dist < closestMatch.first) closestMatch = {dist, n};
 				}
 
 			throw std::runtime_error("No command with name <" + mName + ">\nDid you mean <" + closestMatch.second + ">?");
 		}
-		inline Cmd& CmdLine::create(const std::initializer_list<std::string>& mNames) { auto result(new Cmd{mNames}); cmds.emplace_back(result); return *result; }
+		inline Cmd& CmdLine::create(const std::initializer_list<std::string>& mNames) { return ssvu::getEmplaceUptr<Cmd>(cmds, mNames); }
 		inline void CmdLine::parseCmdLine(const std::vector<std::string>& mArgs)
 		{
 			if(mArgs.empty()) return;

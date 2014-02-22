@@ -234,7 +234,11 @@ SSVU_TEST(StringUtilsTests)
 	SSVUT_EXPECT(endsWith(s, 'a') == false);
 	SSVUT_EXPECT(toLower("AAA") == "aaa");
 	SSVUT_EXPECT(getCharCount("AAA", 'A') == 3);
-	SSVUT_EXPECT(getLevenshteinDistance("AAA", "AAB") == 1);
+	SSVUT_EXPECT(getDistLevenshtein("AAA", "AAB") == 1);
+	SSVUT_EXPECT(getDistLevenshtein("AAA", "ABB") == 2);
+	SSVUT_EXPECT(getDistLevenshtein("AAA", "BBB") == 3);
+	SSVUT_EXPECT(getDistLevenshtein("AAA", "BBBB") == 4);
+	SSVUT_EXPECT(getDistLevenshtein("AAA", "BBC") == 3);
 
 	SSVUT_EXPECT(getTrimmedStrL("   AAA") == "AAA");
 	SSVUT_EXPECT(getTrimmedStrL("   AA  A") == "AA  A");

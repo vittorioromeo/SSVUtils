@@ -55,7 +55,7 @@ namespace ssvu
 			}
 			template<typename TType = T, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
 			{
-				auto result(new TType(std::forward<TArgs>(mArgs)...)); this->toAdd.emplace_back(result); return *result;
+				return ssvu::getEmplaceUptr<TType>(this->toAdd, std::forward<TArgs>(mArgs)...);
 			}
 	};
 }
