@@ -5,10 +5,15 @@
 #ifndef SSVU_UTILS_MACROS
 #define SSVU_UTILS_MACROS
 
+#include <cassert>
 #include "SSVUtils/Preprocessor/Preprocessor.hpp"
 
 namespace ssvu
 {
+	// TODO: investigate assert wrapping
+	//#define SSVU_ASSERT(...) assert((__VA_ARGS__))
+	//#define SSVU_ASSERT_STATIC(...) static_assert((__VA_ARGS__))
+
 	#define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVPP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))
 
 	/// @macro Define a template class with name `mName` that checks if a certain type T has
