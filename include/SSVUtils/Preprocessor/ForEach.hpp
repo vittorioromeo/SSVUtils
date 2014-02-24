@@ -9,7 +9,6 @@
 
 namespace ssvu
 {
-	#define SSVPP_IMPL_FOREACH_0()									SSVPP_EMPTY()
 	#define SSVPP_IMPL_FOREACH_1(mAction, mData, mA0)				mAction(0, mData, mA0)
 	#define SSVPP_IMPL_FOREACH_2(mAction, mData, mA0, mA1)			mAction(1, mData, mA0) SSVPP_IMPL_FOREACH_1(mAction, mData, mA1)
 	#define SSVPP_IMPL_FOREACH_3(mAction, mData, mA0, mA1, ...)		mAction(2, mData, mA0) SSVPP_IMPL_FOREACH_2(mAction, mData, mA1, __VA_ARGS__)

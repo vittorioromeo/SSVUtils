@@ -8,8 +8,10 @@
 #include <cassert>
 #include <array>
 #include <random>
+#include "SSVUtils/Log/Log.hpp"
 #include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Utils/Macros.hpp"
+#include "SSVUtils/Assert/Assert.hpp"
 
 namespace ssvu
 {
@@ -28,14 +30,14 @@ namespace ssvu
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper exclusive bound.
 	/// @return Returns a random integer value, between [mMin and mMax).
-	template<typename T = int> inline T getRnd(const T& mMin, const T& mMax) { assert(mMin < mMax); return RndDistributionI<T>(mMin, mMax - 1)(getRndEngine()); }
+	template<typename T = int> inline T getRnd(const T& mMin, const T& mMax) { SSVU_ASSERT(mMin < mMax); return RndDistributionI<T>(mMin, mMax - 1)(getRndEngine()); }
 
 	/// @brief Gets a random real value between [mMin and mMax].
 	/// @tparam T Type of real value. (default float)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper inclusive bound.
 	/// @return Returns a random real value, between [mMin and mMax].
-	template<typename T = float> inline T getRndR(const T& mMin, const T& mMax) { assert(mMin <= mMax); return RndDistributionR<T>{mMin, mMax}(getRndEngine()); }
+	template<typename T = float> inline T getRndR(const T& mMin, const T& mMax) { SSVU_ASSERT(mMin <= mMax); return RndDistributionR<T>{mMin, mMax}(getRndEngine()); }
 
 	/// @brief Gets a random sign.
 	/// @tparam T Type of integer value. (default int)
@@ -68,7 +70,7 @@ namespace ssvu
 	/// @param mMax Upper bound.
 	template<typename T1, typename T2, typename T3> inline void clamp(T1& mValue, const T2& mMin, const T3& mMax) noexcept
 	{
-		assert(mMin <= mMax);
+		SSVU_ASSERT(mMin <= mMax);
 		if(mValue < mMin) mValue = mMin;
 		else if(mValue > mMax) mValue = mMax;
 	}
@@ -92,7 +94,7 @@ namespace ssvu
 	/// @return Returns mMax if mValue > mMax, mMin if mValue < mMin, mValue if mMin < mValue < mMax.
 	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> getClamped(const T1& mValue, const T2& mMin, const T3& mMax) noexcept
 	{
-		SSVU_CONSTEXPR_ASSERT(mMin <= mMax);
+		SSVU_ASSERT_CONSTEXPR(mMin <= mMax);
 		return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue);
 	}
 
@@ -163,7 +165,7 @@ namespace ssvu
 	/// @return Returns a 1D index for an "implicit 2D" array with `mCols` columns.
 	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> get1DIdxFrom2D(const T1& mX, const T2& mY, const T3& mCols) noexcept
 	{
-		SSVU_CONSTEXPR_ASSERT(mCols >= 0);
+		SSVU_ASSERT_CONSTEXPR(mCols >= 0);
 		return mX + mY * mCols;
 	}
 
@@ -178,7 +180,7 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4, typename T5>
 		inline constexpr Common<T1, T2, T3, T4, T5> get1DIdxFrom3D(const T1& mX, const T2& mY, const T3& mZ, const T4& mCols, const T5& mRows) noexcept
 	{
-		SSVU_CONSTEXPR_ASSERT(mCols >= 0 && mRows >= 0);
+		SSVU_ASSERT_CONSTEXPR(mCols >= 0 && mRows >= 0);
 		return mX + mY * mCols + mZ * mCols * mRows;
 	}
 
@@ -189,7 +191,7 @@ namespace ssvu
 	/// @return Returns a 2D index (under the form of an std::tuple) for a 2D array with `mCols` columns.
 	template<typename T1, typename T2> inline std::tuple<Common<T1, T2>, Common<T1, T2>> get2DIdxFrom1D(const T1& mIdx, const T2& mCols) noexcept
 	{
-		assert(mIdx > 0 && mCols != 0);
+		SSVU_ASSERT(mIdx > 0 && mCols != 0);
 		Common<T1, T2> y{mIdx / mCols};
 		return std::make_tuple(mIdx - y * mCols, y);
 	}
@@ -203,7 +205,7 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3> inline std::tuple<Common<T1, T2, T3>, Common<T1, T2, T3>, Common<T1, T2, T3>>
 		get3DIdxFrom1D(const T1& mIdx, const T2& mCols, const T3& mRows) noexcept
 	{
-		assert(mIdx > 0 && mRows != 0 && mCols != 0);
+		SSVU_ASSERT(mIdx > 0 && mRows != 0 && mCols != 0);
 		Common<T1, T2, T3> y{mIdx / mCols};
 		return std::make_tuple(y, y % mRows, mIdx / (mCols * mRows));
 	}
@@ -211,15 +213,15 @@ namespace ssvu
 	/// @brief Gets sign-indepedent modulo calculation.
 	/// @details The sign of the result is equal to mB's sign.
 	/// @code
-	/// assert(getSIMod(-2, 12) == 10);
-	/// assert(getSIMod(2, -12) == -10);
+	/// SSVU_ASSERT(getSIMod(-2, 12) == 10);
+	/// SSVU_ASSERT(getSIMod(2, -12) == -10);
 	/// @endcode
 	/// @param mA Left side of operation.
 	/// @param mB Right side of operation.
 	/// @return Returns the mathematically correct mA % mB.
 	template<typename T1, typename T2> inline Common<T1, T2> getSIMod(const T1& mA, const T2& mB)
 	{
-		assert(mB != 0);
+		SSVU_ASSERT(mB != 0);
 		if(mB < 0) return getSIMod(-mA, -mB);
 		auto result(mA % mB);
 		if(result < 0) result += mB;
@@ -228,7 +230,7 @@ namespace ssvu
 
 	/// @brief Gets a wrapped index value.
 	/// @code
-	/// assert(getWrapIdx(-2, 0, 12) == 9);
+	/// SSVU_ASSERT(getWrapIdx(-2, 0, 12) == 9);
 	/// @endcode
 	/// @param mVal Index value to wrap.
 	/// @param mLowerBound Lower bound of possible indices (inclusive).
@@ -236,23 +238,23 @@ namespace ssvu
 	/// @return Returns the wrapped index value.
 	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getWrapIdx(T1 mVal, const T2& mLowerBound, const T3& mUpperBound) noexcept
 	{
-		assert(mLowerBound < mUpperBound);
+		SSVU_ASSERT(mLowerBound < mUpperBound);
 		const auto& rangeSize(mUpperBound - mLowerBound);
-		assert(rangeSize != 0 && rangeSize + 1 != 0);
+		SSVU_ASSERT(rangeSize != 0 && rangeSize + 1 != 0);
 		if(mVal < mLowerBound) mVal += rangeSize * ((mLowerBound - mVal) / rangeSize + 1);
 		return mLowerBound + (mVal - mLowerBound) % rangeSize;
 	}
 
 	/// @brief Gets a wrapped index value. (Default inclusive lower bound: 0)
 	/// @code
-	/// assert(getWrapIdx(-2, 12) == 9);
+	/// SSVU_ASSERT(getWrapIdx(-2, 12) == 9);
 	/// @endcode
 	/// @param mVal Index value to wrap.
 	/// @param mUpperBound Upper bound of possible indices (exclusive).
 	/// @return Returns the wrapped index value.
 	template<typename T1, typename T2> inline constexpr Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept
 	{
-		SSVU_CONSTEXPR_ASSERT(mUpperBound != 0);
+		SSVU_ASSERT_CONSTEXPR(mUpperBound != 0);
 		return ((mVal % mUpperBound) + mUpperBound) % mUpperBound;
 	}
 

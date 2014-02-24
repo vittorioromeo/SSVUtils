@@ -5,10 +5,11 @@
 #ifndef SSVUTILS
 #define SSVUTILS
 
+#include "SSVUtils/Log/Log.hpp"
 #include "SSVUtils/Preprocessor/Preprocessor.hpp"
 #include "SSVUtils/Global/Common.hpp"
 #include "SSVUtils/Test/Test.hpp"
-#include "SSVUtils/Log/Log.hpp"
+#include "SSVUtils/Assert/Assert.hpp"
 #include "SSVUtils/Timeline/Timeline.hpp"
 #include "SSVUtils/Utils/Utils.hpp"
 #include "SSVUtils/String/String.hpp"
@@ -21,6 +22,8 @@
 #include "SSVUtils/PreAlloc/PreAlloc.hpp"
 #include "SSVUtils/Bimap/Bimap.hpp"
 #include "SSVUtils/CommandLine/CommandLine.hpp"
+
+#include "SSVUtils/Log/Log.inl"
 
 #ifndef SSVU_TEST_DISABLE
 	#include "SSVUtils/Test/Tests.hpp"

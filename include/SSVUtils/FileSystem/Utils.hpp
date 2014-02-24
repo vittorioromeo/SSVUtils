@@ -28,7 +28,7 @@ namespace ssvu
 		/// @return Returns a string containing the file's contents.
 		inline std::string getFileContents(const Path& mPath)
 		{
-			assert(mPath.exists());
+			SSVU_ASSERT(mPath.exists());
 
 			std::ifstream ifs{mPath, std::ios_base::binary};
 			return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};

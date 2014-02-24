@@ -35,7 +35,7 @@ namespace ssvu
 			template<typename... TArgs> inline void emplace(TArgs&&... mArgs)
 			{
 				const auto& pair(map1.emplace(std::forward<TArgs>(mArgs)...));
-				assert(pair.second == true);
+				SSVU_ASSERT(pair.second == true);
 
 				const auto& itr(pair.first);
 				map2[itr->second] = &(itr->first);
@@ -46,18 +46,18 @@ namespace ssvu
 			inline void insert(const std::pair<T1, T2>& mPair) { this->emplace(mPair); }
 
 			/// @brief Replaces a key/value pair with another.
-			inline void replace(const T1& mSrc, const T2& mDest) { assert(this->has(mSrc)); this->erase(mSrc); this->emplace(mSrc, mDest); }
+			inline void replace(const T1& mSrc, const T2& mDest) { SSVU_ASSERT(this->has(mSrc)); this->erase(mSrc); this->emplace(mSrc, mDest); }
 
 			/// @brief Replaces a key/value pair with another.
-			inline void replace(const T2& mSrc, const T1& mDest) { assert(this->has(mSrc)); this->erase(mSrc); this->emplace(mSrc, mDest); }
+			inline void replace(const T2& mSrc, const T1& mDest) { SSVU_ASSERT(this->has(mSrc)); this->erase(mSrc); this->emplace(mSrc, mDest); }
 
 			/// @brief Erase a pair from the Bimap.
 			/// @param mKey Key of the pair to erase.
-			inline void erase(const T1& mKey) { assert(this->has(mKey)); map2.erase(map1.at(mKey)); map1.erase(mKey); }
+			inline void erase(const T1& mKey) { SSVU_ASSERT(this->has(mKey)); map2.erase(map1.at(mKey)); map1.erase(mKey); }
 
 			/// @brief Erase a pair from the Bimap.
 			/// @param mKey Key of the pair to erase.
-			inline void erase(const T2& mKey) { assert(this->has(mKey)); map1.erase(*map2.at(mKey)); map2.erase(mKey); }
+			inline void erase(const T2& mKey) { SSVU_ASSERT(this->has(mKey)); map1.erase(*map2.at(mKey)); map2.erase(mKey); }
 
 			/// @brief Returns a value from the Bimap.
 			/// @param mKey Key of the value to return.
@@ -69,11 +69,11 @@ namespace ssvu
 
 			/// @brief Returns a value from the Bimap. (unsafe)
 			/// @param mKey Key of the value to return.
-			inline const T2& operator[](const T1& mKey) noexcept { assert(this->has(mKey)); return map1[mKey]; }
+			inline const T2& operator[](const T1& mKey) noexcept { SSVU_ASSERT(this->has(mKey)); return map1[mKey]; }
 
 			/// @brief Returns a value from the Bimap. (unsafe)
 			/// @param mKey Key of the value to return.
-			inline const T1& operator[](const T2& mKey) noexcept { assert(this->has(mKey)); return *map2[mKey]; }
+			inline const T1& operator[](const T2& mKey) noexcept { SSVU_ASSERT(this->has(mKey)); return *map2[mKey]; }
 
 			/// @brief Looks for a value in the Bimap.
 			/// @param mValue Key of the value to find.

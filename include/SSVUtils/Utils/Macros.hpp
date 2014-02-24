@@ -10,10 +10,6 @@
 
 namespace ssvu
 {
-	// TODO: investigate assert wrapping
-	//#define SSVU_ASSERT(...) assert((__VA_ARGS__))
-	//#define SSVU_ASSERT_STATIC(...) static_assert((__VA_ARGS__))
-
 	#define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVPP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))
 
 	/// @macro Define a template class with name `mName` that checks if a certain type T has
@@ -73,14 +69,6 @@ namespace ssvu
 	#define SSVU_DEFINE_MEMFN_CALLER(mName, mMemberName, mSignature) \
 		SSVU_DEFINE_MEMFN_DETECTOR(SSVPP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName); \
 		SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName, ( SSVPP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__)<T, mSignature>() ))
-
-	#ifdef __clang__
-		/// @macro When compiling with clang, using `assert` in constexpr functions seems to be allowed.
-		#define SSVU_CONSTEXPR_ASSERT(mTest) assert(mTest)
-	#else
-		/// @macro When compiling with g++, using `assert` in constexpr functions causes an error.
-		#define SSVU_CONSTEXPR_ASSERT(mTest)
-	#endif
 }
 
 #endif

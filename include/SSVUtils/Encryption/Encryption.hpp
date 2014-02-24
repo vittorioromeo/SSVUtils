@@ -23,7 +23,7 @@ namespace ssvu
 		/// string e{encrypt<Type::Base64>(s)};
 		/// strign d{decrypt<Type::Base64>(s)};
 		///
-		/// assert(s == d);
+		/// SSVU_ASSERT(s == d);
 		/// @endcode
 		/// @tparam T Type of encryption to use. (example ssvu::Encryption::Type::MD5)
 		/// @param mStr String to encrypt.
@@ -40,7 +40,7 @@ namespace ssvu
 		/// string e{encrypt<Type::Base64>(s)};
 		/// strign d{decrypt<Type::Base64>(s)};
 		///
-		/// assert(s == d);
+		/// SSVU_ASSERT(s == d);
 		/// @endcode
 		/// @tparam T Type of encryption to use. (example ssvu::Encryption::Type::MD5)
 		/// @param mStr String to decrypt.

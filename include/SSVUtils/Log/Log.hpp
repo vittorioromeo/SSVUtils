@@ -15,7 +15,6 @@
 #include <unordered_map>
 #include "SSVUtils/String/Utils.hpp"
 #include "SSVUtils/Utils/Console.hpp"
-#include "SSVUtils/String/Stringifier.hpp"
 
 namespace ssvu
 {
@@ -23,14 +22,7 @@ namespace ssvu
 
 	namespace Internal
 	{
-		inline const std::string& getUniqueColor(const std::string& mStr)
-		{
-			static int lastColorIdx{2};
-			static std::unordered_map<std::string, Console::Color> map;
-
-			if(map.count(mStr) == 0) map[mStr] = Console::Color(getWrapIdx(lastColorIdx++, 2, 7));
-			return Console::setColorFG(map[mStr]);
-		}
+		const std::string& getUniqueColor(const std::string&);
 	}
 
 	/// @brief Returns a reference to the log stream.
@@ -128,15 +120,6 @@ namespace ssvu
 	/// @brief Saves all the log entries to a file.
 	/// @param mPath File path (file will be created if it doesn't exist).
 	void saveLogToFile(const FileSystem::Path& mPath);
-}
-
-#include "SSVUtils/FileSystem/FileSystem.hpp"
-
-inline void ssvu::saveLogToFile(const ssvufs::Path& mPath)
-{
-	#ifndef SSVU_LOG_DISABLE
-		std::ofstream o; o.open(mPath); o << ssvu::getLogStream().str(); o.flush(); o.close();
-	#endif
 }
 
 #endif

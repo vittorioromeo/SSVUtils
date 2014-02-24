@@ -44,9 +44,9 @@ namespace ssvu
 			/// delegate += []{ return 20; };
 			/// auto result{delegate()};
 			///
-			/// assert(result[0] == 0);
-			/// assert(result[1] == 10);
-			/// assert(result[2] == 20);
+			/// SSVU_ASSERT(result[0] == 0);
+			/// SSVU_ASSERT(result[1] == 10);
+			/// SSVU_ASSERT(result[2] == 20);
 			/// @endcode
 			/// @param mArgs Arguments passed to every function
 			/// @return void or std::vector containing return values from the functions

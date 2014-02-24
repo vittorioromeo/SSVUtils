@@ -34,7 +34,7 @@ namespace ssvu
 				/// using namespace ssvu::TemplateSystem;
 				/// Dictionary dict{{"key1", "value1"}, {"key2", "value2"}};
 				/// string toExpand{".{{key1}}.{{key2}}."};
-				/// assert(dict.getExpanded(toExpand) == ".value1.value2.");
+				/// SSVU_ASSERT(dict.getExpanded(toExpand) == ".value1.value2.");
 				/// @endcode
 				Dictionary(const std::initializer_list<std::pair<std::string, std::string>>& mPairs) { for(const auto& p : mPairs) replacements.insert(p); }
 
@@ -46,7 +46,7 @@ namespace ssvu
 				/// using namespace ssvu::TemplateSystem;
 				/// Dictionary dict{{"key1", "value1"}, {"key2", "value2"}};
 				/// string toExpand{".{{key1}}.{{key2}}."};
-				/// assert(dict.getExpanded(toExpand) == ".value1.value2.");
+				/// SSVU_ASSERT(dict.getExpanded(toExpand) == ".value1.value2.");
 				/// @endcode
 				/// @param mStr Template to use (not a path!).
 				/// @return Returns a string containing the expanded dictionary template.
@@ -86,7 +86,7 @@ namespace ssvu
 				/// dict["key1"] = "value1";
 				/// dict["key2"] = "value2";
 				/// string toExpand{".{{key1}}.{{key2}}."};
-				/// assert(dict.getExpanded(toExpand) == ".value1.value2.");
+				/// SSVU_ASSERT(dict.getExpanded(toExpand) == ".value1.value2.");
 				/// @endcode
 				/// @param mStr Key of the "key -> string" replacement.
 				/// @return Returns a reference to the string used in the "key -> string" replacement. Set it to the value you desire.
@@ -103,7 +103,7 @@ namespace ssvu
 				/// dict += {"section", subdict2};
 				///
 				/// string toExpand{"{{#section}}.{{key}}.{{/section}}"};
-				/// assert(dict.getExpanded(toExpand) == ".value1..value2.");
+				/// SSVU_ASSERT(dict.getExpanded(toExpand) == ".value1..value2.");
 				/// @endcode
 				/// @param mPair Pair containing the key of the section name and the subdictionary to use in the replacement.
 				inline void operator+=(const std::pair<std::string, Dictionary>& mPair) { sectionDictionaries[mPair.first].emplace_back(mPair.second); }

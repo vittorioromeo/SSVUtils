@@ -7,6 +7,7 @@
 
 #include "SSVUtils/String/Enums.hpp"
 #include "SSVUtils/String/Utils.hpp"
+#include "SSVUtils/String/Trim.hpp"
 #include "SSVUtils/String/Stringifier.hpp"
 #include "SSVUtils/String/Split.hpp"
 

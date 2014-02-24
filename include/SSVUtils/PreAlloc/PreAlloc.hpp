@@ -29,7 +29,7 @@ namespace ssvu
 			struct MemRange // MemRange is a range of memory [begin, end)
 			{
 				MemUnitPtr begin, end;
-				inline MemRange(MemUnitPtr mStart, MemUnitPtr mEnd) noexcept : begin{mStart}, end{mEnd} { assert(mStart <= mEnd); }
+				inline MemRange(MemUnitPtr mStart, MemUnitPtr mEnd) noexcept : begin{mStart}, end{mEnd} { SSVU_ASSERT(mStart <= mEnd); }
 				inline MemSize getSize() const noexcept { return sizeof(MemUnit) * (end - begin); }
 			};
 
@@ -40,7 +40,7 @@ namespace ssvu
 					MemRange range;
 
 				public:
-					inline MemBuffer(MemSize mSize) : buffer{new MemUnit[mSize]}, range{&buffer[0], &buffer[mSize]} { assert(mSize > 0); }
+					inline MemBuffer(MemSize mSize) : buffer{new MemUnit[mSize]}, range{&buffer[0], &buffer[mSize]} { SSVU_ASSERT(mSize > 0); }
 					inline MemUnitPtr getBegin() const noexcept			{ return range.begin; }
 					inline MemUnitPtr getEnd() const noexcept			{ return range.end; }
 					inline const MemRange& getRange() const noexcept	{ return range; }
@@ -171,10 +171,10 @@ namespace ssvu
 				std::stack<MemRange, std::vector<MemRange>> available;
 
 			public:
-				PreAllocChunk(MemSize mChunkSize, std::size_t mChunks) : chunkSize{mChunkSize}, buffer{chunkSize * mChunks} { assert(mChunks > 0); createChunks(available, mChunkSize, mChunks, buffer); }
+				PreAllocChunk(MemSize mChunkSize, std::size_t mChunks) : chunkSize{mChunkSize}, buffer{chunkSize * mChunks} { SSVU_ASSERT(mChunks > 0); createChunks(available, mChunkSize, mChunks, buffer); }
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
-					assert(sizeof(T) <= chunkSize);
+					SSVU_ASSERT(sizeof(T) <= chunkSize);
 					auto toUse(available.top().begin); available.pop();
 					return new (toUse) T{std::forward<TArgs>(mArgs)...};
 				}
@@ -189,7 +189,7 @@ namespace ssvu
 				std::stack<MemRange, std::vector<MemRange>> available;
 
 			public:
-				PreAllocStatic(std::size_t mChunks) : buffer{sizeof(T) * mChunks} { assert(mChunks > 0); createChunks(available, sizeof(T), mChunks, buffer); }
+				PreAllocStatic(std::size_t mChunks) : buffer{sizeof(T) * mChunks} { SSVU_ASSERT(mChunks > 0); createChunks(available, sizeof(T), mChunks, buffer); }
 				template<typename TType = T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					auto toUse(available.top().begin); available.pop();

@@ -614,7 +614,7 @@ SSVU_TEST(StringifierTests)
 	SSVUT_STRINGIFY_TEST("abc");
 	SSVUT_STRINGIFY_TEST(std::string{"abc"});
 	ssvu::stringify<true>(trash, testArray); ssvu::stringify<false>(trash, testArray);
-	SSVUT_STRINGIFY_TEST(__R(std::array<int, 3>{1, 2, 3}));
+	SSVUT_STRINGIFY_TEST(__R(std::array<int, 3>{{1, 2, 3}}));
 	SSVUT_STRINGIFY_TEST(__R(std::vector<int>{1, 2, 3}));
 	SSVUT_STRINGIFY_TEST(__R(std::list<int>{1, 2, 3}));
 	SSVUT_STRINGIFY_TEST(__R(std::forward_list<int>{1, 2, 3}));

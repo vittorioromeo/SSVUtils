@@ -58,7 +58,7 @@ namespace ssvu
 
 			/// @brief Divides the internal value by another value.
 			/// @param mValue Value to divide with.
-			inline T operator/=(const T& mValue) { assert(mValue != 0); set(get() / mValue); return get(); }
+			inline T operator/=(const T& mValue) { SSVU_ASSERT(mValue != 0); set(get() / mValue); return get(); }
 
 			/// @brief Shortcut operator for set.
 			/// @param mValue Value to use.
