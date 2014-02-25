@@ -10,7 +10,6 @@
 #include <vector>
 #include <algorithm>
 #include "SSVUtils/Global/Common.hpp"
-
 #include "SSVUtils/Utils/Iterator.hpp"
 
 namespace ssvu
