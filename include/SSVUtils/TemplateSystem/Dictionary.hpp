@@ -9,7 +9,7 @@
 #include <vector>
 #include <map>
 #include "SSVUtils/TemplateSystem/Internal/Symbols.hpp"
-#include "SSVUtils/String/Utils.hpp"
+#include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu
 {

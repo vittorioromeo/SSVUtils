@@ -10,10 +10,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
-#include "SSVUtils/Global/Common.hpp"
-#include "SSVUtils/Log/Log.hpp"
-#include "SSVUtils/Utils/Macros.hpp"
-#include "SSVUtils/Preprocessor/Preprocessor.hpp"
+#include "SSVUtils/Core/Core.hpp"
 
 #define SSVUT_EXPECT(mExpr) \
 	while(true) \

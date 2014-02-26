@@ -7,7 +7,7 @@
 
 #include <string>
 #include <sstream>
-#include "SSVUtils/Global/Common.hpp"
+#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Encryption/Encryption.hpp"
 
 namespace ssvu

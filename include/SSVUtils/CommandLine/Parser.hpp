@@ -8,8 +8,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
-#include "SSVUtils/Utils/Containers.hpp"
-#include "SSVUtils/String/Utils.hpp"
+#include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu
 {

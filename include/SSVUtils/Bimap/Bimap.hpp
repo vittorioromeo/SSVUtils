@@ -5,8 +5,8 @@
 #ifndef SSVU_BIMAP
 #define SSVU_BIMAP
 
-#include <cassert>
 #include <map>
+#include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu
 {

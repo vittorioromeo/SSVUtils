@@ -5,7 +5,7 @@
 #ifndef SSVU_TIMELINE_WAIT
 #define SSVU_TIMELINE_WAIT
 
-#include <cassert>
+#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Timeline/Command.hpp"
 #include "SSVUtils/Timeline/Timeline.hpp"
 
