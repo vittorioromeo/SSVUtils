@@ -12,7 +12,7 @@
 #include "SSVUtils/Test/Test.hpp"
 #include "SSVUtils/Core/Core.hpp"
 
-SSVU_TEST(UtilsMathTests)
+SSVUT_TEST(UtilsMathTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -72,9 +72,8 @@ SSVU_TEST(UtilsMathTests)
 	SSVUT_EXPECT(getWrapIdx(-3, 3) == 0);
 	SSVUT_EXPECT(getWrapIdx(-4, 3) == 2);
 }
-SSVU_TEST_END();
 
-SSVU_TEST(BimapTests)
+SSVUT_TEST(BimapTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -121,9 +120,8 @@ SSVU_TEST(BimapTests)
 		SSVUT_EXPECT(!bimap.has("hi"));
 	}
 }
-SSVU_TEST_END();
 
-SSVU_TEST(DelegateTests)
+SSVUT_TEST(DelegateTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -148,9 +146,8 @@ SSVU_TEST(DelegateTests)
 	del3 += [&del1]{ del1(); };
 	del3(); SSVUT_EXPECT(testState == true);
 }
-SSVU_TEST_END();
 
-SSVU_TEST(PathTests)
+SSVUT_TEST(PathTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -190,9 +187,8 @@ SSVU_TEST(PathTests)
 	SSVUT_EXPECT(path.getFileName() == "test4.png.bak");
 	SSVUT_EXPECT(path.getFileNameNoExtensions() == "test4");
 }
-SSVU_TEST_END();
 
-SSVU_TEST(UtilsContainersTests)
+SSVUT_TEST(UtilsContainersTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -212,9 +208,8 @@ SSVU_TEST(UtilsContainersTests)
 	std::map<string, int> m{{"abc", 0}, {"bcd", 1}, {"def", 2}, {"efg", 3}};
 	SSVUT_EXPECT(ssvu::getKeys(m)[2] == "def");
 }
-SSVU_TEST_END();
 
-SSVU_TEST(StringUtilsTests)
+SSVUT_TEST(StringUtilsTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -281,9 +276,8 @@ SSVU_TEST(StringUtilsTests)
 	SSVUT_EXPECT(isPunctuation(','));
 	SSVUT_EXPECT(isPunctuation('!'));
 }
-SSVU_TEST_END();
 
-SSVU_TEST(StringSplitTests)
+SSVUT_TEST(StringSplitTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -367,9 +361,8 @@ SSVU_TEST(StringSplitTests)
 	SSVUT_EXPECT(spv3[9] == "##");
 	SSVUT_EXPECT(spv3[10] == "efg");
 }
-SSVU_TEST_END();
 
-SSVU_TEST(EncryptionTests)
+SSVUT_TEST(EncryptionTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -381,9 +374,8 @@ SSVU_TEST(EncryptionTests)
 	SSVUT_EXPECT(encrypt<Type::Base64>("testhash") == "dGVzdGhhc2g=");
 	SSVUT_EXPECT(decrypt<Type::Base64>("dGVzdGhhc2g=") == "testhash");
 }
-SSVU_TEST_END();
 
-SSVU_TEST(ObfuscatedValueTests)
+SSVUT_TEST(ObfuscatedValueTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -396,9 +388,8 @@ SSVU_TEST(ObfuscatedValueTests)
 	SSVUT_EXPECT(v.get() == 15.f);
 	SSVUT_EXPECT(v == 15.f);
 }
-SSVU_TEST_END();
 
-SSVU_TEST(PreprocessorTests)
+SSVUT_TEST(PreprocessorTests)
 {
 	SSVUT_EXPECT(SSVPP_ARGCOUNT() == 0);
 	SSVUT_EXPECT(SSVPP_ARGCOUNT(1) == 1);
@@ -565,7 +556,6 @@ SSVU_TEST(PreprocessorTests)
 		#undef SSVU_TEST_GEN_LMBD
 	}
 }
-SSVU_TEST_END();
 
 // NOTE: MEMFN_DETECTORs (and other macros) must be defined outside lambdas/function bodies
 SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker1, hello);
@@ -573,7 +563,7 @@ SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker2, hello2);
 SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker3, nohello);
 SSVU_DEFINE_MEMFN_CALLER(SsvuTestMacroTestCallGoodbye1, goodbye1, int());
 SSVU_DEFINE_MEMFN_CALLER(SsvuTestMacroTestCallGoodbye2, goodbye2, int());
-SSVU_TEST(MacrosTests)
+SSVUT_TEST(MacrosTests)
 {
 	SSVU_DEFINE_DUMMY_STRUCT(blah, test, abc);
 
@@ -595,9 +585,8 @@ SSVU_TEST(MacrosTests)
 	SSVUT_EXPECT(SsvuTestMacroTestCallGoodbye1(mts) == 2);
 	SSVUT_EXPECT(SsvuTestMacroTestCallGoodbye2(mts) == 4);
 }
-SSVU_TEST_END();
 
-SSVU_TEST(StringifierTests)
+SSVUT_TEST(StringifierTests)
 {
 	auto nothing([]{ });
 	int testArray[]{1, 2, 3};
@@ -627,6 +616,5 @@ SSVU_TEST(StringifierTests)
 	SSVUT_STRINGIFY_TEST(__R(std::tuple<int, int, int>{1, 2, 3}));
 	SSVUT_STRINGIFY_TEST(__R(std::pair<int, int>{2, 3}));
 }
-SSVU_TEST_END();
 
 #endif
