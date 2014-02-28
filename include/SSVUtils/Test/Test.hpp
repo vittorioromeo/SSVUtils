@@ -8,46 +8,48 @@
 
 #include <map>
 #include <string>
-#include <vector>
 #include <stdexcept>
 #include "SSVUtils/Core/Core.hpp"
 
-#define SSVUT_EXPECT(mExpr) \
-	while(true) \
+#define SSVUT_IMPL_GET_NAME_TYPE(mName) 		SSVPP_CAT(SSVUTTestUnique, mName, __LINE__)
+#define SSVUT_IMPL_GET_NAME_RUNNER(mName)		SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), runner)
+#define SSVUT_IMPL_GET_NAME_INSTANCE(mName) 	SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), instance)
+#define SSVUT_IMPL_GET_KEY(mName)				SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
+
+#define SSVUT_IMPL_GENERATE_STRUCT(mName) \
+	struct SSVUT_IMPL_GET_NAME_TYPE(mName) : public ::ssvu::Test::Internal::TestBase \
 	{ \
-		try { if(!ssvu::Test::Internal::suppress(mExpr)) throw ssvu::Test::Internal::Fail{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr}; } \
-		catch(const ssvu::Test::Internal::Fail&) { throw; } \
-		catch(const std::exception& e) { throw ssvu::Test::Internal::Unexpect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr, ssvu::Test::Internal::getWithMsg(e.what())}; } \
-		catch(...) { throw ssvu::Test::Internal::Unexpect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr, "of unknown type"}; } \
-		break; \
-	}
+		inline SSVUT_IMPL_GET_NAME_TYPE(mName) () : ::ssvu::Test::Internal::TestBase{SSVPP_TOSTR(mName), SSVPP_TOSTR(__LINE__), SSVPP_TOSTR(__FILE__)} { } \
+		virtual void run() const override; \
+	}; \
+	static SSVUT_IMPL_GET_NAME_TYPE(mName) SSVUT_IMPL_GET_NAME_INSTANCE(mName);
 
-#define SSVUT_EXPECT_THROWS(mExpr) \
-	while(true) \
+#define SSVUT_IMPL_GENERATE_RUNNER(mName) \
+	static ::ssvu::Test::Internal::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName) {[] \
 	{ \
-		try { ssvu::Test::Internal::suppress(mExpr); } catch(...) { break; } \
-		throw ssvu::Test::Internal::Expect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr}; \
-	}
+		if(::ssvu::Test::Internal::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) return; \
+		::ssvu::Test::Internal::setTestExecuted(SSVUT_IMPL_GET_KEY(mName)); \
+		ssvu::getEmplaceUptr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Internal::getTestStorage(), SSVUT_IMPL_GET_NAME_INSTANCE(mName)); \
+	}};
 
-#define SSVUT_EXPECT_THROWS_AS(mExpr, mException) \
-	while(true) \
-	{ \
-		try { ssvu::Test::Internal::suppress(mExpr); } catch(mException&) { break; } catch(...) { } \
-		throw ssvu::Test::Internal::Expect{ssvu::Test::Internal::Location{__FILE__, __LINE__}, #mExpr, ssvu::Test::Internal::getOfType(#mException)}; \
-	}
+#ifndef SSVUT_DISABLE
+	#define SSVUT_TEST(mName) \
+		SSVUT_IMPL_GENERATE_STRUCT(mName) \
+		SSVUT_IMPL_GENERATE_RUNNER(mName) \
+		inline void SSVUT_IMPL_GET_NAME_TYPE(mName)::run() const
 
-#ifndef SSVU_TEST_DISABLE
-	#define SSVU_TEST(name) static ssvu::Test::Internal::Runner SSVPP_CAT(Unique_, name, __LINE__) { []{ \
-		if(ssvu::Test::Internal::isRunnerExecuted(SSVPP_TOSTR(SSVPP_CAT(Unique_, name, __LINE__)))) return; \
-		ssvu::Test::Internal::setRunnerExecuted(SSVPP_TOSTR(SSVPP_CAT(Unique_, name, __LINE__))); \
-		ssvu::Test::Internal::getTestGroups().push_back({ {SSVPP_TOSTR(name), []
+	#define SSVUT_EXPECT(mExpr) \
+		while(true) \
+		{ \
+			if(!(mExpr)) throw ::ssvu::Test::Internal::Fail{this, SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), mExpr)}; \
+			break; \
+		}
 
-	#define SSVU_TEST_END() }});}}
-	#define SSVU_TEST_RUN_ALL() ssvu::Test::Internal::runAllTests()
+	#define SSVUT_RUN() ::ssvu::Test::Internal::runAllTests()
 #else
-	#define SSVU_TEST(name) struct SSVPP_CAT(Unique_,__LINE__) { void f() __attribute__ ((unused)) {
-	#define SSVU_TEST_END() }} __attribute__ ((unused))
-	#define SSVU_TEST_RUN_ALL()
+	#define SSVUT_TEST(mName) inline void SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), unused) ()
+	#define SSVUT_EXPECT(...)
+	#define SSVUT_RUN() while(false){ }
 #endif
 
 namespace ssvu
@@ -56,90 +58,78 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			struct Test { const std::string name; const Action action; };
-			struct Location
-			{
-				const std::string file;
-				const int line;
-				Location(std::string mFile, int mLine) : file{std::move(mFile)}, line{mLine} { }
-			};
-			struct Comment
-			{
-				const std::string text;
-				Comment(std::string mText) : text{std::move(mText)} { }
-				inline operator bool() const { return !text.empty(); }
-			};
-
-			struct Msg : std::runtime_error
-			{
-				const std::string type;
-				const Location location;
-				const Comment comment;
-				Msg(std::string mType, Location mLocation, std::string mExpr, std::string mNote = "")
-					: std::runtime_error{std::move(mExpr)}, type{std::move(mType)}, location{std::move(mLocation)}, comment{std::move(mNote)} { }
-			};
-			struct Fail : Msg		{ Fail(Location mLocation, std::string mExpr) :									Msg{"fail",							std::move(mLocation), std::move(mExpr)							} { } };
-			struct Expect : Msg		{ Expect(Location mLocation, std::string mExpr, std::string mException = "") :	Msg{"fail: no wanted exception",	std::move(mLocation), std::move(mExpr), std::move(mException)	} { } };
-			struct Unexpect : Msg	{ Unexpect(Location mLocation, std::string mExpr, std::string mNote) :			Msg{"unwanted exception:",			std::move(mLocation), std::move(mExpr), std::move(mNote)		} { } };
-
-			inline bool suppress(bool mValue) { return mValue; }
-
-			inline std::string getWithMsg(std::string mStr)									{ return "with msg \"" + std::move(mStr) + "\""; }
-			inline std::string getOfType(std::string mStr)									{ return "of type " + std::move(mStr); }
-			inline std::ostream& operator<<(std::ostream& mOs, const Comment& mComment)		{ return mOs << (mComment ? " " + mComment.text : ""); }
-			inline std::ostream& operator<<(std::ostream& mOs, const Location& mLocation)	{ return mOs << mLocation.file << ":" << mLocation.line; }
-
-			inline void report(const Msg& mMsg, const std::string& mTest) { ssvu::lo("ssvu::Test") << mMsg.location << "\n" << mMsg.type << mMsg.comment << ": " << mTest << ": " << mMsg.what() << "\n" << std::endl; }
-			inline void report(const std::string& mError, const std::string& mTest) { ssvu::lo("ssvu::Test") << mError << "\n" << ": " << mTest << ": \n" << std::endl; }
-
-			inline int run(const std::vector<Test>& mTests)
-			{
-				int fails{0};
-
-				for(auto& t : mTests)
+			#ifndef SSVUT_DISABLE
+				struct Runner
 				{
-					try { t.action(); }
-					catch(const Msg& mMsg) { ++fails; report(mMsg, t.name); }
-					catch(...) { ++fails; report("unexpected exception", t.name); }
-				}
+					template<typename T> inline Runner(const T& mAction) { mAction(); }
+				};
 
-				if(fails > 0) ssvu::lo("ssvu::Test") << "[" << fails << "/" << mTests.size() << "] " << "tests failed\n\n";
-				return fails;
-			}
+				class TestBase
+				{
+					private:
+						const std::string name, line, file;
 
-			inline std::map<std::string, bool>& getRunnerMap() noexcept			{ static std::map<std::string, bool> result; return result; }
-			inline bool isRunnerExecuted(const std::string& mKey) noexcept		{ return getRunnerMap()[mKey]; }
-			inline void setRunnerExecuted(const std::string& mKey) noexcept		{ getRunnerMap()[mKey] = true; }
+					public:
+						inline TestBase(std::string mName, std::string mLine, std::string mFile) : name{std::move(mName)}, line{std::move(mLine)}, file{std::move(mFile)} { }
+						inline virtual ~TestBase() { }
+						inline virtual void run() const { }
 
-			inline std::vector<std::vector<Test>>& getTestGroups() { static std::vector<std::vector<Test>> testGroups; return testGroups; }
-			struct Runner
-			{
-				#ifndef SSVU_TEST_DISABLE
-					template<typename T> Runner(const T& mAction) { mAction(); }
-				#endif
-			};
+						inline const std::string& getName() const 	{ return name; }
+						inline const std::string& getLine() const 	{ return line; }
+						inline const std::string& getFile() const 	{ return file; }
+				};
 
-			inline void runAllTests()
-			{
-				#ifndef SSVU_TEST_DISABLE
-					static bool done{false};
+				struct Fail : std::exception
+				{
+					const TestBase* test;
+					const std::string expr;
+					inline Fail(const TestBase* mTest, std::string mExpr) : test{mTest}, expr{std::move(mExpr)} { }
+				};
+
+				using TestStorage = std::vector<ssvu::Uptr<TestBase>>;
+				using TestExecMap = std::map<std::string, bool>;
+
+				inline TestStorage& getTestStorage() noexcept 	{ static TestStorage result; return result; }
+				inline TestExecMap& getTestExecMap() noexcept	{ static TestExecMap result; return result; }
+
+				inline bool wasTestExecuted(const std::string& mKey) noexcept	{ return getTestExecMap()[mKey]; }
+				inline void setTestExecuted(const std::string& mKey) noexcept	{ getTestExecMap()[mKey] = true; }
+
+				inline void runAllTests()
+				{
+					static bool	done{false};
 					if(done) return;
+
 					done = true;
 
-					bool fail{false};
+					bool failure{false};
 
-					for(auto& tg : Internal::getTestGroups())
-						if(Internal::run(tg) > 0)
+					for(const auto& t : ::ssvu::Test::Internal::getTestStorage())
+					{
+						try
 						{
-							fail = true;
-							ssvu::lo("########################################################################################################\n\n");
+							t->run();
 						}
+						catch(::ssvu::Test::Internal::Fail& mFail)
+						{
+							failure = true;
 
-					if(!fail) ssvu::lo("ssvu::Test") << "All tests passed!\n";
+							auto& test(*mFail.test);
+
+							ssvu::lo("Test") << "Test failure\n\n"
+								<< "Test:\t<"	<< test.getName() << ">\n"
+								<< "Line:\t<" 	<< test.getLine() << ">\n"
+								<< "File:\t<" 	<< test.getFile() << ">\n\n"
+								<< "Expression:\n" << mFail.expr << "\n"
+								<< "_________________________________________\n\n";
+						}
+					}
+
+					if(!failure) ssvu::lo("Test") << "All tests passed!\n";
 
 					ssvu::lo().flush();
-				#endif
-			}
+				}
+			#endif
 		}
 	}
 }
