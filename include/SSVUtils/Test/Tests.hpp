@@ -75,50 +75,103 @@ SSVUT_TEST(UtilsMathTests)
 
 SSVUT_TEST(BimapTests)
 {
-	using namespace std;
-	using namespace ssvu;
+	ssvu::Bimap<int, std::string> sb;
 
-	{
-		Bimap<string, int> bimap;
-		bimap.emplace("hi", 10);
-		SSVUT_EXPECT(bimap[10] == "hi");
-		SSVUT_EXPECT(bimap["hi"] == 10);
-		SSVUT_EXPECT(bimap.at(10) == "hi");
-		SSVUT_EXPECT(bimap.at("hi") == 10);
+	SSVUT_EXPECT(sb.empty());
+	SSVUT_EXPECT(!sb.has(10));
+	SSVUT_EXPECT(!sb.has("banana"));
+	SSVUT_EXPECT(sb.count(10) == 0);
+	SSVUT_EXPECT(sb.count("banana") == 0);
 
-		bimap.replace("hi", 1000);
-		SSVUT_EXPECT(!bimap.has(10));
-		SSVUT_EXPECT(bimap.has(1000));
-		SSVUT_EXPECT(bimap.has("hi"));
-		SSVUT_EXPECT(bimap["hi"] == 1000);
-		SSVUT_EXPECT(bimap[1000] == "hi");
-		SSVUT_EXPECT(bimap["hi"] != 10);
+	sb.emplace(10, "banana");
 
-		bimap.erase(1000);
-		SSVUT_EXPECT(!bimap.has(1000));
-		SSVUT_EXPECT(!bimap.has("hi"));
-	}
+	SSVUT_EXPECT(!sb.empty());
+	SSVUT_EXPECT(sb.size() == 1);
+	SSVUT_EXPECT(sb.has(10));
+	SSVUT_EXPECT(sb.has("banana"));
+	SSVUT_EXPECT(sb.count(10) == 1);
+	SSVUT_EXPECT(sb.count("banana") == 1);
+	SSVUT_EXPECT(sb.at(10) == "banana");
+	SSVUT_EXPECT(sb[10] == "banana");
+	SSVUT_EXPECT(sb.at("banana") == 10);
+	SSVUT_EXPECT(sb["banana"] == 10);
 
-	{
-		Bimap<string, int, std::unordered_map> bimap;
-		bimap.emplace("hi", 10);
-		SSVUT_EXPECT(bimap[10] == "hi");
-		SSVUT_EXPECT(bimap["hi"] == 10);
-		SSVUT_EXPECT(bimap.at(10) == "hi");
-		SSVUT_EXPECT(bimap.at("hi") == 10);
+	sb["banana"] = 25;
 
-		bimap.replace("hi", 1000);
-		SSVUT_EXPECT(!bimap.has(10));
-		SSVUT_EXPECT(bimap.has(1000));
-		SSVUT_EXPECT(bimap.has("hi"));
-		SSVUT_EXPECT(bimap["hi"] == 1000);
-		SSVUT_EXPECT(bimap[1000] == "hi");
-		SSVUT_EXPECT(bimap["hi"] != 10);
+	SSVUT_EXPECT(!sb.empty());
+	SSVUT_EXPECT(sb.size() == 1);
+	SSVUT_EXPECT(!sb.has(10));
+	SSVUT_EXPECT(sb.has(25));
+	SSVUT_EXPECT(sb.has("banana"));
+	SSVUT_EXPECT(sb.count(10) == 0);
+	SSVUT_EXPECT(sb.count(25) == 1);
+	SSVUT_EXPECT(sb.count("banana") == 1);
+	SSVUT_EXPECT(sb.at(25) == "banana");
+	SSVUT_EXPECT(sb[25] == "banana");
+	SSVUT_EXPECT(sb.at("banana") == 25);
+	SSVUT_EXPECT(sb["banana"] == 25);
 
-		bimap.erase(1000);
-		SSVUT_EXPECT(!bimap.has(1000));
-		SSVUT_EXPECT(!bimap.has("hi"));
-	}
+	sb["banana"] = 15;
+	sb[15] = "melon";
+	sb.emplace(10, "cucumber");
+
+	SSVUT_EXPECT(!sb.empty());
+	SSVUT_EXPECT(sb.size() == 2);
+	SSVUT_EXPECT(sb.has(10));
+	SSVUT_EXPECT(sb.has(15));
+	SSVUT_EXPECT(!sb.has(25));
+	SSVUT_EXPECT(sb.has("melon"));
+	SSVUT_EXPECT(sb.has("cucumber"));
+	SSVUT_EXPECT(!sb.has("banana"));
+	SSVUT_EXPECT(sb.count(10) == 1);
+	SSVUT_EXPECT(sb.count(15) == 1);
+	SSVUT_EXPECT(sb.count(25) == 0);
+	SSVUT_EXPECT(sb.count("melon") == 1);
+	SSVUT_EXPECT(sb.count("cucumber") == 1);
+	SSVUT_EXPECT(sb.count("banana") == 0);
+	SSVUT_EXPECT(sb.at(10) == "cucumber");
+	SSVUT_EXPECT(sb[10] == "cucumber");
+	SSVUT_EXPECT(sb.at("cucumber") == 10);
+	SSVUT_EXPECT(sb["cucumber"] == 10);
+	SSVUT_EXPECT(sb.at(15) == "melon");
+	SSVUT_EXPECT(sb[15] == "melon");
+	SSVUT_EXPECT(sb.at("melon") == 15);
+	SSVUT_EXPECT(sb["melon"] == 15);
+
+	sb.clear();
+
+	SSVUT_EXPECT(sb.empty());
+	SSVUT_EXPECT(sb.size() == 0);
+	SSVUT_EXPECT(!sb.has(10));
+	SSVUT_EXPECT(!sb.has(15));
+	SSVUT_EXPECT(!sb.has(25));
+	SSVUT_EXPECT(!sb.has("melon"));
+	SSVUT_EXPECT(!sb.has("cucumber"));
+	SSVUT_EXPECT(!sb.has("banana"));
+
+	sb["yolo"] = 15;
+
+	SSVUT_EXPECT(!sb.empty());
+	SSVUT_EXPECT(sb.size() == 1);
+	SSVUT_EXPECT(!sb.has(10));
+	SSVUT_EXPECT(sb.has(15));
+	SSVUT_EXPECT(!sb.has("melon"));
+	SSVUT_EXPECT(sb.has("yolo"));
+	SSVUT_EXPECT(sb["yolo"] == 15);
+
+	sb["yolo"] = 25;
+
+	SSVUT_EXPECT(sb.has("yolo"));
+	SSVUT_EXPECT(!sb.has(15));
+	SSVUT_EXPECT(sb.has(25));
+	SSVUT_EXPECT(sb["yolo"] == 25);
+
+	sb.erase("yolo");
+
+	SSVUT_EXPECT(!sb.has("yolo"));
+	SSVUT_EXPECT(!sb.has(15));
+	SSVUT_EXPECT(!sb.has(25));
+	SSVUT_EXPECT(sb.empty());
 }
 
 SSVUT_TEST(DelegateTests)

@@ -5,21 +5,137 @@
 #ifndef SSVU_BIMAP
 #define SSVU_BIMAP
 
-#include <map>
+#include <set>
+#include <utility>
+#include <cstddef>
 #include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu
 {
+	/// @namespace Internal bimap implementation details.
+	namespace Internal
+	{
+		/// @brief Comparison functor that compares pointer's values.
+		template<typename T> struct PtrComparator
+		{
+			inline bool operator()(const T* mA, const T* mB) const noexcept { return *mA < *mB; }
+		};
+
+		/// @typedef Set of pointers, sorted by pointer values.
+		template<typename T> using PtrSet = std::set<const T*, Internal::PtrComparator<T>>;
+
+		/// @brief Helper bimap struct.
+		template<typename T1, typename T2, typename T> struct BimapHelper;
+
+		/// @brief Helper bimap struct. (specialized for the first type)
+		template<typename T1, typename T2> struct BimapHelper<T1, T2, T1>
+		{
+			/// @typedef The other type.
+			using Other = T2;
+
+			/// @brief Returns a const reference to the set of the first type.
+			template<typename TBimap> inline static const PtrSet<T1>& getSetCurrent(TBimap& mBimap) noexcept { return mBimap.set1; }
+		};
+
+		/// @brief Helper bimap struct. (specialized for the second type)
+		template<typename T1, typename T2> struct BimapHelper<T1, T2, T2>
+		{
+			/// @typedef The other type.
+			using Other = T1;
+
+			/// @brief Returns a const reference to the set of the second type.
+			template<typename TBimap> inline static const PtrSet<T2>& getSetCurrent(TBimap& mBimap) noexcept { return mBimap.set2; }
+		};
+	}
+
 	/// @brief Bi-directional key-value container.
-	/// @details Implemented as a pair of std::map
+	/// @details Implemented as two std::sets of pointers. Assumes `std::pair` memory contiguity.
 	/// @tparam T1 Key/Value type 1
 	/// @tparam T2 Key/Value type 2
-	/// @tparam TContainer Underlying container type. Can be std::map, std::unordered_map, ...
-	template<typename T1, typename T2, template<typename...> class TContainer = std::map> class Bimap
+	template<typename T1, typename T2> class Bimap
 	{
+		template<typename, typename, typename> friend struct Internal::BimapHelper;
+
+		public:
+			/// @typedef Type of pair.
+			using BMPair = std::pair<T1, T2>;
+
+			/// @typedef Type of storage.
+			using Storage = std::vector<ssvu::Uptr<BMPair>>;
+
+			// Standard iterator support
+			using iterator = typename Storage::iterator;
+			using const_iterator = typename Storage::const_iterator;
+			using reverse_iterator = typename Storage::reverse_iterator;
+			using const_reverse_iterator = typename Storage::const_reverse_iterator;
+
 		private:
-			TContainer<T1, T2> map1; /*!< Map container 1. */
-			TContainer<T2, const T1*> map2; /*!< Map container 2. */
+			/// @brief Storage of key/value pairs.
+			/// @details Implemented as an std::vector of ssvu::Uptr.
+			Storage storage;
+
+			/// @brief Set of the first type.
+			Internal::PtrSet<T1> set1;
+
+			/// @brief Set of the second type.
+			Internal::PtrSet<T2> set2;
+
+			/// @brief Internal method to get a BMPair from a pointer.
+			template<typename T> inline constexpr BMPair& getPairImpl(const T* mPtr) const noexcept
+			{
+				SSVU_ASSERT_STATIC(std::is_standard_layout<BMPair>::value, "BMPair must have standard layout");
+				return *(const_cast<BMPair*>(reinterpret_cast<const BMPair*>(mPtr)));
+			}
+
+			/// @brief Internal method to get the base pointer of a pair, from a T2*.
+			inline constexpr const char* getPairBasePtr(const T2* mItem) const noexcept
+			{
+				return reinterpret_cast<const char*>(mItem) - offsetof(BMPair, second);
+			}
+
+			/// @brief Internal method to get a BMPair from T1*.
+			inline constexpr BMPair& getPair(const T1* mItem) const noexcept { return getPairImpl(mItem); }
+
+			/// @brief Internal method to get a BMPair from T2*.
+			inline constexpr BMPair& getPair(const T2* mItem) const noexcept { return getPairImpl(getPairBasePtr(mItem)); }
+
+			/// @brief Internal method to get a T2& from the corrisponding T1*.
+			inline T2& getItem(const T1* mItem) noexcept { return getPair(mItem).second; }
+
+			/// @brief Internal method to get a T1& from the corrisponding T2*.
+			inline T1& getItem(const T2* mItem) noexcept { return getPair(mItem).first; }
+
+			/// @brief Internal method to get a T2& from the corrisponding T1*. (const version)
+			inline const T2& getItem(const T1* mItem) const noexcept { return getPair(mItem).second; }
+
+			/// @brief Internal method to get a T1& from the corrisponding T2*. (const version)
+			inline const T1& getItem(const T2* mItem) const noexcept { return getPair(mItem).first; }
+
+			/// @brief Internal implementation of the `at` method.
+			/// @details Throws an `std::out_of_range` exception if the value isn't found.
+			template<typename T> auto atImpl(const T& mKey) const noexcept -> const typename Internal::BimapHelper<T1, T2, T>::Other&
+			{
+				const auto& set(Internal::BimapHelper<T1, T2, T>::getSetCurrent(*this));
+				const auto& itr(this->find(mKey));
+				if(itr == std::end(set)) throw std::out_of_range{"mKey was not found in set"};
+				return getItem(*itr);
+			}
+
+			/// @brief Internal implementation of the `erase` method.
+			/// @details Assumes (and asserts) that the `mKey` value exists in the bimap.
+			template<typename T> inline void eraseImpl(const T& mKey)
+			{
+				SSVU_ASSERT(this->has(mKey));
+
+				const auto& pair(getPair(*this->find(mKey)));
+
+				set1.erase(&pair.first);
+				set2.erase(&pair.second);
+
+				ssvu::eraseRemoveIf(storage, [&pair](const ssvu::Uptr<BMPair>& mI){ return mI.get() == &pair; });
+
+				SSVU_ASSERT(!this->has(mKey));
+			}
 
 		public:
 			/// @brief Default constructor.
@@ -28,74 +144,114 @@ namespace ssvu
 
 			/// @brief Initializer list constructor.
 			/// @details Initializes a Bimap from a std::initalizer_list of pairs.
-			/// @param mPairs Initializer list of std::pair<T, U>.
-			inline Bimap(const std::initializer_list<std::pair<T1, T2>>& mPairs) { for(const auto& p : mPairs) insert(p); }
+			/// @param mPairs Initializer list of BMPair.
+			inline Bimap(const std::initializer_list<BMPair>& mPairs) { for(const auto& p : mPairs) emplace(p.first, p.second); }
 
-			/// @brief Emplace a pair in the Bimap.
-			template<typename... TArgs> inline void emplace(TArgs&&... mArgs)
+			/// @brief Emplaces a T1/T2 pair into the bimap.
+			/// @details A copy of the values is created and stored into the bimap. Asserts that the value doesn't already exist.
+			/// @param mArg1 First value.
+			/// @param mArg2 Second value.
+			template<typename TA1, typename TA2> inline BMPair& emplace(TA1&& mArg1, TA2&& mArg2)
 			{
-				const auto& pair(map1.emplace(std::forward<TArgs>(mArgs)...));
-				SSVU_ASSERT(pair.second == true);
+				SSVU_ASSERT(!this->has(mArg1) && !this->has(mArg2));
 
-				const auto& itr(pair.first);
-				map2[itr->second] = &(itr->first);
+				auto& pair(ssvu::getEmplaceUptr<BMPair>(storage, std::forward<TA1>(mArg1), std::forward<TA2>(mArg2)));
+				set1.emplace(&pair.first);
+				set2.emplace(&pair.second);
+
+				return pair;
 			}
 
-			/// @brief Insert a pair in the Bimap.
-			/// @param mPair std::pair<T, U> to insert.
-			inline void insert(const std::pair<T1, T2>& mPair) { this->emplace(mPair); }
+			/// @brief Inserts a T1/T2 pair into the bimap.
+			/// @details Internally uses `emplace`.
+			inline BMPair& insert(const BMPair& mPair) { return this->emplace(mPair.first, mPair.second); }
 
-			/// @brief Replaces a key/value pair with another.
-			inline void replace(const T1& mSrc, const T2& mDest) { SSVU_ASSERT(this->has(mSrc)); this->erase(mSrc); this->emplace(mSrc, mDest); }
+			/// @brief Erases a T1/T2 pair into the bimap.
+			/// @param mKey Key of the pair.
+			inline void erase(const T1& mKey) { this->eraseImpl(mKey); }
 
-			/// @brief Replaces a key/value pair with another.
-			inline void replace(const T2& mSrc, const T1& mDest) { SSVU_ASSERT(this->has(mSrc)); this->erase(mSrc); this->emplace(mSrc, mDest); }
+			/// @brief Erases a T1/T2 pair into the bimap.
+			/// @param mKey Key of the pair.
+			inline void erase(const T2& mKey) { this->eraseImpl(mKey); }
 
-			/// @brief Erase a pair from the Bimap.
-			/// @param mKey Key of the pair to erase.
-			inline void erase(const T1& mKey) { SSVU_ASSERT(this->has(mKey)); map2.erase(map1.at(mKey)); map1.erase(mKey); }
+			/// @brief Returns a const reference to a value of a bimap pair.
+			/// @details Throws an `std::out_of_range` exception if the value isn't found.
+			/// @param mKey Key of the pair.
+			inline const T2& at(const T1& mKey) const noexcept { return this->atImpl(mKey); }
 
-			/// @brief Erase a pair from the Bimap.
-			/// @param mKey Key of the pair to erase.
-			inline void erase(const T2& mKey) { SSVU_ASSERT(this->has(mKey)); map1.erase(*map2.at(mKey)); map2.erase(mKey); }
+			/// @brief Returns a const reference to a value of a bimap pair.
+			/// @details Throws an `std::out_of_range` exception if the value isn't found.
+			/// @param mKey Key of the pair.
+			inline const T1& at(const T2& mKey) const noexcept { return this->atImpl(mKey); }
 
-			/// @brief Returns a value from the Bimap.
-			/// @param mKey Key of the value to return.
-			inline const T2& at(const T1& mKey) const { return map1.at(mKey); }
+			/// @brief Returns a reference to a value of a bimap pair, or creates it if unexistant.
+			/// @details Checks if the value exists.
+			/// @param mKey Key of the pair.
+			inline T2& operator[](const T1& mKey) noexcept { return this->has(mKey) ? this->get(mKey) : this->emplace(mKey, T2{}).second; }
 
-			/// @brief Returns a value from the Bimap.
-			/// @param mKey Key of the value to return.
-			inline const T1& at(const T2& mKey) const { return *map2.at(mKey); }
+			/// @brief Returns a reference to a value of a bimap pair, or creates it if unexistant.
+			/// @details Checks if the value exists.
+			/// @param mKey Key of the pair.
+			inline T1& operator[](const T2& mKey) noexcept { return this->has(mKey) ? this->get(mKey) : this->emplace(T1{}, mKey).first; }
 
-			/// @brief Returns a value from the Bimap. (unsafe)
-			/// @param mKey Key of the value to return.
-			inline const T2& operator[](const T1& mKey) noexcept { SSVU_ASSERT(this->has(mKey)); return map1[mKey]; }
+			/// @brief Returns a reference to a value of a bimap pair. (unsafe)
+			/// @details Does not check if the value exists.
+			/// @param mKey Key of the pair.
+			inline T2& get(const T1& mKey) noexcept { SSVU_ASSERT(this->has(mKey)); return getItem(*this->find(mKey)); }
 
-			/// @brief Returns a value from the Bimap. (unsafe)
-			/// @param mKey Key of the value to return.
-			inline const T1& operator[](const T2& mKey) noexcept { SSVU_ASSERT(this->has(mKey)); return *map2[mKey]; }
+			/// @brief Returns a reference to a value of a bimap pair. (unsafe)
+			/// @details Does not check if the value exists.
+			/// @param mKey Key of the pair.
+			inline T1& get(const T2& mKey) noexcept { SSVU_ASSERT(this->has(mKey)); return getItem(*this->find(mKey)); }
 
-			/// @brief Looks for a value in the Bimap.
-			/// @param mValue Key of the value to find.
-			inline auto find(const T1& mValue) const -> decltype(std::declval<const decltype(map1)>().find(mValue)) { return map1.find(mValue); }
+			/// @brief Returns a const reference to a value of a bimap pair. (unsafe)
+			/// @details Does not check if the value exists.
+			/// @param mKey Key of the pair.
+			inline const T2& operator[](const T1& mKey) const noexcept { return this->get(mKey); }
 
-			/// @brief Looks for a value in the Bimap.
-			/// @param mValue Key of the value to find.
-			inline auto find(const T2& mValue) const -> decltype(std::declval<const decltype(map2)>().find(mValue)) { return map2.find(mValue); }
+			/// @brief Returns a const reference to a value of a bimap pair. (unsafe)
+			/// @details Does not check if the value exists.
+			/// @param mKey Key of the pair.
+			inline const T1& operator[](const T2& mKey) const noexcept { return this->get(mKey); }
 
-			/// @brief Checks if a value is in the Bimap.
-			/// @param mValue Key of the value to find.
-			inline bool has(const T1& mValue) const { return this->find(mValue) != std::end(map1); }
+			/// @brief Clears the bimap, destroying its items.
+			inline void clear() noexcept { storage.clear(); set1.clear(); set2.clear(); }
 
-			/// @brief Checks if a value is in the Bimap.
-			/// @param mValue Key of the value to find.
-			inline bool has(const T2& mValue) const { return this->find(mValue) != std::end(map2); }
+			/// @brief Returns true if the bimap is empty.
+			inline bool empty() const noexcept { return storage.empty(); }
 
-			/// @brief Returns the first map container. (const version)
-			inline const decltype(map1)& getMap1() const noexcept { return map1; }
+			/// @brief Returns the size of the bimap.
+			inline auto size() const noexcept -> decltype(storage.size()) { return storage.size(); }
 
-			/// @brief Returns the second map container. (const version)
-			inline const decltype(map2)& getMap2() const noexcept { return map2; }
+			/// @brief Returns the count of items with `mKey` key.
+			inline auto count(const T1& mKey) const noexcept -> decltype(set1.count(&mKey)) { return set1.count(&mKey); }
+
+			/// @brief Returns the count of items with `mKey` key.
+			inline auto count(const T2& mKey) const noexcept -> decltype(set2.count(&mKey)) { return set2.count(&mKey); }
+
+			/// @brief Returns an iterator to the item with `mKey` key.
+			inline auto find(const T1& mKey) const noexcept -> decltype(set1.find(&mKey)) { return set1.find(&mKey); }
+
+			/// @brief Returns an iterator to the item with `mKey` key.
+			inline auto find(const T2& mKey) const noexcept -> decltype(set2.find(&mKey)) { return set2.find(&mKey); }
+
+			/// @brief Returns true if the bimap contains the `mKey` value.
+			inline bool has(const T1& mKey) const noexcept { return this->find(mKey) != std::end(set1); }
+
+			/// @brief Returns true if the bimap contains the `mKey` value.
+			inline bool has(const T2& mKey) const noexcept { return this->find(mKey) != std::end(set2); }
+
+			// Standard iterator support
+			inline auto begin()		noexcept		-> decltype(storage.begin())	{ return storage.begin(); }
+			inline auto end()		noexcept		-> decltype(storage.end())		{ return storage.end(); }
+			inline auto begin()		const noexcept	-> decltype(storage.begin())	{ return storage.begin(); }
+			inline auto end()		const noexcept	-> decltype(storage.end())		{ return storage.end(); }
+			inline auto cbegin()	const noexcept	-> decltype(storage.cbegin())	{ return storage.cbegin(); }
+			inline auto cend()		const noexcept	-> decltype(storage.cend())		{ return storage.cend(); }
+			inline auto rbegin()	noexcept		-> decltype(storage.rbegin())	{ return storage.rbegin(); }
+			inline auto rend()		noexcept		-> decltype(storage.rend())		{ return storage.rend(); }
+			inline auto crbegin()	const noexcept	-> decltype(storage.crbegin())	{ return storage.crbegin(); }
+			inline auto crend()		const noexcept	-> decltype(storage.crend())	{ return storage.crend(); }
 	};
 }
 
