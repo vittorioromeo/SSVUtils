@@ -253,6 +253,28 @@ namespace ssvu
 			inline auto crbegin()	const noexcept	-> decltype(storage.crbegin())	{ return storage.crbegin(); }
 			inline auto crend()		const noexcept	-> decltype(storage.crend())	{ return storage.crend(); }
 	};
+
+	// Stringifier support
+	template<typename T1, typename T2> struct Stringifier<Bimap<T1, T2>>
+	{
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const Bimap<T1, T2>& mValue)
+		{
+				auto itrBegin(std::begin(mValue));
+				if(itrBegin == std::end(mValue)) { Internal::printBold<TFmt>(mStream, "{ EMPTY }"); return; }
+
+				Internal::printBold<TFmt>(mStream, "{");
+
+				// C++14: `auto` lambda
+				Internal::repeatPenultimate(itrBegin, std::end(mValue), [&mStream](decltype(*itrBegin) mE)
+				{
+					Internal::callStringifyImpl<TFmt>(mStream, mE->first);
+					Internal::printBold<TFmt>(mStream, " <-> ");
+					Internal::callStringifyImpl<TFmt>(mStream, mE->second);
+				}, [&mStream](decltype(*itrBegin)){ Internal::printBold<TFmt>(mStream, "\n"); });
+
+				Internal::printBold<TFmt>(mStream, "}");
+		}
+	};
 }
 
 #endif

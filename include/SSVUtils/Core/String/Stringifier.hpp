@@ -188,18 +188,6 @@ namespace ssvu
 		}
 	};
 
-	// TODO: move to bimap
-	// Stringify bimap
-	/*
-	template<typename T1, typename T2, template<typename...> class TM> struct Stringifier<Bimap<T1, T2, TM>>
-	{
-		template<bool TFmt> inline static void impl(std::ostream& mStream, const Bimap<T1, T2, TM>& mValue)
-		{
-			Internal::stringifyMapImpl<TFmt>(mStream, mValue.getMap1(), " <-> ");
-		}
-	};
-	*/
-
 	// Stringify pointer
 	template<typename T> struct Stringifier<T*>
 	{

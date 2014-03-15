@@ -40,7 +40,7 @@
 	#define SSVUT_EXPECT(mExpr) \
 		while(true) \
 		{ \
-			if(!(mExpr)) throw ::ssvu::Test::Internal::Fail{this, SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), mExpr)}; \
+			if(!(mExpr)) throw ::ssvu::Test::Internal::TestFailException{this, SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), mExpr)}; \
 			break; \
 		}
 
@@ -73,16 +73,16 @@ namespace ssvu
 						inline virtual ~TestBase() { }
 						inline virtual void run() const { }
 
-						inline const std::string& getName() const 	{ return name; }
-						inline const std::string& getLine() const 	{ return line; }
-						inline const std::string& getFile() const 	{ return file; }
+						inline const std::string& getName() const	{ return name; }
+						inline const std::string& getLine() const	{ return line; }
+						inline const std::string& getFile() const	{ return file; }
 				};
 
-				struct Fail : std::exception
+				struct TestFailException : std::exception
 				{
 					const TestBase* test;
 					const std::string expr;
-					inline Fail(const TestBase* mTest, std::string mExpr) : test{mTest}, expr{std::move(mExpr)} { }
+					inline TestFailException(const TestBase* mTest, std::string mExpr) : test{mTest}, expr{std::move(mExpr)} { }
 				};
 
 				using TestStorage = std::vector<ssvu::Uptr<TestBase>>;
@@ -109,17 +109,17 @@ namespace ssvu
 						{
 							t->run();
 						}
-						catch(::ssvu::Test::Internal::Fail& mFail)
+						catch(TestFailException& mFail)
 						{
 							failure = true;
 
 							auto& test(*mFail.test);
 
 							ssvu::lo("Test") << "Test failure\n\n"
-								<< "Test:\t<"	<< test.getName() << ">\n"
-								<< "Line:\t<" 	<< test.getLine() << ">\n"
-								<< "File:\t<" 	<< test.getFile() << ">\n\n"
-								<< "Expression:\n" << mFail.expr << "\n"
+								<< "Test:\t<"		<< test.getName() << ">\n"
+								<< "Line:\t<"		<< test.getLine() << ">\n"
+								<< "File:\t<"		<< test.getFile() << ">\n\n"
+								<< "Expression:\n"	<< mFail.expr << "\n"
 								<< "_________________________________________\n\n";
 						}
 					}

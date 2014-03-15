@@ -114,7 +114,7 @@ namespace ssvu
 				}
 
 				std::string reimaining(mStr.substr(startAt, mStr.size() - startAt));
-				if(!reimaining.empty()) mTarget.emplace_back(reimaining);;
+				if(!reimaining.empty()) mTarget.emplace_back(reimaining);
 			}
 		};
 	}
