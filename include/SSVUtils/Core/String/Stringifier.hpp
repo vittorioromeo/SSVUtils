@@ -15,9 +15,6 @@
 #include "SSVUtils/Core/Utils/Containers.hpp"
 #include "SSVUtils/Core/ConsoleFmt/ConsoleFmt.hpp"
 
-// TODO: move to bimap
-// #include "SSVUtils/Bimap/Bimap.hpp"
-
 namespace ssvu
 {
 	namespace Internal

@@ -16,8 +16,10 @@ namespace ssvu
 		/// @brief Internal struct storing data and state for assertions.
 		struct AssertState
 		{
-			std::string code, line, file;
-			bool skip{false};
+			#ifndef NDEBUG
+				std::string code, line, file;
+				bool skip{false};
+			#endif
 		};
 
 		/// @brief Returns a reference to the global static AssertState instance.

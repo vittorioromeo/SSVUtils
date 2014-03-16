@@ -7,42 +7,46 @@
 
 // This file implements `assertImpl`, which required additional dependencies.
 
+#ifndef NDEBUG
+
 namespace ssvu
 {
 	namespace Internal
 	{
 		inline void assertImpl(bool mExpression, const std::string& mMsg) noexcept
 		{
-			if(mExpression) return;
+				if(mExpression) return;
 
-			// Data must be cached because other assertions may be tested during logging
-			auto cachedData(getAssertState());
+				// Data must be cached because other assertions may be tested during logging
+				auto cachedData(getAssertState());
 
-			ssvu::lo() << "\n";
-			ssvu::lo("ASSERTION FAILED") << mMsg << "\n\n"
-				<< "Line " << cachedData.line << " in file " << cachedData.file << "\n"
-				<< "Code: " << cachedData.code << "\n" << std::endl;
+				ssvu::lo() << "\n";
+				ssvu::lo("ASSERTION FAILED") << mMsg << "\n\n"
+					<< "Line " << cachedData.line << " in file " << cachedData.file << "\n"
+					<< "Code: " << cachedData.code << "\n" << std::endl;
 
-			if(getAssertState().skip)
-			{
-				ssvu::lo() << "Skipping assertion..." << std::endl;
-				return;
-			}
+				if(getAssertState().skip)
+				{
+					ssvu::lo() << "Skipping assertion..." << std::endl;
+					return;
+				}
 
-			ssvu::lo() << "Choose what to do:\n\n"
-				<< "(0) -> Skip this assertion.\n"
-				<< "(1) -> Skip all assertions.\n"
-				<< "(2) -> Terminate the program." << std::endl;
+				ssvu::lo() << "Choose what to do:\n\n"
+					<< "(0) -> Skip this assertion.\n"
+					<< "(1) -> Skip all assertions.\n"
+					<< "(2) -> Terminate the program." << std::endl;
 
-			std::string userInput;
-			std::cin >> userInput;
+				std::string userInput;
+				std::cin >> userInput;
 
-			if(userInput == "0") { return; }
-			if(userInput == "1") { getAssertState().skip = true; return; }
+				if(userInput == "0") { return; }
+				if(userInput == "1") { getAssertState().skip = true; return; }
 
-			std::terminate();
+				std::terminate();
 		}
 	}
 }
+
+#endif
 
 #endif
