@@ -209,6 +209,14 @@ namespace ssvu
 		return *result;
 	}
 
+	// TODO: docs
+	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUptrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
+	{
+		auto uptr(std::make_unique<T>(std::forward<TArgs>(mArgs)...));
+		auto result(uptr.get());
+		mContainer.emplace(std::make_pair(std::forward<TK>(mKey), std::move(uptr)));
+		return *result;
+	}
 }
 
 #endif
