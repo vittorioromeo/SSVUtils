@@ -45,7 +45,7 @@ SSVUT_TEST(UtilsMathTests)
 	SSVUT_EXPECT(getSign(-1.5f) == -1);
 	SSVUT_EXPECT(getSign(1.5f) == 1);
 	SSVUT_EXPECT(getSign(0.5f) == 1);
-	SSVUT_EXPECT(getSign(0.0f) == 0);
+	SSVUT_EXPECT(getSign(0.f) == 0);
 
 	SSVUT_EXPECT(getClampedMin(0, 100) == 100);
 	SSVUT_EXPECT(getClampedMin(150, 100) == 150);
