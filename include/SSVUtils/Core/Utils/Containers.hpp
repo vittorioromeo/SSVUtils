@@ -209,7 +209,12 @@ namespace ssvu
 		return *result;
 	}
 
-	// TODO: docs
+	/// @brief Emplaces a `ssvu::Uptr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
+	/// @details Internally uses `std::make_unique` and `ssvu::Uptr<T>::get`.
+	/// @param mContainer Map container of `ssvu::Uptr<T>` where the newly created smart pointer will be emplaced.
+	/// @param mKey Key of the element.
+	/// @param mArgs Emplacement variadic arguments.
+	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUptrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 	{
 		auto uptr(std::make_unique<T>(std::forward<TArgs>(mArgs)...));

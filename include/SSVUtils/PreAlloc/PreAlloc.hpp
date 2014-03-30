@@ -71,7 +71,7 @@ namespace ssvu
 			template<typename T, typename TPreAlloc> struct PreAllocMMDel
 			{
 				TPreAlloc* preAlloc;
-				PreAllocMMDel(TPreAlloc& mPreAlloc) : preAlloc(&mPreAlloc) { }
+				inline PreAllocMMDel(TPreAlloc& mPreAlloc) : preAlloc(&mPreAlloc) { }
 				inline void operator()(T* mPtr) { preAlloc->destroy(mPtr); }
 			};
 
@@ -83,7 +83,7 @@ namespace ssvu
 					UptrDeleter uptrDeleter;
 
 				public:
-					PreAllocMMBase(TPreAlloc& mPreAlloc) : preAlloc(mPreAlloc), uptrDeleter(preAlloc) { }
+					inline PreAllocMMBase(TPreAlloc& mPreAlloc) : preAlloc(mPreAlloc), uptrDeleter(preAlloc) { }
 
 					inline void refreshImpl()
 					{
@@ -141,7 +141,7 @@ namespace ssvu
 				}
 
 			public:
-				PreAllocDyn(MemSize mBufferSize) : buffer{mBufferSize} { available.emplace_back(buffer.getRange()); }
+				inline PreAllocDyn(MemSize mBufferSize) : buffer{mBufferSize} { available.emplace_back(buffer.getRange()); }
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					if(mustUnify) { unifyContiguous(); mustUnify = false; }
@@ -169,7 +169,7 @@ namespace ssvu
 				std::stack<MemRange, std::vector<MemRange>> available;
 
 			public:
-				PreAllocChunk(MemSize mChunkSize, std::size_t mChunks) : chunkSize{mChunkSize}, buffer{chunkSize * mChunks} { SSVU_ASSERT(mChunks > 0); createChunks(available, mChunkSize, mChunks, buffer); }
+				inline PreAllocChunk(MemSize mChunkSize, std::size_t mChunks) : chunkSize{mChunkSize}, buffer{chunkSize * mChunks} { SSVU_ASSERT(mChunks > 0); createChunks(available, mChunkSize, mChunks, buffer); }
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					SSVU_ASSERT(sizeof(T) <= chunkSize);
@@ -187,7 +187,7 @@ namespace ssvu
 				std::stack<MemRange, std::vector<MemRange>> available;
 
 			public:
-				PreAllocStatic(std::size_t mChunks) : buffer{sizeof(T) * mChunks} { SSVU_ASSERT(mChunks > 0); createChunks(available, sizeof(T), mChunks, buffer); }
+				inline PreAllocStatic(std::size_t mChunks) : buffer{sizeof(T) * mChunks} { SSVU_ASSERT(mChunks > 0); createChunks(available, sizeof(T), mChunks, buffer); }
 				template<typename TType = T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					auto toUse(available.top().begin); available.pop();
