@@ -97,6 +97,8 @@ namespace ssvu
 	/// @brief Starts the benchmark timer.
 	inline void startBenchmark() noexcept
 	{
+		// TODO: stack-based benchmarking in separate hpp
+
 		#ifndef SSVU_LOG_DISABLE
 			Internal::getBenchStart() = HRClock::now();
 		#endif

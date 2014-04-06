@@ -9,17 +9,10 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
-		/// @brief Filesystem scan mode.
-		enum class Mode{Recurse, Single};
-
-		/// @brief Filesystem scan type.
-		enum class Type{All, File, Folder};
-
-		/// @brief Filesystem scan filtering.
-		enum class Pick{Any, ByExt, ByName};
-
-		/// @brief Filesystem scan sorting.
-		enum class Sort{Alphabetic, Unsorted};
+		enum class Mode{Recurse, Single};		///< @brief Filesystem scan mode.
+		enum class Type{All, File, Folder};		///< @brief Filesystem scan type.
+		enum class Pick{Any, ByExt, ByName};	///< @brief Filesystem scan filtering.
+		enum class Sort{Alphabetic, Unsorted};	///< @brief Filesystem scan sorting.
 	}
 }
 
