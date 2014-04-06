@@ -21,7 +21,7 @@ namespace ssvu
 				bool active{false};
 
 			public:
-				Flag(std::string mShortName, std::string mLongName) noexcept : shortName{std::move(mShortName)}, longName{std::move(mLongName)} { }
+				inline Flag(std::string mShortName, std::string mLongName) noexcept : shortName{std::move(mShortName)}, longName{std::move(mLongName)} { }
 
 				inline Flag& operator=(bool mActive) noexcept	{ active = mActive; return *this; }
 				inline operator bool() const noexcept			{ return active; }

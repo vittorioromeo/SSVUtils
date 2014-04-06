@@ -19,7 +19,7 @@ namespace ssvu
 				std::string name, briefDesc, desc;
 
 			public:
-				virtual ~ElementBase() { }
+				inline virtual ~ElementBase() { }
 
 				inline void setName(std::string mName)				{ name = std::move(mName); }
 				inline void setBriefDesc(std::string mBriefDesc)	{ briefDesc = std::move(mBriefDesc); }
@@ -33,10 +33,10 @@ namespace ssvu
 				{
 					std::string result, usageStr{this->getUsageStr()};
 
-					if(!usageStr.empty()) result += "* " + usageStr;
-					if(!name.empty()) result += "\n  --" + name;
-					if(!briefDesc.empty()) result += "\n  --" + briefDesc;
-					if(!desc.empty()) result += "\n  --" + desc;
+					if(!usageStr.empty())	result += "* " + usageStr;
+					if(!name.empty())		result += "\n  --" + name;
+					if(!briefDesc.empty())	result += "\n  --" + briefDesc;
+					if(!desc.empty())		result += "\n  --" + desc;
 
 					return result + "\n\n";
 				}
@@ -51,21 +51,20 @@ namespace ssvu
 		class ArgPackBase : public ElementBase
 		{
 			protected:
-				bool infinite;
-				unsigned int min, max;
+				std::size_t min, max;
 
 			public:
-				ArgPackBase() noexcept : infinite{true} { }
-				ArgPackBase(unsigned int mMin, unsigned int mMax) noexcept : infinite{false}, min{mMin}, max{mMax} { }
+				inline ArgPackBase() noexcept : min{0}, max{0} { }
+				inline ArgPackBase(std::size_t mMin, std::size_t mMax) noexcept : min{mMin}, max{mMax} { }
 
 				virtual void set(const std::vector<std::string>& mStrings) = 0;
 
-				inline bool isInfinite() const noexcept		{ return infinite; }
-				inline unsigned int getMin() const noexcept	{ return min; }
-				inline unsigned int getMax() const noexcept	{ return max; }
+				inline bool isInfinite() const noexcept		{ return min == 0 && max == 0; }
+				inline std::size_t getMin() const noexcept	{ return min; }
+				inline std::size_t getMax() const noexcept	{ return max; }
 				inline std::string getUsageStr() const override
 				{
-					return "(PACK " + getName() + " " + "[" + toStr(min) + "/" + (infinite ? "..." : toStr(max)) + "])";
+					return "(PACK " + getName() + " " + "[" + toStr(min) + "/" + (isInfinite() ? "..." : toStr(max)) + "])";
 				}
 		};
 	}

@@ -18,7 +18,7 @@ namespace ssvu
 				bool active{false};
 
 			public:
-				OptArg(T mDefaultValue) noexcept : defaultValue{std::move(mDefaultValue)} { }
+				inline OptArg(T mDefaultValue) noexcept : defaultValue{std::move(mDefaultValue)} { }
 
 				inline operator bool() const noexcept				{ return active; }
 				inline void set(const std::string& mValue) override { Arg<T>::set(mValue); active = true; }
