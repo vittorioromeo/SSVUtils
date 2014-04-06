@@ -5,6 +5,7 @@
 #ifndef SSVU_CORE_FILESYSTEM_INTERNAL_SCANHELPER
 #define SSVU_CORE_FILESYSTEM_INTERNAL_SCANHELPER
 
+#include <stdexcept>
 #include <dirent.h>
 #include <sys/stat.h>
 #include "SSVUtils/Core/FileSystem/Enums.hpp"
@@ -20,8 +21,7 @@ namespace ssvu
 		{
 			template<Mode TM, Type TT, Pick TP, Sort TS> inline void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired)
 			{
-				// TODO: exception?
-				if(!mPath.existsAsFolder()) { lo("ssvufs::ScanHelper") << "Directory \"" << mPath << "\" not found" << std::endl; return; }
+				if(!mPath.existsAsFolder()) throw std::runtime_error{"Directory \"" + mPath + "\" not found"};
 
 				DIR* dir{opendir(mPath.getCStr())};
 				dirent* entry{readdir(dir)};
