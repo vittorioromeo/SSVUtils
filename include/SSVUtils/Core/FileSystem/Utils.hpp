@@ -39,7 +39,7 @@ namespace ssvu
 		/// @param mPath Path to non-existing folder, must end with '/'.
 		inline void createFolder(const Path& mPath)
 		{
-			#ifdef _WIN32
+			#ifdef SSVU_OS_WINDOWS
 				mkdir(mPath.getCStr());
 			#else
 				mkdir(mPath.getCStr(), 0755);
@@ -59,7 +59,7 @@ namespace ssvu
 
 			std::string userHome;
 
-			#ifdef _WIN32
+			#ifdef SSVU_OS_WINDOWS
 				if(std::getenv("HOME") != NULL) userHome = std::getenv("HOME");
 				else if(std::getenv("USERPROFILE") != NULL) userHome = std::getenv("USERPROFILE");
 				else if(std::getenv("HOMEPATH") == NULL) return;
@@ -72,9 +72,7 @@ namespace ssvu
 				if(std::getenv("HOME") != NULL) userHome = std::getenv("HOME");
 			#endif
 
-			std::string str(mPath);
-			replaceAll(str, "~", userHome);
-			mPath = str;
+			mPath = getReplacedAll(mPath, "~", userHome);
 		}
 
 		/// @brief Expands the `~` symbol in a path with the user's home path.
