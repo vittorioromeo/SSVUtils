@@ -49,7 +49,7 @@ namespace ssvu
 				ssvu::Internal::getAssertState().line = SSVPP_TOSTR(__LINE__); \
 				ssvu::Internal::getAssertState().file = __FILE__; \
 				ssvu::Internal::assertImpl(__VA_ARGS__); \
-			} while(false);
+			} while(false)
 
 		/// @macro Static assertion. Checked at compile-time.
 		/// @details Currently, it is only a wrapper for the standard `static_assert`.
