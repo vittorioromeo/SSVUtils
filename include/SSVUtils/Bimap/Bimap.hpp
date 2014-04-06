@@ -74,16 +74,13 @@ namespace ssvu
 			/// @details Implemented as an std::vector of ssvu::Uptr.
 			Storage storage;
 
-			/// @brief Set of the first type.
-			Internal::PtrSet<T1> set1;
-
-			/// @brief Set of the second type.
-			Internal::PtrSet<T2> set2;
+			Internal::PtrSet<T1> set1; ///< @brief Set of the first type.
+			Internal::PtrSet<T2> set2; ///< @brief Set of the second type.
 
 			/// @brief Internal method to get a BMPair from a pointer.
 			template<typename T> inline constexpr BMPair& getPairImpl(const T* mPtr) const noexcept
 			{
-				SSVU_ASSERT_STATIC(std::is_standard_layout<BMPair>::value, "BMPair must have standard layout");
+				SSVU_ASSERT_STATIC(isStandardLayout<BMPair>, "BMPair must have standard layout");
 				return *(const_cast<BMPair*>(reinterpret_cast<const BMPair*>(mPtr)));
 			}
 
@@ -113,7 +110,7 @@ namespace ssvu
 
 			/// @brief Internal implementation of the `at` method.
 			/// @details Throws an `std::out_of_range` exception if the value isn't found.
-			template<typename T> auto atImpl(const T& mKey) const noexcept -> const typename Internal::BimapHelper<T1, T2, T>::Other&
+			template<typename T> const typename Internal::BimapHelper<T1, T2, T>::Other& atImpl(const T& mKey) const noexcept
 			{
 				const auto& set(Internal::BimapHelper<T1, T2, T>::getSetCurrent(*this));
 				const auto& itr(this->find(mKey));
