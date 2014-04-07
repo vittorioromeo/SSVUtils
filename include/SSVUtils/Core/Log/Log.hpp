@@ -38,12 +38,8 @@ namespace ssvu
 
 	namespace Internal
 	{
-		using TimePointHR = std::chrono::time_point<HRClock>;
 		using CoutType = std::basic_ostream<char, std::char_traits<char>>;
 		using StdEndLine = CoutType&(CoutType&);
-
-		inline TimePointHR& getBenchStart() noexcept	{ static TimePointHR benchStart; return benchStart; }
-		inline TimePointHR& getBenchEnd() noexcept		{ static TimePointHR benchEnd; return benchEnd; }
 
 		struct LOut
 		{
@@ -94,38 +90,6 @@ namespace ssvu
 		return lo();
 	}
 
-	/// @brief Starts the benchmark timer.
-	inline void startBenchmark() noexcept
-	{
-		// TODO: stack-based benchmarking in separate hpp
-
-		#ifndef SSVU_LOG_DISABLE
-			Internal::getBenchStart() = HRClock::now();
-		#endif
-	}
-
-	/// @brief Ends the benchmark timer and returns the elapsed time.
-	/// @return Returns the elapsed time as a std::chrono::milliseconds.
-	inline std::chrono::milliseconds endBenchmarkAsMs() noexcept
-	{
-		#ifndef SSVU_LOG_DISABLE
-			Internal::getBenchEnd() = HRClock::now();
-			return std::chrono::duration_cast<std::chrono::milliseconds>(Internal::getBenchEnd() - Internal::getBenchStart());
-		#endif
-
-		return std::chrono::milliseconds(0);
-	}
-
-	/// @brief Ends the benchmark timer and returns the elapsed time.
-	/// @return Returns the elapsed time as a string.
-	inline std::string endBenchmark()
-	{
-		#ifndef SSVU_LOG_DISABLE
-			return toStr(endBenchmarkAsMs().count()) + toStr(" ms");
-		#endif
-
-		return "";
-	}
 }
 
 #endif

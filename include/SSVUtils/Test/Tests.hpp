@@ -669,4 +669,17 @@ SSVUT_TEST(StringifierTests)
 	SSVUT_STRINGIFY_TEST(__R(std::pair<int, int>{2, 3}));
 }
 
+SSVUT_TEST(BenchmarkTests)
+{
+	ssvu::Benchmark::start();
+	{
+		ssvu::Benchmark::start();
+		{
+
+		}
+		ssvu::Benchmark::getEndString();
+	}
+	ssvu::Benchmark::getEndDuration();
+}
+
 #endif
