@@ -9,13 +9,13 @@
 
 #if (__linux || __unix || __posix)
 	/// @macro This macro is defined if the current OS is Linux.
-	#define SSVU_OS_LINUX
+	#define SSVU_OS_LINUX 1
 #elif (_WIN64 || _WIN32)
 	/// @macro This macro is defined if the current OS is Windows.
-	#define SSVU_OS_WINDOWS
+	#define SSVU_OS_WINDOWS 1
 #else
 	/// @macro This macro is defined if the current OS is unknown.
-	#define SSVU_OS_UNKNOWN
+	#define SSVU_OS_UNKNOWN 1
 #endif
 
 #include <string>

@@ -61,7 +61,7 @@ namespace ssvu
 
 // Depending on the OS, the correct implementation file is included.
 
-#ifdef SSVU_OS_LINUX
+#if SSVU_OS_LINUX
 	#include "SSVUtils/Core/ConsoleFmt/Internal/ConsoleFmtImplUnix.hpp"
 #elif SSVU_OS_WINDOWS
 	#include "SSVUtils/Core/ConsoleFmt/Internal/ConsoleFmtImplWin.hpp"
