@@ -15,7 +15,7 @@ namespace ssvu
 		namespace Internal
 		{
 			static const std::string base64_chars{"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"};
-			inline static bool is_base64(unsigned char c) { return (std::isalnum(c) || (c == '+') || (c == '/')); }
+			inline bool is_base64(unsigned char c) { return (std::isalnum(c) || (c == '+') || (c == '/')); }
 
 			inline std::string Base64Encode(unsigned char const* bytes_to_encode, unsigned int in_len)
 			{

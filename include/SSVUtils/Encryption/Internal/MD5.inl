@@ -93,11 +93,11 @@ namespace ssvu
 			#define S43 15
 			#define S44 21
 
-			static void MD5Transform(UINT4[4], const unsigned char[64]);
-			static void Encode(unsigned char*, const UINT4*, unsigned int);
-			static void Decode(UINT4*, const unsigned char*, unsigned int);
-			static void MD5_memcpy(POINTER, POINTER, unsigned int);
-			static void MD5_memset(POINTER, int, unsigned int);
+			void MD5Transform(UINT4[4], const unsigned char[64]);
+			void Encode(unsigned char*, const UINT4*, unsigned int);
+			void Decode(UINT4*, const unsigned char*, unsigned int);
+			void MD5_memcpy(POINTER, POINTER, unsigned int);
+			void MD5_memset(POINTER, int, unsigned int);
 
 			static unsigned char PADDING[64] = {
 			  0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -228,7 +228,7 @@ namespace ssvu
 
 			/* MD5 basic transformation. Transforms state based on block.
 			 */
-			inline static void MD5Transform(UINT4 state[4], const unsigned char block[64])
+			inline void MD5Transform(UINT4 state[4], const unsigned char block[64])
 			{
 			  UINT4 a = state[0], b = state[1], c = state[2], d = state[3], x[16];
 
@@ -319,7 +319,7 @@ namespace ssvu
 			/* Encodes input (UINT4) into output (unsigned char). Assumes len is
 			  a multiple of 4.
 			 */
-			inline static void Encode (unsigned char *output, const UINT4 *input, unsigned int len)
+			inline void Encode (unsigned char *output, const UINT4 *input, unsigned int len)
 			{
 				unsigned int i, j;
 				for(i = 0, j = 0; j < len; ++i, j += 4)
@@ -334,7 +334,7 @@ namespace ssvu
 			/* Decodes input (unsigned char) into output (UINT4). Assumes len is
 			  a multiple of 4.
 			 */
-			inline static void Decode(UINT4 *output, const unsigned char *input, unsigned int len)
+			inline void Decode(UINT4 *output, const unsigned char *input, unsigned int len)
 			{
 				unsigned int i, j;
 				for(i = 0, j = 0; j < len; ++i, j += 4) output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8) | (((UINT4)input[j+2]) << 16) | (((UINT4)input[j+3]) << 24);
@@ -343,7 +343,7 @@ namespace ssvu
 			/* Note: Replace "for loop" with standard memcpy if possible.
 			 */
 
-			inline static void MD5_memcpy(POINTER output, POINTER input, unsigned int len)
+			inline void MD5_memcpy(POINTER output, POINTER input, unsigned int len)
 			{
 				unsigned int i;
 				for(i = 0; i < len; ++i) output[i] = input[i];
@@ -351,7 +351,7 @@ namespace ssvu
 
 			/* Note: Replace "for loop" with standard memset if possible.
 			 */
-			inline static void MD5_memset(POINTER output, int value, unsigned int len)
+			inline void MD5_memset(POINTER output, int value, unsigned int len)
 			{
 				unsigned int i;
 				for(i = 0; i < len; ++i) ((char *)output)[i] = (char)value;
