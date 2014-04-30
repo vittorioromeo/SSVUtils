@@ -20,7 +20,7 @@
 #include "SSVUtils/Bimap/Bimap.hpp"
 #include "SSVUtils/CommandLine/CommandLine.hpp"
 
-#ifndef SSVU_TEST_DISABLE
+#ifndef SSVUT_DISABLE
 	#include "SSVUtils/Test/Tests.hpp"
 #endif
 

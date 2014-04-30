@@ -209,12 +209,15 @@ SSVUT_TEST(PathTests)
 	using namespace ssvu::FileSystem;
 
 	Path path{"/usr"};
-	SSVUT_EXPECT(path.getStr() == "/usr/");
-	SSVUT_EXPECT(path.getFolderName() == "usr");
+	if(path.existsAsFolder())
+	{
+		SSVUT_EXPECT(path.getStr() == "/usr/");
+		SSVUT_EXPECT(path.getFolderName() == "usr");
+	}
 
 	path = "/usr.txt";
 	SSVUT_EXPECT(path.getStr() == "/usr.txt");
-	//SSVUT_EXPECT(path.getFolderName() == "");
+	//SSVUT_EXPECT(path.getFolderName() == ""); TODO: ?
 
 	path = "/usr.txt/banana/.log";
 	SSVUT_EXPECT(path.getStr() == "/usr.txt/banana/.log");
