@@ -80,7 +80,7 @@ namespace ssvu
 			/// @brief Internal method to get a BMPair from a pointer.
 			template<typename T> inline constexpr BMPair& getPairImpl(const T* mPtr) const noexcept
 			{
-				SSVU_ASSERT_STATIC(isStandardLayout<BMPair>, "BMPair must have standard layout");
+				SSVU_ASSERT_STATIC(isStandardLayout<BMPair>(), "BMPair must have standard layout");
 				return *(const_cast<BMPair*>(reinterpret_cast<const BMPair*>(mPtr)));
 			}
 
