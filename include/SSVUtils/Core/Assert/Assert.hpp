@@ -30,12 +30,13 @@ namespace ssvu
 		void assertImpl(bool mExpression, const std::string& mMsg = "") noexcept;
 	}
 
+	/// @macro Static assertion. Checked at compile-time.
+	/// @details Currently, it is only a wrapper for the standard `static_assert`.
+	#define SSVU_ASSERT_STATIC(...)	static_assert(__VA_ARGS__)
+
 	#ifdef NDEBUG
 		/// @macro Assertion in release mode: this macro does nothing.
 		#define SSVU_ASSERT(...)
-
-		/// @macro Assertion in release mode: this macro does nothing.
-		#define SSVU_ASSERT_STATIC(...)
 
 		/// @macro Assertion in release mode: this macro does nothing.
 		#define SSVU_ASSERT_CONSTEXPR(...)
@@ -50,10 +51,6 @@ namespace ssvu
 				ssvu::Internal::getAssertState().file = __FILE__; \
 				ssvu::Internal::assertImpl(__VA_ARGS__); \
 			} while(false)
-
-		/// @macro Static assertion. Checked at compile-time.
-		/// @details Currently, it is only a wrapper for the standard `static_assert`.
-		#define SSVU_ASSERT_STATIC(...)	static_assert(__VA_ARGS__)
 
 		// TODO:
 		/// @macro Constexpr assertion. Work-in-progress.
