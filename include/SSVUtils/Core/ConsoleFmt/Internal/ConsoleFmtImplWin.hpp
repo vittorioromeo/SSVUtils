@@ -82,6 +82,30 @@ namespace ssvu
 			inline const std::string& getStrColorFG(Color) noexcept	{ return getEmptyString(); }
 			inline const std::string& getStrColorBG(Color) noexcept	{ return getEmptyString(); }
 			inline const std::string& getStrClear() noexcept		{ return getEmptyString(); }
+
+			struct InfoImpl
+			{
+				std::size_t columns, rows;
+
+				inline InfoImpl()
+				{
+					CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+					GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+					columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+					rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+				}
+			};
+
+			inline const InfoImpl& getInfoImpl() noexcept { static InfoImpl result; return result; }
+
+			inline bool isInfoValid() noexcept { return true; }
+
+			namespace Info
+			{
+				inline std::size_t getColumnCount() noexcept	{ return getInfoImpl().columns; }
+				inline std::size_t getRowCount() noexcept		{ return getInfoImpl().rows; }
+			}
 		}
 	}
 }

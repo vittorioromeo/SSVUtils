@@ -22,6 +22,13 @@ namespace ssvu
 			inline const std::string& getStrColorFG(Color) noexcept	{ return getEmptyString(); }
 			inline const std::string& getStrColorBG(Color) noexcept	{ return getEmptyString(); }
 			inline const std::string& getStrClear() noexcept		{ return getEmptyString(); }
+			inline bool isInfoValid() noexcept						{ return false; }
+
+			namespace Info
+			{
+				inline std::size_t getColumnCount() noexcept	{ return 80; }
+				inline std::size_t getRowCount() noexcept		{ return 50; }
+			}
 		}
 	}
 }

@@ -90,6 +90,15 @@ namespace ssvu
 
 		/// @brief Returns a format string that clears the console window.
 		inline const std::string& clear() noexcept { return Internal::getStrClear(); }
+
+		// TODO: docs
+		inline bool isInfoValid() noexcept { return Internal::isInfoValid(); }
+
+		namespace Info
+		{
+			inline std::size_t getColumnCount() noexcept	{ return Internal::Info::getColumnCount(); }
+			inline std::size_t getRowCount() noexcept		{ return Internal::Info::getRowCount(); }
+		}
 	}
 }
 

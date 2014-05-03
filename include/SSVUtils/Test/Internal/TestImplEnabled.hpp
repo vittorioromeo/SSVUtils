@@ -73,7 +73,7 @@ namespace ssvu
 							<< "Line:\t<"		<< test.getLine() << ">\n"
 							<< "File:\t<"		<< test.getFile() << ">\n\n"
 							<< "Expression:\n"	<< mFail.expr << "\n"
-							<< "_________________________________________\n\n";
+							<< ssvu::hr() << "\n\n";
 					}
 				}
 

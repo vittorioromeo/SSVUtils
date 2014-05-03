@@ -9,6 +9,9 @@
 // Everything returns ASCII formatting codes.
 
 #include <string>
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
 
 namespace ssvu
 {
@@ -89,6 +92,29 @@ namespace ssvu
 			inline const std::string& getStrColorFG(Color mColor) noexcept	{ getLastColorFG() = mColor;			return getFmtStr(); }
 			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getLastColorBG() = mColor;			return getFmtStr(); }
 			inline const std::string& getStrClear() noexcept				{ static std::string result{clear};		return result; }
+
+			struct InfoImpl
+			{
+				std::size_t columns, rows;
+
+				inline InfoImpl()
+				{
+					struct winsize w;
+					ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+					columns = w.ws_col;
+					rows = w.ws_row;
+				}
+			};
+
+			inline const InfoImpl& getInfoImpl() noexcept { static InfoImpl result; return result; }
+
+			inline bool isInfoValid() noexcept { return true; }
+
+			namespace Info
+			{
+				inline std::size_t getColumnCount() noexcept	{ return getInfoImpl().columns; }
+				inline std::size_t getRowCount() noexcept		{ return getInfoImpl().rows; }
+			}
 		}
 	}
 }
