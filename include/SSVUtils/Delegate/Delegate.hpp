@@ -84,3 +84,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: new delagate class with deletion
