@@ -21,13 +21,13 @@ namespace ssvu
 				TP tp;
 				std::string name;
 			};
-		}
 
-		inline void start(std::string) { }
-		inline Internal::Data getEndData() { return Internal::Data{}; }
-		inline Internal::Duration getEndDuration() { return Internal::Duration{0}; }
-		inline std::string getEndString() { return ""; }
-		inline void endLo() { }
+			inline void start(std::string)				{ }
+			inline Internal::Data getEndData()			{ return Internal::Data{}; }
+			inline Internal::Duration getEndDuration()	{ return Internal::Duration{0}; }
+			inline std::string getEndString()			{ return ""; }
+			inline void endLo()							{ }
+		}
 	}
 }
 

@@ -38,42 +38,34 @@ namespace ssvu
 				SSVU_ASSERT(!Internal::getStack().empty());
 				return getStack().back();
 			}
-		}
 
-		/// @brief Starts the benchmark timer.
-		inline void start(std::string mTitle = "")
-		{
-			Internal::getStack().emplace_back(HRClock::now(), std::move(mTitle));
-		}
+			inline void start(std::string mTitle = "")
+			{
+				Internal::getStack().emplace_back(HRClock::now(), std::move(mTitle));
+			}
 
-		/// @brief Ends the current benchmark timer and returns the data.
-		/// @return Returns the elapsed time as a std::chrono::milliseconds.
-		inline Internal::Data getEndData()
-		{
-			auto last(Internal::getLastData());
-			Internal::getStack().pop_back();
-			return last;
-		}
+			inline Internal::Data getEndData()
+			{
+				auto last(Internal::getLastData());
+				Internal::getStack().pop_back();
+				return last;
+			}
 
-		/// @brief Ends the current benchmark timer and returns the elapsed time.
-		/// @return Returns the elapsed time as a std::chrono::milliseconds.
-		inline Internal::Duration getEndDuration()
-		{
-			return std::chrono::duration_cast<Internal::Duration>(HRClock::now() - getEndData().tp);
-		}
+			inline Internal::Duration getEndDuration()
+			{
+				return std::chrono::duration_cast<Internal::Duration>(HRClock::now() - getEndData().tp);
+			}
 
-		/// @brief Ends the current benchmark timer and returns the elapsed time.
-		/// @return Returns the elapsed time as a string.
-		inline std::string getEndString()
-		{
-			return toStr(getEndDuration().count()) + " ms";
-		}
+			inline std::string getEndString()
+			{
+				return toStr(getEndDuration().count()) + " ms";
+			}
 
-		/// @brief Ends the current benchmark timer and logs the elapsed time.
-		inline void endLo()
-		{
-			const auto& last(Internal::getLastData());
-			lo("Benchmark #" + toStr(Internal::getStack().size()) + " - <" + last.name + ">") << getEndString() << std::endl;
+			inline void endLo()
+			{
+				const auto& last(Internal::getLastData());
+				lo("Benchmark #" + toStr(Internal::getStack().size()) + " - <" + last.name + ">") << getEndString() << std::endl;
+			}
 		}
 	}
 }

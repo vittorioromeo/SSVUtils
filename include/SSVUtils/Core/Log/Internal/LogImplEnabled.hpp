@@ -17,13 +17,9 @@ namespace ssvu
 			if(map.count(mStr) == 0) map[mStr] = Console::Color(getWrapIdx(lastColorIdx++, 2, 7));
 			return Console::setColorFG(map[mStr]);
 		}
-	}
 
-	/// @brief Returns a reference to the log stream.
-	inline std::ostringstream& getLogStream() noexcept { static std::ostringstream logStream; return logStream; }
+		inline std::ostringstream& getLogStream() noexcept { static std::ostringstream logStream; return logStream; }
 
-	namespace Internal
-	{
 		struct LOut
 		{
 			std::string title;
@@ -35,7 +31,7 @@ namespace ssvu
 			if(mLOut.title != "")
 			{
 				const auto& tStr("[" + mLOut.title + "] ");
-				std::cout << Internal::getUniqueColor(mLOut.title) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(38) << tStr;
+				std::cout << getUniqueColor(mLOut.title) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(38) << tStr;
 				getLogStream() << std::left << std::setw(38) << tStr;
 				mLOut.title = "";
 			}
@@ -55,17 +51,17 @@ namespace ssvu
 		}
 
 		inline LOut& getLOutInstance() noexcept { static LOut loInstance; return loInstance; }
-	}
 
-	/// @brief Returns a reference to the "log stream" singleton. (no title)
-	inline Internal::LOut& lo() noexcept { return Internal::getLOutInstance(); }
+		inline LOut& lo() noexcept { return getLOutInstance(); }
 
-	/// @brief Returns a reference to the "log stream" singleton. (sets title)
-	/// @param mTitle Title of the next log message.
-	template<typename T> inline Internal::LOut& lo(const T& mTitle)
-	{
-		lo().title = toStr(mTitle);
-		return lo();
+		template<typename T> inline LOut& lo(const T& mTitle)
+		{
+			lo().title = toStr(mTitle);
+			return lo();
+		}
+
+		inline const char* hr() noexcept				{ static std::string str(Console::Info::getColumnCount(), '_'); return str.c_str(); }
+		inline std::string hr(int mOffset, char mChar)	{ return std::string(Console::Info::getColumnCount() + mOffset, mChar); }
 	}
 }
 
