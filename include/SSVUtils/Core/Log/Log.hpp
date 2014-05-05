@@ -46,9 +46,13 @@ namespace ssvu
 	/// @param mTitle Title of the next log message.
 	template<typename T> inline Internal::LOut& lo(const T& mTitle) { return Internal::lo(mTitle); }
 
-	// TODO: docs
-	inline const char* hr() noexcept						{ return Internal::hr(); }
-	inline std::string hr(int mOffset, char mChar = '_')	{ return Internal::hr(mOffset, mChar); }
+	/// @brief Returns a const char* horizontal ruler C string. Intended to be used when printing to the console.
+	inline const char* hr() noexcept { return Internal::hr(); }
+
+	/// @brief Returns a std::string customized horizontal ruler. Intended to be used when printing to the console.
+	/// @param mOffset Length offset of the ruler.
+	/// @param mChar Character used to create the ruler.
+	inline std::string hr(int mOffset, char mChar = '_') { return Internal::hr(mOffset, mChar); }
 }
 
 #endif
