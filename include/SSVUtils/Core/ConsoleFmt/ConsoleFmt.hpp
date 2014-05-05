@@ -91,13 +91,16 @@ namespace ssvu
 		/// @brief Returns a format string that clears the console window.
 		inline const std::string& clear() noexcept { return Internal::getStrClear(); }
 
-		// TODO: docs
+		/// @brief Returns true if valid console information is available.
 		inline bool isInfoValid() noexcept { return Internal::isInfoValid(); }
 
 		namespace Info
 		{
-			inline std::size_t getColumnCount() noexcept	{ return Internal::Info::getColumnCount(); }
-			inline std::size_t getRowCount() noexcept		{ return Internal::Info::getRowCount(); }
+			/// @brief Returns then number of columns of the console screen.
+			inline std::size_t getColumnCount() noexcept { return Internal::Info::getColumnCount(); }
+
+			/// @brief Returns then number of rows of the console screen.
+			inline std::size_t getRowCount() noexcept { return Internal::Info::getRowCount(); }
 		}
 	}
 }
