@@ -75,7 +75,7 @@ namespace ssvu
 				inline std::string getFolderName() const
 				{
 					auto str(getStr());
-					SSVU_ASSERT(endsWith(str, '/'));
+					if(!endsWith(str, '/')) return "";
 
 					str.erase(std::end(str) - 1);
 					auto nameBegin(str.find_last_of('/') + 1);

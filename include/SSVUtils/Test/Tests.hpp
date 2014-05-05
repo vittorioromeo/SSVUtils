@@ -217,7 +217,7 @@ SSVUT_TEST(PathTests)
 
 	path = "/usr.txt";
 	SSVUT_EXPECT(path.getStr() == "/usr.txt");
-	//SSVUT_EXPECT(path.getFolderName() == ""); TODO: ?
+	SSVUT_EXPECT(path.getFolderName() == "");
 
 	path = "/usr.txt/banana/.log";
 	SSVUT_EXPECT(path.getStr() == "/usr.txt/banana/.log");
