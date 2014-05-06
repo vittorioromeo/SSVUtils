@@ -11,25 +11,6 @@
 
 namespace ssvu
 {
-	namespace Internal
-	{
-		/// @brief Internal struct storing data and state for assertions.
-		struct AssertState
-		{
-			#ifndef NDEBUG
-				std::string code, line, file;
-				bool skip{false};
-			#endif
-		};
-
-		/// @brief Returns a reference to the global static AssertState instance.
-		inline AssertState& getAssertState() noexcept { static AssertState result; return result; }
-
-		/// @brief Assert implementation: if mExpression is false, the assertion fires.
-		/// @details Called via the SSVU_ASSERT macro.
-		void assertImpl(bool mExpression, const std::string& mMsg = "") noexcept;
-	}
-
 	/// @macro Static assertion. Checked at compile-time.
 	/// @details Currently, it is only a wrapper for the standard `static_assert`.
 	#define SSVU_ASSERT_STATIC(...)	static_assert(__VA_ARGS__)
@@ -41,6 +22,23 @@ namespace ssvu
 		/// @macro Assertion in release mode: this macro does nothing.
 		#define SSVU_ASSERT_CONSTEXPR(...)
 	#else
+		namespace Internal
+		{
+			/// @brief Internal struct storing data and state for assertions.
+			struct AssertState
+			{
+				std::string code, line, file;
+				bool skip{false};
+			};
+
+			/// @brief Returns a reference to the global static AssertState instance.
+			inline AssertState& getAssertState() noexcept { static AssertState result; return result; }
+
+			/// @brief Assert implementation: if mExpression is false, the assertion fires.
+			/// @details Called via the SSVU_ASSERT macro.
+			void assertImpl(bool mExpression, const std::string& mMsg = "") noexcept;
+		}
+
 		/// @macro Normal assertion. Requires a boolean expression and an optional string message.
 		///	@details If the expression returns false, the assertion fires, calling `ssvu::Internal::assertImpl`.
 		#define SSVU_ASSERT(...) \
