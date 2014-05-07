@@ -126,6 +126,7 @@ namespace ssvu
 	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept	{ return std::is_base_of<T1, T2>::value; }
 	template<typename T> inline constexpr bool isStandardLayout() noexcept			{ return std::is_standard_layout<T>::value; }
 	template<typename T> inline constexpr bool isEnum() noexcept					{ return std::is_enum<T>::value; }
+	template<typename T> inline constexpr bool isDefaultConstructible() noexcept	{ return std::is_default_constructible<T>::value; }
 }
 
 namespace ssvu
