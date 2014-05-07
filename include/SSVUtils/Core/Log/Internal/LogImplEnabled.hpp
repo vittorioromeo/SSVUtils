@@ -44,10 +44,12 @@ namespace ssvu
 
 			return mLOut;
 		}
-		inline LOut& operator<<(LOut& mLOut, StdEndLine manip)
+		inline LOut& operator<<(LOut& mLOut, StdEndLine mManip)
 		{
-			manip(std::cout); manip(getLogStream());
+			mManip(std::cout); mManip(getLogStream());
 			return mLOut;
+
+			// TODO: investigate non-working manipulators (example: setw)
 		}
 
 		inline LOut& getLOutInstance() noexcept { static LOut loInstance; return loInstance; }
