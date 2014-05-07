@@ -62,7 +62,7 @@ namespace ssvu
 		}
 
 		/// @brief Utility function to avoid repetition. (implementation for BidirectionalIterator)
-		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, const TFunc1& mFunc, const TFunc2& mFuncSeparator, std::bidirectional_iterator_tag)
+		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, TFunc1 mFunc, TFunc2 mFuncSeparator, std::bidirectional_iterator_tag)
 		{
 			auto itrPenultimate(--mEnd);
 			while(mBegin != itrPenultimate) { mFunc(*mBegin); mFuncSeparator(*mBegin); ++mBegin; }
@@ -70,7 +70,7 @@ namespace ssvu
 		}
 
 		/// @brief Utility function to avoid repetition. (implementation for ForwardIterator)
-		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, const TFunc1& mFunc, const TFunc2& mFuncSeparator, std::forward_iterator_tag)
+		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, TFunc1 mFunc, TFunc2 mFuncSeparator, std::forward_iterator_tag)
 		{
 			auto count(std::distance(mBegin, mEnd));
 			for(auto i(0u); i < count; ++i) { mFunc(*mBegin); if(i < count - 1) mFuncSeparator(*mBegin); ++mBegin; }
@@ -78,7 +78,7 @@ namespace ssvu
 
 		/// @brief Utility function to avoid repetition.
 		/// @details Calls mFunc on each element, and mFuncSeparator on each element except the last. Dispatches `repeatPenultimateImpl`.
-		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimate(TItr mBegin, TItr mEnd, const TFunc1& mFunc, const TFunc2& mFuncSeparator)
+		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimate(TItr mBegin, TItr mEnd, TFunc1 mFunc, TFunc2 mFuncSeparator)
 		{
 			repeatPenultimateImpl(mBegin, mEnd, mFunc, mFuncSeparator, typename std::iterator_traits<TItr>::iterator_category());
 		}
