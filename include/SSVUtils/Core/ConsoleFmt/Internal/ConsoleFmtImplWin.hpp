@@ -20,31 +20,48 @@ namespace ssvu
 		{
 			// TODO: fix (http://www.cplusplus.com/articles/2ywTURfi/)
 
-			inline char getColorCode(std::size_t mIdx) noexcept
+			inline int getColorCode(std::size_t mIdx) noexcept
 			{
-				static char codes[]
+				static int codes[]
 				{
-					'0',	// 0 = Color::Default
-					'0',	// 1 = Color::Black
-					'4',	// 2 = Color::Red
-					'2',	// 3 = Color::Green
-					'6',	// 4 = Color::Yellow
-					'1',	// 5 = Color::Blue
-					'5',	// 6 = Color::Magenta
-					'3',	// 7 = Color::Cyan
-					'7',	// 8 = Color::LightGray
-					'8',	// 9 = Color::DarkGray
-					'c',	// 10 = Color::LightRed
-					'a',	// 11 = Color::LightGreen
-					'e',	// 12 = Color::LightYellow
-					'9',	// 13 = Color::LightBlue
-					'd',	// 14 = Color::LightMagenta
-					'b',	// 15 = Color::LightCyan
-					'f'		// 16 = Color::LightWhite
+					0,	// 0 = Color::Default
+					0,	// 1 = Color::Black
+					4,	// 2 = Color::Red
+					2,	// 3 = Color::Green
+					6,	// 4 = Color::Yellow
+					1,	// 5 = Color::Blue
+					5,	// 6 = Color::Magenta
+					3,	// 7 = Color::Cyan
+					8,	// 8 = Color::LightGray
+					7,	// 9 = Color::DarkGray
+					12,	// 10 = Color::LightRed
+					10,	// 11 = Color::LightGreen
+					14,	// 12 = Color::LightYellow
+					9,	// 13 = Color::LightBlue
+					13,	// 14 = Color::LightMagenta
+					11,	// 15 = Color::LightCyan
+					15	// 16 = Color::LightWhite
 				};
 
 				return codes[mIdx];
 			}
+/*
+			inline void setColor(int mFGCode, int mBGCode)
+			{
+				mFGCode %= 16; mBGCode %= 16;
+				unsigned short wAttributes{((unsigned)mBGCode << 4) | (unsigned)mFGCode};
+				SetConsoleTextAttribute(getStorage().hConsole, wAttributes);
+			}
+
+			#if defined(_INC_OSTREAM)||defined(_IOSTREAM_)
+			ostream& operator<<(ostream& os,concol c)
+			{os.flush();setcolor(c,backcolor());return os;}
+			#endif
+
+			#if defined(_INC_ISTREAM)||defined(_IOSTREAM_)
+			istream& operator>>(istream& is,concol c)
+			{cout.flush();setcolor(c,backcolor());return is;}
+			#endif*/
 
 			struct StrStorage
 			{
@@ -58,8 +75,8 @@ namespace ssvu
 
 				inline void apply()
 				{
-					WORD word(getColorCode(int(lastColorFG)) + getColorCode(int(lastColorBG)));
-					SetConsoleTextAttribute(hConsole, word);
+					unsigned short wAttributes{((unsigned)getColorCode(int(lastColorFG) % 16) << 4) | (unsigned)getColorCode(int(lastColorBG) % 16)};
+					SetConsoleTextAttribute(hConsole, wAttributes);
 				}
 			};
 

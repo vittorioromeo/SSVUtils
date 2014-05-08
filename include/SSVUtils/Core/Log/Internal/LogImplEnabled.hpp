@@ -28,11 +28,13 @@ namespace ssvu
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
+			constexpr std::size_t leftW{38};
+
 			if(mLOut.title != "")
 			{
 				const auto& tStr("[" + mLOut.title + "] ");
-				std::cout << getUniqueColor(mLOut.title) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(38) << tStr;
-				getLogStream() << std::left << std::setw(38) << tStr;
+				std::cout << getUniqueColor(mLOut.title) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(leftW) << tStr;
+				getLogStream() << std::left << std::setw(leftW) << tStr;
 				mLOut.title = "";
 			}
 

@@ -25,6 +25,8 @@ namespace ssvu
 				mutable std::string path;
 				mutable bool mustNormalize{true};
 
+				/// @brief Internal method that normalizes the path string.
+				/// @details Removes double slashes. If the path exists as a folder on the filesystem adds a trailing slash.
 				inline void normalize() const
 				{
 					if(!mustNormalize) return;
@@ -43,50 +45,73 @@ namespace ssvu
 				inline const std::string& getStr() const	{ normalize(); return path; }
 				inline const char* getCStr() const noexcept	{ return getStr().c_str(); }
 
+				/// @brief Returns true if the path exists as a folder on the user's filesystem.
 				inline bool existsAsFolder() const
 				{
 					struct stat fileStat;
 					int err{stat(getCStr(), &fileStat)};
-					if(err != 0) return false;
-					return (fileStat.st_mode & S_IFMT) == S_IFDIR;
+					return err != 0 ? false : (fileStat.st_mode & S_IFMT) == S_IFDIR;
 				}
 
-				inline bool hasExtension(const std::string& mExt) const	{ return endsWith(toLower(getStr()), toLower(mExt)); }
-				inline bool exists() const								{ struct stat buf; return stat(getCStr(), &buf) != -1; }
-				inline bool isRootOrParent() const						{ return endsWith(getStr(), "./") || endsWith(getStr(), "../"); }
+				/// @brief Returns true if the path ends with a specified extension. Case-insensitive.
+				inline bool hasExtension(const std::string& mExt) const { return endsWith(toLower(getStr()), toLower(mExt)); }
+
+				/// @brief Returns true if the path exists on the user's filesystem.
+				inline bool exists() const { struct stat buf; return stat(getCStr(), &buf) != -1; }
+
+				/// @brief Returns true if the path ends with "./" or "../".
+				inline bool isRootOrParent() const { return endsWith(getStr(), "./") || endsWith(getStr(), "../"); }
+
+				/// @brief Returns the parent of the current path, or an empty path if there is no parent.
+				/// @details It removes everything after the first found slash starting from the end of the path.
 				inline Path getParent() const
 				{
 					const auto& str(getStr());
 					for(auto i(str.size() - 1); i > 0; --i) if(str[i] == '/') return {str.substr(0, i + 1)};
 					return {""};
 				}
+
+				/// @brief Returns the filename of the current path.
+				/// @details It is assumed that the path points to a file.
 				inline std::string getFileName() const
 				{
 					const auto& str(getStr());
 					auto nameBegin(str.find_last_of('/') + 1);
 					return str.substr(nameBegin, str.size() - nameBegin);
 				}
+
+				/// @brief Returns the filename of the current path, without the extension.
+				/// @details It is assumed that the path points to a file.
 				inline std::string getFileNameNoExtensions() const
 				{
 					const auto& str(getFileName());
 					auto extBegin(str.find_first_of('.', beginsWith(str, '.') ? 1 : 0));
 					return str.substr(0, extBegin);
 				}
+
+				/// @brief Returns the folder name of the current path.
+				/// @details It is assumed that the path points to a folder. Returns an empty string if the path doesn't end with a slash.
 				inline std::string getFolderName() const
 				{
-					auto str(getStr());
+					const auto& str(getStr());
 					if(!endsWith(str, '/')) return "";
 
-					str.erase(std::end(str) - 1);
-					auto nameBegin(str.find_last_of('/') + 1);
-					return str.substr(nameBegin, str.size() - nameBegin);
+					auto i(str.size() - 2);
+					while(i > 0 && str[i] != '/') --i;
+					return str.substr(i + 1, str.size() - i - 2);
 				}
+
+				/// @brief Returns the extension of the current path.
+				/// @details It is assumed that the path points to a file.
 				inline std::string getExtension() const
 				{
 					auto str(getFileName()); if(beginsWith(str, '.')) str.erase(std::begin(str));
 					auto extBegin(str.find_last_of('.'));
 					return extBegin == std::string::npos ? "" : str.substr(extBegin, str.size() - extBegin);
 				}
+
+				/// @brief Returns all extensions of the current path. Useful for files with multiple extensions.
+				/// @details It is assumed that the path points to a file.
 				inline std::string getAllExtensions() const
 				{
 					const auto& str(getFileName());
@@ -94,7 +119,9 @@ namespace ssvu
 					return extBegin == std::string::npos ? "" : str.substr(extBegin, str.size() - extBegin);
 				}
 
+				/// @brief Returns true if the path is empty.
 				inline bool isNull() const noexcept { return path == ""; }
+
 				inline bool operator<(const Path& mPath) const { return getStr() < mPath.getStr(); }
 
 				inline operator const std::string&() const { return getStr(); }
@@ -117,5 +144,3 @@ namespace ssvu
 }
 
 #endif
-
-// TODO: docs
