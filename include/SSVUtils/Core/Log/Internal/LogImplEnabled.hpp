@@ -48,8 +48,6 @@ namespace ssvu
 		{
 			mManip(std::cout); mManip(getLogStream());
 			return mLOut;
-
-			// TODO: investigate non-working manipulators (example: setw)
 		}
 
 		inline LOut& getLOutInstance() noexcept { static LOut loInstance; return loInstance; }
@@ -68,3 +66,7 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: investigate non-working manipulators (example: setw)
+// TODO: investigate possibility of counting characters printed in a certain line in order
+//		 to create automatic-length hr()
