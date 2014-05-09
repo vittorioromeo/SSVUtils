@@ -7,7 +7,7 @@
 
 // This file implements `assertImpl`, which required additional dependencies.
 
-#ifndef NDEBUG
+#if !(SSVU_IMPL_ASSERT_DISABLED)
 
 namespace ssvu
 {

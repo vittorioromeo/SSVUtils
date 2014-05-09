@@ -34,8 +34,10 @@ namespace ssvu
 			struct TestFailException : std::exception
 			{
 				const TestBase* test;
-				const std::string expr;
-				inline TestFailException(const TestBase* mTest, std::string mExpr) : test{mTest}, expr{std::move(mExpr)} { }
+				const std::string expr, line;
+
+				inline TestFailException(const TestBase* mTest, std::string mExpr, std::string mLine)
+					: test{mTest}, expr{std::move(mExpr)}, line{std::move(mLine)} { }
 			};
 
 			using TestStorage = std::vector<ssvu::Uptr<TestBase>>;
@@ -73,6 +75,7 @@ namespace ssvu
 							<< "Line:\t<"		<< test.getLine() << ">\n"
 							<< "File:\t<"		<< test.getFile() << ">\n\n"
 							<< "Expression:\n"	<< mFail.expr << "\n"
+							<< "at line: "		<< mFail.line << "\n"
 							<< ssvu::hr() << "\n\n";
 					}
 				}

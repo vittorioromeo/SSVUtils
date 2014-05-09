@@ -40,7 +40,7 @@
 	#define SSVUT_EXPECT(mExpr) \
 		while(true) \
 		{ \
-			if(!(mExpr)) throw ::ssvu::Test::Internal::TestFailException{this, SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), mExpr)}; \
+			if(!(mExpr)) throw ::ssvu::Test::Internal::TestFailException{this, SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), mExpr), SSVPP_TOSTR(__LINE__)}; \
 			break; \
 		}
 
