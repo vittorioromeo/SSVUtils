@@ -35,25 +35,25 @@ namespace ssvu
 
 			inline Data& getLastData()
 			{
-				SSVU_ASSERT(!Internal::getStack().empty());
+				SSVU_ASSERT(!getStack().empty());
 				return getStack().back();
 			}
 
-			inline void start(std::string mTitle = "")
+			inline void start(std::string mTitle)
 			{
-				Internal::getStack().emplace_back(HRClock::now(), std::move(mTitle));
+				getStack().emplace_back(HRClock::now(), std::move(mTitle));
 			}
 
-			inline Internal::Data getEndData()
+			inline Data getEndData()
 			{
-				auto last(Internal::getLastData());
-				Internal::getStack().pop_back();
+				auto last(getLastData());
+				getStack().pop_back();
 				return last;
 			}
 
-			inline Internal::Duration getEndDuration()
+			inline Duration getEndDuration()
 			{
-				return std::chrono::duration_cast<Internal::Duration>(HRClock::now() - getEndData().tp);
+				return std::chrono::duration_cast<Duration>(HRClock::now() - getEndData().tp);
 			}
 
 			inline std::string getEndString()
@@ -63,8 +63,9 @@ namespace ssvu
 
 			inline void endLo()
 			{
-				const auto& last(Internal::getLastData());
-				lo("Benchmark #" + toStr(Internal::getStack().size()) + " - <" + last.name + ">") << getEndString() << std::endl;
+				const auto& last(getLastData());
+				std::string logTitle{"Benchmark #" + toStr(getStack().size()) + " - <" + last.name + ">"};
+				lo(logTitle) << getEndString() << std::endl;
 			}
 		}
 	}

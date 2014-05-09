@@ -18,7 +18,7 @@ namespace ssvu
 	namespace Benchmark
 	{
 		/// @brief Starts the benchmark timer.
-		inline void start(std::string mTitle = "") { return Internal::start(mTitle); }
+		inline void start(std::string mTitle = "") { return Internal::start(std::move(mTitle)); }
 
 		/// @brief Ends the current benchmark timer and returns the data.
 		/// @return Returns the elapsed time as a std::chrono::milliseconds.

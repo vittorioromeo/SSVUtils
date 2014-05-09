@@ -68,3 +68,6 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: FORCE_ASSERTIONS_ON, FORCE_ASSERTIONS_OF, etc.
+// TODO: apply new knowledge to fastfunc.hpp
