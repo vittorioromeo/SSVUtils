@@ -21,8 +21,8 @@ namespace ssvu
 	template<typename T, Encryption::Type TCrypto> class ObfuscatedValue<T, TCrypto, EnableIf<isArithmetic<T>()>>
 	{
 		private:
-			T dummy; ///< Dummy value used to "fool" memory scanners.
-			std::string encodedValue; ///< The "real" value, under the form of a Base64 string.
+			T dummy; ///< @brief Dummy value used to "fool" memory scanners.
+			std::string encodedValue; ///< @brief The "real" value, under the form of a Base64 string.
 
 			/// @brief Converts the encodedValue to the arithmetic type.
 			/// @details Used internally.
