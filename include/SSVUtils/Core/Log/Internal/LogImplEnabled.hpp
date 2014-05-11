@@ -72,4 +72,3 @@ namespace ssvu
 // TODO: investigate non-working manipulators (example: setw)
 // TODO: investigate possibility of counting characters printed in a certain line in order
 //		 to create automatic-length hr()
-// TODO: investigate possible allocations where std::aligned_storage can be used
