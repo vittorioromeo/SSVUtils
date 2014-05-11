@@ -85,4 +85,4 @@ namespace ssvu
 
 #endif
 
-// TODO: new delagate class with deletion
+// TODO: new delegate class with deletion
