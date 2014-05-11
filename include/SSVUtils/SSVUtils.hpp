@@ -19,6 +19,7 @@
 #include "SSVUtils/PreAlloc/PreAlloc.hpp"
 #include "SSVUtils/Bimap/Bimap.hpp"
 #include "SSVUtils/CommandLine/CommandLine.hpp"
+#include "SSVUtils/FatEnum/FatEnum.hpp"
 
 #ifndef SSVUT_DISABLE
 	#include "SSVUtils/Test/Tests.hpp"
