@@ -49,6 +49,9 @@ namespace ssvu
 
 				/// @brief Sets the atom's status to dead.
 				inline void setDead() noexcept { alive = false; }
+
+				/// @brief Returns whether the atom is alive or not.
+				inline bool isAlive() const noexcept { return alive; }
 		};
 	}
 }
