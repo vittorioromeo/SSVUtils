@@ -46,10 +46,10 @@ namespace ssvu
 			/// @brief Sets the pointed atom's status as dead.
 			void destroy() noexcept;
 
-			inline T& operator*() noexcept 				{ return get(); }
-			inline const T& operator*() const noexcept 	{ return get(); }
-			inline T* operator->() noexcept 			{ return &(get()); }
-			inline const T* operator->() const noexcept { return &(get()); }
+			inline T& operator*() noexcept				{ return get(); }
+			inline const T& operator*() const noexcept	{ return get(); }
+			inline T* operator->() noexcept				{ return &(get()); }
+			inline const T* operator->() const noexcept	{ return &(get()); }
 	};
 }
 

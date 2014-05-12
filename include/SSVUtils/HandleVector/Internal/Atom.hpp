@@ -33,7 +33,7 @@ namespace ssvu
 				}
 
 			public:
-				inline Atom() = default;
+				inline Atom(HIdx mMarkIdx) noexcept : markIdx{mMarkIdx} { }
 				inline Atom(Atom&&) = default;
 				inline Atom& operator=(Atom&&) = default;
 

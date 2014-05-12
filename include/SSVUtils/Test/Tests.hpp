@@ -1095,24 +1095,36 @@ SSVUT_TEST(HandleManagerMixed)
 		{ std::string temp; for(auto a : mgr) temp += a.s;			SSVUT_EXPECT(temp == ""); }
 		{ std::string temp; for(auto& a : mgr) temp += a.s;			SSVUT_EXPECT(temp == ""); }
 		{ std::string temp; for(const auto& a : mgr) temp += a.s;	SSVUT_EXPECT(temp == ""); }
+		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdx(); ++itr) temp += itr->s;		SSVUT_EXPECT(temp == ""); }
+		{ std::string temp; for(auto itr(mgr.begin()); itr != mgr.endNext(); ++itr) temp += itr->s;			SSVUT_EXPECT(temp == "abc"); }
+		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdxNext(); ++itr) temp += itr->s;	SSVUT_EXPECT(temp == "abc"); }
 
 		mgr.refresh();
 
 		{ std::string temp; for(auto a : mgr) temp += a.s;			SSVUT_EXPECT(temp == "abc"); }
 		{ std::string temp; for(auto& a : mgr) temp += a.s;			SSVUT_EXPECT(temp == "abc"); }
 		{ std::string temp; for(const auto& a : mgr) temp += a.s;	SSVUT_EXPECT(temp == "abc"); }
+		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdx(); ++itr) temp += itr->s;		SSVUT_EXPECT(temp == "abc"); }
+		{ std::string temp; for(auto itr(mgr.begin()); itr != mgr.endNext(); ++itr) temp += itr->s;			SSVUT_EXPECT(temp == "abc"); }
+		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdxNext(); ++itr) temp += itr->s;	SSVUT_EXPECT(temp == "abc"); }
 
 		auto a3 = mgr.create(cc, dd); a3->s = "d";
 
 		{ std::string temp; for(auto a : mgr) temp += a.s;			SSVUT_EXPECT(temp == "abc"); }
 		{ std::string temp; for(auto& a : mgr) temp += a.s;			SSVUT_EXPECT(temp == "abc"); }
 		{ std::string temp; for(const auto& a : mgr) temp += a.s;	SSVUT_EXPECT(temp == "abc"); }
+		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdx(); ++itr) temp += itr->s;		SSVUT_EXPECT(temp == "abc"); }
+		{ std::string temp; for(auto itr(mgr.begin()); itr != mgr.endNext(); ++itr) temp += itr->s;			SSVUT_EXPECT(temp == "abcd"); }
+		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdxNext(); ++itr) temp += itr->s;	SSVUT_EXPECT(temp == "abcd"); }
 
 		mgr.refresh();
 
 		{ std::string temp; for(auto a : mgr) temp += a.s;			SSVUT_EXPECT(temp == "abcd"); }
 		{ std::string temp; for(auto& a : mgr) temp += a.s;			SSVUT_EXPECT(temp == "abcd"); }
 		{ std::string temp; for(const auto& a : mgr) temp += a.s;	SSVUT_EXPECT(temp == "abcd"); }
+		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdx(); ++itr) temp += itr->s;		SSVUT_EXPECT(temp == "abcd"); }
+		{ std::string temp; for(auto itr(mgr.begin()); itr != mgr.endNext(); ++itr) temp += itr->s;			SSVUT_EXPECT(temp == "abcd"); }
+		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdxNext(); ++itr) temp += itr->s;	SSVUT_EXPECT(temp == "abcd"); }
 	}
 }
 
