@@ -1126,6 +1126,33 @@ SSVUT_TEST(HandleManagerMixed)
 		{ std::string temp; for(auto itr(mgr.begin()); itr != mgr.endNext(); ++itr) temp += itr->s;			SSVUT_EXPECT(temp == "abcd"); }
 		{ std::string temp; for(auto itr(mgr.beginIdx()); itr != mgr.endIdxNext(); ++itr) temp += itr->s;	SSVUT_EXPECT(temp == "abcd"); }
 	}
+
+	// AtomFromData tests
+	/*{ TODO: possible=???
+		HandleVector<OTest> mgr;
+		auto a0 = mgr.create(cc, dd); a0->s = "a";
+		auto a1 = mgr.create(cc, dd); a1->s = "b";
+		auto a2 = mgr.create(cc, dd); a2->s = "c";
+		auto& d0 = *a0;
+		auto& d1 = *a1;
+		auto& d2 = *a2;
+
+		SSVUT_EXPECT(mgr.getAtomFromData(d0).getData().s == "a");
+		SSVUT_EXPECT(mgr.getAtomFromData(d1).getData().s == "b");
+		SSVUT_EXPECT(mgr.getAtomFromData(d2).getData().s == "c");
+
+		mgr.refresh();
+
+		SSVUT_EXPECT(mgr.getAtomFromData(d0).getData().s == "a");
+		SSVUT_EXPECT(mgr.getAtomFromData(d1).getData().s == "b");
+		SSVUT_EXPECT(mgr.getAtomFromData(d2).getData().s == "c");
+
+		mgr.reserve(100);
+
+		SSVUT_EXPECT(mgr.getAtomFromData(d0).getData().s == "a");
+		SSVUT_EXPECT(mgr.getAtomFromData(d1).getData().s == "b");
+		SSVUT_EXPECT(mgr.getAtomFromData(d2).getData().s == "c");
+	}*/
 }
 
 #endif
