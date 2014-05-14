@@ -21,6 +21,7 @@
 #include "SSVUtils/CommandLine/CommandLine.hpp"
 #include "SSVUtils/FatEnum/FatEnum.hpp"
 #include "SSVUtils/HandleVector/HandleVector.hpp"
+#include "SSVUtils/Easing/Easing.hpp"
 
 #ifndef SSVUT_DISABLE
 	#include "SSVUtils/Test/Tests.hpp"
