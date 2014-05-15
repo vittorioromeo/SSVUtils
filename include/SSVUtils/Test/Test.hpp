@@ -16,7 +16,7 @@
 #define SSVUT_IMPL_GET_KEY(mName)				SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
 
 #define SSVUT_IMPL_GENERATE_STRUCT(mName) \
-	struct SSVUT_IMPL_GET_NAME_TYPE(mName) : public ::ssvu::Test::Internal::TestBase \
+	struct SSVUT_IMPL_GET_NAME_TYPE(mName) final : public ::ssvu::Test::Internal::TestBase \
 	{ \
 		inline SSVUT_IMPL_GET_NAME_TYPE(mName) () : ::ssvu::Test::Internal::TestBase{SSVPP_TOSTR(mName), SSVPP_TOSTR(__LINE__), SSVPP_TOSTR(__FILE__)} { } \
 		virtual void run() const override; \

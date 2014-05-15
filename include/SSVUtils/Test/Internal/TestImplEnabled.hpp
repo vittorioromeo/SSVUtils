@@ -31,7 +31,7 @@ namespace ssvu
 					inline const std::string& getFile() const	{ return file; }
 			};
 
-			struct TestFailException : std::exception
+			struct TestFailException final : std::exception
 			{
 				const TestBase* test;
 				const std::string expr, line;
