@@ -141,12 +141,12 @@ namespace ssvu
 	template<typename T> struct Stringifier : public Internal::StringifierDefault<T> { };
 
 	// Stringify C-style strings
-	template<std::size_t TN> struct Stringifier<char[TN]> : public Internal::StringifierDefault<char[TN]> { };
-	template<> struct Stringifier<char*> : public Internal::StringifierDefault<char*> { };
-	template<> struct Stringifier<const char*> : public Internal::StringifierDefault<const char*> { };
+	template<std::size_t TN> struct Stringifier<char[TN]> final : public Internal::StringifierDefault<char[TN]> { };
+	template<> struct Stringifier<char*> final : public Internal::StringifierDefault<char*> { };
+	template<> struct Stringifier<const char*> final : public Internal::StringifierDefault<const char*> { };
 
-	// Stringify flavored types
-	#define SSVU_DEFINE_FLAVORED_STRINGIFIER(mType, mColor, mStyle, mPostfix) \
+	// Stringify base types
+	#define SSVU_IMPL_DEFINE_BASE_STRINGIFIER(mType, mColor, mStyle, mPostfix) \
 		template<> struct Stringifier<mType> \
 		{ \
 			template<bool TFmt> inline static void impl(std::ostream& mStream, const mType& mValue) \
@@ -156,25 +156,27 @@ namespace ssvu
 				if(TFmt) mStream << mPostfix; \
 			} \
 		}
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(int,				Console::Color::LightBlue,		Console::Style::Bold,		"");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(long,				Console::Color::LightBlue,		Console::Style::Bold,		"l");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(unsigned int,		Console::Color::LightBlue,		Console::Style::Bold,		"u");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(unsigned long,		Console::Color::LightBlue,		Console::Style::Bold,		"ul");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(float,				Console::Color::LightRed,		Console::Style::Bold,		"f");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(double,			Console::Color::LightRed,		Console::Style::Bold,		"d");
-	SSVU_DEFINE_FLAVORED_STRINGIFIER(std::string,		Console::Color::LightYellow,	Console::Style::Underline,	"");
-	#undef SSVU_DEFINE_FLAVORED_STRINGIFIER
+
+	SSVU_IMPL_DEFINE_BASE_STRINGIFIER(int,				Console::Color::LightBlue,		Console::Style::Bold,	"");
+	SSVU_IMPL_DEFINE_BASE_STRINGIFIER(long,				Console::Color::LightBlue,		Console::Style::Bold,	"l");
+	SSVU_IMPL_DEFINE_BASE_STRINGIFIER(unsigned int,		Console::Color::LightBlue,		Console::Style::Bold,	"u");
+	SSVU_IMPL_DEFINE_BASE_STRINGIFIER(unsigned long,	Console::Color::LightBlue,		Console::Style::Bold,	"ul");
+	SSVU_IMPL_DEFINE_BASE_STRINGIFIER(float,			Console::Color::LightRed,		Console::Style::Bold,	"f");
+	SSVU_IMPL_DEFINE_BASE_STRINGIFIER(double,			Console::Color::LightRed,		Console::Style::Bold,	"d");
+	SSVU_IMPL_DEFINE_BASE_STRINGIFIER(std::string,		Console::Color::LightYellow,	Console::Style::None,	"");
+
+	#undef SSVU_IMPL_DEFINE_BASE_STRINGIFIER
 
 	// Stringify tuples
-	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>> : public Internal::StringifierTuple<std::pair<T1, T2>> { };
-	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>> : public Internal::StringifierTuple<std::tuple<TArgs...>> { };
+	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>> final : public Internal::StringifierTuple<std::pair<T1, T2>> { };
+	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>> final : public Internal::StringifierTuple<std::tuple<TArgs...>> { };
 
 	// Stringify arrays
-	template<typename T, std::size_t TN> struct Stringifier<T[TN]> : public Internal::StringifierContainer<T[TN]> { };
-	template<typename T, std::size_t TN> struct Stringifier<std::array<T, TN>> : public Internal::StringifierContainer<std::array<T, TN>> { };
+	template<typename T, std::size_t TN> struct Stringifier<T[TN]> final : public Internal::StringifierContainer<T[TN]> { };
+	template<typename T, std::size_t TN> struct Stringifier<std::array<T, TN>> final : public Internal::StringifierContainer<std::array<T, TN>> { };
 
 	// Stringify linear containers (value type and allocator type)
-	template<template<typename, typename> class T, typename TV, typename TAlloc> struct Stringifier<T<TV, TAlloc>> : public Internal::StringifierContainer<T<TV, TAlloc>> { };
+	template<template<typename, typename> class T, typename TV, typename TAlloc> struct Stringifier<T<TV, TAlloc>> final : public Internal::StringifierContainer<T<TV, TAlloc>> { };
 
 	// Stringify map-like containers
 	template<template<typename, typename, typename, typename...> class TM, typename TK, typename TV, typename TComp, typename TAlloc, typename... TArgs> struct Stringifier<TM<TK, TV, TComp, TAlloc, TArgs...>>
