@@ -10,6 +10,18 @@ namespace ssvu
 {
 	namespace Easing
 	{
+		namespace Internal
+		{
+			template<typename T> struct Dispatcher
+			{
+				using FnType = T(*)(T, T, T, T);
+				template<FnType FN> inline static T getMap(const T& mI, const T& mIMin, const T& mIMax, const T& mOMin, const T& mOMax) noexcept
+				{
+					return FN(mIMin + mI, mOMin, mOMax - mOMin, mIMax - mIMin);
+				}
+			};
+		}
+
 		template<typename T> struct Linear
 		{
 			inline static T in(T mT, T mB, T mC, T mD) noexcept
@@ -259,16 +271,42 @@ namespace ssvu
 		};
 	}
 
-	template<typename TF, TF TFunc, typename T1, typename T2, typename T3, typename T4, typename T5>
-		inline Common<T1, T2, T3, T4, T5> getMapEasedImpl(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
+	template<template<typename> class TEase, typename T1, typename T2, typename T3>
+		inline Common<T1, T2, T3> getEasedIn(const T1& mI, const T2& mIMin, const T3& mIMax) noexcept
 	{
-		return TFunc(mIMin + mI, mOMin, mOMax - mOMin, mIMax - mIMin);
+		using CT = Common<T1, T2, T3>;
+		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::in>(mI, mIMin, mIMax, mIMin, mIMax);
+	}
+	template<template<typename> class TEase, typename T1, typename T2, typename T3>
+		inline Common<T1, T2, T3> getEasedOut(const T1& mI, const T2& mIMin, const T3& mIMax) noexcept
+	{
+		using CT = Common<T1, T2, T3>;
+		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::out>(mI, mIMin, mIMax, mIMin, mIMax);
+	}
+	template<template<typename> class TEase, typename T1, typename T2, typename T3>
+		inline Common<T1, T2, T3> getEasedInOut(const T1& mI, const T2& mIMin, const T3& mIMax) noexcept
+	{
+		using CT = Common<T1, T2, T3>;
+		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::inOut>(mI, mIMin, mIMax, mIMin, mIMax);
 	}
 
 	template<template<typename> class TEase, typename T1, typename T2, typename T3, typename T4, typename T5>
+		inline Common<T1, T2, T3, T4, T5> getMapEasedIn(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
+	{
+		using CT = Common<T1, T2, T3, T4, T5>;
+		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::in>(mI, mIMin, mIMax, mOMin, mOMax);
+	}
+	template<template<typename> class TEase, typename T1, typename T2, typename T3, typename T4, typename T5>
+		inline Common<T1, T2, T3, T4, T5> getMapEasedOut(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
+	{
+		using CT = Common<T1, T2, T3, T4, T5>;
+		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::out>(mI, mIMin, mIMax, mOMin, mOMax);
+	}
+	template<template<typename> class TEase, typename T1, typename T2, typename T3, typename T4, typename T5>
 		inline Common<T1, T2, T3, T4, T5> getMapEasedInOut(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
 	{
-		return getMapEasedImpl<decltype(&TEase<Common<T1, T2, T3, T4, T5>>::inOut), &TEase<Common<T1, T2, T3, T4, T5>>::inOut>(mI, mIMin, mIMax, mOMin, mOMax);
+		using CT = Common<T1, T2, T3, T4, T5>;
+		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::inOut>(mI, mIMin, mIMax, mOMin, mOMax);
 	}
 }
 
