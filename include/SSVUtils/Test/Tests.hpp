@@ -73,6 +73,11 @@ SSVUT_TEST(UtilsMathTests)
 	SSVUT_EXPECT(getWrapIdx(-2, 3) == 1);
 	SSVUT_EXPECT(getWrapIdx(-3, 3) == 0);
 	SSVUT_EXPECT(getWrapIdx(-4, 3) == 2);
+
+	SSVUT_EXPECT(getMap(100, 0, 100, 0, 200) == 200);
+	SSVUT_EXPECT(getMap(50, 0, 100, 0, 200) == 100);
+	SSVUT_EXPECT(getMap(0, -100, 100, 0, 200) == 100);
+	SSVUT_EXPECT(getMap(0, -100, 100, -200, 200) == 0);
 }
 
 SSVUT_TEST(BimapTests)
