@@ -138,18 +138,18 @@ namespace ssvu
 	}
 
 	/// @brief Cyclically gets items from a container.
-	/// @details Interally uses getWrapIdx to correctly wrap the entered index.
+	/// @details Interally uses getMod to correctly wrap the entered index.
 	/// @param mContainer Reference to the container.
 	/// @param mIdx Index to use (may get wrapped).
 	/// @return Non-const reference to the item at the wrapped index mIdx.
-	template<typename T, typename TIdx> inline typename T::value_type& getByWrapIdx(T& mContainer, const TIdx& mIdx) { return mContainer[getWrapIdx(mIdx, mContainer.size())]; }
+	template<typename T, typename TIdx> inline typename T::value_type& getByModIdx(T& mContainer, const TIdx& mIdx) { return mContainer[getMod(mIdx, mContainer.size())]; }
 
 	/// @brief Cyclically gets items from a container. (const version)
-	/// @details Interally uses getWrapIdx to correctly wrap the entered index.
+	/// @details Interally uses getMod to correctly wrap the entered index.
 	/// @param mContainer Const reference to the container.
 	/// @param mIdx Index to use (may get wrapped).
 	/// @return Const reference to the item at the wrapped index mIdx.
-	template<typename T, typename TIdx> inline const typename T::value_type& getByWrapIdx(const T& mContainer, const TIdx& mIdx) { return mContainer.at(getWrapIdx(mIdx, mContainer.size())); }
+	template<typename T, typename TIdx> inline const typename T::value_type& getByModIdx(const T& mContainer, const TIdx& mIdx) { return mContainer.at(getMod(mIdx, mContainer.size())); }
 
 	/// @brief Trims items matching a certain predicate from the left.
 	/// @details Items are trimmed until one that doesn't match the predicate is found.

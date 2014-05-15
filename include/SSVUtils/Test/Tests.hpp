@@ -59,25 +59,43 @@ SSVUT_TEST(UtilsMathTests)
 	SSVUT_EXPECT(wrapDeg(720) == 0);
 	SSVUT_EXPECT(wrapDeg(720 + 180) == 180);
 
-	SSVUT_EXPECT(getSIMod(10, 9) == 1);
-	SSVUT_EXPECT(getSIMod(-10, 9) == 8);
-	SSVUT_EXPECT(getSIMod(10, -9) == 8);
+	SSVUT_EXPECT(getMod(10, 9) == 1);
+	SSVUT_EXPECT(getMod(-10, 9) == 8);
+	SSVUT_EXPECT(getMod(2, 2) == 0);
+	SSVUT_EXPECT(getMod(16000, 2) == 0);
+	SSVUT_EXPECT(getMod(16001, 2) == 1);
+	SSVUT_EXPECT(getMod(-16000, 2) == 0);
+	SSVUT_EXPECT(getMod(-16001, 2) == 1);
 
-	SSVUT_EXPECT(getWrapIdx(10, 5) == 0);
-	SSVUT_EXPECT(getWrapIdx(10, 10) == 0);
-	SSVUT_EXPECT(getWrapIdx(10, 15) == 10);
-	SSVUT_EXPECT(getWrapIdx(4, 3) == 1);
-	SSVUT_EXPECT(getWrapIdx(5, 3) == 2);
-	SSVUT_EXPECT(getWrapIdx(6, 3) == 0);
-	SSVUT_EXPECT(getWrapIdx(-1, 3) == 2);
-	SSVUT_EXPECT(getWrapIdx(-2, 3) == 1);
-	SSVUT_EXPECT(getWrapIdx(-3, 3) == 0);
-	SSVUT_EXPECT(getWrapIdx(-4, 3) == 2);
+	SSVUT_EXPECT(getMod(10, 5) == 0);
+	SSVUT_EXPECT(getMod(10, 10) == 0);
+	SSVUT_EXPECT(getMod(10, 15) == 10);
+	SSVUT_EXPECT(getMod(4, 3) == 1);
+	SSVUT_EXPECT(getMod(5, 3) == 2);
+	SSVUT_EXPECT(getMod(6, 3) == 0);
+	SSVUT_EXPECT(getMod(-1, 3) == 2);
+	SSVUT_EXPECT(getMod(-2, 3) == 1);
+	SSVUT_EXPECT(getMod(-3, 3) == 0);
+	SSVUT_EXPECT(getMod(-4, 3) == 2);
+
+	SSVUT_EXPECT(getMod(-2, -2, 2) == -2);
+	SSVUT_EXPECT(getMod(-1, -2, 2) == -1);
+	SSVUT_EXPECT(getMod(0, -2, 2) == 0);
+	SSVUT_EXPECT(getMod(1, -2, 2) == 1);
+	SSVUT_EXPECT(getMod(2, -2, 2) == -2);
+	SSVUT_EXPECT(getMod(3, -2, 2) == -1);
+	SSVUT_EXPECT(getMod(4, -2, 2) == 0);
+	SSVUT_EXPECT(getMod(5, -2, 2) == 1);
+	SSVUT_EXPECT(getMod(6, -2, 2) == -2);
 
 	SSVUT_EXPECT(getMap(100, 0, 100, 0, 200) == 200);
 	SSVUT_EXPECT(getMap(50, 0, 100, 0, 200) == 100);
 	SSVUT_EXPECT(getMap(0, -100, 100, 0, 200) == 100);
 	SSVUT_EXPECT(getMap(0, -100, 100, -200, 200) == 0);
+
+	SSVUT_EXPECT(getLerp(0, -500, 500) == -500);
+	SSVUT_EXPECT(getLerp(1, -500, 500) == 500);
+	SSVUT_EXPECT(getLerp(0.5, -500, 500) == 0);
 }
 
 SSVUT_TEST(BimapTests)

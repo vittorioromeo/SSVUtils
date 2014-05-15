@@ -14,7 +14,7 @@ namespace ssvu
 			static int lastColorIdx{2};
 			static std::unordered_map<std::string, Console::Color> map;
 
-			if(map.count(mStr) == 0) map[mStr] = Console::Color(getWrapIdx(lastColorIdx++, 2, 7));
+			if(map.count(mStr) == 0) map[mStr] = Console::Color(getMod(lastColorIdx++, 2, 7));
 			return Console::setColorFG(map[mStr]);
 		}
 

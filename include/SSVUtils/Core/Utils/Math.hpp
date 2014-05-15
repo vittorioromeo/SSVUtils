@@ -209,52 +209,40 @@ namespace ssvu
 		return std::make_tuple(y, y % mRows, mIdx / (mCols * mRows));
 	}
 
-	/// @brief Gets sign-indepedent modulo calculation.
-	/// @details The sign of the result is equal to mB's sign.
+	/// @brief Gets mathematically correct modulo calculation.
+	/// @details Assumes the modulo is positive.
 	/// @code
-	/// SSVU_ASSERT(getSIMod(-2, 12) == 10);
-	/// SSVU_ASSERT(getSIMod(2, -12) == -10);
+	/// SSVU_ASSERT(getMod(-2, 12) == 10);
 	/// @endcode
-	/// @param mA Left side of operation.
-	/// @param mB Right side of operation.
+	/// @param mVal Left side of operation.
+	/// @param mUB Right side of operation. Must be positive.
 	/// @return Returns the mathematically correct mA % mB.
-	template<typename T1, typename T2> inline Common<T1, T2> getSIMod(const T1& mA, const T2& mB)
+	template<typename T1, typename T2> inline Common<T1, T2> getMod(const T1& mVal, const T2& mUB)
 	{
-		SSVU_ASSERT(mB != 0);
-		if(mB < 0) return getSIMod(-mA, -mB);
-		auto result(mA % mB);
-		if(result < 0) result += mB;
+		SSVU_ASSERT(mUB > 0);
+		auto result(((mVal % mUB) + mUB) % mUB);
+		SSVU_ASSERT(result >= 0 && result < mUB);
 		return result;
 	}
 
-	/// @brief Gets a wrapped index value.
+	/// @brief Wraps a value between two other values.
+	/// @details Assumes mUB - mLB is positive.
 	/// @code
-	/// SSVU_ASSERT(getWrapIdx(-2, 0, 12) == 9);
+	/// SSVU_ASSERT(getMod(-2, 0, 12) == 9);
 	/// @endcode
 	/// @param mVal Index value to wrap.
-	/// @param mLowerBound Lower bound of possible indices (inclusive).
-	/// @param mUpperBound Upper bound of possible indices (exclusive).
+	/// @param mLB Lower bound of possible indices (inclusive).
+	/// @param mUB Upper bound of possible indices (exclusive).
 	/// @return Returns the wrapped index value.
-	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getWrapIdx(T1 mVal, const T2& mLowerBound, const T3& mUpperBound) noexcept
+	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getMod(T1 mVal, const T2& mLB, const T3& mUB) noexcept
 	{
-		SSVU_ASSERT(mLowerBound < mUpperBound);
-		const auto& rangeSize(mUpperBound - mLowerBound);
-		SSVU_ASSERT(rangeSize != 0 && rangeSize + 1 != 0);
-		if(mVal < mLowerBound) mVal += rangeSize * ((mLowerBound - mVal) / rangeSize + 1);
-		return mLowerBound + (mVal - mLowerBound) % rangeSize;
-	}
+		SSVU_ASSERT(mLB < mUB);
 
-	/// @brief Gets a wrapped index value. (Default inclusive lower bound: 0)
-	/// @code
-	/// SSVU_ASSERT(getWrapIdx(-2, 12) == 9);
-	/// @endcode
-	/// @param mVal Index value to wrap.
-	/// @param mUpperBound Upper bound of possible indices (exclusive).
-	/// @return Returns the wrapped index value.
-	template<typename T1, typename T2> inline constexpr Common<T1, T2> getWrapIdx(const T1& mVal, const T2& mUpperBound) noexcept
-	{
-		SSVU_ASSERT_CONSTEXPR(mUpperBound != 0);
-		return ((mVal % mUpperBound) + mUpperBound) % mUpperBound;
+		const auto& rangeSize(mUB - mLB);
+		SSVU_ASSERT(rangeSize > 0 && rangeSize + 1 != 0);
+
+		if(mVal < mLB) mVal += rangeSize * ((mLB - mVal) / rangeSize + 1);
+		return mLB + ((mVal - mLB) % rangeSize);
 	}
 
 	/// @brief Calculates Euclidean distance (squared) between two points.
@@ -344,7 +332,18 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3, typename T4, typename T5>
 		inline constexpr Common<T1, T2, T3, T4, T5> getMap(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
 	{
+		SSVU_ASSERT_CONSTEXPR((mIMax - mIMin) != 0);
 		return mOMin + (mI - mIMin) * (mOMax - mOMin) / (mIMax - mIMin);
+	}
+
+	/// @brief Lineally interpolates between two values using a [0..1] weight.
+	/// @param mWeight Weight between 0 and 1.
+	/// @param mA Min value,
+	/// @param mB Max value.
+	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> getLerp(const T1& mWeight, const T2& mA, const T3& mB) noexcept
+	{
+		SSVU_ASSERT_CONSTEXPR(mWeight >= 0.f && mWeight <= 1.f);
+		return (mA + mWeight * (mB - mA));
 	}
 }
 
