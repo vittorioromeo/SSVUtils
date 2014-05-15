@@ -335,9 +335,14 @@ namespace ssvu
 	/// @return Returns the smallest distance in degrees between mA and mB.
 	template<typename T1, typename T2> inline constexpr Common<T1, T2> getDistDeg(const T1& mA, const T2& mB) noexcept { return 180.f - std::abs(std::fmod(std::abs(mA - mB), 360.f) - 180.f); }
 
-	// TODO: docs, tests
+	/// @brief Maps a numeric value from an input range to an output range.
+	/// @param mI Input value.
+	/// @param mIMin Input range min.
+	/// @param mIMax Input range max.
+	/// @param mOMin Output range min.
+	/// @param mOMax Output range max.
 	template<typename T1, typename T2, typename T3, typename T4, typename T5>
-	inline ssvu::Common<T1, T2, T3, T4, T5> getMap(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax)
+		inline constexpr Common<T1, T2, T3, T4, T5> getMap(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
 	{
 		return mOMin + (mI - mIMin) * (mOMax - mOMin) / (mIMax - mIMin);
 	}
