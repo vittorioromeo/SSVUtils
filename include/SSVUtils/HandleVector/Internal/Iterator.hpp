@@ -37,7 +37,7 @@ namespace ssvu
 		};
 	}
 
-	template<typename T> class HVecItrFast : public Internal::HVecItrBase<T, Internal::Atom<T>*, HVecItrFast<T>>
+	template<typename T> class HVecItrFast final : public Internal::HVecItrBase<T, Internal::Atom<T>*, HVecItrFast<T>>
 	{
 		template<typename, typename, typename> friend class Internal::HVecItrBase;
 
@@ -49,7 +49,7 @@ namespace ssvu
 				: Internal::HVecItrBase<T, Internal::Atom<T>*, HVecItrFast<T>>{mAtomPtr} { }
 	};
 
-	template<typename T> class HVecItrIdx : public Internal::HVecItrBase<T, HIdx, HVecItrIdx<T>>
+	template<typename T> class HVecItrIdx final : public Internal::HVecItrBase<T, HIdx, HVecItrIdx<T>>
 	{
 		template<typename, typename, typename> friend class Internal::HVecItrBase;
 
