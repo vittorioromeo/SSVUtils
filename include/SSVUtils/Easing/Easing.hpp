@@ -15,9 +15,9 @@ namespace ssvu
 			template<typename T> struct Dispatcher
 			{
 				using FnType = T(*)(T, T, T, T);
-				template<FnType FN> inline static T getMap(const T& mI, const T& mIMin, const T& mIMax, const T& mOMin, const T& mOMax) noexcept
+				template<FnType TFN> inline static T getMap(const T& mI, const T& mIMin, const T& mIMax, const T& mOMin, const T& mOMax) noexcept
 				{
-					return FN(mIMin + mI, mOMin, mOMax - mOMin, mIMax - mIMin);
+					return TFN(mIMin + mI, mOMin, mOMax - mOMin, mIMax - mIMin);
 				}
 			};
 		}
