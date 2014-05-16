@@ -92,7 +92,9 @@ namespace ssvu
 			{
 				SSVU_ASSERT(mD != 0);
 				if((mT /= mD / T(2)) < T(1)) return mC / T(2) * mT * mT * mT + mB;
-				return mC / T(2) * ((mT -= T(2)) * mT * mT + T(2)) + mB;
+				auto p1(mC / T(2) * mT);
+				mT -= T(2);
+				return p1 * mT * mT + T(2) + mB;
 			}
 		};
 
