@@ -5,8 +5,6 @@
 #ifndef SSVU_ENCRYPTION_INTERNAL_BASE64
 #define SSVU_ENCRYPTION_INTERNAL_BASE64
 
-#include <string>
-
 namespace ssvu
 {
 	namespace Encryption

@@ -5,10 +5,6 @@
 #ifndef SSVU_CORE_FILESYSTEM_SCAN
 #define SSVU_CORE_FILESYSTEM_SCAN
 
-#include <vector>
-#include <string>
-#include "SSVUtils/Core/FileSystem/Enums.hpp"
-#include "SSVUtils/Core/FileSystem/Path.hpp"
 #include "SSVUtils/Core/FileSystem/Internal/ScanHelper.hpp"
 
 namespace ssvu

@@ -5,9 +5,6 @@
 #ifndef SSVU_CORE_STRING_SPLIT
 #define SSVU_CORE_STRING_SPLIT
 
-#include <string>
-#include <vector>
-#include "SSVUtils/Core/String/Enums.hpp"
 #include "SSVUtils/Core/String/Internal/SplitHelper.hpp"
 
 namespace ssvu

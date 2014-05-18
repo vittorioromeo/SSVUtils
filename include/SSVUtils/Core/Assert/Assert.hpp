@@ -5,10 +5,6 @@
 #ifndef SSVU_CORE_ASSERT
 #define SSVU_CORE_ASSERT
 
-#include <string>
-#include <iostream>
-#include "SSVUtils/Core/Preprocessor/Preprocessor.hpp"
-
 /// @macro Static assertion. Checked at compile-time.
 /// @details Currently, it is only a wrapper for the standard `static_assert`.
 #define SSVU_ASSERT_STATIC(...)	static_assert(__VA_ARGS__)

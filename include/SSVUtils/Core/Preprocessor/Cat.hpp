@@ -5,11 +5,6 @@
 #ifndef SSVU_CORE_PREPROCESSOR_CAT
 #define SSVU_CORE_PREPROCESSOR_CAT
 
-#include "SSVUtils/Core/Preprocessor/Utils.hpp"
-#include "SSVUtils/Core/Preprocessor/ArgCount.hpp"
-#include "SSVUtils/Core/Preprocessor/Bool.hpp"
-#include "SSVUtils/Core/Preprocessor/ForEach.hpp"
-
 #define SSVPP_IMPL_CAT_0()				SSVPP_EMPTY()
 #define SSVPP_IMPL_CAT_1(m0)			SSVPP_EXPAND(m0)
 #define SSVPP_IMPL_CAT_2(m0, m1)		SSVPP_IMPL_CAT_1(SSVPP_TKNCAT_2(m0, m1))

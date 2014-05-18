@@ -8,8 +8,6 @@
 // This file contains a Windows implementation for console formatting.
 // Currently work-in-progress.
 
-#include <string>
-#include <cstdlib>
 #include <windows.h>
 
 namespace ssvu

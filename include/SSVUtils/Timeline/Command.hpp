@@ -5,15 +5,13 @@
 #ifndef SSVU_TIMELINE_COMMAND
 #define SSVU_TIMELINE_COMMAND
 
-#include "SSVUtils/MemoryManager/MemoryManager.hpp"
-
 namespace ssvu
 {
 	class Timeline;
 
 	class Command : public MemoryManageable
 	{
-		friend class Timeline;
+		friend Timeline;
 
 		protected:
 			Timeline& timeline;

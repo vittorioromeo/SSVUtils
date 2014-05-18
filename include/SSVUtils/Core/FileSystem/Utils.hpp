@@ -5,15 +5,6 @@
 #ifndef SSVU_CORE_FILESYSTEM_UTILS
 #define SSVU_CORE_FILESYSTEM_UTILS
 
-#include <cstdlib>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include "SSVUtils/Core/String/Utils.hpp"
-#include "SSVUtils/Core/FileSystem/Path.hpp"
-
 namespace ssvu
 {
 	namespace FileSystem

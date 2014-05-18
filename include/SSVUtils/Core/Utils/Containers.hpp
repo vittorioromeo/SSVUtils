@@ -5,11 +5,6 @@
 #ifndef SSVU_CORE_UTILS_CONTAINERS
 #define SSVU_CORE_UTILS_CONTAINERS
 
-#include <vector>
-#include <map>
-#include <algorithm>
-#include "SSVUtils/Core/Utils/Math.hpp"
-
 namespace ssvu
 {
 	/// @brief Wrapper around std::find that takes a container instead of two iterators.
@@ -197,27 +192,27 @@ namespace ssvu
 	template<typename T, typename P> inline T getTrimmedLR(T mContainer, const P& mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
 
 	/// @brief Emplaces a `ssvu::Uptr<T>` inside mContainer and returns a reference to the allocated T instance.
-	/// @details Internally uses `std::make_unique` and `ssvu::Uptr<T>::get`.
+	/// @details Internally uses `ssvu::makeUptr` and `ssvu::Uptr<T>::get`.
 	/// @param mContainer Container of `ssvu::Uptr<T>` where the newly created smart pointer will be emplaced.
 	/// @param mArgs Emplacement variadic arguments.
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceUptr(TC& mContainer, TArgs&&... mArgs)
 	{
-		auto uptr(std::make_unique<T>(std::forward<TArgs>(mArgs)...));
+		auto uptr(makeUptr<T>(std::forward<TArgs>(mArgs)...));
 		auto result(uptr.get());
 		mContainer.emplace_back(std::move(uptr));
 		return *result;
 	}
 
 	/// @brief Emplaces a `ssvu::Uptr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
-	/// @details Internally uses `std::make_unique` and `ssvu::Uptr<T>::get`.
+	/// @details Internally uses `ssvu::makeUptr` and `ssvu::Uptr<T>::get`.
 	/// @param mContainer Map container of `ssvu::Uptr<T>` where the newly created smart pointer will be emplaced.
 	/// @param mKey Key of the element.
 	/// @param mArgs Emplacement variadic arguments.
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUptrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 	{
-		auto uptr(std::make_unique<T>(std::forward<TArgs>(mArgs)...));
+		auto uptr(makeUptr<T>(std::forward<TArgs>(mArgs)...));
 		auto result(uptr.get());
 		mContainer.emplace(std::make_pair(std::forward<TK>(mKey), std::move(uptr)));
 		return *result;

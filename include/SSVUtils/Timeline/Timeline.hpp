@@ -5,7 +5,6 @@
 #ifndef SSVU_TIMELINE
 #define SSVU_TIMELINE
 
-#include <vector>
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/Timeline/Command.hpp"
@@ -94,7 +93,6 @@ namespace ssvu
 	};
 }
 
-#include "SSVUtils/Timeline/Command.hpp"
 #include "SSVUtils/Timeline/Do.hpp"
 #include "SSVUtils/Timeline/Wait.hpp"
 #include "SSVUtils/Timeline/Go.hpp"

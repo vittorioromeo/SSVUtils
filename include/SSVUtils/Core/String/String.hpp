@@ -8,7 +8,6 @@
 #include "SSVUtils/Core/String/Enums.hpp"
 #include "SSVUtils/Core/String/Utils.hpp"
 #include "SSVUtils/Core/String/Trim.hpp"
-#include "SSVUtils/Core/String/Stringifier.hpp"
 #include "SSVUtils/Core/String/Split.hpp"
 
 #endif

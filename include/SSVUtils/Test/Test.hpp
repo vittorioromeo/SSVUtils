@@ -5,9 +5,6 @@
 #ifndef SSVU_TEST_HPP
 #define SSVU_TEST_HPP
 
-#include <map>
-#include <string>
-#include <stdexcept>
 #include "SSVUtils/Core/Core.hpp"
 
 #define SSVUT_IMPL_GET_NAME_TYPE(mName) 		SSVPP_CAT(SSVUTTestUnique, mName, __LINE__)

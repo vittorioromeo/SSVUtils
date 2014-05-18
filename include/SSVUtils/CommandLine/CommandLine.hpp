@@ -5,6 +5,8 @@
 #ifndef SSVU_COMMANDLINE
 #define SSVU_COMMANDLINE
 
+#include "SSVUtils/Core/Core.hpp"
+
 #include "SSVUtils/CommandLine/Parser.hpp"
 #include "SSVUtils/CommandLine/Elements/Bases.hpp"
 #include "SSVUtils/CommandLine/Elements/Arg.hpp"

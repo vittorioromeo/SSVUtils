@@ -18,17 +18,6 @@
 	#define SSVU_OS_UNKNOWN 1
 #endif
 
-#include <string>
-#include <chrono>
-#include <memory>
-#include <functional>
-#include <type_traits>
-#include <iterator>
-#include <tuple>
-#include <utility>
-#include <typeinfo>
-#include "SSVUtils/Core/Assert/Assert.hpp"
-
 // C++14: will be in standard
 namespace ssvu
 {
@@ -96,6 +85,7 @@ namespace ssvu
 {
 	// Type traits shortcuts
 	template<typename T, typename TDeleter = std::default_delete<T>> using Uptr = std::unique_ptr<T, TDeleter>;
+	template<typename T> using Sptr = std::shared_ptr<T>;
 	template<typename... TArgs> using Common = std::common_type_t<TArgs...>;
 	template<bool TBool, typename T = void> using EnableIf = std::enable_if_t<TBool, T>;
 	template<typename T> using Decay = std::decay_t<T>;
@@ -164,8 +154,8 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<typename T, typename... TArgs> inline ssvu::Uptr<T> makeUniqueHelper(std::false_type, TArgs&&... mArgs) { return ssvu::Uptr<T>(new T(std::forward<TArgs>(mArgs)...)); }
-		template<typename T, typename... TArgs> inline ssvu::Uptr<T> makeUniqueHelper(std::true_type, TArgs&&... mArgs)
+		template<typename T, typename... TArgs> inline ssvu::Uptr<T> makeUptrHelper(std::false_type, TArgs&&... mArgs) { return ssvu::Uptr<T>(new T(std::forward<TArgs>(mArgs)...)); }
+		template<typename T, typename... TArgs> inline ssvu::Uptr<T> makeUptrHelper(std::true_type, TArgs&&... mArgs)
 		{
 			SSVU_ASSERT_STATIC(std::extent<T>::value == 0, "make_unique<T[N]>() is forbidden, please use make_unique<T[]>().");
 			using U = ssvu::RemoveExtent<T>;
@@ -177,7 +167,18 @@ namespace ssvu
 namespace std
 {
 	// C++14: will be in standard
-	template<typename T, typename... TArgs> inline ssvu::Uptr<T> make_unique(TArgs&&... mArgs) { return ssvu::Internal::makeUniqueHelper<T>(std::is_array<T>(), std::forward<TArgs>(mArgs)...); }
+	template<typename T, typename... TArgs> inline ssvu::Uptr<T> make_unique(TArgs&&... mArgs) { return ssvu::Internal::makeUptrHelper<T>(std::is_array<T>(), std::forward<TArgs>(mArgs)...); }
+}
+
+namespace ssvu
+{
+	/// @brief Creates and returns an `ssvu::Uptr<T>`.
+	/// @details Wraps `std::make_unique<T>`.
+	template<typename T, typename... TArgs> inline Uptr<T> makeUptr(TArgs&&... mArgs) { return std::make_unique<T>(std::forward<TArgs>(mArgs)...); }
+
+	/// @brief Creates and returns an `ssvu::Sptr<T>`.
+	/// @details Wraps `std::make_shared<T>`.
+	template<typename T, typename... TArgs> inline Sptr<T> makeSptr(TArgs&&... mArgs) { return std::make_shared<T>(std::forward<TArgs>(mArgs)...); }
 }
 
 #endif

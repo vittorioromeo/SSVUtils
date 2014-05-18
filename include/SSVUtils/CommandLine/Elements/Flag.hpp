@@ -5,8 +5,6 @@
 #ifndef SSVU_COMMANDLINE_ELEMENTS_FLAG
 #define SSVU_COMMANDLINE_ELEMENTS_FLAG
 
-#include <string>
-
 namespace ssvu
 {
 	namespace CommandLine

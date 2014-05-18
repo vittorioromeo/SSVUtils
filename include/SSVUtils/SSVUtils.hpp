@@ -22,9 +22,10 @@
 #include "SSVUtils/FatEnum/FatEnum.hpp"
 #include "SSVUtils/HandleVector/HandleVector.hpp"
 #include "SSVUtils/Easing/Easing.hpp"
+#include "SSVUtils/RecPtr/RecPtr.hpp"
 
 #ifndef SSVUT_DISABLE
-	#include "SSVUtils/Test/Tests.hpp"
+	#include "SSVUtils/Tests/Tests.hpp"
 #endif
 
 #endif

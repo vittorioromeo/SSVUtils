@@ -5,9 +5,6 @@
 #ifndef SSVU_CORE_PREPROCESSOR_TUPLE
 #define SSVU_CORE_PREPROCESSOR_TUPLE
 
-#include "SSVUtils/Core/Preprocessor/ArgCount.hpp"
-#include "SSVUtils/Core/Preprocessor/Utils.hpp"
-
 #define SSVPP_TPL_MAX_SIZE 20
 
 #define SSVPP_IMPL_TPL_EXPLODE(...)	__VA_ARGS__

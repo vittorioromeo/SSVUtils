@@ -8,7 +8,6 @@
 // This file contains an Unix implementation for console formatting.
 // Everything returns ASCII formatting codes.
 
-#include <string>
 #include <sys/ioctl.h>
 #include <stdio.h>
 #include <unistd.h>

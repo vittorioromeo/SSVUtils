@@ -5,8 +5,6 @@
 #ifndef SSVU_CORE_CONSOLEFMT
 #define SSVU_CORE_CONSOLEFMT
 
-#include <string>
-
 namespace ssvu
 {
 	namespace Console

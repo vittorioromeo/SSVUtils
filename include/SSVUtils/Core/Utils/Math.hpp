@@ -5,13 +5,6 @@
 #ifndef SSVU_CORE_UTILS_MATH
 #define SSVU_CORE_UTILS_MATH
 
-#include <cassert>
-#include <array>
-#include <random>
-#include "SSVUtils/Core/Global/Common.hpp"
-#include "SSVUtils/Core/Utils/Macros.hpp"
-#include "SSVUtils/Core/Assert/Assert.hpp"
-
 namespace ssvu
 {
 	inline std::minstd_rand& getRndEngine()	noexcept { static std::minstd_rand rndEngine(std::time(0)); return rndEngine; }

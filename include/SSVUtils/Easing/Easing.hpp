@@ -6,6 +6,8 @@
 #ifndef SSVU_EASING
 #define SSVU_EASING
 
+#include <cmath>
+
 namespace ssvu
 {
 	namespace Easing

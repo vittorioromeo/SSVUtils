@@ -5,11 +5,6 @@
 #ifndef SSVU_CORE_STRING_INTERNAL_SPLITHELPER
 #define SSVU_CORE_STRING_INTERNAL_SPLITHELPER
 
-#include <vector>
-#include <string>
-#include <limits>
-#include "SSVUtils/Core/String/Enums.hpp"
-
 namespace ssvu
 {
 	namespace Internal

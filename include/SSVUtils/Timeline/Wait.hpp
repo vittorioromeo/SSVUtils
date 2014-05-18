@@ -5,10 +5,6 @@
 #ifndef SSVU_TIMELINE_WAIT
 #define SSVU_TIMELINE_WAIT
 
-#include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/Timeline/Command.hpp"
-#include "SSVUtils/Timeline/Timeline.hpp"
-
 namespace ssvu
 {
 	class Wait final : public Command

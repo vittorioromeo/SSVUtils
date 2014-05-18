@@ -5,12 +5,6 @@
 #ifndef SSVU_TEMPLATESYSTEM_DICTIONARY
 #define SSVU_TEMPLATESYSTEM_DICTIONARY
 
-#include <string>
-#include <vector>
-#include <map>
-#include "SSVUtils/TemplateSystem/Internal/Symbols.hpp"
-#include "SSVUtils/Core/Core.hpp"
-
 namespace ssvu
 {
 	namespace TemplateSystem

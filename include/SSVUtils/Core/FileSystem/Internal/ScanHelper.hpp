@@ -5,14 +5,6 @@
 #ifndef SSVU_CORE_FILESYSTEM_INTERNAL_SCANHELPER
 #define SSVU_CORE_FILESYSTEM_INTERNAL_SCANHELPER
 
-#include <stdexcept>
-#include <dirent.h>
-#include <sys/stat.h>
-#include "SSVUtils/Core/FileSystem/Enums.hpp"
-#include "SSVUtils/Core/FileSystem/Utils.hpp"
-#include "SSVUtils/Core/FileSystem/Path.hpp"
-#include "SSVUtils/Core/Utils/Containers.hpp"
-
 namespace ssvu
 {
 	namespace FileSystem

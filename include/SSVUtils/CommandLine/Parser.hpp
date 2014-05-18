@@ -5,11 +5,6 @@
 #ifndef SSVU_COMMANDLINE_PARSER
 #define SSVU_COMMANDLINE_PARSER
 
-#include <vector>
-#include <string>
-#include <stdexcept>
-#include "SSVUtils/Core/Core.hpp"
-
 namespace ssvu
 {
 	namespace CommandLine

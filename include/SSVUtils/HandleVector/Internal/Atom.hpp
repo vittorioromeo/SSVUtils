@@ -1,7 +1,9 @@
+// Copyright (c) 2013-2014 Vittorio Romeo
+// License: Academic Free License ("AFL") v. 3.0
+// AFL License page: http://opensource.org/licenses/AFL-3.0
+
 #ifndef SSVU_HANDLEVECTOR_INTERNAL_ATOM
 #define SSVU_HANDLEVECTOR_INTERNAL_ATOM
-
-#include "SSVUtils/HandleVector/Internal/Uncertain.hpp"
 
 namespace ssvu
 {
@@ -10,7 +12,7 @@ namespace ssvu
 		/// @brief Internal HandleVector class storing data and metadata.
 		template<typename T> class Atom
 		{
-			template<typename> friend class HandleVector;
+			template<typename> friend class ssvu::HandleVector;
 
 			private:
 				Uncertain<T> data;	///< @brief Data being stored.

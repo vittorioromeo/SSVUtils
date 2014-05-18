@@ -5,15 +5,6 @@
 #ifndef SSVU_COMMANDLINE_CMDLINE_INL
 #define SSVU_COMMANDLINE_CMDLINE_INL
 
-#include <deque>
-#include <stdexcept>
-#include <limits>
-#include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/CommandLine/Cmd.hpp"
-#include "SSVUtils/CommandLine/Elements/Flag.hpp"
-#include "SSVUtils/CommandLine/CmdLine.hpp"
-#include "SSVUtils/CommandLine/Elements/Bases.hpp"
-
 namespace ssvu
 {
 	namespace CommandLine

@@ -5,9 +5,6 @@
 #ifndef SSVU_CORE_UTILS_MACROS
 #define SSVU_CORE_UTILS_MACROS
 
-#include <cassert>
-#include "SSVUtils/Core/Preprocessor/Preprocessor.hpp"
-
 namespace ssvu
 {
 	#define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVPP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))

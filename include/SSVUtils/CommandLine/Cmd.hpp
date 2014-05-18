@@ -5,13 +5,7 @@
 #ifndef SSVU_COMMANDLINE_CMD
 #define SSVU_COMMANDLINE_CMD
 
-#include <string>
-#include <vector>
-#include <functional>
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Delegate/Delegate.hpp"
-#include "SSVUtils/CommandLine/Elements/Flag.hpp"
-#include "SSVUtils/CommandLine/Elements/Bases.hpp"
 
 namespace ssvu
 {

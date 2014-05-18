@@ -2,17 +2,11 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_TEST_TESTS
-#define SSVU_TEST_TESTS
+#ifndef SSVU_TESTS
+#define SSVU_TESTS
 
 #include <list>
 #include <forward_list>
-#include <map>
-#include <unordered_map>
-#include "SSVUtils/Test/Test.hpp"
-#include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/FatEnum/FatEnum.hpp"
-#include "SSVUtils/HandleVector/HandleVector.hpp"
 
 SSVUT_TEST(UtilsMathTests)
 {

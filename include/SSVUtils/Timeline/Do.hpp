@@ -5,10 +5,6 @@
 #ifndef SSVU_TIMELINE_DO
 #define SSVU_TIMELINE_DO
 
-#include <functional>
-#include "SSVUtils/Timeline/Command.hpp"
-#include "SSVUtils/Timeline/Timeline.hpp"
-
 namespace ssvu
 {
 	class Do final : public Command

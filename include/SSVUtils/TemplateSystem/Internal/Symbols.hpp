@@ -5,8 +5,6 @@
 #ifndef SSVU_TEMPLATESYSTEM_INTERNAL_SYMBOLS
 #define SSVU_TEMPLATESYSTEM_INTERNAL_SYMBOLS
 
-#include <string>
-
 namespace ssvu
 {
 	namespace TemplateSystem

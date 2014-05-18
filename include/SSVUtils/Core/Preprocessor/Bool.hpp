@@ -5,8 +5,6 @@
 #ifndef SSVU_CORE_PREPROCESSOR_BOOL
 #define SSVU_CORE_PREPROCESSOR_BOOL
 
-#include "SSVUtils/Core/Preprocessor/Utils.hpp"
-
 #define SSVPP_IMPL_BOOL_0 0
 #define SSVPP_IMPL_BOOL_1 1
 #define SSVPP_IMPL_BOOL_2 1

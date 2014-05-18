@@ -1,7 +1,11 @@
+// Copyright (c) 2013-2014 Vittorio Romeo
+// License: Academic Free License ("AFL") v. 3.0
+// AFL License page: http://opensource.org/licenses/AFL-3.0
+
 #ifndef SSVU_FATENUM
 #define SSVU_FATENUM
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Bimap/Bimap.hpp"
 
 #define SSVU_FATENUM_IMPL_MK_ELEM_VALS(mIdx, mData, mArg)			SSVPP_TPL_ELEM(mArg, 0) = SSVPP_TPL_ELEM(mArg, 1) SSVPP_COMMA_IF(mIdx)
 #define SSVU_FATENUM_IMPL_MK_ELEM_DEFS(mIdx, mData, mArg)			mArg SSVPP_COMMA_IF(mIdx)

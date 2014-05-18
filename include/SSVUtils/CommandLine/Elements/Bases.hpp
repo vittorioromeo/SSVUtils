@@ -5,10 +5,6 @@
 #ifndef SSVU_COMMANDLINE_ELEMENTS_BASES
 #define SSVU_COMMANDLINE_ELEMENTS_BASES
 
-#include <string>
-#include <vector>
-#include "SSVUtils/Core/Core.hpp"
-
 namespace ssvu
 {
 	namespace CommandLine

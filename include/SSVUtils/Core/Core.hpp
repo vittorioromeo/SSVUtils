@@ -8,6 +8,30 @@
 // "Core" is the main module of the library: its parts all depend on each other,
 // and cannot be used separately.
 
+// STL Dependencies
+#include <iostream>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <cassert>
+#include <vector>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include <chrono>
+#include <unordered_map>
+#include <array>
+#include <algorithm>
+#include <random>
+#include <map>
+#include <set>
+#include <cstddef>
+#include <functional>
+#include <climits>
+#include <stack>
+#include <memory>
+#include <iterator>
+#include <cstring>
+
 // The "Core/Preprocessor/Preprocessor" module is used in various parts of the library.
 // It does not introduce any additional dependency and is safe to include first.
 #include "SSVUtils/Core/Preprocessor/Preprocessor.hpp"
@@ -30,6 +54,9 @@
 // "Core/ConsoleFmt/ConsoleFmt" deals with console output formatting. It is requried for
 // stringification methods.
 #include "SSVUtils/Core/ConsoleFmt/ConsoleFmt.hpp"
+
+// "Core/Stringifier/Stringifier" deals with pretty-print and value to string conversions.
+#include "SSVUtils/Core/Stringifier/Stringifier.hpp"
 
 // "Core/Log/Log" is also used in most of the library.
 // "Core/Assert/Assert"'s implementation requires it as well.

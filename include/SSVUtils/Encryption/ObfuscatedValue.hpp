@@ -5,11 +5,6 @@
 #ifndef SSVU_ENCRYPTION_OBFUSCATEDVALUE
 #define SSVU_ENCRYPTION_OBFUSCATEDVALUE
 
-#include <string>
-#include <sstream>
-#include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/Encryption/Encryption.hpp"
-
 namespace ssvu
 {
 	template<typename T, Encryption::Type TCrypto = Encryption::Type::Base64, typename TEnable = void> class ObfuscatedValue;

@@ -1,3 +1,7 @@
+// Copyright (c) 2013-2014 Vittorio Romeo
+// License: Academic Free License ("AFL") v. 3.0
+// AFL License page: http://opensource.org/licenses/AFL-3.0
+
 #ifndef SSVU_HANDLEVECTOR_INTERNAL_ITERATOR
 #define SSVU_HANDLEVECTOR_INTERNAL_ITERATOR
 
@@ -11,7 +15,7 @@ namespace ssvu
 				TItrValue value;
 
 				inline TDerived& getThisDerived() noexcept { return *reinterpret_cast<TDerived*>(this); }
-				template<typename TT> inline TT getImpl() noexcept { return getThisDerived().getImpl<TT>(); }
+				template<typename TT> inline TT getImpl() noexcept { return getThisDerived().template getImpl<TT>(); }
 
 			public:
 				inline HVecItrBase(TItrValue mValue) noexcept : value{mValue} { }

@@ -5,9 +5,6 @@
 #ifndef SSVU_COMMANDLINE_ELEMENTS_ARGPACK
 #define SSVU_COMMANDLINE_ELEMENTS_ARGPACK
 
-#include <string>
-#include <vector>
-
 namespace ssvu
 {
 	namespace CommandLine

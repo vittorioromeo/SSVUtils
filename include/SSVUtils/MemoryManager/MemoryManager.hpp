@@ -5,8 +5,6 @@
 #ifndef SSVU_MEMORYMANAGER
 #define SSVU_MEMORYMANAGER
 
-#include <algorithm>
-#include <vector>
 #include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu

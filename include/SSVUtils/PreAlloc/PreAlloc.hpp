@@ -1,11 +1,10 @@
-#ifndef SSVU_PREALLOCATOR
-#define SSVU_PREALLOCATOR
+// Copyright (c) 2013-2014 Vittorio Romeo
+// License: Academic Free License ("AFL") v. 3.0
+// AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#include <vector>
-#include <stack>
-#include <functional>
-#include <stdexcept>
-#include <cmath>
+#ifndef SSVU_PREALLOC
+#define SSVU_PREALLOC
+
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 

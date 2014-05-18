@@ -5,7 +5,7 @@
 #ifndef SSVU_ENCRYPTION
 #define SSVU_ENCRYPTION
 
-#include <string>
+#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Encryption/Internal/Base64.hpp"
 #include "SSVUtils/Encryption/Internal/MD5.hpp"
 

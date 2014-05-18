@@ -5,6 +5,8 @@
 #ifndef SSVU_TEMPLATESYSTEM
 #define SSVU_TEMPLATESYSTEM
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/TemplateSystem/Internal/Symbols.hpp"
 #include "SSVUtils/TemplateSystem/Dictionary.hpp"
 
 #endif

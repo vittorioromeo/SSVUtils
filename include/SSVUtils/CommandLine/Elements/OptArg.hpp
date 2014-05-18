@@ -5,8 +5,6 @@
 #ifndef SSVU_COMMANDLINE_ELEMENTS_OPTARG
 #define SSVU_COMMANDLINE_ELEMENTS_OPTARG
 
-#include <string>
-
 namespace ssvu
 {
 	namespace CommandLine

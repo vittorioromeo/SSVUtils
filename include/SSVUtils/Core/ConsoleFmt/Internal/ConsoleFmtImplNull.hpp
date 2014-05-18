@@ -8,9 +8,6 @@
 // This file contains a null implementation for console formatting.
 // Everything returns an empty string.
 
-#include <string>
-#include "SSVUtils/Core/Global/Common.hpp"
-
 namespace ssvu
 {
 	namespace Console

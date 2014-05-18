@@ -5,9 +5,6 @@
 #ifndef SSVS_TIMELINE_MANAGER
 #define SSVS_TIMELINE_MANAGER
 
-#include "SSVUtils/Timeline/Timeline.hpp"
-#include "SSVUtils/MemoryManager/MemoryManager.hpp"
-
 namespace ssvu
 {
 	class TimelineManager

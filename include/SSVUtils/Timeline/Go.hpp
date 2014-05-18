@@ -5,9 +5,6 @@
 #ifndef SSVU_TIMELINE_GO
 #define SSVU_TIMELINE_GO
 
-#include "SSVUtils/Timeline/Command.hpp"
-#include "SSVUtils/Timeline/Timeline.hpp"
-
 namespace ssvu
 {
 	namespace Internal
