@@ -53,7 +53,7 @@ namespace ssvu
 
 		template<typename T, typename TBase> inline PtrRecycler<T, TBase>& getPtrRecycler() noexcept
 		{
-			static PtrRecycler<T, TBase> result;
+			thread_local PtrRecycler<T, TBase> result;
 			return result;
 		}
 
