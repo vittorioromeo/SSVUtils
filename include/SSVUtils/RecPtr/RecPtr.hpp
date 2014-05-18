@@ -48,7 +48,7 @@ namespace ssvu
 					ptrs.pop_back();
 					return reinterpret_cast<T*>(result);
 				}
-				inline bool isEmpty() const noexcept { return ptrs.size() == 0; }
+				inline bool isEmpty() const noexcept { return ptrs.empty(); }
 		};
 
 		template<typename T, typename TBase> inline PtrRecycler<T, TBase>& getPtrRecycler() noexcept
