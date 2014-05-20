@@ -12,14 +12,18 @@ namespace ssvu
 {
 	namespace Easing
 	{
+		template<typename T> struct In		{ inline static decltype(&T::in)	get() noexcept { return &T::in; } };
+		template<typename T> struct Out		{ inline static decltype(&T::out)	get() noexcept { return &T::out; } };
+		template<typename T> struct InOut	{ inline static decltype(&T::inOut) get() noexcept { return &T::inOut; } };
+
 		namespace Internal
 		{
 			template<typename T> struct Dispatcher
 			{
-				using FnType = T(*)(T, T, T, T);
-				template<FnType TFN> inline static T getMap(const T& mI, const T& mIMin, const T& mIMax, const T& mOMin, const T& mOMax) noexcept
+				template<template<typename> class TEase, template<typename> class TKind>
+					inline static T getMap(const T& mI, const T& mIMin, const T& mIMax, const T& mOMin, const T& mOMax) noexcept
 				{
-					return TFN(mIMin + mI, mOMin, mOMax - mOMin, mIMax - mIMin);
+					return TKind<TEase<T>>::get()(mIMin + mI, mOMin, mOMax - mOMin, mIMax - mIMin);
 				}
 			};
 		}
@@ -275,45 +279,31 @@ namespace ssvu
 		};
 	}
 
-	template<template<typename> class TEase, typename T1, typename T2, typename T3>
-		inline Common<T1, T2, T3> getEasedIn(const T1& mI, const T2& mIMin, const T3& mIMax) noexcept
+	/// @brief Returns a value eased in a range.
+	/// @tparam TEase Easing type.
+	/// @tparam TKind Easing kind. Can be In/Out/InOut.
+	/// @param mI Input value.
+	/// @param mIMin Input range min.
+	/// @param mIMax Input range max.
+	template<template<typename> class TEase, template<typename> class TKind, typename T1, typename T2, typename T3>
+		inline Common<T1, T2, T3> getEased(const T1& mI, const T2& mIMin, const T3& mIMax) noexcept
 	{
-		using CT = Common<T1, T2, T3>;
-		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::in>(mI, mIMin, mIMax, mIMin, mIMax);
-	}
-	template<template<typename> class TEase, typename T1, typename T2, typename T3>
-		inline Common<T1, T2, T3> getEasedOut(const T1& mI, const T2& mIMin, const T3& mIMax) noexcept
-	{
-		using CT = Common<T1, T2, T3>;
-		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::out>(mI, mIMin, mIMax, mIMin, mIMax);
-	}
-	template<template<typename> class TEase, typename T1, typename T2, typename T3>
-		inline Common<T1, T2, T3> getEasedInOut(const T1& mI, const T2& mIMin, const T3& mIMax) noexcept
-	{
-		using CT = Common<T1, T2, T3>;
-		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::inOut>(mI, mIMin, mIMax, mIMin, mIMax);
+		return Easing::Internal::Dispatcher<Common<T1, T2, T3>>::template getMap<TEase, TKind>(mI, mIMin, mIMax, mIMin, mIMax);
 	}
 
-	template<template<typename> class TEase, typename T1, typename T2, typename T3, typename T4, typename T5>
-		inline Common<T1, T2, T3, T4, T5> getMapEasedIn(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
+	/// @brief Returns a value eased in a range and mapped to an output range.
+	/// @tparam TEase Easing type.
+	/// @tparam TKind Easing kind. Can be In/Out/InOut.
+	/// @param mI Input value.
+	/// @param mIMin Input range min.
+	/// @param mIMax Input range max.
+	/// @param mOMin Output range min.
+	/// @param mOMax Output range max.
+	template<template<typename> class TEase, template<typename> class TKind, typename T1, typename T2, typename T3, typename T4, typename T5>
+		inline Common<T1, T2, T3, T4, T5> getMapEased(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
 	{
-		using CT = Common<T1, T2, T3, T4, T5>;
-		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::in>(mI, mIMin, mIMax, mOMin, mOMax);
-	}
-	template<template<typename> class TEase, typename T1, typename T2, typename T3, typename T4, typename T5>
-		inline Common<T1, T2, T3, T4, T5> getMapEasedOut(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
-	{
-		using CT = Common<T1, T2, T3, T4, T5>;
-		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::out>(mI, mIMin, mIMax, mOMin, mOMax);
-	}
-	template<template<typename> class TEase, typename T1, typename T2, typename T3, typename T4, typename T5>
-		inline Common<T1, T2, T3, T4, T5> getMapEasedInOut(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
-	{
-		using CT = Common<T1, T2, T3, T4, T5>;
-		return Easing::Internal::Dispatcher<CT>::template getMap<&TEase<CT>::inOut>(mI, mIMin, mIMax, mOMin, mOMax);
+		return Easing::Internal::Dispatcher<Common<T1, T2, T3, T4, T5>>::template getMap<TEase, TKind>(mI, mIMin, mIMax, mOMin, mOMax);
 	}
 }
 
 #endif
-
-// TODO: docs, tests
