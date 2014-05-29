@@ -39,10 +39,10 @@ namespace ssvu
 
 			private:
 				std::vector<std::string> names;
-				std::vector<Uptr<ArgBase>> args, optArgs;
-				std::vector<Uptr<ArgPackBase>> argPacks;
-				std::vector<Uptr<Flag>> flags;
-				ssvu::Delegate<void()> onAction;
+				VecUptr<ArgBase> args, optArgs;
+				VecUptr<ArgPackBase> argPacks;
+				VecUptr<Flag> flags;
+				Delegate<void()> onAction;
 				std::string desc;
 
 				inline Flag& findFlag(const std::string& mName)

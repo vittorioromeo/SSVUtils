@@ -13,7 +13,7 @@ namespace ssvu
 
 	namespace Internal
 	{
-		template<typename TDerived, typename TItem, typename TDeleter = std::default_delete<TItem>> class MemoryManagerBase : protected std::vector<Uptr<TItem, TDeleter>>
+		template<typename TDerived, typename TItem, typename TDeleter = std::default_delete<TItem>> class MemoryManagerBase : protected VecUptr<TItem, TDeleter>
 		{
 			template<typename T, typename P> friend void ssvu::eraseRemoveIf(T&, const P&);
 
@@ -52,7 +52,7 @@ namespace ssvu
 			}
 			template<typename TType = T, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
 			{
-				return ssvu::getEmplaceUptr<TType>(this->toAdd, std::forward<TArgs>(mArgs)...);
+				return getEmplaceUptr<TType>(this->toAdd, std::forward<TArgs>(mArgs)...);
 			}
 	};
 }

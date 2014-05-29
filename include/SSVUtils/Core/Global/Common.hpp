@@ -149,7 +149,7 @@ namespace ssvu
 	using FTDuration = std::chrono::duration<FT, std::milli>;
 
 	/// @typedef Shortcut typedef for `std::vector<ssvu::Uptr<T>>`.
-	template<typename T> using VectorUptr = std::vector<ssvu::Uptr<T>>;
+	template<typename T, typename TDeleter = std::default_delete<T>> using VecUptr = std::vector<ssvu::Uptr<T, TDeleter>>;
 }
 
 // C++14: will be in standard

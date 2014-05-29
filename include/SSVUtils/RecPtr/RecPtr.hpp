@@ -91,7 +91,7 @@ namespace ssvu
 		return getEmplaceUptrRecPoly<T, T>(mContainer, std::forward<TArgs>(mArgs)...);
 	}
 
-	template<typename TBase> using VectorUptrRecPoly = std::vector<UptrRec<TBase>>;
+	template<typename TBase> using VecUptrRecPoly = std::vector<UptrRec<TBase>>;
 }
 
 #endif

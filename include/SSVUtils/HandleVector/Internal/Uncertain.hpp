@@ -14,17 +14,17 @@ namespace ssvu
 		template<typename T> class Uncertain
 		{
 			private:
-				ssvu::AlignedStorageBasic<T> storage;
+				AlignedStorageBasic<T> storage;
 
 			public:
 				/// @brief Allocates and construct the T instance.
-				template<typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(ssvu::isNothrowConstructible<T>())
+				template<typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(isNothrowConstructible<T>())
 				{
 					new (&storage) T(std::forward<TArgs>(mArgs)...);
 				}
 
 				/// @brief Deallocates and destroys the T instance.
-				inline void deinit() noexcept(ssvu::isNothrowDestructible<T>()) { get().~T(); }
+				inline void deinit() noexcept(isNothrowDestructible<T>()) { get().~T(); }
 
 				/// @brief Returns a reference to the T instance. Assumes `init()` was called.
 				inline T& get() noexcept { return reinterpret_cast<T&>(storage); }

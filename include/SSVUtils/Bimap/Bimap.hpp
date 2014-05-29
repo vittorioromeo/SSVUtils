@@ -58,7 +58,7 @@ namespace ssvu
 			using BMPair = std::pair<T1, T2>;
 
 			/// @typedef Type of storage.
-			using Storage = ssvu::VectorUptr<BMPair>;
+			using Storage = VecUptr<BMPair>;
 
 			// Standard iterator support
 			using iterator = typename Storage::iterator;
@@ -126,7 +126,7 @@ namespace ssvu
 				set1.erase(&pair.first);
 				set2.erase(&pair.second);
 
-				ssvu::eraseRemoveIf(storage, [&pair](const ssvu::Uptr<BMPair>& mI){ return mI.get() == &pair; });
+				eraseRemoveIf(storage, [&pair](const Uptr<BMPair>& mI){ return mI.get() == &pair; });
 
 				SSVU_ASSERT(!this->has(mKey));
 			}
