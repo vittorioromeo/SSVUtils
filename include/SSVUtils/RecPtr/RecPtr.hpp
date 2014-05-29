@@ -66,32 +66,32 @@ namespace ssvu
 		}
 	}
 
-	template<typename T, typename TBase> using RecPolyUptr = Uptr<T, void(*)(TBase*)>;
-	template<typename T> using RecUptr = RecPolyUptr<T, T>;
+	template<typename T, typename TBase> using UptrRecPoly = Uptr<T, void(*)(TBase*)>;
+	template<typename T> using UptrRec = UptrRecPoly<T, T>;
 
-	template<typename T, typename TBase, typename... TArgs> inline RecPolyUptr<T, TBase> makeRecPolyUptr(TArgs&&... mArgs)
+	template<typename T, typename TBase, typename... TArgs> inline UptrRecPoly<T, TBase> makeUptrRecPoly(TArgs&&... mArgs)
 	{
-		return RecPolyUptr<T, TBase>(Internal::makePolyPtr<T, TBase>(std::forward<TArgs>(mArgs)...), [](TBase* mPtr)
+		return UptrRecPoly<T, TBase>(Internal::makePolyPtr<T, TBase>(std::forward<TArgs>(mArgs)...), [](TBase* mPtr)
 		{
 			auto& pr(Internal::getPtrRecycler<T, TBase>());
 			pr.destroy(mPtr); pr.push(mPtr);
 		});
 	}
-	template<typename T, typename... TArgs> inline RecUptr<T> makeRecUptr(TArgs&&... mArgs) { return makeRecPolyUptr<T, T>(std::forward<TArgs>(mArgs)...); }
+	template<typename T, typename... TArgs> inline UptrRec<T> makeUptrRec(TArgs&&... mArgs) { return makeUptrRecPoly<T, T>(std::forward<TArgs>(mArgs)...); }
 
-	template<typename T, typename TBase, typename... TArgs, typename TC> inline T& getEmplaceRecPolyUptr(TC& mContainer, TArgs&&... mArgs)
+	template<typename T, typename TBase, typename... TArgs, typename TC> inline T& getEmplaceUptrRecPoly(TC& mContainer, TArgs&&... mArgs)
 	{
-		auto uptr(makeRecPolyUptr<T, TBase>(std::forward<TArgs>(mArgs)...));
+		auto uptr(makeUptrRecPoly<T, TBase>(std::forward<TArgs>(mArgs)...));
 		auto result(uptr.get());
 		mContainer.emplace_back(std::move(uptr));
 		return *result;
 	}
-	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceRecUptr(TC& mContainer, TArgs&&... mArgs)
+	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceUptrRec(TC& mContainer, TArgs&&... mArgs)
 	{
-		return getEmplaceRecPolyUptr<T, T>(mContainer, std::forward<TArgs>(mArgs)...);
+		return getEmplaceUptrRecPoly<T, T>(mContainer, std::forward<TArgs>(mArgs)...);
 	}
 
-	template<typename TBase> using RecPolyUptrVector = std::vector<RecUptr<TBase>>;
+	template<typename TBase> using VectorUptrRecPoly = std::vector<UptrRec<TBase>>;
 }
 
 #endif

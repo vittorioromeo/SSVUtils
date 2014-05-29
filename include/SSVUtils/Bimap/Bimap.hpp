@@ -58,7 +58,7 @@ namespace ssvu
 			using BMPair = std::pair<T1, T2>;
 
 			/// @typedef Type of storage.
-			using Storage = std::vector<ssvu::Uptr<BMPair>>;
+			using Storage = ssvu::VectorUptr<BMPair>;
 
 			// Standard iterator support
 			using iterator = typename Storage::iterator;

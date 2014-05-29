@@ -40,7 +40,7 @@ namespace ssvu
 					: test{mTest}, expr{std::move(mExpr)}, line{std::move(mLine)} { }
 			};
 
-			using TestStorage = std::vector<ssvu::Uptr<TestBase>>;
+			using TestStorage = ssvu::VectorUptr<TestBase>;
 			using TestExecMap = std::map<std::string, bool>;
 
 			inline TestStorage& getTestStorage() noexcept 	{ static TestStorage result; return result; }

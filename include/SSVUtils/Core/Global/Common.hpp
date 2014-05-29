@@ -147,6 +147,9 @@ namespace ssvu
 	/// @typedef FTDuration is a millisecond-precision `std::chrono::duration` intended
 	/// for use in frametime-related contexts.
 	using FTDuration = std::chrono::duration<FT, std::milli>;
+
+	/// @typedef Shortcut typedef for `std::vector<ssvu::Uptr<T>>`.
+	template<typename T> using VectorUptr = std::vector<ssvu::Uptr<T>>;
 }
 
 // C++14: will be in standard
