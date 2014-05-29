@@ -81,10 +81,7 @@ namespace ssvu
 
 	template<typename T, typename TBase, typename... TArgs, typename TC> inline T& getEmplaceUptrRecPoly(TC& mContainer, TArgs&&... mArgs)
 	{
-		auto uptr(makeUptrRecPoly<T, TBase>(std::forward<TArgs>(mArgs)...));
-		auto result(uptr.get());
-		mContainer.emplace_back(std::move(uptr));
-		return *result;
+		return Internal::getEmplaceUptrImpl<T, TC, decltype(&makeUptrRecPoly<T, TBase, TArgs...>), &makeUptrRecPoly<T, TBase, TArgs...>>(mContainer, std::forward<TArgs>(mArgs)...);
 	}
 	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceUptrRec(TC& mContainer, TArgs&&... mArgs)
 	{

@@ -191,17 +191,26 @@ namespace ssvu
 	/// @return Returns a copy of the container, trimmed.
 	template<typename T, typename P> inline T getTrimmedLR(T mContainer, const P& mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
 
+	namespace Internal
+	{
+		template<typename T, typename TC, typename TMF, TMF TFnPtr, typename... TArgs> inline T& getEmplaceUptrImpl(TC& mContainer, TArgs&&... mArgs)
+		{
+			auto uptr(TFnPtr(std::forward<TArgs>(mArgs)...));
+			auto result(uptr.get());
+			mContainer.emplace_back(std::move(uptr));
+			return *result;
+		}
+	}
+
 	/// @brief Emplaces a `ssvu::Uptr<T>` inside mContainer and returns a reference to the allocated T instance.
 	/// @details Internally uses `ssvu::makeUptr` and `ssvu::Uptr<T>::get`.
 	/// @param mContainer Container of `ssvu::Uptr<T>` where the newly created smart pointer will be emplaced.
 	/// @param mArgs Emplacement variadic arguments.
 	/// @return Returns a reference to the newly allocated T instance.
-	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceUptr(TC& mContainer, TArgs&&... mArgs)
+	template<typename T, typename TC, typename... TArgs> inline T& getEmplaceUptr(TC& mContainer, TArgs&&... mArgs)
 	{
-		auto uptr(makeUptr<T>(std::forward<TArgs>(mArgs)...));
-		auto result(uptr.get());
-		mContainer.emplace_back(std::move(uptr));
-		return *result;
+		// TODO: stackoverflow
+		return Internal::getEmplaceUptrImpl<T, TC, decltype(&makeUptr<T, TArgs...>), &makeUptr<T, TArgs...>>(mContainer, std::forward<TArgs>(mArgs)...);
 	}
 
 	/// @brief Emplaces a `ssvu::Uptr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
