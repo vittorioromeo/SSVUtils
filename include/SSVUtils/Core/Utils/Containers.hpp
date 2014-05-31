@@ -191,13 +191,22 @@ namespace ssvu
 	/// @return Returns a copy of the container, trimmed.
 	template<typename T, typename P> inline T getTrimmedLR(T mContainer, const P& mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
 
+	// TODO: docs
 	namespace Internal
 	{
-		template<typename T, typename TC, typename TMF, TMF TFnPtr, typename... TArgs> inline T& getEmplaceUptrImpl(TC& mContainer, TArgs&&... mArgs)
+		template<typename T, typename TC, typename TM, typename... TArgs> inline T& getEmplaceUptrImpl(TC& mContainer, TArgs&&... mArgs)
 		{
-			auto uptr(TFnPtr(std::forward<TArgs>(mArgs)...));
+			auto uptr(TM::template make<TArgs...>(std::forward<TArgs>(mArgs)...));
 			auto result(uptr.get());
 			mContainer.emplace_back(std::move(uptr));
+			return *result;
+		}
+
+		template<typename T, typename TC, typename TK, typename TM, typename... TArgs> inline T& getEmplaceUptrMapImpl(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
+		{
+			auto uptr(TM::template make<TArgs...>(std::forward<TArgs>(mArgs)...));
+			auto result(uptr.get());
+			mContainer.emplace(std::make_pair(std::forward<TK>(mKey), std::move(uptr)));
 			return *result;
 		}
 	}
@@ -209,8 +218,7 @@ namespace ssvu
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename TC, typename... TArgs> inline T& getEmplaceUptr(TC& mContainer, TArgs&&... mArgs)
 	{
-		// TODO: stackoverflow
-		return Internal::getEmplaceUptrImpl<T, TC, decltype(&makeUptr<T, TArgs...>), &makeUptr<T, TArgs...>>(mContainer, std::forward<TArgs>(mArgs)...);
+		return Internal::getEmplaceUptrImpl<T, TC, Internal::MakerUptr<T>>(mContainer, std::forward<TArgs>(mArgs)...);
 	}
 
 	/// @brief Emplaces a `ssvu::Uptr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
@@ -221,10 +229,7 @@ namespace ssvu
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUptrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 	{
-		auto uptr(makeUptr<T>(std::forward<TArgs>(mArgs)...));
-		auto result(uptr.get());
-		mContainer.emplace(std::make_pair(std::forward<TK>(mKey), std::move(uptr)));
-		return *result;
+		return Internal::getEmplaceUptrMapImpl<T, TC, TK, Internal::MakerUptr<T>>(mContainer, mKey, std::forward<TArgs>(mArgs)...);
 	}
 }
 

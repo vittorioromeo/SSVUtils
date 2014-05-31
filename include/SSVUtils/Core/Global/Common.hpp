@@ -182,6 +182,13 @@ namespace ssvu
 	/// @brief Creates and returns an `ssvu::Sptr<T>`.
 	/// @details Wraps `std::make_shared<T>`.
 	template<typename T, typename... TArgs> inline Sptr<T> makeSptr(TArgs&&... mArgs) { return std::make_shared<T>(std::forward<TArgs>(mArgs)...); }
+
+	namespace Internal
+	{
+		// TODO: docs
+		template<typename T> struct MakerUptr { template<typename... TArgs> static inline Uptr<T> make(TArgs&&... mArgs) { return makeUptr<T>(std::forward<TArgs>(mArgs)...); } };
+		template<typename T> struct MakerSptr { template<typename... TArgs> static inline Sptr<T> make(TArgs&&... mArgs) { return makeSptr<T>(std::forward<TArgs>(mArgs)...); } };
+	}
 }
 
 #endif

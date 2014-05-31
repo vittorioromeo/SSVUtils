@@ -11,58 +11,43 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<typename T, typename TBase> class PtrRecycler
+		template<typename T, typename TBase> class Recycler
 		{
 			private:
 				std::vector<TBase*> ptrs;
 				std::allocator<T> alloc;
 
-			public:
-				inline PtrRecycler() = default;
-				inline ~PtrRecycler() noexcept { for(auto p : ptrs) alloc.deallocate(reinterpret_cast<T*>(p), 1); }
-
-				inline T* allocate() noexcept(noexcept(alloc.allocate(1))) { return alloc.allocate(1); }
-
-				template<typename... TArgs> inline void construct(T* mPtr, TArgs&&... mArgs)
-					noexcept(noexcept(alloc.construct(mPtr, std::forward<TArgs>(mArgs)...)))
-				{
-					alloc.construct(mPtr, std::forward<TArgs>(mArgs)...);
-				}
-
-				inline void destroy(TBase* mPtr) noexcept(noexcept(alloc.destroy(mPtr)))
-				{
-					alloc.destroy(mPtr);
-				}
-
-				inline void push(TBase* mPtr) noexcept
-				{
-					SSVU_ASSERT(mPtr != nullptr);
-
-					ptrs.emplace_back(mPtr);
-				}
 				inline T* pop() noexcept
 				{
-					SSVU_ASSERT(ptrs.size() > 0);
+					SSVU_ASSERT(!ptrs.empty());
 
 					auto result(ptrs.back());
 					ptrs.pop_back();
 					return reinterpret_cast<T*>(result);
 				}
-				inline bool isEmpty() const noexcept { return ptrs.empty(); }
+
+			public:
+				inline Recycler() = default;
+				inline ~Recycler() noexcept { for(auto p : ptrs) alloc.deallocate(reinterpret_cast<T*>(p), 1); }
+
+				inline void recycle(TBase* mPtr) noexcept(noexcept(alloc.destroy(mPtr)))
+				{
+					SSVU_ASSERT(mPtr != nullptr);
+					alloc.destroy(mPtr);
+					ptrs.emplace_back(mPtr);
+				}
+
+				template<typename... TArgs> inline T* create(TArgs&&... mArgs)
+				{
+					auto result(ptrs.empty() ? alloc.allocate(1) : pop());
+					alloc.construct(result, std::forward<TArgs>(mArgs)...);
+					return result;
+				}
 		};
 
-		template<typename T, typename TBase> inline PtrRecycler<T, TBase>& getPtrRecycler() noexcept
+		template<typename T, typename TBase> inline Recycler<T, TBase>& getRecycler() noexcept
 		{
-			thread_local PtrRecycler<T, TBase> result;
-			return result;
-		}
-
-		template<typename T, typename TBase, typename... TArgs> inline T* makePolyPtr(TArgs&&... mArgs)
-		{
-			auto& pr(getPtrRecycler<T, TBase>());
-			T* result{pr.isEmpty() ? pr.allocate() : pr.pop()};
-			pr.construct(result, std::forward<TArgs>(mArgs)...);
-			return result;
+			thread_local Recycler<T, TBase> result; return result;
 		}
 	}
 
@@ -71,17 +56,27 @@ namespace ssvu
 
 	template<typename T, typename TBase, typename... TArgs> inline UptrRecPoly<T, TBase> makeUptrRecPoly(TArgs&&... mArgs)
 	{
-		return UptrRecPoly<T, TBase>(Internal::makePolyPtr<T, TBase>(std::forward<TArgs>(mArgs)...), [](TBase* mPtr)
+		return {Internal::getRecycler<T, TBase>().create(std::forward<TArgs>(mArgs)...), [](TBase* mPtr)
 		{
-			auto& pr(Internal::getPtrRecycler<T, TBase>());
-			pr.destroy(mPtr); pr.push(mPtr);
-		});
+			Internal::getRecycler<T, TBase>().recycle(mPtr);
+		}};
 	}
 	template<typename T, typename... TArgs> inline UptrRec<T> makeUptrRec(TArgs&&... mArgs) { return makeUptrRecPoly<T, T>(std::forward<TArgs>(mArgs)...); }
 
+	namespace Internal
+	{
+		template<typename T, typename TBase> struct MakerUptrRecPoly
+		{
+			template<typename... TArgs> static inline UptrRecPoly<T, TBase> make(TArgs&&... mArgs)
+			{
+				return makeUptrRecPoly<T, TBase, TArgs...>(std::forward<TArgs>(mArgs)...);
+			}
+		};
+	}
+
 	template<typename T, typename TBase, typename... TArgs, typename TC> inline T& getEmplaceUptrRecPoly(TC& mContainer, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUptrImpl<T, TC, decltype(&makeUptrRecPoly<T, TBase, TArgs...>), &makeUptrRecPoly<T, TBase, TArgs...>>(mContainer, std::forward<TArgs>(mArgs)...);
+		return Internal::getEmplaceUptrImpl<T, TC, Internal::MakerUptrRecPoly<T, TBase>>(mContainer, std::forward<TArgs>(mArgs)...);
 	}
 	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceUptrRec(TC& mContainer, TArgs&&... mArgs)
 	{
@@ -93,4 +88,4 @@ namespace ssvu
 
 #endif
 
-// TODO: docs, tests
+// TODO: docs, test, sptr
