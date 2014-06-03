@@ -47,12 +47,13 @@ namespace ssvu
 
 		template<typename T, typename TBase> inline Recycler<T, TBase>& getRecycler() noexcept
 		{
-			thread_local Recycler<T, TBase> result; return result;
+			static Recycler<T, TBase> result; return result;
 		}
 	}
 
 	template<typename T, typename TBase> using UptrRecPoly = Uptr<T, void(*)(TBase*)>;
 	template<typename T> using UptrRec = UptrRecPoly<T, T>;
+	template<typename TBase> using VecUptrRecPoly = std::vector<UptrRec<TBase>>;
 
 	template<typename T, typename TBase, typename... TArgs> inline UptrRecPoly<T, TBase> makeUptrRecPoly(TArgs&&... mArgs)
 	{
@@ -82,8 +83,6 @@ namespace ssvu
 	{
 		return getEmplaceUptrRecPoly<T, T>(mContainer, std::forward<TArgs>(mArgs)...);
 	}
-
-	template<typename TBase> using VecUptrRecPoly = std::vector<UptrRec<TBase>>;
 }
 
 #endif
