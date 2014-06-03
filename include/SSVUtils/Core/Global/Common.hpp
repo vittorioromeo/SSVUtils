@@ -161,8 +161,7 @@ namespace ssvu
 		template<typename T, typename... TArgs> inline ssvu::Uptr<T> makeUptrHelper(std::true_type, TArgs&&... mArgs)
 		{
 			SSVU_ASSERT_STATIC(std::extent<T>::value == 0, "make_unique<T[N]>() is forbidden, please use make_unique<T[]>().");
-			using U = ssvu::RemoveExtent<T>;
-			return ssvu::Uptr<T>(new U[sizeof...(TArgs)]{std::forward<TArgs>(mArgs)...});
+			return ssvu::Uptr<T>(new ssvu::RemoveExtent<T>[sizeof...(TArgs)]{std::forward<TArgs>(mArgs)...});
 		}
 	}
 }
@@ -185,8 +184,10 @@ namespace ssvu
 
 	namespace Internal
 	{
-		// TODO: docs
+		/// @brief Internal functor that creates an `ssvu::Uptr`.
 		template<typename T> struct MakerUptr { template<typename... TArgs> static inline Uptr<T> make(TArgs&&... mArgs) { return makeUptr<T>(std::forward<TArgs>(mArgs)...); } };
+
+		/// @brief Internal functor that creates an `ssvu::Sptr`.
 		template<typename T> struct MakerSptr { template<typename... TArgs> static inline Sptr<T> make(TArgs&&... mArgs) { return makeSptr<T>(std::forward<TArgs>(mArgs)...); } };
 	}
 }
