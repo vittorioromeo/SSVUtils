@@ -20,11 +20,11 @@ namespace ssvu
 	/// @endcode
 	#define SSVU_DEFINE_MEMFN_DETECTOR(mName, mMemberName) \
 		template<typename, typename T> struct SSVPP_CAT(__, mName, __impl); \
-		template<typename C, typename TReturn, typename... TArgs> struct SSVPP_CAT(__, mName, __impl)<C, TReturn(TArgs...)> \
+		template<typename TC, typename TReturn, typename... TArgs> struct SSVPP_CAT(__, mName, __impl)<TC, TReturn(TArgs...)> \
 		{ \
 			template<typename T> inline static constexpr auto check(T*) -> ssvu::IsSame<decltype(std::declval<T>().mMemberName(std::declval<TArgs>()...)), TReturn> { return {}; } \
 			template<typename> inline static constexpr std::false_type check(...) { return {}; } \
-			static constexpr bool value{decltype(check<C>(0))::value}; \
+			static constexpr bool value{decltype(check<TC>(0))::value}; \
 		}; \
 		template<typename T, typename TSignature> inline constexpr bool mName() noexcept { return SSVPP_CAT(__, mName, __impl) < T, TSignature > :: value; } \
 		SSVU_DEFINE_DUMMY_STRUCT(mName, mMemberName, SSVPP_CAT(__, mName, __impl))
