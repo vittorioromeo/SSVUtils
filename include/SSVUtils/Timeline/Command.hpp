@@ -17,7 +17,7 @@ namespace ssvu
 			Timeline& timeline;
 
 		public:
-			Command(Timeline& mTimeline) noexcept : timeline(mTimeline) { }
+			inline Command(Timeline& mTimeline) noexcept : timeline(mTimeline) { }
 			inline virtual ~Command()		{ }
 			inline virtual void update(FT)	{ }
 			inline virtual void reset()		{ }

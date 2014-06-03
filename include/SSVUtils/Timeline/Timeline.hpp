@@ -28,14 +28,15 @@ namespace ssvu
 			MemoryManager<Command> commandManager;
 			std::vector<Command*> commands;
 			Command* currentCommand{nullptr};
-			bool ready{true}, finished{false};
 			FT remainder{0.f};
+			bool ready{true}, finished{false};
 
-			template<typename T> inline T& insertImpl(std::size_t mIdx, T& mCommand)
+			template<typename T, typename... TArgs> inline T& insertImpl(std::size_t mIdx, TArgs&&... mArgs)
 			{
-				commands.insert(std::begin(commands) + mIdx, &mCommand);
-				if(currentCommand == nullptr) currentCommand = &mCommand;
-				return mCommand;
+				auto& c(commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...));
+				commands.insert(std::begin(commands) + mIdx, &c);
+				if(currentCommand == nullptr) currentCommand = &c;
+				return c;
 			}
 			inline void next()
 			{
@@ -46,19 +47,17 @@ namespace ssvu
 				if(itr < std::end(commands) - 1 && itr >= std::begin(commands)) currentCommand = *++itr;
 			}
 
-			template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...); }
-
 		public:
 			inline Timeline(bool mStart = true) noexcept { if(!mStart) stop(); }
 
-			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return insertImpl(commands.size(), create<T>(mArgs...)); }
-			template<typename T, typename... TArgs> inline T& insert(unsigned int mIdx, TArgs&&... mArgs)	{ return insertImpl(mIdx, create<T>(mArgs...)); }
+			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return insertImpl<T>(commands.size(), std::forward<TArgs>(mArgs)...); }
+			template<typename T, typename... TArgs> inline T& insert(std::size_t mIdx, TArgs&&... mArgs)	{ return insertImpl<T>(mIdx, std::forward<TArgs>(mArgs)...); }
 
 			inline void del(Command& mCommand)				{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
 			inline void jumpTo(std::size_t mIdx) noexcept	{ currentCommand = commands[mIdx]; }
 			inline void jumpTo(Command& mCommand) noexcept	{ currentCommand = &mCommand; }
 			inline void start()	noexcept					{ finished = false; ready = true; }
-			inline void clear()	noexcept					{ currentCommand = nullptr; commands.clear(); finished = true; }
+			inline void clear()	noexcept					{ currentCommand = nullptr; commandManager.clear(); commands.clear(); finished = true; }
 			inline void stop() noexcept						{ finished = true; ready = false; }
 
 			inline void update(FT mFT)
