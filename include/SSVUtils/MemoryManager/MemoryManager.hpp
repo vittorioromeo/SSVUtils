@@ -140,9 +140,9 @@ namespace ssvu
 
 			public:
 				VecUptrRec<TItem> c;
-				std::size_t aliveSize{0u}, tempAlive{0u};
+				std::size_t aliveSize{0u};
 
-				inline void clear()	noexcept { c.clear(); }
+				inline void clear()	noexcept { c.clear(); aliveSize = 0u; }
 				inline void del(TItem& mItem) const noexcept { mItem.ssvu_mmAlive = false; }
 
 				// Statically polymorphic methods
@@ -162,23 +162,39 @@ namespace ssvu
 		public:
 			inline void refreshImpl()
 			{
-				//this->aliveSize = 0u;
-				//while(this->aliveSize < this->c.size() && this->template isAlive<UptrRec<T>>(this->c[this->aliveSize])) ++this->aliveSize;
-				//this->tempAlive = this->aliveSize;
+				int iDead{0};
+				const int intSizeNext(this->c.size());
 
-				eraseRemoveIf(this->c, this->template isDead<UptrRec<T>>);
+				while(iDead < intSizeNext && this->template isAlive(this->c[iDead])) ++iDead;
+				int iAlive{iDead - 1};
+
+				for(int iD{iDead}; iD < intSizeNext; ++iD)
+				{
+					if(this->template isAlive(this->c[iD])) continue;
+
+					for(int iA{iDead + 1}; true; ++iA)
+					{
+						if(iA == intSizeNext) goto finishRefresh;
+
+						if(!this->template isAlive(this->c[iA])) continue;
+
+						std::swap(this->c[iA], this->c[iD]);
+						iAlive = iD; iDead = iA;
+
+						break;
+					}
+				}
+
+				finishRefresh:
+
+				this->c.erase(std::begin(this->c) + iAlive + 1, std::end(this->c));
 				this->aliveSize = this->c.size();
 			}
 			template<typename TType = T, typename... TArgs> inline TType& createTImpl(TArgs&&... mArgs)
 			{
 				auto uptr(makeUptrRecPoly<TType, T>(std::forward<TArgs>(mArgs)...));
 				auto result(uptr.get());
-
-				//if(this->tempAlive > this->c.size())
-				//	this->c[this->tempAlive++] = std::move(uptr);
-				//else
-					this->c.emplace_back(std::move(uptr));
-
+				this->c.emplace_back(std::move(uptr));
 				return *result;
 			}
 
