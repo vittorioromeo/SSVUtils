@@ -53,7 +53,7 @@ namespace ssvu
 
 	template<typename T, typename TBase> using UptrRecPoly = Uptr<T, void(*)(TBase*)>;
 	template<typename T> using UptrRec = UptrRecPoly<T, T>;
-	template<typename TBase> using VecUptrRecPoly = std::vector<UptrRec<TBase>>;
+	template<typename TBase> using VecUptrRec = std::vector<UptrRec<TBase>>;
 
 	template<typename T, typename TBase, typename... TArgs> inline UptrRecPoly<T, TBase> makeUptrRecPoly(TArgs&&... mArgs)
 	{
