@@ -212,10 +212,10 @@ namespace ssvu
 				//auto result(getRV(sizeof(T)).empty() ? alloc.allocate(1) : popRecyclable(sizeof(T)));
 				//alloc.construct(result, std::forward<TArgs>(mArgs)...);
 
-				RType r(this, sizeof(T));
-				toAdd.emplace_back(result, r);
+				//RType r(this, sizeof(T));
+				//toAdd.emplace_back(result, r);
 
-				return *reinterpret_cast<T*>(result);
+				//return *reinterpret_cast<T*>(result);
 			}
 
 			template<typename T> inline static bool isAlive(const T& mItem) noexcept	{ return mItem->ssvu_mmAlive; }
