@@ -100,102 +100,75 @@ namespace ssvu
 					class Chunk
 					{
 						private:
-							std::size_t size;
 							std::vector<TBase*> ptrs;
+							std::size_t allocSize;
 
 						public:
-							inline Chunk(std::size_t mSize) noexcept : size{mSize} { }
+							inline Chunk(std::size_t mAllocSize) noexcept : allocSize{mAllocSize} { }
+							inline ~Chunk() { for(auto p : ptrs) delete p; }
 
-							inline void push(TBase* mPtr) { ptrs.emplace_back(mPtr); }
-							inline TBase* pop()
+							inline void push(TBase* mPtr) noexcept(noexcept(ptrs.emplace_back(mPtr))) { ptrs.emplace_back(mPtr); }
+							inline TBase* pop() noexcept(noexcept(ptrs.pop_back()))
 							{
 								auto result(ptrs.back());
 								ptrs.pop_back();
 								return result;
 							}
+
+							inline std::size_t getAllocSize() const noexcept { return allocSize; }
+							inline bool isEmpty() const noexcept { return ptrs.empty(); }
 					};
+
 					std::vector<Chunk> chunks;
 
 					inline Chunk& getChunkBySize(std::size_t mSize)
 					{
 						auto i(0u);
-						for(; i < chunks.size() && chunks[i].size <= mSize; ++i)
+						for(; i < chunks.size(); ++i)
 						{
-							if(chunks[i].size == mSize)
-							{
-								return chunks[i];
-							}
+							if(chunks[i].getAllocSize() > mSize) break;
+							if(chunks[i].getAllocSize() == mSize) return chunks[i];
 						}
 
-						chunks.emplace(std::begin(chunks) + i, size);
+						chunks.emplace(std::begin(chunks) + i, mSize);
 						return chunks[i];
+					}
+
+				public:
+					template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
+					{
+						std::allocator<T> alloc;
+						auto& chunk(getChunkBySize(sizeof(T)));
+
+						auto result(chunk.isEmpty() ? alloc.allocate(1) : chunk.pop());
+						alloc.construct(result, std::forward<TArgs>(mArgs)...);
+
+						return reinterpret_cast<T*>(result);
 					}
 
 					inline void recycle(TBase* mPtr, std::size_t mS)
 					{
-						auto& c(getChunkBySize(mS));
-						// insert mPtr at right spot
-						// destroy mPtr
-					}
-
-				public:
-					inline ~PolyManagerStorage() { for(auto& c : chunks) for(auto p : c.ptrs) delete p; }
-
-					template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
-					{
-						std::allocator<T> alloc;
-						auto& c(getChunkBySize(sizeof(T)));
-
-						auto result(c.ptrs.empty() ? alloc.allocate(1) : c.pop());
-						alloc.construct(result, std::forward<TArgs>(mArgs)...);
-
-						return *reinterpret_cast<T*>(result);
+						auto& chunk(getChunkBySize(mS));
+						mPtr->TBase::~TBase();
+						chunk.push(mPtr);
 					}
 			};
 
-			/*
-			//std::map<std::size_t, std::vector<TBase*>> recyclable;
-			std::vector<std::pair<std::size_t, std::vector<TBase*>>> recyclable;
-
-			//inline std::vector<TBase*>& getRV(std::size_t mS) { return recyclable[mS]; }
-			inline std::vector<TBase*>& getRV(std::size_t mS)
-			{
-				for(auto idx(0u); idx < recyclable.size(); ++idx) if(recyclable[idx].first == mS) return recyclable[idx].second;
-
-				recyclable.emplace_back(mS, std::vector<TBase*>{});
-				return recyclable.back().second;
-			}
-			inline void recycle(TBase* mPtr, std::size_t mS)
-			{
-				getRV(mS).emplace_back(mPtr);
-			}
-			*/
+			PolyManagerStorage pms;
 
 			struct RType
 			{
 				PolyManager* pm;
 				std::size_t s;
 				inline RType(PolyManager* mPm, std::size_t mS) noexcept : pm(mPm), s(mS) { }
-				inline void operator()(TBase* mPtr) const { pm->recycle(mPtr, s); }
+				inline void operator()(TBase* mPtr) const { pm->pms.recycle(mPtr, s); }
 			};
 
 			using PtrType = Uptr<TBase, RType>;
 			using Container = std::vector<PtrType>;
 			Container items, toAdd;
 
-			/*inline TBase* popRecyclable(std::size_t mS)
-			{
-				auto& r(getRV(mS));
-				auto result(r.back());
-				r.pop_back();
-				return result;
-			}*/
-
 		public:
-			//inline PolyManager() = default;
-			//inline ~PolyManager() { for(auto& p : recyclable) for(const auto& k : p.second) delete k; }
-			//inline ~PolyManager() { for(auto& p : recyclable) for(const auto& k : p.second) delete k; }
-
 			inline void clear()	noexcept { items.clear(); toAdd.clear(); }
 			inline void del(TBase& mItem) const noexcept { mItem.ssvu_mmAlive = false; }
 
@@ -206,16 +179,9 @@ namespace ssvu
 			}
 			template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
 			{
-				//std::allocator<T> alloc;
-
-				// TODO
-				//auto result(getRV(sizeof(T)).empty() ? alloc.allocate(1) : popRecyclable(sizeof(T)));
-				//alloc.construct(result, std::forward<TArgs>(mArgs)...);
-
-				//RType r(this, sizeof(T));
-				//toAdd.emplace_back(result, r);
-
-				//return *reinterpret_cast<T*>(result);
+				auto result(pms.template create<T>(std::forward<TArgs>(mArgs)...));
+				toAdd.emplace_back(result, RType{this, sizeof(T)});
+				return *reinterpret_cast<T*>(result);
 			}
 
 			template<typename T> inline static bool isAlive(const T& mItem) noexcept	{ return mItem->ssvu_mmAlive; }
