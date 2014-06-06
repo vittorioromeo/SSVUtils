@@ -9,88 +9,86 @@
 
 namespace ssvu
 {
-	struct MemoryManageable { bool ssvu_mmAlive{true}; };
-
 	template<typename> class PolyManager;
 	template<typename> class MonoManager;
 	template<typename, typename, typename> class BaseManager;
 
+	using Byte = char;
+
 	namespace Internal
 	{
-		template<typename TBase> class Item
-		{
-			public:
-				bool alive;
-				TBase item;
-		};
-
-		template<typename TBase> inline constexpr Item<TBase>* getItemFromBase(const TBase* mBase) noexcept
-		{
-			SSVU_ASSERT_STATIC(isStandardLayout<Item<TBase>>(), "Item<TBase> must have standard layout");
-			return reinterpret_cast<Item<TBase>*>(const_cast<char*>(reinterpret_cast<const char*>(mBase) - offsetof(Item<TBase>, item)));
-		}
-
-		template<typename TBase> inline constexpr TBase& getBaseFromItem(const Item<TBase>* mItem) noexcept { return mItem->base; }
-
-		template<typename TBase> class Chunk
+		class Chunk
 		{
 			private:
-				std::vector<TBase*> ptrs;
+				std::vector<Byte*> ptrs;
 
 			public:
-				inline ~Chunk() { for(auto p : ptrs) delete p; }
+				inline ~Chunk() { for(auto p : ptrs) std::free(p); }
 
-				inline void push(TBase* mPtr) noexcept(noexcept(ptrs.emplace_back(mPtr))) { ptrs.emplace_back(mPtr); }
-				inline TBase* pop() noexcept(noexcept(ptrs.pop_back()))
+				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
-					auto result(ptrs.back());
-					ptrs.pop_back();
-					return result;
+					Byte* result;
+
+					if(ptrs.empty()) result = reinterpret_cast<Byte*>(std::malloc(sizeof(bool) + sizeof(T)));
+					else
+					{
+						result = ptrs.back();
+						ptrs.pop_back();
+					}
+
+					new (result + 0) bool{true};
+					new (result + sizeof(bool)) T(std::forward<TArgs>(mArgs)...);
+
+					return reinterpret_cast<T*>(result + sizeof(bool));
 				}
 
-				inline bool isEmpty() const noexcept { return ptrs.empty(); }
-				inline void recycle(TBase* mPtr) { mPtr->TBase::~TBase(); push(mPtr); }
+				template<typename TBase> inline void recycle(TBase* mPtr)
+				{
+					mPtr->TBase::~TBase();
+					ptrs.emplace_back(reinterpret_cast<Byte*>(mPtr) - sizeof(bool));
+				}
 		};
 
 		template<typename TBase> class ChunkDeleter
 		{
 			private:
-				Chunk<TBase>* chunk;
+				Chunk* chunk;
 
 			public:
-				inline ChunkDeleter(Chunk<TBase>& mChunk) noexcept : chunk{&mChunk} { }
-				inline void operator()(TBase* mPtr) const { chunk->recycle(mPtr); }
+				inline ChunkDeleter(Chunk& mChunk) noexcept : chunk{&mChunk} { }
+				inline void operator()(TBase* mPtr) const { chunk->recycle<TBase>(mPtr); }
 		};
 
-		template<typename TBase> class PolyStorage
+		class PolyStorage
 		{
 			private:
-				std::map<std::size_t, Chunk<TBase>> chunks;
+				std::map<std::size_t, Chunk> chunks;
 
 			public:
-				template<typename T> inline Chunk<TBase>& getChunk() { return chunks[sizeof(T)]; }
+				template<typename T> inline Chunk& getChunk() { return chunks[sizeof(T)]; }
 
-				template<typename T, typename... TArgs> inline T* create(Chunk<TBase>& mChunk, TArgs&&... mArgs)
+				template<typename T, typename... TArgs> inline T* create(Chunk& mChunk, TArgs&&... mArgs)
 				{
-					std::allocator<T> alloc;
-
-					auto result(mChunk.isEmpty() ? alloc.allocate(1) : mChunk.pop());
-					//alloc.construct(result, std::forward<TArgs>(mArgs)...);
-					new (result) T(std::forward<TArgs>(mArgs)...);
-
-					return reinterpret_cast<T*>(result);
+					return mChunk.create<T>(std::forward<TArgs>(mArgs)...);
 				}
 		};
 
-		template<typename TBase> class MonoStorage
+		struct MonoStorage
 		{
-			public:
-				Chunk<TBase> chunk;
-				std::allocator<TBase> alloc;
+			Chunk chunk;
 		};
 
-		template<typename TBase> using PolyManagerBase = BaseManager<TBase, PolyStorage<TBase>, PolyManager<TBase>>;
-		template<typename TBase> using MonoManagerBase = BaseManager<TBase, MonoStorage<TBase>, MonoManager<TBase>>;
+		template<typename TBase> using PolyManagerBase = BaseManager<TBase, PolyStorage, PolyManager<TBase>>;
+		template<typename TBase> using MonoManagerBase = BaseManager<TBase, MonoStorage, MonoManager<TBase>>;
+
+		template<typename TBase> inline void setBool(TBase* mBase, bool mBool) noexcept
+		{
+			*reinterpret_cast<bool*>(reinterpret_cast<Byte*>(mBase) - sizeof(bool)) = mBool;
+		}
+		template<typename TBase> inline bool getBoolConst(const TBase* mBase) noexcept
+		{
+			return *reinterpret_cast<const bool*>(reinterpret_cast<const Byte*>(mBase) - sizeof(bool));
+		}
 	}
 
 	template<typename TBase, typename TStorage, typename TDerived> class BaseManager
@@ -98,7 +96,7 @@ namespace ssvu
 		template<typename T1, typename T2> friend void ssvu::eraseRemoveIf(T1&, const T2&);
 
 		protected:
-			using ChunkType = Internal::Chunk<TBase>;
+			using ChunkType = Internal::Chunk;
 			using ChunkDeleterType = Internal::ChunkDeleter<TBase>;
 			using PtrType = Uptr<TBase, ChunkDeleterType>;
 			using Container = std::vector<PtrType>;
@@ -112,16 +110,19 @@ namespace ssvu
 			}
 
 			inline void clear()	noexcept { items.clear(); toAdd.clear(); }
-			inline void del(TBase& mItem) const noexcept { mItem.ssvu_mmAlive = false; }
+			inline void del(TBase& mItem) noexcept { Internal::setBool(&mItem, false); }
 
 			inline void refresh()
 			{
 				for(auto& i : this->toAdd) this->items.emplace_back(std::move(i)); this->toAdd.clear();
-				eraseRemoveIf(this->items, this->template isDead<PtrType>);
+				eraseRemoveIf(this->items, [](const PtrType& mP){ return TDerived::isDead(mP.get()); });
 			}
 
-			template<typename T> inline static bool isAlive(const T& mItem) noexcept	{ return mItem->ssvu_mmAlive; }
-			template<typename T> inline static bool isDead(const T& mItem) noexcept		{ return !isAlive(mItem); }
+			inline static bool isAlive(const TBase* mItem) noexcept	{ return Internal::getBoolConst(mItem); }
+			inline static bool isDead(const TBase* mItem) noexcept	{ return !isAlive(mItem); }
+
+			//inline static bool isAlive(const TBase& mItem) noexcept	{ return isAlive(&mItem); }
+			//inline static bool isDead(const TBase& mItem) noexcept	{ return isDead(&mItem); }
 
 			inline auto size() const noexcept -> decltype(items.size()) { return items.size(); }
 
@@ -148,7 +149,7 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline T& createImpl(TArgs&&... mArgs)
 			{
 				auto& chunk(this->storage.template getChunk<T>());
-				auto result(this->storage.template create<T>(chunk, std::forward<TArgs>(mArgs)...));
+				auto result(chunk.template create<T>(std::forward<TArgs>(mArgs)...));
 				this->toAdd.emplace_back(result, ChunkDeleterType{chunk});
 				return *result;
 			}
@@ -164,13 +165,53 @@ namespace ssvu
 
 			template<typename T, typename... TArgs> inline T& createImpl(TArgs&&... mArgs)
 			{
-				auto result(this->storage.chunk.isEmpty() ? this->storage.alloc.allocate(1) : this->storage.chunk.pop());
-				this->storage.alloc.construct(result, std::forward<TArgs>(mArgs)...);
+				auto result(this->storage.chunk.template create<T>(std::forward<TArgs>(mArgs)...));
 				this->toAdd.emplace_back(result, ChunkDeleterType{this->storage.chunk});
 				return *result;
 			}
 	 };
 }
+
+struct KTest
+{
+	double d;
+	int i;
+	float f;
+
+	KTest(double mD, int mI, float mF) : d{mD}, i{mI}, f{mF} { }
+};
+
+SSVUT_TEST(DioCane)
+{
+	ssvu::Byte* ptr;
+	ptr = reinterpret_cast<ssvu::Byte*>(std::malloc(sizeof(bool) + sizeof(KTest)));
+
+	new (ptr + 0) bool{true};
+	new (ptr + sizeof(bool)) KTest{22.5, 5, 11.f};
+
+	SSVUT_EXPECT(*reinterpret_cast<bool*>(ptr) == true);
+	SSVUT_EXPECT(reinterpret_cast<KTest*>(ptr + sizeof(bool))->d == 22.5);
+	SSVUT_EXPECT(reinterpret_cast<KTest*>(ptr + sizeof(bool))->i == 5);
+	SSVUT_EXPECT(reinterpret_cast<KTest*>(ptr + sizeof(bool))->f == 11.f);
+
+	*reinterpret_cast<bool*>(ptr) = false;
+	SSVUT_EXPECT(*reinterpret_cast<bool*>(ptr) == false);
+
+	*reinterpret_cast<bool*>(ptr) = true;
+	SSVUT_EXPECT(*reinterpret_cast<bool*>(ptr) == true);
+
+	auto kkc = [](const KTest* mP){ return *reinterpret_cast<const bool*>(reinterpret_cast<const ssvu::Byte*>(mP) - sizeof(bool)); };
+	auto kk = [](KTest* mP, bool mB){ *reinterpret_cast<bool*>(reinterpret_cast<ssvu::Byte*>(mP) - sizeof(bool)) = mB; };
+
+	KTest* kptr = reinterpret_cast<KTest*>(ptr + sizeof(bool));
+
+	SSVUT_EXPECT(kkc(kptr) == true);
+	kk(kptr, false);
+	SSVUT_EXPECT(kkc(kptr) == false);
+	kk(kptr, true);
+	SSVUT_EXPECT(kkc(kptr) == true);
+}
+
 
 #endif
 
