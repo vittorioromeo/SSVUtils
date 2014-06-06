@@ -10,7 +10,7 @@ namespace ssvu
 	class TimelineManager
 	{
 		private:
-			MemoryManager<Timeline> timelines;
+			MonoManager<Timeline> timelines;
 
 		public:
 			inline Timeline& create() { return timelines.create(); }

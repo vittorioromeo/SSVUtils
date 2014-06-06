@@ -67,6 +67,8 @@ namespace ssvu
 				}
 			}
 
+			// TODO:
+			/*
 			template<typename T, typename TPreAlloc> struct PreAllocMMDel
 			{
 				TPreAlloc* preAlloc;
@@ -94,6 +96,7 @@ namespace ssvu
 						auto result(this->preAlloc.template create<TType>(std::forward<TArgs>(mArgs)...)); this->toAdd.emplace_back(result, uptrDeleter); return *result;
 					}
 			};
+			*/
 		}
 
 		class PreAllocDyn
@@ -195,9 +198,12 @@ namespace ssvu
 				inline void destroy(T* mObj) { Internal::destroyReclaim(mObj, available); }
 		};
 
-		template<typename T> using PAMMDyn =	Internal::PreAllocMMBase<T, PreAllocDyn>;
-		template<typename T> using PAMMChunk =	Internal::PreAllocMMBase<T, PreAllocChunk>;
-		template<typename T> using PAMMStatic =	Internal::PreAllocMMBase<T, PreAllocStatic<T>>;
+		// TODO:
+		/*
+			template<typename T> using PAMMDyn =	Internal::PreAllocMMBase<T, PreAllocDyn>;
+			template<typename T> using PAMMChunk =	Internal::PreAllocMMBase<T, PreAllocChunk>;
+			template<typename T> using PAMMStatic =	Internal::PreAllocMMBase<T, PreAllocStatic<T>>;
+		*/
 	}
 }
 

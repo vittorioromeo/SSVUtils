@@ -25,7 +25,7 @@ namespace ssvu
 		template<typename> friend class Internal::GoImpl;
 
 		private:
-			MemoryManager<Command> commandManager;
+			PolyManager<Command> commandManager;
 			std::vector<Command*> commands;
 			Command* currentCommand{nullptr};
 			FT remainder{0.f};

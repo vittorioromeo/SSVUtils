@@ -120,6 +120,7 @@ namespace ssvu
 	template<typename T> inline constexpr bool isDefaultConstructible() noexcept	{ return std::is_default_constructible<T>::value; }
 	template<typename T> inline constexpr bool isNothrowConstructible() noexcept	{ return std::is_nothrow_constructible<T>::value; }
 	template<typename T> inline constexpr bool isNothrowDestructible() noexcept		{ return std::is_nothrow_destructible<T>::value; }
+	template<typename T> inline constexpr bool isPolymorphic() noexcept				{ return std::is_polymorphic<T>::value; }
 }
 
 namespace ssvu
