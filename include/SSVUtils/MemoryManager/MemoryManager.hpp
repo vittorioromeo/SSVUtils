@@ -17,35 +17,74 @@ namespace ssvu
 
 	namespace Internal
 	{
+		namespace Item
+		{
+			template<typename T> inline Byte* getAllocated() noexcept
+			{
+				return reinterpret_cast<Byte*>(std::malloc(sizeof(bool) + sizeof(T)));
+			}
+
+			inline void deallocate(Byte* mPtr) noexcept
+			{
+				SSVU_ASSERT(mBase != nullptr);
+				std::free(mPtr);
+			}
+
+			template<typename T, typename... TArgs> inline void construct(Byte* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(std::forward<TArgs>(mArgs)...)))
+			{
+				SSVU_ASSERT(mBase != nullptr);
+
+				new (mPtr + 0) bool{true};
+				new (mPtr + sizeof(bool)) T(std::forward<TArgs>(mArgs)...);
+			}
+
+			template<typename TBase> inline void destroy(TBase* mBase) noexcept(noexcept(mBase->TBase::~TBase()))
+			{
+				SSVU_ASSERT(mBase != nullptr);
+				mBase->TBase::~TBase();
+			}
+
+			template<typename TBase> inline void setBool(TBase* mBase, bool mBool) noexcept
+			{
+				*reinterpret_cast<bool*>(reinterpret_cast<Byte*>(mBase) - sizeof(bool)) = mBool;
+			}
+			template<typename TBase> inline constexpr bool getBool(const TBase* mBase) noexcept
+			{
+				return *reinterpret_cast<const bool*>(reinterpret_cast<const Byte*>(mBase) - sizeof(bool));
+			}
+
+			template<typename TBase> inline constexpr Byte* getByte(TBase* mBase) noexcept { return reinterpret_cast<Byte*>(mBase) - sizeof(bool); }
+			template<typename T> inline constexpr T* getBase(Byte* mPtr) noexcept { return reinterpret_cast<T*>(mPtr + sizeof(bool)); }
+		};
+
 		class Chunk
 		{
 			private:
 				std::vector<Byte*> ptrs;
 
 			public:
-				inline ~Chunk() { for(auto p : ptrs) std::free(p); }
+				inline ~Chunk() { for(auto p : ptrs) Item::deallocate(p); }
 
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					Byte* result;
 
-					if(ptrs.empty()) result = reinterpret_cast<Byte*>(std::malloc(sizeof(bool) + sizeof(T)));
+					if(ptrs.empty()) result = Item::getAllocated<T>();
 					else
 					{
 						result = ptrs.back();
 						ptrs.pop_back();
 					}
 
-					new (result + 0) bool{true};
-					new (result + sizeof(bool)) T(std::forward<TArgs>(mArgs)...);
+					Item::construct<T>(result, std::forward<TArgs>(mArgs)...);
 
-					return reinterpret_cast<T*>(result + sizeof(bool));
+					return Item::getBase<T>(result);
 				}
 
-				template<typename TBase> inline void recycle(TBase* mPtr)
+				template<typename TBase> inline void recycle(TBase* mBase)
 				{
-					mPtr->TBase::~TBase();
-					ptrs.emplace_back(reinterpret_cast<Byte*>(mPtr) - sizeof(bool));
+					Item::destroy(mBase);
+					ptrs.emplace_back(Item::getByte(mBase));
 				}
 		};
 
@@ -66,29 +105,16 @@ namespace ssvu
 
 			public:
 				template<typename T> inline Chunk& getChunk() { return chunks[sizeof(T)]; }
-
 				template<typename T, typename... TArgs> inline T* create(Chunk& mChunk, TArgs&&... mArgs)
 				{
 					return mChunk.create<T>(std::forward<TArgs>(mArgs)...);
 				}
 		};
 
-		struct MonoStorage
-		{
-			Chunk chunk;
-		};
+		struct MonoStorage { Chunk chunk; };
 
 		template<typename TBase> using PolyManagerBase = BaseManager<TBase, PolyStorage, PolyManager<TBase>>;
 		template<typename TBase> using MonoManagerBase = BaseManager<TBase, MonoStorage, MonoManager<TBase>>;
-
-		template<typename TBase> inline void setBool(TBase* mBase, bool mBool) noexcept
-		{
-			*reinterpret_cast<bool*>(reinterpret_cast<Byte*>(mBase) - sizeof(bool)) = mBool;
-		}
-		template<typename TBase> inline bool getBoolConst(const TBase* mBase) noexcept
-		{
-			return *reinterpret_cast<const bool*>(reinterpret_cast<const Byte*>(mBase) - sizeof(bool));
-		}
 	}
 
 	template<typename TBase, typename TStorage, typename TDerived> class BaseManager
@@ -110,7 +136,7 @@ namespace ssvu
 			}
 
 			inline void clear()	noexcept { items.clear(); toAdd.clear(); }
-			inline void del(TBase& mItem) noexcept { Internal::setBool(&mItem, false); }
+			inline void del(TBase& mBase) noexcept { Internal::Item::setBool(&mBase, false); }
 
 			inline void refresh()
 			{
@@ -118,15 +144,13 @@ namespace ssvu
 				eraseRemoveIf(this->items, [](const PtrType& mP){ return TDerived::isDead(mP.get()); });
 			}
 
-			inline static bool isAlive(const TBase* mItem) noexcept	{ return Internal::getBoolConst(mItem); }
-			inline static bool isDead(const TBase* mItem) noexcept	{ return !isAlive(mItem); }
+			inline static bool isAlive(const TBase* mBase) noexcept	{ return Internal::Item::getBool(mBase); }
+			inline static bool isDead(const TBase* mBase) noexcept	{ return !isAlive(mBase); }
 
 			//inline static bool isAlive(const TBase& mItem) noexcept	{ return isAlive(&mItem); }
 			//inline static bool isDead(const TBase& mItem) noexcept	{ return isDead(&mItem); }
 
-			inline auto size() const noexcept -> decltype(items.size()) { return items.size(); }
-
-			// Standard iterator support
+			inline auto size()		const noexcept	-> decltype(items.size())		{ return items.size(); }
 			inline auto begin()		noexcept		-> decltype(items.begin())		{ return items.begin(); }
 			inline auto end()		noexcept		-> decltype(items.end())		{ return items.end(); }
 			inline auto begin()		const noexcept	-> decltype(items.begin())		{ return items.begin(); }
@@ -172,17 +196,17 @@ namespace ssvu
 	 };
 }
 
-struct KTest
+SSVUT_TEST(PtrTests)
 {
-	double d;
-	int i;
-	float f;
+	struct KTest
+	{
+		double d;
+		int i;
+		float f;
 
-	KTest(double mD, int mI, float mF) : d{mD}, i{mI}, f{mF} { }
-};
+		KTest(double mD, int mI, float mF) : d{mD}, i{mI}, f{mF} { }
+	};
 
-SSVUT_TEST(DioCane)
-{
 	ssvu::Byte* ptr;
 	ptr = reinterpret_cast<ssvu::Byte*>(std::malloc(sizeof(bool) + sizeof(KTest)));
 
@@ -214,5 +238,3 @@ SSVUT_TEST(DioCane)
 
 
 #endif
-
-// TODO: BIMAP LIKE PAIR STORAGE?? (to avoid MemoryMangeable)
