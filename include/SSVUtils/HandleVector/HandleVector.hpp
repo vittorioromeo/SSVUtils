@@ -242,6 +242,12 @@ namespace ssvu
 			/// @brief Returns a const reference to the internal atom storage.
 			inline const decltype(atoms)& getAtoms() const noexcept { return atoms; }
 
+			// TODO: docs
+			inline constexpr AtomType& getAtomFromData(T& mData) noexcept
+			{
+				return *(Internal::Atom<T>::getAtomFromUncertain(Internal::Uncertain<T>::getUncertainFromData(&mData)));
+			}
+
 
 
 			// Fast iterators

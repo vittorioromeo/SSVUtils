@@ -1145,7 +1145,7 @@ SSVUT_TEST(HandleManagerMixed)
 	}
 
 	// AtomFromData tests
-	/*{ TODO: possible=???
+	{
 		HandleVector<OTest> mgr;
 		auto a0 = mgr.create(cc, dd); a0->s = "a";
 		auto a1 = mgr.create(cc, dd); a1->s = "b";
@@ -1169,7 +1169,7 @@ SSVUT_TEST(HandleManagerMixed)
 		SSVUT_EXPECT(mgr.getAtomFromData(d0).getData().s == "a");
 		SSVUT_EXPECT(mgr.getAtomFromData(d1).getData().s == "b");
 		SSVUT_EXPECT(mgr.getAtomFromData(d2).getData().s == "c");
-	}*/
+	}
 }
 
 #endif

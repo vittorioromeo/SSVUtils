@@ -49,8 +49,7 @@ namespace ssvu
 			template<typename TT> inline TT getImpl() noexcept { return this->value->getData(); }
 
 		public:
-			inline HVecItrFast(Internal::Atom<T>* mAtomPtr) noexcept
-				: Internal::HVecItrBase<T, Internal::Atom<T>*, HVecItrFast<T>>{mAtomPtr} { }
+			inline HVecItrFast(Internal::Atom<T>* mAtomPtr) noexcept: Internal::HVecItrBase<T, Internal::Atom<T>*, HVecItrFast<T>>{mAtomPtr} { }
 	};
 
 	template<typename T> class HVecItrIdx final : public Internal::HVecItrBase<T, HIdx, HVecItrIdx<T>>
@@ -62,8 +61,7 @@ namespace ssvu
 			template<typename TT> inline TT getImpl() noexcept { return hVec->getDataAt(this->value); }
 
 		public:
-			inline HVecItrIdx(HandleVector<T>& mHVec, HIdx mIdx) noexcept
-				: Internal::HVecItrBase<T, HIdx, HVecItrIdx<T>>{mIdx}, hVec(&mHVec) { }
+			inline HVecItrIdx(HandleVector<T>& mHVec, HIdx mIdx) noexcept : Internal::HVecItrBase<T, HIdx, HVecItrIdx<T>>{mIdx}, hVec(&mHVec) { }
 	};
 }
 

@@ -31,6 +31,11 @@ namespace ssvu
 
 				/// @brief Returns a const reference to the T instance. Assumes `init()` was called.
 				inline const T& get() const noexcept { return reinterpret_cast<const T&>(storage); }
+
+				inline static constexpr Uncertain<T>* getUncertainFromData(T* mData) noexcept
+				{
+					return SSVU_GET_BASEPTR_FROM_MEMBERPTR(Uncertain<T>, mData, storage);
+				}
 		};
 	}
 }

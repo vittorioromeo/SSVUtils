@@ -54,6 +54,11 @@ namespace ssvu
 
 				/// @brief Returns whether the atom is alive or not.
 				inline bool isAlive() const noexcept { return alive; }
+
+				inline static constexpr Atom<T>* getAtomFromUncertain(Uncertain<T>* mUncertain) noexcept
+				{
+					return SSVU_GET_BASEPTR_FROM_MEMBERPTR(Atom<T>, mUncertain, data);
+				}
 		};
 	}
 }

@@ -75,23 +75,13 @@ namespace ssvu
 			Internal::PtrSet<T2> set2; ///< @brief Set of the second type.
 
 			/// @brief Internal method to get a BMPair from a pointer.
-			template<typename T> inline constexpr BMPair& getPairImpl(const T* mPtr) const noexcept
-			{
-				SSVU_ASSERT_STATIC(isStandardLayout<BMPair>(), "BMPair must have standard layout");
-				return *(const_cast<BMPair*>(reinterpret_cast<const BMPair*>(mPtr)));
-			}
-
-			/// @brief Internal method to get the base pointer of a pair, from a T2*.
-			inline constexpr const char* getPairBasePtr(const T2* mItem) const noexcept
-			{
-				return reinterpret_cast<const char*>(mItem) - offsetof(BMPair, second);
-			}
+			template<typename T> inline constexpr BMPair& getPairImpl(const T* mPtr) const noexcept { return *(const_cast<BMPair*>(reinterpret_cast<const BMPair*>(mPtr))); }
 
 			/// @brief Internal method to get a BMPair from T1*.
 			inline constexpr BMPair& getPair(const T1* mItem) const noexcept { return getPairImpl(mItem); }
 
 			/// @brief Internal method to get a BMPair from T2*.
-			inline constexpr BMPair& getPair(const T2* mItem) const noexcept { return getPairImpl(getPairBasePtr(mItem)); }
+			inline constexpr BMPair& getPair(const T2* mItem) const noexcept { return getPairImpl(SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(BMPair, mItem, second)); }
 
 			/// @brief Internal method to get a T2& from the corrisponding T1*.
 			inline T2& getItem(const T1* mItem) noexcept { return getPair(mItem).second; }

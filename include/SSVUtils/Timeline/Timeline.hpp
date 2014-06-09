@@ -17,7 +17,7 @@ namespace ssvu
 		template<typename> class GoImpl;
 	}
 
-	class Timeline : public MemoryManageable
+	class Timeline
 	{
 		friend class Do;
 		friend class Wait;

@@ -9,7 +9,7 @@ namespace ssvu
 {
 	class Timeline;
 
-	class Command : public MemoryManageable
+	class Command
 	{
 		friend Timeline;
 
