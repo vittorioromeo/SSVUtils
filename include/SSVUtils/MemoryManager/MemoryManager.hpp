@@ -57,23 +57,37 @@ namespace ssvu
 			template<typename TBase> inline constexpr bool getBool(const TBase* mBase) noexcept	{ return *reinterpret_cast<const bool*>(&getLayout(mBase)->storageBool); }
 		}
 
+		struct Chain
+		{
+			Chain* next;
+		};
+
 		class Chunk
 		{
 			private:
-				std::vector<char*> ptrs;
+				Chain* chain{nullptr};
 
 			public:
-				inline ~Chunk() { for(auto p : ptrs) Item::deallocate(p); }
+				inline ~Chunk()
+				{
+					Chain* temp;
+					while(chain != nullptr)
+					{
+						temp = chain;
+						chain = chain->next;
+						Item::deallocate(reinterpret_cast<char*>(temp));
+					}
+				}
 
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					char* result;
 
-					if(ptrs.empty()) result = Item::allocate<T>();
+					if(chain == nullptr) result = Item::allocate<T>();
 					else
 					{
-						result = ptrs.back();
-						ptrs.pop_back();
+						result = reinterpret_cast<char*>(chain);
+						chain = chain->next;
 					}
 
 					Item::construct<T>(result, std::forward<TArgs>(mArgs)...);
@@ -84,15 +98,10 @@ namespace ssvu
 				template<typename TBase> inline void recycle(TBase* mBase)
 				{
 					Item::destroy(mBase);
-					ptrs.emplace_back(Item::getByte(mBase));
-				}
 
-				template<typename T> inline void reserve(std::size_t mCapacity)
-				{
-					SSVU_ASSERT(ptrs.capacity() < mCapacity);
-
-					ptrs.reserve(mCapacity);
-					for(auto i(ptrs.size()); i < mCapacity; ++i) ptrs.emplace_back(Item::allocate<T>());
+					auto newHead(reinterpret_cast<Chain*>(Item::getByte(mBase)));
+					newHead->next = chain;
+					chain = newHead;
 				}
 		};
 
@@ -117,13 +126,11 @@ namespace ssvu
 				{
 					return mChunk.create<T>(std::forward<TArgs>(mArgs)...);
 				}
-				template<typename> inline void reserve(std::size_t) { /* ... */ }
 		};
 
 		struct MonoStorage
 		{
 			Chunk chunk;
-			template<typename T> inline void reserve(std::size_t mCapacity) { chunk.reserve<T>(mCapacity); }
 		};
 
 		template<typename TBase> using PolyManagerBase = BaseManager<TBase, PolyStorage, PolyManager<TBase>>;
@@ -145,6 +152,8 @@ namespace ssvu
 		public:
 			template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
 			{
+				SSVU_ASSERT_STATIC(sizeof(TBase) >= sizeof(char*), "sizeof(TBase) must be >= sizeof(char*)");
+
 				return reinterpret_cast<TDerived*>(this)->template createImpl<T>(std::forward<TArgs>(mArgs)...);
 			}
 
@@ -156,7 +165,6 @@ namespace ssvu
 				SSVU_ASSERT(items.capacity() < mCapacity);
 				items.reserve(mCapacity);
 				toAdd.reserve(mCapacity);
-				storage.template reserve<TBase>(mCapacity);
 			}
 
 			inline void refresh()
