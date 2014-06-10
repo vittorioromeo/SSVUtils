@@ -84,11 +84,6 @@ namespace ssvu
 	}
 }
 
-namespace ssvu
-{
-
-}
-
 #endif
 
 // TODO: docs, test, sptr
