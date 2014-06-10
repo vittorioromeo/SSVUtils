@@ -51,11 +51,10 @@ namespace ssvu
 
 			inline void refresh()
 			{
-				auto iItr(std::begin(items));
 				auto kItr(std::begin(toAdd));
 
 				// While there currently are items in the main container...
-				for(; iItr != std::end(items); ++iItr)
+				for(auto iItr(std::begin(items)); iItr != std::end(items); ++iItr)
 				{
 					// Skip alive items
 					if(TDerived::isAlive(iItr->get())) continue;
