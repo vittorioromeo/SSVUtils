@@ -1165,10 +1165,11 @@ SSVUT_TEST(HandleManagerMixed)
 		SSVUT_EXPECT(mgr.getAtomFromData(d2).getData().s == "c");
 
 		mgr.reserve(100);
+		// After reserving pointers may now be invalid, we need to use handles
 
-		SSVUT_EXPECT(mgr.getAtomFromData(d0).getData().s == "a");
-		SSVUT_EXPECT(mgr.getAtomFromData(d1).getData().s == "b");
-		SSVUT_EXPECT(mgr.getAtomFromData(d2).getData().s == "c");
+		SSVUT_EXPECT(mgr.getAtomFromHandle(a0).getData().s == "a");
+		SSVUT_EXPECT(mgr.getAtomFromHandle(a1).getData().s == "b");
+		SSVUT_EXPECT(mgr.getAtomFromHandle(a2).getData().s == "c");
 	}
 }
 

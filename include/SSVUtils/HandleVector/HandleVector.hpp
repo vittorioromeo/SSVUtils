@@ -248,6 +248,11 @@ namespace ssvu
 				return *(Internal::Atom<T>::getAtomFromUncertain(Internal::Uncertain<T>::getUncertainFromData(&mData)));
 			}
 
+			/// @brief Returns a reference to `mHandle`'s atom.
+			inline constexpr AtomType& getAtomFromHandle(Handle<T>& mHandle) noexcept
+			{
+				return getAtomFromData(*mHandle);
+			}
 
 
 			// Fast iterators
