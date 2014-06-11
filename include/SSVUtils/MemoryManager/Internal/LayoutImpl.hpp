@@ -30,7 +30,7 @@ namespace ssvu
 				inline static void destroy(TBase* mBase) noexcept(noexcept(mBase->TBase::~TBase()))
 				{
 					SSVU_ASSERT(mBase != nullptr);
-					mBase->TBase::~TBase();
+					mBase->~TBase();
 				}
 			};
 
