@@ -243,16 +243,14 @@ namespace ssvu
 			inline const decltype(atoms)& getAtoms() const noexcept { return atoms; }
 
 			/// @brief Returns a reference to `mData`'s atom. Assumes `mData` is a member of an atom.
+			/// @details Will not work correctly if the HandleVector gets resized (either by reserving or adding elements).
 			inline constexpr AtomType& getAtomFromData(T& mData) noexcept
 			{
 				return *(Internal::Atom<T>::getAtomFromUncertain(Internal::Uncertain<T>::getUncertainFromData(&mData)));
 			}
 
 			/// @brief Returns a reference to `mHandle`'s atom.
-			inline constexpr AtomType& getAtomFromHandle(Handle<T>& mHandle) noexcept
-			{
-				return getAtomFromData(*mHandle);
-			}
+			inline constexpr AtomType& getAtomFromHandle(Handle<T>& mHandle) noexcept { return getAtomFromData(*mHandle); }
 
 
 			// Fast iterators
