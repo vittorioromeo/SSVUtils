@@ -53,7 +53,7 @@ namespace ssvu
 				inline static constexpr LType* getLayout(TBase* mBase) noexcept					{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR(LType, mBase, storageItem); }
 				inline static constexpr const LType* getLayout(const TBase* mBase) noexcept		{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(LType, mBase, storageItem); }
 				inline static constexpr char* getByte(TBase* mBase) noexcept					{ return reinterpret_cast<char*>(getLayout(mBase)); }
-				template<typename T> inline static constexpr T* getBase(char* mPtr) noexcept	{ return reinterpret_cast<T*>(&reinterpret_cast<LBool<T>*>(mPtr)->storageItem); }
+				template<typename T> inline static constexpr T* getItem(char* mPtr) noexcept	{ return reinterpret_cast<T*>(getItemAddress<T>(mPtr)); }
 				inline static void setBool(TBase* mBase, bool mBool) noexcept					{ *reinterpret_cast<bool*>(&getLayout(mBase)->storageBool) = mBool; }
 				inline static constexpr bool getBool(const TBase* mBase) noexcept				{ return *reinterpret_cast<const bool*>(&getLayout(mBase)->storageBool); }
 			};
@@ -75,7 +75,7 @@ namespace ssvu
 				inline static constexpr LType* getLayout(TBase* mBase) noexcept					{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR(LType, mBase, storageItem); }
 				inline static constexpr const LType* getLayout(const TBase* mBase) noexcept		{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(LType, mBase, storageItem); }
 				inline static constexpr char* getByte(TBase* mBase) noexcept					{ return reinterpret_cast<char*>(getLayout(mBase)); }
-				template<typename T> inline static constexpr T* getBase(char* mPtr) noexcept	{ return reinterpret_cast<T*>(&reinterpret_cast<LNoBool<T>*>(mPtr)->storageItem); }
+				template<typename T> inline static constexpr T* getItem(char* mPtr) noexcept	{ return reinterpret_cast<T*>(getItemAddress<T>(mPtr)); }
 			};
 		}
 	}
