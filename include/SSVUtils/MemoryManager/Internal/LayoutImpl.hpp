@@ -27,7 +27,7 @@ namespace ssvu
 			template<typename TBase> struct LHelperBase
 			{
 				inline static void deallocate(char* mPtr) noexcept { SSVU_ASSERT(mPtr != nullptr); delete[] mPtr; }
-				inline static void destroy(TBase* mBase) noexcept(noexcept(mBase->TBase::~TBase()))
+				inline static void destroy(TBase* mBase) noexcept(noexcept(mBase->~TBase()))
 				{
 					SSVU_ASSERT(mBase != nullptr);
 					mBase->~TBase();
