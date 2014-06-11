@@ -23,7 +23,7 @@ namespace ssvu
 				using DerivedType = TDerived<TBase, TLHelper>;
 
 			protected:
-				 StorageType storage;
+				StorageType storage;
 
 			public:
 				template<typename T = TBase, typename... TArgs> inline PtrType create(TArgs&&... mArgs)

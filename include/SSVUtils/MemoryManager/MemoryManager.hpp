@@ -26,8 +26,8 @@ namespace ssvu
 
 namespace ssvu
 {
-	template<typename TBase> using MonoRecycler = Internal::MonoRecyclerImpl<TBase, Internal::LayoutImpl::LNoBool>;
-	template<typename TBase> using PolyRecycler = Internal::PolyRecyclerImpl<TBase, Internal::LayoutImpl::LNoBool>;
+	template<typename TBase> using MonoRecycler = Internal::MonoRecyclerImpl<TBase, Internal::LayoutImpl::LHelperNoBool>;
+	template<typename TBase> using PolyRecycler = Internal::PolyRecyclerImpl<TBase, Internal::LayoutImpl::LHelperNoBool>;
 
 	template<typename TBase> using MonoManager = Internal::BaseManager<TBase, Internal::MonoRecyclerImpl>;
 	template<typename TBase> using PolyManager = Internal::BaseManager<TBase, Internal::PolyRecyclerImpl>;

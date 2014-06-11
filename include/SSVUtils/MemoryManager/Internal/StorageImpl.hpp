@@ -42,7 +42,7 @@ namespace ssvu
 
 					LHelperType::template construct<T>(result, std::forward<TArgs>(mArgs)...);
 
-					return LHelperType::template getBase<T>(result);
+					return LHelperType::template getItem<T>(result);
 				}
 
 				inline void recycle(TBase* mBase)

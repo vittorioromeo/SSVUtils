@@ -73,7 +73,7 @@ namespace ssvu
 				inline std::size_t getArgCount() const noexcept					{ return args.size(); }
 				inline std::size_t getOptArgCount() const noexcept				{ return optArgs.size(); }
 				inline std::size_t getArgPackCount() const noexcept				{ return argPacks.size(); }
-				inline std::size_t getFlagCount() const	 noexcept				{ return flags.size(); }
+				inline std::size_t getFlagCount() const noexcept				{ return flags.size(); }
 				inline const decltype(names)& getNames() const noexcept			{ return names; }
 				inline const decltype(args)& getArgs() const noexcept			{ return args; }
 				inline const decltype(optArgs)& getOptArgs() const noexcept		{ return optArgs; }
