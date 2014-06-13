@@ -24,58 +24,44 @@ namespace ssvu
 				AlignedStorageBasic<T> storageItem;
 			};
 
-			template<typename TBase> struct LHelperBase
+			template<typename TBase, template<typename> class TLT> struct LHelperBase
 			{
-				inline static void deallocate(char* mPtr) noexcept { SSVU_ASSERT(mPtr != nullptr); delete[] mPtr; }
-				inline static void destroy(TBase* mBase) noexcept(noexcept(mBase->~TBase()))
-				{
-					SSVU_ASSERT(mBase != nullptr);
-					mBase->~TBase();
-				}
+				using TLType = TLT<TBase>;
+
+				template<typename T> inline static char* allocate()								{ return new char[sizeof(TLT<T>)]; }
+				inline static void deallocate(char* mPtr) noexcept								{ SSVU_ASSERT(mPtr != nullptr); delete[] mPtr; }
+				inline static void destroy(TBase* mBase) noexcept(noexcept(mBase->~TBase()))	{ SSVU_ASSERT(mBase != nullptr); mBase->~TBase(); }
+
+				inline static constexpr TLType* getLayout(TBase* mBase) noexcept				{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR(TLType, mBase, storageItem); }
+				inline static constexpr const TLType* getLayout(const TBase* mBase) noexcept	{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(TLType, mBase, storageItem); }
+				inline static constexpr char* getByte(TBase* mBase) noexcept					{ return reinterpret_cast<char*>(getLayout(mBase)); }
+
+				template<typename T> inline static constexpr char* getItemAddress(char* mPtr) noexcept	{ return reinterpret_cast<char*>(&reinterpret_cast<TLT<T>*>(mPtr)->storageItem); }
+				template<typename T> inline static constexpr T* getItem(char* mPtr) noexcept			{ return reinterpret_cast<T*>(getItemAddress<T>(mPtr)); }
 			};
 
-			template<typename TBase> struct LHelperBool : public LHelperBase<TBase>
+			template<typename TBase> struct LHelperBool : public LHelperBase<TBase, LBool>
 			{
-				using LType = LBool<TBase>;
-
-				template<typename T> inline static char* allocate()										{ return new char[sizeof(LBool<T>)]; }
-				template<typename T> inline static constexpr char* getBoolAddress(char* mPtr) noexcept	{ return reinterpret_cast<char*>(&reinterpret_cast<LBool<T>*>(mPtr)->storageBool); }
-				template<typename T> inline static constexpr char* getItemAddress(char* mPtr) noexcept	{ return reinterpret_cast<char*>(&reinterpret_cast<LBool<T>*>(mPtr)->storageItem); }
+				template<typename T> inline static constexpr char* getBoolAddress(char* mPtr) noexcept { return reinterpret_cast<char*>(&reinterpret_cast<LBool<T>*>(mPtr)->storageBool); }
 
 				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(std::forward<TArgs>(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
 					new (getBoolAddress<T>(mPtr)) bool{true};
-					new (getItemAddress<T>(mPtr)) T(std::forward<TArgs>(mArgs)...);
+					new (LHelperBool::template getItemAddress<T>(mPtr)) T(std::forward<TArgs>(mArgs)...);
 				}
 
-				// Memory-manipulation getters/setters
-				inline static constexpr LType* getLayout(TBase* mBase) noexcept					{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR(LType, mBase, storageItem); }
-				inline static constexpr const LType* getLayout(const TBase* mBase) noexcept		{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(LType, mBase, storageItem); }
-				inline static constexpr char* getByte(TBase* mBase) noexcept					{ return reinterpret_cast<char*>(getLayout(mBase)); }
-				template<typename T> inline static constexpr T* getItem(char* mPtr) noexcept	{ return reinterpret_cast<T*>(getItemAddress<T>(mPtr)); }
-				inline static void setBool(TBase* mBase, bool mBool) noexcept					{ *reinterpret_cast<bool*>(&getLayout(mBase)->storageBool) = mBool; }
-				inline static constexpr bool getBool(const TBase* mBase) noexcept				{ return *reinterpret_cast<const bool*>(&getLayout(mBase)->storageBool); }
+				inline static void setBool(TBase* mBase, bool mBool) noexcept					{ *reinterpret_cast<bool*>(&LHelperBool::getLayout(mBase)->storageBool) = mBool; }
+				inline static constexpr bool getBool(const TBase* mBase) noexcept				{ return *reinterpret_cast<const bool*>(&LHelperBool::getLayout(mBase)->storageBool); }
 			};
 
-			template<typename TBase> struct LHelperNoBool : public LHelperBase<TBase>
+			template<typename TBase> struct LHelperNoBool : public LHelperBase<TBase, LNoBool>
 			{
-				using LType = LNoBool<TBase>;
-
-				template<typename T> inline static char* allocate()										{ return new char[sizeof(LNoBool<T>)]; }
-				template<typename T> inline static constexpr char* getItemAddress(char* mPtr) noexcept	{ return reinterpret_cast<char*>(&reinterpret_cast<LNoBool<T>*>(mPtr)->storageItem); }
-
 				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(std::forward<TArgs>(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
-					new (getItemAddress<T>(mPtr)) T(std::forward<TArgs>(mArgs)...);
+					new (LHelperNoBool::template getItemAddress<T>(mPtr)) T(std::forward<TArgs>(mArgs)...);
 				}
-
-				// Memory-manipulation getters/setters
-				inline static constexpr LType* getLayout(TBase* mBase) noexcept					{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR(LType, mBase, storageItem); }
-				inline static constexpr const LType* getLayout(const TBase* mBase) noexcept		{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(LType, mBase, storageItem); }
-				inline static constexpr char* getByte(TBase* mBase) noexcept					{ return reinterpret_cast<char*>(getLayout(mBase)); }
-				template<typename T> inline static constexpr T* getItem(char* mPtr) noexcept	{ return reinterpret_cast<T*>(getItemAddress<T>(mPtr)); }
 			};
 		}
 	}

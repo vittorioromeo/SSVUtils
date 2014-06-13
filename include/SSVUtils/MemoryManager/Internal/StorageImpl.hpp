@@ -10,6 +10,17 @@ namespace ssvu
 	namespace Internal
 	{
 		struct Chain { Chain* next; };
+		template<typename T> inline void chainPush(Chain*& mChain, T mItem) noexcept
+		{
+			reinterpret_cast<Chain*>(mItem)->next = mChain;
+			mChain = reinterpret_cast<Chain*>(mItem);
+		}
+		template<typename T> inline T chainPop(Chain*& mChain) noexcept
+		{
+			auto result(reinterpret_cast<T>(mChain));
+			mChain = mChain->next;
+			return result;
+		}
 
 		template<typename TBase, template<typename> class TLHelper> class Chunk
 		{
@@ -18,7 +29,7 @@ namespace ssvu
 				Chain* chain{nullptr};
 
 			public:
-				inline ~Chunk()
+				inline ~Chunk() noexcept
 				{
 					Chain* temp;
 					while(chain != nullptr)
@@ -31,27 +42,15 @@ namespace ssvu
 
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
-					char* result;
-
-					if(chain == nullptr) result = LHelperType::template allocate<T>();
-					else
-					{
-						result = reinterpret_cast<char*>(chain);
-						chain = chain->next;
-					}
-
+					char* result{chain == nullptr ? LHelperType::template allocate<T>() : chainPop<char*>(chain)};
 					LHelperType::template construct<T>(result, std::forward<TArgs>(mArgs)...);
-
 					return LHelperType::template getItem<T>(result);
 				}
 
-				inline void recycle(TBase* mBase)
+				inline void recycle(TBase* mBase) noexcept(noexcept(LHelperType::destroy(mBase)))
 				{
 					LHelperType::destroy(mBase);
-
-					auto newHead(reinterpret_cast<Chain*>(LHelperType::getByte(mBase)));
-					newHead->next = chain;
-					chain = newHead;
+					chainPush(chain, LHelperType::getByte(mBase));
 				}
 		};
 
@@ -65,7 +64,7 @@ namespace ssvu
 
 			public:
 				inline ChunkDeleter(ChunkType& mChunk) noexcept : chunk{&mChunk} { }
-				inline void operator()(TBase* mPtr) const { chunk->recycle(mPtr); }
+				inline void operator()(TBase* mPtr) const noexcept(noexcept(chunk->recycle(mPtr))) { chunk->recycle(mPtr); }
 		};
 
 		template<typename TBase, template<typename> class TLHelper> struct MonoStorage
@@ -84,10 +83,6 @@ namespace ssvu
 
 			public:
 				template<typename T> inline ChunkType& getChunk() { return chunks[sizeof(T)]; }
-				template<typename T, typename... TArgs> inline T* create(ChunkType mChunk, TArgs&&... mArgs)
-				{
-					return mChunk.template create<T>(std::forward<TArgs>(mArgs)...);
-				}
 		};
 	}
 }
