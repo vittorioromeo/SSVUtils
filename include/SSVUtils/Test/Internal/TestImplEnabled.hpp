@@ -43,7 +43,7 @@ namespace ssvu
 			using TestStorage = ssvu::VecUptr<TestBase>;
 			using TestExecMap = std::map<std::string, bool>;
 
-			inline TestStorage& getTestStorage() noexcept 	{ static TestStorage result; return result; }
+			inline TestStorage& getTestStorage() noexcept	{ static TestStorage result; return result; }
 			inline TestExecMap& getTestExecMap() noexcept	{ static TestExecMap result; return result; }
 
 			inline bool wasTestExecuted(const std::string& mKey) noexcept	{ return getTestExecMap()[mKey]; }
@@ -81,6 +81,9 @@ namespace ssvu
 				}
 
 				if(!failure) ssvu::lo("Test") << "All tests passed!\n";
+
+				getTestStorage().clear();
+				getTestExecMap().clear();
 
 				ssvu::lo().flush();
 			}
