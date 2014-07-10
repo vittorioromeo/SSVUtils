@@ -23,7 +23,7 @@ namespace ssvu
 			ssvu::lo() << "\n";
 			ssvu::lo("ASSERTION FAILED") << mMsg << "\n\n"
 				<< "Line " << cachedData.line << " in file " << cachedData.file << "\n"
-				<< "Code: " << cachedData.code << "\n" << std::endl;
+				<< "Code: " << cachedData.code << "\n\n";
 
 			if(getAssertState().skip)
 			{
