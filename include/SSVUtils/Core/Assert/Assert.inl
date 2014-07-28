@@ -5,7 +5,7 @@
 #ifndef SSVU_CORE_ASSERT_INL
 #define SSVU_CORE_ASSERT_INL
 
-// This file implements `assertImpl`, which required additional dependencies.
+// This file implements `assertImpl`, which requires additional dependencies.
 
 #if !(SSVU_IMPL_ASSERT_DISABLED)
 

@@ -14,7 +14,7 @@ namespace ssvu
 			inline void update(FT) override { action(); timeline.next(); }
 
 		public:
-			Do(Timeline& mTimeline, const Action& mAction) noexcept : Command{mTimeline}, action{mAction} { }
+			inline Do(Timeline& mTimeline, const Action& mAction) noexcept : Command{mTimeline}, action{mAction} { }
 	};
 }
 

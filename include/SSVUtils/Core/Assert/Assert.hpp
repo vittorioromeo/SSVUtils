@@ -9,6 +9,9 @@
 /// @details Currently, it is only a wrapper for the standard `static_assert`.
 #define SSVU_ASSERT_STATIC(...)	static_assert(__VA_ARGS__)
 
+// `SSVU_ASSERT_FORCE_OFF` and `SSVU_ASSERT_FORCE_ON` macros force enabling/disabling of assertions.
+// `SSVU_ASSERT_FORCE_ON` has priority over `SSVU_ASSERT_FORCE_OFF`.
+
 #if (SSVU_ASSERT_FORCE_OFF || NDEBUG)
 	#define SSVU_IMPL_ASSERT_DISABLED 1
 #else

@@ -8,9 +8,9 @@
 #include "SSVUtils/Core/Core.hpp"
 
 #define SSVUT_IMPL_GET_NAME_TYPE(mName)		SSVPP_CAT(SSVUTTestUnique, mName, __LINE__)
-#define SSVUT_IMPL_GET_NAME_RUNNER(mName)		SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), runner)
+#define SSVUT_IMPL_GET_NAME_RUNNER(mName)	SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), runner)
 #define SSVUT_IMPL_GET_NAME_INSTANCE(mName)	SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), instance)
-#define SSVUT_IMPL_GET_KEY(mName)				SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
+#define SSVUT_IMPL_GET_KEY(mName)			SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
 
 #define SSVUT_IMPL_GENERATE_STRUCT(mName) \
 	struct SSVUT_IMPL_GET_NAME_TYPE(mName) final : public ::ssvu::Test::Internal::TestBase \

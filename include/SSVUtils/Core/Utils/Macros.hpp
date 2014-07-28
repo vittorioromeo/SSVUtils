@@ -9,6 +9,7 @@ namespace ssvu
 {
 	namespace Internal
 	{
+		/// @brief Internal structure with `isStandardLayout` static assertion used for "baseptr" macros.
 		template<typename T> struct StandardLayoutChecker
 		{
 			SSVU_ASSERT_STATIC(isStandardLayout<T>(), "T must be a standard-layout type");

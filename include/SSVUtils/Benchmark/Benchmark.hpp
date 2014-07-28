@@ -7,6 +7,31 @@
 
 #include "SSVUtils/Core/Core.hpp"
 
+namespace ssvu
+{
+	namespace Benchmark
+	{
+		namespace Internal
+		{
+			/// @typedef Shortcut typedef for `std::chrono::timepoint<HRClock>`.
+			using TP = std::chrono::time_point<HRClock>;
+
+			/// @typedef Shortcut typedef for `std::chrono::milliseconds`.
+			using Duration = std::chrono::milliseconds;
+
+			/// @brief Benchmark data structure storing a time point and a name.
+			struct Data
+			{
+				TP tp;
+				std::string name;
+
+				inline Data() = default;
+				inline Data(const TP& mTP, std::string mName) : tp{mTP}, name{std::move(mName)} { }
+			};
+		}
+	}
+}
+
 #ifndef SSVU_BENCHMARK_DISABLE
 	#include "SSVUtils/Benchmark/Internal/BenchmarkImplEnabled.hpp"
 #else

@@ -10,7 +10,7 @@
 #include "SSVUtils/Core/FileSystem/Utils.hpp"
 #include "SSVUtils/Core/FileSystem/Scan.hpp"
 
-#endif
-
 /// @brief `ssvufs` is a namespace alias for `ssvu::FileSystem`.
 namespace ssvufs = ssvu::FileSystem;
+
+#endif

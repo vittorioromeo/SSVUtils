@@ -5,26 +5,12 @@
 #ifndef SSVU_BENCHMARK_INTERNAL_IMPL_ENABLED
 #define SSVU_BENCHMARK_INTERNAL_IMPL_ENABLED
 
-#include "SSVUtils/Core/Core.hpp"
-
 namespace ssvu
 {
 	namespace Benchmark
 	{
 		namespace Internal
 		{
-			using TP = std::chrono::time_point<HRClock>;
-			using Duration = std::chrono::milliseconds;
-
-			struct Data
-			{
-				TP tp;
-				std::string name;
-
-				inline Data() = default;
-				inline Data(const TP& mTP, std::string mName) : tp{mTP}, name{std::move(mName)} { }
-			};
-
 			using Stack = std::vector<Data>;
 
 			inline Stack& getStack() noexcept
