@@ -24,7 +24,7 @@ namespace ssvu
 
 			throw std::runtime_error("No command with name <" + mName + ">\nDid you mean <" + closestMatch.second + ">?");
 		}
-		inline Cmd& CmdLine::create(const std::initializer_list<std::string>& mNames) { return getEmplaceUptr<Cmd>(cmds, mNames); }
+		inline Cmd& CmdLine::create(const std::initializer_list<std::string>& mNames) { return getEmplaceUPtr<Cmd>(cmds, mNames); }
 		inline void CmdLine::parseCmdLine(const std::vector<std::string>& mArgs)
 		{
 			if(mArgs.empty()) return;

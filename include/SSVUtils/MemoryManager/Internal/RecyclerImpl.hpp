@@ -19,7 +19,7 @@ namespace ssvu
 				using ChunkType = Chunk<TBase, TLHelper>;
 				using ChunkDeleterType = ChunkDeleter<TBase, TLHelper>;
 				using StorageType = TStorage<TBase, TLHelper>;
-				using PtrType = Uptr<TBase, ChunkDeleterType>;
+				using PtrType = UPtr<TBase, ChunkDeleterType>;
 				using DerivedType = TDerived<TBase, TLHelper>;
 
 			protected:

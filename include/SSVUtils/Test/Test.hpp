@@ -25,7 +25,7 @@
 	{ \
 		if(::ssvu::Test::Internal::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) return; \
 		::ssvu::Test::Internal::setTestExecuted(SSVUT_IMPL_GET_KEY(mName)); \
-		ssvu::getEmplaceUptr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Internal::getTestStorage(), SSVUT_IMPL_GET_NAME_INSTANCE(mName)); \
+		ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Internal::getTestStorage(), SSVUT_IMPL_GET_NAME_INSTANCE(mName)); \
 	}};
 
 #ifndef SSVUT_DISABLE

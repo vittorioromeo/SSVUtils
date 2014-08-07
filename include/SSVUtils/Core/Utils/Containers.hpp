@@ -193,44 +193,44 @@ namespace ssvu
 
 	namespace Internal
 	{
-		/// @brief Internal implementation method for Uptr emplacement in linear containers.
-		template<typename T, typename TC, typename TM, typename... TArgs> inline T& getEmplaceUptrImpl(TC& mContainer, TArgs&&... mArgs)
+		/// @brief Internal implementation method for UPtr emplacement in linear containers.
+		template<typename T, typename TC, typename TM, typename... TArgs> inline T& getEmplaceUPtrImpl(TC& mContainer, TArgs&&... mArgs)
 		{
-			auto uptr(TM::template make<TArgs...>(std::forward<TArgs>(mArgs)...));
-			auto result(uptr.get());
-			mContainer.emplace_back(std::move(uptr));
+			auto uPtr(TM::template make<TArgs...>(std::forward<TArgs>(mArgs)...));
+			auto result(uPtr.get());
+			mContainer.emplace_back(std::move(uPtr));
 			return *result;
 		}
 
-		/// @brief Internal implementation method for Uptr emplacement in map containers.
-		template<typename T, typename TC, typename TK, typename TM, typename... TArgs> inline T& getEmplaceUptrMapImpl(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
+		/// @brief Internal implementation method for UPtr emplacement in map containers.
+		template<typename T, typename TC, typename TK, typename TM, typename... TArgs> inline T& getEmplaceUPtrMapImpl(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 		{
-			auto uptr(TM::template make<TArgs...>(std::forward<TArgs>(mArgs)...));
-			auto result(uptr.get());
-			mContainer.emplace(std::forward<TK>(mKey), std::move(uptr));
+			auto uPtr(TM::template make<TArgs...>(std::forward<TArgs>(mArgs)...));
+			auto result(uPtr.get());
+			mContainer.emplace(std::forward<TK>(mKey), std::move(uPtr));
 			return *result;
 		}
 	}
 
-	/// @brief Emplaces a `ssvu::Uptr<T>` inside mContainer and returns a reference to the allocated T instance.
-	/// @details Internally uses `ssvu::makeUptr` and `ssvu::Uptr<T>::get`.
-	/// @param mContainer Container of `ssvu::Uptr<T>` where the newly created smart pointer will be emplaced.
+	/// @brief Emplaces a `ssvu::UPtr<T>` inside mContainer and returns a reference to the allocated T instance.
+	/// @details Internally uses `ssvu::makeUPtr` and `ssvu::UPtr<T>::get`.
+	/// @param mContainer Container of `ssvu::UPtr<T>` where the newly created smart pointer will be emplaced.
 	/// @param mArgs Emplacement variadic arguments.
 	/// @return Returns a reference to the newly allocated T instance.
-	template<typename T, typename TC, typename... TArgs> inline T& getEmplaceUptr(TC& mContainer, TArgs&&... mArgs)
+	template<typename T, typename TC, typename... TArgs> inline T& getEmplaceUPtr(TC& mContainer, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUptrImpl<T, TC, Internal::MakerUptr<T>>(mContainer, std::forward<TArgs>(mArgs)...);
+		return Internal::getEmplaceUPtrImpl<T, TC, Internal::MakerUPtr<T>>(mContainer, std::forward<TArgs>(mArgs)...);
 	}
 
-	/// @brief Emplaces a `ssvu::Uptr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
-	/// @details Internally uses `ssvu::makeUptr` and `ssvu::Uptr<T>::get`.
-	/// @param mContainer Map container of `ssvu::Uptr<T>` where the newly created smart pointer will be emplaced.
+	/// @brief Emplaces a `ssvu::UPtr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
+	/// @details Internally uses `ssvu::makeUPtr` and `ssvu::UPtr<T>::get`.
+	/// @param mContainer Map container of `ssvu::UPtr<T>` where the newly created smart pointer will be emplaced.
 	/// @param mKey Key of the element.
 	/// @param mArgs Emplacement variadic arguments.
 	/// @return Returns a reference to the newly allocated T instance.
-	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUptrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
+	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUPtrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUptrMapImpl<T, TC, TK, Internal::MakerUptr<T>>(mContainer, mKey, std::forward<TArgs>(mArgs)...);
+		return Internal::getEmplaceUPtrMapImpl<T, TC, TK, Internal::MakerUPtr<T>>(mContainer, mKey, std::forward<TArgs>(mArgs)...);
 	}
 }
 

@@ -84,8 +84,8 @@ namespace std
 namespace ssvu
 {
 	// Type traits shortcuts
-	template<typename T, typename TDeleter = std::default_delete<T>> using Uptr = std::unique_ptr<T, TDeleter>;
-	template<typename T> using Sptr = std::shared_ptr<T>;
+	template<typename T, typename TDeleter = std::default_delete<T>> using UPtr = std::unique_ptr<T, TDeleter>;
+	template<typename T> using SPtr = std::shared_ptr<T>;
 	template<typename... TArgs> using Common = std::common_type_t<TArgs...>;
 	template<bool TBool, typename T = void> using EnableIf = std::enable_if_t<TBool, T>;
 	template<typename T> using Decay = std::decay_t<T>;
@@ -125,32 +125,32 @@ namespace ssvu
 
 namespace ssvu
 {
-	/// @brief Returns a const reference to a statically allocated empty std::string.
+	/// @brief Returns a const reference to a statically allocated empty `std::string`.
 	inline const std::string& getEmptyString() noexcept { static std::string result; return result; }
 
-	/// @typedef Func is an `std::function` alias.
+	/// @typedef Alias for `std::function`.
 	template<typename T> using Func = std::function<T>;
 
-	/// @typedef Action represents a `void()` function,
+	/// @typedef Alias for represents a `void()` function,
 	using Action = Func<void()>;
 
-	/// @typedef Predicate represents a `bool()` function,
+	/// @typedef Alias for a `bool()` function,
 	using Predicate = Func<bool()>;
 
-	/// @typedef HRClock is a simple shortcut for `std::chrono::high_resolution_clock`.
+	/// @typedef Alias for `std::chrono::high_resolution_clock`.
 	using HRClock = std::chrono::high_resolution_clock;
 
-	/// @typedef FT is a shortcut for `float` intended to be used in frametime related
+	/// @typedef `FT` is an alias for `float` intended to be used in frametime related
 	/// contexts. It can be read both as "frametime" and "float time", and should be
 	/// used instead of plain float for frametime-driven timers, delays and durations.
 	using FT = float;
 
-	/// @typedef FTDuration is a millisecond-precision `std::chrono::duration` intended
+	/// @typedef `FTDuration` is a millisecond-precision `std::chrono::duration` intended
 	/// for use in frametime-related contexts.
 	using FTDuration = std::chrono::duration<FT, std::milli>;
 
-	/// @typedef Shortcut typedef for `std::vector<ssvu::Uptr<T>>`.
-	template<typename T, typename TDeleter = std::default_delete<T>> using VecUptr = std::vector<ssvu::Uptr<T, TDeleter>>;
+	/// @typedef Alias for `std::vector<ssvu::UPtr<T>>`.
+	template<typename T, typename TDeleter = std::default_delete<T>> using VecUPtr = std::vector<ssvu::UPtr<T, TDeleter>>;
 }
 
 // C++14: will be in standard
@@ -158,11 +158,11 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<typename T, typename... TArgs> inline ssvu::Uptr<T> makeUptrHelper(std::false_type, TArgs&&... mArgs) { return ssvu::Uptr<T>(new T(std::forward<TArgs>(mArgs)...)); }
-		template<typename T, typename... TArgs> inline ssvu::Uptr<T> makeUptrHelper(std::true_type, TArgs&&... mArgs)
+		template<typename T, typename... TArgs> inline ssvu::UPtr<T> makeUPtrHelper(std::false_type, TArgs&&... mArgs) { return ssvu::UPtr<T>(new T(std::forward<TArgs>(mArgs)...)); }
+		template<typename T, typename... TArgs> inline ssvu::UPtr<T> makeUPtrHelper(std::true_type, TArgs&&... mArgs)
 		{
 			SSVU_ASSERT_STATIC(std::extent<T>::value == 0, "make_unique<T[N]>() is forbidden, please use make_unique<T[]>().");
-			return ssvu::Uptr<T>(new ssvu::RemoveExtent<T>[sizeof...(TArgs)]{std::forward<TArgs>(mArgs)...});
+			return ssvu::UPtr<T>(new ssvu::RemoveExtent<T>[sizeof...(TArgs)]{std::forward<TArgs>(mArgs)...});
 		}
 	}
 }
@@ -170,26 +170,26 @@ namespace ssvu
 namespace std
 {
 	// C++14: will be in standard
-	template<typename T, typename... TArgs> inline ssvu::Uptr<T> make_unique(TArgs&&... mArgs) { return ssvu::Internal::makeUptrHelper<T>(std::is_array<T>(), std::forward<TArgs>(mArgs)...); }
+	template<typename T, typename... TArgs> inline ssvu::UPtr<T> make_unique(TArgs&&... mArgs) { return ssvu::Internal::makeUPtrHelper<T>(std::is_array<T>(), std::forward<TArgs>(mArgs)...); }
 }
 
 namespace ssvu
 {
-	/// @brief Creates and returns an `ssvu::Uptr<T>`.
+	/// @brief Creates and returns an `ssvu::UPtr<T>`.
 	/// @details Wraps `std::make_unique<T>`.
-	template<typename T, typename... TArgs> inline Uptr<T> makeUptr(TArgs&&... mArgs) { return std::make_unique<T>(std::forward<TArgs>(mArgs)...); }
+	template<typename T, typename... TArgs> inline UPtr<T> makeUPtr(TArgs&&... mArgs) { return std::make_unique<T>(std::forward<TArgs>(mArgs)...); }
 
-	/// @brief Creates and returns an `ssvu::Sptr<T>`.
+	/// @brief Creates and returns an `ssvu::SPtr<T>`.
 	/// @details Wraps `std::make_shared<T>`.
-	template<typename T, typename... TArgs> inline Sptr<T> makeSptr(TArgs&&... mArgs) { return std::make_shared<T>(std::forward<TArgs>(mArgs)...); }
+	template<typename T, typename... TArgs> inline SPtr<T> makeSPtr(TArgs&&... mArgs) { return std::make_shared<T>(std::forward<TArgs>(mArgs)...); }
 
 	namespace Internal
 	{
-		/// @brief Internal functor that creates an `ssvu::Uptr`.
-		template<typename T> struct MakerUptr { template<typename... TArgs> static inline Uptr<T> make(TArgs&&... mArgs) { return makeUptr<T>(std::forward<TArgs>(mArgs)...); } };
+		/// @brief Internal functor that creates an `ssvu::UPtr`.
+		template<typename T> struct MakerUPtr { template<typename... TArgs> static inline UPtr<T> make(TArgs&&... mArgs) { return makeUPtr<T>(std::forward<TArgs>(mArgs)...); } };
 
-		/// @brief Internal functor that creates an `ssvu::Sptr`.
-		template<typename T> struct MakerSptr { template<typename... TArgs> static inline Sptr<T> make(TArgs&&... mArgs) { return makeSptr<T>(std::forward<TArgs>(mArgs)...); } };
+		/// @brief Internal functor that creates an `ssvu::SPtr`.
+		template<typename T> struct MakerSPtr { template<typename... TArgs> static inline SPtr<T> make(TArgs&&... mArgs) { return makeSPtr<T>(std::forward<TArgs>(mArgs)...); } };
 	}
 }
 

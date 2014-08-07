@@ -181,7 +181,7 @@ namespace ssvu
 		if(m == 0) return n;
 		if(n == 0) return m;
 
-		auto costs(Uptr<std::size_t[]>(new std::size_t[n + 1]));
+		auto costs(UPtr<std::size_t[]>(new std::size_t[n + 1]));
 		for(std::size_t k{0}; k <= n; ++k) costs[k] = k;
 
 		std::size_t i{0};

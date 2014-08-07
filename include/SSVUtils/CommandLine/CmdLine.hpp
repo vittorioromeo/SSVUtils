@@ -14,7 +14,7 @@ namespace ssvu
 		class CmdLine
 		{
 			private:
-				VecUptr<Cmd> cmds;
+				VecUPtr<Cmd> cmds;
 
 			public:
 				Cmd& findCmd(const std::string& mName) const;

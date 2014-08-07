@@ -58,7 +58,7 @@ namespace ssvu
 			using BMPair = std::pair<T1, T2>;
 
 			/// @typedef Type of storage.
-			using Storage = VecUptr<BMPair>;
+			using Storage = VecUPtr<BMPair>;
 
 			// Standard iterator support
 			using iterator = typename Storage::iterator;
@@ -68,7 +68,7 @@ namespace ssvu
 
 		private:
 			/// @brief Storage of key/value pairs.
-			/// @details Implemented as an std::vector of ssvu::Uptr.
+			/// @details Implemented as an std::vector of ssvu::UPtr.
 			Storage storage;
 
 			Internal::PtrSet<T1> set1; ///< @brief Set of the first type.
@@ -116,7 +116,7 @@ namespace ssvu
 				set1.erase(&pair.first);
 				set2.erase(&pair.second);
 
-				eraseRemoveIf(storage, [&pair](const Uptr<BMPair>& mI){ return mI.get() == &pair; });
+				eraseRemoveIf(storage, [&pair](const UPtr<BMPair>& mI){ return mI.get() == &pair; });
 
 				SSVU_ASSERT(!this->has(mKey));
 			}
@@ -139,7 +139,7 @@ namespace ssvu
 			{
 				SSVU_ASSERT(!this->has(mArg1) && !this->has(mArg2));
 
-				auto& pair(ssvu::getEmplaceUptr<BMPair>(storage, std::forward<TA1>(mArg1), std::forward<TA2>(mArg2)));
+				auto& pair(ssvu::getEmplaceUPtr<BMPair>(storage, std::forward<TA1>(mArg1), std::forward<TA2>(mArg2)));
 				set1.emplace(&pair.first);
 				set2.emplace(&pair.second);
 

@@ -17,7 +17,7 @@ namespace ssvu
 				using LayoutType = LayoutImpl::LHelperBool<TBase>;
 				using ChunkType = Chunk<TBase, LayoutImpl::LHelperBool>;
 				using ChunkDeleterType = ChunkDeleter<TBase, LayoutImpl::LHelperBool>;
-				using PtrType = Uptr<TBase, ChunkDeleterType>;
+				using PtrType = UPtr<TBase, ChunkDeleterType>;
 				using RecyclerType = TRecycler<TBase, LayoutImpl::LHelperBool>;
 				using Container = std::vector<PtrType>;
 
@@ -30,9 +30,9 @@ namespace ssvu
 				{
 					SSVU_ASSERT_STATIC(sizeof(TBase) >= sizeof(char*), "sizeof(TBase) must be >= sizeof(char*)");
 
-					auto uptr(this->recycler.template create<T>(std::forward<TArgs>(mArgs)...));
-					auto result(uptr.get());
-					this->toAdd.emplace_back(std::move(uptr));
+					auto uPtr(this->recycler.template create<T>(std::forward<TArgs>(mArgs)...));
+					auto result(uPtr.get());
+					this->toAdd.emplace_back(std::move(uPtr));
 					return *reinterpret_cast<T*>(result);
 				}
 

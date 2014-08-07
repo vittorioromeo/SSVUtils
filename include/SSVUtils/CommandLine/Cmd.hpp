@@ -39,9 +39,9 @@ namespace ssvu
 
 			private:
 				std::vector<std::string> names;
-				VecUptr<ArgBase> args, optArgs;
-				VecUptr<ArgPackBase> argPacks;
-				VecUptr<Flag> flags;
+				VecUPtr<ArgBase> args, optArgs;
+				VecUPtr<ArgPackBase> argPacks;
+				VecUPtr<Flag> flags;
 				Delegate<void()> onAction;
 				std::string desc;
 
@@ -60,11 +60,11 @@ namespace ssvu
 				inline Cmd& operator+=(const Action& mFunc) { onAction += mFunc; return *this; }
 				inline Cmd& operator()() { onAction(); return *this; }
 
-				template<typename T> inline Arg<T>& createArg()												{ return ssvu::getEmplaceUptr<Arg<T>>(args); }
-				template<typename T> inline OptArg<T>& createOptArg(const T& mDefaultValue)					{ return ssvu::getEmplaceUptr<OptArg<T>>(optArgs, mDefaultValue); }
-				template<typename T> inline ArgPack<T>& createArgPack(unsigned int mMin, unsigned int mMax)	{ return ssvu::getEmplaceUptr<ArgPack<T>>(argPacks, mMin, mMax); }
-				template<typename T> inline ArgPack<T>& createInfiniteArgPack()								{ return ssvu::getEmplaceUptr<ArgPack<T>>(argPacks); }
-				inline Flag& createFlag(std::string mShortName, std::string mLongName)						{ return ssvu::getEmplaceUptr<Flag>(flags, std::move(mShortName), std::move(mLongName)); }
+				template<typename T> inline Arg<T>& createArg()												{ return ssvu::getEmplaceUPtr<Arg<T>>(args); }
+				template<typename T> inline OptArg<T>& createOptArg(const T& mDefaultValue)					{ return ssvu::getEmplaceUPtr<OptArg<T>>(optArgs, mDefaultValue); }
+				template<typename T> inline ArgPack<T>& createArgPack(unsigned int mMin, unsigned int mMax)	{ return ssvu::getEmplaceUPtr<ArgPack<T>>(argPacks, mMin, mMax); }
+				template<typename T> inline ArgPack<T>& createInfiniteArgPack()								{ return ssvu::getEmplaceUPtr<ArgPack<T>>(argPacks); }
+				inline Flag& createFlag(std::string mShortName, std::string mLongName)						{ return ssvu::getEmplaceUPtr<Flag>(flags, std::move(mShortName), std::move(mLongName)); }
 
 				inline bool isFlagActive(unsigned int mIdx) const	{ return *flags[mIdx]; }
 				inline void activateFlag(const std::string& mName)	{ findFlag(mName) = true; }
