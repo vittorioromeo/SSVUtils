@@ -22,6 +22,7 @@
 #include "SSVUtils/HandleVector/HandleVector.hpp"
 #include "SSVUtils/Easing/Easing.hpp"
 #include "SSVUtils/RecPtr/RecPtr.hpp"
+#include "SSVUtils/Ticker/Ticker.hpp"
 
 #ifndef SSVUT_DISABLE
 	#include "SSVUtils/Tests/Tests.hpp"
