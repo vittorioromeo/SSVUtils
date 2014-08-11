@@ -153,6 +153,15 @@ namespace ssvu
 	template<typename T, typename TDeleter = std::default_delete<T>> using VecUPtr = std::vector<ssvu::UPtr<T, TDeleter>>;
 }
 
+namespace ssvu
+{
+	// Frametime utils
+	constexpr float secondsFTRatio{60.f};
+	template<typename T> inline constexpr T getFTToSeconds(T mFT) noexcept		{ return mFT / secondsFTRatio; }
+	template<typename T> inline constexpr T getSecondsToFT(T mSeconds) noexcept	{ return mSeconds * secondsFTRatio; }
+	template<typename T> inline constexpr T getFTToFPS(T mFT) noexcept			{ return secondsFTRatio / mFT; }
+}
+
 // C++14: will be in standard
 namespace ssvu
 {
