@@ -15,6 +15,8 @@ namespace ssvu
 			SSVU_ASSERT_STATIC(isStandardLayout<T>(), "T must be a standard-layout type");
 			using Type = T;
 		};
+
+		template<typename T> using StandardLayoutCheckerT = typename ssvu::Internal::StandardLayoutChecker<T>::Type;
 	}
 }
 
@@ -81,7 +83,7 @@ namespace ssvu
 /// @details Requires `mType` to be a standard-layout type. Uses offsetof(...) internally.
 /// Assumes that `mMemberPtr` actually points to an inner member of an existing `mType` instance.
 #define SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(mType, mMemberPtr, mMemberName) \
-	reinterpret_cast<const typename ssvu::Internal::StandardLayoutChecker<mType>::Type*>(reinterpret_cast<const char*>(mMemberPtr) - offsetof(mType, mMemberName))
+	reinterpret_cast<const ssvu::Internal::StandardLayoutCheckerT<mType>*>(reinterpret_cast<const char*>(mMemberPtr) - offsetof(mType, mMemberName))
 
 /// @macro Gets the base `mType*` structure pointer from a `mMemberPointer` pointer to a member of `mType`, with member name `mMemeberName`.
 /// @details Requires `mType` to be a standard-layout type. Uses offsetof(...) internally.

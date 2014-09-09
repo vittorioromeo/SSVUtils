@@ -28,6 +28,8 @@ namespace ssvu
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
+			// TODO: make thread-safe!
+
 			constexpr std::size_t leftW{38};
 
 			if(mLOut.title != "")

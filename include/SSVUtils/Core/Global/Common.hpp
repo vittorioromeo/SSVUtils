@@ -203,3 +203,6 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: comply to standards _t _v and ::type ::value
+// * maybe avoid using shortcuts? or use ShortcutT?
