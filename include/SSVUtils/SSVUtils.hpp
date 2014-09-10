@@ -32,5 +32,5 @@
 
 // TODO:
 // * C++14!
-// * .inl FILES and SSVU_INLINE macro
+// * .inl and .cpp FILES and SSVU_INLINE macro
 // * Fix includes (old method was better)
