@@ -111,16 +111,17 @@ namespace ssvu
 	template<typename T1, typename T2> using IsSame = typename std::is_same<T1, T2>::type;
 	template<std::size_t TS, typename T> using TupleElement = std::tuple_element_t<TS, T>;
 
-	template<typename T> inline constexpr bool isArithmetic() noexcept				{ return std::is_arithmetic<T>::value; }
-	template<typename T> inline constexpr bool isSigned() noexcept					{ return std::is_signed<T>::value; }
-	template<typename T1, typename T2> inline constexpr bool isSame() noexcept		{ return std::is_same<T1, T2>::value; }
-	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept	{ return std::is_base_of<T1, T2>::value; }
-	template<typename T> inline constexpr bool isStandardLayout() noexcept			{ return std::is_standard_layout<T>::value; }
-	template<typename T> inline constexpr bool isEnum() noexcept					{ return std::is_enum<T>::value; }
-	template<typename T> inline constexpr bool isDefaultConstructible() noexcept	{ return std::is_default_constructible<T>::value; }
-	template<typename T> inline constexpr bool isNothrowConstructible() noexcept	{ return std::is_nothrow_constructible<T>::value; }
-	template<typename T> inline constexpr bool isNothrowDestructible() noexcept		{ return std::is_nothrow_destructible<T>::value; }
-	template<typename T> inline constexpr bool isPolymorphic() noexcept				{ return std::is_polymorphic<T>::value; }
+	template<typename T> inline constexpr bool isArithmetic() noexcept					{ return std::is_arithmetic<T>::value; }
+	template<typename T> inline constexpr bool isSigned() noexcept						{ return std::is_signed<T>::value; }
+	template<typename T1, typename T2> inline constexpr bool isSame() noexcept			{ return std::is_same<T1, T2>::value; }
+	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept		{ return std::is_base_of<T1, T2>::value; }
+	template<typename T1, typename T2> inline constexpr bool isSameOrBaseOf() noexcept	{ return isSame<T1, T2>() || isBaseOf<T1, T2>(); }
+	template<typename T> inline constexpr bool isStandardLayout() noexcept				{ return std::is_standard_layout<T>::value; }
+	template<typename T> inline constexpr bool isEnum() noexcept						{ return std::is_enum<T>::value; }
+	template<typename T> inline constexpr bool isDefaultConstructible() noexcept		{ return std::is_default_constructible<T>::value; }
+	template<typename T> inline constexpr bool isNothrowConstructible() noexcept		{ return std::is_nothrow_constructible<T>::value; }
+	template<typename T> inline constexpr bool isNothrowDestructible() noexcept			{ return std::is_nothrow_destructible<T>::value; }
+	template<typename T> inline constexpr bool isPolymorphic() noexcept					{ return std::is_polymorphic<T>::value; }
 }
 
 namespace ssvu
