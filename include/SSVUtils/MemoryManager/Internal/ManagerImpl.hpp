@@ -28,8 +28,6 @@ namespace ssvu
 			public:
 				template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
 				{
-					SSVU_ASSERT_STATIC(sizeof(TBase) >= sizeof(char*), "sizeof(TBase) must be >= sizeof(char*)");
-
 					auto uPtr(this->recycler.template create<T>(std::forward<TArgs>(mArgs)...));
 					auto result(uPtr.get());
 					this->toAdd.emplace_back(std::move(uPtr));

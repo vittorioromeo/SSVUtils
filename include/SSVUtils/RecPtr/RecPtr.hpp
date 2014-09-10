@@ -33,7 +33,7 @@ namespace ssvu
 				template<typename TT> inline void recycle(TT* mPtr) noexcept(noexcept(alloc.destroy(mPtr)) && noexcept(ptrs.emplace_back(mPtr)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
-					SSVU_ASSERT_STATIC(isBaseOf<TT, T>() || isSame<TT, T>(), "TT must be the same as T or its base type");
+					SSVU_ASSERT_STATIC(isSameOrBaseOf<TT, T>(), "TT and T must belong to the same hierarchy");
 
 					alloc.destroy(reinterpret_cast<T*>(mPtr));
 					ptrs.emplace_back(reinterpret_cast<T*>(mPtr));

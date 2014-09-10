@@ -28,7 +28,6 @@ namespace ssvu
 			public:
 				template<typename T = TBase, typename... TArgs> inline PtrType create(TArgs&&... mArgs)
 				{
-					SSVU_ASSERT_STATIC(sizeof(TBase) >= sizeof(char*), "sizeof(TBase) must be >= sizeof(char*)");
 					return reinterpret_cast<DerivedType*>(this)->template createImpl<T>(std::forward<TArgs>(mArgs)...);
 				}
 		};
@@ -55,7 +54,7 @@ namespace ssvu
 
 			template<typename T, typename... TArgs> inline PtrType createImpl(TArgs&&... mArgs)
 			{
-				SSVU_ASSERT_STATIC(isSame<TBase, T>() || isBaseOf<TBase, T>(), "PolyRecyclerImpl can only allocate types that belong to the same hierarchy");
+				SSVU_ASSERT_STATIC(isSameOrBaseOf<TBase, T>(), "PolyRecyclerImpl can only allocate types that belong to the same hierarchy");
 				auto& chunk(this->storage.template getChunk<T>());
 				auto result(chunk.template create<T>(std::forward<TArgs>(mArgs)...));
 				return PtrType{result, ChunkDeleterType{chunk}};
