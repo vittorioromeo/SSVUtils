@@ -78,3 +78,5 @@ namespace ssvu
 	::ssvu::Benchmark::Internal::ScopeLogBenchmark SSVPP_CAT(__scopeLogBenchmark, __LINE__){__VA_ARGS__}
 
 #endif
+
+// TODO: consider renaming scopelogbenchmark?
