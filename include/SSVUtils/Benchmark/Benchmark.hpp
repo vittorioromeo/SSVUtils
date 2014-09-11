@@ -59,7 +59,22 @@ namespace ssvu
 
 		/// @brief Ends the current benchmark timer and logs the elapsed time.
 		inline void endLo() { Internal::endLo(); }
+
+		namespace Internal
+		{
+			struct ScopeLogBenchmark
+			{
+				inline ScopeLogBenchmark(std::string mTitle = "") { start(std::move(mTitle)); }
+				inline ~ScopeLogBenchmark() { endLo(); }
+			};
+		}
 	}
 }
+
+/// @macro Instantiates a ScopeLogBenchmark temp-named object in the current scope.
+/// @details The istantiated object will run a benchmark during its lifetime.
+/// Pass the desired benchmark title as a parameter.
+#define SSVU_BENCHMARK_SCOPELOGBENCHMARK(...) \
+	::ssvu::Benchmark::Internal::ScopeLogBenchmark SSVPP_CAT(__scopeLogBenchmark, __LINE__){__VA_ARGS__}
 
 #endif

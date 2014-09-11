@@ -702,6 +702,16 @@ SSVUT_TEST(BenchmarkTests)
 		ssvu::Benchmark::getEndString();
 	}
 	ssvu::Benchmark::getEndDuration();
+
+	{
+		SSVU_BENCHMARK_SCOPELOGBENCHMARK();
+		SSVU_BENCHMARK_SCOPELOGBENCHMARK("test0");
+
+		{
+			SSVU_BENCHMARK_SCOPELOGBENCHMARK();
+			SSVU_BENCHMARK_SCOPELOGBENCHMARK("test1");
+		}
+	}
 }
 
 SSVU_FATENUM_MGR(_ssvutTestMgr);
