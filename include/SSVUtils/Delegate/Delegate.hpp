@@ -6,8 +6,7 @@
 #ifndef SSVU_DELEGATE
 #define SSVU_DELEGATE
 
-#include <vector>
-#include <functional>
+#include <SSVUtils/Core/Core.hpp>
 
 namespace ssvu
 {
