@@ -9,6 +9,9 @@ namespace ssvu
 {
 	namespace Internal
 	{
+		/// @brief Base memory recycler manager class.
+		/// @tparam TBase Base type of manager objects.
+		/// @tparam TRecycler Internal recycler type. (MonoRecycler? PolyRecycler?)
 		template<typename TBase, template<typename, template<typename> class> class TRecycler> class BaseManager
 		{
 			template<typename T1, typename T2> friend void ssvu::eraseRemoveIf(T1&, const T2&);
@@ -54,7 +57,7 @@ namespace ssvu
 						// Skip alive items
 						if(isAlive(iItr->get())) continue;
 
-						// Found a dead item - no more items to add
+						// Found a dead item - possibility 1: there are no more items to add
 						if(kItr == std::end(toAdd))
 						{
 							// Erase-remove-if all dead items from this point forward and exit
@@ -63,7 +66,7 @@ namespace ssvu
 							return;
 						}
 
-						// Found a dead item - items to add
+						// Found a dead item - possibility 2: there still are items to add
 						*iItr = std::move(*kItr++);
 					}
 

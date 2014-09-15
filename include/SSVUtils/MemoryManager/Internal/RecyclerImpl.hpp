@@ -12,7 +12,16 @@ namespace ssvu
 		template<typename TBase, template<typename> class TLHelper> using MonoRecyclerBase = BaseRecycler<TBase, TLHelper, MonoStorage, MonoRecyclerImpl>;
 		template<typename TBase, template<typename> class TLHelper> using PolyRecyclerBase = BaseRecycler<TBase, TLHelper, PolyStorage, PolyRecyclerImpl>;
 
-		template<typename TBase, template<typename> class TLHelper, template<typename, template<typename> class> class TStorage, template<typename, template<typename> class> class TDerived> class BaseRecycler
+		/// @brief Base CRTP recycler implementation.
+		/// @tparam TBase Base type of stored objects.
+		/// @tparam TLHelper Type of layout helper. (bool or no bool?)
+		/// @tparam TStorage Type of storage. (MonoStorage? PolyStorage?)
+		/// @tparam TDerived Type of derived class. (CRTP)
+		template<typename TBase,
+				 template<typename> class TLHelper,
+				 template<typename, template<typename> class> class TStorage,
+				 template<typename, template<typename> class> class TDerived>
+		class BaseRecycler
 		{
 			public:
 				using LayoutType = TLHelper<TBase>;
@@ -25,13 +34,17 @@ namespace ssvu
 			protected:
 				StorageType storage;
 
+			private:
+				inline DerivedType& getThisDerived() noexcept { return *reinterpret_cast<DerivedType*>(this); }
+
 			public:
 				template<typename T = TBase, typename... TArgs> inline PtrType create(TArgs&&... mArgs)
 				{
-					return reinterpret_cast<DerivedType*>(this)->template createImpl<T>(std::forward<TArgs>(mArgs)...);
+					return getThisDerived().template createImpl<T>(std::forward<TArgs>(mArgs)...);
 				}
 		};
 
+		/// @brief CRTP implementation for `MonoRecycler`.
 		template<typename TBase, template<typename> class TLHelper> struct MonoRecyclerImpl final : public MonoRecyclerBase<TBase, TLHelper>
 		{
 			using BaseType = MonoRecyclerBase<TBase, TLHelper>;
@@ -46,6 +59,7 @@ namespace ssvu
 			}
 		};
 
+		/// @brief CRTP implementation for `PolyRecycler`.
 		template<typename TBase, template<typename> class TLHelper> struct PolyRecyclerImpl final : public PolyRecyclerBase<TBase, TLHelper>
 		{
 			using BaseType = PolyRecyclerBase<TBase, TLHelper>;

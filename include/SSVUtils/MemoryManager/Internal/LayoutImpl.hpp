@@ -51,8 +51,8 @@ namespace ssvu
 					new (LHelperBool::template getItemAddress<T>(mPtr)) T(std::forward<TArgs>(mArgs)...);
 				}
 
-				inline static void setBool(TBase* mBase, bool mBool) noexcept					{ *reinterpret_cast<bool*>(&LHelperBool::getLayout(mBase)->storageBool) = mBool; }
-				inline static constexpr bool getBool(const TBase* mBase) noexcept				{ return *reinterpret_cast<const bool*>(&LHelperBool::getLayout(mBase)->storageBool); }
+				inline static void setBool(TBase* mBase, bool mBool) noexcept		{ *reinterpret_cast<bool*>(&LHelperBool::getLayout(mBase)->storageBool) = mBool; }
+				inline static constexpr bool getBool(const TBase* mBase) noexcept	{ return *reinterpret_cast<const bool*>(&LHelperBool::getLayout(mBase)->storageBool); }
 			};
 
 			template<typename TBase> struct LHelperNoBool : public LHelperBase<TBase, LNoBool>
