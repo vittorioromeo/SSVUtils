@@ -80,3 +80,5 @@ namespace ssvu
 #endif
 
 // TODO: consider renaming scopelogbenchmark?
+// TODO: grouped benchmarks (like separate code segments, accumulate the time, then display at the end)
+// TODO: indentation options, display options (check map example
