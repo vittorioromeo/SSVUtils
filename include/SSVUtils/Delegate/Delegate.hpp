@@ -29,7 +29,7 @@ namespace ssvu
 			/// @brief Add a function to the delegate
 			/// @details Operator+= adds a function the delegate's internal function list which will be called using operator().
 			/// @code
-			/// ssvu::Delegate<int, int> delegate;
+			/// ssvu::Delegate<int(int)> delegate;
 			/// delegate += [](int mParameter){ return mParameter * 2; };
 			/// @endcode
 			/// @param mFunc Function to add - can be a std::function or a lambda
@@ -37,7 +37,7 @@ namespace ssvu
 
 			/// @brief Call all the functions in the delegate.
 			/// @code
-			/// ssvu::Delegate<int> delegate;
+			/// ssvu::Delegate<int()> delegate;
 			/// delegate += []{ return 0; };
 			/// delegate += []{ return 10; };
 			/// delegate += []{ return 20; };
