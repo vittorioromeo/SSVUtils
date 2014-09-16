@@ -1184,3 +1184,5 @@ SSVUT_TEST(HandleManagerMixed)
 }
 
 #endif
+
+// TODO: check actual vs expected value in tests
