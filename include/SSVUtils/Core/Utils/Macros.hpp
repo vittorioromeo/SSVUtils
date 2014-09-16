@@ -79,13 +79,13 @@ namespace ssvu
 	SSVU_DEFINE_MEMFN_DETECTOR(SSVPP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName); \
 	SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName, ( SSVPP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__)<T, mSignature>() ))
 
-/// @macro Gets the base `mType*` structure pointer from a `mMemberPointer` pointer to a member of `mType`, with member name `mMemeberName`. Const version.
+/// @macro Gets the base `mType*` structure pointer from a `mMemberPointer` pointer to a member of `mType`, with member name `mMemberName`. Const version.
 /// @details Requires `mType` to be a standard-layout type. Uses offsetof(...) internally.
 /// Assumes that `mMemberPtr` actually points to an inner member of an existing `mType` instance.
 #define SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(mType, mMemberPtr, mMemberName) \
 	reinterpret_cast<const ssvu::Internal::StandardLayoutCheckerT<mType>*>(reinterpret_cast<const char*>(mMemberPtr) - offsetof(mType, mMemberName))
 
-/// @macro Gets the base `mType*` structure pointer from a `mMemberPointer` pointer to a member of `mType`, with member name `mMemeberName`.
+/// @macro Gets the base `mType*` structure pointer from a `mMemberPointer` pointer to a member of `mType`, with member name `mMemberName`.
 /// @details Requires `mType` to be a standard-layout type. Uses offsetof(...) internally.
 /// Assumes that `mMemberPtr` actually points to an inner member of an existing `mType` instance.
 #define SSVU_GET_BASEPTR_FROM_MEMBERPTR(mType, mMemberPtr, mMemberName) \
