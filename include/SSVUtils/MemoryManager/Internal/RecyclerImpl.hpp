@@ -35,12 +35,12 @@ namespace ssvu
 				StorageType storage;
 
 			private:
-				inline DerivedType& getThisDerived() noexcept { return *reinterpret_cast<DerivedType*>(this); }
+				inline auto& getThisDerived() noexcept { return *reinterpret_cast<DerivedType*>(this); }
 
 			public:
-				template<typename T = TBase, typename... TArgs> inline PtrType create(TArgs&&... mArgs)
+				template<typename T = TBase, typename... TArgs> inline auto create(TArgs&&... mArgs)
 				{
-					return getThisDerived().template createImpl<T>(std::forward<TArgs>(mArgs)...);
+					return getThisDerived().template createImpl<T>(fwd<TArgs>(mArgs)...);
 				}
 		};
 
@@ -51,10 +51,10 @@ namespace ssvu
 			using PtrType = typename BaseType::PtrType;
 			using ChunkDeleterType = typename BaseType::ChunkDeleterType;
 
-			template<typename T, typename... TArgs> inline PtrType createImpl(TArgs&&... mArgs)
+			template<typename T, typename... TArgs> inline auto createImpl(TArgs&&... mArgs)
 			{
 				SSVU_ASSERT_STATIC(isSame<TBase, T>(), "MonoRecyclerImpl can only allocate objects of the same type");
-				auto result(this->storage.chunk.template create<T>(std::forward<TArgs>(mArgs)...));
+				auto result(this->storage.chunk.template create<T>(fwd<TArgs>(mArgs)...));
 				return PtrType{result, ChunkDeleterType{this->storage.chunk}};
 			}
 		};
@@ -66,11 +66,11 @@ namespace ssvu
 			using PtrType = typename BaseType::PtrType;
 			using ChunkDeleterType = typename BaseType::ChunkDeleterType;
 
-			template<typename T, typename... TArgs> inline PtrType createImpl(TArgs&&... mArgs)
+			template<typename T, typename... TArgs> inline auto createImpl(TArgs&&... mArgs)
 			{
 				SSVU_ASSERT_STATIC(isSameOrBaseOf<TBase, T>(), "PolyRecyclerImpl can only allocate types that belong to the same hierarchy");
 				auto& chunk(this->storage.template getChunk<T>());
-				auto result(chunk.template create<T>(std::forward<TArgs>(mArgs)...));
+				auto result(chunk.template create<T>(fwd<TArgs>(mArgs)...));
 				return PtrType{result, ChunkDeleterType{chunk}};
 			}
 		};

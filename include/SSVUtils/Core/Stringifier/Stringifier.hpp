@@ -88,10 +88,7 @@ namespace ssvu
 				if(itrBegin == std::end(mValue)) { printBold<TFmt>(mStream, "{ EMPTY }"); return; }
 
 				printBold<TFmt>(mStream, "{");
-
-				// C++14: `auto` lambda
-				repeatPenultimate(itrBegin, std::end(mValue), [&mStream](decltype(*itrBegin) mE){ callStringifyImpl<TFmt>(mStream, mE); }, [&mStream](decltype(*itrBegin)){ printBold<TFmt>(mStream, ", "); });
-
+				repeatPenultimate(itrBegin, std::end(mValue), [&mStream](const auto& mE){ callStringifyImpl<TFmt>(mStream, mE); }, [&mStream](auto&){ printBold<TFmt>(mStream, ", "); });
 				printBold<TFmt>(mStream, "}");
 			}
 		};
@@ -115,13 +112,12 @@ namespace ssvu
 
 			printBold<TFmt>(mStream, "{");
 
-			// C++14: `auto` lambda
-			repeatPenultimate(itrBegin, std::end(mValue), [&mStream, &mSeparator](decltype(*itrBegin) mE)
+			repeatPenultimate(itrBegin, std::end(mValue), [&mStream, &mSeparator](const auto& mE)
 			{
 				callStringifyImpl<TFmt>(mStream, mE.first);
 				printBold<TFmt>(mStream, mSeparator);
 				callStringifyImpl<TFmt>(mStream, mE.second);
-			}, [&mStream](decltype(*itrBegin)){ printBold<TFmt>(mStream, ", "); });
+			}, [&mStream](const auto&){ printBold<TFmt>(mStream, ", "); });
 
 			printBold<TFmt>(mStream, "}");
 		}

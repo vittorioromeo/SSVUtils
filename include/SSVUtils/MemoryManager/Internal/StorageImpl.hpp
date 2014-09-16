@@ -69,7 +69,7 @@ namespace ssvu
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					char* result{ptrChain.isEmpty() ? LHelperType::template allocate<T>() : ptrChain.pop()};
-					LHelperType::template construct<T>(result, std::forward<TArgs>(mArgs)...);
+					LHelperType::template construct<T>(result, fwd<TArgs>(mArgs)...);
 					return LHelperType::template getItem<T>(result);
 				}
 
@@ -112,11 +112,11 @@ namespace ssvu
 				std::map<std::size_t, ChunkType> chunks;
 
 			public:
-				template<typename T> inline ChunkType& getChunk() { return chunks[sizeof(T)]; }
+				template<typename T> inline auto& getChunk() { return chunks[sizeof(T)]; }
 		};
 	}
 }
 
 #endif
 
-// TODO: investigate data-oriented maps?
+// TODO: investigate data-oriented maps!

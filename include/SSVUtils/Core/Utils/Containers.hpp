@@ -10,7 +10,7 @@ namespace ssvu
 	/// @brief Wrapper around std::find that takes a container instead of two iterators.
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
-	template<typename T, typename TV> inline auto find(const T& mContainer, const TV& mValue) -> decltype(std::find(std::begin(mContainer), std::end(mContainer), mValue))
+	template<typename T, typename TV> inline auto find(const T& mContainer, const TV& mValue)
 	{
 		return std::find(std::begin(mContainer), std::end(mContainer), mValue);
 	}
@@ -18,7 +18,7 @@ namespace ssvu
 	/// @brief Wrapper around std::rotate that takes a container instead of two iterators.
 	/// @param mContainer Reference to the container.
 	/// @param mNewBegin New begin iterator after the rotation.
-	template<typename T, typename TI> inline auto rotate(T& mContainer, const TI& mNewBegin) -> decltype(std::rotate(std::begin(mContainer), mNewBegin, std::end(mContainer)))
+	template<typename T, typename TI> inline auto rotate(T& mContainer, const TI& mNewBegin)
 	{
 		return std::rotate(std::begin(mContainer), mNewBegin, std::end(mContainer));
 	}
@@ -27,7 +27,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate used for checking. Can be std::function, a lambda, a functor, etc...
 	/// @return Returns an iterator to the item that matches the predicate (can be end iterator if the item is not found).
-	template<typename T, typename TP> inline auto findIf(const T& mContainer, const TP& mPredicate) -> decltype(std::find_if(std::begin(mContainer), std::end(mContainer), mPredicate))
+	template<typename T, typename TP> inline auto findIf(const T& mContainer, const TP& mPredicate)
 	{
 		return std::find_if(std::begin(mContainer), std::end(mContainer), mPredicate);
 	}
@@ -36,7 +36,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
 	/// @return Returns a past-the-end iterator for the new end of the range.
-	template<typename T, typename TV> inline auto remove(T& mContainer, const TV& mValue) -> decltype(std::remove(std::begin(mContainer), std::end(mContainer), mValue))
+	template<typename T, typename TV> inline auto remove(T& mContainer, const TV& mValue)
 	{
 		return std::remove(std::begin(mContainer), std::end(mContainer), mValue);
 	}
@@ -45,7 +45,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
 	/// @return Returns a past-the-end iterator for the new end of the range.
-	template<typename T, typename TP> inline auto removeIf(T& mContainer, const TP& mPredicate) -> decltype(std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate))
+	template<typename T, typename TP> inline auto removeIf(T& mContainer, const TP& mPredicate)
 	{
 		return std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate);
 	}
@@ -71,7 +71,7 @@ namespace ssvu
 	/// @brief Gets the index of a item in the container, using find and subtracting the begin iterator.
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
-	template<typename T, typename TV> inline typename T::size_type idxOf(const T& mContainer, const TV& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
+	template<typename T, typename TV> inline auto idxOf(const T& mContainer, const TV& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
 
 	/// @brief Checks if a container contains any item that matches a specific predicate.
 	/// @param mContainer Reference to the container.
@@ -117,7 +117,7 @@ namespace ssvu
 	/// @brief Gets all the keys from a map container.
 	/// @param mMap Const reference to the map container.
 	/// @return Returns a std::vector containing all the keys.
-	template<typename TMap> inline std::vector<typename TMap::key_type> getKeys(const TMap& mMap)
+	template<typename TMap> inline auto getKeys(const TMap& mMap)
 	{
 		std::vector<typename TMap::key_type> result;
 		for(const auto& p : mMap) result.emplace_back(p.first);
@@ -137,14 +137,14 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mIdx Index to use (may get wrapped).
 	/// @return Non-const reference to the item at the wrapped index mIdx.
-	template<typename T, typename TIdx> inline typename T::value_type& getByModIdx(T& mContainer, const TIdx& mIdx) { return mContainer[getMod(mIdx, mContainer.size())]; }
+	template<typename T, typename TIdx> inline auto& getByModIdx(T& mContainer, const TIdx& mIdx) { return mContainer[getMod(mIdx, mContainer.size())]; }
 
 	/// @brief Cyclically gets items from a container. (const version)
 	/// @details Interally uses getMod to correctly wrap the entered index.
 	/// @param mContainer Const reference to the container.
 	/// @param mIdx Index to use (may get wrapped).
 	/// @return Const reference to the item at the wrapped index mIdx.
-	template<typename T, typename TIdx> inline const typename T::value_type& getByModIdx(const T& mContainer, const TIdx& mIdx) { return mContainer.at(getMod(mIdx, mContainer.size())); }
+	template<typename T, typename TIdx> inline const auto& getByModIdx(const T& mContainer, const TIdx& mIdx) { return mContainer.at(getMod(mIdx, mContainer.size())); }
 
 	/// @brief Trims items matching a certain predicate from the left.
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
@@ -196,7 +196,7 @@ namespace ssvu
 		/// @brief Internal implementation method for UPtr emplacement in linear containers.
 		template<typename T, typename TC, typename TM, typename... TArgs> inline T& getEmplaceUPtrImpl(TC& mContainer, TArgs&&... mArgs)
 		{
-			auto uPtr(TM::template make<TArgs...>(std::forward<TArgs>(mArgs)...));
+			auto uPtr(TM::template make<TArgs...>(fwd<TArgs>(mArgs)...));
 			auto result(uPtr.get());
 			mContainer.emplace_back(std::move(uPtr));
 			return *result;
@@ -205,9 +205,9 @@ namespace ssvu
 		/// @brief Internal implementation method for UPtr emplacement in map containers.
 		template<typename T, typename TC, typename TK, typename TM, typename... TArgs> inline T& getEmplaceUPtrMapImpl(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 		{
-			auto uPtr(TM::template make<TArgs...>(std::forward<TArgs>(mArgs)...));
+			auto uPtr(TM::template make<TArgs...>(fwd<TArgs>(mArgs)...));
 			auto result(uPtr.get());
-			mContainer.emplace(std::forward<TK>(mKey), std::move(uPtr));
+			mContainer.emplace(fwd<TK>(mKey), std::move(uPtr));
 			return *result;
 		}
 	}
@@ -219,7 +219,7 @@ namespace ssvu
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename TC, typename... TArgs> inline T& getEmplaceUPtr(TC& mContainer, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUPtrImpl<T, TC, Internal::MakerUPtr<T>>(mContainer, std::forward<TArgs>(mArgs)...);
+		return Internal::getEmplaceUPtrImpl<T, TC, Internal::MakerUPtr<T>>(mContainer, fwd<TArgs>(mArgs)...);
 	}
 
 	/// @brief Emplaces a `ssvu::UPtr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
@@ -230,7 +230,7 @@ namespace ssvu
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUPtrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUPtrMapImpl<T, TC, TK, Internal::MakerUPtr<T>>(mContainer, mKey, std::forward<TArgs>(mArgs)...);
+		return Internal::getEmplaceUPtrMapImpl<T, TC, TK, Internal::MakerUPtr<T>>(mContainer, mKey, fwd<TArgs>(mArgs)...);
 	}
 }
 

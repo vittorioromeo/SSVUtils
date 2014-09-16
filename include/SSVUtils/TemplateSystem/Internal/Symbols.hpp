@@ -18,9 +18,9 @@ namespace ssvu
 			constexpr const char* sectionEndLeft{"{{/"};
 			constexpr const char* sectionEndRight{"}}"};
 
-			inline std::string getKey(const std::string& mStr)			{ return keyLeft + mStr + keyRight; }
-			inline std::string getSectionStart(const std::string& mStr)	{ return sectionStartLeft + mStr + sectionStartRight; }
-			inline std::string getSectionEnd(const std::string& mStr)	{ return sectionEndLeft + mStr + sectionEndRight; }
+			inline auto getKey(const std::string& mStr)				{ return keyLeft + mStr + keyRight; }
+			inline auto getSectionStart(const std::string& mStr)	{ return sectionStartLeft + mStr + sectionStartRight; }
+			inline auto getSectionEnd(const std::string& mStr)		{ return sectionEndLeft + mStr + sectionEndRight; }
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace ssvu
 			public:
 				template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
 				{
-					auto uPtr(this->recycler.template create<T>(std::forward<TArgs>(mArgs)...));
+					auto uPtr(this->recycler.template create<T>(fwd<TArgs>(mArgs)...));
 					auto result(uPtr.get());
 					this->toAdd.emplace_back(std::move(uPtr));
 					return *reinterpret_cast<T*>(result);
@@ -78,17 +78,17 @@ namespace ssvu
 				inline static bool isAlive(const TBase* mBase) noexcept	{ return LayoutType::getBool(mBase); }
 				inline static bool isDead(const TBase* mBase) noexcept	{ return !isAlive(mBase); }
 
-				inline auto size()		const noexcept	-> decltype(items.size())		{ return items.size(); }
-				inline auto begin()		noexcept		-> decltype(items.begin())		{ return items.begin(); }
-				inline auto end()		noexcept		-> decltype(items.end())		{ return items.end(); }
-				inline auto begin()		const noexcept	-> decltype(items.begin())		{ return items.begin(); }
-				inline auto end()		const noexcept	-> decltype(items.end())		{ return items.end(); }
-				inline auto cbegin()	const noexcept	-> decltype(items.cbegin())		{ return items.cbegin(); }
-				inline auto cend()		const noexcept	-> decltype(items.cend())		{ return items.cend(); }
-				inline auto rbegin()	noexcept		-> decltype(items.rbegin())		{ return items.rbegin(); }
-				inline auto rend()		noexcept		-> decltype(items.rend())		{ return items.rend(); }
-				inline auto crbegin()	const noexcept	-> decltype(items.crbegin())	{ return items.crbegin(); }
-				inline auto crend()		const noexcept	-> decltype(items.crend())		{ return items.crend(); }
+				inline auto size()		const noexcept	{ return items.size(); }
+				inline auto begin()		noexcept		{ return items.begin(); }
+				inline auto end()		noexcept		{ return items.end(); }
+				inline auto begin()		const noexcept	{ return items.begin(); }
+				inline auto end()		const noexcept	{ return items.end(); }
+				inline auto cbegin()	const noexcept	{ return items.cbegin(); }
+				inline auto cend()		const noexcept	{ return items.cend(); }
+				inline auto rbegin()	noexcept		{ return items.rbegin(); }
+				inline auto rend()		noexcept		{ return items.rend(); }
+				inline auto crbegin()	const noexcept	{ return items.crbegin(); }
+				inline auto crend()		const noexcept	{ return items.crend(); }
 		};
 	}
 }

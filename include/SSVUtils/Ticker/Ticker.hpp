@@ -45,14 +45,14 @@ namespace ssvu
 			inline void resetTotal() noexcept			{ total = 0.f; }
 			inline void resetAll() noexcept				{ resetCurrent(); resetTicks(); resetTotal(); }
 
-			inline void setLoop(bool mLoop) noexcept		{ loop = mLoop; }
+			inline void setLoop(bool mLoop) noexcept	{ loop = mLoop; }
 
-			inline bool getLoop() const noexcept			{ return loop; }
-			inline bool isRunning() const noexcept			{ return running; }
-			inline FT getTarget() const noexcept			{ return target; }
-			inline FT getCurrent() const noexcept			{ return current; }
-			inline FT getTotal() const noexcept				{ return total; }
-			inline std::size_t getTicks() const noexcept	{ return ticks; }
+			inline bool getLoop() const noexcept		{ return loop; }
+			inline bool isRunning() const noexcept		{ return running; }
+			inline auto getTarget() const noexcept		{ return target; }
+			inline auto getCurrent() const noexcept		{ return current; }
+			inline auto getTotal() const noexcept		{ return total; }
+			inline auto getTicks() const noexcept		{ return ticks; }
 
 			template<typename T = FT> inline T getTotalSecs() const noexcept	{ return static_cast<T>(ssvu::getFTToSeconds(total)); }
 			template<typename T = FT> inline T getCurrentSecs() const noexcept	{ return static_cast<T>(ssvu::getFTToSeconds(current)); }

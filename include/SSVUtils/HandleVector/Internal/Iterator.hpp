@@ -14,18 +14,18 @@ namespace ssvu
 			protected:
 				TItrValue value;
 
-				inline TDerived& getThisDerived() noexcept { return *reinterpret_cast<TDerived*>(this); }
+				inline auto& getThisDerived() noexcept { return *reinterpret_cast<TDerived*>(this); }
 				template<typename TT> inline TT getImpl() noexcept { return getThisDerived().template getImpl<TT>(); }
 
 			public:
 				inline HVecItrBase(TItrValue mValue) noexcept : value{mValue} { }
 
-				inline TDerived& operator++() noexcept				{ ++value;			return getThisDerived(); }
-				inline TDerived& operator++(int) noexcept			{ ++value;			return getThisDerived(); }
-				inline TDerived& operator--() noexcept				{ --value;			return getThisDerived(); }
-				inline TDerived& operator--(int) noexcept			{ --value;			return getThisDerived(); }
-				inline TDerived& operator+=(int mOffset) noexcept	{ value += mOffset;	return getThisDerived(); }
-				inline TDerived& operator-=(int mOffset) noexcept	{ value -= mOffset;	return getThisDerived(); }
+				inline auto& operator++() noexcept				{ ++value;			return getThisDerived(); }
+				inline auto& operator++(int) noexcept			{ ++value;			return getThisDerived(); }
+				inline auto& operator--() noexcept				{ --value;			return getThisDerived(); }
+				inline auto& operator--(int) noexcept			{ --value;			return getThisDerived(); }
+				inline auto& operator+=(int mOffset) noexcept	{ value += mOffset;	return getThisDerived(); }
+				inline auto& operator-=(int mOffset) noexcept	{ value -= mOffset;	return getThisDerived(); }
 
 				inline T& operator*() noexcept				{ return getImpl<T&>(); }
 				inline const T& operator*() const noexcept	{ return getImpl<const T&>(); }

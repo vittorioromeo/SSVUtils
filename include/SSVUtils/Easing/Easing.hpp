@@ -12,9 +12,9 @@ namespace ssvu
 {
 	namespace Easing
 	{
-		template<typename T> struct In		{ inline static decltype(&T::in)	get() noexcept { return &T::in; } };
-		template<typename T> struct Out		{ inline static decltype(&T::out)	get() noexcept { return &T::out; } };
-		template<typename T> struct InOut	{ inline static decltype(&T::inOut) get() noexcept { return &T::inOut; } };
+		template<typename T> struct In		{ inline static auto get() noexcept { return &T::in; } };
+		template<typename T> struct Out		{ inline static auto get() noexcept { return &T::out; } };
+		template<typename T> struct InOut	{ inline static auto get() noexcept { return &T::inOut; } };
 
 		namespace Internal
 		{

@@ -13,7 +13,7 @@ namespace ssvu
 			MonoManager<Timeline> timelines;
 
 		public:
-			inline Timeline& create() { return timelines.create(); }
+			inline auto& create() { return timelines.create(); }
 			inline void update(FT mFT)
 			{
 				timelines.refresh();

@@ -21,11 +21,11 @@ namespace ssvu
 				inline void setBriefDesc(std::string mBriefDesc)	{ briefDesc = std::move(mBriefDesc); }
 				inline void setDesc(std::string mDesc)				{ desc = std::move(mDesc); }
 
-				inline const std::string& getName() const noexcept		{ return name; }
-				inline const std::string& getBriefDesc() const noexcept	{ return briefDesc; }
-				inline const std::string& getDesc() const noexcept		{ return desc; }
-				inline virtual std::string getUsageStr() const			{ return ""; }
-				inline std::string getHelpStr()
+				inline const auto& getName() const noexcept			{ return name; }
+				inline const auto& getBriefDesc() const noexcept	{ return briefDesc; }
+				inline const auto& getDesc() const noexcept			{ return desc; }
+				inline virtual std::string getUsageStr() const		{ return ""; }
+				inline auto getHelpStr()
 				{
 					std::string result, usageStr{this->getUsageStr()};
 
@@ -56,8 +56,8 @@ namespace ssvu
 				virtual void set(const std::vector<std::string>& mStrings) = 0;
 
 				inline bool isInfinite() const noexcept		{ return min == 0 && max == 0; }
-				inline std::size_t getMin() const noexcept	{ return min; }
-				inline std::size_t getMax() const noexcept	{ return max; }
+				inline auto getMin() const noexcept	{ return min; }
+				inline auto getMax() const noexcept	{ return max; }
 				inline std::string getUsageStr() const override
 				{
 					return "(PACK " + getName() + " " + "[" + toStr(min) + "/" + (isInfinite() ? "..." : toStr(max)) + "])";

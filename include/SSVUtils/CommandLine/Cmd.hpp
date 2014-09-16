@@ -60,32 +60,32 @@ namespace ssvu
 				inline Cmd& operator+=(const Action& mFunc) { onAction += mFunc; return *this; }
 				inline Cmd& operator()() { onAction(); return *this; }
 
-				template<typename T> inline Arg<T>& createArg()												{ return ssvu::getEmplaceUPtr<Arg<T>>(args); }
-				template<typename T> inline OptArg<T>& createOptArg(const T& mDefaultValue)					{ return ssvu::getEmplaceUPtr<OptArg<T>>(optArgs, mDefaultValue); }
-				template<typename T> inline ArgPack<T>& createArgPack(unsigned int mMin, unsigned int mMax)	{ return ssvu::getEmplaceUPtr<ArgPack<T>>(argPacks, mMin, mMax); }
-				template<typename T> inline ArgPack<T>& createInfiniteArgPack()								{ return ssvu::getEmplaceUPtr<ArgPack<T>>(argPacks); }
-				inline Flag& createFlag(std::string mShortName, std::string mLongName)						{ return ssvu::getEmplaceUPtr<Flag>(flags, std::move(mShortName), std::move(mLongName)); }
+				template<typename T> inline auto& createArg()											{ return ssvu::getEmplaceUPtr<Arg<T>>(args); }
+				template<typename T> inline auto& createOptArg(const T& mDefaultValue)					{ return ssvu::getEmplaceUPtr<OptArg<T>>(optArgs, mDefaultValue); }
+				template<typename T> inline auto& createArgPack(unsigned int mMin, unsigned int mMax)	{ return ssvu::getEmplaceUPtr<ArgPack<T>>(argPacks, mMin, mMax); }
+				template<typename T> inline auto& createInfiniteArgPack()								{ return ssvu::getEmplaceUPtr<ArgPack<T>>(argPacks); }
+				inline Flag& createFlag(std::string mShortName, std::string mLongName)					{ return ssvu::getEmplaceUPtr<Flag>(flags, std::move(mShortName), std::move(mLongName)); }
 
 				inline bool isFlagActive(unsigned int mIdx) const	{ return *flags[mIdx]; }
 				inline void activateFlag(const std::string& mName)	{ findFlag(mName) = true; }
 
-				inline bool hasName(const std::string& mName) const				{ return contains(names, mName); }
-				inline std::size_t getArgCount() const noexcept					{ return args.size(); }
-				inline std::size_t getOptArgCount() const noexcept				{ return optArgs.size(); }
-				inline std::size_t getArgPackCount() const noexcept				{ return argPacks.size(); }
-				inline std::size_t getFlagCount() const noexcept				{ return flags.size(); }
-				inline const decltype(names)& getNames() const noexcept			{ return names; }
-				inline const decltype(args)& getArgs() const noexcept			{ return args; }
-				inline const decltype(optArgs)& getOptArgs() const noexcept		{ return optArgs; }
-				inline const decltype(argPacks)& getArgPacks() const noexcept	{ return argPacks; }
-				inline const decltype(flags)& getFlags() const noexcept			{ return flags; }
+				inline bool hasName(const std::string& mName) const	{ return contains(names, mName); }
+				inline auto getArgCount() const noexcept			{ return args.size(); }
+				inline auto getOptArgCount() const noexcept			{ return optArgs.size(); }
+				inline auto getArgPackCount() const noexcept		{ return argPacks.size(); }
+				inline auto getFlagCount() const noexcept			{ return flags.size(); }
+				inline const auto& getNames() const noexcept		{ return names; }
+				inline const auto& getArgs() const noexcept			{ return args; }
+				inline const auto& getOptArgs() const noexcept		{ return optArgs; }
+				inline const auto& getArgPacks() const noexcept		{ return argPacks; }
+				inline const auto& getFlags() const noexcept		{ return flags; }
 
-				std::string getNamesStr() const		{ return Internal::buildCmdStr(names, "<", ">", " || "); }
-				std::string getArgsStr() const		{ return Internal::buildCmdStr(args); }
-				std::string getOptArgsStr() const	{ return Internal::buildCmdStr(optArgs); }
-				std::string getArgPacksStr() const	{ return Internal::buildCmdStr(argPacks); }
-				std::string getFlagsStr() const		{ return Internal::buildCmdStr(flags); }
-				std::string getHelpStr() const
+				std::string getNamesStr() const	{ return Internal::buildCmdStr(names, "<", ">", " || "); }
+				auto getArgsStr() const		{ return Internal::buildCmdStr(args); }
+				auto getOptArgsStr() const	{ return Internal::buildCmdStr(optArgs); }
+				auto getArgPacksStr() const	{ return Internal::buildCmdStr(argPacks); }
+				auto getFlagsStr() const	{ return Internal::buildCmdStr(flags); }
+				auto getHelpStr() const
 				{
 					std::string result;
 
@@ -99,8 +99,8 @@ namespace ssvu
 					return result;
 				}
 
-				inline void setDesc(std::string mDesc)				{ desc = std::move(mDesc); }
-				inline const std::string& getDesc() const noexcept	{ return desc; }
+				inline void setDesc(std::string mDesc)		{ desc = std::move(mDesc); }
+				inline const auto& getDesc() const noexcept	{ return desc; }
 		};
 	}
 }

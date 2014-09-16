@@ -44,11 +44,11 @@ namespace ssvu
 			{
 				template<typename T> inline static constexpr char* getBoolAddress(char* mPtr) noexcept { return reinterpret_cast<char*>(&reinterpret_cast<LBool<T>*>(mPtr)->storageBool); }
 
-				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(std::forward<TArgs>(mArgs)...)))
+				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(fwd<TArgs>(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
 					new (getBoolAddress<T>(mPtr)) bool{true};
-					new (LHelperBool::template getItemAddress<T>(mPtr)) T(std::forward<TArgs>(mArgs)...);
+					new (LHelperBool::template getItemAddress<T>(mPtr)) T(fwd<TArgs>(mArgs)...);
 				}
 
 				inline static void setBool(TBase* mBase, bool mBool) noexcept		{ *reinterpret_cast<bool*>(&LHelperBool::getLayout(mBase)->storageBool) = mBool; }
@@ -57,10 +57,10 @@ namespace ssvu
 
 			template<typename TBase> struct LHelperNoBool : public LHelperBase<TBase, LNoBool>
 			{
-				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(std::forward<TArgs>(mArgs)...)))
+				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(fwd<TArgs>(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
-					new (LHelperNoBool::template getItemAddress<T>(mPtr)) T(std::forward<TArgs>(mArgs)...);
+					new (LHelperNoBool::template getItemAddress<T>(mPtr)) T(fwd<TArgs>(mArgs)...);
 				}
 			};
 		}

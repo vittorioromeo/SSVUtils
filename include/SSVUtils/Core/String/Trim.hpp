@@ -26,19 +26,19 @@ namespace ssvu
 	/// @param mStr String to trim. (will not be modified)
 	/// @param mChar Character to trim.
 	/// @return Returns a copy of the string, trimmed.
-	inline std::string getTrimmedStrL(std::string mStr, char mChar = ' ') { trimStrL(mStr, mChar); return mStr; }
+	inline auto getTrimmedStrL(std::string mStr, char mChar = ' ') { trimStrL(mStr, mChar); return mStr; }
 
 	/// @brief Gets a copy of a string with characters of a certain type trimmed from the right.
 	/// @param mStr String to trim. (will not be modified)
 	/// @param mChar Character to trim.
 	/// @return Returns a copy of the string, trimmed.
-	inline std::string getTrimmedStrR(std::string mStr, char mChar = ' ') { trimStrR(mStr, mChar); return mStr; }
+	inline auto getTrimmedStrR(std::string mStr, char mChar = ' ') { trimStrR(mStr, mChar); return mStr; }
 
 	/// @brief Gets a copy of a string with characters of a certain type trimmed both from the left and right.
 	/// @param mStr String to trim. (will not be modified)
 	/// @param mChar Character to trim.
 	/// @return Returns a copy of the string, trimmed.
-	inline std::string getTrimmedStrLR(std::string mStr, char mChar = ' ') { trimStrLR(mStr, mChar); return mStr; }
+	inline auto getTrimmedStrLR(std::string mStr, char mChar = ' ') { trimStrLR(mStr, mChar); return mStr; }
 }
 
 #endif

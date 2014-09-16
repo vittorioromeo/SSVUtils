@@ -30,10 +30,11 @@ namespace ssvu
 			public:
 				inline Path() = default;
 				inline Path(const char* mPath) : path{mPath} { }
-				inline Path(std::string mPath) : path{std::move(mPath)} { }
+				inline Path(const std::string& mPath) : path{mPath} { }
+				inline Path(std::string&& mPath) : path{std::move(mPath)} { }
 
-				inline const std::string& getStr() const	{ normalize(); return path; }
-				inline const char* getCStr() const noexcept	{ return getStr().c_str(); }
+				inline const auto& getStr() const		{ normalize(); return path; }
+				inline auto getCStr() const noexcept	{ return getStr().c_str(); }
 
 				/// @brief Returns true if the path exists as a folder on the user's filesystem.
 				inline bool existsAsFolder() const

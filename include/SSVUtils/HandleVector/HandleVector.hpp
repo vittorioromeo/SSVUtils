@@ -46,7 +46,7 @@ namespace ssvu
 			std::size_t sizeNext{0u};		///< @brief Next size. Takes into account newly created atoms.
 
 			/// @brief Returns the capacity of the internal storage.
-			inline std::size_t getCapacity() const noexcept { return atoms.size(); }
+			inline auto getCapacity() const noexcept { return atoms.size(); }
 
 			/// @brief Increases internal storage capacity by mAmount.
 			inline void growCapacityBy(std::size_t mAmount)
@@ -88,10 +88,10 @@ namespace ssvu
 			}
 
 			/// @brief Returns a reference to mAtom's controller mark.
-			inline Mark& getMarkFromAtom(const AtomType& mAtom)	noexcept { return marks[mAtom.markIdx]; }
+			inline auto& getMarkFromAtom(const AtomType& mAtom)	noexcept { return marks[mAtom.markIdx]; }
 
 			/// @brief Returns a reference to mMark's controlled atom.
-			inline AtomType& getAtomFromMark(const Mark& mMark) noexcept { return atoms[mMark.atomIdx]; }
+			inline auto& getAtomFromMark(const Mark& mMark) noexcept { return atoms[mMark.atomIdx]; }
 
 		public:
 			inline HandleVector() = default;
@@ -122,21 +122,21 @@ namespace ssvu
 
 			/// @brief Creates and returns an handle pointing to mAtom.
 			/// @details The created atom will not be used until the HandleVector is refreshed.
-			inline Handle<T> createHandleFromAtom(AtomType& mAtom) noexcept
+			inline auto createHandleFromAtom(AtomType& mAtom) noexcept
 			{
-				return {*this, mAtom.markIdx, getMarkFromAtom(mAtom).ctr};
+				return Handle<T>{*this, mAtom.markIdx, getMarkFromAtom(mAtom).ctr};
 			}
 
 			/// @brief Creates an atom, returning a reference to it.
 			/// @details The created atom will not be used until the HandleVector is refreshed.
-			template<typename... TArgs> inline AtomType& createAtom(TArgs&&... mArgs)
+			template<typename... TArgs> inline auto& createAtom(TArgs&&... mArgs)
 			{
 				// `sizeNext` may be greater than the sizes of the vectors - resize vectors if needed
 				growIfNeeded();
 
 				// `sizeNext` now is the first empty valid index - we create our atom there
 				auto& atom(atoms[sizeNext]);
-				atom.initData(std::forward<TArgs>(mArgs)...);
+				atom.initData(fwd<TArgs>(mArgs)...);
 				atom.alive = true;
 
 				// Update the mark
@@ -151,9 +151,9 @@ namespace ssvu
 
 			/// @brief Creates an atom, returning an handle pointing to it.
 			/// @details The created atom will not be used until the HandleVector is refreshed.
-			template<typename... TArgs> inline Handle<T> create(TArgs&&... mArgs)
+			template<typename... TArgs> inline auto create(TArgs&&... mArgs)
 			{
-				return createHandleFromAtom(createAtom(std::forward<TArgs>(mArgs)...));
+				return createHandleFromAtom(createAtom(fwd<TArgs>(mArgs)...));
 			}
 
 			/// @brief Refreshes the HandleVector.
@@ -219,10 +219,10 @@ namespace ssvu
 			}
 
 			/// @brief Returns a reference to the atom at mIdx.
-			inline AtomType& getAtomAt(HIdx mIdx) noexcept { SSVU_ASSERT(mIdx < atoms.size()); return atoms[mIdx]; }
+			inline auto& getAtomAt(HIdx mIdx) noexcept { SSVU_ASSERT(mIdx < atoms.size()); return atoms[mIdx]; }
 
 			/// @brief Returns a const reference to the atom at mIdx.
-			inline const AtomType& getAtomAt(HIdx mIdx) const noexcept { SSVU_ASSERT(mIdx < atoms.size()); return atoms[mIdx]; }
+			inline const auto& getAtomAt(HIdx mIdx) const noexcept { SSVU_ASSERT(mIdx < atoms.size()); return atoms[mIdx]; }
 
 			/// @brief Returns a reference to the data at mIdx. Assumes the data is initialized.
 			inline T& getDataAt(HIdx mIdx) noexcept { return getAtomAt(mIdx).getData(); }
@@ -231,16 +231,16 @@ namespace ssvu
 			inline const T& getDataAt(HIdx mIdx) const noexcept { return getAtomAt(mIdx).getData(); }
 
 			/// @brief Returns the current size of the HandleVector. Newly created atoms aren't taken into account.
-			inline std::size_t getSize() const noexcept { return size; }
+			inline auto getSize() const noexcept { return size; }
 
 			/// @brief Returns the next size of the HandleVector. Newly created atoms are taken into account.
-			inline std::size_t getSizeNext() const noexcept { return sizeNext; }
+			inline auto getSizeNext() const noexcept { return sizeNext; }
 
 			/// @brief Returns a reference to the internal atom storage.
-			inline decltype(atoms)& getAtoms() noexcept { return atoms; }
+			inline auto& getAtoms() noexcept { return atoms; }
 
 			/// @brief Returns a const reference to the internal atom storage.
-			inline const decltype(atoms)& getAtoms() const noexcept { return atoms; }
+			inline const auto& getAtoms() const noexcept { return atoms; }
 
 			/// @brief Returns a reference to `mData`'s atom. Assumes `mData` is a member of an atom.
 			/// @details Will not work correctly if the HandleVector gets resized (either by reserving or adding elements).

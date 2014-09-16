@@ -32,10 +32,10 @@ namespace ssvu
 
 		public:
 			/// @brief Returns a reference to the atom. Assumes the handle is valid.
-			inline AtomType& getAtom() noexcept { return getAtomImpl<AtomType&>(); }
+			inline auto& getAtom() noexcept { return getAtomImpl<AtomType&>(); }
 
 			/// @brief Returns a const reference to the atom. Assumes the handle is valid.
-			inline const AtomType& getAtom() const noexcept { return getAtomImpl<const AtomType&>(); }
+			inline const auto& getAtom() const noexcept { return getAtomImpl<const AtomType&>(); }
 
 			/// @brief Returns a reference to the data. Assumes the handle is valid.
 			inline T& get() noexcept { return getAtom().getData(); }

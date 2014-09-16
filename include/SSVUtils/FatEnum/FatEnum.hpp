@@ -23,7 +23,7 @@
 #define SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY_DEFS(mIdx, mData, mArg)	SSVPP_TOSTR(mArg) SSVPP_COMMA_IF(mIdx)
 #define SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY(mDispatch)				SSVPP_CAT(SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY_, mDispatch)
 
-#define SSVU_FATENUM_IMPL_MK_GETASSTRING(mMgr, mEnum, mX)			template<> inline const std::string& mMgr < mEnum > :: getAsStringImpl < mEnum :: mX >() noexcept { static std::string s{SSVPP_TOSTR(mX)}; return s; }
+#define SSVU_FATENUM_IMPL_MK_GETASSTRING(mMgr, mEnum, mX)			template<> inline const auto& mMgr < mEnum > :: getAsStringImpl < mEnum :: mX >() noexcept { static std::string s{SSVPP_TOSTR(mX)}; return s; }
 #define SSVU_FATENUM_IMPL_MK_GETASSTRING_VALS(mIdx, mData, mArg)	SSVU_FATENUM_IMPL_MK_GETASSTRING(SSVPP_TPL_ELEM(mData, 0), SSVPP_TPL_ELEM(mData, 1), SSVPP_TPL_ELEM(mArg, 0))
 #define SSVU_FATENUM_IMPL_MK_GETASSTRING_DEFS(mIdx, mData, mArg)	SSVU_FATENUM_IMPL_MK_GETASSTRING(SSVPP_TPL_ELEM(mData, 0), SSVPP_TPL_ELEM(mData, 1), mArg)
 #define SSVU_FATENUM_IMPL_MK_GETASSTRING_DISPATCH(mDispatch)		SSVPP_CAT(SSVU_FATENUM_IMPL_MK_GETASSTRING_, mDispatch)
@@ -38,10 +38,10 @@ namespace ssvu
 
 		template<std::size_t TS, template<typename> class T, typename TEnum> struct FatEnumMgrImpl<TS, T<TEnum>>
 		{
-			inline static std::size_t getSize() noexcept									{ return TS; }
-			template<TEnum TVal> inline static const std::string& getAsString() noexcept	{ return T<TEnum>::template getAsStringImpl<TVal>(); }
-			inline static const std::string& getAsString(TEnum mValue) noexcept				{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
-			inline static TEnum getFromString(const std::string& mValue) noexcept			{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
+			inline static std::size_t getSize() noexcept							{ return TS; }
+			template<TEnum TVal> inline static const auto& getAsString() noexcept	{ return T<TEnum>::template getAsStringImpl<TVal>(); }
+			inline static auto& getAsString(TEnum mValue) noexcept					{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
+			inline static TEnum getFromString(const std::string& mValue) noexcept	{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
 		};
 	}
 }
@@ -53,8 +53,8 @@ namespace ssvu
 	}; \
 	template<> struct mMgr<mName> final : public ssvu::Internal::FatEnumMgrImpl<SSVPP_ARGCOUNT(__VA_ARGS__), mMgr<mName>> \
 	{ \
-		template<mName TVal> inline static const std::string& getAsStringImpl() noexcept; \
-		inline static const ssvu::Bimap<std::string, mName>& getBimap() noexcept \
+		template<mName TVal> inline static const auto& getAsStringImpl() noexcept; \
+		inline static const auto& getBimap() noexcept \
 		{ \
 			static ssvu::Bimap<std::string, mName> result \
 			{ \
@@ -62,7 +62,7 @@ namespace ssvu
 			}; \
 			return result; \
 		} \
-		inline static const std::array<mName, SSVPP_ARGCOUNT(__VA_ARGS__)>& getValues() noexcept \
+		inline static const auto& getValues() noexcept \
 		{ \
 			static std::array<mName, SSVPP_ARGCOUNT(__VA_ARGS__)> result \
 			{{ \
@@ -70,7 +70,7 @@ namespace ssvu
 			}}; \
 			return result; \
 		} \
-		inline static const std::array<std::string, SSVPP_ARGCOUNT(__VA_ARGS__)>& getElementNames() noexcept \
+		inline static const auto& getElementNames() noexcept \
 		{ \
 			static std::array<std::string, SSVPP_ARGCOUNT(__VA_ARGS__)> result \
 			{{ \

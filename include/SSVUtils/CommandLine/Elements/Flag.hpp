@@ -24,10 +24,10 @@ namespace ssvu
 				inline Flag& operator=(bool mActive) noexcept	{ active = mActive; return *this; }
 				inline operator bool() const noexcept			{ return active; }
 
-				inline const std::string& getShortName() const noexcept			{ return shortName; }
-				inline const std::string& getLongName() const noexcept			{ return longName; }
-				inline std::string getShortNameWithPrefix() const noexcept		{ return flagPrefixShort + shortName; }
-				inline std::string getLongNameWithPrefix() const noexcept		{ return flagPrefixLong + longName; }
+				inline const auto& getShortName() const noexcept				{ return shortName; }
+				inline const auto& getLongName() const noexcept					{ return longName; }
+				inline auto getShortNameWithPrefix() const noexcept				{ return std::string{flagPrefixShort + shortName}; }
+				inline auto getLongNameWithPrefix() const noexcept				{ return std::string{flagPrefixLong + longName}; }
 				inline bool hasName(const std::string& mName) const noexcept	{ return mName == getShortNameWithPrefix() || mName == getLongNameWithPrefix(); }
 				inline std::string getUsageStr() const override					{ return "[" + getShortNameWithPrefix() + " || " + getLongNameWithPrefix() + "]"; }
 		};

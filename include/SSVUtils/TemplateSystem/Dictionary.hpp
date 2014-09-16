@@ -20,7 +20,7 @@ namespace ssvu
 			public:
 				/// @brief Default constructor.
 				/// @details Initializes an empty Dictionary.
-				Dictionary() = default;
+				inline Dictionary() = default;
 
 				/// @brief std::initializer_list constructor.
 				/// @details Initializes a dictionary filled with "key -> string" data.
@@ -30,7 +30,7 @@ namespace ssvu
 				/// string toExpand{".{{key1}}.{{key2}}."};
 				/// SSVU_ASSERT(dict.getExpanded(toExpand) == ".value1.value2.");
 				/// @endcode
-				Dictionary(const std::initializer_list<std::pair<std::string, std::string>>& mPairs) { for(const auto& p : mPairs) replacements.insert(p); }
+				inline Dictionary(const std::initializer_list<std::pair<std::string, std::string>>& mPairs) { for(const auto& p : mPairs) replacements.insert(p); }
 
 				/// @brief Expands the dictionary.
 				/// @details Expands the dictionary, along with subdictionary sections, to a string.
@@ -44,7 +44,7 @@ namespace ssvu
 				/// @endcode
 				/// @param mStr Template to use (not a path!).
 				/// @return Returns a string containing the expanded dictionary template.
-				std::string getExpanded(std::string mStr) const
+				inline std::string getExpanded(std::string mStr) const
 				{
 					using namespace Internal;
 
@@ -84,7 +84,7 @@ namespace ssvu
 				/// @endcode
 				/// @param mStr Key of the "key -> string" replacement.
 				/// @return Returns a reference to the string used in the "key -> string" replacement. Set it to the value you desire.
-				inline std::string& operator[](const std::string& mKey) { return replacements[mKey]; }
+				inline auto& operator[](const std::string& mKey) { return replacements[mKey]; }
 
 				/// @brief Adds a "key -> subdictionary" replacement
 				/// @code

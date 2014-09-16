@@ -13,11 +13,7 @@ namespace ssvu
 		{
 			using Stack = std::vector<Data>;
 
-			inline Stack& getStack() noexcept
-			{
-				static Stack result;
-				return result;
-			}
+			inline auto& getStack() noexcept { static Stack result; return result; }
 
 			inline Data& getLastData()
 			{
@@ -37,12 +33,12 @@ namespace ssvu
 				return last;
 			}
 
-			inline Duration getEndDuration()
+			inline auto getEndDuration()
 			{
 				return std::chrono::duration_cast<Duration>(HRClock::now() - getEndData().tp);
 			}
 
-			inline std::string getEndString()
+			inline auto getEndString()
 			{
 				return toStr(getEndDuration().count()) + " ms";
 			}

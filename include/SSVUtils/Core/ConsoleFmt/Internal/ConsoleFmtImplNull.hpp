@@ -14,12 +14,12 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			inline const std::string& getStrResetFmt() noexcept		{ return getEmptyString(); }
-			inline const std::string& getStrStyle(Style) noexcept	{ return getEmptyString(); }
-			inline const std::string& getStrColorFG(Color) noexcept	{ return getEmptyString(); }
-			inline const std::string& getStrColorBG(Color) noexcept	{ return getEmptyString(); }
-			inline const std::string& getStrClear() noexcept		{ return getEmptyString(); }
-			inline bool isInfoValid() noexcept						{ return false; }
+			inline const auto& getStrResetFmt() noexcept		{ return getEmptyString(); }
+			inline const auto& getStrStyle(Style) noexcept		{ return getEmptyString(); }
+			inline const auto& getStrColorFG(Color) noexcept	{ return getEmptyString(); }
+			inline const auto& getStrColorBG(Color) noexcept	{ return getEmptyString(); }
+			inline const auto& getStrClear() noexcept			{ return getEmptyString(); }
+			inline bool isInfoValid() noexcept					{ return false; }
 
 			namespace Info
 			{

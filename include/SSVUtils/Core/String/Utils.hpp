@@ -22,7 +22,7 @@ namespace ssvu
 	namespace Internal
 	{
 		void resetFmt(std::ostream& mStream);
-		inline std::ostringstream& getStringifyStream() noexcept { static std::ostringstream oss; return oss; }
+		inline auto& getStringifyStream() noexcept { static std::ostringstream oss; return oss; }
 		template<bool TFmt, bool TResetFmt = true, typename T> inline void callStringifyImpl(std::ostream& mStream, const T& mValue)
 		{
 			if(TResetFmt) resetFmt(mStream);
@@ -35,7 +35,7 @@ namespace ssvu
 	/// @details Uses Stringifier<T> internally, with disabled formatting options.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns a std::string representing the stringified value.
-	template<typename T> inline std::string toStr(const T& mValue)
+	template<typename T> inline auto toStr(const T& mValue)
 	{
 		Internal::getStringifyStream().str("");
 		Internal::callStringifyImpl<false, false>(Internal::getStringifyStream(), mValue);
@@ -136,37 +136,37 @@ namespace ssvu
 	/// @brief Converts a string to a lowercase string.
 	/// @param mStr String to convert.
 	/// @return Returns a std::string that is a copy of mStr, with all characters lowercase.
-	inline std::string toLower(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::tolower); return mStr; }
+	inline auto toLower(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::tolower); return mStr; }
 
 	/// @brief Converts a string to an uppercase string.
 	/// @param mStr String to convert.
 	/// @return Returns a std::string that is a copy of mStr, with all characters uppercase.
-	inline std::string toUpper(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::toupper); return mStr; }
+	inline auto toUpper(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::toupper); return mStr; }
 
 	/// @brief Copies a string and replaces the first occurrence of a string in it with another string.
 	/// @param mStr String to copy.
 	/// @param mFrom String to replace.
 	/// @param mTo Replacement string.
 	/// @return Returns a std::string with mFrom replaced by mTo (first occurrence).
-	inline std::string getReplaced(std::string mStr, const std::string& mFrom, const std::string& mTo) { replace(mStr, mFrom, mTo); return mStr; }
+	inline auto getReplaced(std::string mStr, const std::string& mFrom, const std::string& mTo) { replace(mStr, mFrom, mTo); return mStr; }
 
 	/// @brief Copies a string and replaces the all occurences of a string in it with another string.
 	/// @param mStr String to copy.
 	/// @param mFrom String to replace.
 	/// @param mTo Replacement string.
 	/// @return Returns a std::string with mFrom replaced by mTo (all occurrences).
-	inline std::string getReplacedAll(std::string mStr, const std::string& mFrom, const std::string& mTo) { replaceAll(mStr, mFrom, mTo); return mStr; }
+	inline auto getReplacedAll(std::string mStr, const std::string& mFrom, const std::string& mTo) { replaceAll(mStr, mFrom, mTo); return mStr; }
 
 	/// @brief Counts the number of occurences of a certain char in a std::string.
 	/// @param mStr String to work with.
 	/// @param mChar Character to look for.
 	/// @return Returns an unsigned int which is the count of the character's occurrences.
-	inline std::size_t getCharCount(const std::string& mStr, const char& mChar) { return std::count(std::begin(mStr), std::end(mStr), mChar); }
+	inline auto getCharCount(const std::string& mStr, const char& mChar) { return std::count(std::begin(mStr), std::end(mStr), mChar); }
 
 	/// @brief Counts the number of newlines in a std::string.
 	/// @param mStr String to work with.
 	/// @return Returns an unsigned int which is the count of newlines.
-	inline std::size_t getNewLinesCount(const std::string& mStr) { return getCharCount(mStr, '\n'); }
+	inline auto getNewLinesCount(const std::string& mStr) { return getCharCount(mStr, '\n'); }
 
 	/// @brief Calculates the levenshtein distance between two strings.
 	/// @details Levenshtein distance measures the "difference" between two strings.
@@ -174,7 +174,7 @@ namespace ssvu
 	/// @param mA First string.
 	/// @param mB Second string.
 	/// @return Returns the levenshtein distance between two strings as an std::size_t.
-	inline std::size_t getDistLevenshtein(const std::string& mA, const std::string& mB)
+	inline auto getDistLevenshtein(const std::string& mA, const std::string& mB)
 	{
 		const auto& m(mA.size());
 		const auto& n(mB.size());

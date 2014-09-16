@@ -50,9 +50,9 @@ namespace ssvu
 		template<typename T, bool TCheck, typename... TArgs> struct _ ## mName ## Impl; \
 		template<typename T, typename... TArgs> struct _ ## mName ## Impl<T, true, TArgs...> \
 		{ \
-			inline static auto call(T& mArg, TArgs&&... mArgs) -> decltype(mArg.mMemberName(std::forward<TArgs>(mArgs)...)) \
+			inline static auto call(T& mArg, TArgs&&... mArgs) \
 			{ \
-				return mArg.mMemberName(std::forward<TArgs>(mArgs)...); \
+				return mArg.mMemberName(ssvu::fwd<TArgs>(mArgs)...); \
 			} \
 		}; \
 		template<typename T, typename... TArgs> struct _ ## mName ## Impl<T, false, TArgs...> \
@@ -61,9 +61,8 @@ namespace ssvu
 		}; \
 	} \
 	template<typename T, typename... TArgs> inline auto mName(T& mArg, TArgs&&... mArgs) \
-		-> decltype(__ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, std::forward<TArgs>(mArgs)...)) \
 	{ \
-		return __ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, std::forward<TArgs>(mArgs)...); \
+		return __ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, ssvu::fwd<TArgs>(mArgs)...); \
 	} \
 	SSVU_DEFINE_DUMMY_STRUCT(mName, mMemberName)
 
@@ -92,3 +91,5 @@ namespace ssvu
 	const_cast<mType*>(SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(mType, mMemberPtr, mMemberName))
 
 #endif
+
+// TODO: void_t callers?

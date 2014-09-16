@@ -26,7 +26,7 @@ namespace ssvu
 	/// @param mStr String to split.
 	/// @param mSeparator Separator to split at. Every occurrence of the separator will cause a split.
 	/// @return Returns a std::vector containing all splitted strings.
-	template<Split TM = Split::Normal, typename T> inline std::vector<std::string> getSplit(const std::string& mStr, const T& mSeparator)
+	template<Split TM = Split::Normal, typename T> inline auto getSplit(const std::string& mStr, const T& mSeparator)
 	{
 		std::vector<std::string> result;
 		split<TM, T>(result, mStr, mSeparator);

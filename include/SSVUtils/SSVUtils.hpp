@@ -31,9 +31,9 @@
 #endif
 
 // TODO:
-// * C++14!
 // * .inl and .cpp FILES and SSVU_INLINE macro
 // * Fix includes (old method was better)
 // * consider moving tests to their headers? (investigate)
 // * investigate metaprogramming code generation
 // * test framework - write expected and actual value and more...
+// * c++14-ify other libs

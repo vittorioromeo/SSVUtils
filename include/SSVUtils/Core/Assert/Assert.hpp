@@ -41,7 +41,7 @@
 			};
 
 			/// @brief Returns a reference to the global static AssertState instance.
-			inline AssertState& getAssertState() noexcept { static AssertState result; return result; }
+			inline auto& getAssertState() noexcept { static AssertState result; return result; }
 
 			/// @brief Assert implementation: if mExpression is false, the assertion fires.
 			/// @details Called via the SSVU_ASSERT macro.

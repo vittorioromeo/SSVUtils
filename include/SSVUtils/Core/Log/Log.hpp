@@ -25,14 +25,14 @@ namespace ssvu
 namespace ssvu
 {
 	/// @brief Returns a reference to the log stream.
-	inline std::ostringstream& getLogStream() noexcept { return Internal::getLogStream(); }
+	inline auto& getLogStream() noexcept { return Internal::getLogStream(); }
 
 	/// @brief Returns a reference to the "log stream" singleton. (no title)
-	inline Internal::LOut& lo() noexcept { return Internal::getLOutInstance(); }
+	inline auto& lo() noexcept { return Internal::getLOutInstance(); }
 
 	/// @brief Returns a reference to the "log stream" singleton. (sets title)
 	/// @param mTitle Title of the next log message.
-	template<typename T> inline Internal::LOut& lo(const T& mTitle) { return Internal::lo(mTitle); }
+	template<typename T> inline auto& lo(const T& mTitle) { return Internal::lo(mTitle); }
 
 	/// @brief Returns a const char* horizontal ruler C string. Intended to be used when printing to the console.
 	inline const char* hr() noexcept { return Internal::hr(); }

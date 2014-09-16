@@ -70,27 +70,27 @@ namespace ssvu
 			}
 			inline int getColorBGCode(Color mColor) noexcept { return getColorFGCode(mColor) + 10; }
 
-			inline Style& getLastStyle() noexcept	{ static Style result{Style::None};		return result; }
-			inline Color& getLastColorFG() noexcept	{ static Color result{Color::Default};	return result; }
-			inline Color& getLastColorBG() noexcept	{ static Color result{Color::Default};	return result; }
-			inline const std::string& getFmtStr() noexcept
+			inline auto& getLastStyle() noexcept	{ static Style result{Style::None};		return result; }
+			inline auto& getLastColorFG() noexcept	{ static Color result{Color::Default};	return result; }
+			inline auto& getLastColorBG() noexcept	{ static Color result{Color::Default};	return result; }
+			inline const auto& getFmtStr() noexcept
 			{
 				static std::string result;
 				result = {prefix + toStr(getStyleCode(getLastStyle())) + ";" + toStr(getColorFGCode(getLastColorFG())) + ";" + toStr(getColorBGCode(getLastColorBG())) + postfix};
 				return result;
 			}
 
-			inline const std::string& getStrResetFmt() noexcept
+			inline const auto& getStrResetFmt() noexcept
 			{
 				getLastStyle() = Style::None;
 				getLastColorFG() = Color::Default;
 				getLastColorBG() = Color::Default;
 				return getFmtStr();
 			}
-			inline const std::string& getStrStyle(Style mStyle) noexcept	{ getLastStyle() = mStyle;				return getFmtStr(); }
-			inline const std::string& getStrColorFG(Color mColor) noexcept	{ getLastColorFG() = mColor;			return getFmtStr(); }
-			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getLastColorBG() = mColor;			return getFmtStr(); }
-			inline const std::string& getStrClear() noexcept				{ static std::string result{clear};		return result; }
+			inline const auto& getStrStyle(Style mStyle) noexcept	{ getLastStyle() = mStyle;				return getFmtStr(); }
+			inline const auto& getStrColorFG(Color mColor) noexcept	{ getLastColorFG() = mColor;			return getFmtStr(); }
+			inline const auto& getStrColorBG(Color mColor) noexcept	{ getLastColorBG() = mColor;			return getFmtStr(); }
+			inline const auto& getStrClear() noexcept				{ static std::string result{clear};		return result; }
 
 			struct InfoImpl
 			{
@@ -105,7 +105,7 @@ namespace ssvu
 				}
 			};
 
-			inline const InfoImpl& getInfoImpl() noexcept { static InfoImpl result; return result; }
+			inline const auto& getInfoImpl() noexcept { static InfoImpl result; return result; }
 
 			inline bool isInfoValid() noexcept { return true; }
 

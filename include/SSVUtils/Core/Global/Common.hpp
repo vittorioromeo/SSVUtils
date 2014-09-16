@@ -18,67 +18,15 @@
 	#define SSVU_OS_UNKNOWN 1
 #endif
 
-// C++14: will be in standard
-namespace ssvu
-{
-	namespace Internal
-	{
-		template<std::size_t TIdx, typename TSearch, typename First, typename... TArgs> struct GetImpl
-		{
-			using type = typename GetImpl<TIdx + 1, TSearch, TArgs...>::type;
-			static constexpr int idx{TIdx};
-		};
-
-		template<std::size_t TIdx, typename TSearch, typename... TArgs> struct GetImpl<TIdx, TSearch, TSearch, TArgs...>
-		{
-			using type = GetImpl;
-			static constexpr int idx{TIdx};
-		};
-	}
-}
-
 namespace std
 {
-	// C++14: will be in standard
-	template<typename T, typename... TArgs> inline auto get(const std::tuple<TArgs...>& mTpl) noexcept
-		-> decltype(std::get<ssvu::Internal::GetImpl<0, T, TArgs...>::type::idx>(mTpl))
-	{
-		return std::get<ssvu::Internal::GetImpl<0, T, TArgs...>::type::idx>(mTpl);
-	}
-
-	// C++14: will be in standard
-	template<typename T> inline auto cbegin(const T& mContainer) noexcept -> decltype(std::begin(mContainer))	{ return std::begin(mContainer); }
-	template<typename T> inline auto cend(const T& mContainer) noexcept -> decltype(std::end(mContainer))		{ return std::end(mContainer); }
-	template<typename T> inline auto rbegin(const T& mContainer) noexcept -> decltype(mContainer.rbegin())		{ return mContainer.rbegin(); }
-	template<typename T> inline auto rbegin(T& mContainer) noexcept -> decltype(mContainer.rbegin())			{ return mContainer.rbegin(); }
-	template<typename T> inline auto crbegin(const T& mContainer) noexcept -> decltype(rbegin(mContainer))		{ return rbegin(mContainer); }
-	template<typename T> inline auto rend(const T& mContainer) noexcept -> decltype(mContainer.rend())			{ return mContainer.rend(); }
-	template<typename T> inline auto rend(T& mContainer) noexcept -> decltype(mContainer.rend())				{ return mContainer.rend(); }
-	template<typename T> inline auto crend(const T& mContainer) noexcept -> decltype(rend(mContainer))			{ return rend(mContainer); }
-
-	// C++14: will be in standard
-	template<typename... TArgs> using common_type_t = typename std::common_type<TArgs...>::type;
-	template<bool B, typename T = void> using enable_if_t = typename std::enable_if<B, T>::type;
-	template<typename T> using decay_t = typename std::decay<T>::type;
-	template<typename T> using remove_reference_t = typename std::remove_reference<T>::type;
-	template<typename T> using remove_extent_t = typename std::remove_extent<T>::type;
-	template<typename T> using remove_volatile_t = typename std::remove_volatile<T>::type;
-	template<typename T> using remove_const_t = typename std::remove_const<T>::type;
-	template<typename T> using remove_cv_t = typename std::remove_cv<T>::type;
-	template<typename T> using add_volatile_t = typename std::add_volatile<T>::type;
-	template<typename T> using add_const_t = typename std::add_const<T>::type;
-	template<typename T> using add_cv_t = typename std::add_cv<T>::type;
-	template<typename T> using add_lvalue_reference_t = typename std::add_lvalue_reference<T>::type;
-	template<typename T> using add_rvalue_reference_t = typename std::add_rvalue_reference<T>::type;
-	template<typename T> using remove_pointer_t = typename std::remove_pointer<T>::type;
-	template<typename T> using add_pointer_t = typename std::add_pointer<T>::type;
-	template<typename T> using make_unsigned_t = typename std::make_unsigned<T>::type;
-	template<typename T> using make_signed_t = typename std::make_signed<T>::type;
-	template<typename T> using remove_all_extents_t = typename std::remove_all_extents<T>::type;
-	template<std::size_t Len, std::size_t Align> using aligned_storage_t = typename std::aligned_storage<Len, Align>::type;
-	template<bool B, typename T, typename F> using conditional_t = typename std::conditional<B, T, F>::type;
-	template<typename T> using underlying_type_t = typename std::underlying_type<T>::type;
-	template<std::size_t TS, typename T> using tuple_element_t = typename std::tuple_element<TS, T>::type;
+	// C++14: will be in standard (should be?)
+	template<typename T> inline auto rbegin(const T& mContainer) noexcept	{ return mContainer.rbegin(); }
+	template<typename T> inline auto rbegin(T& mContainer) noexcept 		{ return mContainer.rbegin(); }
+	template<typename T> inline auto crbegin(const T& mContainer) noexcept	{ return rbegin(mContainer); }
+	template<typename T> inline auto rend(const T& mContainer) noexcept 	{ return mContainer.rend(); }
+	template<typename T> inline auto rend(T& mContainer) noexcept 			{ return mContainer.rend(); }
+	template<typename T> inline auto crend(const T& mContainer) noexcept 	{ return rend(mContainer); }
 }
 
 namespace ssvu
@@ -122,6 +70,9 @@ namespace ssvu
 	template<typename T> inline constexpr bool isNothrowConstructible() noexcept		{ return std::is_nothrow_constructible<T>::value; }
 	template<typename T> inline constexpr bool isNothrowDestructible() noexcept			{ return std::is_nothrow_destructible<T>::value; }
 	template<typename T> inline constexpr bool isPolymorphic() noexcept					{ return std::is_polymorphic<T>::value; }
+	template<typename T> inline constexpr auto getTupleSize() noexcept					{ return std::tuple_size<T>::value; }
+
+	template<typename T> inline constexpr decltype(auto) fwd(T mValue) noexcept { return std::forward<T>(mValue); }
 }
 
 namespace ssvu
@@ -163,43 +114,23 @@ namespace ssvu
 	template<typename T> inline constexpr T getFTToFPS(T mFT) noexcept			{ return secondsFTRatio / mFT; }
 }
 
-// C++14: will be in standard
-namespace ssvu
-{
-	namespace Internal
-	{
-		template<typename T, typename... TArgs> inline ssvu::UPtr<T> makeUPtrHelper(std::false_type, TArgs&&... mArgs) { return ssvu::UPtr<T>(new T(std::forward<TArgs>(mArgs)...)); }
-		template<typename T, typename... TArgs> inline ssvu::UPtr<T> makeUPtrHelper(std::true_type, TArgs&&... mArgs)
-		{
-			SSVU_ASSERT_STATIC(std::extent<T>::value == 0, "make_unique<T[N]>() is forbidden, please use make_unique<T[]>().");
-			return ssvu::UPtr<T>(new ssvu::RemoveExtent<T>[sizeof...(TArgs)]{std::forward<TArgs>(mArgs)...});
-		}
-	}
-}
-
-namespace std
-{
-	// C++14: will be in standard
-	template<typename T, typename... TArgs> inline ssvu::UPtr<T> make_unique(TArgs&&... mArgs) { return ssvu::Internal::makeUPtrHelper<T>(std::is_array<T>(), std::forward<TArgs>(mArgs)...); }
-}
-
 namespace ssvu
 {
 	/// @brief Creates and returns an `ssvu::UPtr<T>`.
 	/// @details Wraps `std::make_unique<T>`.
-	template<typename T, typename... TArgs> inline UPtr<T> makeUPtr(TArgs&&... mArgs) { return std::make_unique<T>(std::forward<TArgs>(mArgs)...); }
+	template<typename T, typename... TArgs> inline UPtr<T> makeUPtr(TArgs&&... mArgs) { return std::make_unique<T>(fwd<TArgs>(mArgs)...); }
 
 	/// @brief Creates and returns an `ssvu::SPtr<T>`.
 	/// @details Wraps `std::make_shared<T>`.
-	template<typename T, typename... TArgs> inline SPtr<T> makeSPtr(TArgs&&... mArgs) { return std::make_shared<T>(std::forward<TArgs>(mArgs)...); }
+	template<typename T, typename... TArgs> inline SPtr<T> makeSPtr(TArgs&&... mArgs) { return std::make_shared<T>(fwd<TArgs>(mArgs)...); }
 
 	namespace Internal
 	{
 		/// @brief Internal functor that creates an `ssvu::UPtr`.
-		template<typename T> struct MakerUPtr { template<typename... TArgs> static inline UPtr<T> make(TArgs&&... mArgs) { return makeUPtr<T>(std::forward<TArgs>(mArgs)...); } };
+		template<typename T> struct MakerUPtr { template<typename... TArgs> static inline auto make(TArgs&&... mArgs) { return makeUPtr<T>(fwd<TArgs>(mArgs)...); } };
 
 		/// @brief Internal functor that creates an `ssvu::SPtr`.
-		template<typename T> struct MakerSPtr { template<typename... TArgs> static inline SPtr<T> make(TArgs&&... mArgs) { return makeSPtr<T>(std::forward<TArgs>(mArgs)...); } };
+		template<typename T> struct MakerSPtr { template<typename... TArgs> static inline auto make(TArgs&&... mArgs) { return makeSPtr<T>(fwd<TArgs>(mArgs)...); } };
 	}
 }
 

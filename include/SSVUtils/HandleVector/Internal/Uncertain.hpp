@@ -20,7 +20,7 @@ namespace ssvu
 				/// @brief Allocates and construct the T instance.
 				template<typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(isNothrowConstructible<T>())
 				{
-					new (&storage) T(std::forward<TArgs>(mArgs)...);
+					new (&storage) T(fwd<TArgs>(mArgs)...);
 				}
 
 				/// @brief Deallocates and destroys the T instance.

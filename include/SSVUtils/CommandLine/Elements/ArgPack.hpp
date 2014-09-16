@@ -12,9 +12,6 @@ namespace ssvu
 		template<typename T> class ArgPack final : public ArgPackBase
 		{
 			private:
-				using Iterator = typename std::vector<T>::iterator;
-				using ConstIterator = typename std::vector<T>::const_iterator;
-
 				std::vector<T> values;
 
 			public:
@@ -26,12 +23,12 @@ namespace ssvu
 					for(const auto& v : mValues) values.emplace_back(Parser<T>::parse(v));
 				}
 
-				inline Iterator begin() noexcept				{ return values.begin(); }
-				inline Iterator end() noexcept					{ return values.end(); }
-				inline ConstIterator begin() const noexcept		{ return values.begin(); }
-				inline ConstIterator end() const noexcept		{ return values.end(); }
-				inline const Iterator cbegin() const noexcept	{ return values.cbegin(); }
-				inline const Iterator cend() const noexcept		{ return values.cend(); }
+				inline auto begin() noexcept		{ return values.begin(); }
+				inline auto end() noexcept			{ return values.end(); }
+				inline auto begin() const noexcept	{ return values.begin(); }
+				inline auto end() const noexcept	{ return values.end(); }
+				inline auto cbegin() const noexcept	{ return values.cbegin(); }
+				inline auto cend() const noexcept	{ return values.cend(); }
 		};
 	}
 }

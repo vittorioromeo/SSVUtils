@@ -33,7 +33,7 @@ namespace ssvu
 
 			template<typename T, typename... TArgs> inline T& insertImpl(std::size_t mIdx, TArgs&&... mArgs)
 			{
-				auto& c(commandManager.create<T>(*this, std::forward<TArgs>(mArgs)...));
+				auto& c(commandManager.create<T>(*this, fwd<TArgs>(mArgs)...));
 				commands.insert(std::begin(commands) + mIdx, &c);
 				if(currentCommand == nullptr) currentCommand = &c;
 				return c;
@@ -50,8 +50,8 @@ namespace ssvu
 		public:
 			inline Timeline(bool mStart = true) noexcept { if(!mStart) stop(); }
 
-			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return insertImpl<T>(commands.size(), std::forward<TArgs>(mArgs)...); }
-			template<typename T, typename... TArgs> inline T& insert(std::size_t mIdx, TArgs&&... mArgs)	{ return insertImpl<T>(mIdx, std::forward<TArgs>(mArgs)...); }
+			template<typename T, typename... TArgs> inline T& append(TArgs&&... mArgs)						{ return insertImpl<T>(commands.size(), fwd<TArgs>(mArgs)...); }
+			template<typename T, typename... TArgs> inline T& insert(std::size_t mIdx, TArgs&&... mArgs)	{ return insertImpl<T>(mIdx, fwd<TArgs>(mArgs)...); }
 
 			inline void del(Command& mCommand)				{ eraseRemove(commands, &mCommand); commandManager.del(mCommand); }
 			inline void jumpTo(std::size_t mIdx) noexcept	{ currentCommand = commands[mIdx]; }
@@ -81,8 +81,8 @@ namespace ssvu
 				currentCommand = commands.empty() ? nullptr : commands[0];
 			}
 
-			inline std::size_t getSize() const noexcept	{ return commands.size(); }
-			inline bool isFinished() const noexcept		{ return finished; }
+			inline auto getSize() const noexcept	{ return commands.size(); }
+			inline bool isFinished() const noexcept	{ return finished; }
 			inline int getCurrentIndex() const
 			{
 				if(currentCommand == nullptr) return 0;

@@ -342,3 +342,4 @@ namespace ssvu
 
 #endif
 
+// TODO: common to auto?

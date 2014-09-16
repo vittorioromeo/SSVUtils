@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		inline const std::string& getUniqueColor(const std::string& mStr)
+		inline const auto& getUniqueColor(const std::string& mStr)
 		{
 			static int lastColorIdx{2};
 			static std::unordered_map<std::string, Console::Color> map;
@@ -18,7 +18,7 @@ namespace ssvu
 			return Console::setColorFG(map[mStr]);
 		}
 
-		inline std::ostringstream& getLogStream() noexcept { static std::ostringstream logStream; return logStream; }
+		inline auto& getLogStream() noexcept { static std::ostringstream logStream; return logStream; }
 
 		struct LOut
 		{

@@ -26,9 +26,9 @@ namespace ssvu
 					inline virtual ~TestBase() { }
 					inline virtual void run() const { }
 
-					inline const std::string& getName() const	{ return name; }
-					inline const std::string& getLine() const	{ return line; }
-					inline const std::string& getFile() const	{ return file; }
+					inline const auto& getName() const	{ return name; }
+					inline const auto& getLine() const	{ return line; }
+					inline const auto& getFile() const	{ return file; }
 			};
 
 			struct TestFailException final : std::exception
@@ -43,8 +43,8 @@ namespace ssvu
 			using TestStorage = ssvu::VecUPtr<TestBase>;
 			using TestExecMap = std::map<std::string, bool>;
 
-			inline TestStorage& getTestStorage() noexcept	{ static TestStorage result; return result; }
-			inline TestExecMap& getTestExecMap() noexcept	{ static TestExecMap result; return result; }
+			inline auto& getTestStorage() noexcept	{ static TestStorage result; return result; }
+			inline auto& getTestExecMap() noexcept	{ static TestExecMap result; return result; }
 
 			inline bool wasTestExecuted(const std::string& mKey) noexcept	{ return getTestExecMap()[mKey]; }
 			inline void setTestExecuted(const std::string& mKey) noexcept	{ getTestExecMap()[mKey] = true; }

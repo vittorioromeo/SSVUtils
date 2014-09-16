@@ -28,7 +28,7 @@ namespace ssvu
 		/// @param mTarget std::vector to fill.
 		/// @param mPath Path to start the search in.
 		/// @param mDesired Optional: only set if using Pick::ByExt or Pick::ByName.
-		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired = "")
+		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> inline void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired = "")
 		{
 			Internal::scan<TM, TT, TP, TS>(mTarget, mPath, mDesired);
 		}
@@ -48,7 +48,7 @@ namespace ssvu
 		/// @param mPath Path to start the search in.
 		/// @param mDesired Optional: only set if using Pick::ByExt or Pick::ByName.
 		/// @return Returns a newly created std::vector of strings containing the scanned paths.
-		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> std::vector<Path> getScan(const Path& mPath, const std::string& mDesired = "")
+		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> inline auto getScan(const Path& mPath, const std::string& mDesired = "")
 		{
 			std::vector<Path> result;
 			scan<TM, TT, TP, TS>(result, mPath, mDesired);

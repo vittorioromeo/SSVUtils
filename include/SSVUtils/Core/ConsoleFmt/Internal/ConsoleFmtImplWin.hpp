@@ -92,11 +92,11 @@ namespace ssvu
 			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getStorage().lastColorBG = mColor; getStorage().apply(); return getStorage().emptyString; }
 			*/
 
-			inline const std::string& getStrResetFmt() noexcept		{ return getEmptyString(); }
-			inline const std::string& getStrStyle(Style) noexcept	{ return getEmptyString(); }
-			inline const std::string& getStrColorFG(Color) noexcept	{ return getEmptyString(); }
-			inline const std::string& getStrColorBG(Color) noexcept	{ return getEmptyString(); }
-			inline const std::string& getStrClear() noexcept		{ return getEmptyString(); }
+			inline const auto& getStrResetFmt() noexcept		{ return getEmptyString(); }
+			inline const auto& getStrStyle(Style) noexcept		{ return getEmptyString(); }
+			inline const auto& getStrColorFG(Color) noexcept	{ return getEmptyString(); }
+			inline const auto& getStrColorBG(Color) noexcept	{ return getEmptyString(); }
+			inline const auto& getStrClear() noexcept			{ return getEmptyString(); }
 
 			struct InfoImpl
 			{
@@ -112,7 +112,7 @@ namespace ssvu
 				}
 			};
 
-			inline const InfoImpl& getInfoImpl() noexcept { static InfoImpl result; return result; }
+			inline const auto& getInfoImpl() noexcept { static InfoImpl result; return result; }
 
 			inline bool isInfoValid() noexcept { return true; }
 

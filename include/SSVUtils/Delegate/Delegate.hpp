@@ -49,9 +49,9 @@ namespace ssvu
 			/// @endcode
 			/// @param mArgs Arguments passed to every function
 			/// @return void or std::vector containing return values from the functions
-			inline auto operator()(TArgs... mArgs) -> decltype(Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, mArgs...))
+			inline auto operator()(TArgs... mArgs)
 			{
-				return Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, std::forward<TArgs>(mArgs)...);
+				return Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, fwd<TArgs>(mArgs)...);
 			}
 
 			/// @brief Clears all the functions from the delegate.
@@ -65,10 +65,10 @@ namespace ssvu
 	{
 		template<typename TReturn, typename... TArgs> struct DelegateHelper
 		{
-			inline static std::vector<TReturn> exec(Delegate<TReturn(TArgs...)>& mDelegate, TArgs... mArgs)
+			inline static auto exec(Delegate<TReturn(TArgs...)>& mDelegate, TArgs... mArgs)
 			{
 				std::vector<TReturn> result; result.reserve(mDelegate.funcs.size());
-				for(const auto& f : mDelegate.funcs) result.emplace_back(f(std::forward<TArgs>(mArgs)...));
+				for(const auto& f : mDelegate.funcs) result.emplace_back(f(fwd<TArgs>(mArgs)...));
 				return result;
 			}
 		};
@@ -76,7 +76,7 @@ namespace ssvu
 		{
 			inline static void exec(Delegate<void(TArgs...)>& mDelegate, TArgs... mArgs)
 			{
-				for(const auto& f : mDelegate.funcs) f(std::forward<TArgs>(mArgs)...);
+				for(const auto& f : mDelegate.funcs) f(fwd<TArgs>(mArgs)...);
 			}
 		};
 	}

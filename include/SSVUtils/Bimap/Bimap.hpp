@@ -31,7 +31,7 @@ namespace ssvu
 			using Other = T2;
 
 			/// @brief Returns a const reference to the set of the first type.
-			template<typename TBimap> inline static const PtrSet<T1>& getSetCurrent(TBimap& mBimap) noexcept { return mBimap.set1; }
+			template<typename TBimap> inline static const auto& getSetCurrent(TBimap& mBimap) noexcept { return mBimap.set1; }
 		};
 
 		/// @brief Helper bimap struct. (specialized for the second type)
@@ -41,7 +41,7 @@ namespace ssvu
 			using Other = T1;
 
 			/// @brief Returns a const reference to the set of the second type.
-			template<typename TBimap> inline static const PtrSet<T2>& getSetCurrent(TBimap& mBimap) noexcept { return mBimap.set2; }
+			template<typename TBimap> inline static const auto& getSetCurrent(TBimap& mBimap) noexcept { return mBimap.set2; }
 		};
 	}
 
@@ -97,7 +97,7 @@ namespace ssvu
 
 			/// @brief Internal implementation of the `at` method.
 			/// @details Throws an `std::out_of_range` exception if the value isn't found.
-			template<typename T> const typename Internal::BimapHelper<T1, T2, T>::Other& atImpl(const T& mKey) const noexcept
+			template<typename T> const auto& atImpl(const T& mKey) const noexcept
 			{
 				const auto& set(Internal::BimapHelper<T1, T2, T>::getSetCurrent(*this));
 				const auto& itr(this->find(mKey));
@@ -139,7 +139,7 @@ namespace ssvu
 			{
 				SSVU_ASSERT(!this->has(mArg1) && !this->has(mArg2));
 
-				auto& pair(ssvu::getEmplaceUPtr<BMPair>(storage, std::forward<TA1>(mArg1), std::forward<TA2>(mArg2)));
+				auto& pair(ssvu::getEmplaceUPtr<BMPair>(storage, fwd<TA1>(mArg1), fwd<TA2>(mArg2)));
 				set1.emplace(&pair.first);
 				set2.emplace(&pair.second);
 
@@ -205,19 +205,19 @@ namespace ssvu
 			inline bool empty() const noexcept { return storage.empty(); }
 
 			/// @brief Returns the size of the bimap.
-			inline auto size() const noexcept -> decltype(storage.size()) { return storage.size(); }
+			inline auto size() const noexcept { return storage.size(); }
 
 			/// @brief Returns the count of items with `mKey` key.
-			inline auto count(const T1& mKey) const noexcept -> decltype(set1.count(&mKey)) { return set1.count(&mKey); }
+			inline auto count(const T1& mKey) const noexcept { return set1.count(&mKey); }
 
 			/// @brief Returns the count of items with `mKey` key.
-			inline auto count(const T2& mKey) const noexcept -> decltype(set2.count(&mKey)) { return set2.count(&mKey); }
+			inline auto count(const T2& mKey) const noexcept { return set2.count(&mKey); }
 
 			/// @brief Returns an iterator to the item with `mKey` key.
-			inline auto find(const T1& mKey) const noexcept -> decltype(set1.find(&mKey)) { return set1.find(&mKey); }
+			inline auto find(const T1& mKey) const noexcept { return set1.find(&mKey); }
 
 			/// @brief Returns an iterator to the item with `mKey` key.
-			inline auto find(const T2& mKey) const noexcept -> decltype(set2.find(&mKey)) { return set2.find(&mKey); }
+			inline auto find(const T2& mKey) const noexcept { return set2.find(&mKey); }
 
 			/// @brief Returns true if the bimap contains the `mKey` value.
 			inline bool has(const T1& mKey) const noexcept { return this->find(mKey) != std::end(set1); }
@@ -226,16 +226,16 @@ namespace ssvu
 			inline bool has(const T2& mKey) const noexcept { return this->find(mKey) != std::end(set2); }
 
 			// Standard iterator support
-			inline auto begin()		noexcept		-> decltype(storage.begin())	{ return storage.begin(); }
-			inline auto end()		noexcept		-> decltype(storage.end())		{ return storage.end(); }
-			inline auto begin()		const noexcept	-> decltype(storage.begin())	{ return storage.begin(); }
-			inline auto end()		const noexcept	-> decltype(storage.end())		{ return storage.end(); }
-			inline auto cbegin()	const noexcept	-> decltype(storage.cbegin())	{ return storage.cbegin(); }
-			inline auto cend()		const noexcept	-> decltype(storage.cend())		{ return storage.cend(); }
-			inline auto rbegin()	noexcept		-> decltype(storage.rbegin())	{ return storage.rbegin(); }
-			inline auto rend()		noexcept		-> decltype(storage.rend())		{ return storage.rend(); }
-			inline auto crbegin()	const noexcept	-> decltype(storage.crbegin())	{ return storage.crbegin(); }
-			inline auto crend()		const noexcept	-> decltype(storage.crend())	{ return storage.crend(); }
+			inline auto begin()		noexcept		{ return storage.begin(); }
+			inline auto end()		noexcept		{ return storage.end(); }
+			inline auto begin()		const noexcept	{ return storage.begin(); }
+			inline auto end()		const noexcept	{ return storage.end(); }
+			inline auto cbegin()	const noexcept	{ return storage.cbegin(); }
+			inline auto cend()		const noexcept	{ return storage.cend(); }
+			inline auto rbegin()	noexcept		{ return storage.rbegin(); }
+			inline auto rend()		noexcept		{ return storage.rend(); }
+			inline auto crbegin()	const noexcept	{ return storage.crbegin(); }
+			inline auto crend()		const noexcept	{ return storage.crend(); }
 	};
 
 	// Stringifier support
@@ -248,13 +248,12 @@ namespace ssvu
 
 			Internal::printBold<TFmt>(mStream, "{");
 
-			// C++14: `auto` lambda
-			Internal::repeatPenultimate(itrBegin, std::end(mValue), [&mStream](decltype(*itrBegin) mE)
+			Internal::repeatPenultimate(itrBegin, std::end(mValue), [&mStream](const auto& mE)
 			{
 				Internal::callStringifyImpl<TFmt>(mStream, mE->first);
 				Internal::printBold<TFmt>(mStream, " <-> ");
 				Internal::callStringifyImpl<TFmt>(mStream, mE->second);
-			}, [&mStream](decltype(*itrBegin)){ Internal::printBold<TFmt>(mStream, "\n"); });
+			}, [&mStream](const auto&){ Internal::printBold<TFmt>(mStream, "\n"); });
 
 			Internal::printBold<TFmt>(mStream, "}");
 		}

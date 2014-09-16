@@ -21,10 +21,10 @@ namespace ssvu
 
 				/// @brief Allocates and constructs the data. Assumes the atom is not alive.
 				template<typename... TArgs> inline void initData(TArgs&&... mArgs)
-					noexcept(noexcept(data.init(std::forward<TArgs>(mArgs)...)))
+					noexcept(noexcept(data.init(fwd<TArgs>(mArgs)...)))
 				{
 					SSVU_ASSERT(!alive);
-					data.init(std::forward<TArgs>(mArgs)...);
+					data.init(fwd<TArgs>(mArgs)...);
 				}
 
 				/// @brief Deallocates and destroys the data. Assumes the atom is alive.

@@ -12,7 +12,7 @@ namespace ssvu
 		template<typename T> struct Parser;
 		template<> struct Parser<std::string>
 		{
-			inline static std::string parse(const std::string& mStr) { return mStr; }
+			inline static auto parse(const std::string& mStr) { return mStr; }
 		};
 		template<> struct Parser<int>
 		{
