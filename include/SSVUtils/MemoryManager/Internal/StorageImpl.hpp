@@ -9,51 +9,79 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		struct Chain { Chain* next; };
-		template<typename T> inline void chainPush(Chain*& mChain, T mItem) noexcept
-		{
-			reinterpret_cast<Chain*>(mItem)->next = mChain;
-			mChain = reinterpret_cast<Chain*>(mItem);
-		}
-		template<typename T> inline T chainPop(Chain*& mChain) noexcept
-		{
-			auto result(reinterpret_cast<T>(mChain));
-			mChain = mChain->next;
-			return result;
-		}
-
-		template<typename TBase, template<typename> class TLHelper> class Chunk
+		/// @brief Internal pointer chain data structure.
+		/// @details Stored pointers contain a link to the next one in the chain when unused,
+		/// otherwise they point to an allocated space that can be used for recycling.
+		/// The memory pointed to from the stored pointers gets deallocated on destruction.
+		template<typename TBase, template<typename> class TLHelper> class PtrChain
 		{
 			private:
 				using LHelperType = TLHelper<TBase>;
-				Chain* chain{nullptr};
+				struct Link { Link* next; };
+				Link* base{nullptr};
 
 			public:
-				inline ~Chunk() noexcept
+				inline PtrChain() noexcept
 				{
-					Chain* temp;
-					while(chain != nullptr)
+					SSVU_ASSERT_STATIC(sizeof(TBase) >= sizeof(char*), "sizeof(TBase) must be >= sizeof(char*)");
+				}
+
+				inline ~PtrChain() noexcept
+				{
+					Link* temp;
+					while(base != nullptr)
 					{
-						temp = chain;
-						chain = chain->next;
+						temp = base;
+						base = base->next;
 						LHelperType::deallocate(reinterpret_cast<char*>(temp));
 					}
 				}
 
+				/// @brief Push a pointer in the chain. Assumes the contents of the pointer were destroyed.
+				inline void push(char* mItem) noexcept
+				{
+					reinterpret_cast<Link*>(mItem)->next = base;
+					base = reinterpret_cast<Link*>(mItem);
+				}
+
+				/// @brief Pops and returns a pointer from the chain.
+				inline char* pop() noexcept
+				{
+					auto result(reinterpret_cast<char*>(base));
+					base = base->next;
+					return result;
+				}
+
+				/// @brief Returns true if the pointer chain is empty.
+				inline bool isEmpty() const noexcept { return base == nullptr; }
+		};
+
+		/// @brief Memory "chunk" storage structure for a certain object type.
+		template<typename TBase, template<typename> class TLHelper> class Chunk
+		{
+			private:
+				using LHelperType = TLHelper<TBase>;
+				PtrChain<TBase, TLHelper> ptrChain;
+
+			public:
+				/// @brief Creates and constructs a `T` instance.
+				/// @details Uses one of the recyclable pointers if available, otherwise allocates new memory.
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
-					char* result{chain == nullptr ? LHelperType::template allocate<T>() : chainPop<char*>(chain)};
+					char* result{ptrChain.isEmpty() ? LHelperType::template allocate<T>() : ptrChain.pop()};
 					LHelperType::template construct<T>(result, std::forward<TArgs>(mArgs)...);
 					return LHelperType::template getItem<T>(result);
 				}
 
+				/// @brief Destroys a pointer that is in use. Memory does not get allocated - it gets recycled instead.
 				inline void recycle(TBase* mBase) noexcept(noexcept(LHelperType::destroy(mBase)))
 				{
 					LHelperType::destroy(mBase);
-					chainPush(chain, LHelperType::getByte(mBase));
+					ptrChain.push(LHelperType::getByte(mBase));
 				}
 		};
 
+		/// @brief Deleter functor used for the recycled smart pointers.
 		template<typename TBase, template<typename> class TLHelper> class ChunkDeleter
 		{
 			public:
@@ -67,12 +95,14 @@ namespace ssvu
 				inline void operator()(TBase* mPtr) const noexcept(noexcept(chunk->recycle(mPtr))) { chunk->recycle(mPtr); }
 		};
 
+		/// @brief Storage data structure for a single type - uses a single `Chunk`.
 		template<typename TBase, template<typename> class TLHelper> struct MonoStorage
 		{
 			using ChunkType = Chunk<TBase, TLHelper>;
 			ChunkType chunk;
 		};
 
+		/// @brief Storage data structure for multiple types - uses a map of `Chunk` objects.
 		template<typename TBase, template<typename> class TLHelper> class PolyStorage
 		{
 			public:
@@ -88,3 +118,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: investigate data-oriented maps?
