@@ -79,10 +79,10 @@ namespace ssvu
 	inline bool isDigitHexadecimal(char mChar) noexcept { return std::isxdigit(mChar); }
 
 	/// @brief Returns mChar, converted to lowercase. (Wraps std::tolower)
-	inline char toLowercase(char mChar) noexcept { return std::tolower(mChar); }
+	inline char toLower(char mChar) noexcept { return std::tolower(mChar); }
 
 	/// @brief Returns mChar, converted to uppercase. (Wraps std::toupper)
-	inline char toUppercase(char mChar) noexcept { return std::toupper(mChar); }
+	inline char toUpper(char mChar) noexcept { return std::toupper(mChar); }
 
 	/// @brief Replace the first occurrence of a string in a string with another string.
 	/// @param mStr String to work with.
@@ -136,12 +136,12 @@ namespace ssvu
 	/// @brief Converts a string to a lowercase string.
 	/// @param mStr String to convert.
 	/// @return Returns a std::string that is a copy of mStr, with all characters lowercase.
-	inline auto toLower(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::tolower); return mStr; }
+	inline auto toLower(std::string mStr) noexcept { for(auto& c : mStr) c = toLower(c); return mStr; }
 
 	/// @brief Converts a string to an uppercase string.
 	/// @param mStr String to convert.
 	/// @return Returns a std::string that is a copy of mStr, with all characters uppercase.
-	inline auto toUpper(std::string mStr) { std::transform(std::begin(mStr), std::end(mStr), std::begin(mStr), ::toupper); return mStr; }
+	inline auto toUpper(std::string mStr) noexcept { for(auto& c : mStr) c = toUpper(c); return mStr; }
 
 	/// @brief Copies a string and replaces the first occurrence of a string in it with another string.
 	/// @param mStr String to copy.
