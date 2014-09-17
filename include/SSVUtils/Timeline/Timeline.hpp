@@ -100,3 +100,4 @@ namespace ssvu
 #endif
 
 // TODO: add more commands, move to SSVS?
+// TODO: store index instead of pointer for current command?
