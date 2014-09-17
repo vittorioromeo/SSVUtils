@@ -12,7 +12,7 @@ namespace ssvu
 		/// @brief Checks if a path exists on the user's filesystem.
 		/// @param mPath Path to check, must end with '/'.
 		/// @return Returns true if the path exists, false otherwise.
-		inline bool exists(const Path& mPath) noexcept { struct stat buf; return stat(mPath.getCStr(), &buf) != -1; }
+		inline bool exists(const Path& mPath) noexcept { CStat buf; return stat(mPath.getCStr(), &buf) != -1; }
 
 		/// @brief Gets the file's binary contents.
 		/// @param mPath Path to the file.
