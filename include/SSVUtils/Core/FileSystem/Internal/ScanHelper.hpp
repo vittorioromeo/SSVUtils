@@ -13,7 +13,7 @@ namespace ssvu
 		{
 			template<Mode TM, Type TT, Pick TP, Sort TS> inline void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired)
 			{
-				if(!mPath.existsAsFolder()) throw std::runtime_error{"Directory \"" + mPath + "\" not found"};
+				if(!mPath.exists<Type::Folder>()) throw std::runtime_error{"Directory \"" + mPath + "\" not found"};
 
 				DIR* dir{opendir(mPath.getCStr())};
 				dirent* entry{readdir(dir)};
@@ -24,7 +24,7 @@ namespace ssvu
 					Path path{mPath + name};
 					if(!path.isRootOrParent())
 					{
-						if(path.existsAsFolder())
+						if(path.exists<Type::Folder>())
 						{
 							if(TT == Type::All || TT == Type::Folder) { mTarget.emplace_back(path); }
 							if(TM == Mode::Recurse) { Internal::scan<Mode::Recurse, TT, TP, TS>(mTarget, path, mDesired); }
