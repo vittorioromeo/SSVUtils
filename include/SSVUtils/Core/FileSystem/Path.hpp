@@ -9,6 +9,14 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
+		namespace Internal
+		{
+			template<Type TType> struct ExistsFilter;
+			template<> struct ExistsFilter<Type::All>		{ inline static bool get(const CStat& mFileStat) noexcept { return true; } };
+			template<> struct ExistsFilter<Type::File>		{ inline static bool get(const CStat& mFileStat) noexcept { return (mFileStat.st_mode & S_IFMT) == S_IFREG; } };
+			template<> struct ExistsFilter<Type::Folder>	{ inline static bool get(const CStat& mFileStat) noexcept { return (mFileStat.st_mode & S_IFMT) == S_IFDIR; } };
+		}
+
 		class Path
 		{
 			private:
@@ -21,10 +29,11 @@ namespace ssvu
 				{
 					if(!mustNormalize) return;
 					mustNormalize = false;
+					// TODO: string matcher
 					replaceAll(path, R"(\)", "/");
 					replaceAll(path, R"(\\)", "/");
 					replaceAll(path, "//", "/");
-					if(!endsWith(path, "/") && existsAsFolder()) path += "/";
+					if(!endsWith(path, "/") && exists<Type::Folder>()) path += "/";
 				}
 
 			public:
@@ -37,30 +46,20 @@ namespace ssvu
 				inline auto getCStr() const noexcept	{ return getStr().c_str(); }
 
 				// TODO: docs, tests, &&
-				inline void set(const std::string& mStr)
-				{
-					path = mStr;
-					mustNormalize = true;
-				}
-				inline void append(const std::string& mStr)
-				{
-					path += mStr;
-					mustNormalize = true;
-				}
+				inline void set(const std::string& mStr) { path = mStr; mustNormalize = true; }
+				inline void append(const std::string& mStr) { path += mStr; mustNormalize = true; }
 
-				/// @brief Returns true if the path exists as a folder on the user's filesystem.
-				inline bool existsAsFolder() const
+				/// @brief Returns true if the path exists on the user's filesystem and respects the passed filter.
+				/// @tparam TType Existance type to check.
+				template<Type TType> inline bool exists() const noexcept
 				{
-					struct stat fileStat;
+					CStat fileStat;
 					int err{stat(getCStr(), &fileStat)};
-					return err != 0 ? false : (fileStat.st_mode & S_IFMT) == S_IFDIR;
+					return err == 0 && Internal::ExistsFilter<TType>::get(fileStat);
 				}
 
 				/// @brief Returns true if the path ends with a specified extension. Case-insensitive.
 				inline bool hasExtension(const std::string& mExt) const { return endsWith(toLower(getStr()), toLower(mExt)); }
-
-				/// @brief Returns true if the path exists on the user's filesystem.
-				inline bool exists() const { struct stat buf; return stat(getCStr(), &buf) != -1; }
 
 				/// @brief Returns true if the path ends with "./" or "../".
 				inline bool isRootOrParent() const { return endsWith(getStr(), "./") || endsWith(getStr(), "../"); }
@@ -120,6 +119,25 @@ namespace ssvu
 					const auto& str(getFileName());
 					auto extBegin(str.find_first_of('.', beginsWith(str, '.') ? 1 : 0));
 					return extBegin == std::string::npos ? "" : str.substr(extBegin, str.size() - extBegin);
+				}
+
+				/// @brief Returns a string containing the file's contents, read in binary mode.
+				inline std::string getContentsAsString() const
+				{
+					SSVU_ASSERT(exists<FilterFile>());
+
+					std::ifstream ifs{getCStr(), std::ios_base::binary};
+					SSVU_ASSERT(ifs);
+
+					ifs.seekg(0, std::ios::end);
+					auto size(ifs.tellg());
+					ifs.seekg(0, std::ios::beg);
+
+					auto buffer(makeUPtr<char[]>(size));
+					ifs.read(&buffer[0], size);
+					std::string result{buffer.get(), size};
+
+					return result;
 				}
 
 				/// @brief Returns true if the path is empty.
