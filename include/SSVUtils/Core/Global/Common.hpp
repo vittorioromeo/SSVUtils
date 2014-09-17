@@ -5,17 +5,26 @@
 #ifndef SSVU_CORE_GLOBAL_COMMON
 #define SSVU_CORE_GLOBAL_COMMON
 
-// The following macros check the current operating system.
+// The following macros check the current operating system and architecture.
 
-#if (__linux || __unix || __posix)
+#if (__linux || __unix || __posix || __LINUX__ || __linux__)
 	/// @macro This macro is defined if the current OS is Linux.
 	#define SSVU_OS_LINUX 1
-#elif (_WIN64 || _WIN32)
+#elif (_WIN64 || _WIN32 || __CYGWIN32__ || __MINGW32__)
 	/// @macro This macro is defined if the current OS is Windows.
 	#define SSVU_OS_WINDOWS 1
+#elif (MACOSX || __DARWIN__ || __APPLE__)
+	/// @macro This macro is defined if the current OS is Windows.
+	#define SSVU_OS_MAC 1
 #else
 	/// @macro This macro is defined if the current OS is unknown.
 	#define SSVU_OS_UNKNOWN 1
+#endif
+
+#if (WIN_32 || __i386__ || i386 || __x86__)
+	#define SSVU_ARCH_32
+#elif (__amd64 || __amd64__ || __x86_64 || __x86_64__ || _M_X64 || __ia64__ || _M_IA64)
+	#define SSVU_ARCH_64
 #endif
 
 namespace std
@@ -138,3 +147,4 @@ namespace ssvu
 
 // TODO: comply to standards _t _v and ::type ::value
 // * maybe avoid using shortcuts? or use ShortcutT?
+// TODO: separate
