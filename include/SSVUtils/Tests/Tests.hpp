@@ -228,7 +228,7 @@ SSVUT_TEST(PathTests)
 	using namespace ssvu::FileSystem;
 
 	Path path{"/usr"};
-	if(path.existsAsFolder())
+	if(path.exists<ssvufs::Type::Folder>())
 	{
 		SSVUT_EXPECT(path.getStr() == "/usr/");
 		SSVUT_EXPECT(path.getFolderName() == "usr");

@@ -35,7 +35,7 @@ namespace ssvu
 				/// @brief Expands the dictionary.
 				/// @details Expands the dictionary, along with subdictionary sections, to a string.
 				/// Takes a string parameter which is the template (not a path to the template file).
-				/// Consider using ssvufs::getFileContents(...) to pass a template file.
+				/// Consider using ssvufs::Path::getContentsAsString() to pass a template file.
 				/// @code
 				/// using namespace ssvu::TemplateSystem;
 				/// Dictionary dict{{"key1", "value1"}, {"key2", "value2"}};

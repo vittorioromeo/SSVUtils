@@ -37,3 +37,4 @@
 // * investigate metaprogramming code generation
 // * test framework - write expected and actual value and more...
 // * c++14-ify other libs
+// * c++14 literals for seconds
