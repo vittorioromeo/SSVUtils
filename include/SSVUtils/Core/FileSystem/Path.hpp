@@ -36,6 +36,18 @@ namespace ssvu
 				inline const auto& getStr() const		{ normalize(); return path; }
 				inline auto getCStr() const noexcept	{ return getStr().c_str(); }
 
+				// TODO: docs, tests, &&
+				inline void set(const std::string& mStr)
+				{
+					path = mStr;
+					mustNormalize = true;
+				}
+				inline void append(const std::string& mStr)
+				{
+					path += mStr;
+					mustNormalize = true;
+				}
+
 				/// @brief Returns true if the path exists as a folder on the user's filesystem.
 				inline bool existsAsFolder() const
 				{
@@ -120,17 +132,21 @@ namespace ssvu
 
 		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath)	{ return mStream << mPath.getStr(); }
 
-		inline Path operator+(const std::string& mLhs, const Path& mRhs)			{ return {mLhs + mRhs.getStr()}; }
-		inline Path operator+(const Path& mLhs, const std::string& mRhs)			{ return {mLhs.getStr() + mRhs}; }
-		inline Path operator+(const Path& mLhs, const Path& mRhs)					{ return {mLhs.getStr() + mRhs.getStr()}; }
-		inline Path operator+(const char* mLhs, const Path& mRhs)					{ return {std::string(mLhs) + mRhs.getStr()}; }
-		inline Path operator+(const Path& mLhs, const char* mRhs)					{ return {mLhs.getStr() + std::string(mRhs)}; }
+		inline Path operator+(const std::string& mLhs, const Path& mRhs)	{ return {mLhs + mRhs.getStr()}; }
+		inline Path operator+(const Path& mLhs, const std::string& mRhs)	{ return {mLhs.getStr() + mRhs}; }
+		inline Path operator+(const Path& mLhs, const Path& mRhs)			{ return {mLhs.getStr() + mRhs.getStr()}; }
+		inline Path operator+(const char* mLhs, const Path& mRhs)			{ return {std::string(mLhs) + mRhs.getStr()}; }
+		inline Path operator+(const Path& mLhs, const char* mRhs)			{ return {mLhs.getStr() + std::string(mRhs)}; }
 
-		inline bool operator==(const std::string& mLhs, const Path& mRhs)			{ return mLhs == mRhs.getStr(); }
-		inline bool operator==(const Path& mLhs, const std::string& mRhs)			{ return mLhs.getStr() == mRhs; }
-		inline bool operator==(const Path& mLhs, const Path& mRhs)					{ return mLhs.getStr() == mRhs.getStr(); }
-		inline bool operator==(const char* mLhs, const Path& mRhs)					{ return std::string(mLhs) == mRhs.getStr(); }
-		inline bool operator==(const Path& mLhs, const char* mRhs)					{ return mLhs.getStr() == std::string(mRhs); }
+		inline Path& operator+=(Path& mLhs, const std::string& mRhs)		{ mLhs.append(mRhs); return mLhs; }
+		inline Path& operator+=(Path& mLhs, const Path& mRhs)				{ mLhs.append(mRhs.getStr()); return mLhs; }
+		inline Path& operator+=(Path& mLhs, const char* mRhs)				{ mLhs.append(std::string{mRhs}); return mLhs; }
+
+		inline bool operator==(const std::string& mLhs, const Path& mRhs)	{ return mLhs == mRhs.getStr(); }
+		inline bool operator==(const Path& mLhs, const std::string& mRhs)	{ return mLhs.getStr() == mRhs; }
+		inline bool operator==(const Path& mLhs, const Path& mRhs)			{ return mLhs.getStr() == mRhs.getStr(); }
+		inline bool operator==(const char* mLhs, const Path& mRhs)			{ return std::string(mLhs) == mRhs.getStr(); }
+		inline bool operator==(const Path& mLhs, const char* mRhs)			{ return mLhs.getStr() == std::string(mRhs); }
 	}
 }
 
