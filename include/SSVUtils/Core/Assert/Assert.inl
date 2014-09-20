@@ -32,9 +32,9 @@ namespace ssvu
 			}
 
 			ssvu::lo() << "Choose what to do:\n\n"
-				<< "(0) -> Skip this assertion.\n"
-				<< "(1) -> Skip all assertions.\n"
-				<< "(2) -> Terminate the program." << std::endl;
+				<< "(  0  ) -> Skip this assertion.\n"
+				<< "(  1  ) -> Skip all assertions.\n"
+				<< "( ... ) -> Terminate the program." << std::endl;
 
 			std::string userInput;
 			std::cin >> userInput;
