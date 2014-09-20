@@ -18,7 +18,7 @@ namespace ssvu
 				DIR* dir{opendir(mPath.getCStr())};
 				dirent* entry{readdir(dir)};
 
-				while(entry != NULL)
+				while(entry != nullptr)
 				{
 					std::string name{entry->d_name};
 					Path path{mPath + name};
