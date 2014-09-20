@@ -95,7 +95,7 @@ namespace ssvu
 	/// @param mMin Range min.
 	/// @param mMax Range max.
 	/// @return Returns the cycled value.
-	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getCycledValue(const T1& mValue, const T2& mMin, const T3& mMax)
+	template<typename T1, typename T2, typename T3> inline auto getCycledValue(const T1& mValue, const T2& mMin, const T3& mMax)
 	{
 		Common<T1, T2, T3> delta{mMax - mMin}, result{std::fmod(mValue - mMin, delta)};
 		if(result < 0) result += delta;
@@ -128,7 +128,7 @@ namespace ssvu
 	/// @param mEnd Target angle.
 	/// @param mSpeed Rotation speed.
 	/// @return Returns the rotated angle in degrees.
-	template<typename T1, typename T2, typename T3> inline Common<T1, T2, T3> getRotatedDeg(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept
+	template<typename T1, typename T2, typename T3> inline auto getRotatedDeg(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept
 	{
 		using CT = Common<T1, T2, T3>;
 		CT diff{getCycledValue(wrapDeg(mEnd) - wrapDeg(mStart), -CT(180), CT(180))};
@@ -143,7 +143,7 @@ namespace ssvu
 	/// @param mEnd Target angle.
 	/// @param mSpeed Rotation speed.
 	/// @return Returns the rotated angle in radians.
-	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> getRotatedRad(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept
+	template<typename T1, typename T2, typename T3> inline constexpr auto getRotatedRad(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept
 	{
 		return getRotatedDeg(toDeg(mStart), toDeg(mEnd), mSpeed);
 	}
@@ -181,7 +181,7 @@ namespace ssvu
 	/// @param mIdx 1D index.
 	/// @param mCols Number of columns of the 2D array.
 	/// @return Returns a 2D index (under the form of an std::tuple) for a 2D array with `mCols` columns.
-	template<typename T1, typename T2> inline std::tuple<Common<T1, T2>, Common<T1, T2>> get2DIdxFrom1D(const T1& mIdx, const T2& mCols) noexcept
+	template<typename T1, typename T2> inline auto get2DIdxFrom1D(const T1& mIdx, const T2& mCols) noexcept
 	{
 		SSVU_ASSERT(mIdx > 0 && mCols != 0);
 		Common<T1, T2> y{mIdx / mCols};
@@ -194,8 +194,7 @@ namespace ssvu
 	/// @param mCols Number of columns of the 2D array.
 	/// @param mRows Number of rows of the 3D array.
 	/// @return Returns a 3D index (under the form of an std::tuple) for an "implicit 3D" array.
-	template<typename T1, typename T2, typename T3> inline std::tuple<Common<T1, T2, T3>, Common<T1, T2, T3>, Common<T1, T2, T3>>
-		get3DIdxFrom1D(const T1& mIdx, const T2& mCols, const T3& mRows) noexcept
+	template<typename T1, typename T2, typename T3> inline auto get3DIdxFrom1D(const T1& mIdx, const T2& mCols, const T3& mRows) noexcept
 	{
 		SSVU_ASSERT(mIdx > 0 && mRows != 0 && mCols != 0);
 		Common<T1, T2, T3> y{mIdx / mCols};
