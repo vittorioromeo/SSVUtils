@@ -9,22 +9,6 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
-		/// @brief Checks if a path exists on the user's filesystem.
-		/// @param mPath Path to check, must end with '/'.
-		/// @return Returns true if the path exists, false otherwise.
-		inline bool exists(const Path& mPath) noexcept { CStat buf; return stat(mPath.getCStr(), &buf) != -1; }
-
-		/// @brief Gets the file's binary contents.
-		/// @param mPath Path to the file.
-		/// @return Returns a string containing the file's contents.
-		inline std::string getFileContents(const Path& mPath)
-		{
-			SSVU_ASSERT(mPath.exists());
-
-			std::ifstream ifs{mPath, std::ios_base::binary};
-			return {std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>()};
-		}
-
 		/// @brief Creates a folder on the user's filesystem.
 		/// @details Works both on Linux and Windows.
 		/// @param mPath Path to non-existing folder, must end with '/'.

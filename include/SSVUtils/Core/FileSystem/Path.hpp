@@ -124,7 +124,7 @@ namespace ssvu
 				/// @brief Returns a string containing the file's contents, read in binary mode.
 				inline std::string getContentsAsString() const
 				{
-					SSVU_ASSERT(exists<FilterFile>());
+					SSVU_ASSERT(exists<Type::File>());
 
 					std::ifstream ifs{getCStr(), std::ios_base::binary};
 					SSVU_ASSERT(ifs);
