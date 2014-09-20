@@ -204,8 +204,10 @@ SSVUT_TEST(DelegateTests)
 	Delegate<void()> del1;
 	del1 += [&testState]{ testState = !testState; };
 
-	del1(); SSVUT_EXPECT(testState == true);
-	del1(); SSVUT_EXPECT(testState == false);
+	del1();
+	SSVUT_EXPECT(testState == true);
+	del1();
+	SSVUT_EXPECT(testState == false);
 
 	Delegate<int(int)> del2;
 	del2 += [](int x){ return x + x; };
@@ -312,18 +314,18 @@ SSVUT_TEST(StringUtilsTests)
 	SSVUT_EXPECT(getDistLevenshtein("AAA", "BBBB") == 4);
 	SSVUT_EXPECT(getDistLevenshtein("AAA", "BBC") == 3);
 
-	SSVUT_EXPECT(getTrimmedStrL("   AAA") == "AAA");
-	SSVUT_EXPECT(getTrimmedStrL("   AA  A") == "AA  A");
-	SSVUT_EXPECT(getTrimmedStrL("A A A") == "A A A");
-	SSVUT_EXPECT(getTrimmedStrL("  A A A") == "A A A");
+	SSVUT_EXPECT(getTrimStrL("   AAA") == "AAA");
+	SSVUT_EXPECT(getTrimStrL("   AA  A") == "AA  A");
+	SSVUT_EXPECT(getTrimStrL("A A A") == "A A A");
+	SSVUT_EXPECT(getTrimStrL("  A A A") == "A A A");
 
-	SSVUT_EXPECT(getTrimmedStrR("AAA   ") == "AAA");
-	SSVUT_EXPECT(getTrimmedStrR("AA  A   ") == "AA  A");
-	SSVUT_EXPECT(getTrimmedStrR("A A A") == "A A A");
-	SSVUT_EXPECT(getTrimmedStrR("A A A  ") == "A A A");
+	SSVUT_EXPECT(getTrimStrR("AAA   ") == "AAA");
+	SSVUT_EXPECT(getTrimStrR("AA  A   ") == "AA  A");
+	SSVUT_EXPECT(getTrimStrR("A A A") == "A A A");
+	SSVUT_EXPECT(getTrimStrR("A A A  ") == "A A A");
 
-	SSVUT_EXPECT(getTrimmedStrLR("   A A A  ") == "A A A");
-	SSVUT_EXPECT(getTrimmedStrLR("      AaA  ") == "AaA");
+	SSVUT_EXPECT(getTrimStrLR("   A A A  ") == "A A A");
+	SSVUT_EXPECT(getTrimStrLR("      AaA  ") == "AaA");
 
 	SSVUT_EXPECT(isDigit('0'));
 	SSVUT_EXPECT(isDigit('1'));
@@ -699,19 +701,48 @@ SSVUT_TEST(BenchmarkTests)
 		{
 
 		}
-		ssvu::Benchmark::getEndString();
+		ssvu::Benchmark::getEndData().getString();
 	}
-	ssvu::Benchmark::getEndDuration();
+	ssvu::Benchmark::getEndData().getDuration();
+
+	ssvu::setLogSuppressed(true);
 
 	{
-		SSVU_BENCHMARK_SCOPELOGBENCHMARK();
-		SSVU_BENCHMARK_SCOPELOGBENCHMARK("test0");
+		SSVU_BENCHMARK_LOG_SCOPE_EXIT();
+		SSVU_BENCHMARK_LOG_SCOPE_EXIT("test0");
 
 		{
-			SSVU_BENCHMARK_SCOPELOGBENCHMARK();
-			SSVU_BENCHMARK_SCOPELOGBENCHMARK("test1");
+			SSVU_BENCHMARK_LOG_SCOPE_EXIT();
+			SSVU_BENCHMARK_LOG_SCOPE_EXIT("test1");
 		}
 	}
+
+	{
+		ssvu::Benchmark::resetGroup("__testGroup1");
+		ssvu::Benchmark::resetGroup("__testGroup2");
+
+		ssvu::Benchmark::resumeGroup("__testGroup1");
+		ssvu::Benchmark::pauseGroup("__testGroup1");
+
+		ssvu::Benchmark::resumeGroup("__testGroup2");
+		ssvu::Benchmark::pauseGroup("__testGroup2");
+
+		ssvu::Benchmark::endLoGroup("__testGroup1");
+		ssvu::Benchmark::endLoGroup("__testGroup2");
+	}
+
+	{
+		ssvu::Benchmark::resetGroup("__testGroup1");
+		ssvu::Benchmark::resetGroup("__testGroup2");
+
+		{ SSVU_BENCHMARK_RUN_GROUP_SCOPE_EXIT("__testGroup1"); }
+		{ SSVU_BENCHMARK_RUN_GROUP_SCOPE_EXIT("__testGroup2"); }
+
+		ssvu::Benchmark::endLoGroup("__testGroup1");
+		ssvu::Benchmark::endLoGroup("__testGroup2");
+	}
+
+	ssvu::setLogSuppressed(false);
 }
 
 SSVU_FATENUM_MGR(_ssvutTestMgr);
@@ -780,8 +811,7 @@ SSVUT_TEST(FatEnumTests)
 	}
 }
 
-
-SSVUT_TEST(HandleManagerMixed)
+SSVUT_TEST(HandleManagerMixedTests)
 {
 	using namespace ssvu;
 	using namespace std;
@@ -1180,6 +1210,127 @@ SSVUT_TEST(HandleManagerMixed)
 		SSVUT_EXPECT(mgr.getAtomFromHandle(a0).getData().s == "a");
 		SSVUT_EXPECT(mgr.getAtomFromHandle(a1).getData().s == "b");
 		SSVUT_EXPECT(mgr.getAtomFromHandle(a2).getData().s == "c");
+	}
+}
+
+SSVUT_TEST(MemoryManagerTests)
+{
+	volatile int cc{0};
+	volatile int dc{0};
+
+	struct TMMItem
+	{
+		volatile int& dcRef;
+		inline TMMItem(volatile int& mCC, volatile int& mDC) : dcRef(mDC) { ++mCC; }
+		inline virtual ~TMMItem() { ++dcRef; }
+	};
+
+	struct TMMItemS : public TMMItem { char stuff[2]; using TMMItem::TMMItem; };
+	struct TMMItemB : public TMMItem { char stuff[20]; using TMMItem::TMMItem; };
+
+	{
+		SSVUT_EXPECT(cc == 0 && dc == 0);
+
+		ssvu::MonoRecycler<TMMItem> mr;
+
+		{
+			auto i1 = mr.create(cc, dc);
+			auto i2 = mr.create(cc, dc);
+			mr.create(cc, dc); // dies immediately
+
+			SSVUT_EXPECT(cc == 3 && dc == 1);
+		}
+
+		SSVUT_EXPECT(cc == 3 && dc == 3);
+	}
+
+	cc = 0; dc = 0;
+
+	{
+		SSVUT_EXPECT(cc == 0 && dc == 0);
+
+		ssvu::PolyRecycler<TMMItem> pr;
+
+		{
+			auto i1 = pr.create<TMMItemS>(cc, dc);
+			auto i2 = pr.create<TMMItemB>(cc, dc);
+			pr.create<TMMItemS>(cc, dc);
+			pr.create<TMMItemB>(cc, dc);
+
+			SSVUT_EXPECT(cc == 4 && dc == 2);
+		}
+
+		SSVUT_EXPECT(cc == 4 && dc == 4);
+
+		{
+			auto i1 = pr.create<TMMItemS>(cc, dc);
+			auto i2 = pr.create<TMMItemB>(cc, dc);
+			pr.create<TMMItemS>(cc, dc);
+			pr.create<TMMItemB>(cc, dc);
+
+			SSVUT_EXPECT(cc == 8 && dc == 6);
+		}
+
+		SSVUT_EXPECT(cc == 8 && dc == 8);
+	}
+
+	cc = 0; dc = 0;
+
+	{
+		SSVUT_EXPECT(cc == 0 && dc == 0);
+
+		ssvu::MonoManager<TMMItem> mm;
+
+		{
+			auto& i1 = mm.create(cc, dc);
+			SSVUT_EXPECT(cc == 1 && dc == 0);
+
+			auto& i2 = mm.create(cc, dc);
+			SSVUT_EXPECT(cc == 2 && dc == 0);
+
+			mm.create(cc, dc);
+			SSVUT_EXPECT(cc == 3 && dc == 0);
+		}
+
+		mm.refresh();
+		SSVUT_EXPECT(cc == 3 && dc == 0);
+
+		for(auto& i : mm) mm.del(*i);
+		SSVUT_EXPECT(cc == 3 && dc == 0);
+
+		mm.refresh();
+		SSVUT_EXPECT(cc == 3 && dc == 3);
+	}
+
+	cc = 0; dc = 0;
+
+	{
+		SSVUT_EXPECT(cc == 0 && dc == 0);
+
+		ssvu::PolyManager<TMMItem> mm;
+
+		{
+			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			SSVUT_EXPECT(cc == 1 && dc == 0);
+
+			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT(cc == 2 && dc == 0);
+
+			mm.create<TMMItemS>(cc, dc);
+			SSVUT_EXPECT(cc == 3 && dc == 0);
+
+			mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT(cc == 4 && dc == 0);
+		}
+
+		mm.refresh();
+		SSVUT_EXPECT(cc == 4 && dc == 0);
+
+		for(auto& i : mm) mm.del(*i);
+		SSVUT_EXPECT(cc == 4 && dc == 0);
+
+		mm.refresh();
+		SSVUT_EXPECT(cc == 4 && dc == 4);
 	}
 }
 
