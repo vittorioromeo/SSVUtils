@@ -114,9 +114,93 @@ namespace ssvu
 			public:
 				template<typename T> inline auto& getChunk() { return chunks[sizeof(T)]; }
 		};
+
+				// TODO: STACKOVERFLOW
+/*
+		/// @namespace Implementation details for `PolyFixedStorage`.
+		namespace FixedStorageImpl
+		{
+			/// @brief Returns a new unique idx.
+			inline auto getLastSizeIdx() noexcept
+			{
+				static std::size_t lastSizeIdx{0};
+				SSVU_ASSERT(lastIdx < maxChunkTypes);
+				return lastSizeIdx++;
+			}
+
+			/// @brief Returns an unique idx attached to a specific object size.
+			template<std::size_t TS> inline const auto& getSizeIdx() noexcept
+			{
+				static std::size_t idx{getLastSizeIdx()}; return idx;
+			}
+
+			template<std::size_t TS> struct Info
+			{
+				using Idx = std::integral_constant<std::size_t,
+			};
+		}
+
+		/// @brief Storage data structure for multiple types - uses a map of `Chunk` objects.
+		template<typename TBase, template<typename> class TLHelper> class PolyStorage
+		{
+			public:
+				using ChunkType = Chunk<TBase, TLHelper>;
+
+			private:
+				ChunkType* chunks;
+				std::size_t capacity;
+
+			public:
+				inline PolyStorage() : capacity{10}, chunks{new ChunkType[capacity]} { }
+				inline ~PolyStorage() noexcept { delete[] chunks; }
+
+				template<typename T> inline auto& getChunk()
+				{
+					if(capacity <= FixedStorageImpl::getSizeIdx<sizeof(T)>())
+					{
+						capacity *= 2;
+						auto newChunks(new ChunkType[capacity]);
+						std::copy(chunks, chunks + capacity, newChunks);
+						delete[] chunks;
+						chunks = newChunks;
+					}
+
+					return chunks[FixedStorageImpl::getSizeIdx<sizeof(T)>()];
+				}
+		};*/
+
+		namespace FixedStorageImpl
+		{
+			/// @brief Returns a new unique idx.
+			inline auto getLastSizeIdx() noexcept
+			{
+				static std::size_t lastSizeIdx{0}; return lastSizeIdx++;
+			}
+
+			/// @brief Returns an unique idx attached to a specific object size.
+			template<std::size_t TS> inline const auto& getSizeIdx() noexcept
+			{
+				static std::size_t idx{getLastSizeIdx()}; return idx;
+			}
+		}
+
+		/// @brief Storage data structure for multiple types - uses a map of `Chunk` objects. Supports a limited number of object sizes.
+		template<typename TBase, template<typename> class TLHelper, std::size_t TMaxChunks> class PolyFixedStorage
+		{
+			public:
+				using ChunkType = Chunk<TBase, TLHelper>;
+
+			private:
+				std::array<ChunkType, TMaxChunks> chunks;
+
+			public:
+				template<typename T> inline auto& getChunk() noexcept
+				{
+					SSVU_ASSERT(FixedStorageImpl::getSizeIdx<sizeof(T)>() < TMaxChunks);
+					return chunks[FixedStorageImpl::getSizeIdx<sizeof(T)>()];
+				}
+		};
 	}
 }
 
 #endif
-
-// TODO: investigate data-oriented maps!

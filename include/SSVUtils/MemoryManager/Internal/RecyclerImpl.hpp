@@ -9,27 +9,23 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<typename TBase, template<typename> class TLHelper> using MonoRecyclerBase = BaseRecycler<TBase, TLHelper, MonoStorage, MonoRecyclerImpl>;
-		template<typename TBase, template<typename> class TLHelper> using PolyRecyclerBase = BaseRecycler<TBase, TLHelper, PolyStorage, PolyRecyclerImpl>;
+		template<typename TBase, template<typename> class TLHelper>						using MonoRecyclerBase = BaseRecycler<TBase, TLHelper, MonoStorage<TBase, TLHelper>, MonoRecyclerImpl<TBase, TLHelper>>;
+		template<typename TBase, template<typename> class TLHelper, typename TStorage>	using PolyRecyclerBase = BaseRecycler<TBase, TLHelper, TStorage, PolyRecyclerImpl<TBase, TLHelper, TStorage>>;
 
 		/// @brief Base CRTP recycler implementation.
 		/// @tparam TBase Base type of stored objects.
 		/// @tparam TLHelper Type of layout helper. (bool or no bool?)
 		/// @tparam TStorage Type of storage. (MonoStorage? PolyStorage?)
 		/// @tparam TDerived Type of derived class. (CRTP)
-		template<typename TBase,
-				 template<typename> class TLHelper,
-				 template<typename, template<typename> class> class TStorage,
-				 template<typename, template<typename> class> class TDerived>
-		class BaseRecycler
+		template<typename TBase, template<typename> class TLHelper, typename TStorage, typename TDerived> class BaseRecycler
 		{
 			public:
 				using LayoutType = TLHelper<TBase>;
 				using ChunkType = Chunk<TBase, TLHelper>;
 				using ChunkDeleterType = ChunkDeleter<TBase, TLHelper>;
-				using StorageType = TStorage<TBase, TLHelper>;
+				using StorageType = TStorage;
 				using PtrType = UPtr<TBase, ChunkDeleterType>;
-				using DerivedType = TDerived<TBase, TLHelper>;
+				using DerivedType = TDerived;
 
 			protected:
 				StorageType storage;
@@ -60,9 +56,9 @@ namespace ssvu
 		};
 
 		/// @brief CRTP implementation for `PolyRecycler`.
-		template<typename TBase, template<typename> class TLHelper> struct PolyRecyclerImpl final : public PolyRecyclerBase<TBase, TLHelper>
+		template<typename TBase, template<typename> class TLHelper, typename TStorage> struct PolyRecyclerImpl final : public PolyRecyclerBase<TBase, TLHelper, TStorage>
 		{
-			using BaseType = PolyRecyclerBase<TBase, TLHelper>;
+			using BaseType = PolyRecyclerBase<TBase, TLHelper, TStorage>;
 			using PtrType = typename BaseType::PtrType;
 			using ChunkDeleterType = typename BaseType::ChunkDeleterType;
 

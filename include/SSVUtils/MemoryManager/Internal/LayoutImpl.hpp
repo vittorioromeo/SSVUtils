@@ -24,6 +24,7 @@ namespace ssvu
 				AlignedStorageBasic<T> storageItem;
 			};
 
+			/// @brief Base class used for Layout CRTP.
 			template<typename TBase, template<typename> class TLT> struct LHelperBase
 			{
 				using TLType = TLT<TBase>;
@@ -40,6 +41,7 @@ namespace ssvu
 				template<typename T> inline static constexpr T* getItem(char* mPtr) noexcept			{ return reinterpret_cast<T*>(getItemAddress<T>(mPtr)); }
 			};
 
+			/// @brief CRTP implementation for a layout with a bool.
 			template<typename TBase> struct LHelperBool : public LHelperBase<TBase, LBool>
 			{
 				template<typename T> inline static constexpr char* getBoolAddress(char* mPtr) noexcept { return reinterpret_cast<char*>(&reinterpret_cast<LBool<T>*>(mPtr)->storageBool); }
@@ -55,6 +57,7 @@ namespace ssvu
 				inline static constexpr bool getBool(const TBase* mBase) noexcept	{ return *reinterpret_cast<const bool*>(&LHelperBool::getLayout(mBase)->storageBool); }
 			};
 
+			/// @brief CRTP implementation for a layout with no extra bool.
 			template<typename TBase> struct LHelperNoBool : public LHelperBase<TBase, LNoBool>
 			{
 				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(fwd<TArgs>(mArgs)...)))

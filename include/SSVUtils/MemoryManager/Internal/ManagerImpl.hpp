@@ -12,7 +12,7 @@ namespace ssvu
 		/// @brief Base memory recycler manager class.
 		/// @tparam TBase Base type of manager objects.
 		/// @tparam TRecycler Internal recycler type. (MonoRecycler? PolyRecycler?)
-		template<typename TBase, template<typename, template<typename> class> class TRecycler> class BaseManager
+		template<typename TBase, typename TRecycler> class BaseManager
 		{
 			template<typename T1, typename T2> friend void ssvu::eraseRemoveIf(T1&, const T2&);
 
@@ -21,7 +21,7 @@ namespace ssvu
 				using ChunkType = Chunk<TBase, LayoutImpl::LHelperBool>;
 				using ChunkDeleterType = ChunkDeleter<TBase, LayoutImpl::LHelperBool>;
 				using PtrType = UPtr<TBase, ChunkDeleterType>;
-				using RecyclerType = TRecycler<TBase, LayoutImpl::LHelperBool>;
+				using RecyclerType = TRecycler;
 				using Container = std::vector<PtrType>;
 
 			private:
