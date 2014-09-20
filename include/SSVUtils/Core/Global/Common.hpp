@@ -81,7 +81,8 @@ namespace ssvu
 	template<typename T> inline constexpr bool isPolymorphic() noexcept					{ return std::is_polymorphic<T>::value; }
 	template<typename T> inline constexpr auto getTupleSize() noexcept					{ return std::tuple_size<T>::value; }
 
-	template<typename T> inline constexpr decltype(auto) fwd(T mValue) noexcept { return std::forward<T>(mValue); }
+	template<typename T> inline constexpr T&& fwd(RemoveReference<T>& mA) noexcept { return std::forward<T>(mA); }
+	template<typename T> inline constexpr T&& fwd(RemoveReference<T>&& mA) noexcept { return std::forward<T>(mA); }
 }
 
 namespace ssvu
