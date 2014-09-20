@@ -19,14 +19,38 @@ namespace ssvu
 			/// @typedef Shortcut typedef for `std::chrono::milliseconds`.
 			using Duration = std::chrono::milliseconds;
 
+			/// @brief CRTP struct for data classes' shared methods.
+			template<typename TDerived> struct DataBase
+			{
+				/// @brief Returns the elapsed time as a string.
+				inline std::string getString() const { return toStr(reinterpret_cast<const TDerived*>(this)->getDuration().count()) + " ms"; }
+			};
+
 			/// @brief Benchmark data structure storing a time point and a name.
-			struct Data
+			struct Data : public DataBase<Data>
 			{
 				TP tp;
 				std::string name;
 
 				inline Data() = default;
 				inline Data(const TP& mTP, std::string mName) : tp{mTP}, name{std::move(mName)} { }
+
+				/// @brief Returns the elapsed time as a std::chrono::milliseconds.
+				inline Duration getDuration() const noexcept { return std::chrono::duration_cast<Duration>(HRClock::now() - tp); }
+			};
+
+			/// @brief Benchmark group data structure storing a time point and a duration.
+			struct DataGroup : public DataBase<DataGroup>
+			{
+				TP tp;
+				Duration duration;
+
+				inline void reset() noexcept { tp = HRClock::now(); duration = Duration{0}; }
+				inline void start() noexcept { tp = HRClock::now(); }
+				inline void pause() noexcept { duration += std::chrono::duration_cast<Duration>(HRClock::now() - tp); tp = HRClock::now(); }
+
+				/// @brief Returns the elapsed time as a std::chrono::milliseconds.
+				inline Duration getDuration() const noexcept { return duration; }
 			};
 		}
 	}
@@ -49,36 +73,51 @@ namespace ssvu
 		/// @return Returns the elapsed time as a std::chrono::milliseconds.
 		inline auto getEndData() { return Internal::getEndData(); }
 
-		/// @brief Ends the current benchmark timer and returns the elapsed time.
-		/// @return Returns the elapsed time as a std::chrono::milliseconds.
-		inline auto getEndDuration() { return Internal::getEndDuration(); }
-
-		/// @brief Ends the current benchmark timer and returns the elapsed time.
-		/// @return Returns the elapsed time as a string.
-		inline auto getEndString() { return Internal::getEndString(); }
-
 		/// @brief Ends the current benchmark timer and logs the elapsed time.
 		inline void endLo() { Internal::endLo(); }
 
+		/// @brief Resets the accumulated time of the `mGroup` benchmark group.
+		inline void resetGroup(const std::string& mGroup) { Internal::resetGroup(mGroup); }
+
+		/// @brief Resumes accumulating time in the `mGroup` benchmark group.
+		inline void resumeGroup(const std::string& mGroup) { Internal::resumeGroup(mGroup); }
+
+		/// @brief Pauses accumulating time in the `mGroup` benchmark group.
+		inline void pauseGroup(const std::string& mGroup) { Internal::pauseGroup(mGroup); }
+
+		/// @brief Stops and logs on `ssvu::lo()` the accumulated time of the `mGroup` benchmark group.
+		inline void endLoGroup(const std::string& mGroup) { Internal::endLoGroup(mGroup); }
+
 		namespace Internal
 		{
-			struct ScopeLogBenchmark
+			/// @brief RAII struct used for LOG_SCOPE_EXIT benchmarks.
+			struct LogScopeExit
 			{
-				inline ScopeLogBenchmark(std::string mTitle = "") { start(std::move(mTitle)); }
-				inline ~ScopeLogBenchmark() { endLo(); }
+				inline LogScopeExit(std::string mTitle = "") { start(std::move(mTitle)); }
+				inline ~LogScopeExit() { endLo(); }
+			};
+
+			/// @brief RAII struct used for RUN_GROUP_SCOPE_EXIT benchmarks.
+			struct RunGroupScopeExit
+			{
+				std::string group;
+				inline RunGroupScopeExit(std::string mGroup) : group{std::move(mGroup)} { resumeGroup(group); }
+				inline ~RunGroupScopeExit() { pauseGroup(group); }
 			};
 		}
 	}
 }
 
-/// @macro Instantiates a ScopeLogBenchmark temp-named object in the current scope.
+/// @macro Instantiates a `LogScopeExit` temp-named object in the current scope.
 /// @details The istantiated object will run a benchmark during its lifetime.
 /// Pass the desired benchmark title as a parameter.
-#define SSVU_BENCHMARK_SCOPELOGBENCHMARK(...) \
-	::ssvu::Benchmark::Internal::ScopeLogBenchmark SSVPP_CAT(__scopeLogBenchmark, __LINE__){__VA_ARGS__}
+#define SSVU_BENCHMARK_LOG_SCOPE_EXIT(...) \
+	::ssvu::Benchmark::Internal::LogScopeExit SSVPP_CAT(__logScopeExit, __LINE__){__VA_ARGS__}
+
+/// @macro Instantiates a `RunGroupScopeExit` temp-named object in the current scope.
+/// @details The istantiated object will resume and pause a group benchmark during its lifetime.
+/// Pass the desired benchmark group as a parameter.
+#define SSVU_BENCHMARK_RUN_GROUP_SCOPE_EXIT(...) \
+	::ssvu::Benchmark::Internal::RunGroupScopeExit SSVPP_CAT(__logGroupScopeExit, __LINE__){__VA_ARGS__}
 
 #endif
-
-// TODO: consider renaming scopelogbenchmark?
-// TODO: grouped benchmarks (like separate code segments, accumulate the time, then display at the end)
-// TODO: indentation options, display options (check map example

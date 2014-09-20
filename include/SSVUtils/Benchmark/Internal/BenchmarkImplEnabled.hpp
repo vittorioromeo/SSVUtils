@@ -11,43 +11,73 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			using Stack = std::vector<Data>;
+			/// @brief Returns a reference to the static benchmark stack.
+			inline auto& getStack() noexcept { static std::vector<Data> result; return result; }
 
-			inline auto& getStack() noexcept { static Stack result; return result; }
+			/// @brief Returns a reference to a statitc `bool` used to keep track if there was more than one benchmark on the stack.
+			inline auto& hadNested() noexcept { static bool result{false}; return result; }
 
-			inline Data& getLastData()
-			{
-				SSVU_ASSERT(!getStack().empty());
-				return getStack().back();
-			}
+			/// @brief Returns a reference to the top of the stack. Assumes that the stack is not empty.
+			inline auto& getLastDataRef() { SSVU_ASSERT(!getStack().empty()); return getStack().back(); }
 
+			/// @brief Creates and pushes a new benchmark on the stack. If it's nested, sets `hasNested()` to true.
 			inline void start(std::string mTitle)
 			{
 				getStack().emplace_back(HRClock::now(), std::move(mTitle));
+				if(getStack().size() > 1) hadNested() = true;
 			}
 
-			inline Data getEndData()
+			/// @brief Pops and returns the top of the stack.
+			inline auto getEndData()
 			{
-				auto last(getLastData());
+				// Makes a copy and pops from the stack
+				auto result(getLastDataRef());
 				getStack().pop_back();
-				return last;
+				return result;
 			}
 
-			inline auto getEndDuration()
-			{
-				return std::chrono::duration_cast<Duration>(HRClock::now() - getEndData().tp);
-			}
-
-			inline auto getEndString()
-			{
-				return toStr(getEndDuration().count()) + " ms";
-			}
-
+			/// @brief Pops the top of the stack. Logs the benchmark on `ssvu::lo()`.
+			/// @details Automatically adds a newline between "groups" of nested benchmarks.
 			inline void endLo()
 			{
-				const auto& last(getLastData());
-				std::string logTitle{"Benchmark #" + toStr(getStack().size()) + " - <" + last.name + ">"};
-				lo(logTitle) << getEndString() << std::endl;
+				const auto& last(getEndData());
+
+				std::string logTitle{"Benchmark #"};
+
+				// Add 4 dashes for every level of nesting the benchmark has.
+				if(getStack().size() > 0)
+				{
+					for(auto i(0u); i < getStack().size(); ++i) logTitle += "----";
+					logTitle += "> ";
+				}
+				else logTitle += "^ ";
+
+				lo(logTitle + last.name) << last.getString() << "\n";
+
+				// If the benchmark was nested, add a newline
+				if(getStack().empty() && hadNested())
+				{
+					hadNested() = false;
+					lo() << "\n";
+				}
+
+				lo().flush();
+			}
+
+			/// @brief Returns a reference to the static benchmark group map.
+			inline auto& getGroupMap() noexcept { static std::map<std::string, DataGroup> result; return result; }
+
+			// Implementations of the benchmark group functions.
+			inline void resetGroup(const std::string& mGroup) { getGroupMap()[mGroup].reset(); }
+			inline void resumeGroup(const std::string& mGroup) { getGroupMap()[mGroup].start(); }
+			inline void pauseGroup(const std::string& mGroup) { getGroupMap()[mGroup].pause(); }
+			inline void endLoGroup(const std::string& mGroup)
+			{
+				std::string logTitle{"BenchmarkGroup #"};
+				lo(logTitle + mGroup) << getGroupMap()[mGroup].getString() << "\n";
+				lo().flush();
+
+				getGroupMap()[mGroup].reset();
 			}
 		}
 	}

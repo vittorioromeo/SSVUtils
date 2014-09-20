@@ -11,11 +11,13 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			inline void start(std::string)		{ }
-			inline auto getEndData()			{ return Internal::Data{}; }
-			inline auto getEndDuration()		{ return Internal::Duration{0}; }
-			inline std::string getEndString()	{ return ""; }
-			inline void endLo()					{ }
+			inline void start(std::string)				{ }
+			inline auto getEndData()					{ return Internal::Data{}; }
+			inline void endLo()							{ }
+			inline void resetGroup(const std::string&)	{ }
+			inline void resumeGroup(const std::string&)	{ }
+			inline void pauseGroup(const std::string&)	{ }
+			inline void endLoGroup(const std::string&)	{ }
 		}
 	}
 }
