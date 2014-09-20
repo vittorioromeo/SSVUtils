@@ -50,6 +50,25 @@ namespace ssvu
 		return std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate);
 	}
 
+	/// @brief Wraps `std::lower_bound`.
+	/// @param mContainer Reference to the container.
+	/// @param mValue Const reference to the value.
+	/// @return Returns iterator pointing to the first element not less than `mValue`.
+	template<typename T, typename TV> inline auto lowerBound(T& mContainer, const TV& mValue)
+	{
+		return std::lower_bound(std::begin(mContainer), std::end(mContainer), mValue);
+	}
+
+	/// @brief Wraps `std::lower_bound`.
+	/// @param mContainer Reference to the container.
+	/// @param mValue Const reference to the value.
+	/// @param mComparer Comparison object.
+	/// @return Returns iterator pointing to the first element not less than `mValue`.
+	template<typename T, typename TV, typename TC> inline auto lowerBound(T& mContainer, const TV& mValue, TC mComparer)
+	{
+		return std::lower_bound(std::begin(mContainer), std::end(mContainer), mValue, mComparer);
+	}
+
 	/// @brief Sorts a container. (no predicate)
 	/// @param mContainer Reference to the container.
 	template<typename T> inline void sort(T& mContainer) { std::sort(std::begin(mContainer), std::end(mContainer)); }
@@ -175,21 +194,21 @@ namespace ssvu
 	/// @param mContainer Copy of the container. (original won't be modified)
 	/// @param mPredicate Predicate to use.
 	/// @return Returns a copy of the container, trimmed.
-	template<typename T, typename TP> inline T getTrimmedL(T mContainer, const TP& mPredicate) { trimL(mContainer, mPredicate); return mContainer; }
+	template<typename T, typename TP> inline T getTrimL(T mContainer, const TP& mPredicate) { trimL(mContainer, mPredicate); return mContainer; }
 
 	/// @brief Gets a copy of the container with items matching a certain predicate trimmed from the right.
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
 	/// @param mContainer Copy of the container. (original won't be modified)
 	/// @param mPredicate Predicate to use.
 	/// @return Returns a copy of the container, trimmed.
-	template<typename T, typename TP> inline T getTrimmedR(T mContainer, const TP& mPredicate) { trimR(mContainer, mPredicate); return mContainer; }
+	template<typename T, typename TP> inline T getTrimR(T mContainer, const TP& mPredicate) { trimR(mContainer, mPredicate); return mContainer; }
 
 	/// @brief Gets a copy of the container with items matching a certain predicate trimmed both from the left and the right.
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
 	/// @param mContainer Copy of the container. (original won't be modified)
 	/// @param mPredicate Predicate to use.
 	/// @return Returns a copy of the container, trimmed.
-	template<typename T, typename TP> inline T getTrimmedLR(T mContainer, const TP& mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
+	template<typename T, typename TP> inline T getTrimLR(T mContainer, const TP& mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
 
 	namespace Internal
 	{
