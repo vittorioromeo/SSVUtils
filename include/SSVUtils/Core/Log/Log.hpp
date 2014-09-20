@@ -13,6 +13,12 @@ namespace ssvu
 	{
 		using CoutType = std::basic_ostream<char, std::char_traits<char>>;
 		using StdEndLine = CoutType&(CoutType&);
+
+		/// @brief Returns a reference to the static `std::ostringstream` log stream.
+		inline auto& getLogStream() noexcept { static std::ostringstream logStream; return logStream; }
+
+		/// @brief Returns a reference to the static suppressed `bool` value.
+		inline auto& getLogSuppressed() noexcept { static bool logSuppressed{false}; return logSuppressed; }
 	}
 }
 
@@ -41,6 +47,10 @@ namespace ssvu
 	/// @param mOffset Length offset of the ruler.
 	/// @param mChar Character used to create the ruler.
 	inline std::string hr(int mOffset, char mChar = '_') { return Internal::hr(mOffset, mChar); }
+
+	/// @brief Starts or stops suppressing the log functionality.
+	/// @details While the log is being suppressed, no output will be given to either `std::cout` or to the file log stream.
+	inline void setLogSuppressed(bool mLogSuppressed) noexcept { Internal::getLogSuppressed() = mLogSuppressed; }
 }
 
 #endif

@@ -9,12 +9,10 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		inline const std::string& getUniqueColor(const std::string&)
+		inline const auto& getUniqueColor(const std::string&)
 		{
 			return Console::setColorFG(Console::Color::Default);
 		}
-
-		inline std::ostringstream& getLogStream() noexcept { static std::ostringstream logStream; return logStream; }
 
 		struct LOut
 		{

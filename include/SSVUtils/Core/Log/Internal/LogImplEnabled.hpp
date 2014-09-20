@@ -18,8 +18,6 @@ namespace ssvu
 			return Console::setColorFG(map[mStr]);
 		}
 
-		inline auto& getLogStream() noexcept { static std::ostringstream logStream; return logStream; }
-
 		struct LOut
 		{
 			std::string title;
@@ -32,19 +30,22 @@ namespace ssvu
 
 			constexpr std::size_t leftW{38};
 
-			if(mLOut.title != "")
+			if(!getLogSuppressed())
 			{
-				const auto& tStr("[" + mLOut.title + "] ");
-				std::cout << getUniqueColor(mLOut.title) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(leftW) << tStr;
-				getLogStream() << std::left << std::setw(leftW) << tStr;
-				mLOut.title = "";
+				if(mLOut.title != "")
+				{
+					const auto& tStr("[" + mLOut.title + "] ");
+					std::cout << getUniqueColor(mLOut.title) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(leftW) << tStr;
+					getLogStream() << std::left << std::setw(leftW) << tStr;
+					mLOut.title = "";
+				}
+
+				std::cout << Console::resetFmt();
+				stringify<true>(std::cout, mValue);
+				std::cout << Console::resetFmt();
+
+				stringify<false>(getLogStream(), mValue);
 			}
-
-			std::cout << Console::resetFmt();
-			stringify<true>(std::cout, mValue);
-			std::cout << Console::resetFmt();
-
-			stringify<false>(getLogStream(), mValue);
 
 			return mLOut;
 		}
@@ -60,7 +61,7 @@ namespace ssvu
 
 		template<typename T> inline LOut& lo(const T& mTitle)
 		{
-			lo().title = toStr(mTitle);
+			if(!getLogSuppressed()) lo().title = toStr(mTitle);
 			return lo();
 		}
 
