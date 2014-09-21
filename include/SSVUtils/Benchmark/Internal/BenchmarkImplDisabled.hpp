@@ -14,10 +14,10 @@ namespace ssvu
 			inline void start(std::string)				{ }
 			inline auto getEndData()					{ return Internal::Data{}; }
 			inline void endLo()							{ }
-			inline void resetGroup(const std::string&)	{ }
-			inline void resumeGroup(const std::string&)	{ }
-			inline void pauseGroup(const std::string&)	{ }
-			inline void endLoGroup(const std::string&)	{ }
+			inline void groupReset(const std::string&)	{ }
+			inline void groupResume(const std::string&)	{ }
+			inline void groupPause(const std::string&)	{ }
+			inline void groupEndLo(const std::string&)	{ }
 		}
 	}
 }

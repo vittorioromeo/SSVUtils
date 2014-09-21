@@ -68,10 +68,10 @@ namespace ssvu
 			inline auto& getGroupMap() noexcept { static std::map<std::string, DataGroup> result; return result; }
 
 			// Implementations of the benchmark group functions.
-			inline void resetGroup(const std::string& mGroup) { getGroupMap()[mGroup].reset(); }
-			inline void resumeGroup(const std::string& mGroup) { getGroupMap()[mGroup].start(); }
-			inline void pauseGroup(const std::string& mGroup) { getGroupMap()[mGroup].pause(); }
-			inline void endLoGroup(const std::string& mGroup)
+			inline void groupReset(const std::string& mGroup) { getGroupMap()[mGroup].reset(); }
+			inline void groupResume(const std::string& mGroup) { getGroupMap()[mGroup].start(); }
+			inline void groupPause(const std::string& mGroup) { getGroupMap()[mGroup].pause(); }
+			inline void groupEndLo(const std::string& mGroup)
 			{
 				std::string logTitle{"BenchmarkGroup #"};
 				lo(logTitle + mGroup) << getGroupMap()[mGroup].getString() << "\n";

@@ -77,16 +77,16 @@ namespace ssvu
 		inline void endLo() { Internal::endLo(); }
 
 		/// @brief Resets the accumulated time of the `mGroup` benchmark group.
-		inline void resetGroup(const std::string& mGroup) { Internal::resetGroup(mGroup); }
+		inline void groupReset(const std::string& mGroup) { Internal::groupReset(mGroup); }
 
 		/// @brief Resumes accumulating time in the `mGroup` benchmark group.
-		inline void resumeGroup(const std::string& mGroup) { Internal::resumeGroup(mGroup); }
+		inline void groupResume(const std::string& mGroup) { Internal::groupResume(mGroup); }
 
 		/// @brief Pauses accumulating time in the `mGroup` benchmark group.
-		inline void pauseGroup(const std::string& mGroup) { Internal::pauseGroup(mGroup); }
+		inline void groupPause(const std::string& mGroup) { Internal::groupPause(mGroup); }
 
 		/// @brief Stops and logs on `ssvu::lo()` the accumulated time of the `mGroup` benchmark group.
-		inline void endLoGroup(const std::string& mGroup) { Internal::endLoGroup(mGroup); }
+		inline void groupEndLo(const std::string& mGroup) { Internal::groupEndLo(mGroup); }
 
 		namespace Internal
 		{
@@ -101,8 +101,8 @@ namespace ssvu
 			struct RunGroupScopeExit
 			{
 				std::string group;
-				inline RunGroupScopeExit(std::string mGroup) : group{std::move(mGroup)} { resumeGroup(group); }
-				inline ~RunGroupScopeExit() { pauseGroup(group); }
+				inline RunGroupScopeExit(std::string mGroup) : group{std::move(mGroup)} { groupResume(group); }
+				inline ~RunGroupScopeExit() { groupPause(group); }
 			};
 		}
 	}
