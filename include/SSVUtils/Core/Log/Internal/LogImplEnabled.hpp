@@ -26,18 +26,18 @@ namespace ssvu
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
-			// TODO: make thread-safe!
+			// TODO: make thread-safe! (mutex?)
 
 			constexpr std::size_t leftW{38};
 
 			if(!getLogSuppressed())
 			{
-				if(mLOut.title != "")
+				if(!mLOut.title.empty())
 				{
-					const auto& tStr("[" + mLOut.title + "] ");
-					std::cout << getUniqueColor(mLOut.title) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(leftW) << tStr;
+					auto tStr("[" + mLOut.title + "] ");
+					std::cout << getUniqueColor(tStr) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(leftW) << tStr;
 					getLogStream() << std::left << std::setw(leftW) << tStr;
-					mLOut.title = "";
+					mLOut.title.clear();
 				}
 
 				std::cout << Console::resetFmt();
