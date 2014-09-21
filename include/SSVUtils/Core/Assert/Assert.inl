@@ -15,7 +15,7 @@ namespace ssvu
 	{
 		inline void assertImpl(bool mExpression, const std::string& mMsg) noexcept
 		{
-			if(mExpression) return;
+			if(SSVU_LIKELY(mExpression)) return;
 
 			// Data must be cached because other assertions may be tested during logging
 			auto cachedData(getAssertState());

@@ -40,9 +40,9 @@
 // "Core/Assert/Assert" comes next, as many other modules make heavy use of assertions.
 #include "SSVUtils/Core/Assert/Assert.hpp"
 
-// The "Core/Global/Common" module defines various typedefs and shortcut functions.
+// The "Core/Common/Common" module defines various typedefs and shortcut functions.
 // It also includes some commonly used STL header files and checks the current OS.
-#include "SSVUtils/Core/Global/Common.hpp"
+#include "SSVUtils/Core/Common/Common.hpp"
 
 // "Core/Utils/Utils" module has many utility functions that are used heavily throughout
 // the whole library.
