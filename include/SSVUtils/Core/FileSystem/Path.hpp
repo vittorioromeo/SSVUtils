@@ -29,10 +29,21 @@ namespace ssvu
 				{
 					if(!mustNormalize) return;
 					mustNormalize = false;
-					// TODO: string matcher
-					replaceAll(path, R"(\)", "/");
-					replaceAll(path, R"(\\)", "/");
-					replaceAll(path, "//", "/");
+
+					// Replace every '\' with '/'
+					for(auto& c : path) if(c == '\\') c = '/';
+
+					// Replace consecutive '/' with a single '/'
+					for(auto i(0u); i < path.size(); ++i)
+					{
+						if(path[i] != '/') continue;
+
+						auto j(i);
+						while(j < path.size() && path[j] == '/') ++j;
+
+						path.erase(i, j - i - 1);
+					}
+
 					if(!endsWith(path, "/") && exists<Type::Folder>()) path += "/";
 				}
 
@@ -45,9 +56,11 @@ namespace ssvu
 				inline const auto& getStr() const		{ normalize(); return path; }
 				inline auto getCStr() const noexcept	{ return getStr().c_str(); }
 
-				// TODO: docs, tests, &&
-				inline void set(const std::string& mStr) { path = mStr; mustNormalize = true; }
-				inline void append(const std::string& mStr) { path += mStr; mustNormalize = true; }
+				// Sink set and append methods to change the path
+				inline void set(const std::string& mStr)	{ path = mStr; mustNormalize = true; }
+				inline void set(std::string&& mStr)			{ path = std::move(mStr); mustNormalize = true; }
+				inline void append(const std::string& mStr)	{ path += mStr; mustNormalize = true; }
+				inline void append(std::string&& mStr)		{ path += std::move(mStr); mustNormalize = true; }
 
 				/// @brief Returns true if the path exists on the user's filesystem and respects the passed filter.
 				/// @tparam TType Existance type to check.
