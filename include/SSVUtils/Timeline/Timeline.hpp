@@ -25,8 +25,7 @@ namespace ssvu
 		template<typename> friend class Internal::GoImpl;
 
 		private:
-			// TODO: let user choose -v-
-			PolyFixedManager<Command, 50> commandManager;
+			PolyManager<Command> commandManager;
 			std::vector<Command*> commands;
 			Command* currentCommand{nullptr};
 			FT remainder{0.f};
@@ -100,5 +99,4 @@ namespace ssvu
 
 #endif
 
-// TODO: add more commands, move to SSVS?
 // TODO: store index instead of pointer for current command?

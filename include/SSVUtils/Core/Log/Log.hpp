@@ -11,7 +11,7 @@ namespace ssvu
 
 	namespace Internal
 	{
-		using CoutType = std::basic_ostream<char, std::char_traits<char>>;
+		using CoutType = decltype(std::cout);
 		using StdEndLine = CoutType&(CoutType&);
 
 		/// @brief Returns a reference to the static `std::ostringstream` log stream.
@@ -34,7 +34,7 @@ namespace ssvu
 	inline auto& getLogStream() noexcept { return Internal::getLogStream(); }
 
 	/// @brief Returns a reference to the "log stream" singleton. (no title)
-	inline auto& lo() noexcept { return Internal::getLOut(); }
+	inline auto& lo() noexcept { return Internal::lo(); }
 
 	/// @brief Returns a reference to the "log stream" singleton. (sets title)
 	/// @param mTitle Title of the next log message.

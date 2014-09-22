@@ -9,6 +9,7 @@ namespace ssvu
 {
 	namespace Internal
 	{
+		/// @brief Returns an unique color based of `mStr`'s hash.
 		inline const auto& getUniqueColor(const std::string& mStr)
 		{
 			static int lastColorIdx{2};
@@ -18,6 +19,7 @@ namespace ssvu
 			return Console::setColorFG(map[mStr]);
 		}
 
+		/// @brief Implementation of the "cout-like" `lo()` object type.
 		struct LOut
 		{
 			static constexpr std::size_t leftW{38};
@@ -27,18 +29,20 @@ namespace ssvu
 
 			inline void flush()
 			{
-				std::lock_guard<std::mutex> lock{mtx};
+				std::lock_guard<std::mutex> lg{mtx};
 
 				std::cout.flush();
 				getLogStream().flush();
 			}
 		};
 
-		inline LOut& getLOut() noexcept { static LOut loInstance; return loInstance; }
+		/// @brief Returns a reference to the statically allocated global `LOut` instance.
+		inline LOut& lo() noexcept { static LOut result; return result; }
 
+		/// @brief Interaction between the `lo()` object and a "stringificable" object.
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
-			std::lock_guard<std::mutex> lock{getLOut().mtx};
+			std::lock_guard<std::mutex> lg{lo().mtx};
 
 			if(!getLogSuppressed())
 			{
@@ -59,22 +63,23 @@ namespace ssvu
 
 			return mLOut;
 		}
+
+		/// @brief Interaction between the `lo()` object and a stream manipulator.
 		inline LOut& operator<<(LOut& mLOut, StdEndLine mManip)
 		{
-			std::lock_guard<std::mutex> lock{getLOut().mtx};
+			std::lock_guard<std::mutex> lg{lo().mtx};
 
 			mManip(std::cout);
 			mManip(getLogStream());
 			return mLOut;
 		}
 
-		inline LOut& lo() noexcept { return getLOut(); }
-
+		/// @brief Sets `lo()`'s current title and returns a reference to it.
 		template<typename T> inline LOut& lo(const T& mTitle)
 		{
 			if(!getLogSuppressed())
 			{
-				std::lock_guard<std::mutex> lock{getLOut().mtx};
+				std::lock_guard<std::mutex> lg{lo().mtx};
 
 				lo().title = toStr(mTitle);
 			}
@@ -82,13 +87,15 @@ namespace ssvu
 			return lo();
 		}
 
-		inline const char* hr() noexcept				{ static std::string str(Console::Info::getColumnCount(), '_'); return str.c_str(); }
-		inline std::string hr(int mOffset, char mChar)	{ return std::string(Console::Info::getColumnCount() + mOffset, mChar); }
+		/// @brief Statically allocated horizontal ruler implementation.
+		inline const char* hr() noexcept { static std::string str(Console::Info::getColumnCount(), '_'); return str.c_str(); }
+
+		/// @brief Dynamic horizontal ruler implementation.
+		inline std::string hr(int mOffset, char mChar) { return std::string(Console::Info::getColumnCount() + mOffset, mChar); }
 	}
 }
 
 #endif
 
-// TODO: docs, TEST mutexes
-// TODO: investigate non-working manipulators (example: setw)
+// TODO: investigate non-working manipulators (example: setw) (stackoverflow)
 // investigate possibility of counting characters printed in a certain line in order to create automatic-length hr()
