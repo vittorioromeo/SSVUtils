@@ -12,9 +12,9 @@ namespace ssvu
 		namespace Internal
 		{
 			template<Type TType> struct ExistsFilter;
-			template<> struct ExistsFilter<Type::All>		{ inline static bool get(const CStat& mFileStat) noexcept { return true; } };
-			template<> struct ExistsFilter<Type::File>		{ inline static bool get(const CStat& mFileStat) noexcept { return (mFileStat.st_mode & S_IFMT) == S_IFREG; } };
-			template<> struct ExistsFilter<Type::Folder>	{ inline static bool get(const CStat& mFileStat) noexcept { return (mFileStat.st_mode & S_IFMT) == S_IFDIR; } };
+			template<> struct ExistsFilter<Type::All>		{ inline static bool get(const CStat&) noexcept			{ return true; } };
+			template<> struct ExistsFilter<Type::File>		{ inline static bool get(const CStat& mStat) noexcept	{ return (mStat.st_mode & S_IFMT) == S_IFREG; } };
+			template<> struct ExistsFilter<Type::Folder>	{ inline static bool get(const CStat& mStat) noexcept	{ return (mStat.st_mode & S_IFMT) == S_IFDIR; } };
 		}
 
 		class Path

@@ -88,7 +88,7 @@ namespace ssvu
 			{
 				if(currentCommand == nullptr) return 0;
 				auto pos(idxOf(commands, currentCommand));
-				return pos < commands.size() ? pos : -1;
+				return pos < static_cast<decltype(pos)>(commands.size()) ? pos : -1;
 			}
 	};
 }
