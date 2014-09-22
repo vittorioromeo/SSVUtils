@@ -34,9 +34,21 @@ namespace ssvu
 				inline auto& getThisDerived() noexcept { return *reinterpret_cast<DerivedType*>(this); }
 
 			public:
+				/// @brief Creates a `T` instance and returns a `PtrType` to it.
 				template<typename T = TBase, typename... TArgs> inline auto create(TArgs&&... mArgs)
 				{
 					return getThisDerived().template createImpl<T>(fwd<TArgs>(mArgs)...);
+				}
+
+				/// @brief Creates a `T` instance and emplaces its `PtrType` back into `mContainer`. Returns a reference to the instance.
+				/// @param mContainer Container where the created `PtrType` will be emplaced back.
+				template<typename T = TBase, typename TContainer, typename... TArgs> inline T& getCreateEmplace(TContainer& mContainer, TArgs&&... mArgs)
+				{
+					auto uPtr(create<T>(fwd<TArgs>(mArgs)...));
+					auto result(reinterpret_cast<T*>(uPtr.get()));
+
+					mContainer.emplace_back(std::move(uPtr));
+					return *result;
 				}
 		};
 
@@ -50,8 +62,7 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline auto createImpl(TArgs&&... mArgs)
 			{
 				SSVU_ASSERT_STATIC(isSame<TBase, T>(), "MonoRecyclerImpl can only allocate objects of the same type");
-				auto result(this->storage.chunk.template create<T>(fwd<TArgs>(mArgs)...));
-				return PtrType{result, ChunkDeleterType{this->storage.chunk}};
+				return PtrType{this->storage.chunk.template create<T>(fwd<TArgs>(mArgs)...), ChunkDeleterType{this->storage.chunk}};
 			}
 		};
 
@@ -66,8 +77,7 @@ namespace ssvu
 			{
 				SSVU_ASSERT_STATIC(isSameOrBaseOf<TBase, T>(), "PolyRecyclerImpl can only allocate types that belong to the same hierarchy");
 				auto& chunk(this->storage.template getChunk<T>());
-				auto result(chunk.template create<T>(fwd<TArgs>(mArgs)...));
-				return PtrType{result, ChunkDeleterType{chunk}};
+				return PtrType{chunk.template create<T>(fwd<TArgs>(mArgs)...), ChunkDeleterType{chunk}};
 			}
 		};
 	}
