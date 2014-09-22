@@ -33,8 +33,6 @@
 // TODO:
 // * .inl and .cpp FILES and SSVU_INLINE macro
 // * Fix includes (old method was better)
-// * consider moving tests to their headers? (investigate) or separate them?
+// * Separate test groups
 // * investigate metaprogramming code generation
 // * test framework - write expected and actual value and more...
-// * c++14-ify other libs
-// * c++14 literals for seconds and strings

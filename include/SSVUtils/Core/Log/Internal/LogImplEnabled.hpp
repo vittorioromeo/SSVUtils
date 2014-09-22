@@ -97,5 +97,5 @@ namespace ssvu
 
 #endif
 
-// TODO: investigate non-working manipulators (example: setw) (stackoverflow)
+// TODO: investigate non-working manipulators (example: setw) (testManip.cpp)
 // investigate possibility of counting characters printed in a certain line in order to create automatic-length hr()

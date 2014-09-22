@@ -368,9 +368,9 @@ SSVUT_TEST(StringSplitTests)
 	auto sp2 = getSplit(s2, ',');
 	auto sp3 = getSplit(s3, "##");
 
-	auto sps1 = getSplit(s1, std::string{" "});
-	auto sps2 = getSplit(s2, std::string{","});
-	auto sps3 = getSplit(s3, std::string{"##"});
+	auto sps1 = getSplit(s1, " "s);
+	auto sps2 = getSplit(s2, ","s);
+	auto sps3 = getSplit(s3, "##"s);
 
 	auto spks1 = getSplit<Split::TrailingSeparator>(s1, ' ');
 	auto spks2 = getSplit<Split::TrailingSeparator>(s2, ',');
@@ -680,7 +680,7 @@ SSVUT_TEST(StringifierTests)
 	SSVUT_STRINGIFY_TEST(0.0);
 	SSVUT_STRINGIFY_TEST(&trash);
 	SSVUT_STRINGIFY_TEST("abc");
-	SSVUT_STRINGIFY_TEST(std::string{"abc"});
+	SSVUT_STRINGIFY_TEST("abc"s);
 	ssvu::stringify<true>(trash, testArray); ssvu::stringify<false>(trash, testArray);
 	SSVUT_STRINGIFY_TEST(__R(std::array<int, 3>{{1, 2, 3}}));
 	SSVUT_STRINGIFY_TEST(__R(std::vector<int>{1, 2, 3}));
