@@ -21,9 +21,9 @@ namespace ssvu
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T&) { return mLOut; }
 		inline LOut& operator<<(LOut& mLOut, StdEndLine) { return mLOut; }
-		inline LOut& getLOutInstance() noexcept { static LOut loInstance; return loInstance; }
+		inline LOut& getLOut() noexcept { static LOut loInstance; return loInstance; }
 
-		inline LOut& lo() noexcept { return Internal::getLOutInstance(); }
+		inline LOut& lo() noexcept { return Internal::getLOut(); }
 		template<typename T> inline LOut& lo(const T&) { return lo(); }
 
 		inline const char* hr() noexcept { return getEmptyString().c_str(); }

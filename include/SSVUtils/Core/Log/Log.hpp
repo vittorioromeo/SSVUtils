@@ -34,7 +34,7 @@ namespace ssvu
 	inline auto& getLogStream() noexcept { return Internal::getLogStream(); }
 
 	/// @brief Returns a reference to the "log stream" singleton. (no title)
-	inline auto& lo() noexcept { return Internal::getLOutInstance(); }
+	inline auto& lo() noexcept { return Internal::getLOut(); }
 
 	/// @brief Returns a reference to the "log stream" singleton. (sets title)
 	/// @param mTitle Title of the next log message.

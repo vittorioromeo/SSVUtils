@@ -20,23 +20,33 @@ namespace ssvu
 
 		struct LOut
 		{
+			static constexpr std::size_t leftW{38};
+
+			std::mutex mtx;
 			std::string title;
-			inline void flush() const { std::cout.flush(); getLogStream().flush(); }
+
+			inline void flush()
+			{
+				std::lock_guard<std::mutex> lock{mtx};
+
+				std::cout.flush();
+				getLogStream().flush();
+			}
 		};
+
+		inline LOut& getLOut() noexcept { static LOut loInstance; return loInstance; }
 
 		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
 		{
-			// TODO: make thread-safe! (mutex?)
-
-			constexpr std::size_t leftW{38};
+			std::lock_guard<std::mutex> lock{getLOut().mtx};
 
 			if(!getLogSuppressed())
 			{
 				if(!mLOut.title.empty())
 				{
 					auto tStr("[" + mLOut.title + "] ");
-					std::cout << getUniqueColor(tStr) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(leftW) << tStr;
-					getLogStream() << std::left << std::setw(leftW) << tStr;
+					std::cout << getUniqueColor(tStr) << Console::setStyle(Console::Style::Bold) << std::left << std::setw(LOut::leftW) << tStr;
+					getLogStream() << std::left << std::setw(LOut::leftW) << tStr;
 					mLOut.title.clear();
 				}
 
@@ -51,17 +61,24 @@ namespace ssvu
 		}
 		inline LOut& operator<<(LOut& mLOut, StdEndLine mManip)
 		{
-			mManip(std::cout); mManip(getLogStream());
+			std::lock_guard<std::mutex> lock{getLOut().mtx};
+
+			mManip(std::cout);
+			mManip(getLogStream());
 			return mLOut;
 		}
 
-		inline LOut& getLOutInstance() noexcept { static LOut loInstance; return loInstance; }
-
-		inline LOut& lo() noexcept { return getLOutInstance(); }
+		inline LOut& lo() noexcept { return getLOut(); }
 
 		template<typename T> inline LOut& lo(const T& mTitle)
 		{
-			if(!getLogSuppressed()) lo().title = toStr(mTitle);
+			if(!getLogSuppressed())
+			{
+				std::lock_guard<std::mutex> lock{getLOut().mtx};
+
+				lo().title = toStr(mTitle);
+			}
+
 			return lo();
 		}
 
@@ -72,5 +89,6 @@ namespace ssvu
 
 #endif
 
+// TODO: docs, TEST mutexes
 // TODO: investigate non-working manipulators (example: setw)
 // investigate possibility of counting characters printed in a certain line in order to create automatic-length hr()
