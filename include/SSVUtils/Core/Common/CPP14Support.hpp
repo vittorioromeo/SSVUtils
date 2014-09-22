@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_COMMON_CPP14SUPPORT
 #define SSVU_CORE_COMMON_CPP14SUPPORT
 
+using namespace std::literals;
+
 namespace std
 {
 	// C++14: will be in standard (should be?)
