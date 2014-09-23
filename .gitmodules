@@ -1,0 +1,3 @@
+[submodule "extlibs/SSVCMake"]
+	path = extlibs/SSVCMake
+	url = https://github.com/SuperV1234/SSVCMake.git
