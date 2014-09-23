@@ -1,6 +1,8 @@
 # SSVUtils
 
-C++11 multi-purpose utility library that only depends on the STL.
+C++14 multi-purpose utility library that only depends on the STL.
+
+*The code examples below are currently outdated.*
 
 ---
 
