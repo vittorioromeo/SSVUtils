@@ -6,6 +6,7 @@
 #define SSVU_CORE_STRING
 
 #include "SSVUtils/Core/String/Enums.hpp"
+#include "SSVUtils/Core/String/IgnoreManip.hpp"
 #include "SSVUtils/Core/String/Utils.hpp"
 #include "SSVUtils/Core/String/Trim.hpp"
 #include "SSVUtils/Core/String/Split.hpp"
