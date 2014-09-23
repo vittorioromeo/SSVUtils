@@ -5,8 +5,4 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/extlibs/SSVCMake/cmake/modules/;${CMA
 include(SSVCMake)
 
 SSVCMake_setDefaults()
-
-add_library(HEADER_ONLY_TARGET STATIC ${SRC_LIST})
-set_target_properties(HEADER_ONLY_TARGET PROPERTIES LINKER_LANGUAGE CXX)
-
-install(DIRECTORY ${INC_DIR} DESTINATION .)
+SSVCMake_setAndInstallHeaderOnly()
