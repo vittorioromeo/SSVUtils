@@ -37,10 +37,10 @@ namespace ssvu
 		};
 
 		/// @brief Returns a reference to the statically allocated global `LOut` instance.
-		inline LOut& lo() noexcept { static LOut result; return result; }
+		inline auto& lo() noexcept { static LOut result; return result; }
 
 		/// @brief Interaction between the `lo()` object and a "stringificable" object.
-		template<typename T> inline LOut& operator<<(LOut& mLOut, const T& mValue)
+		template<typename T> inline auto& operator<<(LOut& mLOut, const T& mValue)
 		{
 			std::lock_guard<std::mutex> lg{lo().mtx};
 
@@ -65,12 +65,19 @@ namespace ssvu
 		}
 
 		/// @brief Interaction between the `lo()` object and a stream manipulator.
-		inline LOut& operator<<(LOut& mLOut, StdEndLine mManip)
+		inline auto& operator<<(LOut& mLOut, StdEndLine mManip)
 		{
 			std::lock_guard<std::mutex> lg{lo().mtx};
 
 			mManip(std::cout);
 			mManip(getLogStream());
+			return mLOut;
+		}
+
+		/// @brief Interaction between the `lo()` object and a `IgnoreManip` object.
+		inline auto& operator<<(LOut& mLOut, const IgnoreManip& mIBM)
+		{
+			for(auto c : mIBM) std::cout.put(c);
 			return mLOut;
 		}
 
@@ -97,5 +104,4 @@ namespace ssvu
 
 #endif
 
-// TODO: investigate non-working manipulators (example: setw) (testManip.cpp)
-// investigate possibility of counting characters printed in a certain line in order to create automatic-length hr()
+// TODO: investigate possibility of counting characters printed in a certain line in order to create automatic-length hr()

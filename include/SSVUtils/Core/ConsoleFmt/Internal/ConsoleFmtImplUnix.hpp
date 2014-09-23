@@ -75,7 +75,7 @@ namespace ssvu
 			inline auto& getLastColorBG() noexcept	{ static Color result{Color::Default};	return result; }
 			inline const auto& getFmtStr() noexcept
 			{
-				static std::string result;
+				static IgnoreManip result;
 				result = {prefix + toStr(getStyleCode(getLastStyle())) + ";" + toStr(getColorFGCode(getLastColorFG())) + ";" + toStr(getColorBGCode(getLastColorBG())) + postfix};
 				return result;
 			}
