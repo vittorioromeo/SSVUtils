@@ -51,16 +51,16 @@ namespace ssvu
 				inline Path() = default;
 				inline Path(const char* mPath) : path{mPath} { }
 				inline Path(const std::string& mPath) : path{mPath} { }
-				inline Path(std::string&& mPath) : path{std::move(mPath)} { }
+				inline Path(std::string&& mPath) noexcept : path{std::move(mPath)} { }
 
 				inline const auto& getStr() const		{ normalize(); return path; }
 				inline auto getCStr() const noexcept	{ return getStr().c_str(); }
 
 				// Sink set and append methods to change the path
-				inline void set(const std::string& mStr)	{ path = mStr; mustNormalize = true; }
-				inline void set(std::string&& mStr)			{ path = std::move(mStr); mustNormalize = true; }
-				inline void append(const std::string& mStr)	{ path += mStr; mustNormalize = true; }
-				inline void append(std::string&& mStr)		{ path += std::move(mStr); mustNormalize = true; }
+				inline void set(const std::string& mStr)		{ path = mStr; mustNormalize = true; }
+				inline void set(std::string&& mStr) noexcept	{ path = std::move(mStr); mustNormalize = true; }
+				inline void append(const std::string& mStr)		{ path += mStr; mustNormalize = true; }
+				inline void append(std::string&& mStr)			{ path += std::move(mStr); mustNormalize = true; }
 
 				/// @brief Returns true if the path exists on the user's filesystem and respects the passed filter.
 				/// @tparam TType Existance type to check.
