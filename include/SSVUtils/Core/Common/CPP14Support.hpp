@@ -10,9 +10,11 @@ using namespace std::literals;
 namespace std
 {
 	// C++14: will be in standard (should be?)
+	template<typename T> inline auto cbegin(const T& mContainer) noexcept	{ return mContainer.cbegin(); }
 	template<typename T> inline auto rbegin(const T& mContainer) noexcept	{ return mContainer.rbegin(); }
 	template<typename T> inline auto rbegin(T& mContainer) noexcept 		{ return mContainer.rbegin(); }
 	template<typename T> inline auto crbegin(const T& mContainer) noexcept	{ return rbegin(mContainer); }
+	template<typename T> inline auto cend(const T& mContainer) noexcept 	{ return mContainer.cend(); }
 	template<typename T> inline auto rend(const T& mContainer) noexcept 	{ return mContainer.rend(); }
 	template<typename T> inline auto rend(T& mContainer) noexcept 			{ return mContainer.rend(); }
 	template<typename T> inline auto crend(const T& mContainer) noexcept 	{ return rend(mContainer); }
