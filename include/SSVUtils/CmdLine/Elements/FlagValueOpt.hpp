@@ -12,16 +12,16 @@ namespace ssvu
 		template<typename T> class FlagValueOpt final : public FlagValue<T>
 		{
 			private:
-				T defaultValue;
+				T valueDefault;
 				bool active{false};
 
 			public:
-				inline FlagValueOpt(std::string mShortName, std::string mLongName, const T& mDefaultValue) noexcept : FlagValue<T>{std::move(mShortName), std::move(mLongName)}, defaultValue{mDefaultValue} { }
+				inline FlagValueOpt(const std::string& mNameShort, const std::string& mNameLong, const T& mValueDefault) noexcept : FlagValue<T>{mNameShort, mNameLong}, valueDefault{mValueDefault} { }
 
-				inline void set(const std::string& mValue) override { FlagValue<T>::set(mValue); active = true; }
-				inline T get() const noexcept						{ return active ? FlagValue<T>::get() : defaultValue; }
+				inline void set(const std::string& mValue) override	{ FlagValue<T>::set(mValue); active = true; }
+				inline auto get() const noexcept					{ return active ? FlagValue<T>::get() : valueDefault; }
 
-				inline std::string getUsageStr() const override { return "[OPT " + FlagBase::getShortNameWithPrefix() + "=(...) || OPT " + FlagBase::getLongNameWithPrefix() + "=(...)]"; }
+				inline std::string getUsageStr() const override { return "[OPT " + FlagBase::getNameShort() + "=(...) || OPT " + FlagBase::getNameLong() + "=(...)]"; }
 		};
 	}
 }

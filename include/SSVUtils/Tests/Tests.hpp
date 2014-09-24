@@ -637,11 +637,11 @@ SSVUT_TEST(PreprocessorTests)
 }
 
 // NOTE: MEMFN_DETECTORs (and other macros) must be defined outside lambdas/function bodies
-SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker1, hello);
-SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker2, hello2);
-SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker3, nohello);
-SSVU_DEFINE_MEMFN_CALLER(SsvuTestMacroTestCallGoodbye1, goodbye1, int());
-SSVU_DEFINE_MEMFN_CALLER(SsvuTestMacroTestCallGoodbye2, goodbye2, int());
+SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker1, hello)
+SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker2, hello2)
+SSVU_DEFINE_MEMFN_DETECTOR(SsvuTestMacroTestChecker3, nohello)
+SSVU_DEFINE_MEMFN_CALLER(SsvuTestMacroTestCallGoodbye1, goodbye1, int())
+SSVU_DEFINE_MEMFN_CALLER(SsvuTestMacroTestCallGoodbye2, goodbye2, int())
 SSVUT_TEST(MacrosTests)
 {
 	SSVU_DEFINE_DUMMY_STRUCT(blah, test, abc);
@@ -746,8 +746,8 @@ SSVUT_TEST(BenchmarkTests)
 }
 
 SSVU_FATENUM_MGR(_ssvutTestMgr);
-SSVU_FATENUM_VALS(_ssvutTestMgr, _ssvutTestEnum, int, (A, 5), (B, 4), (C, -3));
-SSVU_FATENUM_DEFS(_ssvutTestMgr, _ssvutTestEnumColors, int, Red, Green, Blue);
+SSVU_FATENUM_VALS(_ssvutTestMgr, _ssvutTestEnum, int, (A, 5), (B, 4), (C, -3))
+SSVU_FATENUM_DEFS(_ssvutTestMgr, _ssvutTestEnumColors, int, Red, Green, Blue)
 SSVUT_TEST(FatEnumTests)
 {
 	SSVUT_EXPECT(int(_ssvutTestEnum::A) == 5);

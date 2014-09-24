@@ -15,8 +15,8 @@ namespace ssvu
 				T value;
 
 			public:
-				inline T get() const noexcept { return value; }
-				inline void set(const std::string& mValue) override { value = Parser<T>::parse(mValue); }
+				inline void set(const std::string& mValue) override	{ value = Parser<T>::parse(mValue); }
+				inline auto get() const								{ return value; }
 		};
 	}
 }

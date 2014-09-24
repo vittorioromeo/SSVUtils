@@ -15,12 +15,12 @@ namespace ssvu
 				T value;
 
 			public:
-				inline FlagValue(std::string mShortName, std::string mLongName) noexcept : FlagValueBase{std::move(mShortName), std::move(mLongName)} { }
+				inline FlagValue(const std::string& mNameShort, const std::string& mNameLong) noexcept : FlagValueBase{mNameShort, mNameLong} { }
 
 				inline void set(const std::string& mValue) override	{ value = Parser<T>::parse(mValue); }
-				inline T get() const noexcept						{ return value; }
+				inline auto get() const noexcept					{ return value; }
 
-				inline std::string getUsageStr() const override { return "[" + getShortNameWithPrefix() + "=(...) || " + getLongNameWithPrefix() + "=(...)]"; }
+				inline std::string getUsageStr() const override { return "[" + getNameShort() + "=(...) || " + getNameLong() + "=(...)]"; }
 		};
 	}
 }

@@ -17,14 +17,16 @@ namespace ssvu
 			public:
 				inline virtual ~ElementBase() { }
 
-				inline void setName(std::string mName)				{ name = std::move(mName); }
-				inline void setBriefDesc(std::string mBriefDesc)	{ briefDesc = std::move(mBriefDesc); }
-				inline void setDesc(std::string mDesc)				{ desc = std::move(mDesc); }
+				SSVU_DEFINE_SINK_SETTER_SIMPLE(setName, name)
+				SSVU_DEFINE_SINK_SETTER_SIMPLE(setBriefDesc, briefDesc)
+				SSVU_DEFINE_SINK_SETTER_SIMPLE(setDesc, desc)
 
 				inline const auto& getName() const noexcept			{ return name; }
 				inline const auto& getBriefDesc() const noexcept	{ return briefDesc; }
 				inline const auto& getDesc() const noexcept			{ return desc; }
-				inline virtual std::string getUsageStr() const		{ return ""; }
+
+				inline virtual std::string getUsageStr() const		{ return ""s; }
+
 				inline auto getHelpStr()
 				{
 					std::string result, usageStr{this->getUsageStr()};
@@ -38,10 +40,11 @@ namespace ssvu
 				}
 		};
 
-		struct ArgBase : public ElementBase
+		class ArgBase : public ElementBase
 		{
-			virtual void set(const std::string& mStr) = 0;
-			inline std::string getUsageStr() const override { return "(ARG " + getName() + ")"; }
+			public:
+				virtual void set(const std::string&) = 0;
+				inline std::string getUsageStr() const override { return "(ARG " + getName() + ")"; }
 		};
 
 		class ArgPackBase : public ElementBase
@@ -53,11 +56,12 @@ namespace ssvu
 				inline ArgPackBase() noexcept : min{0}, max{0} { }
 				inline ArgPackBase(std::size_t mMin, std::size_t mMax) noexcept : min{mMin}, max{mMax} { }
 
-				virtual void set(const std::vector<std::string>& mStrings) = 0;
+				virtual void set(const std::vector<std::string>&) = 0;
 
-				inline bool isInfinite() const noexcept { return min == 0 && max == 0; }
-				inline auto getMin() const noexcept { return min; }
-				inline auto getMax() const noexcept { return max; }
+				inline auto isInfinite() const noexcept	{ return min == 0 && max == 0; }
+				inline auto getMin() const noexcept		{ return min; }
+				inline auto getMax() const noexcept		{ return max; }
+
 				inline std::string getUsageStr() const override
 				{
 					return "(PACK " + getName() + " " + "[" + toStr(min) + "/" + (isInfinite() ? "..." : toStr(max)) + "])";
@@ -70,22 +74,21 @@ namespace ssvu
 		class FlagBase : public ElementBase
 		{
 			private:
-				std::string shortName, longName;
+				std::string nameShort, nameLong; // With prefix
 
 			public:
-				inline FlagBase(std::string mShortName, std::string mLongName) noexcept : shortName{std::move(mShortName)}, longName{std::move(mLongName)} { }
+				inline FlagBase(const std::string& mNameShort, const std::string& mNameLong) : nameShort{flagPrefixShort + mNameShort}, nameLong{flagPrefixLong + mNameLong} { }
 
-				inline const auto& getShortName() const noexcept				{ return shortName; }
-				inline const auto& getLongName() const noexcept					{ return longName; }
-				inline auto getShortNameWithPrefix() const noexcept				{ return std::string{flagPrefixShort + shortName}; }
-				inline auto getLongNameWithPrefix() const noexcept				{ return std::string{flagPrefixLong + longName}; }
-				inline bool hasName(const std::string& mName) const noexcept	{ return mName == getShortNameWithPrefix() || mName == getLongNameWithPrefix(); }
+				inline const auto& getNameShort() const noexcept				{ return nameShort; }
+				inline const auto& getNameLong() const noexcept					{ return nameLong; }
+				inline auto hasName(const std::string& mName) const noexcept	{ return mName == nameShort || mName == nameLong; }
 		};
 
-		struct FlagValueBase : public FlagBase
+		class FlagValueBase : public FlagBase
 		{
-			inline FlagValueBase(std::string mShortName, std::string mLongName) noexcept : FlagBase{std::move(mShortName), std::move(mLongName)} { }
-			virtual void set(const std::string& mStr) = 0;
+			public:
+				inline FlagValueBase(const std::string& mNameShort, const std::string& mNameLong) : FlagBase{mNameShort, mNameLong} { }
+				virtual void set(const std::string&) = 0;
 		};
 	}
 }

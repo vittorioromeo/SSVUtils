@@ -12,16 +12,18 @@ namespace ssvu
 		template<typename T> class ArgOpt final : public Arg<T>
 		{
 			private:
-				T defaultValue;
+				T valueDefault;
 				bool active{false};
 
 			public:
-				inline ArgOpt(T mDefaultValue) noexcept : defaultValue{std::move(mDefaultValue)} { }
+				SSVU_DEFINE_SINK_CTOR_SIMPLE_1(ArgOpt, valueDefault)
 
-				inline operator bool() const noexcept				{ return active; }
-				inline void set(const std::string& mValue) override { Arg<T>::set(mValue); active = true; }
-				inline T get() const								{ return active ? Arg<T>::get() : defaultValue; }
-				inline std::string getUsageStr() const override		{ return "(ARGOPT " + ElementBase::getName() + ")"; }
+				inline operator bool() const noexcept { return active; }
+
+				inline void set(const std::string& mValue) override	{ Arg<T>::set(mValue); active = true; }
+				inline auto get() const								{ return active ? Arg<T>::get() : valueDefault; }
+
+				inline std::string getUsageStr() const override { return "(ARGOPT " + ElementBase::getName() + ")"; }
 		};
 	}
 }

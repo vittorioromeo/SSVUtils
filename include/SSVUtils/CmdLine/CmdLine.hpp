@@ -6,6 +6,8 @@
 #define SSVU_CMDLINE
 
 #include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Delegate/Delegate.hpp"
+#include "SSVUtils/MemoryManager/MemoryManager.hpp"
 
 #include "SSVUtils/CmdLine/Parser.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases.hpp"

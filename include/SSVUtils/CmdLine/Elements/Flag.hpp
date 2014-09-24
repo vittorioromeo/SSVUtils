@@ -15,12 +15,12 @@ namespace ssvu
 				bool active{false};
 
 			public:
-				inline Flag(std::string mShortName, std::string mLongName) noexcept : FlagBase{std::move(mShortName), std::move(mLongName)} { }
+				inline Flag(const std::string& mNameShort, const std::string& mNameLong) noexcept : FlagBase{mNameShort, mNameLong} { }
 
 				inline auto& operator=(bool mActive) noexcept	{ active = mActive; return *this; }
 				inline operator bool() const noexcept			{ return active; }
 
-				inline std::string getUsageStr() const override { return "[" + getShortNameWithPrefix() + " || " + getLongNameWithPrefix() + "]"; }
+				inline std::string getUsageStr() const override { return "[" + getNameShort() + " || " + getNameLong() + "]"; }
 		};
 	}
 }

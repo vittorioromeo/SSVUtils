@@ -5,19 +5,10 @@
 #ifndef SSVU_CMDLINE_CMD
 #define SSVU_CMDLINE_CMD
 
-#include "SSVUtils/Delegate/Delegate.hpp"
-
 namespace ssvu
 {
 	namespace CmdLine
 	{
-		class Flag;
-		struct ArgBase;
-		class ArgPackBase;
-		template<typename T> class Arg;
-		template<typename T> class ArgOpt;
-		template<typename T> class ArgPack;
-
 		namespace Internal
 		{
 			// These functions exist only to avoid some code repetition below
@@ -31,7 +22,40 @@ namespace ssvu
 				for(auto i(0u); i < mC.size(); ++i) { mStart += mC[i]; if(i < mC.size() - 1) mStart += mSep; }
 				return mStart + mEnd;
 			}
+
+			// Static type id storage
+			inline auto getLastETId() noexcept { static std::size_t lastETId{0}; return lastETId++; }
+			template<typename T> struct ETIdInfo { static std::size_t id; };
+			template<typename T> std::size_t ETIdInfo<T>::id{getLastETId()};
+			template<typename T> inline auto getETId() noexcept
+			{
+				SSVU_ASSERT_STATIC(ssvu::isBaseOf<ElementBase, T>(), "`T` must derive from `ElementBase`");
+				return ETIdInfo<T>::id;
+			}
 		}
+
+		class ManagerElements
+		{
+			private:
+				static constexpr std::size_t maxTypes{15};
+				PolyFixedRecycler<ElementBase, maxTypes> recycler;
+				std::array<std::vector<ElementBase*>, maxTypes> groupedElements;
+
+				template<typename T> inline auto& getGroupVec() noexcept { return groupedElements[Internal::getETId<T>()]; }
+
+			public:
+				template<typename T, typename... TArgs> inline auto& create(TArgs&&... mArgs)
+				{
+					SSVU_ASSERT_STATIC(ssvu::isBaseOf<ElementBase, T>(), "`T` must derive from `ElementBase`");
+					auto& result(*recycler.create<T>(fwd<TArgs>(mArgs)...));
+					getGroupVec<T>().emplace_back(&result);
+					return result;
+				}
+
+				template<typename T> inline auto getCount() const noexcept		{ return getGroupVec<T>().size(); }
+				template<typename T> inline auto& getAll() noexcept				{ return getGroupVec<T>(); }
+				template<typename T> inline const auto& getAll() const noexcept	{ return getGroupVec<T>(); }
+		};
 
 		class Cmd
 		{
@@ -68,12 +92,12 @@ namespace ssvu
 				inline Cmd& operator()() { onAction(); return *this; }
 
 				template<typename T> inline auto& createArg()																				{ return ssvu::getEmplaceUPtr<Arg<T>>(args); }
-				template<typename T> inline auto& createArgOpt(const T& mDefaultValue)														{ return ssvu::getEmplaceUPtr<ArgOpt<T>>(argsOpt, mDefaultValue); }
+				template<typename T> inline auto& createArgOpt(const T& mValueDefault)														{ return ssvu::getEmplaceUPtr<ArgOpt<T>>(argsOpt, mValueDefault); }
 				template<typename T> inline auto& createArgPack(std::size_t mMin, std::size_t mMax)											{ return ssvu::getEmplaceUPtr<ArgPack<T>>(argPacks, mMin, mMax); }
 				template<typename T> inline auto& createInfiniteArgPack()																	{ return ssvu::getEmplaceUPtr<ArgPack<T>>(argPacks); }
-				inline Flag& createFlag(std::string mShortName, std::string mLongName)														{ return ssvu::getEmplaceUPtr<Flag>(flags, std::move(mShortName), std::move(mLongName)); }
-				template<typename T> inline auto& createFlagValue(std::string mShortName, std::string mLongName)							{ return ssvu::getEmplaceUPtr<FlagValue<T>>(flagValues, std::move(mShortName), std::move(mLongName)); }
-				template<typename T> inline auto& createFlagValueOpt(std::string mShortName, std::string mLongName, const T& mDefaultValue)	{ return ssvu::getEmplaceUPtr<FlagValueOpt<T>>(flagValuesOpt, std::move(mShortName), std::move(mLongName), mDefaultValue); }
+				inline Flag& createFlag(std::string mNameShort, std::string mNameLong)														{ return ssvu::getEmplaceUPtr<Flag>(flags, std::move(mNameShort), std::move(mNameLong)); }
+				template<typename T> inline auto& createFlagValue(std::string mNameShort, std::string mNameLong)							{ return ssvu::getEmplaceUPtr<FlagValue<T>>(flagValues, std::move(mNameShort), std::move(mNameLong)); }
+				template<typename T> inline auto& createFlagValueOpt(std::string mNameShort, std::string mNameLong, const T& mValueDefault)	{ return ssvu::getEmplaceUPtr<FlagValueOpt<T>>(flagValuesOpt, std::move(mNameShort), std::move(mNameLong), mValueDefault); }
 
 				inline bool isFlagActive(std::size_t mIdx) const	{ return *flags[mIdx]; }
 				inline void activateFlag(const std::string& mName)	{ findFlag(mName) = true; }
