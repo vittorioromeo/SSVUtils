@@ -160,12 +160,12 @@ namespace ssvu
 	/// @brief Counts the number of occurences of a certain char in a std::string.
 	/// @param mStr String to work with.
 	/// @param mChar Character to look for.
-	/// @return Returns an unsigned int which is the count of the character's occurrences.
+	/// @return Returns the count of the character's occurrences.
 	inline auto getCharCount(const std::string& mStr, const char& mChar) { return std::count(std::begin(mStr), std::end(mStr), mChar); }
 
-	/// @brief Counts the number of newlines in a std::string.
+	/// @brief Counts the number of newlines in a std::string. Newlines are searched for as '\n'.
 	/// @param mStr String to work with.
-	/// @return Returns an unsigned int which is the count of newlines.
+	/// @return Returns the count of newlines.
 	inline auto getNewLinesCount(const std::string& mStr) { return getCharCount(mStr, '\n'); }
 
 	/// @brief Calculates the levenshtein distance between two strings.
