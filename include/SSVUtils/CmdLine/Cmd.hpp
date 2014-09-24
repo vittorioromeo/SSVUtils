@@ -88,7 +88,7 @@ namespace ssvu
 						if(flag.hasName(mName)) return flag;
 					}
 
-					throw std::runtime_error("No flag with name '" + mName + "' in command " + getNamesStr());
+					throw Exception::createFlagNotFound(mName, getNamesStr());
 				}
 
 				template<EType TET> inline void setElementValue(std::size_t mIdx, const std::string& mValue) { mgr.getAt<TET>(mIdx).set(mValue); }

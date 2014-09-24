@@ -13,6 +13,8 @@
 #include "SSVUtils/CmdLine/Internal/EType.hpp"
 #include "SSVUtils/CmdLine/Elements/Elements.hpp"
 #include "SSVUtils/CmdLine/Internal/ETypeBaseInfo.hpp"
+
+#include "SSVUtils/CmdLine/Internal/Exceptions.hpp"
 #include "SSVUtils/CmdLine/Cmd.hpp"
 #include "SSVUtils/CmdLine/Ctx.hpp"
 #include "SSVUtils/CmdLine/Ctx.inl"

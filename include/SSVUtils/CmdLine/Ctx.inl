@@ -22,9 +22,11 @@ namespace ssvu
 					if(dist < closestMatch.first) closestMatch = {dist, n};
 				}
 
-			throw std::runtime_error("No command with name <" + mName + ">\nDid you mean <" + closestMatch.second + ">?");
+			throw Exception::createCmdNotFound(mName, closestMatch.second);
 		}
+
 		inline Cmd& Ctx::create(const std::initializer_list<std::string>& mNames) { return getEmplaceUPtr<Cmd>(cmds, mNames); }
+
 		inline void Ctx::process(const std::vector<std::string>& mArgs)
 		{
 			std::deque<std::string> entered{std::begin(mArgs), std::end(mArgs)};
@@ -51,7 +53,7 @@ namespace ssvu
 					if(equalPos == std::string::npos)
 					{
 						cFlags.emplace_back(s);
-						if(cFlags.size() > cmd.getCount<EType::Flag>()) throw std::runtime_error("Incorrect number of flags" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::Flag>()) + "'");
+						if(cFlags.size() > cmd.getCount<EType::Flag>()) throw Exception::createSignatureMismatch(getForCmdPhrase(cmd), "flags", toStr(cmd.getCount<EType::Flag>()));
 					}
 					else
 					{
@@ -61,7 +63,7 @@ namespace ssvu
 						if(anyOf(cmd.getAll<EType::FlagValueOpt>(), [&fName](auto mFVO){ return reinterpret_cast<Internal::BaseFlag*>(mFVO)->hasName(fName); }))
 						{
 							cFlagValuesOpt.emplace_back(s);
-							if(cFlagValuesOpt.size() > cmd.getCount<EType::FlagValueOpt>()) throw std::runtime_error("Incorrect number of flagvaluesopt" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::FlagValueOpt>()) + "'");
+							if(cFlagValuesOpt.size() > cmd.getCount<EType::FlagValueOpt>()) throw Exception::createSignatureMismatch(getForCmdPhrase(cmd), "optional flag values", toStr(cmd.getCount<EType::FlagValueOpt>()));
 
 							cFlagValuesOptValues.emplace_back(fValue);
 						}
@@ -75,7 +77,7 @@ namespace ssvu
 				}
 			}
 
-			if(cFlagValues.size() != cmd.getCount<EType::FlagValue>()) throw std::runtime_error("Incorrect number of flag values" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::FlagValue>()) + "'");
+			if(cFlagValues.size() != cmd.getCount<EType::FlagValue>()) throw Exception::createSignatureMismatch(getForCmdPhrase(cmd), "required flag values", toStr(cmd.getCount<EType::FlagValue>()));
 
 			for(const auto& f : cFlags) eraseRemove(entered, f);
 			for(const auto& f : cFlagValues) eraseRemove(entered, f);
@@ -85,7 +87,8 @@ namespace ssvu
 			std::vector<std::string> cArgs;
 			for(auto i(cmd.getCount<EType::Arg>()); i > 0; --i)
 			{
-				if(entered.empty()) throw std::runtime_error("Incorrect number of args" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::Arg>()) + "'");
+				if(entered.empty()) throw Exception::createSignatureMismatch(getForCmdPhrase(cmd), "args", toStr(cmd.getCount<EType::Arg>()));
+
 				cArgs.emplace_back(entered.front());
 				entered.pop_front();
 			}
@@ -96,7 +99,7 @@ namespace ssvu
 			{
 				if(entered.empty()) break;
 				cArgsOpt.emplace_back(entered.front());
-				if(cArgsOpt.size() > cmd.getCount<EType::ArgOpt>()) throw std::runtime_error("Incorrect number of argsopt" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::ArgOpt>()) + "'");
+				if(cArgsOpt.size() > cmd.getCount<EType::ArgOpt>()) throw Exception::createSignatureMismatch(getForCmdPhrase(cmd), "optional args", toStr(cmd.getCount<EType::ArgOpt>()));
 				entered.pop_front();
 			}
 
@@ -108,12 +111,12 @@ namespace ssvu
 
 				if(argPack.isInfinite())
 				{
-					if(i != cmd.getCount<EType::ArgPack>() -1) throw std::runtime_error("Infinite argpacks must be last");
+					if(i != cmd.getCount<EType::ArgPack>() -1) throw Exception::createArgPackInfinitePositionError();
 					while(!entered.empty()) { toPack.emplace_back(entered.front()); entered.pop_front(); }
 				}
 				else
 				{
-					if(entered.size() < argPack.getMin()) throw std::runtime_error("Not enough args for finite argpack");
+					if(entered.size() < argPack.getMin()) throw Exception::createArgPackSignatureMismatch(argPack);
 
 					auto clampedCount(getClamped(entered.size(), 0u, argPack.getMax()));
 					for(auto iS(0u); iS < clampedCount; ++iS) { toPack.emplace_back(entered.front()); entered.pop_front(); }
@@ -123,7 +126,7 @@ namespace ssvu
 			}
 
 			// If there still stuff left, there are too many arguments!
-			if(!entered.empty()) throw std::runtime_error("Too many arguments!");
+			if(!entered.empty()) throw Exception::createParsingError();
 
 			for(auto i(0u); i < cArgs.size(); ++i) cmd.setElementValue<EType::Arg>(i, cArgs[i]);
 			for(auto i(0u); i < cArgsOpt.size(); ++i) cmd.setElementValue<EType::ArgOpt>(i, cArgsOpt[i]);
