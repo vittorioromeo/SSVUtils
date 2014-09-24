@@ -2,12 +2,12 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_COMMANDLINE_PARSER
-#define SSVU_COMMANDLINE_PARSER
+#ifndef SSVU_CMDLINE_PARSER
+#define SSVU_CMDLINE_PARSER
 
 namespace ssvu
 {
-	namespace CommandLine
+	namespace CmdLine
 	{
 		template<typename T> struct Parser;
 		template<> struct Parser<std::string>

@@ -2,12 +2,12 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_COMMANDLINE_ELEMENTS_ARGPACK
-#define SSVU_COMMANDLINE_ELEMENTS_ARGPACK
+#ifndef SSVU_CMDLINE_ELEMENTS_ARGPACK
+#define SSVU_CMDLINE_ELEMENTS_ARGPACK
 
 namespace ssvu
 {
-	namespace CommandLine
+	namespace CmdLine
 	{
 		template<typename T> class ArgPack final : public ArgPackBase
 		{

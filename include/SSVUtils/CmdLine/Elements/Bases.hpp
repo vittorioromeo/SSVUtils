@@ -2,12 +2,12 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_COMMANDLINE_ELEMENTS_BASES
-#define SSVU_COMMANDLINE_ELEMENTS_BASES
+#ifndef SSVU_CMDLINE_ELEMENTS_BASES
+#define SSVU_CMDLINE_ELEMENTS_BASES
 
 namespace ssvu
 {
-	namespace CommandLine
+	namespace CmdLine
 	{
 		class ElementBase
 		{
@@ -55,13 +55,37 @@ namespace ssvu
 
 				virtual void set(const std::vector<std::string>& mStrings) = 0;
 
-				inline bool isInfinite() const noexcept		{ return min == 0 && max == 0; }
-				inline auto getMin() const noexcept	{ return min; }
-				inline auto getMax() const noexcept	{ return max; }
+				inline bool isInfinite() const noexcept { return min == 0 && max == 0; }
+				inline auto getMin() const noexcept { return min; }
+				inline auto getMax() const noexcept { return max; }
 				inline std::string getUsageStr() const override
 				{
 					return "(PACK " + getName() + " " + "[" + toStr(min) + "/" + (isInfinite() ? "..." : toStr(max)) + "])";
 				}
+		};
+
+		constexpr const char* flagPrefixShort{"-"};
+		constexpr const char* flagPrefixLong{"--"};
+
+		class FlagBase : public ElementBase
+		{
+			private:
+				std::string shortName, longName;
+
+			public:
+				inline FlagBase(std::string mShortName, std::string mLongName) noexcept : shortName{std::move(mShortName)}, longName{std::move(mLongName)} { }
+
+				inline const auto& getShortName() const noexcept				{ return shortName; }
+				inline const auto& getLongName() const noexcept					{ return longName; }
+				inline auto getShortNameWithPrefix() const noexcept				{ return std::string{flagPrefixShort + shortName}; }
+				inline auto getLongNameWithPrefix() const noexcept				{ return std::string{flagPrefixLong + longName}; }
+				inline bool hasName(const std::string& mName) const noexcept	{ return mName == getShortNameWithPrefix() || mName == getLongNameWithPrefix(); }
+		};
+
+		struct FlagValueBase : public FlagBase
+		{
+			inline FlagValueBase(std::string mShortName, std::string mLongName) noexcept : FlagBase{std::move(mShortName), std::move(mLongName)} { }
+			virtual void set(const std::string& mStr) = 0;
 		};
 	}
 }
