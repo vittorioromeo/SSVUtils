@@ -17,7 +17,7 @@
 #include "SSVUtils/Timeline/TimelineManager.hpp"
 #include "SSVUtils/Encryption/Encryption.hpp"
 #include "SSVUtils/Bimap/Bimap.hpp"
-#include "SSVUtils/CommandLine/CommandLine.hpp"
+#include "SSVUtils/CmdLine/CmdLine.hpp"
 #include "SSVUtils/FatEnum/FatEnum.hpp"
 #include "SSVUtils/HandleVector/HandleVector.hpp"
 #include "SSVUtils/Easing/Easing.hpp"
