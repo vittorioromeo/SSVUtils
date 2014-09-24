@@ -17,7 +17,6 @@ namespace ssvu
 			{
 				inline static constexpr EType getEType() noexcept { return TET; }
 			};
-
 		}
 	}
 }

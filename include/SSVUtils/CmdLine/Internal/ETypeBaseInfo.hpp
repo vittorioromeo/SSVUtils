@@ -14,6 +14,7 @@ namespace ssvu
 		namespace Internal
 		{
 			template<EType TET> struct ETypeBaseInfo;
+
 			template<> struct ETypeBaseInfo<EType::Arg>				{ using Type = BaseArg; };
 			template<> struct ETypeBaseInfo<EType::ArgOpt>			{ using Type = BaseArg; };
 			template<> struct ETypeBaseInfo<EType::ArgPack>			{ using Type = BaseArgPack; };

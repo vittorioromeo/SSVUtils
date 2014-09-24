@@ -22,12 +22,13 @@ namespace ssvu
 
 				inline auto getForCmdPhrase(Cmd& mCmd) const noexcept
 				{
-					return mCmd.isMain() ? ""s : " for command "s + mCmd.getNamesStr();
+					return mCmd.isMainCmd() ? ""s : " for command "s + mCmd.getNamesStr();
 				}
 
 			public:
 				Cmd& findCmd(const std::string& mName) const;
 				Cmd& create(const std::initializer_list<std::string>& mNames);
+
 				void process(const std::vector<std::string>& mArgs);
 				inline void process(int mArgCount, char* mArgValues[])
 				{
@@ -35,6 +36,7 @@ namespace ssvu
 					for(int i{1}; i < mArgCount; ++i) args.emplace_back(mArgValues[i]);
 					process(args);
 				}
+
 				inline const auto& getCmds() const noexcept { return cmds; }
 				inline auto& getCmdMain() noexcept { return cmdMain; }
 		};

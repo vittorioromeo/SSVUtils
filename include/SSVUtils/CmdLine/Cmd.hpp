@@ -22,49 +22,49 @@ namespace ssvu
 				for(auto i(0u); i < mC.size(); ++i) { mStart += mC[i]; if(i < mC.size() - 1) mStart += mSep; }
 				return mStart + mEnd;
 			}
-		}
 
-		class ManagerElements
-		{
-			private:
-				static constexpr std::size_t maxTypes{50};
-				PolyFixedRecycler<Internal::BaseElement, maxTypes> recycler;
-				std::vector<decltype(recycler)::PtrType> elements;
-				std::array<std::vector<Internal::BaseElement*>, maxTypes> groupedElements;
+			class ManagerElements
+			{
+				private:
+					static constexpr std::size_t maxTypes{50};
+					PolyFixedRecycler<BaseElement, maxTypes> recycler;
+					std::vector<decltype(recycler)::PtrType> elements;
+					std::array<std::vector<BaseElement*>, maxTypes> groupedElements;
 
-				template<EType TET> inline auto& getGroupVec() noexcept				{ return groupedElements[static_cast<std::size_t>(TET)]; }
-				template<EType TET> inline const auto& getGroupVec() const noexcept	{ return groupedElements[static_cast<std::size_t>(TET)]; }
+					template<EType TET> inline auto& getGroupVec() noexcept				{ return groupedElements[static_cast<std::size_t>(TET)]; }
+					template<EType TET> inline const auto& getGroupVec() const noexcept	{ return groupedElements[static_cast<std::size_t>(TET)]; }
 
-			public:
-				template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs)
-				{
-					SSVU_ASSERT_STATIC(ssvu::isBaseOf<Internal::BaseElement, T>(), "`T` must derive from `BaseElement`");
-
-					auto& result(recycler.getCreateEmplace<T>(elements, fwd<TArgs>(mArgs)...));
-					getGroupVec<T::getEType()>().emplace_back(&result);
-					return result;
-				}
-
-				template<EType TET> inline auto getCount() const noexcept	{ return getGroupVec<TET>().size(); }
-				template<EType TET> inline auto isEmpty() const noexcept	{ return getCount<TET>() == 0; }
-
-				template<EType TET> inline auto& getAll() noexcept				{ return getGroupVec<TET>(); }
-				template<EType TET> inline const auto& getAll() const noexcept	{ return getGroupVec<TET>(); }
-
-				template<EType TET> inline auto& getAt(std::size_t mIdx) noexcept				{ return *reinterpret_cast<Internal::ETypeBase<TET>*>(getAll<TET>()[mIdx]); }
-				template<EType TET> inline const auto& getAt(std::size_t mIdx) const noexcept	{ return *reinterpret_cast<const Internal::ETypeBase<TET>*>(getAll<TET>()[mIdx]); }
-
-				/*
-				 * TODO: casting iterator
-				 *
-				template<typename T, typename TF> inline void forEach(TF mFunc)
-				{
-					for(auto p : getAll<T>())
+				public:
+					template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs)
 					{
-						mFunc(*reinterpret_cast<T*>(p));
+						SSVU_ASSERT_STATIC(ssvu::isBaseOf<BaseElement, T>(), "`T` must derive from `BaseElement`");
+
+						auto& result(recycler.getCreateEmplace<T>(elements, fwd<TArgs>(mArgs)...));
+						getGroupVec<T::getEType()>().emplace_back(&result);
+						return result;
 					}
-				}*/
-		};
+
+					template<EType TET> inline auto getCount() const noexcept	{ return getGroupVec<TET>().size(); }
+					template<EType TET> inline auto isEmpty() const noexcept	{ return getCount<TET>() == 0; }
+
+					template<EType TET> inline auto& getAll() noexcept				{ return getGroupVec<TET>(); }
+					template<EType TET> inline const auto& getAll() const noexcept	{ return getGroupVec<TET>(); }
+
+					template<EType TET> inline auto& getAt(std::size_t mIdx) noexcept				{ return *reinterpret_cast<ETypeBase<TET>*>(getAll<TET>()[mIdx]); }
+					template<EType TET> inline const auto& getAt(std::size_t mIdx) const noexcept	{ return *reinterpret_cast<const ETypeBase<TET>*>(getAll<TET>()[mIdx]); }
+
+					/*
+					 * TODO: casting iterator
+					 *
+					template<typename T, typename TF> inline void forEach(TF mFunc)
+					{
+						for(auto p : getAll<T>())
+						{
+							mFunc(*reinterpret_cast<T*>(p));
+						}
+					}*/
+			};
+		}
 
 		class Cmd
 		{
@@ -72,13 +72,13 @@ namespace ssvu
 
 			private:
 				std::vector<std::string> names;
-				ManagerElements mgr;
+				Internal::ManagerElements mgr;
 				Delegate<void()> onAction;
 				std::string desc;
-				bool main{false}; // Is this the main cmd?
+				bool mainCmd{false}; // Is this the main cmd?
 
 				inline Cmd() = default;
-				inline static Cmd createCmdMain() { Cmd result; result.main = true; return result; }
+				inline static Cmd createCmdMain() { Cmd result; result.mainCmd = true; return result; }
 
 				inline auto& findFlag(const std::string& mName)
 				{
@@ -101,10 +101,10 @@ namespace ssvu
 
 				template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return mgr.create<T>(fwd<TArgs>(mArgs)...); }
 
-				inline void activateFlag(const std::string& mName)	{ findFlag(mName) = true; }
+				inline void activateFlag(const std::string& mName) { findFlag(mName) = true; }
 
-				inline bool hasName(const std::string& mName) const		{ return contains(names, mName); }
-				inline bool isMain() const noexcept						{ return main; }
+				inline bool hasName(const std::string& mName) const	{ return contains(names, mName); }
+				inline bool isMainCmd() const noexcept				{ return mainCmd; }
 
 				inline const auto& getNames() const noexcept { return names; }
 
@@ -114,8 +114,9 @@ namespace ssvu
 				template<EType TET> inline auto& getAt(std::size_t mIdx) noexcept				{ return mgr.getAt<TET>(mIdx); }
 				template<EType TET> inline const auto& getAt(std::size_t mIdx) const noexcept	{ return mgr.getAt<TET>(mIdx); }
 
-				std::string getNamesStr() const { return Internal::buildCmdStr(names, "<", ">", " || "); }
-				template<EType TET> auto getStr() const { return Internal::buildCmdStr(getAll<TET>()); }
+				std::string getNamesStr() const			{ return Internal::buildCmdStr(names, "<", ">", " || "); }
+				template<EType TET> auto getStr() const	{ return Internal::buildCmdStr(getAll<TET>()); }
+
 				auto getHelpStr() const
 				{
 					std::string result;
