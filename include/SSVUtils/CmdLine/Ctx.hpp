@@ -9,8 +9,6 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		class Cmd;
-
 		class Ctx
 		{
 			private:
@@ -19,13 +17,12 @@ namespace ssvu
 
 				inline bool beginsAsFlag(const std::string& mStr) const noexcept
 				{
-					return beginsWith(mStr, flagPrefixShort) || beginsWith(mStr, flagPrefixLong);
+					return beginsWith(mStr, Internal::flagPrefixShort) || beginsWith(mStr, Internal::flagPrefixLong);
 				}
 
-				inline std::string getForCmdPhrase(Cmd& mCmd) const noexcept
+				inline auto getForCmdPhrase(Cmd& mCmd) const noexcept
 				{
-					if(!mCmd.isMain()) return " for command "s + mCmd.getNamesStr();
-					return ""s;
+					return mCmd.isMain() ? ""s : " for command "s + mCmd.getNamesStr();
 				}
 
 			public:

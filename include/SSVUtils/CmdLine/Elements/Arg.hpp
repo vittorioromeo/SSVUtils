@@ -9,15 +9,20 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		template<typename T> class Arg : public ArgBase
+		namespace Internal
 		{
-			protected:
-				T value;
+			template<typename T> class ArgImpl : public Internal::BaseArg
+			{
+				protected:
+					T value;
 
-			public:
-				inline void set(const std::string& mValue) override	{ value = Parser<T>::parse(mValue); }
-				inline auto get() const								{ return value; }
-		};
+				public:
+					inline void set(const std::string& mValue) override	{ value = Parser<T>::parse(mValue); }
+					inline auto get() const								{ return value; }
+			};
+		}
+
+		template<typename T> class Arg final : public Internal::ArgImpl<T>, public Internal::ETypeInfo<EType::Arg> { };
 	}
 }
 

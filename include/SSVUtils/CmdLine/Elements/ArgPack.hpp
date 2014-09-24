@@ -9,18 +9,18 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		template<typename T> class ArgPack final : public ArgPackBase
+		template<typename T> class ArgPack final : public Internal::BaseArgPack, public Internal::ETypeInfo<EType::ArgPack>
 		{
 			private:
 				std::vector<T> values;
 
 			public:
 				inline ArgPack() = default;
-				inline ArgPack(std::size_t mMin, std::size_t mMax) noexcept : ArgPackBase{mMin, mMax} { }
+				inline ArgPack(std::size_t mMin, std::size_t mMax) noexcept : BaseArgPack{mMin, mMax} { }
 
 				inline void set(const std::vector<std::string>& mValues) override
 				{
-					for(const auto& v : mValues) values.emplace_back(Parser<T>::parse(v));
+					for(const auto& v : mValues) values.emplace_back(Internal::Parser<T>::parse(v));
 				}
 
 				inline auto begin() noexcept		{ return values.begin(); }

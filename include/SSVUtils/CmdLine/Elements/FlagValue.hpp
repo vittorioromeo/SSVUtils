@@ -9,18 +9,28 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		template<typename T> class FlagValue : public FlagValueBase
+		namespace Internal
 		{
-			private:
-				T value;
+			template<typename T> class FlagValueImpl : public BaseFlagValue
+			{
+				private:
+					T value;
 
+				public:
+					inline FlagValueImpl(const std::string& mNameShort, const std::string& mNameLong) noexcept : BaseFlagValue{mNameShort, mNameLong} { }
+
+					inline void set(const std::string& mValue) override	{ value = Parser<T>::parse(mValue); }
+					inline auto get() const noexcept					{ return value; }
+
+					inline std::string getUsageStr() const override { return "[" + getNameShort() + "=(...) || " + getNameLong() + "=(...)]"; }
+			};
+		}
+
+		template<typename T> class FlagValue final : public Internal::FlagValueImpl<T>, public Internal::ETypeInfo<EType::FlagValue>
+		{
 			public:
-				inline FlagValue(const std::string& mNameShort, const std::string& mNameLong) noexcept : FlagValueBase{mNameShort, mNameLong} { }
-
-				inline void set(const std::string& mValue) override	{ value = Parser<T>::parse(mValue); }
-				inline auto get() const noexcept					{ return value; }
-
-				inline std::string getUsageStr() const override { return "[" + getNameShort() + "=(...) || " + getNameLong() + "=(...)]"; }
+				inline FlagValue(const std::string& mNameShort, const std::string& mNameLong) noexcept
+					: Internal::FlagValueImpl<T>{mNameShort, mNameLong} { }
 		};
 	}
 }

@@ -51,17 +51,17 @@ namespace ssvu
 					if(equalPos == std::string::npos)
 					{
 						cFlags.emplace_back(s);
-						if(cFlags.size() > cmd.getFlagCount()) throw std::runtime_error("Incorrect number of flags" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getFlagCount()) + "'");
+						if(cFlags.size() > cmd.getCount<EType::Flag>()) throw std::runtime_error("Incorrect number of flags" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::Flag>()) + "'");
 					}
 					else
 					{
 						auto fName(s.substr(0, equalPos));
 						auto fValue(s.substr(equalPos + 1, s.size() - equalPos));
 
-						if(anyOf(cmd.getFlagValuesOpt(), [&fName](const auto& mFVO){ return mFVO->hasName(fName); }))
+						if(anyOf(cmd.getAll<EType::FlagValueOpt>(), [&fName](auto mFVO){ return reinterpret_cast<Internal::BaseFlag*>(mFVO)->hasName(fName); }))
 						{
 							cFlagValuesOpt.emplace_back(s);
-							if(cFlagValuesOpt.size() > cmd.getFlagValueOptCount()) throw std::runtime_error("Incorrect number of flagvaluesopt" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getFlagValueOptCount()) + "'");
+							if(cFlagValuesOpt.size() > cmd.getCount<EType::FlagValueOpt>()) throw std::runtime_error("Incorrect number of flagvaluesopt" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::FlagValueOpt>()) + "'");
 
 							cFlagValuesOptValues.emplace_back(fValue);
 						}
@@ -75,7 +75,7 @@ namespace ssvu
 				}
 			}
 
-			if(cFlagValues.size() != cmd.getFlagValueCount()) throw std::runtime_error("Incorrect number of flag values" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getFlagValueCount()) + "'");
+			if(cFlagValues.size() != cmd.getCount<EType::FlagValue>()) throw std::runtime_error("Incorrect number of flag values" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::FlagValue>()) + "'");
 
 			for(const auto& f : cFlags) eraseRemove(entered, f);
 			for(const auto& f : cFlagValues) eraseRemove(entered, f);
@@ -83,32 +83,32 @@ namespace ssvu
 
 			// Find args, put them in cArgs
 			std::vector<std::string> cArgs;
-			for(auto i(cmd.getArgCount()); i > 0; --i)
+			for(auto i(cmd.getCount<EType::Arg>()); i > 0; --i)
 			{
-				if(entered.empty()) throw std::runtime_error("Incorrect number of args" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getArgCount()) + "'");
+				if(entered.empty()) throw std::runtime_error("Incorrect number of args" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::Arg>()) + "'");
 				cArgs.emplace_back(entered.front());
 				entered.pop_front();
 			}
 
 			// Remaining std::string in args must be optargs
 			std::vector<std::string> cArgsOpt;
-			for(auto i(cmd.getArgOptCount()); i > 0; --i)
+			for(auto i(cmd.getCount<EType::ArgOpt>()); i > 0; --i)
 			{
 				if(entered.empty()) break;
 				cArgsOpt.emplace_back(entered.front());
-				if(cArgsOpt.size() > cmd.getArgOptCount()) throw std::runtime_error("Incorrect number of argsopt" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getArgOptCount()) + "'");
+				if(cArgsOpt.size() > cmd.getCount<EType::ArgOpt>()) throw std::runtime_error("Incorrect number of argsopt" + getForCmdPhrase(cmd) + ", correct number is '" + toStr(cmd.getCount<EType::ArgOpt>()) + "'");
 				entered.pop_front();
 			}
 
 			// Check for argpacks
-			for(auto i(0u); i < cmd.getArgPackCount(); ++i)
+			for(auto i(0u); i < cmd.getCount<EType::ArgPack>(); ++i)
 			{
-				auto& argPack(*cmd.getArgPacks()[i]);
+				auto& argPack(cmd.getAt<EType::ArgPack>(i));
 				std::vector<std::string> toPack;
 
 				if(argPack.isInfinite())
 				{
-					if(i != cmd.getArgPackCount() -1) throw std::runtime_error("Infinite argpacks must be last");
+					if(i != cmd.getCount<EType::ArgPack>() -1) throw std::runtime_error("Infinite argpacks must be last");
 					while(!entered.empty()) { toPack.emplace_back(entered.front()); entered.pop_front(); }
 				}
 				else
@@ -125,11 +125,11 @@ namespace ssvu
 			// If there still stuff left, there are too many arguments!
 			if(!entered.empty()) throw std::runtime_error("Too many arguments!");
 
-			for(auto i(0u); i < cArgs.size(); ++i) cmd.setArgValue(i, cArgs[i]);
-			for(auto i(0u); i < cArgsOpt.size(); ++i) cmd.setArgOptValue(i, cArgsOpt[i]);
+			for(auto i(0u); i < cArgs.size(); ++i) cmd.setElementValue<EType::Arg>(i, cArgs[i]);
+			for(auto i(0u); i < cArgsOpt.size(); ++i) cmd.setElementValue<EType::ArgOpt>(i, cArgsOpt[i]);
 			for(const auto& f : cFlags) cmd.activateFlag(f);
-			for(auto i(0u); i < cFlagValuesValues.size(); ++i) cmd.setFlagValueValue(i, cFlagValuesValues[i]);
-			for(auto i(0u); i < cFlagValuesOptValues.size(); ++i) cmd.setFlagValueOptValue(i, cFlagValuesOptValues[i]);
+			for(auto i(0u); i < cFlagValuesValues.size(); ++i) cmd.setElementValue<EType::FlagValue>(i, cFlagValuesValues[i]);
+			for(auto i(0u); i < cFlagValuesOptValues.size(); ++i) cmd.setElementValue<EType::FlagValueOpt>(i, cFlagValuesOptValues[i]);
 
 			cmd();
 		}

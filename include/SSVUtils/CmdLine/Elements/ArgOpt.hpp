@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		template<typename T> class ArgOpt final : public Arg<T>
+		template<typename T> class ArgOpt final : public Internal::ArgImpl<T>, public Internal::ETypeInfo<EType::ArgOpt>
 		{
 			private:
 				T valueDefault;
@@ -20,10 +20,10 @@ namespace ssvu
 
 				inline operator bool() const noexcept { return active; }
 
-				inline void set(const std::string& mValue) override	{ Arg<T>::set(mValue); active = true; }
-				inline auto get() const								{ return active ? Arg<T>::get() : valueDefault; }
+				inline void set(const std::string& mValue) override	{ Internal::ArgImpl<T>::set(mValue); active = true; }
+				inline auto get() const								{ return active ? Internal::ArgImpl<T>::get() : valueDefault; }
 
-				inline std::string getUsageStr() const override { return "(ARGOPT " + ElementBase::getName() + ")"; }
+				inline std::string getUsageStr() const override { return "(ARGOPT " + Internal::BaseElement::getName() + ")"; }
 		};
 	}
 }

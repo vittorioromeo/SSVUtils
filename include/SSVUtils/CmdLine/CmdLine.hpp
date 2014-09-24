@@ -9,16 +9,15 @@
 #include "SSVUtils/Delegate/Delegate.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 
-#include "SSVUtils/CmdLine/Parser.hpp"
-#include "SSVUtils/CmdLine/Elements/Bases.hpp"
-#include "SSVUtils/CmdLine/Elements/Arg.hpp"
-#include "SSVUtils/CmdLine/Elements/ArgOpt.hpp"
-#include "SSVUtils/CmdLine/Elements/ArgPack.hpp"
-#include "SSVUtils/CmdLine/Elements/Flag.hpp"
-#include "SSVUtils/CmdLine/Elements/FlagValue.hpp"
-#include "SSVUtils/CmdLine/Elements/FlagValueOpt.hpp"
+#include "SSVUtils/CmdLine/Internal/Parser.hpp"
+#include "SSVUtils/CmdLine/Internal/EType.hpp"
+#include "SSVUtils/CmdLine/Elements/Elements.hpp"
+#include "SSVUtils/CmdLine/Internal/ETypeBaseInfo.hpp"
 #include "SSVUtils/CmdLine/Cmd.hpp"
 #include "SSVUtils/CmdLine/Ctx.hpp"
 #include "SSVUtils/CmdLine/Ctx.inl"
+
+/// @brief `ssvucl` is a namespace alias for `ssvu::CmdLine`.
+namespace ssvucl = ssvu::CmdLine;
 
 #endif
