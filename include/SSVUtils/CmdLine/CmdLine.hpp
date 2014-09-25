@@ -8,6 +8,7 @@
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Delegate/Delegate.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
+#include "SSVUtils/Range/Range.hpp"
 
 #include "SSVUtils/CmdLine/Internal/Parser.hpp"
 #include "SSVUtils/CmdLine/Internal/EType.hpp"

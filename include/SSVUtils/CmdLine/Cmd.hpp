@@ -52,17 +52,6 @@ namespace ssvu
 
 					template<EType TET> inline auto& getAt(std::size_t mIdx) noexcept				{ return *reinterpret_cast<ETypeBase<TET>*>(getAll<TET>()[mIdx]); }
 					template<EType TET> inline const auto& getAt(std::size_t mIdx) const noexcept	{ return *reinterpret_cast<const ETypeBase<TET>*>(getAll<TET>()[mIdx]); }
-
-					/*
-					 * TODO: casting iterator
-					 *
-					template<typename T, typename TF> inline void forEach(TF mFunc)
-					{
-						for(auto p : getAll<T>())
-						{
-							mFunc(*reinterpret_cast<T*>(p));
-						}
-					}*/
 			};
 		}
 
@@ -82,12 +71,7 @@ namespace ssvu
 
 				inline auto& findFlag(const std::string& mName)
 				{
-					for(auto p : mgr.getAll<EType::Flag>())
-					{
-						auto& flag(*reinterpret_cast<Flag*>(p));
-						if(flag.hasName(mName)) return flag;
-					}
-
+					for(auto& f : makeRangeCastRef<Flag>(mgr.getAll<EType::Flag>())) if(f.hasName(mName)) return f;
 					throw Exception::createFlagNotFound(mName, getNamesStr());
 				}
 
