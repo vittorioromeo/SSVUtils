@@ -84,16 +84,16 @@ namespace ssvu
 			inline constexpr BMPair& getPair(const T2* mItem) const noexcept { return getPairImpl(SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(BMPair, mItem, second)); }
 
 			/// @brief Internal method to get a T2& from the corrisponding T1*.
-			inline T2& getItem(const T1* mItem) noexcept { return getPair(mItem).second; }
+			inline T2& getItem(const T1* mItem) noexcept { return std::get<T2>(getPair(mItem)); }
 
 			/// @brief Internal method to get a T1& from the corrisponding T2*.
-			inline T1& getItem(const T2* mItem) noexcept { return getPair(mItem).first; }
+			inline T1& getItem(const T2* mItem) noexcept { return std::get<T1>(getPair(mItem)); }
 
 			/// @brief Internal method to get a T2& from the corrisponding T1*. (const version)
-			inline const T2& getItem(const T1* mItem) const noexcept { return getPair(mItem).second; }
+			inline const T2& getItem(const T1* mItem) const noexcept { return std::get<T2>(getPair(mItem)); }
 
 			/// @brief Internal method to get a T1& from the corrisponding T2*. (const version)
-			inline const T1& getItem(const T2* mItem) const noexcept { return getPair(mItem).first; }
+			inline const T1& getItem(const T2* mItem) const noexcept { return std::get<T1>(getPair(mItem)); }
 
 			/// @brief Internal implementation of the `at` method.
 			/// @details Throws an `std::out_of_range` exception if the value isn't found.
