@@ -33,6 +33,7 @@
 #include <cstring>
 #include <bitset>
 #include <future>
+#include <mutex>
 
 // The "Core/Preprocessor/Preprocessor" module is used in various parts of the library.
 // It does not introduce any additional dependency and is safe to include first.

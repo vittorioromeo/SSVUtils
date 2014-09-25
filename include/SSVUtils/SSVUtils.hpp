@@ -36,3 +36,4 @@
 // * Fix includes (old method was better)
 // * investigate metaprogramming code generation
 // * test framework - write expected and actual value and more...
+// * SSVCMake : remove cache and force
