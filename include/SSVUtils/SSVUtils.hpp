@@ -34,7 +34,5 @@
 // TODO:
 // * .inl and .cpp FILES and SSVU_INLINE macro
 // * Fix includes (old method was better)
-// * Separate test groups
 // * investigate metaprogramming code generation
 // * test framework - write expected and actual value and more...
-// * std::get<T> instead of get<N> and .first/.second
