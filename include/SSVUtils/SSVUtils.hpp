@@ -23,6 +23,7 @@
 #include "SSVUtils/Easing/Easing.hpp"
 #include "SSVUtils/RecPtr/RecPtr.hpp"
 #include "SSVUtils/Ticker/Ticker.hpp"
+#include "SSVUtils/Range/Range.hpp"
 
 #ifndef SSVUT_DISABLE
 	#include "SSVUtils/Tests/Tests.hpp"
@@ -36,3 +37,4 @@
 // * Separate test groups
 // * investigate metaprogramming code generation
 // * test framework - write expected and actual value and more...
+// * std::get<T> instead of get<N> and .first/.second

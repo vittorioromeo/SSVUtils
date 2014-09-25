@@ -11,11 +11,10 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			class BaseArg : public BaseElement
+			struct BaseArg : public BaseElement
 			{
-				public:
-					virtual void set(const std::string&) = 0;
-					inline std::string getUsageStr() const override { return "(ARG " + getName() + ")"; }
+				virtual void set(const std::string&) = 0;
+				inline std::string getUsageStr() const override { return "(ARG " + getName() + ")"; }
 			};
 		}
 	}

@@ -10,14 +10,14 @@ using namespace std::literals;
 namespace std
 {
 	// C++14: will be in standard (should be?)
-	template<typename T> inline auto cbegin(const T& mContainer) noexcept	{ return mContainer.cbegin(); }
-	template<typename T> inline auto rbegin(const T& mContainer) noexcept	{ return mContainer.rbegin(); }
-	template<typename T> inline auto rbegin(T& mContainer) noexcept 		{ return mContainer.rbegin(); }
-	template<typename T> inline auto crbegin(const T& mContainer) noexcept	{ return rbegin(mContainer); }
-	template<typename T> inline auto cend(const T& mContainer) noexcept 	{ return mContainer.cend(); }
-	template<typename T> inline auto rend(const T& mContainer) noexcept 	{ return mContainer.rend(); }
-	template<typename T> inline auto rend(T& mContainer) noexcept 			{ return mContainer.rend(); }
-	template<typename T> inline auto crend(const T& mContainer) noexcept 	{ return rend(mContainer); }
+	template<typename TC> inline auto cbegin(const TC& mContainer) noexcept		{ return mContainer.cbegin(); }
+	template<typename TC> inline auto rbegin(const TC& mContainer) noexcept		{ return mContainer.rbegin(); }
+	template<typename TC> inline auto rbegin(TC& mContainer) noexcept			{ return mContainer.rbegin(); }
+	template<typename TC> inline auto crbegin(const TC& mContainer) noexcept	{ return rbegin(mContainer); }
+	template<typename TC> inline auto cend(const TC& mContainer) noexcept		{ return mContainer.cend(); }
+	template<typename TC> inline auto rend(const TC& mContainer) noexcept		{ return mContainer.rend(); }
+	template<typename TC> inline auto rend(TC& mContainer) noexcept				{ return mContainer.rend(); }
+	template<typename TC> inline auto crend(const TC& mContainer) noexcept		{ return rend(mContainer); }
 }
 
 #endif

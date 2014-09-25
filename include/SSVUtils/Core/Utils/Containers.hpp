@@ -10,7 +10,7 @@ namespace ssvu
 	/// @brief Wrapper around `std::any_of` that takes a container instead of two iterators.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate to use.
-	template<typename T, typename TP> inline auto anyOf(const T& mContainer, TP mPredicate)
+	template<typename TC, typename TP> inline auto anyOf(const TC& mContainer, TP mPredicate)
 	{
 		return std::any_of(std::begin(mContainer), std::end(mContainer), mPredicate);
 	}
@@ -19,7 +19,7 @@ namespace ssvu
 	/// @brief Wrapper around `std::find` that takes a container instead of two iterators.
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
-	template<typename T, typename TV> inline auto find(const T& mContainer, const TV& mValue)
+	template<typename TC, typename TV> inline auto find(const TC& mContainer, const TV& mValue)
 	{
 		return std::find(std::begin(mContainer), std::end(mContainer), mValue);
 	}
@@ -27,7 +27,7 @@ namespace ssvu
 	/// @brief Wrapper around `std::rotate` that takes a container instead of two iterators.
 	/// @param mContainer Reference to the container.
 	/// @param mNewBegin New begin iterator after the rotation.
-	template<typename T, typename TI> inline auto rotate(T& mContainer, const TI& mNewBegin)
+	template<typename TC, typename TI> inline auto rotate(TC& mContainer, const TI& mNewBegin)
 	{
 		return std::rotate(std::begin(mContainer), mNewBegin, std::end(mContainer));
 	}
@@ -36,7 +36,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate used for checking. Can be std::function, a lambda, a functor, etc...
 	/// @return Returns an iterator to the item that matches the predicate (can be end iterator if the item is not found).
-	template<typename T, typename TP> inline auto findIf(const T& mContainer, TP mPredicate)
+	template<typename TC, typename TP> inline auto findIf(const TC& mContainer, TP mPredicate)
 	{
 		return std::find_if(std::begin(mContainer), std::end(mContainer), mPredicate);
 	}
@@ -45,7 +45,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
 	/// @return Returns a past-the-end iterator for the new end of the range.
-	template<typename T, typename TV> inline auto remove(T& mContainer, const TV& mValue)
+	template<typename TC, typename TV> inline auto remove(TC& mContainer, const TV& mValue)
 	{
 		return std::remove(std::begin(mContainer), std::end(mContainer), mValue);
 	}
@@ -54,7 +54,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
 	/// @return Returns a past-the-end iterator for the new end of the range.
-	template<typename T, typename TP> inline auto removeIf(T& mContainer, TP mPredicate)
+	template<typename TC, typename TP> inline auto removeIf(TC& mContainer, TP mPredicate)
 	{
 		return std::remove_if(std::begin(mContainer), std::end(mContainer), mPredicate);
 	}
@@ -63,7 +63,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
 	/// @return Returns iterator pointing to the first element not less than `mValue`.
-	template<typename T, typename TV> inline auto lowerBound(T& mContainer, const TV& mValue)
+	template<typename TC, typename TV> inline auto lowerBound(TC& mContainer, const TV& mValue)
 	{
 		return std::lower_bound(std::begin(mContainer), std::end(mContainer), mValue);
 	}
@@ -73,43 +73,43 @@ namespace ssvu
 	/// @param mValue Const reference to the value.
 	/// @param mComparer Comparison object.
 	/// @return Returns iterator pointing to the first element not less than `mValue`.
-	template<typename T, typename TV, typename TC> inline auto lowerBound(T& mContainer, const TV& mValue, TC mComparer)
+	template<typename TC, typename TV, typename TCmp> inline auto lowerBound(TC& mContainer, const TV& mValue, TCmp mComparer)
 	{
 		return std::lower_bound(std::begin(mContainer), std::end(mContainer), mValue, mComparer);
 	}
 
 	/// @brief Sorts a container. (no predicate)
 	/// @param mContainer Reference to the container.
-	template<typename T> inline void sort(T& mContainer) { std::sort(std::begin(mContainer), std::end(mContainer)); }
+	template<typename TC> inline void sort(TC& mContainer) { std::sort(std::begin(mContainer), std::end(mContainer)); }
 
 	/// @brief Sorts a container with a user-defined predicate.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
-	template<typename T, typename TP> inline void sort(T& mContainer, TP mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
+	template<typename TC, typename TP> inline void sort(TC& mContainer, TP mPredicate) { std::sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
 
 	/// @brief Sorts a container. (stable, no predicate)
 	/// @param mContainer Reference to the container.
-	template<typename T> inline void sortStable(T& mContainer) { std::stable_sort(std::begin(mContainer), std::end(mContainer)); }
+	template<typename TC> inline void sortStable(TC& mContainer) { std::stable_sort(std::begin(mContainer), std::end(mContainer)); }
 
 	/// @brief Sorts a container with a user-defined predicate. (stable)
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate used for sorting. Can be std::function, a lambda, a functor, etc...
-	template<typename T, typename TP> inline void sortStable(T& mContainer, TP mPredicate) { std::stable_sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
+	template<typename TC, typename TP> inline void sortStable(TC& mContainer, TP mPredicate) { std::stable_sort(std::begin(mContainer), std::end(mContainer), mPredicate); }
 
 	/// @brief Gets the index of a item in the container, using find and subtracting the begin iterator.
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
-	template<typename T, typename TV> inline auto idxOf(const T& mContainer, const TV& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
+	template<typename TC, typename TV> inline auto idxOf(const TC& mContainer, const TV& mValue) { return find(mContainer, mValue) - std::begin(mContainer); }
 
 	/// @brief Checks if a container contains any item that matches a specific predicate.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate used for checking. Can be std::function, a lambda, a functor, etc...
-	template<typename T, typename TP> inline bool containsAnyIf(T& mContainer, TP mPredicate) { return findIf(mContainer, mPredicate) != std::end(mContainer); }
+	template<typename TC, typename TP> inline bool containsAnyIf(TC& mContainer, TP mPredicate) { return findIf(mContainer, mPredicate) != std::end(mContainer); }
 
 	/// @brief Removes a specific item from a container.
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
-	template<typename T, typename TV> inline void eraseRemove(T& mContainer, const TV& mValue)
+	template<typename TC, typename TV> inline void eraseRemove(TC& mContainer, const TV& mValue)
 	{
 		mContainer.erase(remove(mContainer, mValue), std::end(mContainer));
 	}
@@ -118,14 +118,14 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
 	/// @return Returns true if the container contains the specific item.
-	template<typename T, typename TV> inline bool contains(const T& mContainer, const TV& mValue) { return find(mContainer, mValue) != std::end(mContainer); }
+	template<typename TC, typename TV> inline bool contains(const TC& mContainer, const TV& mValue) { return find(mContainer, mValue) != std::end(mContainer); }
 
 	/// @brief Checks if any item from a container is in another container.
 	/// @details This method calls "contains" on every item.
 	/// @param mContainer Reference to the container to check.
 	/// @param mValues Const reference to the container containing the items to check.
 	/// @return Returns true if the container contains any of the items.
-	template<typename T, typename T2> inline bool containsAnyOf(const T& mContainer, const T2& mValues)
+	template<typename TC, typename TVC> inline bool containsAnyOf(const TC& mContainer, const TVC& mValues)
 	{
 		for(const auto& v : mValues) if(contains(mContainer, v)) return true;
 		return false;
@@ -136,7 +136,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container to check.
 	/// @param mValues Const reference to the container containing the items to check.
 	/// @return Returns true if the container contains all of the items.
-	template<typename T, typename T2> inline bool containsAllOf(const T& mContainer, const T2& mValues)
+	template<typename TC, typename TVC> inline bool containsAllOf(const TC& mContainer, const TVC& mValues)
 	{
 		for(const auto& v : mValues) if(!contains(mContainer, v)) return false;
 		return true;
@@ -155,7 +155,7 @@ namespace ssvu
 	/// @brief Removes all items that satisfy a predicate from a container.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Const reference to the predicate.
-	template<typename T, typename TP> inline void eraseRemoveIf(T& mContainer, TP mPredicate)
+	template<typename TC, typename TP> inline void eraseRemoveIf(TC& mContainer, TP mPredicate)
 	{
 		mContainer.erase(removeIf(mContainer, mPredicate), std::end(mContainer));
 	}
@@ -165,20 +165,20 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mIdx Index to use (may get wrapped).
 	/// @return Non-const reference to the item at the wrapped index mIdx.
-	template<typename T, typename TIdx> inline auto& getByModIdx(T& mContainer, const TIdx& mIdx) { return mContainer[getMod(mIdx, mContainer.size())]; }
+	template<typename TC, typename TIdx> inline auto& getByModIdx(TC& mContainer, const TIdx& mIdx) { return mContainer[getMod(mIdx, mContainer.size())]; }
 
 	/// @brief Cyclically gets items from a container. (const version)
 	/// @details Interally uses getMod to correctly wrap the entered index.
 	/// @param mContainer Const reference to the container.
 	/// @param mIdx Index to use (may get wrapped).
 	/// @return Const reference to the item at the wrapped index mIdx.
-	template<typename T, typename TIdx> inline const auto& getByModIdx(const T& mContainer, const TIdx& mIdx) { return mContainer.at(getMod(mIdx, mContainer.size())); }
+	template<typename TC, typename TIdx> inline const auto& getByModIdx(const TC& mContainer, const TIdx& mIdx) { return mContainer.at(getMod(mIdx, mContainer.size())); }
 
 	/// @brief Trims items matching a certain predicate from the left.
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate to use.
-	template<typename T, typename TP> inline void trimL(T& mContainer, TP mPredicate)
+	template<typename TC, typename TP> inline void trimL(TC& mContainer, TP mPredicate)
 	{
 		mContainer.erase(std::begin(mContainer), std::find_if_not(std::begin(mContainer), std::end(mContainer), mPredicate));
 	}
@@ -187,7 +187,7 @@ namespace ssvu
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate to use.
-	template<typename T, typename TP> inline void trimR(T& mContainer, TP mPredicate)
+	template<typename TC, typename TP> inline void trimR(TC& mContainer, TP mPredicate)
 	{
 		mContainer.erase(std::find_if_not(std::rbegin(mContainer), std::rend(mContainer), mPredicate).base(), std::end(mContainer));
 	}
@@ -196,28 +196,28 @@ namespace ssvu
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate to use.
-	template<typename T, typename TP> inline void trimLR(T& mContainer, TP mPredicate) { trimL(mContainer, mPredicate); trimR(mContainer, mPredicate); }
+	template<typename TC, typename TP> inline void trimLR(TC& mContainer, TP mPredicate) { trimL(mContainer, mPredicate); trimR(mContainer, mPredicate); }
 
 	/// @brief Gets a copy of the container with items matching a certain predicate trimmed from the left.
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
 	/// @param mContainer Copy of the container. (original won't be modified)
 	/// @param mPredicate Predicate to use.
 	/// @return Returns a copy of the container, trimmed.
-	template<typename T, typename TP> inline T getTrimL(T mContainer, TP mPredicate) { trimL(mContainer, mPredicate); return mContainer; }
+	template<typename TC, typename TP> inline TC getTrimL(TC mContainer, TP mPredicate) { trimL(mContainer, mPredicate); return mContainer; }
 
 	/// @brief Gets a copy of the container with items matching a certain predicate trimmed from the right.
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
 	/// @param mContainer Copy of the container. (original won't be modified)
 	/// @param mPredicate Predicate to use.
 	/// @return Returns a copy of the container, trimmed.
-	template<typename T, typename TP> inline T getTrimR(T mContainer, TP mPredicate) { trimR(mContainer, mPredicate); return mContainer; }
+	template<typename TC, typename TP> inline TC getTrimR(TC mContainer, TP mPredicate) { trimR(mContainer, mPredicate); return mContainer; }
 
 	/// @brief Gets a copy of the container with items matching a certain predicate trimmed both from the left and the right.
 	/// @details Items are trimmed until one that doesn't match the predicate is found.
 	/// @param mContainer Copy of the container. (original won't be modified)
 	/// @param mPredicate Predicate to use.
 	/// @return Returns a copy of the container, trimmed.
-	template<typename T, typename TP> inline T getTrimLR(T mContainer, TP mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
+	template<typename TC, typename TP> inline TC getTrimLR(TC mContainer, TP mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
 
 	namespace Internal
 	{

@@ -11,11 +11,10 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			class BaseFlagValue : public BaseFlag
+			struct BaseFlagValue : public BaseFlag
 			{
-				public:
-					inline BaseFlagValue(const std::string& mNameShort, const std::string& mNameLong) : BaseFlag{mNameShort, mNameLong} { }
-					virtual void set(const std::string&) = 0;
+				inline BaseFlagValue(const std::string& mNameShort, const std::string& mNameLong) : BaseFlag{mNameShort, mNameLong} { }
+				virtual void set(const std::string&) = 0;
 			};
 		}
 	}

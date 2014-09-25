@@ -35,21 +35,21 @@ namespace ssvu
 	template<typename T1, typename T2>									using IsSame = typename std::is_same<T1, T2>::type;
 	template<std::size_t TS, typename T>								using TupleElem = std::tuple_element_t<TS, T>;
 
-	template<typename T> inline constexpr bool isArithmetic() noexcept					{ return std::is_arithmetic<T>::value; }
-	template<typename T> inline constexpr bool isSigned() noexcept						{ return std::is_signed<T>::value; }
-	template<typename T1, typename T2> inline constexpr bool isSame() noexcept			{ return std::is_same<T1, T2>::value; }
-	template<typename T1, typename T2> inline constexpr bool isBaseOf() noexcept		{ return std::is_base_of<T1, T2>::value; }
-	template<typename T1, typename T2> inline constexpr bool isSameOrBaseOf() noexcept	{ return isSame<T1, T2>() || isBaseOf<T1, T2>(); }
-	template<typename T> inline constexpr bool isStandardLayout() noexcept				{ return std::is_standard_layout<T>::value; }
-	template<typename T> inline constexpr bool isEnum() noexcept						{ return std::is_enum<T>::value; }
-	template<typename T> inline constexpr bool isDefaultConstructible() noexcept		{ return std::is_default_constructible<T>::value; }
-	template<typename T> inline constexpr bool isNothrowConstructible() noexcept		{ return std::is_nothrow_constructible<T>::value; }
-	template<typename T> inline constexpr bool isNothrowDestructible() noexcept			{ return std::is_nothrow_destructible<T>::value; }
-	template<typename T> inline constexpr bool isPolymorphic() noexcept					{ return std::is_polymorphic<T>::value; }
-	template<typename T> inline constexpr auto getTupleSize() noexcept					{ return std::tuple_size<T>::value; }
+	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>::value; }
+	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>::value; }
+	template<typename T1, typename T2> inline constexpr auto isSame() noexcept				{ return std::is_same<T1, T2>::value; }
+	template<typename TBase, typename T> inline constexpr auto isBaseOf() noexcept			{ return std::is_base_of<TBase, T>::value; }
+	template<typename TBase, typename T> inline constexpr auto isSameOrBaseOf() noexcept	{ return isSame<TBase, T>() || isBaseOf<TBase, T>(); }
+	template<typename T> inline constexpr auto isStandardLayout() noexcept					{ return std::is_standard_layout<T>::value; }
+	template<typename T> inline constexpr auto isEnum() noexcept							{ return std::is_enum<T>::value; }
+	template<typename T> inline constexpr auto isDefaultConstructible() noexcept			{ return std::is_default_constructible<T>::value; }
+	template<typename T> inline constexpr auto isNothrowConstructible() noexcept			{ return std::is_nothrow_constructible<T>::value; }
+	template<typename T> inline constexpr auto isNothrowDestructible() noexcept				{ return std::is_nothrow_destructible<T>::value; }
+	template<typename T> inline constexpr auto isPolymorphic() noexcept						{ return std::is_polymorphic<T>::value; }
+	template<typename T> inline constexpr auto getTupleSize() noexcept						{ return std::tuple_size<T>::value; }
 
-	template<typename T> inline constexpr T&& fwd(RemoveRef<T>& mA) noexcept	{ return std::forward<T>(mA); }
-	template<typename T> inline constexpr T&& fwd(RemoveRef<T>&& mA) noexcept	{ return std::forward<T>(mA); }
+	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>& mA) noexcept		{ return std::forward<T>(mA); }
+	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>&& mA) noexcept	{ return std::forward<T>(mA); }
 
 	/// @typedef Alias for `std::function`.
 	template<typename T> using Func = std::function<T>;
