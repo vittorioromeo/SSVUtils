@@ -121,5 +121,3 @@ namespace ssvu
 #endif
 
 // TODO: void_t callers?
-// TODO: move " \" to same column
-// TODO: mStr mString setString setStr getStr ?

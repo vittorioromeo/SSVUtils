@@ -11,11 +11,14 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			/// @brief Returns a reference to the static benchmark stack.
-			inline auto& getStack() noexcept { static std::vector<Data> result; return result; }
+			/// @brief Returns a reference to the static thread_local benchmark stack.
+			inline auto& getStack() noexcept { static thread_local std::vector<Data> result; return result; }
 
-			/// @brief Returns a reference to a statitc `bool` used to keep track if there was more than one benchmark on the stack.
-			inline auto& hadNested() noexcept { static bool result{false}; return result; }
+			/// @brief Returns a reference to a static  thread_local `bool` used to keep track if there was more than one benchmark on the stack.
+			inline auto& hadNested() noexcept { static thread_local bool result{false}; return result; }
+
+			/// @brief Returns a reference to the static thread_local benchmark group map.
+			inline auto& getGroupMap() noexcept { static thread_local std::map<std::string, DataGroup> result; return result; }
 
 			/// @brief Returns a reference to the top of the stack. Assumes that the stack is not empty.
 			inline auto& getLastDataRef() { SSVU_ASSERT(!getStack().empty()); return getStack().back(); }
@@ -63,9 +66,6 @@ namespace ssvu
 
 				lo().flush();
 			}
-
-			/// @brief Returns a reference to the static benchmark group map.
-			inline auto& getGroupMap() noexcept { static std::map<std::string, DataGroup> result; return result; }
 
 			// Implementations of the benchmark group functions.
 			inline void groupReset(const std::string& mGroup) { getGroupMap()[mGroup].reset(); }
