@@ -29,7 +29,7 @@ namespace ssvu
 	}
 
 	using Go = Internal::GoImpl<int>;
-	using Goto = Internal::GoImpl<Command&>;
+	//using Goto = Internal::GoImpl<Command&>;
 }
 
 #endif

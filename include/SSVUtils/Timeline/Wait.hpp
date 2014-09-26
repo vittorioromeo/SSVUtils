@@ -33,9 +33,14 @@ namespace ssvu
 	{
 		template<bool TWhile> class WaitLoop final : public Command
 		{
-			private:	Predicate predicate;
-			protected:	inline void update(FT) override { timeline.ready = false; if(predicate() != TWhile) timeline.next(); }
-			public:		WaitLoop(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
+			private:
+				Predicate predicate;
+
+			protected:
+				inline void update(FT) override { timeline.ready = false; if(predicate() != TWhile) timeline.next(); }
+
+			public:
+				inline WaitLoop(Timeline& mTimeline, const Predicate& mPredicate) : Command{mTimeline}, predicate{mPredicate} { }
 		};
 	}
 
