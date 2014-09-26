@@ -46,8 +46,8 @@ namespace ssvu
 				Duration duration;
 
 				inline void reset() noexcept { tp = HRClock::now(); duration = Duration{0}; }
-				inline void start() noexcept { tp = HRClock::now(); }
-				inline void pause() noexcept { duration += std::chrono::duration_cast<Duration>(HRClock::now() - tp); tp = HRClock::now(); }
+				inline void resume() noexcept { tp = HRClock::now(); }
+				inline void pause() noexcept { duration += std::chrono::duration_cast<Duration>(HRClock::now() - tp); }
 
 				/// @brief Returns the elapsed time as a std::chrono::milliseconds.
 				inline Duration getDuration() const noexcept { return duration; }

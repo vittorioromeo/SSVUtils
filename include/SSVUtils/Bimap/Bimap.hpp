@@ -71,8 +71,11 @@ namespace ssvu
 			/// @details Implemented as an std::vector of ssvu::UPtr.
 			Storage storage;
 
-			Internal::PtrSet<T1> set1; ///< @brief Set of the first type.
-			Internal::PtrSet<T2> set2; ///< @brief Set of the second type.
+			/// @brief Set of the first type.
+			Internal::PtrSet<T1> set1;
+
+			/// @brief Set of the second type.
+			Internal::PtrSet<T2> set2;
 
 			/// @brief Internal method to get a BMPair from a pointer.
 			template<typename T> inline constexpr BMPair& getPairImpl(const T* mPtr) const noexcept { return *(const_cast<BMPair*>(reinterpret_cast<const BMPair*>(mPtr))); }

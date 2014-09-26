@@ -7,11 +7,14 @@
 
 #include "SSVUtils/Core/Core.hpp"
 
-using HIdx = std::size_t;	///< @typedef HandleVector index type.
-using HCtr = int;			///< @typedef HandleVector counter type.
-
 namespace ssvu
 {
+	/// @typedef HandleVector index type.
+	using HIdx = std::size_t;
+
+	/// @typedef HandleVector counter type.
+	using HCtr = int;
+
 	template<typename> class HandleVector;
 }
 
@@ -37,13 +40,21 @@ namespace ssvu
 			};
 
 		public:
-			using AtomType = typename Internal::Atom<T>; ///< @typedef Atom type.
+			/// @typedef Atom type.
+			using AtomType = typename Internal::Atom<T>;
 
 		private:
-			std::vector<AtomType> atoms;	///< @brief Internal atom storage.
-			std::vector<Mark> marks;		///< @brief Internal mark storage.
-			std::size_t size{0u};			///< @brief Current size. Does not take into account newly created atoms.
-			std::size_t sizeNext{0u};		///< @brief Next size. Takes into account newly created atoms.
+			/// @brief Internal atom storage.
+			std::vector<AtomType> atoms;
+
+			/// @brief Internal mark storage.
+			std::vector<Mark> marks;
+
+			/// @brief Current size. Does not take into account newly created atoms.
+			std::size_t size{0u};
+
+			/// @brief Next size. Takes into account newly created atoms.
+			std::size_t sizeNext{0u};
 
 			/// @brief Returns the capacity of the internal storage.
 			inline auto getCapacity() const noexcept { return atoms.size(); }
@@ -285,27 +296,27 @@ namespace ssvu
 
 			/// @brief Returns an index iterator pointing to the first data.
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> beginIdx() noexcept { return {*this, 0}; }
+			inline HVecItrIdx<T> beginIdx() noexcept { return {0, *this}; }
 
 			/// @brief Returns an index iterator pointing one after the last data. Newly created atoms aren't taken into account.
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> endIdx() noexcept { return {*this, size}; }
+			inline HVecItrIdx<T> endIdx() noexcept { return {size, *this}; }
 
 			/// @brief Returns an index iterator pointing one after the last newly-created data. Newly created atoms are taken into account.
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> endIdxNext() noexcept { return {*this, sizeNext}; }
+			inline HVecItrIdx<T> endIdxNext() noexcept { return {sizeNext, *this}; }
 
 			/// @brief Returns an index iterator pointing to the first data. (const vesrion)
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> beginIdx() const noexcept { return {*this, 0}; }
+			inline HVecItrIdx<T> beginIdx() const noexcept { return {0, *this}; }
 
 			/// @brief Returns an index iterator pointing one after the last data. Newly created atoms aren't taken into account. (const version)
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> endIdx() const noexcept { return {*this, size}; }
+			inline HVecItrIdx<T> endIdx() const noexcept { return {size, *this}; }
 
 			/// @brief Returns an index iterator pointing one after the last newly-created data. Newly created atoms are taken into account. (const version)
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> endIdxNext() const noexcept { return {*this, sizeNext}; }
+			inline HVecItrIdx<T> endIdxNext() const noexcept { return {sizeNext, *this}; }
 	};
 }
 

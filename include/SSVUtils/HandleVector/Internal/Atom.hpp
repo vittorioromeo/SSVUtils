@@ -15,9 +15,14 @@ namespace ssvu
 			template<typename> friend class ssvu::HandleVector;
 
 			private:
-				Uncertain<T> data;	///< @brief Data being stored.
-				HIdx markIdx;		///< @brief Index of the mark controlling this atom.
-				bool alive{false};	///< @brief Status of the atom.
+				/// @brief Data being stored.
+				Uncertain<T> data;
+
+				/// @brief Index of the mark controlling this atom.
+				HIdx markIdx;
+
+				/// @brief Status of the atom.
+				bool alive{false};
 
 				/// @brief Allocates and constructs the data. Assumes the atom is not alive.
 				template<typename... TArgs> inline void initData(TArgs&&... mArgs)
@@ -39,7 +44,6 @@ namespace ssvu
 				inline Atom(Atom&&) = default;
 				inline Atom& operator=(Atom&&) = default;
 
-				// Disallow copies
 				inline Atom(const Atom&) = delete;
 				inline Atom& operator=(const Atom&) = delete;
 

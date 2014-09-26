@@ -69,7 +69,7 @@ namespace ssvu
 
 			// Implementations of the benchmark group functions.
 			inline void groupReset(const std::string& mGroup) { getGroupMap()[mGroup].reset(); }
-			inline void groupResume(const std::string& mGroup) { getGroupMap()[mGroup].start(); }
+			inline void groupResume(const std::string& mGroup) { getGroupMap()[mGroup].resume(); }
 			inline void groupPause(const std::string& mGroup) { getGroupMap()[mGroup].pause(); }
 			inline void groupEndLo(const std::string& mGroup)
 			{

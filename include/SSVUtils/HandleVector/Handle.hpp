@@ -13,15 +13,20 @@ namespace ssvu
 		template<typename> friend class HandleVector;
 
 		public:
-			using AtomType = typename Internal::Atom<T>; ///< @typedef Atom type.
+			/// @typedef Atom type.
+			using AtomType = typename Internal::Atom<T>;
 
 		private:
-			HandleVector<T>* hVec;	///< @brief Internal pointer to the HandleVector.
-			HIdx markIdx;			///< @brief Index of the mark to check.
-			HCtr ctr;				///< @brief Counter of the handle. Will be compared to the mark's counter.
+			/// @brief Internal pointer to the HandleVector.
+			HandleVector<T>* hVec;
 
-			inline Handle(HandleVector<T>& mHVec, HIdx mMarkIdx, HCtr mCtr) noexcept
-				: hVec(&mHVec), markIdx{mMarkIdx}, ctr{mCtr} { }
+			/// @brief Index of the mark to check.
+			HIdx markIdx;
+
+			/// @brief Counter of the handle. Will be compared to the mark's counter.
+			HCtr ctr;
+
+			inline Handle(HandleVector<T>& mHVec, HIdx mMarkIdx, HCtr mCtr) noexcept : hVec(&mHVec), markIdx{mMarkIdx}, ctr{mCtr} { }
 
 			/// @brief Internal implementation method that returns a reference or a const reference to the atom.
 			template<typename TT> inline TT getAtomImpl() noexcept
