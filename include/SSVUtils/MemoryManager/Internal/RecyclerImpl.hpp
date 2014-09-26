@@ -44,11 +44,8 @@ namespace ssvu
 				/// @param mContainer Container where the created `PtrType` will be emplaced back.
 				template<typename T = TBase, typename TContainer, typename... TArgs> inline T& getCreateEmplace(TContainer& mContainer, TArgs&&... mArgs)
 				{
-					auto uPtr(create<T>(fwd<TArgs>(mArgs)...));
-					auto result(reinterpret_cast<T*>(uPtr.get()));
-
-					mContainer.emplace_back(std::move(uPtr));
-					return *result;
+					mContainer.emplace_back(create<T>(fwd<TArgs>(mArgs)...));
+					return reinterpret_cast<T&>(*mContainer.back());
 				}
 		};
 

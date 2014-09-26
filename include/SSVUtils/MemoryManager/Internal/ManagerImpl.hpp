@@ -31,10 +31,8 @@ namespace ssvu
 			public:
 				template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
 				{
-					auto uPtr(this->recycler.template create<T>(fwd<TArgs>(mArgs)...));
-					auto result(uPtr.get());
-					this->toAdd.emplace_back(std::move(uPtr));
-					return *reinterpret_cast<T*>(result);
+					this->toAdd.emplace_back(this->recycler.template create<T>(fwd<TArgs>(mArgs)...));
+					return reinterpret_cast<T&>(*(this->toAdd.back()));
 				}
 
 				inline void clear()	noexcept { items.clear(); toAdd.clear(); }

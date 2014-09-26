@@ -224,19 +224,14 @@ namespace ssvu
 		/// @brief Internal implementation method for UPtr emplacement in linear containers.
 		template<typename T, typename TC, typename TM, typename... TArgs> inline T& getEmplaceUPtrImpl(TC& mContainer, TArgs&&... mArgs)
 		{
-			auto uPtr(TM::template make<TArgs...>(fwd<TArgs>(mArgs)...));
-			auto result(uPtr.get());
-			mContainer.emplace_back(std::move(uPtr));
-			return *result;
+			mContainer.emplace_back(TM::template make<TArgs...>(fwd<TArgs>(mArgs)...));
+			return reinterpret_cast<T&>(*mContainer.back());
 		}
 
 		/// @brief Internal implementation method for UPtr emplacement in map containers.
 		template<typename T, typename TC, typename TK, typename TM, typename... TArgs> inline T& getEmplaceUPtrMapImpl(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 		{
-			auto uPtr(TM::template make<TArgs...>(fwd<TArgs>(mArgs)...));
-			auto result(uPtr.get());
-			mContainer.emplace(fwd<TK>(mKey), std::move(uPtr));
-			return *result;
+			return reinterpret_cast<T&>(*(*(mContainer.emplace(fwd<TK>(mKey), TM::template make<TArgs...>(fwd<TArgs>(mArgs)...)).first)).second);
 		}
 	}
 
