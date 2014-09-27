@@ -28,7 +28,7 @@ namespace ssvu
 	template<typename T>												using MakeUnsigned = std::make_unsigned_t<T>;
 	template<typename T>												using MakeSigned = std::make_signed_t<T>;
 	template<typename T>												using RemoveAllExtents = std::remove_all_extents_t<T>;
-	template<std::size_t TS, std::size_t TAlign> 						using AlignedStorage = std::aligned_storage_t<TS, TAlign>;
+	template<std::size_t TS, std::size_t TAlign>						using AlignedStorage = std::aligned_storage_t<TS, TAlign>;
 	template<typename T>												using AlignedStorageBasic = AlignedStorage<sizeof(T), alignof(T)>;
 	template<bool B, typename T, typename F>							using Conditional = std::conditional_t<B, T, F>;
 	template<typename T>												using Underlying = std::underlying_type_t<T>;
@@ -44,6 +44,7 @@ namespace ssvu
 	template<typename T> inline constexpr auto isEnum() noexcept							{ return std::is_enum<T>::value; }
 	template<typename T> inline constexpr auto isDefaultConstructible() noexcept			{ return std::is_default_constructible<T>::value; }
 	template<typename T> inline constexpr auto isNothrowConstructible() noexcept			{ return std::is_nothrow_constructible<T>::value; }
+	template<typename T> inline constexpr auto isNothrowMoveConstructible() noexcept		{ return std::is_nothrow_move_constructible<T>::value; }
 	template<typename T> inline constexpr auto isNothrowDestructible() noexcept				{ return std::is_nothrow_destructible<T>::value; }
 	template<typename T> inline constexpr auto isPolymorphic() noexcept						{ return std::is_polymorphic<T>::value; }
 	template<typename T> inline constexpr auto getTupleSize() noexcept						{ return std::tuple_size<T>::value; }
