@@ -44,4 +44,10 @@
 	#define SSVU_COMPILER_UNKNOWN 1
 #endif
 
+// Debug mode detection
+#if !NDEBUG
+	#define SSVU_DEBUG 1
+#endif
+
+
 #endif

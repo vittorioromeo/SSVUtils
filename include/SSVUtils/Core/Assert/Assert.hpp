@@ -12,7 +12,7 @@
 // `SSVU_ASSERT_FORCE_OFF` and `SSVU_ASSERT_FORCE_ON` macros force enabling/disabling of assertions.
 // `SSVU_ASSERT_FORCE_ON` has priority over `SSVU_ASSERT_FORCE_OFF`.
 
-#if (SSVU_ASSERT_FORCE_OFF || NDEBUG)
+#if (SSVU_ASSERT_FORCE_OFF || !SSVU_DEBUG)
 	#define SSVU_IMPL_ASSERT_DISABLED 1
 #else
 	#define SSVU_IMPL_ASSERT_DISABLED 0
@@ -42,7 +42,6 @@
 
 			/// @brief Returns a reference to the global static thread_local AssertState instance.
 			inline auto& getAssertState() noexcept { static thread_local AssertState result; return result; }
-
 			/// @brief Assert implementation: if mExpression is false, the assertion fires.
 			/// @details Called via the SSVU_ASSERT macro.
 			void assertImpl(bool mExpression, const std::string& mMsg = "") noexcept;

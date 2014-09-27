@@ -13,7 +13,7 @@ namespace ssvu
 		{
 			protected:
 				T target;
-				int times, currentTimes;
+				std::size_t times, currentTimes;
 
 				inline void update(FT) override
 				{
@@ -28,8 +28,7 @@ namespace ssvu
 		};
 	}
 
-	using Go = Internal::GoImpl<int>;
-	//using Goto = Internal::GoImpl<Command&>;
+	using Go = Internal::GoImpl<Timeline::Idx>;
 }
 
 #endif
