@@ -17,9 +17,7 @@ namespace ssvu
 					std::string title;
 
 				public:
-					inline Base(const std::string& mTitle, const std::string& mStr)
-						: title{mTitle}, std::runtime_error{mStr} { }
-
+					inline Base(const std::string& mTitle, const std::string& mStr) : std::runtime_error{mStr}, title{mTitle} { }
 					inline const auto& getTitle() const noexcept { return title; }
 			};
 

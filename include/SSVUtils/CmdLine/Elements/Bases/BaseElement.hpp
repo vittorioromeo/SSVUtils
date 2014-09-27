@@ -27,7 +27,7 @@ namespace ssvu
 					inline const auto& getBriefDesc() const noexcept	{ return briefDesc; }
 					inline const auto& getDesc() const noexcept			{ return desc; }
 
-					inline virtual std::string getUsageStr() const = 0;
+					virtual std::string getUsageStr() const = 0;
 
 					inline auto getHelpStr()
 					{
