@@ -5,7 +5,6 @@
 #ifndef SSVU_CORE_COMMON_COMMON
 #define SSVU_CORE_COMMON_COMMON
 
-#include "SSVUtils/Core/Common/Detection.hpp"
 #include "SSVUtils/Core/Common/LikelyUnlikely.hpp"
 #include "SSVUtils/Core/Common/CPP14Support.hpp"
 #include "SSVUtils/Core/Common/Aliases.hpp"

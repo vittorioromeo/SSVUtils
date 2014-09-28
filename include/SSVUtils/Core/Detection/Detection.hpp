@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_CORE_COMMON_DETECTION
-#define SSVU_CORE_COMMON_DETECTION
+#ifndef SSVU_CORE_DETECTION
+#define SSVU_CORE_DETECTION
 
 // Operating system detection
 #if (__linux || __unix || __posix || __LINUX__ || __linux__)

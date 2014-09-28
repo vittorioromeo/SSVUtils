@@ -36,6 +36,9 @@
 #include <mutex>
 #include <list>
 
+// The "Core/Detection/Detection" module detects OS, compiler and debug/release information
+#include "SSVUtils/Core/Detection/Detection.hpp"
+
 // The "Core/Preprocessor/Preprocessor" module is used in various parts of the library.
 // It does not introduce any additional dependency and is safe to include first.
 #include "SSVUtils/Core/Preprocessor/Preprocessor.hpp"

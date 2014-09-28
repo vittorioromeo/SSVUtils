@@ -17,7 +17,7 @@ namespace ssvu
 	template<typename T>												using RemoveExtent = std::remove_extent_t<T>;
 	template<typename T>												using RemoveVolatile = std::remove_volatile_t<T>;
 	template<typename T>												using RemoveConst = std::remove_const_t<T>;
-	template<typename T>												using RemoveCv = std::remove_cv_t<T>;
+	template<typename T>												using RemoveCV = std::remove_cv_t<T>;
 	template<typename T>												using AddVolatile = std::add_volatile_t<T>;
 	template<typename T>												using AddConst = std::add_const_t<T>;
 	template<typename T>												using AddCv = std::add_cv_t<T>;
@@ -34,6 +34,7 @@ namespace ssvu
 	template<typename T>												using Underlying = std::underlying_type_t<T>;
 	template<typename T1, typename T2>									using IsSame = typename std::is_same<T1, T2>::type;
 	template<std::size_t TS, typename T>								using TupleElem = std::tuple_element_t<TS, T>;
+	template<typename T>												using RemoveAll = RemoveCV<RemoveRef<T>>;
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>::value; }
 	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>::value; }
