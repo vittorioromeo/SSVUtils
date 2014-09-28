@@ -6,6 +6,8 @@
 #define SSVU_CORE_COMMON_CPP14SUPPORT
 
 using namespace std::literals;
+using namespace std::string_literals;
+using namespace std::chrono_literals;
 
 namespace std
 {
