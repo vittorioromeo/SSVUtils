@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_TESTS_TESTSOBFUSCATEDVALUE
-#define SSVU_TESTS_TESTSOBFUSCATEDVALUE
+#ifndef SSVU_TESTS_TESTSOBFUSCATEDVAL
+#define SSVU_TESTS_TESTSOBFUSCATEDVAL
 
 SSVUT_TEST(ObfuscatedValueTests)
 {

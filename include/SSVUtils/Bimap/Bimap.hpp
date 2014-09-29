@@ -229,16 +229,16 @@ namespace ssvu
 			inline bool has(const T2& mKey) const noexcept { return this->find(mKey) != std::end(set2); }
 
 			// Standard iterator support
-			inline auto begin()		noexcept		{ return storage.begin(); }
-			inline auto end()		noexcept		{ return storage.end(); }
-			inline auto begin()		const noexcept	{ return storage.begin(); }
-			inline auto end()		const noexcept	{ return storage.end(); }
-			inline auto cbegin()	const noexcept	{ return storage.cbegin(); }
-			inline auto cend()		const noexcept	{ return storage.cend(); }
-			inline auto rbegin()	noexcept		{ return storage.rbegin(); }
-			inline auto rend()		noexcept		{ return storage.rend(); }
-			inline auto crbegin()	const noexcept	{ return storage.crbegin(); }
-			inline auto crend()		const noexcept	{ return storage.crend(); }
+			inline auto begin()		noexcept		{ return std::begin(storage); }
+			inline auto end()		noexcept		{ return std::end(storage); }
+			inline auto begin()		const noexcept	{ return std::begin(storage); }
+			inline auto end()		const noexcept	{ return std::end(storage); }
+			inline auto cbegin()	const noexcept	{ return std::cbegin(storage); }
+			inline auto cend()		const noexcept	{ return std::cend(storage); }
+			inline auto rbegin()	noexcept		{ return std::rbegin(storage); }
+			inline auto rend()		noexcept		{ return std::rend(storage); }
+			inline auto crbegin()	const noexcept	{ return std::crbegin(storage); }
+			inline auto crend()		const noexcept	{ return std::crend(storage); }
 	};
 
 	// Stringifier support

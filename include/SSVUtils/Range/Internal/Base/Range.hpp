@@ -20,6 +20,16 @@ namespace ssvu
 			inline constexpr auto begin() const noexcept	{ return itrBegin; }
 			inline constexpr auto end() const noexcept		{ return itrEnd; }
 	};
+
+	template<typename TC> inline constexpr auto makeRange(TC& mContainer) noexcept
+	{
+		return Range<decltype(std::begin(mContainer))>{std::begin(mContainer), std::end(mContainer)};
+	}
+
+	template<typename TC> inline constexpr auto makeRangeConst(const TC& mContainer) noexcept
+	{
+		return Range<decltype(std::cbegin(mContainer))>{std::cbegin(mContainer), std::cend(mContainer)};
+	}
 }
 
 #endif

@@ -77,16 +77,16 @@ namespace ssvu
 				inline static bool isDead(const TBase* mBase) noexcept	{ return !isAlive(mBase); }
 
 				inline auto size()		const noexcept	{ return items.size(); }
-				inline auto begin()		noexcept		{ return items.begin(); }
-				inline auto end()		noexcept		{ return items.end(); }
-				inline auto begin()		const noexcept	{ return items.begin(); }
-				inline auto end()		const noexcept	{ return items.end(); }
-				inline auto cbegin()	const noexcept	{ return items.cbegin(); }
-				inline auto cend()		const noexcept	{ return items.cend(); }
-				inline auto rbegin()	noexcept		{ return items.rbegin(); }
-				inline auto rend()		noexcept		{ return items.rend(); }
-				inline auto crbegin()	const noexcept	{ return items.crbegin(); }
-				inline auto crend()		const noexcept	{ return items.crend(); }
+				inline auto begin()		noexcept		{ return std::begin(items); }
+				inline auto end()		noexcept		{ return std::end(items); }
+				inline auto begin()		const noexcept	{ return std::begin(items); }
+				inline auto end()		const noexcept	{ return std::end(items); }
+				inline auto cbegin()	const noexcept	{ return std::cbegin(items); }
+				inline auto cend()		const noexcept	{ return std::cend(items); }
+				inline auto rbegin()	noexcept		{ return std::rbegin(items); }
+				inline auto rend()		noexcept		{ return std::rend(items); }
+				inline auto crbegin()	const noexcept	{ return std::crbegin(items); }
+				inline auto crend()		const noexcept	{ return std::crend(items); }
 		};
 	}
 }

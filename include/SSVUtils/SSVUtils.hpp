@@ -24,6 +24,7 @@
 #include "SSVUtils/RecPtr/RecPtr.hpp"
 #include "SSVUtils/Ticker/Ticker.hpp"
 #include "SSVUtils/Range/Range.hpp"
+#include "SSVUtils/Json/Json.hpp"
 
 #ifndef SSVUT_DISABLE
 	#include "SSVUtils/Tests/Tests.hpp"

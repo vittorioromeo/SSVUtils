@@ -67,6 +67,9 @@ namespace ssvu
 
 	/// @typedef Alias for `std::vector<ssvu::UPtr<T>>`.
 	template<typename T, typename TDeleter = std::default_delete<T>> using VecUPtr = std::vector<ssvu::UPtr<T, TDeleter>>;
+
 }
 
 #endif
+
+// TODO: use monomanager in place of vecuptr?
