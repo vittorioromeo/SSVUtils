@@ -76,6 +76,7 @@ namespace ssvu
 			inline const auto& getFmtStr() noexcept
 			{
 				static IgnoreManip result;
+				// TODO: cache string codes
 				result = {prefix + toStr(getStyleCode(getLastStyle())) + ";" + toStr(getColorFGCode(getLastColorFG())) + ";" + toStr(getColorBGCode(getLastColorBG())) + postfix};
 				return result;
 			}

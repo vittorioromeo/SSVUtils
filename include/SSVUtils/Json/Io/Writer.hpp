@@ -128,9 +128,10 @@ namespace ssvu
 
 						switch(mNum.getType())
 						{
-							case Num::Type::IntS:	wOut(toStr(mNum.as<Num::IntS>())); break;
-							case Num::Type::IntU:	wOut(toStr(mNum.as<Num::IntU>())); break;
-							case Num::Type::Real:	wOut(toStr(mNum.as<Num::Real>())); break;
+							// TODO: prefer itoa itod ...
+							case Num::Type::IntS: wOut(toStr(mNum.as<Num::IntS>())); break;
+							case Num::Type::IntU: wOut(toStr(mNum.as<Num::IntU>())); break;
+							case Num::Type::Real: wOut(toStr(mNum.as<Num::Real>())); break;
 						}
 					}
 
@@ -150,12 +151,12 @@ namespace ssvu
 					{
 						switch(mVal.getType())
 						{
-							case Val::Type::Obj:	write(mVal.as<Obj>()); break;
-							case Val::Type::Arr:	write(mVal.as<Arr>()); break;
-							case Val::Type::Str:	write(mVal.as<Str>()); break;
-							case Val::Type::Num:	write(mVal.as<Num>()); break;
-							case Val::Type::Bln:		write(mVal.as<Bln>()); break;
-							case Val::Type::Nll:		write(Nll{}); break;
+							case Val::Type::Obj: write(mVal.as<Obj>()); break;
+							case Val::Type::Arr: write(mVal.as<Arr>()); break;
+							case Val::Type::Str: write(mVal.as<Str>()); break;
+							case Val::Type::Num: write(mVal.as<Num>()); break;
+							case Val::Type::Bln: write(mVal.as<Bln>()); break;
+							case Val::Type::Nll: write(Nll{}); break;
 						}
 					}
 
