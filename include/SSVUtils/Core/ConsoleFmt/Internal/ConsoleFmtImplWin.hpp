@@ -73,7 +73,7 @@ namespace ssvu
 
 				inline void apply()
 				{
-					unsigned short wAttributes{((unsigned short)getColorCode(int(lastColorFG) % 16) << 4) | (unsigned short)getColorCode(int(lastColorBG) % 16)};
+					unsigned short wAttributes{((unsigned short)getColorCode((unsigned short)(lastColorFG) % 16) << 4) | (unsigned short)getColorCode((unsigned short)(lastColorBG) % 16)};
 					SetConsoleTextAttribute(hConsole, wAttributes);
 				}
 			};
