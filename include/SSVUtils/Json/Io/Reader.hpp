@@ -119,7 +119,7 @@ namespace ssvu
 							if(src[end] == '\\') { ++end; continue; }
 						}
 
-						// Reserve memory for the string
+						// Reserve memory for the string (BOTTLENECK)
 						Str result;
 						result.reserve(end - idx);
 

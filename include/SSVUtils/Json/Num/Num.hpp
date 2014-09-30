@@ -86,6 +86,7 @@ namespace ssvu
 							case Type::Real: return getReal() == mN.getReal();
 						}
 
+						SSVU_ASSERT(false);
 						std::terminate();
 					}
 					inline auto operator!=(const Num& mN) const noexcept { return !(operator==(mN)); }

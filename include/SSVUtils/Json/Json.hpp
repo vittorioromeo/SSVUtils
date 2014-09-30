@@ -23,3 +23,4 @@
 //       custom type support
 //       WriterSettings<...>
 //       ReaderSettings<...>
+//       docs

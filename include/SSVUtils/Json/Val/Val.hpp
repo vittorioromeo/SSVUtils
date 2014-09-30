@@ -141,6 +141,7 @@ namespace ssvu
 						case Type::Nll: return true;
 					}
 
+					SSVU_ASSERT(false);
 					std::terminate();
 				}
 				inline auto operator!=(const Val& mV) const noexcept { return !(operator==(mV)); }

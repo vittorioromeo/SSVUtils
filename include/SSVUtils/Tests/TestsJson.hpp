@@ -149,6 +149,33 @@ SSVUT_TEST(SSVUJsonReadTests)
 	SSVUT_EXPECT(v["e"] == "//\"//");
 }
 
+SSVUT_TEST(SSVUJsonWriteTests)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
+
+	auto testSrc(R"(
+	{
+		"a": 15,
+		"b": { "c": null },
+		"c": ["x", "y", 10.5]
+	}
+	)");
+
+	auto v(Val::fromStr(testSrc));
+
+	SSVUT_EXPECT(v["a"] == 15);
+	SSVUT_EXPECT(v["b"]["c"] == Nll{});
+	SSVUT_EXPECT(v["c"][0] == "x");
+	SSVUT_EXPECT(v["c"][1] == "y");
+	SSVUT_EXPECT(v["c"][2] == 10.5);
+
+	auto minified(v.getWriteToStr<WriterMode::Minified>());
+
+	SSVUT_EXPECT(minified == R"({"a":15,"b":{"c":null},"c":["x","y",10.5]})");
+}
+
 #endif
 
 // TODO: iteration tests, missing tests (check all source), writing minified, etc
