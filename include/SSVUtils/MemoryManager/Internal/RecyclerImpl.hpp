@@ -31,13 +31,13 @@ namespace ssvu
 				StorageType storage;
 
 			private:
-				inline auto& getThisDerived() noexcept { return *reinterpret_cast<DerivedType*>(this); }
+				inline auto& getTD() noexcept { return *reinterpret_cast<DerivedType*>(this); }
 
 			public:
 				/// @brief Creates a `T` instance and returns a `PtrType` to it.
 				template<typename T = TBase, typename... TArgs> inline auto create(TArgs&&... mArgs)
 				{
-					return getThisDerived().template createImpl<T>(fwd<TArgs>(mArgs)...);
+					return getTD().template createImpl<T>(fwd<TArgs>(mArgs)...);
 				}
 
 				/// @brief Creates a `T` instance and emplaces its `PtrType` back into `mContainer`. Returns a reference to the instance.
