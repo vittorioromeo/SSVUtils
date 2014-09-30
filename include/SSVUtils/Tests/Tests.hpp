@@ -26,7 +26,7 @@
 #include "SSVUtils/Tests/TestsHandleManager.hpp"
 #include "SSVUtils/Tests/TestsJson.hpp"
 #include "SSVUtils/Tests/TestsMemoryManager.hpp"
-// #include "SSVUtils/Tests/TestsRange.hpp"
+#include "SSVUtils/Tests/TestsRange.hpp"
 // #include "SSVUtils/Tests/TestsRecPtr.hpp"
 // #include "SSVUtils/Tests/TestsTemplateSystem.hpp"
 #include "SSVUtils/Tests/TestsObfuscatedValue.hpp"

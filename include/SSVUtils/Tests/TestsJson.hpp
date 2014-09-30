@@ -100,6 +100,8 @@ SSVUT_TEST(SSVUJsonValTests)
 		Obj o{{"hello", "bye"}, {"welcome"s, "goodbye"s}, {"banana", 15}, {"best letter", 'v'}};
 		EXEC_TEST_BASIC(Obj, o)
 	}
+
+	#undef EXEC_TEST_BASIC
 }
 
 SSVUT_TEST(SSVUJsonReadTests)
@@ -178,4 +180,4 @@ SSVUT_TEST(SSVUJsonWriteTests)
 
 #endif
 
-// TODO: iteration tests, missing tests (check all source), writing minified, etc
+// TODO: iteration tests, missing tests (check all source)
