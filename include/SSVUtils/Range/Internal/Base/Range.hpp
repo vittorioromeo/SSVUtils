@@ -21,12 +21,14 @@ namespace ssvu
 			inline constexpr auto end() const noexcept		{ return itrEnd; }
 	};
 
-	template<typename TC> inline constexpr auto makeRange(TC& mContainer) noexcept
+	/// @brief Returns a range made by `std::begin(mContainer)` and `std::end(mContainer)`.
+	template<typename TC> inline constexpr auto asRange(TC& mContainer) noexcept
 	{
 		return Range<decltype(std::begin(mContainer))>{std::begin(mContainer), std::end(mContainer)};
 	}
 
-	template<typename TC> inline constexpr auto makeRangeConst(const TC& mContainer) noexcept
+	/// @brief Returns a range made by `std::cbegin(mContainer)` and `std::cend(mContainer)`.
+	template<typename TC> inline constexpr auto asRange(const TC& mContainer) noexcept
 	{
 		return Range<decltype(std::cbegin(mContainer))>{std::cbegin(mContainer), std::cend(mContainer)};
 	}

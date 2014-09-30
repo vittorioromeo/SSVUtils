@@ -9,27 +9,40 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<typename T> struct AdaptorImplCastRef
+		/// @brief Cast iterator adaptor implementation.
+		template<typename T> struct AdaptorImplCast
 		{
-			template<typename TItr> inline static T& get(TItr mItr) noexcept { return reinterpret_cast<T&>(**mItr);  }
+			template<typename TItr> inline static T get(TItr mItr) noexcept { return reinterpret_cast<T>(**mItr);  }
 		};
 
-		template<typename T, typename TItr> using ItrCastRef = Internal::BaseAdaptorItrRnd<TItr, Internal::AdaptorImplCastRef<T>>;
+		/// @typedef Typedef for a cast iterator.
+		template<typename T, typename TItr> using ItrCast = AdaptorFromItr<TItr, AdaptorImplCast<T>>;
+
+		/// @brief Creates and returns a cast iterator.
+		/// @details The cast adaptor automatically dereferences pointer-like objects and casts them to `T`.
+		template<typename T, typename TItr> inline auto makeItrCast(TItr mItr) noexcept { return ItrCast<T, TItr>{mItr}; }
+
+		/// @brief Creates and returns a const cast iterator.
+		/// @details The cast adaptor automatically dereferences pointer-like objects and casts them to `const T`.
+		template<typename T, typename TItr> inline auto makeItrCastConst(TItr mItr) noexcept { return ItrCast<const T, TItr>{mItr}; }
 	}
 
-	/// @brief Creates and returns a cast ref iterator adaptor.
-	/// @details The cast ref adaptor automatically dereferences pointer-like objects and casts them to `T` references.
-	template<typename T, typename TItr> inline auto makeItrCastRef(TItr mItr) noexcept
+	/// @brief Creates and returns a cast iterator range.
+	/// @details The cast range automatically dereferences pointer-like objects and casts them to `T`.
+	template<typename T, typename TC> inline auto asRangeCast(TC& mContainer) noexcept
 	{
-		return Internal::ItrCastRef<T, TItr>{mItr};
+		auto itrBegin(Internal::makeItrCast<T>(std::begin(mContainer)));
+		auto itrEnd(Internal::makeItrCast<T>(std::end(mContainer)));
+
+		return Range<decltype(itrBegin)>{itrBegin, itrEnd};
 	}
 
-	/// @brief Creates and returns a cast ref iterator range.
-	/// @details The cast ref range automatically dereferences pointer-like objects and casts them to `T` references.
-	template<typename T, typename TC> inline auto makeRangeCastRef(TC& mContainer) noexcept
+	/// @brief Creates and returns a const cast iterator range.
+	/// @details The cast range automatically dereferences pointer-like objects and casts them to `const T`.
+	template<typename T, typename TC> inline auto asRangeCast(const TC& mContainer) noexcept
 	{
-		auto itrBegin(makeItrCastRef<T>(std::begin(mContainer)));
-		auto itrEnd(makeItrCastRef<T>(std::end(mContainer)));
+		auto itrBegin(Internal::makeItrCastConst<T>(std::cbegin(mContainer)));
+		auto itrEnd(Internal::makeItrCastConst<T>(std::cend(mContainer)));
 
 		return Range<decltype(itrBegin)>{itrBegin, itrEnd};
 	}
