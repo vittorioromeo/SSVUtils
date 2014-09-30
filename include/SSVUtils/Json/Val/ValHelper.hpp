@@ -14,25 +14,25 @@ namespace ssvu
 			#define SSVU_JSON_DEFINE_VALHELPER_NUM_IMPL(mType) \
 				template<> struct ValHelper<mType> \
 				{ \
-					inline static void set(Val& mV, const mType& mX) { mV.setNum(Num{mX}); } \
-					inline static decltype(auto) as(const Val& mV) { return mV.getNum().as<mType>(); } \
+					inline static void set(Val& mV, const mType& mX) noexcept { mV.setNum(Num{mX}); } \
+					inline static decltype(auto) as(const Val& mV) noexcept { return mV.getNum().as<mType>(); } \
 					inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Num; } \
 				};
 
 			#define SSVU_JSON_DEFINE_VALHELPER_BIG_MUTABLE(mType) \
 				template<> struct ValHelper<mType> \
 				{ \
-					template<typename T> inline static void set(Val& mV, T&& mX) { SSVPP_CAT(mV.set, mType)(fwd<T>(mX)); } \
-					inline static const auto& as(const Val& mV) { return SSVPP_CAT(mV.get, mType)(); } \
-					inline static auto as(Val&& mV) { return SSVPP_CAT(std::move(mV).get, mType, Move)(); } \
+					template<typename T> inline static void set(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(fwd<T>(mX)))) { SSVPP_CAT(mV.set, mType)(fwd<T>(mX)); } \
+					inline static const auto& as(const Val& mV)	noexcept(noexcept(SSVPP_CAT(mV.get, mType)())) { return SSVPP_CAT(mV.get, mType)(); } \
+					inline static auto as(Val&& mV)				noexcept(noexcept(SSVPP_CAT(mV.get, mType)())) { return SSVPP_CAT(mV.get, mType)(); } \
 					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::mType); } \
 				};
 
 			#define SSVU_JSON_DEFINE_VALHELPER_SMALL_IMMUTABLE(mType) \
 				template<> struct ValHelper<mType> \
 				{ \
-					inline static void set(Val& mV, const mType& mX) { SSVPP_CAT(mV.set, mType)(mX); } \
-					inline static decltype(auto) as(const Val& mV) { return SSVPP_CAT(mV.get, mType)(); } \
+					inline static void set(Val& mV, const mType& mX) noexcept { SSVPP_CAT(mV.set, mType)(mX); } \
+					inline static decltype(auto) as(const Val& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
 					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::mType); } \
 				};
 
@@ -59,7 +59,7 @@ namespace ssvu
 
 			template<> struct ValHelper<Val>
 			{
-				template<typename T> inline static void set(Val& mV, T&& mX) { mV.init(fwd<T>(mX)); }
+				template<typename T> inline static void set(Val& mV, T&& mX) noexcept(noexcept(mV.init(fwd<T>(mX)))) { mV.init(fwd<T>(mX)); }
 				inline static const auto& as(const Val& mV) noexcept { return mV; }
 				inline static auto& as(Val& mV) noexcept { return mV; }
 			};

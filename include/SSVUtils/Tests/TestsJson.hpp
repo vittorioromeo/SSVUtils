@@ -173,7 +173,7 @@ SSVUT_TEST(SSVUJsonWriteTests)
 	SSVUT_EXPECT(v["c"][1] == "y");
 	SSVUT_EXPECT(v["c"][2] == 10.5);
 
-	auto minified(v.getWriteToStr<WriterMode::Minified>());
+	auto minified(v.getWriteToStr<WriterSettings<WMode::Minified>>());
 
 	SSVUT_EXPECT(minified == R"({"a":15,"b":{"c":null},"c":["x","y",10.5]})");
 }

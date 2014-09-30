@@ -11,7 +11,7 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<WriterMode TWS = WriterMode::Pretty, bool TFmt = false> class Writer
+			template<typename TWS = WriterSettings<WMode::Pretty>> class Writer
 			{
 				private:
 					using FmtCC = Console::Color;
@@ -34,19 +34,19 @@ namespace ssvu
 
 					inline void wFmt(FmtCC mColor, FmtCS mStyle = FmtCS::None)
 					{
-						if(!TFmt) return;
+						if(!TWS::fmt) return;
 
 						out += Console::resetFmt();
 						out += Console::setColorFG(mColor);
 						out += Console::setStyle(mStyle);
 					}
 
-					inline void wNL() { if(TWS == WriterMode::Pretty) { out += "\n"; needIndent = true; } }
-					inline void wWS() { if(TWS == WriterMode::Pretty) { out += " "; } }
+					inline void wNL() { if(TWS::pretty) { out += "\n"; needIndent = true; } }
+					inline void wWS() { if(TWS::pretty) { out += " "; } }
 
 					inline void wOut(const std::string& mStr)
 					{
-						if(TWS == WriterMode::Pretty)
+						if(TWS::pretty)
 						{
 							if(needIndent) indent();
 						}

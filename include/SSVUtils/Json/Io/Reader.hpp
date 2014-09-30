@@ -34,11 +34,16 @@ namespace ssvu
 				SSVU_JSON_UNREACHABLE();
 			}
 
-			class Reader
+			template<typename TRS = ReaderSettings<RMode::Default>> class Reader
 			{
 				private:
 					std::string src;
 					Idx idx{0u};
+
+					inline void throwError(std::string mTitle, std::string mBody)
+					{
+						throw ReadException{std::move(mTitle), std::move(mBody), getErrorSrc()};
+					}
 
 					inline void purgeSource()
 					{
@@ -103,12 +108,12 @@ namespace ssvu
 					{
 						for(auto i(0u); i < TS - 1; ++i)
 						{
-							if(getC() != mKeyword[i]) throw ReadException("Invalid keyword", std::string{"Couldn't match keyword `"} + std::string{mKeyword} + "'", getErrorSrc());
+							if(getC() != mKeyword[i]) throwError("Invalid keyword", std::string{"Couldn't match keyword `"} + std::string{mKeyword} + "'");
 							++idx;
 						}
 					}
 
-					inline auto readStr()
+					inline Str readStr()
 					{
 						// Skip opening '"'
 						++idx;
@@ -151,11 +156,11 @@ namespace ssvu
 						return result;
 					}
 
-					inline auto parseNll()		{ match("null"); return Val{Nll{}}; }
-					inline auto parseBlnFalse()	{ match("false"); return Val{false}; }
-					inline auto parseBlnTrue()	{ match("true"); return Val{true}; }
+					inline Val parseNll()		{ match("null"); return Val{Nll{}}; }
+					inline Val parseBlnFalse()	{ match("false"); return Val{false}; }
+					inline Val parseBlnTrue()	{ match("true"); return Val{true}; }
 
-					inline auto parseNum()
+					inline Val parseNum()
 					{
 						char* endChar;
 
@@ -168,9 +173,9 @@ namespace ssvu
 						return Val{Num{isDecimal ? realN : intSN}};
 					}
 
-					inline auto parseStr() { return Val{readStr()}; }
+					inline Val parseStr() { return Val{readStr()}; }
 
-					inline auto parseArr()
+					inline Val parseArr()
 					{
 						Arr array;
 
@@ -195,7 +200,7 @@ namespace ssvu
 							// Check for end of the array
 							if(isC(']')) break;
 
-							throw ReadException{"Invalid array", "Expected either `,` or `]`, got `"s + getC() + "`", getErrorSrc()};
+							throwError("Invalid array", std::string{"Expected either `,` or `]`, got `"} + getC() + "`");
 						}
 
 						end:
@@ -206,7 +211,7 @@ namespace ssvu
 						return Val{array};
 					}
 
-					inline auto parseObj()
+					inline Val parseObj()
 					{
 						Obj object;
 
@@ -222,12 +227,12 @@ namespace ssvu
 						{
 							// Read string key
 							skipWhitespace();
-							if(!isC('"')) throw ReadException{"Invalid object", "Expected `\"` , got `"s + getC() + "`", getErrorSrc()};
+							if(!isC('"')) throwError("Invalid object", std::string{"Expected `\"` , got `"} + getC() + "`");
 							auto key(readStr());
 
 							// Read ':'
 							skipWhitespace();
-							if(!isC(':')) throw ReadException{"Invalid object", "Expected `:` , got `"s + getC() + "`", getErrorSrc()};
+							if(!isC(':')) throwError("Invalid object", std::string{"Expected `:` , got `"} + getC() + "`");
 
 							// Skip ':'
 							++idx;
@@ -243,7 +248,7 @@ namespace ssvu
 							// Check for end of the object
 							if(isC('}')) break;
 
-							throw ReadException{"Invalid object", "Expected either `,` or `}`, got `"s + getC() + "`", getErrorSrc()};
+							throwError("Invalid object", std::string{"Expected either `,` or `}`, got `"} + getC() + "`");
 						}
 
 						end:
@@ -255,7 +260,10 @@ namespace ssvu
 					}
 
 				public:
-					inline Reader(std::string mSrc) : src{std::move(mSrc)} { purgeSource(); }
+					template<typename T> inline Reader(T&& mSrc) : src{fwd<T>(mSrc)}
+					{
+						if(!TRS::noComments) purgeSource();
+					}
 
 					inline Val parseVal()
 					{
@@ -275,7 +283,7 @@ namespace ssvu
 						// Check if value is a number
 						if(isNumStart(getC())) return parseNum();
 
-						throw ReadException{"Invalid value", "No match for values beginning with `"s + getC() + "`", getErrorSrc()};
+						throwError("Invalid value", std::string{"No match for values beginning with `"} + getC() + "`");
 					}
 			};
 		}

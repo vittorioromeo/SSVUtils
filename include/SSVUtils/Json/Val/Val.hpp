@@ -41,24 +41,22 @@ namespace ssvu
 					inline ~Holder() noexcept { }
 				} h;
 
-				template<typename T> inline void setObj(T&& mX)	{ type = Type::Obj; new(&h.hObj) Obj(fwd<T>(mX)); }
-				template<typename T> inline void setArr(T&& mX)	{ type = Type::Arr; new(&h.hArr) Arr(fwd<T>(mX)); }
-				template<typename T> inline void setStr(T&& mX)	{ type = Type::Str; new(&h.hStr) Str(fwd<T>(mX)); }
-				inline void setNum(const Num& mX) noexcept		{ type = Type::Num; h.hNum = mX; }
-				inline void setBln(Bln mX) noexcept				{ type = Type::Bln; h.hBool = mX; }
-				inline void setNll(Nll) noexcept				{ type = Type::Nll; }
+				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{fwd<T>(mX)})) { type = Type::Obj; new(&h.hObj) Obj{fwd<T>(mX)}; }
+				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{fwd<T>(mX)})) { type = Type::Arr; new(&h.hArr) Arr(fwd<T>(mX)); }
+				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{fwd<T>(mX)})) { type = Type::Str; new(&h.hStr) Str(fwd<T>(mX)); }
 
-				inline auto& getObj() & noexcept			{ SSVU_ASSERT(is<Obj>()); return h.hObj; }
-				inline const auto& getObj() const& noexcept	{ SSVU_ASSERT(is<Obj>()); return h.hObj; }
-				inline auto getObjMove() && noexcept		{ SSVU_ASSERT(is<Obj>()); return std::move(h.hObj); }
+				inline void setNum(const Num& mX) noexcept	{ type = Type::Num; h.hNum = mX; }
+				inline void setBln(Bln mX) noexcept			{ type = Type::Bln; h.hBool = mX; }
+				inline void setNll(Nll) noexcept			{ type = Type::Nll; }
 
-				inline auto& getArr() & noexcept			{ SSVU_ASSERT(is<Arr>()); return h.hArr; }
-				inline const auto& getArr() const& noexcept	{ SSVU_ASSERT(is<Arr>()); return h.hArr; }
-				inline auto getArrMove() && noexcept		{ SSVU_ASSERT(is<Arr>()); return std::move(h.hArr); }
+				inline auto& getObj() noexcept				{ SSVU_ASSERT(is<Obj>()); return h.hObj; }
+				inline const auto& getObj() const noexcept	{ SSVU_ASSERT(is<Obj>()); return h.hObj; }
 
-				inline auto& getStr() & noexcept			{ SSVU_ASSERT(is<Str>()); return h.hStr; }
-				inline const auto& getStr() const& noexcept	{ SSVU_ASSERT(is<Str>()); return h.hStr; }
-				inline auto getStrMove() && noexcept		{ SSVU_ASSERT(is<Str>()); return std::move(h.hStr); }
+				inline auto& getArr() noexcept				{ SSVU_ASSERT(is<Arr>()); return h.hArr; }
+				inline const auto& getArr() const noexcept	{ SSVU_ASSERT(is<Arr>()); return h.hArr; }
+
+				inline auto& getStr() noexcept				{ SSVU_ASSERT(is<Str>()); return h.hStr; }
+				inline const auto& getStr() const noexcept	{ SSVU_ASSERT(is<Str>()); return h.hStr; }
 
 				inline auto getNum() const noexcept			{ SSVU_ASSERT(is<Num>()); return h.hNum; }
 				inline auto getBln() const noexcept			{ SSVU_ASSERT(is<Bln>()); return h.hBool; }
@@ -75,15 +73,21 @@ namespace ssvu
 					}
 				}
 
+				// Moves `mV` if `T` is an rvalue reference
+				template<typename T, typename TV> inline constexpr decltype(auto) moveIfRValue(TV&& mV) noexcept
+				{
+					return reinterpret_cast<Conditional<isRValueRef<T>(), RemoveRef<TV>&&, const TV&>>(mV);
+				}
+
 				template<typename T> inline void init(T&& mV)
 				{
 					switch(mV.type)
 					{
-						case Type::Obj: setObj(fwd<T>(mV).getObj()); break;
-						case Type::Arr: setArr(fwd<T>(mV).getArr()); break;
-						case Type::Str: setStr(fwd<T>(mV).getStr()); break;
-						case Type::Num: setNum(fwd<T>(mV).getNum()); break;
-						case Type::Bln: setBln(fwd<T>(mV).getBln()); break;
+						case Type::Obj: setObj(moveIfRValue<decltype(mV)>(mV.getObj())); break;
+						case Type::Arr: setArr(moveIfRValue<decltype(mV)>(mV.getArr())); break;
+						case Type::Str: setStr(moveIfRValue<decltype(mV)>(mV.getStr())); break;
+						case Type::Num: setNum(mV.getNum()); break;
+						case Type::Bln: setBln(mV.getBln()); break;
 						case Type::Nll: setNll(Nll{}); break;
 					}
 				}
@@ -98,7 +102,11 @@ namespace ssvu
 				inline ~Val() { deinitCurrent(); }
 
 				// "Explicit" `set` function set the inner contents of the value
-				template<typename T> inline void set(T&& mX) { deinitCurrent(); Internal::ValHelper<RemoveAll<T>>::set(*this, fwd<T>(mX)); }
+				template<typename T> inline void set(T&& mX) noexcept(noexcept(Internal::ValHelper<RemoveAll<T>>::set(std::declval<Val&>(), fwd<T>(mX))))
+				{
+					deinitCurrent();
+					Internal::ValHelper<RemoveAll<T>>::set(*this, fwd<T>(mX));
+				}
 
 				// Check stored type
 				template<typename T> inline bool is() const noexcept { return Internal::ValHelper<T>::is(*this); }
@@ -109,15 +117,19 @@ namespace ssvu
 				template<typename T> decltype(auto) as() && noexcept		{ return Internal::ValHelper<T>::as(std::move(*this)); }
 
 				// "Implicit" `set` function done via `operator=` overloading
-				template<typename T> inline auto& operator=(T&& mX) { set(fwd<T>(mX)); return *this; }
+				template<typename T> inline auto& operator=(T&& mX) noexcept(noexcept(std::declval<Val&>().set(fwd<T>(mX))))
+				{
+					set(fwd<T>(mX));
+					return *this;
+				}
 
 				// "Implicit" Val from Obj by Key getters
-				inline auto& operator[](const Key& mKey) &				{ return getObj()[mKey]; }
-				inline const auto& operator[](const Key& mKey) const&	{ return getObj().at(mKey); }
+				inline auto& operator[](const Key& mKey) 				{ return getObj()[mKey]; }
+				inline const auto& operator[](const Key& mKey) const	{ return getObj().at(mKey); }
 
 				// "Implicit" Val from Arr by Idx getters
-				inline auto& operator[](Idx mIdx) &				{ return getArr()[mIdx]; }
-				inline const auto& operator[](Idx mIdx) const&	{ return getArr().at(mIdx); }
+				inline auto& operator[](Idx mIdx) 				{ return getArr()[mIdx]; }
+				inline const auto& operator[](Idx mIdx) const	{ return getArr().at(mIdx); }
 
 				inline bool has(const Key& mKey) const noexcept { return getObj().has(mKey); }
 
@@ -148,15 +160,17 @@ namespace ssvu
 
 
 				// IO
-				template<WriterMode TWS = WriterMode::Pretty, bool TFmt = false> void writeToStream(std::ostream&) const;
-				template<WriterMode TWS = WriterMode::Pretty, bool TFmt = false> void writeToStr(std::string&) const;
-				template<WriterMode TWS = WriterMode::Pretty, bool TFmt = false> void writeToFile(const ssvufs::Path&) const;
-				template<WriterMode TWS = WriterMode::Pretty, bool TFmt = false> auto getWriteToStr() const;
+				template<typename TWS = WriterSettings<WMode::Pretty>> void writeToStream(std::ostream&) const;
+				template<typename TWS = WriterSettings<WMode::Pretty>> inline void writeToStr(std::string& mStr) const			{ std::ostringstream o; writeToStream<TWS>(o); mStr = o.str(); }
+				template<typename TWS = WriterSettings<WMode::Pretty>> inline void writeToFile(const ssvufs::Path& mPath) const	{ std::ofstream o{mPath}; writeToStream<TWS>(o); o.close(); }
+				template<typename TWS = WriterSettings<WMode::Pretty>> inline auto getWriteToStr() const						{ std::string result; writeToStr<TWS>(result); return result; }
 
-				void readFromStr(std::string mStr);
-				void readFromFile(const ssvufs::Path& mPath);
+				template<typename TRS = ReaderSettings<RMode::Default>, typename T> void readFromStr(T&& mStr);
+				template<typename TRS = ReaderSettings<RMode::Default>> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(std::move(mPath.getContentsAsString())); }
 
-				static inline Val fromStr(const std::string& mStr)		{ Val result; result.readFromStr(mStr); return result; }
+				template<typename T> static inline Val fromStr(T&& mStr) { Val result; result.readFromStr(fwd<T>(mStr)); return result; }
+
+				// TODO: path move semantics
 				static inline Val fromFile(const ssvufs::Path& mPath)	{ Val result; result.readFromFile(mPath); return result; }
 
 

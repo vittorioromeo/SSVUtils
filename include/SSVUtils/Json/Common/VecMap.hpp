@@ -133,5 +133,3 @@ namespace ssvu
 }
 
 #endif
-
-// TODO: use vecsorted?

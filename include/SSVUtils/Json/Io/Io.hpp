@@ -32,7 +32,7 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			inline bool tryParse(Val& mVal, Internal::Reader& mReader)
+			template<typename TRS> inline bool tryParse(Val& mVal, Reader<TRS>& mReader)
 			{
 				try
 				{

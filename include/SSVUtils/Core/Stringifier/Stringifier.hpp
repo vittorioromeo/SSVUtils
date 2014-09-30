@@ -63,7 +63,7 @@ namespace ssvu
 		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, TFunc1 mFunc, TFunc2 mFuncSeparator, std::forward_iterator_tag)
 		{
 			auto count(std::distance(mBegin, mEnd));
-			for(auto i(0u); i < count; ++i) { mFunc(*mBegin); if(i < count - 1u) mFuncSeparator(*mBegin); ++mBegin; }
+			for(auto i(0); i < count; ++i) { mFunc(*mBegin); if(i < count - 1) mFuncSeparator(*mBegin); ++mBegin; }
 		}
 
 		/// @brief Utility function to avoid repetition.

@@ -29,7 +29,22 @@ namespace ssvu
 
 		struct Nll { };
 
-		enum class WriterMode{Pretty, Minified};
+
+
+		enum class WMode{Pretty, Minified, PrettyConsole};
+
+		template<WMode TWM> struct WriterSettings;
+		template<> struct WriterSettings<WMode::Pretty>			{ enum { fmt = false,	pretty = true }; };
+		template<> struct WriterSettings<WMode::Minified>		{ enum { fmt = false,	pretty = false }; };
+		template<> struct WriterSettings<WMode::PrettyConsole>	{ enum { fmt = true,	pretty = true }; };
+
+
+
+		enum class RMode{Default, NoComments};
+
+		template<RMode TRM> struct ReaderSettings;
+		template<> struct ReaderSettings<RMode::Default>		{ enum { noComments = false }; };
+		template<> struct ReaderSettings<RMode::NoComments>		{ enum { noComments = true }; };
 	}
 }
 
