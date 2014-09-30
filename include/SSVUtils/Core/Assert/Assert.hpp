@@ -59,20 +59,15 @@
 			ssvu::Internal::assertImpl(__VA_ARGS__); \
 		} while(false)
 
-	// TODO:
+	// TODO: BUG: gcc - doesn't work yet
 	/// @macro Constexpr assertion. Work-in-progress.
-	#define SSVU_ASSERT_CONSTEXPR(...)
-
-	// C++14: uncomment
-	/*
-	#ifdef __clang__
+	#if SSVU_COMPILER_CLANG
 		/// @macro When compiling with clang, using `assert` in constexpr functions seems to be allowed.
-		#define SSVU_ASSERT_CONSTEXPR(mTest) assert(mTest)
+		#define SSVU_ASSERT_CONSTEXPR(...) assert(__VA_ARGS__)
 	#else
 		/// @macro When compiling with g++, using `assert` in constexpr functions causes an error.
-		#define SSVU_ASSERT_CONSTEXPR(mTest)
+		#define SSVU_ASSERT_CONSTEXPR(...)
 	#endif
-	*/
 #endif
 
 #endif
