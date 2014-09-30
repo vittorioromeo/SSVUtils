@@ -11,8 +11,82 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<typename TK, typename TV> class VecMap
+			template<typename TDerived> class VecBase
 			{
+				private:
+					inline auto& getTD() noexcept				{ return reinterpret_cast<TDerived&>(*this); }
+					inline const auto& getTD() const noexcept	{ return reinterpret_cast<const TDerived&>(*this); }
+
+				public:
+					template<typename T> inline bool has(const T& mValue) const noexcept { return getTD().is(getTD().lookup(mValue), mValue); }
+
+					inline auto& getData() noexcept { return getTD().data; }
+					inline const auto& getData() const noexcept { return getTD().data; }
+
+					template<typename TC> inline auto operator==(const TC& mC) const noexcept { return getData() == mC.getData(); }
+					template<typename TC> inline auto operator!=(const TC& mC) const noexcept { return !(operator==(mC)); }
+
+					inline void clear()		noexcept		{ getData().clear(); }
+
+					inline auto size()		const noexcept	{ return getData().size(); }
+					inline auto empty()		const noexcept	{ return getData().empty(); }
+
+					inline auto begin()		noexcept		{ return std::begin(getData()); }
+					inline auto end()		noexcept		{ return std::end(getData()); }
+					inline auto begin()		const noexcept	{ return std::begin(getData()); }
+					inline auto end()		const noexcept	{ return std::end(getData()); }
+					inline auto cbegin()	const noexcept	{ return std::cbegin(getData()); }
+					inline auto cend()		const noexcept	{ return std::cend(getData()); }
+					inline auto rbegin()	noexcept		{ return std::rbegin(getData()); }
+					inline auto rend()		noexcept		{ return std::rend(getData()); }
+					inline auto crbegin()	const noexcept	{ return std::crbegin(getData()); }
+					inline auto crend()		const noexcept	{ return std::crend(getData()); }
+			};
+
+			template<typename T, typename TCmp> class VecSorted : public VecBase<VecSorted<T, TCmp>>
+			{
+				template<typename TDerived> friend class VecBase;
+
+				private:
+					std::vector<T> data;
+
+					template<typename TC> inline static auto lookupHelper(TC& mVecSorted, const T& mValue) noexcept
+					{
+						return lowerBound(mVecSorted.data, mValue, TCmp{});
+					}
+
+					inline auto lookup(const T& mValue) noexcept		{ return lookupHelper(*this, mValue); }
+					inline auto lookup(const T& mValue) const noexcept	{ return lookupHelper(*this, mValue); }
+
+					template<typename TItr> inline bool is(const T& mItr, const T& mValue) const noexcept
+					{
+						return mItr != std::end(data) && *mItr == mValue;
+					}
+
+				public:
+					inline VecSorted() = default;
+					inline VecSorted(const VecSorted& mVM) : data{mVM.data} { }
+					inline VecSorted(VecSorted&& mVM) : data{std::move(mVM.data)} { }
+					inline VecSorted(std::initializer_list<T>&& mIL) : data{std::move(mIL)} { sort(data, TCmp{}); }
+
+					inline auto& operator[](const T& mValue)
+					{
+						auto itr(lookup(mValue));
+						return is(itr, mValue) ? *itr : data.emplace(itr, mValue);
+					}
+					inline const auto& at(const T& mValue) const
+					{
+						auto itr(lookup(mValue));
+						if(is(itr, mValue)) return *itr;
+
+						throw std::out_of_range{""};
+					}
+			};
+
+			template<typename TK, typename TV> class VecMap : public VecBase<VecMap<TK, TV>>
+			{
+				template<typename TDerived> friend class VecBase;
+
 				public:
 					using Item = std::pair<TK, TV>;
 
@@ -53,28 +127,6 @@ namespace ssvu
 
 						throw std::out_of_range{""};
 					}
-
-					inline bool has(const TK& mKey) const noexcept { return is(lookup(mKey), mKey); }
-
-					inline auto operator==(const VecMap& mVM) const noexcept { return data == mVM.data; }
-					inline auto operator!=(const VecMap& mVM) const noexcept { return !(operator==(mVM)); }
-
-
-					inline void clear()		noexcept		{ data.clear(); }
-
-					inline auto size()		const noexcept	{ return data.size(); }
-					inline auto empty()		const noexcept	{ return data.empty(); }
-
-					inline auto begin()		noexcept		{ return std::begin(data); }
-					inline auto end()		noexcept		{ return std::end(data); }
-					inline auto begin()		const noexcept	{ return std::begin(data); }
-					inline auto end()		const noexcept	{ return std::end(data); }
-					inline auto cbegin()	const noexcept	{ return std::cbegin(data); }
-					inline auto cend()		const noexcept	{ return std::cend(data); }
-					inline auto rbegin()	noexcept		{ return std::rbegin(data); }
-					inline auto rend()		noexcept		{ return std::rend(data); }
-					inline auto crbegin()	const noexcept	{ return std::crbegin(data); }
-					inline auto crend()		const noexcept	{ return std::crend(data); }
 			};
 		}
 	}
@@ -82,4 +134,4 @@ namespace ssvu
 
 #endif
 
-// TODO: generalize to sortedvector
+// TODO: use vecsorted?

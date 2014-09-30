@@ -85,7 +85,6 @@ namespace ssvu
 						case Type::Num: setNum(fwd<T>(mV).getNum()); break;
 						case Type::Bln: setBln(fwd<T>(mV).getBln()); break;
 						case Type::Nll: setNll(Nll{}); break;
-						default: break;
 					}
 				}
 
@@ -141,8 +140,7 @@ namespace ssvu
 						case Type::Nll: return true;
 					}
 
-					SSVU_ASSERT(false);
-					std::terminate();
+					SSVU_JSON_UNREACHABLE();
 				}
 				inline auto operator!=(const Val& mV) const noexcept { return !(operator==(mV)); }
 
@@ -164,21 +162,21 @@ namespace ssvu
 
 
 				// Iteration
-				inline auto makeRangeObj() noexcept			{ return makeRange(getObj()); }
-				inline auto makeRangeObj() const noexcept	{ return makeRange(getObj()); }
+				inline auto asRangeObj() noexcept		{ return asRange(getObj()); }
+				inline auto asRangeObj() const noexcept	{ return asRange(getObj()); }
 
-				inline auto makeRangeArr() noexcept			{ return makeRange(getArr()); }
-				inline auto makeRangeArr() const noexcept	{ return makeRange(getArr()); }
+				inline auto asRangeArr() noexcept		{ return asRange(getArr()); }
+				inline auto asRangeArr() const noexcept	{ return asRange(getArr()); }
 
-				template<typename TF> inline void forObj(TF mFunc)						{ for(		auto& i : makeRangeObj()) mFunc(i.first, i.second); }
-				template<typename TF> inline void forObj(TF mFunc) const				{ for(const auto& i : makeRangeObj()) mFunc(i.first, i.second); }
-				template<typename TV, typename TF> inline void forObjAs(TF mFunc)		{ for(		auto& i : makeRangeObj()) mFunc(i.first, i.second.template as<TV>()); }
-				template<typename TV, typename TF> inline void forObjAs(TF mFunc) const	{ for(const auto& i : makeRangeObj()) mFunc(i.first, i.second.template as<TV>()); }
+				template<typename TF> inline void forObj(TF mFunc)						{ for(		auto& i : asRangeObj()) mFunc(i.first, i.second); }
+				template<typename TF> inline void forObj(TF mFunc) const				{ for(const auto& i : asRangeObj()) mFunc(i.first, i.second); }
+				template<typename TV, typename TF> inline void forObjAs(TF mFunc)		{ for(		auto& i : asRangeObj()) mFunc(i.first, i.second.template as<TV>()); }
+				template<typename TV, typename TF> inline void forObjAs(TF mFunc) const	{ for(const auto& i : asRangeObj()) mFunc(i.first, i.second.template as<TV>()); }
 
-				template<typename TF> inline void forArr(TF mFunc)						{ for(		auto& i : makeRangeArr()) mFunc(i); }
-				template<typename TF> inline void forArr(TF mFunc) const				{ for(const auto& i : makeRangeArr()) mFunc(i); }
-				template<typename TV, typename TF> inline void forArrAs(TF mFunc)		{ for(		auto& i : makeRangeArr()) mFunc(i.template as<TV>()); }
-				template<typename TV, typename TF> inline void forArrAs(TF mFunc) const	{ for(const auto& i : makeRangeArr()) mFunc(i.template as<TV>()); }
+				template<typename TF> inline void forArr(TF mFunc)						{ for(		auto& i : asRangeArr()) mFunc(i); }
+				template<typename TF> inline void forArr(TF mFunc) const				{ for(const auto& i : asRangeArr()) mFunc(i); }
+				template<typename TV, typename TF> inline void forArrAs(TF mFunc)		{ for(		auto& i : asRangeArr()) mFunc(i.template as<TV>()); }
+				template<typename TV, typename TF> inline void forArrAs(TF mFunc) const	{ for(const auto& i : asRangeArr()) mFunc(i.template as<TV>()); }
 		};
 
 		using Obj = Val::Obj;

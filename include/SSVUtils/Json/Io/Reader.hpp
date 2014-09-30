@@ -11,8 +11,15 @@ namespace ssvu
 	{
 		namespace Internal
 		{
+			inline bool isValidEscapeSequenceChar(char mC) noexcept
+			{
+				return mC == '"' || mC == '\\' || mC == '/' || mC == 'b' || mC == 'f' || mC == 'n' || mC == 'r' || mC == 't';
+			}
+
 			inline char getEscapeSequence(char mC) noexcept
 			{
+				SSVU_ASSERT(isValidEscapeSequenceChar(mC));
+
 				switch(mC)
 				{
 					case '"': case '\\': case '/': return mC;
@@ -24,8 +31,7 @@ namespace ssvu
 					case 't': return '\t';
 				}
 
-				SSVU_ASSERT(false);
-				std::terminate();
+				SSVU_JSON_UNREACHABLE();
 			}
 
 			class Reader
@@ -114,9 +120,13 @@ namespace ssvu
 							// End of the string
 							if(src[end] == '"') break;
 
-							// TODO: assert escape sequence validity
 							// Skip escape sequences
-							if(src[end] == '\\') { ++end; continue; }
+							if(src[end] == '\\')
+							{
+								++end;
+								SSVU_ASSERT(isValidEscapeSequenceChar(src[end]));
+								continue;
+							}
 						}
 
 						// Reserve memory for the string (BOTTLENECK)

@@ -128,7 +128,6 @@ namespace ssvu
 
 						switch(mNum.getType())
 						{
-							// TODO: prefer itoa itod ...
 							case Num::Type::IntS: wOut(toStr(mNum.as<Num::IntS>())); break;
 							case Num::Type::IntU: wOut(toStr(mNum.as<Num::IntU>())); break;
 							case Num::Type::Real: wOut(toStr(mNum.as<Num::Real>())); break;

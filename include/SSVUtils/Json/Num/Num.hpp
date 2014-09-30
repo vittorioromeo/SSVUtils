@@ -46,6 +46,8 @@ namespace ssvu
 							case Type::IntU: return static_cast<IntS>(h.hIntU);
 							case Type::Real: return static_cast<IntS>(h.hReal);
 						}
+
+						SSVU_JSON_UNREACHABLE();
 					}
 
 					inline IntU getIntU() const noexcept
@@ -56,6 +58,8 @@ namespace ssvu
 							case Type::IntU: return h.hIntU;
 							case Type::Real: return static_cast<IntU>(h.hReal);
 						}
+
+						SSVU_JSON_UNREACHABLE();
 					}
 
 					inline Real getReal() const noexcept
@@ -66,6 +70,8 @@ namespace ssvu
 							case Type::IntU: return static_cast<Real>(h.hIntU);
 							case Type::Real: return h.hReal;
 						}
+
+						SSVU_JSON_UNREACHABLE();
 					}
 
 				public:
@@ -86,8 +92,7 @@ namespace ssvu
 							case Type::Real: return getReal() == mN.getReal();
 						}
 
-						SSVU_ASSERT(false);
-						std::terminate();
+						SSVU_JSON_UNREACHABLE();
 					}
 					inline auto operator!=(const Num& mN) const noexcept { return !(operator==(mN)); }
 			};
