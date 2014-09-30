@@ -6,7 +6,7 @@
 #define SSVU_CORE_CONSOLEFMT_IMPL
 
 // This file contains an Unix implementation for console formatting.
-// Everything returns ASCII formatting codes.
+// Everything returns ANSI formatting codes.
 
 #include <sys/ioctl.h>
 #include <stdio.h>
@@ -22,7 +22,7 @@ namespace ssvu
 			constexpr const char* postfix{"m"};
 			constexpr const char* clear{"\033[1;1H\033[2J"};
 
-			inline int getStyleCode(Style mStyle) noexcept
+			inline auto& getStyleCodes() noexcept
 			{
 				static int codes[]
 				{
@@ -41,9 +41,9 @@ namespace ssvu
 					28		// 12 = Style::ResetHidden
 				};
 
-				return codes[int(mStyle)];
+				return codes;
 			}
-			inline int getColorFGCode(Color mColor) noexcept
+			inline auto& getColorFGCodes() noexcept
 			{
 				static int codes[]
 				{
@@ -66,32 +66,76 @@ namespace ssvu
 					97		// 16 = Color::LightWhite
 				};
 
-				return codes[int(mColor)];
+				return codes;
 			}
-			inline int getColorBGCode(Color mColor) noexcept { return getColorFGCode(mColor) + 10; }
+			inline auto& getColorBGCodes() noexcept
+			{
+				static int codes[]
+				{
+					49,		// 0 = Color::Default
+					40,		// 1 = Color::Black
+					41,		// 2 = Color::Red
+					42,		// 3 = Color::Green
+					43,		// 4 = Color::Yellow
+					44,		// 5 = Color::Blue
+					45,		// 6 = Color::Magenta
+					46,		// 7 = Color::Cyan
+					47,		// 8 = Color::LightGray
+					100,	// 9 = Color::DarkGray
+					101,	// 10 = Color::LightRed
+					102,	// 11 = Color::LightGreen
+					103,	// 12 = Color::LightYellow
+					104,	// 13 = Color::LightBlue
+					105,	// 14 = Color::LightMagenta
+					106,	// 15 = Color::LightCyan
+					107		// 16 = Color::LightWhite
+				};
 
-			inline auto& getLastStyle() noexcept	{ static Style result{Style::None};		return result; }
-			inline auto& getLastColorFG() noexcept	{ static Color result{Color::Default};	return result; }
-			inline auto& getLastColorBG() noexcept	{ static Color result{Color::Default};	return result; }
+				return codes;
+			}
+
+			struct FmtCache
+			{
+				Style lastStyle{Style::None};
+				Color lastColorFG{Color::Default}, lastColorBG{Color::Default};
+				std::vector<std::string> styleCodeStrs, colorFGCodeStrs, colorBGCodeStrs;
+				std::string strClear{clear};
+
+				inline FmtCache()
+				{
+					for(const auto& i : getStyleCodes())	styleCodeStrs.emplace_back(toStr(i));
+					for(const auto& i : getColorFGCodes())	colorFGCodeStrs.emplace_back(toStr(i));
+					for(const auto& i : getColorBGCodes())	colorBGCodeStrs.emplace_back(toStr(i));
+				}
+			};
+
+			inline auto& getFmtCache() noexcept { static FmtCache result; return result; }
+
+			inline auto& getLastStyle() noexcept	{ return getFmtCache().lastStyle; }
+			inline auto& getLastColorFG() noexcept	{ return getFmtCache().lastColorFG; }
+			inline auto& getLastColorBG() noexcept	{ return getFmtCache().lastColorBG; }
+
+			inline const auto& getStyleStr(Style mStyle) noexcept	{ return getFmtCache().styleCodeStrs[int(mStyle)]; }
+			inline const auto& getColorFGStr(Color mColor) noexcept	{ return getFmtCache().colorFGCodeStrs[int(mColor)]; }
+			inline const auto& getColorBGStr(Color mColor) noexcept	{ return getFmtCache().colorBGCodeStrs[int(mColor)]; }
+
 			inline const auto& getFmtStr() noexcept
 			{
 				static IgnoreManip result;
-				// TODO: cache string codes
-				result = {prefix + toStr(getStyleCode(getLastStyle())) + ";" + toStr(getColorFGCode(getLastColorFG())) + ";" + toStr(getColorBGCode(getLastColorBG())) + postfix};
+				result = {prefix + getStyleStr(getLastStyle()) + ";" + getColorFGStr(getLastColorFG()) + ";" + getColorBGStr(getLastColorBG()) + postfix};
 				return result;
 			}
 
 			inline const auto& getStrResetFmt() noexcept
 			{
 				getLastStyle() = Style::None;
-				getLastColorFG() = Color::Default;
-				getLastColorBG() = Color::Default;
+				getLastColorFG() = getLastColorBG() = Color::Default;
 				return getFmtStr();
 			}
-			inline const auto& getStrStyle(Style mStyle) noexcept	{ getLastStyle() = mStyle;				return getFmtStr(); }
-			inline const auto& getStrColorFG(Color mColor) noexcept	{ getLastColorFG() = mColor;			return getFmtStr(); }
-			inline const auto& getStrColorBG(Color mColor) noexcept	{ getLastColorBG() = mColor;			return getFmtStr(); }
-			inline const auto& getStrClear() noexcept				{ static std::string result{clear};		return result; }
+			inline const auto& getStrStyle(Style mStyle) noexcept	{ getLastStyle() = mStyle;		return getFmtStr(); }
+			inline const auto& getStrColorFG(Color mColor) noexcept	{ getLastColorFG() = mColor;	return getFmtStr(); }
+			inline const auto& getStrColorBG(Color mColor) noexcept	{ getLastColorBG() = mColor;	return getFmtStr(); }
+			inline const auto& getStrClear() noexcept				{ return getFmtCache().strClear; }
 
 			struct InfoImpl
 			{
