@@ -55,11 +55,9 @@ namespace ssvu
 				inline Path(std::string&& mPath) noexcept : path{std::move(mPath)} { }
 				inline Path(const char* mPath) : path{mPath} { }
 
-				template<typename T, SSVU_ENABLE_IF_IS(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = moveIfRValue<decltype(mPath)>(mPath.path)))
-				{
-					path = moveIfRValue<decltype(mPath)>(mPath.path);
-					mustNormalize = true; return *this;
-				}
+				inline auto& operator=(const Path& mPath)		{ path = mPath.path; mustNormalize = true; return *this; }
+				inline auto& operator=(Path&& mPath) noexcept	{ path = std::move(mPath.path); mustNormalize = true; return *this; }
+
 				template<typename T, SSVU_ENABLE_IF_IS_NOT(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = fwd<T>(mPath)))
 				{
 					path = fwd<T>(mPath);
