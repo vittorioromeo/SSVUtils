@@ -26,6 +26,8 @@ namespace ssvu
 					template<typename TC> inline auto operator==(const TC& mC) const noexcept { return getData() == mC.getData(); }
 					template<typename TC> inline auto operator!=(const TC& mC) const noexcept { return !(operator==(mC)); }
 
+					inline void reserve(std::size_t mV) { getData().reserve(mV); }
+
 					inline void clear()		noexcept		{ getData().clear(); }
 
 					inline auto size()		const noexcept	{ return getData().size(); }
@@ -108,7 +110,7 @@ namespace ssvu
 					}
 
 				public:
-					inline VecMap() { data.reserve(10); }
+					inline VecMap() = default;
 					inline VecMap(const VecMap& mVM) : data{mVM.data} { }
 					inline VecMap(VecMap&& mVM) : data{std::move(mVM.data)} { }
 					inline VecMap(std::initializer_list<Item>&& mIL) : data{std::move(mIL)}

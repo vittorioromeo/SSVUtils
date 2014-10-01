@@ -118,7 +118,8 @@ namespace ssvu
 				}
 
 				// "Implicit" Val from Obj by Key getters
-				inline auto& operator[](const Key& mKey) 				{ return getObj()[mKey]; }
+				inline auto& operator[](Key&& mKey)						{ return getObj()[std::move(mKey)]; }
+				inline auto& operator[](const Key& mKey)				{ return getObj()[mKey]; }
 				inline const auto& operator[](const Key& mKey) const	{ return getObj().at(mKey); }
 
 				// "Implicit" Val from Arr by Idx getters
@@ -128,6 +129,11 @@ namespace ssvu
 				inline bool has(const Key& mKey) const noexcept { return getObj().has(mKey); }
 
 				inline auto getType() const noexcept { return type; }
+
+				template<typename T> inline decltype(auto) getIfHas(const Key& mKey, T&& mDef) const
+				{
+					return has(mKey) ? operator[](mKey).as<T>() : fwd<T>(mDef);
+				}
 
 
 

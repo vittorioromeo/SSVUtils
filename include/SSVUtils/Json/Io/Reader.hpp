@@ -177,7 +177,7 @@ namespace ssvu
 
 					inline Val parseArr()
 					{
-						Arr array;
+						Arr arr;
 
 						// Skip '['
 						++idx;
@@ -187,11 +187,14 @@ namespace ssvu
 						// Empty array
 						if(isC(']')) goto end;
 
+						// Reserve some memory
+						arr.reserve(10);
+
 						while(true)
 						{
 							// Get value
 							skipWhitespace();
-							array.emplace_back(parseVal());
+							arr.emplace_back(parseVal());
 							skipWhitespace();
 
 							// Check for another value
@@ -208,7 +211,7 @@ namespace ssvu
 						// Skip ']'
 						++idx;
 
-						return Val{array};
+						return Val{arr};
 					}
 
 					inline Val parseObj()
@@ -222,6 +225,9 @@ namespace ssvu
 
 						// Empty object
 						if(isC('}')) goto end;
+
+						// Reserve some memory
+						obj.reserve(10);
 
 						while(true)
 						{
