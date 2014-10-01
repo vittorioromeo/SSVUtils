@@ -133,32 +133,23 @@ namespace ssvu
 					return mV.getType() == Val::Type::Arr && Impl::isTpl<0, TArgs...>(mV);
 				}
 			};
-/*
-			template<typename TItem> struct ValHelper<std::vector<TItem>>
+
+			template<typename T> struct ValHelper<std::vector<T>>
 			{
-				using Type = std::vector<TItem>;
+				using Type = std::vector<T>;
 
-				inline static void set(Val& mV, const Type& mX)
+				inline static void set(Val& mV, const Type& mX)	{ Arr result; for(const auto& v : mX) result.emplace_back(v); mV.setArr(std::move(result)); }
+				inline static void set(Val& mV, Type&& mX)		{ Arr result; for(const auto& v : mX) result.emplace_back(std::move(v)); mV.setArr(std::move(result)); }
+				inline static auto as(const Val& mV)	{ Type result; for(const auto& v : mV.forArrAs<T>()) result.emplace_back(v); return result; }
+				inline static auto as(Val&& mV)			{ Type result; for(auto& v : mV.forArrAs<T>()) result.emplace_back(std::move(v)); return result; }
+				inline static auto is(const Val& mV)
 				{
-					Arr result;
-					for(const auto& v : mX) result.emplace_back(v);
-					mV.setArr(std::move(result));
+					if(mV.getType() != Val::Type::Arr) return false;
+					for(const auto& v : mV.forArr()) if(!v.template is<T>()) return false;
+					return true;
 				}
-				inline static void set(Val& mV, Type&& mX)
-				{
-					Arr result;
-					for(const auto& v : mX) result.emplace_back(v);
-					mV.setArr(std::move(result));
-				}
-
-
-				{
-					const auto& size(getObjSize(mObj)); mValue.resize(size);
-					for(auto i(0u); i < size; ++i) extr(mObj, i, mValue[i]);
-				}
-				inline static void toObj(Obj& mObj, const Type& mValue) { for(auto i(0u); i < mValue.size(); ++i) arch(mObj, i, mValue[i]); }
 			};
-*/
+
 			template<typename TItem, std::size_t TS> struct ValHelper<TItem[TS]>
 			{
 				using Type = TItem[TS];

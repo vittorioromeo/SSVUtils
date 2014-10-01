@@ -115,7 +115,7 @@ namespace ssvu
 				inline Val(const Val& mV)	{ init(mV); }
 				inline Val(Val&& mV)		{ init(std::move(mV)); }
 
-				template<typename T, SSVU_ENABLE_IF_IS_NOT(T, Val)> inline Val(T&& mX) { set(fwd<T>(mX)); }
+				template<typename T, SSVU_ENABLEIF_IS_NOT(T, Val)> inline Val(T&& mX) { set(fwd<T>(mX)); }
 
 				inline ~Val() { deinitCurrent(); }
 

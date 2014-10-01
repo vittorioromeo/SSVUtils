@@ -171,12 +171,24 @@ SSVUT_TEST(SSVUJsonValTests)
 		EXEC_TEST_C_ARRAY(PP, p)
 	}
 
-	// TODO:
-	/*{
+	{
 		using PP = std::vector<int>;
 		PP p{10, 20, 35};
 		EXEC_TEST_BASIC(PP, p)
-	}*/
+	}
+
+	{
+		using PP = std::vector<std::string>;
+		PP p{"10", "20", "35"};
+		EXEC_TEST_BASIC(PP, p)
+	}
+
+	{
+		using PP = std::tuple<std::vector<std::string>, std::pair<std::vector<int>, std::vector<float>>, int, std::vector<int>>;
+		PP p{std::vector<std::string>{"10", "20", "35"}, std::pair<std::vector<int>, std::vector<float>>{std::vector<int>{1, 2}, std::vector<float>{1.f, 2.f}}, 20, std::vector<int>{}};
+		EXEC_TEST_BASIC(PP, p)
+	}
+
 
 	#undef EXEC_TEST_BASIC
 	#undef EXEC_TEST_C_ARRAY

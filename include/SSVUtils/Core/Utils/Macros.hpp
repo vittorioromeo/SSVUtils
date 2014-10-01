@@ -120,11 +120,11 @@ namespace ssvu
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
 /// @details Enables if `mT` has the same type of `mType`.
-#define SSVU_ENABLE_IF_IS(mT, mType) EnableIf<isSame<RemoveAll<mT>, mType>()>* = nullptr
+#define SSVU_ENABLEIF_IS(mT, mType) EnableIf<isSame<RemoveAll<mT>, mType>()>* = nullptr
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
 /// /// @details Enables if `mT` has not the same type of `mType`.
-#define SSVU_ENABLE_IF_IS_NOT(mT, mType) EnableIf<!isSame<RemoveAll<mT>, mType>()>* = nullptr
+#define SSVU_ENABLEIF_IS_NOT(mT, mType) EnableIf<!isSame<RemoveAll<mT>, mType>()>* = nullptr
 
 #endif
 
