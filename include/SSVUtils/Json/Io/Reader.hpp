@@ -213,7 +213,7 @@ namespace ssvu
 
 					inline Val parseObj()
 					{
-						Obj object;
+						Obj obj;
 
 						// Skip '{'
 						++idx;
@@ -239,7 +239,7 @@ namespace ssvu
 
 							// Read value
 							skipWhitespace();
-							object[std::move(key)] = parseVal();
+							obj[std::move(key)] = parseVal();
 							skipWhitespace();
 
 							// Check for another key-value pair
@@ -256,7 +256,7 @@ namespace ssvu
 						// Skip '}'
 						++idx;
 
-						return Val{object};
+						return Val{obj};
 					}
 
 				public:
