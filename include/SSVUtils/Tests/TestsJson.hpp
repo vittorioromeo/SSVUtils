@@ -56,12 +56,15 @@ SSVUT_TEST(SSVUJsonValTests)
 		{ \
 			Val v0, v1, v2; \
 			v0 = mVal; \
+			SSVUT_EXPECT(v0.is<mType>()); \
 			v1 = v0; \
+			SSVUT_EXPECT(v1.is<mType>()); \
 			SSVUT_EXPECT(v0.as<Val>() == v0); \
 			SSVUT_EXPECT(v0.as<mType>() == mVal); \
 			SSVUT_EXPECT(v1.as<mType>() == mVal); \
 			SSVUT_EXPECT(v0 == v1); \
 			v2 = std::move(v1); \
+			SSVUT_EXPECT(v2.is<mType>()); \
 			SSVUT_EXPECT(v2.as<mType>() == mVal); \
 			v0 = Obj{}; \
 			v0["inner"] = v2; \
@@ -101,7 +104,82 @@ SSVUT_TEST(SSVUJsonValTests)
 		EXEC_TEST_BASIC(Obj, o)
 	}
 
+	{
+		using PP = std::pair<std::string, double>;
+		PP p{"coolpair", 205.5};
+		EXEC_TEST_BASIC(PP, p)
+	}
+
+	{
+		using PP = std::pair<std::pair<int, std::string>, std::pair<float, double>>;
+		PP p{std::pair<int, std::string>{10, "coolpair2"}, std::pair<float, double>{15.f, 205.5}};
+		EXEC_TEST_BASIC(PP, p)
+	}
+
+	{
+		using PP = std::tuple<int>;
+		PP p{10};
+		EXEC_TEST_BASIC(PP, p)
+	}
+
+	{
+		using PP = std::tuple<int, float, std::string>;
+		PP p{10, 15.5f, "swag"s};
+		EXEC_TEST_BASIC(PP, p)
+	}
+
+	{
+		using PP = std::tuple<int, float, std::string, int, float>;
+		PP p{10, 15.5f, "more swag"s, 22, 0.f};
+		EXEC_TEST_BASIC(PP, p)
+	}
+
+	{
+		using PP = std::tuple<int, float, std::string, int, std::pair<double, int>, float, std::tuple<int, int, int>>;
+		PP p{10, 15.5f, "ULTRA SWAG"s, 22, std::pair<double, int>{10.5, 99}, 0.f, std::tuple<int, int, int>{0, 1, 2}};
+		EXEC_TEST_BASIC(PP, p)
+	}
+
+	// Equality with C-style arrays doesn't work
+	#define EXEC_TEST_C_ARRAY(mType, mVal) \
+	{ \
+		Val v0, v1, v2; \
+		v0 = mVal; \
+		SSVUT_EXPECT(v0.is<mType>()); \
+		v1 = v0; \
+		SSVUT_EXPECT(v1.is<mType>()); \
+		SSVUT_EXPECT(v0 == v1); \
+		v2 = std::move(v1); \
+		SSVUT_EXPECT(v2.is<mType>()); \
+		v0 = Obj{}; \
+		v0["inner"] = v2; \
+		SSVUT_EXPECT(v0["inner"] == v2); \
+		auto sv0(v0.getWriteToStr()); \
+		auto sv2(v2.getWriteToStr()); \
+		auto osv0(Val::fromStr(sv0)); \
+		auto osv2(Val::fromStr(sv2)); \
+		SSVUT_EXPECT(v0 == osv0); \
+		SSVUT_EXPECT(v2 == osv2); \
+		SSVUT_EXPECT(v0["inner"] == osv2); \
+		SSVUT_EXPECT(osv0["inner"] == v2); \
+		SSVUT_EXPECT(osv0["inner"] == osv2); \
+	}
+
+	{
+		using PP = int[3];
+		PP p{10, 20, 35};
+		EXEC_TEST_C_ARRAY(PP, p)
+	}
+
+	// TODO:
+	/*{
+		using PP = std::vector<int>;
+		PP p{10, 20, 35};
+		EXEC_TEST_BASIC(PP, p)
+	}*/
+
 	#undef EXEC_TEST_BASIC
+	#undef EXEC_TEST_C_ARRAY
 }
 
 SSVUT_TEST(SSVUJsonReadTests)

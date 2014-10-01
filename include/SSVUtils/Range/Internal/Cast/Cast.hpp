@@ -31,20 +31,14 @@ namespace ssvu
 	/// @details The cast range automatically dereferences pointer-like objects and casts them to `T`.
 	template<typename T, typename TC> inline auto asRangeCast(TC& mContainer) noexcept
 	{
-		auto itrBegin(Internal::makeItrCast<T>(std::begin(mContainer)));
-		auto itrEnd(Internal::makeItrCast<T>(std::end(mContainer)));
-
-		return Range<decltype(itrBegin)>{itrBegin, itrEnd};
+		return makeRange(Internal::makeItrCast<T>(std::begin(mContainer)), Internal::makeItrCast<T>(std::end(mContainer)));
 	}
 
 	/// @brief Creates and returns a const cast iterator range.
 	/// @details The cast range automatically dereferences pointer-like objects and casts them to `const T`.
 	template<typename T, typename TC> inline auto asRangeCast(const TC& mContainer) noexcept
 	{
-		auto itrBegin(Internal::makeItrCastConst<T>(std::cbegin(mContainer)));
-		auto itrEnd(Internal::makeItrCastConst<T>(std::cend(mContainer)));
-
-		return Range<decltype(itrBegin)>{itrBegin, itrEnd};
+		return makeRange(Internal::makeItrCastConst<T>(std::cbegin(mContainer)), Internal::makeItrCastConst<T>(std::cend(mContainer)));
 	}
 }
 

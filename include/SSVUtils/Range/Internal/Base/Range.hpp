@@ -21,16 +21,22 @@ namespace ssvu
 			inline constexpr auto end() const noexcept		{ return itrEnd; }
 	};
 
+	/// @brief Returns a range made from two iterators.
+	template<typename TItr> inline constexpr auto makeRange(const TItr& mBegin, const TItr& mEnd)
+	{
+		return Range<TItr>(mBegin, mEnd);
+	};
+
 	/// @brief Returns a range made by `std::begin(mContainer)` and `std::end(mContainer)`.
 	template<typename TC> inline constexpr auto asRange(TC& mContainer) noexcept
 	{
-		return Range<decltype(std::begin(mContainer))>{std::begin(mContainer), std::end(mContainer)};
+		return makeRange(std::begin(mContainer), std::end(mContainer));
 	}
 
 	/// @brief Returns a range made by `std::cbegin(mContainer)` and `std::cend(mContainer)`.
 	template<typename TC> inline constexpr auto asRange(const TC& mContainer) noexcept
 	{
-		return Range<decltype(std::cbegin(mContainer))>{std::cbegin(mContainer), std::cend(mContainer)};
+		return makeRange(std::cbegin(mContainer), std::cend(mContainer));
 	}
 }
 

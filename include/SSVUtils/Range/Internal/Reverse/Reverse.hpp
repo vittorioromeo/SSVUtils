@@ -11,14 +11,14 @@ namespace ssvu
 	/// @details Uses `std::rbegin` and `std::rend` to build the range.
 	template<typename TC> inline constexpr auto asRangeReverse(TC& mContainer) noexcept
 	{
-		return Range<decltype(std::rbegin(mContainer))>{std::rbegin(mContainer), std::rend(mContainer)};
+		return makeRange(std::rbegin(mContainer), std::rend(mContainer));
 	}
 
 	/// @brief Creates and returns a const reverse range.
 	/// @details Uses `std::crbegin` and `std::crend` to build the range.
 	template<typename TC> inline constexpr auto asRangeReverse(const TC& mContainer) noexcept
 	{
-		return Range<decltype(std::crbegin(mContainer))>{std::crbegin(mContainer), std::crend(mContainer)};
+		return makeRange(std::crbegin(mContainer), std::crend(mContainer));
 	}
 }
 
