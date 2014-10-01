@@ -45,47 +45,6 @@ namespace ssvu
 					inline auto crend()		const noexcept	{ return std::crend(getData()); }
 			};
 
-			template<typename T, typename TCmp> class VecSorted : public VecBase<VecSorted<T, TCmp>>
-			{
-				template<typename TDerived> friend class VecBase;
-
-				private:
-					std::vector<T> data;
-
-					template<typename TC> inline static auto lookupHelper(TC& mVecSorted, const T& mValue) noexcept
-					{
-						return lowerBound(mVecSorted.data, mValue, TCmp{});
-					}
-
-					inline auto lookup(const T& mValue) noexcept		{ return lookupHelper(*this, mValue); }
-					inline auto lookup(const T& mValue) const noexcept	{ return lookupHelper(*this, mValue); }
-
-					template<typename TItr> inline bool is(const T& mItr, const T& mValue) const noexcept
-					{
-						return mItr != std::end(data) && *mItr == mValue;
-					}
-
-				public:
-					inline VecSorted() = default;
-					inline VecSorted(const VecSorted& mVM) : data{mVM.data} { }
-					inline VecSorted(VecSorted&& mVM) : data{std::move(mVM.data)} { }
-					inline VecSorted(std::initializer_list<T>&& mIL) : data{std::move(mIL)} { sort(data, TCmp{}); }
-
-					template<typename TT> inline auto& operator[](TT&& mValue)
-					{
-						auto itr(lookup(mValue));
-						return is(itr, mValue) ? *itr : data.emplace(itr, fwd<TT>(mValue));
-					}
-
-					inline const auto& at(const T& mValue) const
-					{
-						auto itr(lookup(mValue));
-						if(is(itr, mValue)) return *itr;
-
-						throw std::out_of_range{""};
-					}
-			};
-
 			template<typename TK, typename TV> class VecMap : public VecBase<VecMap<TK, TV>>
 			{
 				template<typename TDerived> friend class VecBase;
