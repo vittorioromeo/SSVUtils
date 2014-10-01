@@ -34,9 +34,9 @@ namespace ssvu
 						Real hReal;
 					} h;
 
-					inline void setIntS(IntU mX) noexcept { type = Type::IntS; h.hIntS = mX; }
-					inline void setIntU(IntS mX) noexcept { type = Type::IntU; h.hIntU = mX; }
-					inline void setReal(Real mX) noexcept { type = Type::Real; h.hReal = mX; }
+					inline void setIntS(const IntU& mX) noexcept { type = Type::IntS; h.hIntS = mX; }
+					inline void setIntU(const IntS& mX) noexcept { type = Type::IntU; h.hIntU = mX; }
+					inline void setReal(const Real& mX) noexcept { type = Type::Real; h.hReal = mX; }
 
 					inline IntS getIntS() const noexcept
 					{
@@ -76,9 +76,9 @@ namespace ssvu
 
 				public:
 					inline Num() noexcept = default;
-					template<typename T> inline Num(T mX) noexcept { set<T>(mX); }
+					template<typename T> inline Num(const T& mX) noexcept { set<T>(mX); }
 
-					template<typename T> void set(T mX) noexcept			{ Internal::NumHelper<T>::set(*this, mX); }
+					template<typename T> void set(const T& mX) noexcept		{ Internal::NumHelper<T>::set(*this, mX); }
 					template<typename T> decltype(auto) as() const noexcept	{ return Internal::NumHelper<T>::as(*this); }
 
 					inline auto getType() const noexcept { return type; }

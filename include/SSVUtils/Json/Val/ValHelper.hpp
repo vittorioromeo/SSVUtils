@@ -19,6 +19,7 @@ namespace ssvu
 					inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Num; } \
 				};
 
+			// TODO: try getTypeMove() && std::move(...) ?
 			#define SSVU_JSON_DEFINE_VALHELPER_BIG_MUTABLE(mType) \
 				template<> struct ValHelper<mType> \
 				{ \
@@ -61,7 +62,9 @@ namespace ssvu
 			{
 				template<typename T> inline static void set(Val& mV, T&& mX) noexcept(noexcept(mV.init(fwd<T>(mX)))) { mV.init(fwd<T>(mX)); }
 				inline static const auto& as(const Val& mV) noexcept { return mV; }
+				inline static auto as(Val&& mV) noexcept { return mV; }
 				inline static auto& as(Val& mV) noexcept { return mV; }
+				inline static auto is(const Val& mV) noexcept { return true; }
 			};
 
 			template<std::size_t TS> struct ValHelper<char[TS]>
@@ -80,9 +83,9 @@ namespace ssvu
 			{
 				using Type = std::pair<TK, TV>;
 
-				inline static void set(Val& mV, const Type& mX) { mV.setArr(Arr{Val{mX.first}, Val{mX.second}}); }
+				inline static void set(Val& mV, const Type& mX) { mV.setArr(Arr{{mX.first}, {mX.second}}); }
 				inline static auto as(const Val& mV) { return std::make_pair(mV[0].as<TK>(), mV[1].as<TV>()); }
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && mV[0].is<TK>() && mV[1].is<TV>(); }
+				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && mV.getArr().size() == 2 && mV[0].is<TK>() && mV[1].is<TV>(); }
 			};
 
 			namespace Impl
@@ -109,7 +112,6 @@ namespace ssvu
 					if(!mVal[TI].is<TplArg<TI, std::tuple<TArgs...>>>()) return false;
 					return isTpl<TI + 1, TArgs...>(mVal);
 				}
-
 			}
 
 			template<typename... TArgs> struct ValHelper<std::tuple<TArgs...>>
@@ -130,7 +132,7 @@ namespace ssvu
 				}
 				inline static auto is(const Val& mV) noexcept
 				{
-					return mV.getType() == Val::Type::Arr && Impl::isTpl<0, TArgs...>(mV);
+					return mV.getType() == Val::Type::Arr && mV.getArr().size() == sizeof...(TArgs) && Impl::isTpl<0, TArgs...>(mV);
 				}
 			};
 

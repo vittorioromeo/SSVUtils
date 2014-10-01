@@ -11,7 +11,6 @@ namespace ssvu
 	{
 		template<bool TFmt> inline static void impl(std::ostream& mStream, const Json::Val& mVal)
 		{
-			Internal::printNonBold<TFmt>(mStream, "JSON Val:\n", Console::Color::Green);
 			mVal.writeToStream<Json::WriterSettings<Json::WMode::PrettyConsole>>(mStream);
 		}
 	};

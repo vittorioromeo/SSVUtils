@@ -14,7 +14,7 @@ namespace ssvu
 			#define SSVU_JSON_DEFINE_NUMHELPER(mType, mRepresentation) \
 				template<> struct NumHelper<mType> \
 				{ \
-					inline static void set(Num& mN, mType mX) noexcept { return SSVPP_CAT(mN.set, mRepresentation)(mX); } \
+					inline static void set(Num& mN, const mType& mX) noexcept { return SSVPP_CAT(mN.set, mRepresentation)(mX); } \
 					inline static auto as(const Num& mN) noexcept { return static_cast<mType>(SSVPP_CAT(mN.get, mRepresentation)()); } \
 				};
 
