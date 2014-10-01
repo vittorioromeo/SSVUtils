@@ -53,10 +53,10 @@
 	#define SSVU_ASSERT(...) \
 		do \
 		{ \
-			ssvu::Internal::getAssertState().code = SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), __VA_ARGS__); \
-			ssvu::Internal::getAssertState().line = SSVPP_TOSTR(__LINE__); \
-			ssvu::Internal::getAssertState().file = __FILE__; \
-			ssvu::Internal::assertImpl(__VA_ARGS__); \
+			::ssvu::Internal::getAssertState().code = SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), __VA_ARGS__); \
+			::ssvu::Internal::getAssertState().line = SSVPP_TOSTR(__LINE__); \
+			::ssvu::Internal::getAssertState().file = __FILE__; \
+			::ssvu::Internal::assertImpl(__VA_ARGS__); \
 		} while(false)
 
 	// TODO: BUG: gcc - doesn't work yet

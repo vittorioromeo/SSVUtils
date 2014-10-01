@@ -20,18 +20,18 @@ namespace ssvu
 			// Data must be cached because other assertions may be tested during logging
 			auto cachedData(getAssertState());
 
-			ssvu::lo() << "\n";
-			ssvu::lo("ASSERTION FAILED") << mMsg << "\n\n"
+			lo() << "\n";
+			lo("ASSERTION FAILED") << mMsg << "\n\n"
 				<< "Line " << cachedData.line << " in file " << cachedData.file << "\n"
 				<< "Code: " << cachedData.code << "\n\n";
 
 			if(getAssertState().skip)
 			{
-				ssvu::lo() << "Skipping assertion..." << std::endl;
+				lo() << "Skipping assertion..." << std::endl;
 				return;
 			}
 
-			ssvu::lo() << "Choose what to do:\n\n"
+			lo() << "Choose what to do:\n\n"
 				<< "(  0  ) -> Skip this assertion.\n"
 				<< "(  1  ) -> Skip all assertions.\n"
 				<< "( ... ) -> Terminate the program." << std::endl;

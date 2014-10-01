@@ -239,7 +239,7 @@ namespace ssvu
 
 							// Read value
 							skipWhitespace();
-							object[key] = parseVal();
+							object[std::move(key)] = parseVal();
 							skipWhitespace();
 
 							// Check for another key-value pair

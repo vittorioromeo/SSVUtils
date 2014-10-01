@@ -25,7 +25,7 @@ namespace ssvu
 
 				/// @brief Internal method that normalizes the path string.
 				/// @details Removes double slashes. If the path exists as a folder on the filesystem adds a trailing slash.
-				inline void normalize() const
+				inline void normalize() const noexcept
 				{
 					if(!mustNormalize) return;
 					mustNormalize = false;
@@ -49,18 +49,37 @@ namespace ssvu
 
 			public:
 				inline Path() = default;
-				inline Path(const char* mPath) : path{mPath} { }
+				inline Path(const Path& mPath) : path{mPath.path} { }
+				inline Path(Path&& mPath) noexcept : path{std::move(mPath.path)} { }
 				inline Path(const std::string& mPath) : path{mPath} { }
 				inline Path(std::string&& mPath) noexcept : path{std::move(mPath)} { }
+				inline Path(const char* mPath) : path{mPath} { }
 
-				inline const auto& getStr() const		{ normalize(); return path; }
-				inline auto getCStr() const noexcept	{ return getStr().c_str(); }
+				template<typename T, SSVU_ENABLE_IF_IS(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = moveIfRValue<decltype(mPath)>(mPath.path)))
+				{
+					path = moveIfRValue<decltype(mPath)>(mPath.path);
+					mustNormalize = true; return *this;
+				}
+				template<typename T, SSVU_ENABLE_IF_IS_NOT(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = fwd<T>(mPath)))
+				{
+					path = fwd<T>(mPath);
+					mustNormalize = true; return *this;
+				}
 
-				// Sink set and append methods to change the path
-				inline void set(const std::string& mStr)		{ path = mStr; mustNormalize = true; }
-				inline void set(std::string&& mStr) noexcept	{ path = std::move(mStr); mustNormalize = true; }
-				inline void append(const std::string& mStr)		{ path += mStr; mustNormalize = true; }
-				inline void append(std::string&& mStr)			{ path += std::move(mStr); mustNormalize = true; }
+				template<typename T, SSVU_ENABLE_IF_IS(T, Path)> inline auto& operator+=(T&& mPath) noexcept(noexcept(path += moveIfRValue<decltype(mPath)>(mPath.path)))
+				{
+					path += moveIfRValue<decltype(mPath)>(mPath.path);
+					mustNormalize = true; return *this;
+				}
+				template<typename T, SSVU_ENABLE_IF_IS_NOT(T, Path)> inline auto& operator+=(T&& mPath) noexcept(noexcept(path += fwd<T>(mPath)))
+				{
+					path += fwd<T>(mPath);
+					mustNormalize = true; return *this;
+				}
+
+				inline const auto& getStr() const& noexcept	{ normalize(); return path; }
+				inline auto getStr() &&	noexcept			{ normalize(); return path; }
+				inline auto getCStr() const noexcept		{ return getStr().c_str(); }
 
 				/// @brief Returns true if the path exists on the user's filesystem and respects the passed filter.
 				/// @tparam TType Existance type to check.
@@ -156,12 +175,26 @@ namespace ssvu
 				/// @brief Returns true if the path is empty.
 				inline bool isNull() const noexcept { return path == ""; }
 
-				inline bool operator<(const Path& mPath) const { return getStr() < mPath.getStr(); }
+				inline bool operator<(const Path& mPath) const noexcept { return getStr() < mPath.getStr(); }
 
-				inline operator const std::string&() const { return getStr(); }
+				inline operator const std::string&() const& noexcept	{ return getStr(); }
+				inline operator std::string() && noexcept				{ return getStr(); }
 		};
 
 		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath)	{ return mStream << mPath.getStr(); }
+
+		/*template<typename T, SSVU_ENABLE_IF_IS_NOT(T, Path)> inline Path operator+(const Path& mLhs, T&& mRhs)
+		{
+			Path result{mLhs};
+			result += fwd<T>(mRhs);
+			return result;
+		}
+		template<typename T, SSVU_ENABLE_IF_IS_NOT(T, Path)> inline Path operator+(T&& mLhs, const Path& mRhs)
+		{
+			Path result{mRhs};
+			result += fwd<T>(mLhs);
+			return result;
+		}*/
 
 		inline Path operator+(const std::string& mLhs, const Path& mRhs)	{ return {mLhs + mRhs.getStr()}; }
 		inline Path operator+(const Path& mLhs, const std::string& mRhs)	{ return {mLhs.getStr() + mRhs}; }
@@ -169,9 +202,8 @@ namespace ssvu
 		inline Path operator+(const char* mLhs, const Path& mRhs)			{ return {std::string(mLhs) + mRhs.getStr()}; }
 		inline Path operator+(const Path& mLhs, const char* mRhs)			{ return {mLhs.getStr() + std::string(mRhs)}; }
 
-		inline Path& operator+=(Path& mLhs, const std::string& mRhs)		{ mLhs.append(mRhs); return mLhs; }
-		inline Path& operator+=(Path& mLhs, const Path& mRhs)				{ mLhs.append(mRhs.getStr()); return mLhs; }
-		inline Path& operator+=(Path& mLhs, const char* mRhs)				{ mLhs.append(std::string{mRhs}); return mLhs; }
+		inline Path operator+(std::string&& mLhs, const Path& mRhs)			{ return {std::move(mLhs) + mRhs.getStr()}; }
+		inline Path operator+(const Path& mLhs, std::string&& mRhs)			{ return {mLhs.getStr() + std::move(mRhs)}; }
 
 		inline bool operator==(const std::string& mLhs, const Path& mRhs)	{ return mLhs == mRhs.getStr(); }
 		inline bool operator==(const Path& mLhs, const std::string& mRhs)	{ return mLhs.getStr() == mRhs; }

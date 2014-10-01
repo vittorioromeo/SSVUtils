@@ -54,8 +54,8 @@ namespace ssvu
 			inline auto getTotal() const noexcept		{ return total; }
 			inline auto getTicks() const noexcept		{ return ticks; }
 
-			template<typename T = FT> inline T getTotalSecs() const noexcept	{ return static_cast<T>(ssvu::getFTToSeconds(total)); }
-			template<typename T = FT> inline T getCurrentSecs() const noexcept	{ return static_cast<T>(ssvu::getFTToSeconds(current)); }
+			template<typename T = FT> inline T getTotalSecs() const noexcept	{ return static_cast<T>(getFTToSeconds(total)); }
+			template<typename T = FT> inline T getCurrentSecs() const noexcept	{ return static_cast<T>(getFTToSeconds(current)); }
 	};
 }
 

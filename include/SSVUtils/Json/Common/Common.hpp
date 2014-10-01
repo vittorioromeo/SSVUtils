@@ -5,9 +5,6 @@
 #ifndef SSVU_JSON_COMMON
 #define SSVU_JSON_COMMON
 
-#define SSVU_JSON_ENABLE_IF_IS(mT, mType)		EnableIf<isSame<RemoveAll<mT>, mType>()>* = nullptr
-#define SSVU_JSON_ENABLE_IF_IS_NOT(mT, mType)	EnableIf<!isSame<RemoveAll<mT>, mType>()>* = nullptr
-
 #define SSVU_JSON_UNREACHABLE()					SSVU_ASSERT(false); std::terminate()
 
 #include "SSVUtils/Json/Common/VecMap.hpp"

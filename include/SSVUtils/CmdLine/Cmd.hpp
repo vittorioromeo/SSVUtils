@@ -37,7 +37,7 @@ namespace ssvu
 				public:
 					template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs)
 					{
-						SSVU_ASSERT_STATIC(ssvu::isBaseOf<BaseElement, T>(), "`T` must derive from `BaseElement`");
+						SSVU_ASSERT_STATIC(isBaseOf<BaseElement, T>(), "`T` must derive from `BaseElement`");
 
 						auto& result(recycler.getCreateEmplace<T>(elements, fwd<TArgs>(mArgs)...));
 						getGroupVec<T::getEType()>().emplace_back(&result);

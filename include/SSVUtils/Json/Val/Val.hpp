@@ -73,12 +73,6 @@ namespace ssvu
 					}
 				}
 
-				// Moves `mV` if `T` is an rvalue reference
-				template<typename T, typename TV> inline constexpr decltype(auto) moveIfRValue(TV&& mV) noexcept
-				{
-					return reinterpret_cast<Conditional<isRValueRef<T>(), RemoveRef<TV>&&, const TV&>>(mV);
-				}
-
 				template<typename T> inline void init(T&& mV)
 				{
 					switch(mV.type)
@@ -97,7 +91,7 @@ namespace ssvu
 				inline Val(const Val& mV)	{ init(mV); }
 				inline Val(Val&& mV)		{ init(std::move(mV)); }
 
-				template<typename T, SSVU_JSON_ENABLE_IF_IS_NOT(T, Val)> inline Val(T&& mX) { set(fwd<T>(mX)); }
+				template<typename T, SSVU_ENABLE_IF_IS_NOT(T, Val)> inline Val(T&& mX) { set(fwd<T>(mX)); }
 
 				inline ~Val() { deinitCurrent(); }
 
@@ -166,12 +160,10 @@ namespace ssvu
 				template<typename TWS = WriterSettings<WMode::Pretty>> inline auto getWriteToStr() const						{ std::string result; writeToStr<TWS>(result); return result; }
 
 				template<typename TRS = ReaderSettings<RMode::Default>, typename T> void readFromStr(T&& mStr);
-				template<typename TRS = ReaderSettings<RMode::Default>> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(std::move(mPath.getContentsAsString())); }
+				template<typename TRS = ReaderSettings<RMode::Default>> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(mPath.getContentsAsString()); }
 
-				template<typename T> static inline Val fromStr(T&& mStr) { Val result; result.readFromStr(fwd<T>(mStr)); return result; }
-
-				// TODO: path move semantics
-				static inline Val fromFile(const ssvufs::Path& mPath)	{ Val result; result.readFromFile(mPath); return result; }
+				template<typename T> static inline Val fromStr(T&& mStr)	{ Val result; result.readFromStr(fwd<T>(mStr)); return result; }
+				static inline Val fromFile(const ssvufs::Path& mPath)		{ Val result; result.readFromFile(mPath); return result; }
 
 
 
@@ -182,15 +174,16 @@ namespace ssvu
 				inline auto asRangeArr() noexcept		{ return asRange(getArr()); }
 				inline auto asRangeArr() const noexcept	{ return asRange(getArr()); }
 
-				template<typename TF> inline void forObj(TF mFunc)						{ for(		auto& i : asRangeObj()) mFunc(i.first, i.second); }
-				template<typename TF> inline void forObj(TF mFunc) const				{ for(const auto& i : asRangeObj()) mFunc(i.first, i.second); }
-				template<typename TV, typename TF> inline void forObjAs(TF mFunc)		{ for(		auto& i : asRangeObj()) mFunc(i.first, i.second.template as<TV>()); }
-				template<typename TV, typename TF> inline void forObjAs(TF mFunc) const	{ for(const auto& i : asRangeObj()) mFunc(i.first, i.second.template as<TV>()); }
+				template<typename TV, typename TF> inline void forObjAs(TF mFunc)		noexcept(noexcept(mFunc(Str{}, std::declval<TV>())))	{ for(		auto& i : asRangeObj()) mFunc(i.first, i.second.template as<TV>()); }
+				template<typename TV, typename TF> inline void forObjAs(TF mFunc) const	noexcept(noexcept(mFunc(Str{}, std::declval<TV>())))	{ for(const auto& i : asRangeObj()) mFunc(i.first, i.second.template as<TV>()); }
 
-				template<typename TF> inline void forArr(TF mFunc)						{ for(		auto& i : asRangeArr()) mFunc(i); }
-				template<typename TF> inline void forArr(TF mFunc) const				{ for(const auto& i : asRangeArr()) mFunc(i); }
-				template<typename TV, typename TF> inline void forArrAs(TF mFunc)		{ for(		auto& i : asRangeArr()) mFunc(i.template as<TV>()); }
-				template<typename TV, typename TF> inline void forArrAs(TF mFunc) const	{ for(const auto& i : asRangeArr()) mFunc(i.template as<TV>()); }
+				template<typename TV, typename TF> inline void forArrAs(TF mFunc)		noexcept(noexcept(mFunc(std::declval<TV>())))			{ for(		auto& i : asRangeArr()) mFunc(i.template as<TV>()); }
+				template<typename TV, typename TF> inline void forArrAs(TF mFunc) const	noexcept(noexcept(mFunc(std::declval<TV>())))			{ for(const auto& i : asRangeArr()) mFunc(i.template as<TV>()); }
+
+				template<typename TF> inline void forObj(TF mFunc)			noexcept(noexcept(std::declval<Val&>().forObjAs<Val>(mFunc)))	{ forObjAs<Val>(mFunc); }
+				template<typename TF> inline void forObj(TF mFunc) const	noexcept(noexcept(std::declval<Val&>().forObjAs<Val>(mFunc)))	{ forObjAs<Val>(mFunc); }
+				template<typename TF> inline void forArr(TF mFunc)			noexcept(noexcept(std::declval<Val&>().forArrAs<Val>(mFunc)))	{ forArrAs<Val>(mFunc); }
+				template<typename TF> inline void forArr(TF mFunc) const	noexcept(noexcept(std::declval<Val&>().forArrAs<Val>(mFunc)))	{ forArrAs<Val>(mFunc); }
 		};
 
 		using Obj = Val::Obj;

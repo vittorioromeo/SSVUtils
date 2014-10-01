@@ -68,7 +68,13 @@ namespace ssvu
 	using HRClock = std::chrono::high_resolution_clock;
 
 	/// @typedef Alias for `std::vector<ssvu::UPtr<T>>`.
-	template<typename T, typename TDeleter = std::default_delete<T>> using VecUPtr = std::vector<ssvu::UPtr<T, TDeleter>>;
+	template<typename T, typename TDeleter = std::default_delete<T>> using VecUPtr = std::vector<UPtr<T, TDeleter>>;
+
+	/// @brief Moves `mV` if `T` is an rvalue reference.
+	template<typename T, typename TV> inline constexpr decltype(auto) moveIfRValue(TV&& mV) noexcept
+	{
+		return reinterpret_cast<Conditional<isRValueRef<T>(), RemoveRef<TV>&&, const TV&>>(mV);
+	}
 }
 
 #endif

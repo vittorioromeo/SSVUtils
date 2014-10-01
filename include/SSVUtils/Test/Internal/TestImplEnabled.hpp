@@ -40,7 +40,7 @@ namespace ssvu
 					: test{mTest}, expr{std::move(mExpr)}, line{std::move(mLine)} { }
 			};
 
-			using TestStorage = ssvu::VecUPtr<TestBase>;
+			using TestStorage = VecUPtr<TestBase>;
 			using TestExecMap = std::map<std::string, bool>;
 
 			inline auto& getTestStorage() noexcept	{ static TestStorage result; return result; }
@@ -70,22 +70,22 @@ namespace ssvu
 
 						auto& test(*mFail.test);
 
-						ssvu::lo("Test") << "Test failure\n\n"
+						lo("Test") << "Test failure\n\n"
 							<< "Test:\t<"		<< test.getName() << ">\n"
 							<< "Line:\t<"		<< test.getLine() << ">\n"
 							<< "File:\t<"		<< test.getFile() << ">\n\n"
 							<< "Expression:\n"	<< mFail.expr << "\n"
 							<< "at line: "		<< mFail.line << "\n"
-							<< ssvu::hr() << "\n\n";
+							<< hr() << "\n\n";
 					}
 				}
 
-				if(!failure) ssvu::lo("Test") << "All tests passed!\n";
+				if(!failure) lo("Test") << "All " << getTestStorage().size() << " tests passed!\n";
 
 				getTestStorage().clear();
 				getTestExecMap().clear();
 
-				ssvu::lo().flush();
+				lo().flush();
 			}
 		}
 	}

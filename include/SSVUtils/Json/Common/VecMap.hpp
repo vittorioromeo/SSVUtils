@@ -69,11 +69,12 @@ namespace ssvu
 					inline VecSorted(VecSorted&& mVM) : data{std::move(mVM.data)} { }
 					inline VecSorted(std::initializer_list<T>&& mIL) : data{std::move(mIL)} { sort(data, TCmp{}); }
 
-					inline auto& operator[](const T& mValue)
+					template<typename TT> inline auto& operator[](TT&& mValue)
 					{
 						auto itr(lookup(mValue));
-						return is(itr, mValue) ? *itr : data.emplace(itr, mValue);
+						return is(itr, mValue) ? *itr : data.emplace(itr, fwd<TT>(mValue));
 					}
+
 					inline const auto& at(const T& mValue) const
 					{
 						auto itr(lookup(mValue));
@@ -115,11 +116,12 @@ namespace ssvu
 						sort(data, [](const auto& mA, const auto& mB){ return mA.first < mB.first; });
 					}
 
-					inline auto& operator[](const TK& mKey)
+					template<typename TTK> inline auto& operator[](TTK&& mKey)
 					{
 						auto itr(lookup(mKey));
-						return is(itr, mKey) ? itr->second : data.emplace(itr, mKey, TV{})->second;
+						return is(itr, mKey) ? itr->second : data.emplace(itr, fwd<TTK>(mKey), TV{})->second;
 					}
+
 					inline const auto& at(const TK& mKey) const
 					{
 						auto itr(lookup(mKey));

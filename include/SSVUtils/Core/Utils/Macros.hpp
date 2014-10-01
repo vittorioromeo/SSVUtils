@@ -118,6 +118,14 @@ namespace ssvu
 	inline mClassName(decltype(mMember1)&& mParam1,			const decltype(mMember2)& mParam2)		: mMember1{std::move(mParam1)},	mMember2{mParam2} { } \
 	inline mClassName(decltype(mMember1)&& mParam1,			decltype(mMember2)&& mParam2) noexcept	: mMember1{std::move(mParam1)},	mMember2{std::move(mParam2)} { }
 
+/// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
+/// @details Enables if `mT` has the same type of `mType`.
+#define SSVU_ENABLE_IF_IS(mT, mType) EnableIf<isSame<RemoveAll<mT>, mType>()>* = nullptr
+
+/// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
+/// /// @details Enables if `mT` has not the same type of `mType`.
+#define SSVU_ENABLE_IF_IS_NOT(mT, mType) EnableIf<!isSame<RemoveAll<mT>, mType>()>* = nullptr
+
 #endif
 
 // TODO: void_t callers?
