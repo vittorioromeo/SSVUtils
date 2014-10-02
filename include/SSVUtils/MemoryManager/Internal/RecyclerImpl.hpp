@@ -31,7 +31,7 @@ namespace ssvu
 				StorageType storage;
 
 			private:
-				inline auto& getTD() noexcept { return *reinterpret_cast<DerivedType*>(this); }
+				inline auto& getTD() noexcept { return castUp<DerivedType>(*this); }
 
 			public:
 				/// @brief Creates a `T` instance and returns a `PtrType` to it.
@@ -45,7 +45,7 @@ namespace ssvu
 				template<typename T = TBase, typename TContainer, typename... TArgs> inline T& getCreateEmplace(TContainer& mContainer, TArgs&&... mArgs)
 				{
 					mContainer.emplace_back(create<T>(fwd<TArgs>(mArgs)...));
-					return reinterpret_cast<T&>(*mContainer.back());
+					return castUp<T>(*mContainer.back());
 				}
 		};
 

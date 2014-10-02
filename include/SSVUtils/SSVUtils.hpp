@@ -41,3 +41,4 @@
 // * zip iterator
 
 // TODO: cmake: don't FORCE... (everything gets replaced)
+// TODO: try reimplementing vector/map/flatmap with no exceptions and only asserts

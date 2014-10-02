@@ -50,8 +50,8 @@ namespace ssvu
 					template<EType TET> inline auto& getAll() noexcept				{ return getGroupVec<TET>(); }
 					template<EType TET> inline const auto& getAll() const noexcept	{ return getGroupVec<TET>(); }
 
-					template<EType TET> inline auto& getAt(std::size_t mIdx) noexcept				{ return *reinterpret_cast<ETypeBase<TET>*>(getAll<TET>()[mIdx]); }
-					template<EType TET> inline const auto& getAt(std::size_t mIdx) const noexcept	{ return *reinterpret_cast<const ETypeBase<TET>*>(getAll<TET>()[mIdx]); }
+					template<EType TET> inline auto& getAt(std::size_t mIdx) noexcept				{ return castUp<ETypeBase<TET>>(*getAll<TET>()[mIdx]); }
+					template<EType TET> inline const auto& getAt(std::size_t mIdx) const noexcept	{ return castUp<ETypeBase<TET>>(*getAll<TET>()[mIdx]); }
 			};
 		}
 

@@ -32,7 +32,7 @@ namespace ssvu
 				template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
 				{
 					this->toAdd.emplace_back(this->recycler.template create<T>(fwd<TArgs>(mArgs)...));
-					return reinterpret_cast<T&>(*(this->toAdd.back()));
+					return ssvu::castUp<T>(*(this->toAdd.back()));
 				}
 
 				inline void clear()	noexcept { items.clear(); toAdd.clear(); }

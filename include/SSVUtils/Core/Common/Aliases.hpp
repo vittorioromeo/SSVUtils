@@ -73,8 +73,20 @@ namespace ssvu
 	/// @brief Moves `mV` if `T` is an rvalue reference.
 	template<typename T, typename TV> inline constexpr decltype(auto) moveIfRValue(TV&& mV) noexcept
 	{
-		return reinterpret_cast<Conditional<isRValueRef<T>(), RemoveRef<TV>&&, const TV&>>(mV);
+		return static_cast<Conditional<isRValueRef<T>(), RemoveRef<TV>&&, const TV&>>(mV);
 	}
+
+	/// @brief Returns a `TBase&` casted to `T&`. Asserts that `T` is derived from `TBase`.
+	template<typename T, typename TBase> inline T& castUp(TBase& mBase) noexcept { SSVU_ASSERT_STATIC_NM(isBaseOf<TBase, T>()); return static_cast<T&>(mBase); }
+
+	/// @brief Returns a `TBase*` casted to `T*`. Asserts that `T` is derived from `TBase`.
+	template<typename T, typename TBase> inline T* castUp(TBase* mBase) noexcept { SSVU_ASSERT_STATIC_NM(isBaseOf<TBase, T>()); return static_cast<T*>(mBase); }
+
+	/// @brief Returns a `const TBase&` casted to `const T&`. Asserts that `T` is derived from `TBase`.
+	template<typename T, typename TBase> inline const T& castUp(const TBase& mBase) noexcept { SSVU_ASSERT_STATIC_NM(isBaseOf<TBase, T>()); return static_cast<const T&>(mBase); }
+
+	/// @brief Returns a `const TBase*` casted to `const T*`. Asserts that `T` is derived from `TBase`.
+	template<typename T, typename TBase> inline const T* castUp(const TBase* mBase) noexcept { SSVU_ASSERT_STATIC_NM(isBaseOf<TBase, T>()); return static_cast<const T*>(mBase); }
 }
 
 #endif

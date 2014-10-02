@@ -225,13 +225,13 @@ namespace ssvu
 		template<typename T, typename TC, typename TM, typename... TArgs> inline T& getEmplaceUPtrImpl(TC& mContainer, TArgs&&... mArgs)
 		{
 			mContainer.emplace_back(TM::template make<TArgs...>(fwd<TArgs>(mArgs)...));
-			return reinterpret_cast<T&>(*mContainer.back());
+			return castUp<T>(*mContainer.back());
 		}
 
 		/// @brief Internal implementation method for UPtr emplacement in map containers.
 		template<typename T, typename TC, typename TK, typename TM, typename... TArgs> inline T& getEmplaceUPtrMapImpl(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 		{
-			return reinterpret_cast<T&>(*(*(mContainer.emplace(fwd<TK>(mKey), TM::template make<TArgs...>(fwd<TArgs>(mArgs)...)).first)).second);
+			return castUp<T>(*(*(mContainer.emplace(fwd<TK>(mKey), TM::template make<TArgs...>(fwd<TArgs>(mArgs)...)).first)).second);
 		}
 	}
 

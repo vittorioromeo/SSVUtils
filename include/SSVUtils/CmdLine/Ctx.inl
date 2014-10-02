@@ -60,7 +60,7 @@ namespace ssvu
 						auto fName(s.substr(0, equalPos));
 						auto fValue(s.substr(equalPos + 1, s.size() - equalPos));
 
-						if(anyOf(cmd.getAll<EType::FlagValueOpt>(), [&fName](auto mFVO){ return reinterpret_cast<Internal::BaseFlag*>(mFVO)->hasName(fName); }))
+						if(anyOf(cmd.getAll<EType::FlagValueOpt>(), [&fName](auto mFVO){ return castUp<Internal::BaseFlag>(mFVO)->hasName(fName); }))
 						{
 							cFlagValuesOpt.emplace_back(s);
 							if(cFlagValuesOpt.size() > cmd.getCount<EType::FlagValueOpt>()) throw Exception::createSignatureMismatch(getForCmdPhrase(cmd), "optional flag values", toStr(cmd.getCount<EType::FlagValueOpt>()));

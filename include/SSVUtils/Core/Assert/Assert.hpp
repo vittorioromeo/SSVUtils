@@ -6,8 +6,12 @@
 #define SSVU_CORE_ASSERT
 
 /// @macro Static assertion. Checked at compile-time.
-/// @details Currently, it is only a wrapper for the standard `static_assert`.
-#define SSVU_ASSERT_STATIC(...)	static_assert(__VA_ARGS__)
+/// @details Wrapper for the standard `static_assert`.
+#define SSVU_ASSERT_STATIC(...) static_assert(__VA_ARGS__)
+
+/// @macro Static assertion. Checked at compile-time. No message.
+/// @details Wrapper for the standard `static_assert` with an empty string message.
+#define SSVU_ASSERT_STATIC_NM(...) static_assert(__VA_ARGS__, "")
 
 // `SSVU_ASSERT_FORCE_OFF` and `SSVU_ASSERT_FORCE_ON` macros force enabling/disabling of assertions.
 // `SSVU_ASSERT_FORCE_ON` has priority over `SSVU_ASSERT_FORCE_OFF`.

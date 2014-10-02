@@ -23,7 +23,7 @@ namespace ssvu
 			template<typename TDerived> struct DataBase
 			{
 				/// @brief Returns the elapsed time as a string.
-				inline std::string getString() const { return toStr(reinterpret_cast<const TDerived*>(this)->getDuration().count()) + " ms"; }
+				inline std::string getString() const { return toStr(ssvu::castUp<TDerived>(this)->getDuration().count()) + " ms"; }
 			};
 
 			/// @brief Benchmark data structure storing a time point and a name.

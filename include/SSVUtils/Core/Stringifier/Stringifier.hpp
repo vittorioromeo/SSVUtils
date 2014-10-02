@@ -179,7 +179,7 @@ namespace ssvu
 		template<bool TFmt> inline static void impl(std::ostream& mStream, const T* mValue, EnableIf<!isSame<RemoveConst<T>, char>()>* = nullptr)
 		{
 			Internal::printBold<TFmt>(mStream, "[", Console::Color::Blue);
-			Internal::printFmt<TFmt>(mStream, mValue != nullptr ? reinterpret_cast<const void*>(mValue) : "nullptr", Console::Color::Cyan, Console::Style::Underline);
+			Internal::printFmt<TFmt>(mStream, mValue != nullptr ? static_cast<const void*>(mValue) : "nullptr", Console::Color::Cyan, Console::Style::Underline);
 			Internal::printBold<TFmt>(mStream, "]", Console::Color::Blue);
 		}
 	};

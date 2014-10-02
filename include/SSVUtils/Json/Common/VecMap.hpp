@@ -14,8 +14,8 @@ namespace ssvu
 			template<typename TDerived> class VecBase
 			{
 				private:
-					inline auto& getTD() noexcept				{ return reinterpret_cast<TDerived&>(*this); }
-					inline const auto& getTD() const noexcept	{ return reinterpret_cast<const TDerived&>(*this); }
+					inline auto& getTD() noexcept				{ return castUp<TDerived>(*this); }
+					inline const auto& getTD() const noexcept	{ return castUp<TDerived>(*this); }
 
 				public:
 					template<typename T> inline bool has(const T& mValue) const noexcept { return getTD().is(getTD().lookup(mValue), mValue); }
