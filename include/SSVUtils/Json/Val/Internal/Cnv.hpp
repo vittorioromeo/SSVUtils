@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_JSON_VAL_CNV
-#define SSVU_JSON_VAL_CNV
+#ifndef SSVU_JSON_VAL_INTERNAL_CNV
+#define SSVU_JSON_VAL_INTERNAL_CNV
 
 /// @macro Class mixin that allows SSVJ converters to access the current class's private members.
 #define SSVJ_CNV_FRIEND() template<typename> friend struct ssvu::Json::Internal::Cnv
@@ -26,43 +26,58 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<typename TNum> struct CnvNumImpl
+			// Tuple conversion implementation
+			namespace Impl
 			{
-				inline static decltype(auto) getFromVal(const Val& mV) noexcept { return mV.getNum().as<TNum>(); }
-				inline static void toVal(Val& mV, const TNum& mX) noexcept { mV.setNum(Num{mX}); }
-				inline static void fromVal(const Val& mV, TNum& mX) noexcept { mX = getFromVal(mV); }
-			};
+				template<std::size_t TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
 
-			#define SSVU_JSON_DEFINE_CNV_NUM_IMPL(mType) template<> struct Cnv<mType> final : public CnvNumImpl<mType> { };
+				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
+				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
+				{
+					std::get<TI>(mX) = moveIfRValue<decltype(mV)>(mV[TI].template as<TplArg<TI, decltype(mX)>>());
+					toTpl<TI + 1, TArgs...>(fwd<T>(mV), mX);
+				}
+
+				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI == sizeof...(TArgs)> fromTpl(Arr&, T&&) { }
+				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI < sizeof...(TArgs)> fromTpl(Arr& mArr, T&& mX)
+				{
+					mArr.emplace_back(moveIfRValue<decltype(mX)>(std::get<TI>(mX))); // TODO: emplace_back or []?
+					fromTpl<TI + 1, TArgs...>(mArr, fwd<T>(mX));
+				}
+			}
+
+			#define SSVU_JSON_DEFINE_CNV_NUM(mType) \
+				template<> struct Cnv<mType> final \
+				{ \
+					inline static void toVal(Val& mV, const mType& mX) noexcept { mV.setNum(Num{mX}); } \
+					inline static void fromVal(const Val& mV, mType& mX) noexcept { mX = mV.getNum().as<mType>(); } \
+				};
 
 			// TODO: try getTypeMove() && std::move(...) ?
 			// TODO: should as<> always return a copy? Or are refs acceptable like in the case of as<Arr>()?
+			// TODO: use BIG_MUTABLE for SMALL_IMMUTABLE as well?
 			#define SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
-					inline static const auto& getFromVal(const Val& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
-					inline static auto& getFromVal(Val& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
-					inline static auto getFromVal(Val&& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
 					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(fwd<T>(mX)))) { SSVPP_CAT(mV.set, mType)(fwd<T>(mX)); } \
-					template<typename T> inline static void fromVal(Val&& mV, T& mX) { return getFromVal(fwd<T>(mV)); } \
+					template<typename T> inline static void fromVal(T&& mV, T& mX) { mX = moveIfRValue<decltype(mV)>(SSVPP_CAT(mV.get, mType)()); } \
 				};
 
 			#define SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
-					inline static decltype(auto) getFromVal(const Val& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
 					inline static void toVal(Val& mV, const mType& mX) noexcept { SSVPP_CAT(mV.set, mType)(mX); } \
-					inline static void fromVal(const Val& mV, mType& mX) noexcept { mX = getFromVal(mV); } \
+					inline static void fromVal(const Val& mV, mType& mX) noexcept { mX = SSVPP_CAT(mV.get, mType)(); } \
 				};
 
-			SSVU_JSON_DEFINE_CNV_NUM_IMPL(char)
-			SSVU_JSON_DEFINE_CNV_NUM_IMPL(int)
-			SSVU_JSON_DEFINE_CNV_NUM_IMPL(long int)
-			SSVU_JSON_DEFINE_CNV_NUM_IMPL(unsigned char)
-			SSVU_JSON_DEFINE_CNV_NUM_IMPL(unsigned int)
-			SSVU_JSON_DEFINE_CNV_NUM_IMPL(unsigned long int)
-			SSVU_JSON_DEFINE_CNV_NUM_IMPL(float)
-			SSVU_JSON_DEFINE_CNV_NUM_IMPL(double)
+			SSVU_JSON_DEFINE_CNV_NUM(char)
+			SSVU_JSON_DEFINE_CNV_NUM(int)
+			SSVU_JSON_DEFINE_CNV_NUM(long int)
+			SSVU_JSON_DEFINE_CNV_NUM(unsigned char)
+			SSVU_JSON_DEFINE_CNV_NUM(unsigned int)
+			SSVU_JSON_DEFINE_CNV_NUM(unsigned long int)
+			SSVU_JSON_DEFINE_CNV_NUM(float)
+			SSVU_JSON_DEFINE_CNV_NUM(double)
 
 			SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(Obj)
 			SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(Arr)
@@ -72,16 +87,13 @@ namespace ssvu
 			SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(Bln)
 			SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(Nll)
 
-			#undef SSVU_JSON_DEFINE_CNV_NUM_IMPL
+			#undef SSVU_JSON_DEFINE_CNV_NUM
 			#undef SSVU_JSON_DEFINE_CNV_BIG_MUTABLE
 			#undef SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE
 
 			// Convert values to themselves
 			template<> struct Cnv<Val> final
 			{
-				inline static const auto& getFromVal(const Val& mV) noexcept { return mV; }
-				inline static auto getFromVal(Val&& mV) noexcept { return mV; }
-				inline static auto& getFromVal(Val& mV) noexcept { return mV; }
 				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(fwd<T>(mX)))) { mV.init(fwd<T>(mX)); }
 				template<typename T> inline static void fromVal(Val&& mV, Val& mX) noexcept { mX = fwd<T>(mV); }
 			};
@@ -90,7 +102,7 @@ namespace ssvu
 			template<std::size_t TS> struct Cnv<char[TS]> final
 			{
 				inline static void toVal(Val& mV, const char(&mX)[TS]) { mV.setStr(mX); }
-				inline static void fromVal(const Val& mV, char(&mX)[TS]) noexcept { for(auto i(0u); i < TS; ++i) mX[i] = mV.as<Str>()[i]; }
+				inline static void fromVal(const Val& mV, char(&mX)[TS]) noexcept { for(auto i(0u); i < TS; ++i) mX[i] = mV.getStr()[i]; }
 			};
 
 			// Convert C-style strings
@@ -117,35 +129,7 @@ namespace ssvu
 					mX.first = moveIfRValue<decltype(mV)>(mV[0].template as<T1>());
 					mX.second = moveIfRValue<decltype(mV)>(mV[1].template as<T2>());
 				}
-				template<typename T> inline static auto getFromVal(T&& mV) { Type result; fromVal(fwd<T>(mV), result); return result; }
 			};
-
-			// Tuple conversion implementation
-			namespace Impl
-			{
-				template<std::size_t TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
-
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
-				{
-					std::get<TI>(mX) = moveIfRValue<decltype(mV)>(mV[TI].template as<TplArg<TI, decltype(mX)>>());
-					toTpl<TI + 1, TArgs...>(fwd<T>(mV), mX);
-				}
-
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI == sizeof...(TArgs)> fromTpl(Arr&, T&&) { }
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI < sizeof...(TArgs)> fromTpl(Arr& mArr, T&& mX)
-				{
-					mArr.emplace_back(moveIfRValue<decltype(mX)>(std::get<TI>(mX))); // TODO: emplace_back or []?
-					fromTpl<TI + 1, TArgs...>(mArr, fwd<T>(mX));
-				}
-
-				template<std::size_t TI = 0, typename... TArgs> inline EnableIf<TI == sizeof...(TArgs), bool> isTpl(const Val&) noexcept { return true; }
-				template<std::size_t TI = 0, typename... TArgs> inline EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
-				{
-					if(!mV[TI].is<TplArg<TI, std::tuple<TArgs...>>>()) return false;
-					return isTpl<TI + 1, TArgs...>(mV);
-				}
-			}
 
 			// Convert `std::tuple`
 			template<typename... TArgs> struct Cnv<std::tuple<TArgs...>> final
@@ -159,7 +143,6 @@ namespace ssvu
 					mV.setArr(std::move(result));
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX) { Impl::toTpl<0, TArgs...>(fwd<T>(mV), mX); }
-				template<typename T> inline static auto getFromVal(T&& mV) { Type result; fromVal(fwd<T>(mV), result); return result; }
 			};
 
 			// Convert `std::vector`
@@ -179,13 +162,6 @@ namespace ssvu
 					SSVU_ASSERT(mX.size() >= arr.size());
 					for(auto i(0u); i < arr.size(); ++i) mX[i] = moveIfRValue<decltype(mV)>(arr[i]);
 				}
-				template<typename T> inline static Type getFromVal(T&& mV)
-				{
-					const auto& arr(mV.template as<Arr>());
-					Type result; result.reserve(arr.size());
-					for(auto i(0u); i < arr.size(); ++i) result.emplace_back(moveIfRValue<decltype(mV)>(arr[i].template as<TItem>()));
-					return result;
-				}
 			};
 
 			// Convert C-style array
@@ -204,15 +180,9 @@ namespace ssvu
 					SSVU_ASSERT(mV.template as<Arr>().size() >= TS);
 					for(auto i(0u); i < TS; ++i) mX[i] = moveIfRValue<decltype(mV)>(mV[i].template as<TItem>());
 				}
-				template<typename T> inline static auto getFromVal(T&& mV) { Type result; fromVal(fwd<T>(mV), result); return result; }
 			};
 
-			template<typename T> struct CnvImplGet
-			{
-				template<typename TFwd> inline static auto getFromVal(TFwd&& mV) { T result; Cnv<T>::template fromVal(fwd<TFwd>(mV), result); return result; }
-			};
-
-			template<typename T> struct CnvImplSimple : public CnvImplGet<T>
+			template<typename T> struct CnvImplSimple
 			{
 				template<typename TFwd> inline static void toVal(Val& mV, TFwd&& mX) { Cnv<T>::template impl<decltype(mV), decltype(mX)>(mV, fwd<TFwd>(mX)); }
 				template<typename TFwd> inline static void fromVal(TFwd&& mV, T& mX) { Cnv<T>::template impl<decltype(mV), decltype(mX)>(fwd<TFwd>(mV), mX); }

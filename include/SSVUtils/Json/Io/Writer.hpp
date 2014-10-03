@@ -146,18 +146,7 @@ namespace ssvu
 						wOut("null");
 					}
 
-					inline void write(const Val& mVal)
-					{
-						switch(mVal.getType())
-						{
-							case Val::Type::Obj: write(mVal.as<Obj>()); break;
-							case Val::Type::Arr: write(mVal.as<Arr>()); break;
-							case Val::Type::Str: write(mVal.as<Str>()); break;
-							case Val::Type::Num: write(mVal.as<Num>()); break;
-							case Val::Type::Bln: write(mVal.as<Bln>()); break;
-							case Val::Type::Nll: write(Nll{}); break;
-						}
-					}
+					void write(const Val& mVal);
 
 				public:
 					inline void write(const Val& mVal, std::ostream& mStream) { write(mVal); mStream << out; }

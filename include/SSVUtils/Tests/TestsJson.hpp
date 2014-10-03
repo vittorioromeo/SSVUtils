@@ -164,10 +164,8 @@ SSVUT_TEST(SSVUJsonValTests)
 		SSVUT_EXPECT(osv0["inner"] == v2); \
 		SSVUT_EXPECT(osv0["inner"] == osv2); \
 		auto s = v0.getWriteToStr(); \
-		auto fs = Val::fromStrAs<mType>(s); \
+		auto fs = Val::fromStr(s); \
 		SSVUT_EXPECT(fs == v0); \
-		SSVUT_EXPECT(fs.is<mType>()); \
-		SSVUT_EXPECT(fs.as<mType>() == v0.as<mType>()); \
 	}
 
 	{
@@ -291,7 +289,7 @@ SSVUT_TEST(SSVUJsonConvertTests)
 			convert(vOut, out); \
 			SSVUT_EXPECT(out == mBV); \
 			auto s = vOut.getWriteToStr(); \
-			auto fs = Val::fromStrAs<Type>(s); \
+			auto fs = Val::fromStr(s); \
 			SSVUT_EXPECT(fs == vOut); \
 			SSVUT_EXPECT(fs.is<Type>()); \
 			SSVUT_EXPECT(fs.as<Type>() == out); \
@@ -467,10 +465,9 @@ SSVUT_TEST(SSVUJsonCnvTest)
 	SSVUT_EXPECT(k2.is<Type>());
 
 	auto s = k.getWriteToStr();
-	auto fs = Val::fromStrAs<Type>(s);
+	auto fs = Val::fromStr(s);
 	SSVUT_EXPECT(fs == k);
 	SSVUT_EXPECT(fs == k2);
-	SSVUT_EXPECT(fs.is<Type>());
 	SSVUT_EXPECT(fs.as<Type>() == s1);
 }
 

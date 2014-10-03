@@ -75,8 +75,8 @@ namespace ssvu
 					inline Num() noexcept = default;
 					template<typename T> inline Num(const T& mX) noexcept { set<T>(mX); }
 
-					template<typename T> void set(const T& mX) noexcept		{ Internal::NumHelper<T>::set(*this, mX); }
-					template<typename T> decltype(auto) as() const noexcept	{ return Internal::NumHelper<T>::as(*this); }
+					template<typename T> void set(const T& mX) noexcept	{ Internal::NumHelper<T>::set(*this, mX); }
+					template<typename T> auto as() const noexcept		{ return Internal::NumHelper<T>::as(*this); }
 
 					inline auto getType() const noexcept { return type; }
 

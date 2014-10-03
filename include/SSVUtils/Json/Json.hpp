@@ -13,6 +13,8 @@
 #include "SSVUtils/Json/Val/Val.hpp"
 #include "SSVUtils/Json/Io/Io.hpp"
 #include "SSVUtils/Json/Val/Val.inl"
+#include "SSVUtils/Json/Io/Writer.inl"
+#include "SSVUtils/Json/Val/Internal/CnvFuncs.hpp"
 #include "SSVUtils/Json/Stringifier/Stringifier.hpp"
 
 #endif
