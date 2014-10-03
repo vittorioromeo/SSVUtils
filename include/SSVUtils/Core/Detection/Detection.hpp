@@ -10,7 +10,7 @@
 	/// @macro This macro is defined if the current OS is Linux.
 	#define SSVU_OS_LINUX 1
 #elif (_WIN64 || _WIN32 || __CYGWIN32__ || __MINGW32__)
-	/// @macro This macro is defined if the current OS is Windows.
+	/// @macro This macro is defined if the current OS is Windows.noexcept
 	#define SSVU_OS_WINDOWS 1
 #elif (MACOSX || __DARWIN__ || __APPLE__)
 	/// @macro This macro is defined if the current OS is Windows.

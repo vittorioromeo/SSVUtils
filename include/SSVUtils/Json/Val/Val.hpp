@@ -11,7 +11,8 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<typename T> struct ValHelper;
+			template<typename T> struct Cnv;
+			template<typename T> struct CnvNumImpl;
 
 			struct ValItrHelper
 			{
@@ -35,11 +36,31 @@ namespace ssvu
 				template<typename T, typename TItr> inline static constexpr auto makeItrObjRange(TItr mBegin, TItr mEnd) noexcept { return makeItrAsRange<ImplAsObj, T>(mBegin, mEnd); }
 				template<typename T, typename TItr> inline static constexpr auto makeItrArrRange(TItr mBegin, TItr mEnd) noexcept { return makeItrAsRange<ImplAsArr, T>(mBegin, mEnd); }
 			};
+
+			using TypeIdx = std::size_t;
+
+			// Returns the next unique bit index for a type
+			inline auto getLastTypeIdx() noexcept
+			{
+				static TypeIdx lastIdx{0};
+				return lastIdx++;
+			}
+
+			// Stores a specific bit index for a Component type
+			template<typename T> struct TypeIdxInfo { static TypeIdx idx; };
+			template<typename T> TypeIdx TypeIdxInfo<T>::idx{getLastTypeIdx()};
+
+			// Shortcut to get the bit index of a Component type
+			template<typename T> inline auto getTypeIdx() noexcept
+			{
+				return TypeIdxInfo<T>::idx;
+			}
 		}
 
 		class Val
 		{
-			template<typename T> friend struct Internal::ValHelper;
+			template<typename T> friend struct Internal::Cnv;
+			template<typename T> friend struct Internal::CnvNumImpl;
 
 			public:
 				enum class Type{Obj, Arr, Str, Num, Bln, Nll};
@@ -50,8 +71,10 @@ namespace ssvu
 			private:
 				using Num = Internal::Num;
 				using VIH = Internal::ValItrHelper;
+				using CnvType = Internal::TypeIdx;
 
 				Type type{Type::Nll};
+				CnvType cnvType;
 
 				union Holder
 				{
@@ -60,18 +83,18 @@ namespace ssvu
 					Str hStr;
 					Num hNum;
 					Bln hBool;
-
+\
 					inline Holder() noexcept { }
 					inline ~Holder() noexcept { }
 				} h;
 
-				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{fwd<T>(mX)})) { type = Type::Obj; new(&h.hObj) Obj{fwd<T>(mX)}; }
-				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{fwd<T>(mX)})) { type = Type::Arr; new(&h.hArr) Arr(fwd<T>(mX)); }
-				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{fwd<T>(mX)})) { type = Type::Str; new(&h.hStr) Str(fwd<T>(mX)); }
+				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{fwd<T>(mX)})) { type = Type::Obj; cnvType = Internal::getTypeIdx<Obj>(); new(&h.hObj) Obj{fwd<T>(mX)}; }
+				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{fwd<T>(mX)})) { type = Type::Arr; cnvType = Internal::getTypeIdx<Arr>(); new(&h.hArr) Arr(fwd<T>(mX)); }
+				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{fwd<T>(mX)})) { type = Type::Str; cnvType = Internal::getTypeIdx<Str>(); new(&h.hStr) Str(fwd<T>(mX)); }
 
-				inline void setNum(const Num& mX) noexcept	{ type = Type::Num; h.hNum = mX; }
-				inline void setBln(Bln mX) noexcept			{ type = Type::Bln; h.hBool = mX; }
-				inline void setNll(Nll) noexcept			{ type = Type::Nll; }
+				inline void setNum(const Num& mX) noexcept	{ type = Type::Num; cnvType = Internal::getTypeIdx<Num>(); h.hNum = mX; }
+				inline void setBln(Bln mX) noexcept			{ type = Type::Bln; cnvType = Internal::getTypeIdx<Bln>(); h.hBool = mX; }
+				inline void setNll(Nll) noexcept			{ type = Type::Nll; cnvType = Internal::getTypeIdx<Nll>(); }
 
 				inline auto& getObj() noexcept				{ SSVU_ASSERT(is<Obj>()); return h.hObj; }
 				inline const auto& getObj() const noexcept	{ SSVU_ASSERT(is<Obj>()); return h.hObj; }
@@ -120,19 +143,32 @@ namespace ssvu
 				inline ~Val() { deinitCurrent(); }
 
 				// "Explicit" `set` function set the inner contents of the value
-				template<typename T> inline void set(T&& mX) noexcept(noexcept(Internal::ValHelper<RemoveAll<T>>::set(std::declval<Val&>(), fwd<T>(mX))))
+				template<typename T> inline void set(T&& mX) noexcept(noexcept(Internal::Cnv<RemoveAll<T>>::toVal(std::declval<Val&>(), fwd<T>(mX))))
 				{
 					deinitCurrent();
-					Internal::ValHelper<RemoveAll<T>>::set(*this, fwd<T>(mX));
+					Internal::Cnv<RemoveAll<T>>::toVal(*this, fwd<T>(mX));
+					cnvType = Internal::getTypeIdx<T>();
 				}
 
 				// Check stored type
-				template<typename T> inline bool is() const noexcept { return Internal::ValHelper<T>::is(*this); }
+				template<typename T> inline bool is() const noexcept { return cnvType == Internal::getTypeIdx<T>(); }
 
 				// "Explicit" `as` function gets the inner contents of the value
-				template<typename T> decltype(auto) as() & noexcept			{ SSVU_ASSERT(is<T>()); return Internal::ValHelper<T>::as(*this); }
-				template<typename T> decltype(auto) as() const& noexcept	{ SSVU_ASSERT(is<T>()); return Internal::ValHelper<T>::as(*this); }
-				template<typename T> decltype(auto) as() && noexcept		{ SSVU_ASSERT(is<T>()); return Internal::ValHelper<T>::as(std::move(*this)); }
+				template<typename T> decltype(auto) as() & noexcept(noexcept(Internal::Cnv<T>::getFromVal(std::declval<Val&>())))
+				{
+					SSVU_ASSERT(is<T>());
+					return Internal::Cnv<T>::getFromVal(*this);
+				}
+				template<typename T> decltype(auto) as() const& noexcept(noexcept(Internal::Cnv<T>::getFromVal(std::declval<Val&>())))
+				{
+					SSVU_ASSERT(is<T>());
+					return Internal::Cnv<T>::getFromVal(*this);
+				}
+				template<typename T> decltype(auto) as() && noexcept(noexcept(Internal::Cnv<T>::getFromVal(std::declval<Val&&>())))
+				{
+					SSVU_ASSERT(is<T>());
+					return Internal::Cnv<T>::getFromVal(std::move(*this));
+				}
 
 				// "Implicit" `set` function done via `operator=` overloading
 				template<typename T> inline auto& operator=(T&& mX) noexcept(noexcept(std::declval<Val&>().set(fwd<T>(mX))))
@@ -174,9 +210,8 @@ namespace ssvu
 						case Type::Num: return getNum() == mV.getNum();
 						case Type::Bln: return getBln() == mV.getBln();
 						case Type::Nll: return true;
+						default: SSVU_UNREACHABLE();
 					}
-
-					SSVU_JSON_UNREACHABLE();
 				}
 				inline auto operator!=(const Val& mV) const noexcept { return !(operator==(mV)); }
 
@@ -221,9 +256,58 @@ namespace ssvu
 
 		using Obj = Val::Obj;
 		using Arr = Val::Arr;
+
+		namespace Internal
+		{
+			template<Idx TI, typename TArg, typename T> inline void extrArrHelper(T&& mV, TArg& mArg) { mArg = moveIfRValue<decltype(mV)>(mV[TI].template as<TArg>()); }
+			template<Idx TI, typename TArg, typename... TArgs, typename T> inline void extrArrHelper(T&& mV, TArg& mArg, TArgs&... mArgs)
+			{
+				extrArrHelper<TI>(fwd<T>(mV), mArg); extrArrHelper<TI + 1>(fwd<T>(mV), mArgs...);
+			}
+
+			template<Idx TI, typename TArg> inline void archArrHelper(Val& mV, TArg&& mArg) { mV[TI] = fwd<TArg>(mArg); }
+			template<Idx TI, typename TArg, typename... TArgs> inline void archArrHelper(Val& mV, TArg&& mArg, TArgs&&... mArgs)
+			{
+				archArrHelper<TI>(mV, fwd<TArg>(mArg)); archArrHelper<TI + 1>(mV, fwd<TArgs>(mArgs)...);
+			}
+
+			template<typename TArg, typename T> inline void extrObjHelper(T&& mV, const Key& mKey, TArg& mArg) { mArg = moveIfRValue<decltype(mV)>(mV[mKey].template as<TArg>()); }
+			template<typename TArg, typename... TArgs, typename T> inline void extrObjHelper(T&& mV, const Key& mKey, TArg& mArg, TArgs&... mArgs)
+			{
+				extrObjHelper(fwd<T>(mV), mKey, mArg); extrObjHelper(fwd<T>(mV), mArgs...);
+			}
+
+			template<typename TKey, typename TArg> inline void archObjHelper(Val& mV, TKey&& mKey, TArg&& mArg) { mV[fwd<TKey>(mKey)] = fwd<TArg>(mArg); }
+			template<typename TKey, typename TArg, typename... TArgs> inline void archObjHelper(Val& mV, TKey&& mKey, TArg&& mArg, TArgs&&... mArgs)
+			{
+				archObjHelper(mV, fwd<TKey>(mKey), fwd<TArg>(mArg)); archObjHelper(mV, fwd<TArgs>(mArgs)...);
+			}
+		}
+
+
+		template<typename... TArgs, typename T> inline void extrArr(T&& mV, TArgs&... mArgs)	{ Internal::extrArrHelper<0>(fwd<T>(mV), mArgs...); }
+		template<typename... TArgs> inline void archArr(Val& mV, TArgs&&... mArgs)				{ Internal::archArrHelper<0>(mV, fwd<TArgs>(mArgs)...); }
+		//template<typename... TArgs> inline Val getArchArr(const TArgs&... mArgs) { Val result; archArr(result, fwd<const TArgs&>(mArgs)...); return result; }
+
+		template<typename... TArgs, typename T> inline void extrObj(T&& mV, TArgs&... mArgs)	{ Internal::extrObjHelper(fwd<T>(mV), mArgs...); }
+		template<typename... TArgs> inline void archObj(Val& mV, TArgs&&... mArgs)				{ Internal::archObjHelper(mV, fwd<TArgs>(mArgs)...); }
+		//template<typename... TArgs> inline Val getArchVal(const TArgs&... mArgs) { Val result; archObj(result, fwd<const TArgs&>(mArgs)...); return result; }
+
+		template<typename T> inline void convert(const Val& mV, T& mX)	{ mX = mV.as<T>(); }
+		template<typename T> inline void convert(Val&& mV, T& mX)		{ mX = std::move(mV.as<T>()); }
+		template<typename T> inline void convert(Val& mV, T&& mX)		{ mV = fwd<T>(mX); }
+
+		template<typename... TArgs> inline void convertArr(const Val& mV, TArgs&... mArgs)	{ extrArr(mV, mArgs...); }
+		template<typename... TArgs> inline void convertArr(Val&& mV, TArgs&... mArgs)		{ extrArr(std::move(mV), mArgs...); }
+		template<typename... TArgs> inline void convertArr(Val& mV, TArgs&&... mArgs)		{ archArr(mV, fwd<TArgs>(mArgs)...); }
+
+		template<typename... TArgs> inline void convertObj(const Val& mV, TArgs&... mArgs)	{ extrObj(mV, mArgs...); }
+		template<typename... TArgs> inline void convertObj(Val&& mV, TArgs&... mArgs)		{ extrObj(std::move(mV), mArgs...); }
+		template<typename... TArgs> inline void convertObj(Val& mV, TArgs&&... mArgs)		{ archObj(mV, fwd<TArgs>(mArgs)...); }
+
 	}
 }
 
-#include "SSVUtils/Json/Val/ValHelper.hpp"
+#include "SSVUtils/Json/Val/Cnv.hpp"
 
 #endif

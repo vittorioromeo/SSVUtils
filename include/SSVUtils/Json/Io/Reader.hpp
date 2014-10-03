@@ -29,9 +29,8 @@ namespace ssvu
 					case 'n': return '\n';
 					case 'r': return '\r';
 					case 't': return '\t';
+					default: SSVU_UNREACHABLE();
 				}
-
-				SSVU_JSON_UNREACHABLE();
 			}
 
 			template<typename TRS = ReaderSettings<RMode::Default>> class Reader
@@ -50,23 +49,26 @@ namespace ssvu
 						for(auto i(0u); i < src.size(); ++i)
 						{
 							// Skip strings
-							if(src[i] == '"')
+							if(getC(i) == '"')
 							{
 								// Skip opening '"'
 								++i;
 
 								// Move until closing '"', skipping '\"'
-								while(src[i] != '"' || src[i - 1] == '\\') ++i;
+								while(getC(i) != '"' || getC(i - 1) == '\\') ++i;
 
 								// Skip closing '"'
 								++i;
 							}
 
+							// Check for src end
+							if(i >= src.size()) return;
+
 							// Detect C++-style comment
-							if(src[i] != '/' || src[i + 1] != '/') continue;
+							if(getC(i) != '/' || getC(i + 1) != '/') continue;
 
 							// Replace comment with whitespace
-							for(; src[i] != '\n'; ++i) src[i] = ' ';
+							for(; getC(i) != '\n'; ++i) getC(i) = ' ';
 						}
 					}
 
@@ -98,7 +100,11 @@ namespace ssvu
 					inline static constexpr auto isWhitespace(char mC) noexcept	{ return mC == ' ' || mC == '\t' || mC == '\r' || mC == '\n'; }
 					inline static constexpr auto isNumStart(char mC) noexcept	{ return mC == '-' || isDigit(mC); }
 
-					inline char getC() const noexcept		{ return src[idx]; }
+					inline char& getC() noexcept						{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
+					inline char getC() const noexcept					{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
+					inline char& getC(std::size_t mIdx) noexcept		{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
+					inline char getC(std::size_t mIdx) const noexcept	{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
+
 					inline auto isC(char mC) const noexcept	{ return getC() == mC; }
 					inline auto isCDigit() const noexcept	{ return isDigit(getC()); }
 
@@ -123,13 +129,13 @@ namespace ssvu
 						for(; true; ++end)
 						{
 							// End of the string
-							if(src[end] == '"') break;
+							if(getC(end) == '"') break;
 
 							// Skip escape sequences
-							if(src[end] == '\\')
+							if(getC(end) == '\\')
 							{
 								++end;
-								SSVU_ASSERT(isValidEscapeSequenceChar(src[end]));
+								SSVU_ASSERT(isValidEscapeSequenceChar(getC(end)));
 								continue;
 							}
 						}

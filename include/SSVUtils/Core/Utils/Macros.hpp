@@ -126,6 +126,15 @@ namespace ssvu
 /// /// @details Enables if `mT` has not the same type of `mType`.
 #define SSVU_ENABLEIF_IS_NOT(mT, mType) EnableIf<!isSame<RemoveAll<mT>, mType>()>* = nullptr
 
+// Unreachable macro
+#if (SSVU_COMPILER_CLANG || SSVU_COMPILER_GCC)
+	/// @macro Unreachable code. Uses `__builtin_unreachable`. Requires semicolon at the end.
+	#define SSVU_UNREACHABLE() __builtin_unreachable()
+#else
+	/// @macro Unreachable code. Uses an assert and `std::terminate()`. Requires semicolon at the end.
+	#define SSVU_UNREACHABLE() SSVU_ASSERT(false); std::terminate()
+#endif
+
 #endif
 
 // TODO: void_t callers?

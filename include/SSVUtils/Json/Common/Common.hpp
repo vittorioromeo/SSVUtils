@@ -5,8 +5,6 @@
 #ifndef SSVU_JSON_COMMON
 #define SSVU_JSON_COMMON
 
-#define SSVU_JSON_UNREACHABLE()					SSVU_ASSERT(false); std::terminate()
-
 #include "SSVUtils/Json/Common/VecMap.hpp"
 
 namespace ssvu
@@ -28,6 +26,7 @@ namespace ssvu
 
 
 
+		// TODO: can be better?
 		enum class WMode{Pretty, Minified, PrettyConsole};
 
 		template<WMode TWM> struct WriterSettings;
