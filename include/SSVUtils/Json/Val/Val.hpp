@@ -39,24 +39,12 @@ namespace ssvu
 				template<typename T, typename TItr> inline static constexpr auto makeItrArrRange(TItr mBegin, TItr mEnd) noexcept { return makeItrAsRange<ImplAsArr, T>(mBegin, mEnd); }
 			};
 
-			using TypeIdx = std::size_t;
+			using CnvType = std::size_t;
 
-			// Returns the next unique bit index for a type
-			inline auto getLastTypeIdx() noexcept
-			{
-				static TypeIdx lastIdx{0};
-				return lastIdx++;
-			}
-
-			// Stores a specific bit index for a Component type
-			template<typename T> struct TypeIdxInfo { static TypeIdx idx; };
-			template<typename T> TypeIdx TypeIdxInfo<T>::idx{getLastTypeIdx()};
-
-			// Shortcut to get the bit index of a Component type
-			template<typename T> inline auto getTypeIdx() noexcept
-			{
-				return TypeIdxInfo<T>::idx;
-			}
+			inline auto getLastCnvType() noexcept { static CnvType lastIdx{0}; return lastIdx++; }
+			template<typename T> struct CnvTypeInfo { static CnvType idx; };
+			template<typename T> CnvType CnvTypeInfo<T>::idx{getLastCnvType()};
+			template<typename T> inline auto getCnvType() noexcept { return CnvTypeInfo<T>::idx; }
 
 			template<typename> struct CnvTypeHelper;
 
@@ -79,10 +67,10 @@ namespace ssvu
 			private:
 				using Num = Internal::Num;
 				using VIH = Internal::ValItrHelper;
-				using CnvType = Internal::TypeIdx;
+				using CnvType = Internal::CnvType;
 
 				Type type{Type::Nll};
-				CnvType cnvType{Internal::getTypeIdx<Nll>()};
+				Internal::CnvType cnvType{Internal::getCnvType<Nll>()};
 
 				union Holder
 				{
@@ -280,8 +268,8 @@ namespace ssvu
 		{
 			template<typename T> struct CnvTypeHelper
 			{
-				inline static void set(Val& mV) noexcept { mV.cnvType = getTypeIdx<RemoveAll<T>>(); }
-				inline static bool is(const Val& mV) noexcept { return mV.cnvType == getTypeIdx<RemoveAll<T>>(); }
+				inline static void set(Val& mV) noexcept { mV.cnvType = getCnvType<RemoveAll<T>>(); }
+				inline static bool is(const Val& mV) noexcept { return mV.cnvType == getCnvType<RemoveAll<T>>(); }
 			};
 
 			template<> struct CnvTypeHelper<Val>
