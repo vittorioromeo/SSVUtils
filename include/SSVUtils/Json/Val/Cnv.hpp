@@ -31,20 +31,20 @@ namespace ssvu
 				inline static decltype(auto) getFromVal(const Val& mV) noexcept { return mV.getNum().as<TNum>(); }
 				inline static void toVal(Val& mV, const TNum& mX) noexcept { mV.setNum(Num{mX}); }
 				inline static void fromVal(const Val& mV, TNum& mX) noexcept { mX = getFromVal(mV); }
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Num; }
 			};
 
 			#define SSVU_JSON_DEFINE_CNV_NUM_IMPL(mType) template<> struct Cnv<mType> final : public CnvNumImpl<mType> { };
 
 			// TODO: try getTypeMove() && std::move(...) ?
+			// TODO: should as<> always return a copy? Or are refs acceptable like in the case of as<Arr>()?
 			#define SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
 					inline static const auto& getFromVal(const Val& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
+					inline static auto& getFromVal(Val& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
 					inline static auto getFromVal(Val&& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
 					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(fwd<T>(mX)))) { SSVPP_CAT(mV.set, mType)(fwd<T>(mX)); } \
 					template<typename T> inline static void fromVal(Val&& mV, T& mX) { return getFromVal(fwd<T>(mV)); } \
-					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::mType); } \
 				};
 
 			#define SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(mType) \
@@ -53,7 +53,6 @@ namespace ssvu
 					inline static decltype(auto) getFromVal(const Val& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
 					inline static void toVal(Val& mV, const mType& mX) noexcept { SSVPP_CAT(mV.set, mType)(mX); } \
 					inline static void fromVal(const Val& mV, mType& mX) noexcept { mX = getFromVal(mV); } \
-					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::mType); } \
 				};
 
 			SSVU_JSON_DEFINE_CNV_NUM_IMPL(char)
@@ -77,7 +76,7 @@ namespace ssvu
 			#undef SSVU_JSON_DEFINE_CNV_BIG_MUTABLE
 			#undef SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE
 
-			// Convert values to themselvesbr
+			// Convert values to themselves
 			template<> struct Cnv<Val> final
 			{
 				inline static const auto& getFromVal(const Val& mV) noexcept { return mV; }
@@ -85,7 +84,6 @@ namespace ssvu
 				inline static auto& getFromVal(Val& mV) noexcept { return mV; }
 				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(fwd<T>(mX)))) { mV.init(fwd<T>(mX)); }
 				template<typename T> inline static void fromVal(Val&& mV, Val& mX) noexcept { mX = fwd<T>(mV); }
-				inline static auto is(const Val& mV) noexcept { return true; }
 			};
 
 			// Convert C-style string arrays
@@ -93,14 +91,12 @@ namespace ssvu
 			{
 				inline static void toVal(Val& mV, const char(&mX)[TS]) { mV.setStr(mX); }
 				inline static void fromVal(const Val& mV, char(&mX)[TS]) noexcept { for(auto i(0u); i < TS; ++i) mX[i] = mV.as<Str>()[i]; }
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Str && mV.as<Str>().size() == TS; }
 			};
 
 			// Convert C-style strings
 			template<> struct Cnv<const char*> final
 			{
 				inline static void toVal(Val& mV, const char* mX) { mV.setStr(mX); }
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Str; }
 			};
 
 			// Convert `std::pair`
@@ -122,7 +118,6 @@ namespace ssvu
 					mX.second = moveIfRValue<decltype(mV)>(mV[1].template as<T2>());
 				}
 				template<typename T> inline static auto getFromVal(T&& mV) { Type result; fromVal(fwd<T>(mV), result); return result; }
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && mV.getArr().size() == 2 && mV[0].is<T1>() && mV[1].is<T2>(); }
 			};
 
 			// Tuple conversion implementation
@@ -165,19 +160,7 @@ namespace ssvu
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX) { Impl::toTpl<0, TArgs...>(fwd<T>(mV), mX); }
 				template<typename T> inline static auto getFromVal(T&& mV) { Type result; fromVal(fwd<T>(mV), result); return result; }
-				inline static auto is(const Val& mV) noexcept
-				{
-					return mV.getType() == Val::Type::Arr && mV.getArr().size() == sizeof...(TArgs) && Impl::isTpl<0, TArgs...>(mV);
-				}
 			};
-
-			/// @brief Returns `true` if all items of an `Arr` are of type `T`.
-			template<typename T> inline bool areArrItemsOfType(const Val& mV) noexcept
-			{
-				SSVU_ASSERT(mV.is<Arr>());
-				for(const auto& v : mV.forArr()) if(!v.template is<T>()) return false;
-				return true;
-			}
 
 			// Convert `std::vector`
 			template<typename TItem> struct Cnv<std::vector<TItem>> final
@@ -203,7 +186,6 @@ namespace ssvu
 					for(auto i(0u); i < arr.size(); ++i) result.emplace_back(moveIfRValue<decltype(mV)>(arr[i].template as<TItem>()));
 					return result;
 				}
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && areArrItemsOfType<TItem>(mV); }
 			};
 
 			// Convert C-style array
@@ -223,7 +205,6 @@ namespace ssvu
 					for(auto i(0u); i < TS; ++i) mX[i] = moveIfRValue<decltype(mV)>(mV[i].template as<TItem>());
 				}
 				template<typename T> inline static auto getFromVal(T&& mV) { Type result; fromVal(fwd<T>(mV), result); return result; }
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && mV.getArr().size() == TS && areArrItemsOfType<TItem>(mV); }
 			};
 
 			template<typename T> struct CnvImplGet
