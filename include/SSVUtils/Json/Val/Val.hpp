@@ -40,7 +40,6 @@ namespace ssvu
 			};
 
 			using CnvType = std::size_t;
-
 			inline auto getLastCnvType() noexcept { static CnvType lastIdx{0}; return lastIdx++; }
 			template<typename T> struct CnvTypeInfo { static CnvType idx; };
 			template<typename T> CnvType CnvTypeInfo<T>::idx{getLastCnvType()};
