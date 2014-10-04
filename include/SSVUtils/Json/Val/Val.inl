@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		template<typename T> inline decltype(auto) Val::as() &// noexcept(noexcept(Internal::AsHelper<T>::as(std::declval<Val&>())))
+		/*template<typename T> inline decltype(auto) Val::as() &// noexcept(noexcept(Internal::AsHelper<T>::as(std::declval<Val&>())))
 		{
 			SSVU_ASSERT(is<T>());
 			return Internal::AsHelper<T>::as(*this);
@@ -23,6 +23,16 @@ namespace ssvu
 		{
 			SSVU_ASSERT(is<T>());
 			return Internal::AsHelper<T>::as(std::move(*this));
+		}*/
+		template<typename T> inline decltype(auto) Val::as()
+		{
+			SSVU_ASSERT(is<T>());
+			return Internal::AsHelper<T>::as(*this);
+		}
+		template<typename T> inline decltype(auto) Val::as() const
+		{
+			SSVU_ASSERT(is<T>());
+			return Internal::AsHelper<T>::as(*this);
 		}
 
 

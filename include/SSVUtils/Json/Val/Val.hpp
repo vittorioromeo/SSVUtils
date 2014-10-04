@@ -110,9 +110,11 @@ namespace ssvu
 				}
 
 				// "Explicit" `as` function gets the inner contents of the value
-				template<typename T> decltype(auto) as() &;
-				template<typename T> decltype(auto) as() const&;
-				template<typename T> decltype(auto) as() &&;
+				//template<typename T> decltype(auto) as() &;
+				//template<typename T> decltype(auto) as() const&;
+				//template<typename T> decltype(auto) as() &&;
+				template<typename T> decltype(auto) as();
+				template<typename T> decltype(auto) as() const;
 
 				// "Implicit" `set` function done via `operator=` overloading
 				template<typename T> inline auto& operator=(T&& mX) noexcept(noexcept(std::declval<Val&>().set(fwd<T>(mX))))
@@ -177,10 +179,10 @@ namespace ssvu
 
 
 				// Iteration
-				inline auto forObj() noexcept		{ return asRange(getObj()); }
-				inline auto forObj() const noexcept	{ return asRange(getObj()); }
-				inline auto forArr() noexcept		{ return asRange(getArr()); }
-				inline auto forArr() const noexcept	{ return asRange(getArr()); }
+				inline auto forObj() noexcept		{ return VIH::makeItrObjRange<Val>(std::begin(getObj()), std::end(getObj())); }
+				inline auto forObj() const noexcept	{ return VIH::makeItrObjRange<Val>(std::cbegin(getObj()), std::cend(getObj())); }
+				inline auto forArr() noexcept		{ return VIH::makeItrArrRange<Val>(std::begin(getArr()), std::end(getArr())); }
+				inline auto forArr() const noexcept	{ return VIH::makeItrArrRange<Val>(std::cbegin(getArr()), std::cend(getArr())); }
 
 				template<typename T> inline auto forObjAs() noexcept		{ return VIH::makeItrObjRange<T>(std::begin(getObj()), std::end(getObj())); }
 				template<typename T> inline auto forObjAs() const noexcept	{ return VIH::makeItrObjRange<T>(std::cbegin(getObj()), std::cend(getObj())); }

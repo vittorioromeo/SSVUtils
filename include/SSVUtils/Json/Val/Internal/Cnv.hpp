@@ -159,8 +159,8 @@ namespace ssvu
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{
 					const auto& arr(mV.template as<Arr>());
-					SSVU_ASSERT(mX.size() >= arr.size());
-					for(auto i(0u); i < arr.size(); ++i) mX[i] = moveIfRValue<decltype(mV)>(arr[i]);
+					mX.reserve(arr.size());
+					for(auto i(0u); i < arr.size(); ++i) mX.emplace_back(moveIfRValue<decltype(mV)>(arr[i].template as<TItem>()));
 				}
 			};
 
@@ -184,8 +184,10 @@ namespace ssvu
 
 			template<typename T> struct CnvImplSimple
 			{
-				template<typename TFwd> inline static void toVal(Val& mV, TFwd&& mX) { Cnv<T>::template impl<decltype(mV), decltype(mX)>(mV, fwd<TFwd>(mX)); }
-				template<typename TFwd> inline static void fromVal(TFwd&& mV, T& mX) { Cnv<T>::template impl<decltype(mV), decltype(mX)>(fwd<TFwd>(mV), mX); }
+				inline static void toVal(Val& mV, const T& mX)		{ Cnv<T>::template impl<decltype(mV), decltype(mX)>(mV, mX); }
+				inline static void toVal(Val& mV, T&& mX)			{ Cnv<T>::template impl<decltype(mV), decltype(mX)>(mV, mX); }
+				inline static void fromVal(const Val& mV, T& mX)	{ Cnv<T>::template impl<decltype(mV), decltype(mX)>(mV, mX); }
+				inline static void fromVal(Val&& mV, T& mX)			{ Cnv<T>::template impl<decltype(mV), decltype(mX)>(mV, mX); }
 			};
 		}
 	}

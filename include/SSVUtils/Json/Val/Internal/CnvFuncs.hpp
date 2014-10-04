@@ -11,10 +11,15 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<Idx TI, typename TArg, typename T> inline void extrArrHelper(T&& mV, TArg& mArg) { mArg = moveIfRValue<decltype(mV)>(mV[TI].template as<TArg>()); }
+			template<Idx TI, typename TArg, typename T> inline void extrArrHelper(T&& mV, TArg& mArg)
+			{
+				SSVU_ASSERT(mV.template is<Arr>() && mV.template as<Arr>().size() > TI && mV[TI].template is<TArg>());
+				mArg = moveIfRValue<decltype(mV)>(mV[TI].template as<TArg>());
+			}
 			template<Idx TI, typename TArg, typename... TArgs, typename T> inline void extrArrHelper(T&& mV, TArg& mArg, TArgs&... mArgs)
 			{
-				extrArrHelper<TI>(fwd<T>(mV), mArg); extrArrHelper<TI + 1>(fwd<T>(mV), mArgs...);
+				extrArrHelper<TI>(fwd<T>(mV), mArg);
+				extrArrHelper<TI + 1>(fwd<T>(mV), mArgs...);
 			}
 
 			template<Idx TI, typename TArg> inline void archArrHelper(Val& mV, TArg&& mArg) { mV.as<Arr>().emplace_back(fwd<TArg>(mArg)); }
