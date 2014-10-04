@@ -38,7 +38,7 @@ namespace ssvu
 				{
 					mVal = mReader.parseVal();
 				}
-				catch(ReadException& mEx)
+				catch(const ReadException& mEx)
 				{
 					lo("JSON") << "Error occured during read\n";
 					lo(mEx.getTitle()) << mEx.what() << " - at:\n" + mEx.getSrc() << std::endl;

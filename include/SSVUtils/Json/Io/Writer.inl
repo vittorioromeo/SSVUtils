@@ -21,6 +21,7 @@ namespace ssvu
 					case Val::Type::Num: write(mVal.as<Num>()); break;
 					case Val::Type::Bln: write(mVal.as<Bln>()); break;
 					case Val::Type::Nll: write(Nll{}); break;
+					default: SSVU_UNREACHABLE();
 				}
 			}
 		}
