@@ -17,7 +17,6 @@ namespace ssvu
 				extrArrHelper<TI>(fwd<T>(mV), mArg); extrArrHelper<TI + 1>(fwd<T>(mV), mArgs...);
 			}
 
-			//template<Idx TI, typename TArg> inline void archArrHelper(Val& mV, TArg&& mArg) { mV[TI] = fwd<TArg>(mArg); }
 			template<Idx TI, typename TArg> inline void archArrHelper(Val& mV, TArg&& mArg) { mV.as<Arr>().emplace_back(fwd<TArg>(mArg)); }
 			template<Idx TI, typename TArg, typename... TArgs> inline void archArrHelper(Val& mV, TArg&& mArg, TArgs&&... mArgs)
 			{
@@ -37,17 +36,23 @@ namespace ssvu
 			}
 		}
 
+		template<typename T, typename TFwd> inline void extr(TFwd&& mV, T& mX) noexcept(noexcept(Internal::Cnv<T>::fromVal(fwd<TFwd>(mV), mX))) { Internal::Cnv<T>::fromVal(fwd<TFwd>(mV), mX); }
+		template<typename T> inline void arch(Val& mV, T&& mX) noexcept(noexcept(mV = fwd<T>(mX))) { mV = fwd<T>(mX); }
+
+		template<typename T, typename TFwd> inline T getExtr(TFwd&& mV) { T result; extr(fwd<TFwd>(mV), result); return result; }
+		template<typename T> inline Val getArch(T&& mX) { Val result; arch(result, fwd<T>(mX)); return result; }
+
 		template<typename... TArgs, typename T> inline void extrArr(T&& mV, TArgs&... mArgs)	{ Internal::extrArrHelper<0>(fwd<T>(mV), mArgs...); }
 		template<typename... TArgs> inline void archArr(Val& mV, TArgs&&... mArgs)				{ mV = Arr{}; Internal::archArrHelper<0>(mV, fwd<TArgs>(mArgs)...); }
-		//template<typename... TArgs> inline Val getArchArr(const TArgs&... mArgs) { Val result; archArr(result, fwd<const TArgs&>(mArgs)...); return result; }
+		template<typename... TArgs> inline Val getArchArr(TArgs&&... mArgs)						{ Val result; archArr(result, fwd<TArgs>(mArgs)...); return result; }
 
 		template<typename... TArgs, typename T> inline void extrObj(T&& mV, TArgs&... mArgs)	{ Internal::extrObjHelper(fwd<T>(mV), mArgs...); }
 		template<typename... TArgs> inline void archObj(Val& mV, TArgs&&... mArgs)				{ mV = Obj{}; Internal::archObjHelper(mV, fwd<TArgs>(mArgs)...); }
-		//template<typename... TArgs> inline Val getArchVal(const TArgs&... mArgs) { Val result; archObj(result, fwd<const TArgs&>(mArgs)...); return result; }
+		template<typename... TArgs> inline Val getArchObj(TArgs&&... mArgs)						{ Val result; archObj(result, fwd<TArgs>(mArgs)...); return result; }
 
-		template<typename T> inline void convert(const Val& mV, T& mX)	{ mX = mV.as<T>(); }
-		template<typename T> inline void convert(Val&& mV, T& mX)		{ mX = std::move(mV.as<T>()); }
-		template<typename T> inline void convert(Val& mV, T&& mX)		{ mV = fwd<T>(mX); }
+		template<typename T> inline void convert(const Val& mV, T& mX) noexcept(noexcept(extr(mV, mX)))			{ extr(mV, mX); }
+		template<typename T> inline void convert(Val&& mV, T& mX) noexcept(noexcept(extr(std::move(mV), mX)))	{ extr(std::move(mV), mX); }
+		template<typename T> inline void convert(Val& mV, T&& mX) noexcept(noexcept(arch(mV, fwd<T>(mX))))		{ arch(mV, fwd<T>(mX)); }
 
 		template<typename... TArgs> inline void convertArr(const Val& mV, TArgs&... mArgs)	{ extrArr(mV, mArgs...); }
 		template<typename... TArgs> inline void convertArr(Val&& mV, TArgs&... mArgs)		{ extrArr(std::move(mV), mArgs...); }
