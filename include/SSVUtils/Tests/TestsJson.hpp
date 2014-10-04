@@ -5,6 +5,53 @@
 #ifndef SSVU_TESTS_JSON
 #define SSVU_TESTS_JSON
 
+SSVUT_TEST(SSVUJsonVecMapTests)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
+
+	{
+		VecMap<int, int> tm;
+
+		SSVUT_EXPECT(tm.empty());
+		SSVUT_EXPECT(tm.size() == 0);
+
+		tm.reserve(3);
+
+		SSVUT_EXPECT(tm.empty());
+		SSVUT_EXPECT(tm.size() == 0);
+
+		tm[0] = 0;
+		tm[1] = 2;
+		tm[2] = 4;
+
+		SSVUT_EXPECT(!tm.empty());
+		SSVUT_EXPECT(tm.size() == 3);
+
+		SSVUT_EXPECT(tm[0] == 0 && tm.at(0) == 0);
+		SSVUT_EXPECT(tm[1] == 2 && tm.at(1) == 2);
+		SSVUT_EXPECT(tm[2] == 4 && tm.at(2) == 4);
+
+		auto tmc(tm);
+
+		SSVUT_EXPECT(tm == tmc);
+
+		VecMap<int, int> tmil{{0, 0}, {1, 2}, {2, 4}};
+
+		SSVUT_EXPECT(tm == tmil);
+
+		auto tm2(std::move(tm));
+
+		SSVUT_EXPECT(tm2[0] == 0 && tm2.at(0) == 0);
+		SSVUT_EXPECT(tm2[1] == 2 && tm2.at(1) == 2);
+		SSVUT_EXPECT(tm2[2] == 4 && tm2.at(2) == 4);
+
+		tm2[0] = 5;
+		SSVUT_EXPECT(tm2[0] == 5 && tm2.at(0) == 5);
+	}
+}
+
 SSVUT_TEST(SSVUJsonNumTests)
 {
 	using namespace ssvu;
@@ -294,6 +341,16 @@ SSVUT_TEST(SSVUJsonConvertTests)
 			SSVUT_EXPECT(fs.is<Type>()); \
 			SSVUT_EXPECT(fs.as<Type>() == out); \
 			SSVUT_EXPECT(fs.as<Type>() == mBV); \
+			Val eaVal; \
+			arch(eaVal, mBV); \
+			SSVUT_EXPECT(eaVal.as<Type>() == mBV); \
+			Type eaOut; \
+			extr(eaVal, eaOut); \
+			SSVUT_EXPECT(eaOut == mBV); \
+			auto getEaVal(getArch(mBV)); \
+			SSVUT_EXPECT(getEaVal.as<Type>() == mBV); \
+			auto getEaOut(getExtr<Type>(getEaVal)); \
+			SSVUT_EXPECT(getEaOut == mBV); \
 		}
 
 	#define EXEC_CV_TEST_ARR(mType, mBV0, mBV1, mBV2) \
