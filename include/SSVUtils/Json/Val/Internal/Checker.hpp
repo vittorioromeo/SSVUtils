@@ -18,6 +18,7 @@ namespace ssvu
 				template<std::size_t TI = 0, typename... TArgs> inline EnableIf<TI == sizeof...(TArgs), bool> isTpl(const Val&) noexcept { return true; }
 				template<std::size_t TI = 0, typename... TArgs> inline EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
 				{
+					SSVU_ASSERT(mV.is<Arr>() && mV.as<Arr>().size() > TI);
 					if(!mV[TI].is<TplArg<TI, std::tuple<TArgs...>>>()) return false;
 					return isTpl<TI + 1, TArgs...>(mV);
 				}

@@ -32,6 +32,9 @@ namespace ssvu
 
 				template<typename T, typename TItr> inline static constexpr auto makeItrObjRange(TItr mBegin, TItr mEnd) noexcept { return makeItrAsRange<ImplAsObj, T>(mBegin, mEnd); }
 				template<typename T, typename TItr> inline static constexpr auto makeItrArrRange(TItr mBegin, TItr mEnd) noexcept { return makeItrAsRange<ImplAsArr, T>(mBegin, mEnd); }
+
+				template<typename T, typename TItr> inline static constexpr auto makeItrObjRangeEmpty() noexcept { return makeItrAsRange<ImplAsObj, T>(TItr{}, TItr{}); }
+				template<typename T, typename TItr> inline static constexpr auto makeItrArrRangeEmpty() noexcept { return makeItrAsRange<ImplAsArr, T>(TItr{}, TItr{}); }
 			};
 		}
 	}

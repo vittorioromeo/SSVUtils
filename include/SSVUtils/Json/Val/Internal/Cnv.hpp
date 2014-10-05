@@ -34,6 +34,7 @@ namespace ssvu
 				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
 				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
 				{
+					SSVU_ASSERT(mV.template is<Arr>() && mV.template as<Arr>().size() > TI);
 					std::get<TI>(mX) = moveIfRValue<decltype(mV)>(mV[TI].template as<TplArg<TI, decltype(mX)>>());
 					toTpl<TI + 1, TArgs...>(fwd<T>(mV), mX);
 				}
@@ -49,13 +50,12 @@ namespace ssvu
 			#define SSVU_JSON_DEFINE_CNV_NUM(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
-					inline static void toVal(Val& mV, const mType& mX) noexcept { mV.setNum(Num{mX}); } \
-					inline static void fromVal(const Val& mV, mType& mX) noexcept { mX = mV.getNum().as<mType>(); } \
+					inline static void toVal(Val& mV, const mType& mX) noexcept		{ mV.setNum(Num{mX}); } \
+					inline static void fromVal(const Val& mV, mType& mX) noexcept	{ mX = mV.getNum().as<mType>(); } \
 				};
 
 			// TODO: try getTypeMove() && std::move(...) ?
 			// TODO: should as<> always return a copy? Or are refs acceptable like in the case of as<Arr>()?
-			// TODO: use BIG_MUTABLE for SMALL_IMMUTABLE as well?
 			#define SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
@@ -66,8 +66,8 @@ namespace ssvu
 			#define SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
-					inline static void toVal(Val& mV, const mType& mX) noexcept { SSVPP_CAT(mV.set, mType)(mX); } \
-					inline static void fromVal(const Val& mV, mType& mX) noexcept { mX = SSVPP_CAT(mV.get, mType)(); } \
+					inline static void toVal(Val& mV, const mType& mX) noexcept		{ SSVPP_CAT(mV.set, mType)(mX); } \
+					inline static void fromVal(const Val& mV, mType& mX) noexcept	{ mX = SSVPP_CAT(mV.get, mType)(); } \
 				};
 
 			SSVU_JSON_DEFINE_CNV_NUM(char)
@@ -95,7 +95,7 @@ namespace ssvu
 			template<> struct Cnv<Val> final
 			{
 				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(fwd<T>(mX)))) { mV.init(fwd<T>(mX)); }
-				template<typename T> inline static void fromVal(Val&& mV, Val& mX) noexcept { mX = fwd<T>(mV); }
+				template<typename T> inline static void fromVal(T&& mV, Val& mX) noexcept { mX = fwd<T>(mV); }
 			};
 
 			// Convert C-style string arrays

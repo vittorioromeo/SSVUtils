@@ -22,19 +22,31 @@ namespace ssvu
 				extrArrHelper<TI + 1>(fwd<T>(mV), mArgs...);
 			}
 
-			template<Idx TI, typename TArg> inline void archArrHelper(Val& mV, TArg&& mArg) { mV.as<Arr>().emplace_back(fwd<TArg>(mArg)); }
+			template<Idx TI, typename TArg> inline void archArrHelper(Val& mV, TArg&& mArg)
+			{
+				SSVU_ASSERT(mV.template is<Arr>());
+				mV.as<Arr>().emplace_back(fwd<TArg>(mArg));
+			}
 			template<Idx TI, typename TArg, typename... TArgs> inline void archArrHelper(Val& mV, TArg&& mArg, TArgs&&... mArgs)
 			{
 				archArrHelper<TI>(mV, fwd<TArg>(mArg)); archArrHelper<TI + 1>(mV, fwd<TArgs>(mArgs)...);
 			}
 
-			template<typename TArg, typename T> inline void extrObjHelper(T&& mV, const Key& mKey, TArg& mArg) { mArg = moveIfRValue<decltype(mV)>(mV[mKey].template as<TArg>()); }
+			template<typename TArg, typename T> inline void extrObjHelper(T&& mV, const Key& mKey, TArg& mArg)
+			{
+				SSVU_ASSERT(mV.template is<Obj>() && mV.has(mKey));
+				mArg = moveIfRValue<decltype(mV)>(mV[mKey].template as<TArg>());
+			}
 			template<typename TArg, typename... TArgs, typename T> inline void extrObjHelper(T&& mV, const Key& mKey, TArg& mArg, TArgs&... mArgs)
 			{
 				extrObjHelper(fwd<T>(mV), mKey, mArg); extrObjHelper(fwd<T>(mV), mArgs...);
 			}
 
-			template<typename TKey, typename TArg> inline void archObjHelper(Val& mV, TKey&& mKey, TArg&& mArg) { mV[fwd<TKey>(mKey)] = fwd<TArg>(mArg); }
+			template<typename TKey, typename TArg> inline void archObjHelper(Val& mV, TKey&& mKey, TArg&& mArg)
+			{
+				SSVU_ASSERT(mV.template is<Obj>());
+				mV[fwd<TKey>(mKey)] = fwd<TArg>(mArg);
+			}
 			template<typename TKey, typename TArg, typename... TArgs> inline void archObjHelper(Val& mV, TKey&& mKey, TArg&& mArg, TArgs&&... mArgs)
 			{
 				archObjHelper(mV, fwd<TKey>(mKey), fwd<TArg>(mArg)); archObjHelper(mV, fwd<TArgs>(mArgs)...);
