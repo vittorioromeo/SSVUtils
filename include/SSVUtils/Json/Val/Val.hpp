@@ -207,18 +207,6 @@ namespace ssvu
 
 
 				// Iteration
-				/*
-				template<typename T> inline auto forObjAs() noexcept		{ return VIH::makeItrObjRange<T>(std::begin(getObj()), std::end(getObj())); }
-				template<typename T> inline auto forObjAs() const noexcept	{ return VIH::makeItrObjRange<T>(std::cbegin(getObj()), std::cend(getObj())); }
-				template<typename T> inline auto forArrAs() noexcept		{ return VIH::makeItrArrRange<T>(std::begin(getArr()), std::end(getArr())); }
-				template<typename T> inline auto forArrAs() const noexcept	{ return VIH::makeItrArrRange<T>(std::cbegin(getArr()), std::cend(getArr())); }
-
-				inline auto forObj() noexcept		{ return forObjAs<Val>(); }
-				inline auto forObj() const noexcept	{ return forObjAs<Val>(); }
-				inline auto forArr() noexcept		{ return forArrAs<Val>(); }
-				inline auto forArr() const noexcept	{ return forArrAs<Val>(); }
-				*/
-
 				template<typename T> inline auto forUncheckedObjAs() noexcept		{ return VIH::makeItrObjRange<T>(std::begin(getObj()), std::end(getObj())); }
 				template<typename T> inline auto forUncheckedObjAs() const noexcept	{ return VIH::makeItrObjRange<T>(std::cbegin(getObj()), std::cend(getObj())); }
 				template<typename T> inline auto forUncheckedArrAs() noexcept		{ return VIH::makeItrArrRange<T>(std::begin(getArr()), std::end(getArr())); }
@@ -238,18 +226,6 @@ namespace ssvu
 				inline auto forObj() const noexcept	{ return forObjAs<Val>(); }
 				inline auto forArr() noexcept		{ return forArrAs<Val>(); }
 				inline auto forArr() const noexcept	{ return forArrAs<Val>(); }
-
-				/*
-				template<typename TV, typename TF> inline void forObjAs(TF mFunc)		noexcept(noexcept(mFunc(Str{}, std::declval<TV>())))	{ for(		auto& i : forObj()) mFunc(i.first, i.second.template as<TV>()); }
-				template<typename TV, typename TF> inline void forObjAs(TF mFunc) const	noexcept(noexcept(mFunc(Str{}, std::declval<TV>())))	{ for(const auto& i : forObj()) mFunc(i.first, i.second.template as<TV>()); }
-				template<typename TV, typename TF> inline void forArrAs(TF mFunc)		noexcept(noexcept(mFunc(std::declval<TV>())))			{ for(		auto& i : forArr()) mFunc(i.template as<TV>()); }
-				template<typename TV, typename TF> inline void forArrAs(TF mFunc) const	noexcept(noexcept(mFunc(std::declval<TV>())))			{ for(const auto& i : forArr()) mFunc(i.template as<TV>()); }
-
-				template<typename TF> inline void forObj(TF mFunc)			noexcept(noexcept(std::declval<Val&>().forObjAs<Val>(mFunc)))	{ forObjAs<Val>(mFunc); }
-				template<typename TF> inline void forObj(TF mFunc) const	noexcept(noexcept(std::declval<Val&>().forObjAs<Val>(mFunc)))	{ forObjAs<Val>(mFunc); }
-				template<typename TF> inline void forArr(TF mFunc)			noexcept(noexcept(std::declval<Val&>().forArrAs<Val>(mFunc)))	{ forArrAs<Val>(mFunc); }
-				template<typename TF> inline void forArr(TF mFunc) const	noexcept(noexcept(std::declval<Val&>().forArrAs<Val>(mFunc)))	{ forArrAs<Val>(mFunc); }
-				*/
 		};
 
 		using Obj = Val::Obj;
