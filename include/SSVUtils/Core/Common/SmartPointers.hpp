@@ -18,10 +18,10 @@ namespace ssvu
 	namespace Internal
 	{
 		/// @brief Internal functor that creates an `ssvu::UPtr`.
-		template<typename T> struct MakerUPtr { template<typename... TArgs> static inline auto make(TArgs&&... mArgs) { return makeUPtr<T>(fwd<TArgs>(mArgs)...); } };
+		template<typename T> struct MakerUPtr { template<typename... TArgs> inline static auto make(TArgs&&... mArgs) { return makeUPtr<T>(fwd<TArgs>(mArgs)...); } };
 
 		/// @brief Internal functor that creates an `ssvu::SPtr`.
-		template<typename T> struct MakerSPtr { template<typename... TArgs> static inline auto make(TArgs&&... mArgs) { return makeSPtr<T>(fwd<TArgs>(mArgs)...); } };
+		template<typename T> struct MakerSPtr { template<typename... TArgs> inline static auto make(TArgs&&... mArgs) { return makeSPtr<T>(fwd<TArgs>(mArgs)...); } };
 	}
 }
 
