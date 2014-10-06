@@ -91,7 +91,7 @@ namespace ssvu
 						throw std::out_of_range{""};
 					}
 
-					inline const auto& atOrDefault(const TK& mKey) const
+					inline const auto& atOrDefault(const TK& mKey) const noexcept
 					{
 						auto itr(lookup(mKey));
 						if(is(itr, mKey)) return itr->second;
