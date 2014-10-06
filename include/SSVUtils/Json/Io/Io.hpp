@@ -17,8 +17,8 @@ namespace ssvu
 			public:
 				inline ReadException(std::string mTitle, std::string mWhat, std::string mSrc) : std::runtime_error{std::move(mWhat)}, title{std::move(mTitle)}, src{std::move(mSrc)} { }
 
-				inline const auto& getTitle() const noexcept { return title; }
-				inline const auto& getSrc() const noexcept { return src; }
+				inline const auto& getTitle() const noexcept	{ return title; }
+				inline const auto& getSrc() const noexcept		{ return src; }
 		};
 	}
 }
