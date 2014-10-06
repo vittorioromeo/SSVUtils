@@ -9,6 +9,9 @@ namespace ssvu
 {
 	namespace Json
 	{
+		inline auto& Val::operator=(const Val& mV) noexcept { set(mV); return *this; }
+		inline auto& Val::operator=(Val&& mV) noexcept { set(std::move(mV)); return *this; }
+
 		template<typename T> inline decltype(auto) Val::as()		{ SSVU_ASSERT(is<T>()); return Internal::AsHelper<T>::as(*this); }
 		template<typename T> inline decltype(auto) Val::as() const	{ SSVU_ASSERT(is<T>()); return Internal::AsHelper<T>::as(*this); }
 

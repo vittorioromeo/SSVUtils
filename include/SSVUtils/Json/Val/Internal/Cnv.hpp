@@ -60,7 +60,7 @@ namespace ssvu
 				template<> struct Cnv<mType> final \
 				{ \
 					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(fwd<T>(mX)))) { SSVPP_CAT(mV.set, mType)(fwd<T>(mX)); } \
-					template<typename T> inline static void fromVal(T&& mV, T& mX) { mX = moveIfRValue<decltype(mV)>(SSVPP_CAT(mV.get, mType)()); } \
+					template<typename T> inline static void fromVal(T&& mV, mType& mX) { mX = moveIfRValue<decltype(mV)>(SSVPP_CAT(mV.get, mType)()); } \
 				};
 
 			#define SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(mType) \
@@ -96,6 +96,13 @@ namespace ssvu
 			{
 				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(fwd<T>(mX)))) { mV.init(fwd<T>(mX)); }
 				template<typename T> inline static void fromVal(T&& mV, Val& mX) noexcept { mX = fwd<T>(mV); }
+			};
+
+			// Convert enums
+			template<typename T> struct Cnv final
+			{
+				inline static void toVal(Val& mV, const T& mX, EnableIf<isEnum<RemoveAll<T>>()>* = nullptr) noexcept { mV = Underlying<T>(mX);  }
+				inline static void fromVal(const Val& mV, T& mX, EnableIf<isEnum<RemoveAll<T>>()>* = nullptr) noexcept { mX = T(mV.template as<Underlying<T>>()); }
 			};
 
 			// Convert C-style string arrays
@@ -159,8 +166,27 @@ namespace ssvu
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{
 					const auto& arr(mV.template as<Arr>());
-					mX.reserve(arr.size());
+					mX.reserve(arr.size()); mX.clear();
 					for(auto i(0u); i < arr.size(); ++i) mX.emplace_back(moveIfRValue<decltype(mV)>(arr[i].template as<TItem>()));
+				}
+			};
+
+			// Convert map-like objects
+			template<typename TKey, typename TValue, template<typename, typename, typename...> class TMap> struct Cnv<TMap<TKey, TValue>> final
+			{
+				using Type = TMap<TKey, TValue>;
+
+				template<typename T> inline static void toVal(Val& mVal, T&& mX)
+				{
+					mVal = Arr{};
+					for(auto& p : mX) mVal.as<Arr>().emplace_back(moveIfRValue<decltype(mX)>(p));
+				}
+				template<typename T> inline static void fromVal(T&& mVal, Type& mX)
+				{
+					for(auto p : mVal.template forArrAs<std::pair<TKey, TValue>>())
+					{
+						mX[p.first] = p.second;
+					}
 				}
 			};
 

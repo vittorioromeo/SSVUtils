@@ -117,7 +117,7 @@ namespace ssvu
 				inline Val(const Val& mV)	{ init(mV);  }
 				inline Val(Val&& mV)		{ init(std::move(mV)); }
 
-				template<typename T, SSVU_ENABLEIF_IS_NOT(T, Val)> inline Val(T&& mX) { set(fwd<T>(mX)); }
+				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Val)> inline Val(T&& mX) { set(fwd<T>(mX)); }
 
 				inline ~Val() { deinitCurrent(); }
 
@@ -143,6 +143,8 @@ namespace ssvu
 				template<typename T> decltype(auto) as() const;
 
 				// "Implicit" `set` function done via `operator=` overloading
+				auto& operator=(const Val& mV) noexcept;
+				auto& operator=(Val&& mV) noexcept;
 				template<typename T> inline auto& operator=(T&& mX) noexcept(noexcept(std::declval<Val&>().set(fwd<T>(mX))))
 				{
 					set(fwd<T>(mX));
@@ -191,7 +193,6 @@ namespace ssvu
 
 
 
-
 				// IO
 				template<typename TWS = WriterSettings<WMode::Pretty>> void writeToStream(std::ostream&) const;
 				template<typename TWS = WriterSettings<WMode::Pretty>> inline void writeToStr(std::string& mStr) const			{ std::ostringstream o; writeToStream<TWS>(o); mStr = o.str(); }
@@ -201,8 +202,8 @@ namespace ssvu
 				template<typename TRS = ReaderSettings<RMode::Default>, typename T> void readFromStr(T&& mStr);
 				template<typename TRS = ReaderSettings<RMode::Default>> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(mPath.getContentsAsString()); }
 
-				template<typename T> static inline Val fromStr(T&& mStr)	{ Val result; result.readFromStr(fwd<T>(mStr)); return result; }
-				static inline Val fromFile(const ssvufs::Path& mPath)		{ Val result; result.readFromFile(mPath); return result; }
+				template<typename T> inline static Val fromStr(T&& mStr)	{ Val result; result.readFromStr(fwd<T>(mStr)); return result; }
+				inline static Val fromFile(const ssvufs::Path& mPath)		{ Val result; result.readFromFile(mPath); return result; }
 
 
 

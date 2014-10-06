@@ -9,12 +9,16 @@ namespace ssvu
 {
 	namespace Json
 	{
+		template<typename T, typename TFwd> inline void extr(TFwd&& mV, T& mX) noexcept(noexcept(Internal::Cnv<RemoveAll<T>>::fromVal(fwd<TFwd>(mV), mX))) { Internal::Cnv<RemoveAll<T>>::fromVal(fwd<TFwd>(mV), mX); }
+		template<typename T> inline void arch(Val& mV, T&& mX) noexcept(noexcept(mV = fwd<T>(mX))) { mV = fwd<T>(mX); }
+
 		namespace Internal
 		{
 			template<Idx TI, typename TArg, typename T> inline void extrArrHelper(T&& mV, TArg& mArg)
 			{
 				SSVU_ASSERT(mV.template is<Arr>() && mV.template as<Arr>().size() > TI && mV[TI].template is<TArg>());
-				mArg = moveIfRValue<decltype(mV)>(mV[TI].template as<TArg>());
+				extr<TArg>(moveIfRValue<decltype(mV)>(mV[TI]), mArg);
+				//mArg = moveIfRValue<decltype(mV)>(mV[TI].template as<TArg>());
 			}
 			template<Idx TI, typename TArg, typename... TArgs, typename T> inline void extrArrHelper(T&& mV, TArg& mArg, TArgs&... mArgs)
 			{
@@ -35,7 +39,8 @@ namespace ssvu
 			template<typename TArg, typename T> inline void extrObjHelper(T&& mV, const Key& mKey, TArg& mArg)
 			{
 				SSVU_ASSERT(mV.template is<Obj>() && mV.has(mKey));
-				mArg = moveIfRValue<decltype(mV)>(mV[mKey].template as<TArg>());
+				extr<TArg>(moveIfRValue<decltype(mV)>(mV[mKey]), mArg);
+				//mArg = moveIfRValue<decltype(mV)>(mV[mKey].template as<TArg>());
 			}
 			template<typename TArg, typename... TArgs, typename T> inline void extrObjHelper(T&& mV, const Key& mKey, TArg& mArg, TArgs&... mArgs)
 			{
@@ -45,7 +50,7 @@ namespace ssvu
 			template<typename TKey, typename TArg> inline void archObjHelper(Val& mV, TKey&& mKey, TArg&& mArg)
 			{
 				SSVU_ASSERT(mV.template is<Obj>());
-				mV[fwd<TKey>(mKey)] = fwd<TArg>(mArg);
+				arch(mV[fwd<TKey>(mKey)], fwd<TArg>(mArg));
 			}
 			template<typename TKey, typename TArg, typename... TArgs> inline void archObjHelper(Val& mV, TKey&& mKey, TArg&& mArg, TArgs&&... mArgs)
 			{
@@ -53,8 +58,7 @@ namespace ssvu
 			}
 		}
 
-		template<typename T, typename TFwd> inline void extr(TFwd&& mV, T& mX) noexcept(noexcept(Internal::Cnv<T>::fromVal(fwd<TFwd>(mV), mX))) { Internal::Cnv<T>::fromVal(fwd<TFwd>(mV), mX); }
-		template<typename T> inline void arch(Val& mV, T&& mX) noexcept(noexcept(mV = fwd<T>(mX))) { mV = fwd<T>(mX); }
+
 
 		template<typename T, typename TFwd> inline T getExtr(TFwd&& mV) { T result; extr(fwd<TFwd>(mV), result); return result; }
 		template<typename T> inline Val getArch(T&& mX) { Val result; arch(result, fwd<T>(mX)); return result; }

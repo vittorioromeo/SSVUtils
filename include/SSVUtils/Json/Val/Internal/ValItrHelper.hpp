@@ -18,12 +18,12 @@ namespace ssvu
 
 				template<typename T> struct ImplAsObj
 				{
-					template<typename TItr> inline static constexpr auto get(TItr mItr) noexcept { return makeKVPair(mItr->first, mItr->second.template as<T>());  }
+					template<typename TItr> inline static constexpr decltype(auto) get(TItr mItr) noexcept { return makeKVPair(mItr->first, mItr->second.template as<T>());  }
 				};
 
 				template<typename T> struct ImplAsArr
 				{
-					template<typename TItr> inline static constexpr auto get(TItr mItr) noexcept { return mItr->template as<T>();  }
+					template<typename TItr> inline static constexpr decltype(auto) get(TItr mItr) noexcept { return mItr->template as<T>();  }
 				};
 
 				template<template<typename> class TImpl, typename T, typename TItr> using ItrAs = ssvu::Internal::AdaptorFromItr<TItr, TImpl<T>>;
