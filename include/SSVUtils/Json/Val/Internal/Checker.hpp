@@ -37,10 +37,10 @@ namespace ssvu
 				inline static bool is(const Val&) noexcept { return true; }
 			};
 
-			#define SSVU_JSON_DEFINE_CHECKER_NUM(mType, mRepr) \
+			#define SSVU_JSON_DEFINE_CHECKER_NUM(mType) \
 				template<> struct Checker<mType> final \
 				{ \
-					inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Num && mV.getNum().getType() == mRepr; } \
+					inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Num; } \
 				}; \
 
 			#define SSVU_JSON_DEFINE_CHECKER_BASIC(mType) \
@@ -49,14 +49,14 @@ namespace ssvu
 					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::mType); } \
 				};
 
-			SSVU_JSON_DEFINE_CHECKER_NUM(char,				Num::Type::IntS)
-			SSVU_JSON_DEFINE_CHECKER_NUM(int,				Num::Type::IntS)
-			SSVU_JSON_DEFINE_CHECKER_NUM(long int,			Num::Type::IntS)
-			SSVU_JSON_DEFINE_CHECKER_NUM(unsigned char,		Num::Type::IntU)
-			SSVU_JSON_DEFINE_CHECKER_NUM(unsigned int,		Num::Type::IntU)
-			SSVU_JSON_DEFINE_CHECKER_NUM(unsigned long int,	Num::Type::IntU)
-			SSVU_JSON_DEFINE_CHECKER_NUM(float,				Num::Type::Real)
-			SSVU_JSON_DEFINE_CHECKER_NUM(double,			Num::Type::Real)
+			SSVU_JSON_DEFINE_CHECKER_NUM(char)
+			SSVU_JSON_DEFINE_CHECKER_NUM(int)
+			SSVU_JSON_DEFINE_CHECKER_NUM(long int)
+			SSVU_JSON_DEFINE_CHECKER_NUM(unsigned char)
+			SSVU_JSON_DEFINE_CHECKER_NUM(unsigned int)
+			SSVU_JSON_DEFINE_CHECKER_NUM(unsigned long int)
+			SSVU_JSON_DEFINE_CHECKER_NUM(float)
+			SSVU_JSON_DEFINE_CHECKER_NUM(double)
 
 			SSVU_JSON_DEFINE_CHECKER_BASIC(Obj)
 			SSVU_JSON_DEFINE_CHECKER_BASIC(Arr)

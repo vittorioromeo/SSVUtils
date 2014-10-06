@@ -77,6 +77,7 @@ namespace ssvu
 
 					template<typename T> void set(const T& mX) noexcept	{ Internal::NumHelper<T>::set(*this, mX); }
 					template<typename T> auto as() const noexcept		{ return Internal::NumHelper<T>::as(*this); }
+					// TODO: isStoredAs<unsigned int>()... == IntU
 
 					inline auto getType() const noexcept { return type; }
 
