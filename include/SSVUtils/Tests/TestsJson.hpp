@@ -487,7 +487,7 @@ namespace ssvu
 				std::string f3{"yo"};
 				std::tuple<std::string, int, int> f4{"hey", 5, 10};
 
-				inline bool operator==(const __ssvjTestStruct& mT)
+				inline bool operator==(const __ssvjTestStruct& mT) const noexcept
 				{
 					return f0 == mT.f0
 						&& f1 == mT.f1

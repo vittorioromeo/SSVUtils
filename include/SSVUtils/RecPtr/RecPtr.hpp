@@ -64,7 +64,7 @@ namespace ssvu
 	{
 		template<typename T, typename TBase> struct MakerUPtrRecPoly
 		{
-			template<typename... TArgs> static inline UPtrRecPoly<T, TBase> make(TArgs&&... mArgs)
+			template<typename... TArgs> inline static UPtrRecPoly<T, TBase> make(TArgs&&... mArgs)
 			{
 				return makeUPtrRecPoly<T, TBase, TArgs...>(fwd<TArgs>(mArgs)...);
 			}
