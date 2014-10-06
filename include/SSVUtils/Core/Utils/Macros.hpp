@@ -132,7 +132,7 @@ namespace ssvu
 	#define SSVU_UNREACHABLE() __builtin_unreachable()
 #else
 	/// @macro Unreachable code. Uses an assert and `std::terminate()`. Requires semicolon at the end.
-	#define SSVU_UNREACHABLE() SSVU_ASSERT(false); std::terminate()
+	#define SSVU_UNREACHABLE() do { SSVU_ASSERT(false); std::terminate(); } while(false)
 #endif
 
 #endif
