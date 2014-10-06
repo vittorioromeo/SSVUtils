@@ -58,18 +58,18 @@ namespace ssvu
 				inline auto& operator=(const Path& mPath)		{ path = mPath.path; mustNormalize = true; return *this; }
 				inline auto& operator=(Path&& mPath) noexcept	{ path = std::move(mPath.path); mustNormalize = true; return *this; }
 
-				template<typename T, SSVU_ENABLEIF_IS_NOT(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = fwd<T>(mPath)))
+				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = fwd<T>(mPath)))
 				{
 					path = fwd<T>(mPath);
 					mustNormalize = true; return *this;
 				}
 
-				template<typename T, SSVU_ENABLEIF_IS(T, Path)> inline auto& operator+=(T&& mPath) noexcept(noexcept(path += moveIfRValue<decltype(mPath)>(mPath.path)))
+				template<typename T, SSVU_ENABLEIF_RA_IS(T, Path)> inline auto& operator+=(T&& mPath) noexcept(noexcept(path += moveIfRValue<decltype(mPath)>(mPath.path)))
 				{
 					path += moveIfRValue<decltype(mPath)>(mPath.path);
 					mustNormalize = true; return *this;
 				}
-				template<typename T, SSVU_ENABLEIF_IS_NOT(T, Path)> inline auto& operator+=(T&& mPath) noexcept(noexcept(path += fwd<T>(mPath)))
+				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline auto& operator+=(T&& mPath) noexcept(noexcept(path += fwd<T>(mPath)))
 				{
 					path += fwd<T>(mPath);
 					mustNormalize = true; return *this;
@@ -181,13 +181,13 @@ namespace ssvu
 
 		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath)	{ return mStream << mPath.getStr(); }
 
-		/*template<typename T, SSVU_ENABLEIF_IS_NOT(T, Path)> inline Path operator+(const Path& mLhs, T&& mRhs)
+		/*template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline Path operator+(const Path& mLhs, T&& mRhs)
 		{
 			Path result{mLhs};
 			result += fwd<T>(mRhs);
 			return result;
 		}
-		template<typename T, SSVU_ENABLEIF_IS_NOT(T, Path)> inline Path operator+(T&& mLhs, const Path& mRhs)
+		template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline Path operator+(T&& mLhs, const Path& mRhs)
 		{
 			Path result{mRhs};
 			result += fwd<T>(mLhs);
