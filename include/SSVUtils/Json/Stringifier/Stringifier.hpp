@@ -11,7 +11,7 @@ namespace ssvu
 	{
 		template<bool TFmt> inline static void impl(std::ostream& mStream, const Json::Val& mVal)
 		{
-			mVal.writeToStream<Json::WriterSettings<Json::WMode::PrettyConsole>>(mStream);
+			mVal.writeToStream<Json::WriterSettings<TFmt ? Json::WMode::PrettyConsole : Json::WMode::Pretty>>(mStream);
 		}
 	};
 }
