@@ -25,7 +25,6 @@ SSVUT_TEST(TemplateSystemTests)
 	};
 
 	auto r(d.getExpanded(src));
-	ssvu::lo() << r << "\n";
 	SSVUT_EXPECT(r == R"(\{{ Hello, my name is Meow. My skills are meowing, jumping, dancing.)");
 }
 
