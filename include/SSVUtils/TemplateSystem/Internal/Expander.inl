@@ -10,6 +10,43 @@ namespace ssvu
 {
 	namespace TemplateSystem
 	{
+		inline void Expander::replace()
+		{
+			const Dictionary* currentDict{&dict};
+
+			while(currentDict != nullptr)
+			{
+				if(currentDict->replacements.count(bufKey) > 0)
+				{
+					bufResult += currentDict->replacements.at(bufKey);
+					return;
+				}
+
+				currentDict = currentDict->parentDict;
+			}
+		}
+
+		inline void Expander::replaceSection()
+		{
+			const Dictionary* currentDict{&dict};
+
+			while(currentDict != nullptr)
+			{
+				if(currentDict->sections.count(bufKey) <= 0) { currentDict = currentDict->parentDict; continue; }
+				auto& dictVec(currentDict->sections.at(bufKey));
+				if(dictVec.empty()) { currentDict = currentDict->parentDict; continue; }
+
+				// Separated expansions
+				for(auto i(0u); i < dictVec.size() - 1; ++i)
+					Expander{dictVec[i], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, true}.expand();
+
+				// Non-separated expansion
+				Expander{dictVec[dictVec.size() - 1], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false}.expand();
+
+				return;
+			}
+		}
+
 		inline void Expander::expand()
 		{
 			enum class Type{Normal, Section, Separator};
@@ -63,15 +100,15 @@ namespace ssvu
 					++idx;
 
 					// Not a section
-					if(type == Type::Normal)	{ if(dict.replacements.count(bufKey) > 0) bufResult += dict.replacements.at(bufKey);	continue; }
-					if(type == Type::Separator)	{ if(separate) bufResult += bufKey;														continue; }
+					if(type == Type::Normal)	{ replace(); continue; }
+					if(type == Type::Separator)	{ if(separate) bufResult += bufKey; continue; }
 
 					// Section
 					// Skip second '}'
 					SSVU_ASSERT(getC() == '}' && getC(idx + 1) != '}');
 					++idx;
 
-					auto sectIdxStart(idx), sectIdxEnd(idx);
+					sectIdxStart = sectIdxEnd = idx;
 
 					// Find section end
 					for(; true; ++idx)
@@ -104,17 +141,7 @@ namespace ssvu
 						continue;
 					}
 
-
-					if(dict.sections.count(bufKey) <= 0) continue;
-					auto& dictVec(dict.sections.at(bufKey));
-					if(dictVec.empty()) continue;
-
-					// Separated expansions
-					for(auto i(0u); i < dictVec.size() - 1; ++i)
-						Expander{dictVec[i], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, true}.expand();
-
-					// Non-separated expansion
-					Expander{dictVec[dictVec.size() - 1], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false}.expand();
+					replaceSection();
 				}
 			}
 		}

@@ -18,6 +18,7 @@ namespace ssvu
 				using DictVec = std::vector<Dictionary>;
 
 			private:
+				Dictionary* parentDict{nullptr};
 				std::map<std::string, std::string> replacements;
 				std::map<std::string, DictVec> sections;
 
@@ -51,11 +52,13 @@ namespace ssvu
 				// Copy/move init
 				inline void initImpl(const Dictionary& mDict)
 				{
+					parentDict = mDict.parentDict;
 					replacements = mDict.replacements;
 					sections = mDict.sections;
 				}
 				inline void initImpl(Dictionary&& mDict) noexcept
 				{
+					parentDict = mDict.parentDict;
 					replacements = std::move(mDict.replacements);
 					sections = std::move(mDict.sections);
 				}
@@ -70,11 +73,23 @@ namespace ssvu
 					initImpl(fwd<T1>(mA1), fwd<T2>(mA2)); init(fwd<TArgs>(mArgs)...);
 				}
 
+				inline void refreshParents()
+				{
+					for(auto& v : sections)
+						for(auto& d : v.second)
+						{
+							d.parentDict = this;
+							d.refreshParents();
+						}
+				}
+
 			public:
 				template<typename... TArgs> inline Dictionary(TArgs&&... mArgs) { init(fwd<TArgs>(mArgs)...); }
 
-				inline std::string getExpanded(const std::string& mSrc) const
+				inline std::string getExpanded(const std::string& mSrc)
 				{
+					refreshParents();
+
 										// corrupted linked list? BUG ?
 					std::string result; // result.reserve(mSrc.size());
 					std::string bufKey; bufKey.reserve(10);
