@@ -10,7 +10,7 @@ namespace ssvu
 {
 	namespace TemplateSystem
 	{
-		inline void Expander::replace()
+		inline bool Expander::replace()
 		{
 			const Dictionary* currentDict{&dict};
 
@@ -19,14 +19,23 @@ namespace ssvu
 				if(currentDict->replacements.count(bufKey) > 0)
 				{
 					bufResult += currentDict->replacements.at(bufKey);
-					return;
+					return true;
 				}
 
 				currentDict = currentDict->parentDict;
 			}
+
+			if(maintainNotFound)
+			{
+				bufResult += "{{";
+				bufResult += bufKey;
+				bufResult += "}}";
+			}
+
+			return false;
 		}
 
-		inline void Expander::replaceSection()
+		inline bool Expander::replaceSection()
 		{
 			const Dictionary* currentDict{&dict};
 
@@ -38,13 +47,27 @@ namespace ssvu
 
 				// Separated expansions
 				for(auto i(0u); i < dictVec.size() - 1; ++i)
-					Expander{dictVec[i], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, true}.expand();
+					Expander{dictVec[i], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, true, maintainNotFound}.expand();
 
 				// Non-separated expansion
-				Expander{dictVec[dictVec.size() - 1], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false}.expand();
+				Expander{dictVec[dictVec.size() - 1], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false, maintainNotFound}.expand();
 
-				return;
+				return true;
 			}
+
+			if(maintainNotFound)
+			{
+				bufResult += "{{#";
+				bufResult += bufKey;
+				bufResult += "}}";
+			}
+			else
+			{
+				auto emptyDict(Dictionary{});
+				Expander{emptyDict, src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false, maintainNotFound}.expand();
+			}
+
+			return false;
 		}
 
 		inline bool Expander::expand()
@@ -68,7 +91,6 @@ namespace ssvu
 					continue;
 				}
 
-				result = true;
 				// "{{" combination
 				// Skip "{{"
 				idx += 2;
@@ -101,7 +123,7 @@ namespace ssvu
 				++idx;
 
 				// Not a section
-				if(type == Type::Normal)	{ replace(); continue; }
+				if(type == Type::Normal)	{ if(replace()) result = true; continue; }
 				if(type == Type::Separator)	{ if(separate) bufResult += bufKey; continue; }
 
 				// Section
@@ -142,7 +164,7 @@ namespace ssvu
 					continue;
 				}
 
-				replaceSection();
+				if(replaceSection()) result = true;
 			}
 
 			return result;

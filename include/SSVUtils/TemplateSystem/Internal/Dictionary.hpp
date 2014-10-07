@@ -86,20 +86,25 @@ namespace ssvu
 			public:
 				template<typename... TArgs> inline Dictionary(TArgs&&... mArgs) { init(fwd<TArgs>(mArgs)...); }
 
-				inline std::string getExpanded(const std::string& mSrc)
+				inline std::string getExpanded(std::string mSrc, bool mMaintainNotFound = false)
 				{
 					refreshParents();
 
 										// corrupted linked list? BUG ?
-					std::string result; // result.reserve(mSrc.size());
+					std::string buf; // result.reserve(mSrc.size());
 					std::string bufKey; bufKey.reserve(10);
 
-					Expander e{*this, mSrc, result, bufKey, 0, mSrc.size(), 0};
-
 					bool found{true};
-					while(found) found = e.expand();
+					while(found)
+					{
+						Expander e{*this, mSrc, buf, bufKey, 0, mSrc.size(), 0, mMaintainNotFound};
+						found = e.expand();
 
-					return result;
+						mSrc = buf;
+						buf.clear();
+					}
+
+					return mSrc;
 				}
 
 				template<typename T> inline auto operator[](T&& mKey) noexcept { return Proxy<T>{fwd<T>(mKey), *this}; }

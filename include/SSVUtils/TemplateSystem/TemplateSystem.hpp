@@ -11,3 +11,8 @@
 #include "SSVUtils/TemplateSystem/Internal/Expander.inl"
 
 #endif
+
+// TODO:
+// tests, edge case tests
+// fix/improve all code
+// settings struct instead of maintainNotFound

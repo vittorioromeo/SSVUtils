@@ -21,17 +21,17 @@ namespace ssvu
 				std::string& bufKey;
 				const std::size_t idxBegin, idxEnd;
 				std::size_t idx, sectIdxStart, sectIdxEnd;
-				bool separate;
+				bool separate, maintainNotFound;
 
 				inline auto getC() const noexcept 					{ SSVU_ASSERT(idx >= 0 && idx < src.size()); return src[idx]; }
 				inline auto getC(std::size_t mIdx) const noexcept 	{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size()); return src[mIdx]; }
 
-				void replace();
-				void replaceSection();
+				bool replace();
+				bool replaceSection();
 
 			public:
-				inline Expander(const Dictionary& mDict, const std::string& mSrc, std::string& mBufResult, std::string& mBufKey, std::size_t mIdxBegin, std::size_t mIdxEnd, bool mSeparate)
-					: dict{mDict}, src{mSrc}, bufResult{mBufResult}, bufKey{mBufKey}, idxBegin{mIdxBegin}, idxEnd{mIdxEnd}, idx{idxBegin}, separate{mSeparate} { }
+				inline Expander(const Dictionary& mDict, const std::string& mSrc, std::string& mBufResult, std::string& mBufKey, std::size_t mIdxBegin, std::size_t mIdxEnd, bool mSeparate, bool mMaintainNotFound)
+					: dict{mDict}, src{mSrc}, bufResult{mBufResult}, bufKey{mBufKey}, idxBegin{mIdxBegin}, idxEnd{mIdxEnd}, idx{idxBegin}, separate{mSeparate}, maintainNotFound{mMaintainNotFound} { }
 
 				bool expand();
 		};
