@@ -6,7 +6,8 @@
 #define SSVU_TEMPLATESYSTEM
 
 #include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/TemplateSystem/Internal/Symbols.hpp"
-#include "SSVUtils/TemplateSystem/Dictionary.hpp"
+#include "SSVUtils/TemplateSystem/Internal/Expander.hpp"
+#include "SSVUtils/TemplateSystem/Internal/Dictionary.hpp"
+#include "SSVUtils/TemplateSystem/Internal/Expander.inl"
 
 #endif

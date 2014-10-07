@@ -45,7 +45,7 @@
 			};
 
 			/// @brief Returns a reference to the global static thread_local AssertState instance.
-			inline auto& getAssertState() noexcept { static thread_local AssertState result; return result; }
+			inline auto& getAssertState() noexcept { thread_local AssertState result; return result; }
 			/// @brief Assert implementation: if mExpression is false, the assertion fires.
 			/// @details Called via the SSVU_ASSERT macro.
 			void assertImpl(bool mExpression, const std::string& mMsg = "") noexcept;

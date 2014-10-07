@@ -11,17 +11,22 @@ SSVUT_TEST(TemplateSystemTests)
 	using namespace ssvu;
 	using namespace ssvu::TemplateSystem;
 
-	string src{R"(Hello, my name is {{name}}. My skills are {{#skills}}{{skill}}, {{/skills}})"};
+	string src{R"(\{{ Hello, my name is {{name}}.{{null}} My skills are {{#skills}}{{skill}}{{*, }}{{/skills}}.)"};
 
-	Dictionary d;
-	d["name"] = "Meow";
-	d += {"skills", {{"skill", "meowing"}}};
-	d += {"skills", {{"skill", "jumping"}}};
-	d += {"skills", {{"skill", "dancing"}}};
+	Dictionary d
+	{
+		"name",		"Meow",
+		"skills",	Dictionary::DictVec
+					{
+						{"skill", "meowing"},
+						{"skill", "jumping"},
+						{"skill", "dancing"}
+					}
+	};
 
 	auto r(d.getExpanded(src));
-
-	SSVUT_EXPECT(r == R"(Hello, my name is Meow. My skills are meowing, jumping, dancing, )");
+	ssvu::lo() << r << "\n";
+	SSVUT_EXPECT(r == R"(\{{ Hello, my name is Meow. My skills are meowing, jumping, dancing.)");
 }
 
 #endif
