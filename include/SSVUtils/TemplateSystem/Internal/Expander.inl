@@ -47,8 +47,9 @@ namespace ssvu
 			}
 		}
 
-		inline void Expander::expand()
+		inline bool Expander::expand()
 		{
+			bool result{false};
 			enum class Type{Normal, Section, Separator};
 
 			for(; idx < idxEnd; ++idx)
@@ -67,83 +68,84 @@ namespace ssvu
 					continue;
 				}
 
+				result = true;
 				// "{{" combination
+				// Skip "{{"
+				idx += 2;
+
+				Type type{Type::Normal};
+
+				// Section start
+				if(getC() == '#')
 				{
-					// Skip "{{"
-					idx += 2;
+					type = Type::Section;
 
-					Type type{Type::Normal};
-
-					// Section start
-					if(getC() == '#')
-					{
-						type = Type::Section;
-
-						// Skip '#'
-						++idx;
-					}
-					else if(getC() == '*')
-					{
-						type = Type::Separator;
-
-						// Skip '['
-						++idx;
-					}
-
-					bufKey.clear();
-
-					for(; getC() != '}'; ++idx) bufKey += getC();
-
-					SSVU_ASSERT(getC() == '}' && getC(idx + 1) == '}');
-
-					// Skip first '}', second one will be skipped by the for's `idx` increment or by section increment
+					// Skip '#'
 					++idx;
+				}
+				else if(getC() == '*')
+				{
+					type = Type::Separator;
 
-					// Not a section
-					if(type == Type::Normal)	{ replace(); continue; }
-					if(type == Type::Separator)	{ if(separate) bufResult += bufKey; continue; }
-
-					// Section
-					// Skip second '}'
-					SSVU_ASSERT(getC() == '}' && getC(idx + 1) != '}');
+					// Skip '['
 					++idx;
+				}
 
-					sectIdxStart = sectIdxEnd = idx;
+				bufKey.clear();
 
-					// Find section end
-					for(; true; ++idx)
+				for(; getC() != '}'; ++idx) bufKey += getC();
+
+				SSVU_ASSERT(getC() == '}' && getC(idx + 1) == '}');
+
+				// Skip first '}', second one will be skipped by the for's `idx` increment or by section increment
+				++idx;
+
+				// Not a section
+				if(type == Type::Normal)	{ replace(); continue; }
+				if(type == Type::Separator)	{ if(separate) bufResult += bufKey; continue; }
+
+				// Section
+				// Skip second '}'
+				SSVU_ASSERT(getC() == '}' && getC(idx + 1) != '}');
+				++idx;
+
+				sectIdxStart = sectIdxEnd = idx;
+
+				// Find section end
+				for(; true; ++idx)
+				{
+					// Skip non-special characters or escaped special characters
+					if(getC() != '{') continue;
+					if(getC(idx - 1) == '\\') continue;
+
+					sectIdxEnd = idx;
+
+					if(getC(idx + 1) == '{' && getC(idx + 2) == '/')
 					{
-						// Skip non-special characters or escaped special characters
-						if(getC() != '{') continue;
-						if(getC(idx - 1) == '\\') continue;
+						idx += 3;
 
-						sectIdxEnd = idx;
-
-						if(getC(idx + 1) == '{' && getC(idx + 2) == '/')
+						// Check if section key matches
+						for(auto kc : bufKey)
 						{
-							idx += 3;
-
-							// Check if section key matches
-							for(auto kc : bufKey)
-							{
-								if(getC() != kc) goto next;
-								++idx;
-							}
-
-							SSVU_ASSERT(getC() == '}' && getC(idx + 1) == '}');
-
-							// Skip first '}', second one will be skipped by the for's `idx` increment
+							if(getC() != kc) goto next;
 							++idx;
-							break;
 						}
 
-						next:
-						continue;
+						SSVU_ASSERT(getC() == '}' && getC(idx + 1) == '}');
+
+						// Skip first '}', second one will be skipped by the for's `idx` increment
+						++idx;
+						break;
 					}
 
-					replaceSection();
+					next:
+					continue;
 				}
+
+				replaceSection();
 			}
+
+			return result;
 		}
 	}
 }

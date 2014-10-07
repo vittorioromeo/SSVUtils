@@ -94,7 +94,10 @@ namespace ssvu
 					std::string result; // result.reserve(mSrc.size());
 					std::string bufKey; bufKey.reserve(10);
 
-					Expander{*this, mSrc, result, bufKey, 0, mSrc.size(), 0}.expand();
+					Expander e{*this, mSrc, result, bufKey, 0, mSrc.size(), 0};
+
+					bool found{true};
+					while(found) found = e.expand();
 
 					return result;
 				}

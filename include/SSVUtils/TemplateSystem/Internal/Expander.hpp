@@ -33,7 +33,7 @@ namespace ssvu
 				inline Expander(const Dictionary& mDict, const std::string& mSrc, std::string& mBufResult, std::string& mBufKey, std::size_t mIdxBegin, std::size_t mIdxEnd, bool mSeparate)
 					: dict{mDict}, src{mSrc}, bufResult{mBufResult}, bufKey{mBufKey}, idxBegin{mIdxBegin}, idxEnd{mIdxEnd}, idx{idxBegin}, separate{mSeparate} { }
 
-				void expand();
+				bool expand();
 		};
 	}
 }
