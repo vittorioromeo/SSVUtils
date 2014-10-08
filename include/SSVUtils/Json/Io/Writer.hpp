@@ -35,10 +35,7 @@ namespace ssvu
 					inline void wFmt(FmtCC mColor, FmtCS mStyle = FmtCS::None)
 					{
 						if(!TWS::fmt) return;
-
-						out += Console::resetFmt();
-						out += Console::setColorFG(mColor);
-						out += Console::setStyle(mStyle);
+						appendTo(out, Console::resetFmt(), Console::setColorFG(mColor), Console::setStyle(mStyle));
 					}
 
 					inline void wNL() { if(TWS::pretty) { out += "\n"; needIndent = true; } }

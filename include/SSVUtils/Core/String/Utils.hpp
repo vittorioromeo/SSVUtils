@@ -207,6 +207,21 @@ namespace ssvu
 		return costs[n];
 	}
 
+	namespace Impl
+	{
+		inline auto& appendToImpl(std::string& mStr) noexcept { return mStr; }
+		template<typename T, typename... TArgs> inline auto& appendToImpl(std::string& mStr, T&& mA, TArgs&&... mArgs)
+		{
+			mStr += fwd<T>(mA);
+			return appendToImpl(mStr, fwd<TArgs>(mArgs)...);
+		}
+	}
+
+	// TODO: docs
+	template<typename... TArgs> inline auto& appendTo(std::string& mStr, TArgs&&... mArgs)
+	{
+		return Impl::appendToImpl(mStr, fwd<TArgs>(mArgs)...);
+	}
 }
 
 #endif

@@ -18,9 +18,9 @@ namespace ssvu
 				using DictVec = std::vector<Dictionary>;
 
 			private:
-				Dictionary* parentDict{nullptr};
 				std::map<std::string, std::string> replacements;
 				std::map<std::string, DictVec> sections;
+				Dictionary* parentDict{nullptr};
 
 				template<typename TKey> class Proxy
 				{
@@ -83,6 +83,12 @@ namespace ssvu
 						}
 				}
 
+				template<typename... TArgs> bool expandImpl(TArgs&&... mArgs) const
+				{
+					Expander e(*this, fwd<TArgs>(mArgs)...);
+					return e.expand();
+				}
+
 			public:
 				template<typename... TArgs> inline Dictionary(TArgs&&... mArgs) { init(fwd<TArgs>(mArgs)...); }
 
@@ -92,13 +98,12 @@ namespace ssvu
 
 										// corrupted linked list? BUG ?
 					std::string buf; // result.reserve(mSrc.size());
-					std::string bufKey; bufKey.reserve(10);
+					std::string bufKey; bufKey.reserve(25);
 
 					bool found{true};
 					while(found)
 					{
-						Expander e{*this, mSrc, buf, bufKey, 0, mSrc.size(), 0, mMaintainNotFound};
-						found = e.expand();
+						found = expandImpl(mSrc, buf, bufKey, 0, mSrc.size(), 0, mMaintainNotFound);
 
 						mSrc = buf;
 						buf.clear();

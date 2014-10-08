@@ -12,60 +12,39 @@ namespace ssvu
 	{
 		inline bool Expander::replace()
 		{
-			const Dictionary* currentDict{&dict};
-
-			while(currentDict != nullptr)
+			for(const auto* cd(&dict); cd != nullptr; cd = cd->parentDict)
 			{
-				if(currentDict->replacements.count(bufKey) > 0)
-				{
-					bufResult += currentDict->replacements.at(bufKey);
-					return true;
-				}
+				if(cd->replacements.count(bufKey) <= 0) continue;
 
-				currentDict = currentDict->parentDict;
+				bufResult += cd->replacements.at(bufKey);
+				return true;
 			}
 
-			if(maintainNotFound)
-			{
-				bufResult += "{{";
-				bufResult += bufKey;
-				bufResult += "}}";
-			}
-
+			if(maintainNotFound) appendTo(bufResult, "{{", bufKey, "}}");
 			return false;
 		}
 
 		inline bool Expander::replaceSection()
 		{
-			const Dictionary* currentDict{&dict};
-
-			while(currentDict != nullptr)
+			for(const auto* cd(&dict); cd != nullptr; cd = cd->parentDict)
 			{
-				if(currentDict->sections.count(bufKey) <= 0) { currentDict = currentDict->parentDict; continue; }
-				auto& dictVec(currentDict->sections.at(bufKey));
-				if(dictVec.empty()) { currentDict = currentDict->parentDict; continue; }
+				if(cd->sections.count(bufKey) <= 0) continue;
+
+				auto& dictVec(cd->sections.at(bufKey));
+				if(dictVec.empty()) continue;
 
 				// Separated expansions
 				for(auto i(0u); i < dictVec.size() - 1; ++i)
-					Expander{dictVec[i], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, true, maintainNotFound}.expand();
+					dictVec[i].expandImpl(src, bufResult, bufKey, sectIdxStart, sectIdxEnd, true, maintainNotFound);
 
 				// Non-separated expansion
-				Expander{dictVec[dictVec.size() - 1], src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false, maintainNotFound}.expand();
+				dictVec[dictVec.size() - 1].expandImpl(src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false, maintainNotFound);
 
 				return true;
 			}
 
-			if(maintainNotFound)
-			{
-				bufResult += "{{#";
-				bufResult += bufKey;
-				bufResult += "}}";
-			}
-			else
-			{
-				auto emptyDict(Dictionary{});
-				Expander{emptyDict, src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false, maintainNotFound}.expand();
-			}
+			if(maintainNotFound) appendTo(bufResult, "{{#", bufKey, "}}");
+			else Dictionary{}.expandImpl(src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false, maintainNotFound);
 
 			return false;
 		}
@@ -80,12 +59,7 @@ namespace ssvu
 				SSVU_ASSERT(idx >= 0 && idx < src.size());
 
 				// Skip non-special characters or escaped special characters
-				if(getC() != '{' || (idx > 0 && getC(idx - 1) == '\\'))
-				{
-					bufResult += getC();
-					continue;
-				}
-				if(getC(idx + 1) != '{')
+				if(getC() != '{' || (idx > 0 && getC(idx - 1) == '\\') || getC(idx + 1) != '{')
 				{
 					bufResult += getC();
 					continue;
@@ -97,24 +71,15 @@ namespace ssvu
 
 				Type type{Type::Normal};
 
-				// Section start
-				if(getC() == '#')
+				// Get eventual section/separator symbol and skip it
+				switch(getC())
 				{
-					type = Type::Section;
-
-					// Skip '#'
-					++idx;
-				}
-				else if(getC() == '*')
-				{
-					type = Type::Separator;
-
-					// Skip '['
-					++idx;
+					case '#': type = Type::Section; ++idx; break;
+					case '*': type = Type::Separator; ++idx; break;
 				}
 
+				// Read key into `bufKey`
 				bufKey.clear();
-
 				for(; getC() != '}'; ++idx) bufKey += getC();
 
 				SSVU_ASSERT(getC() == '}' && getC(idx + 1) == '}');

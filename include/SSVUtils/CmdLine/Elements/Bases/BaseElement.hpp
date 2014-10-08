@@ -33,10 +33,10 @@ namespace ssvu
 					{
 						std::string result, usageStr{this->getUsageStr()};
 
-						if(!usageStr.empty())	result += "* " + usageStr;
-						if(!name.empty())		result += "\n  --" + name;
-						if(!briefDesc.empty())	result += "\n  --" + briefDesc;
-						if(!desc.empty())		result += "\n  --" + desc;
+						if(!usageStr.empty())	appendTo(result, "* ", usageStr);
+						if(!name.empty())		appendTo(result, "\n  --", name);
+						if(!briefDesc.empty())	appendTo(result, "\n  --", briefDesc);
+						if(!desc.empty())		appendTo(result, "\n  --", desc);
 
 						return result + "\n\n";
 					}

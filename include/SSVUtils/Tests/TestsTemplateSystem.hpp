@@ -53,4 +53,28 @@ SSVUT_TEST(TemplateSystemTestsRecursion)
 	SSVUT_EXPECT(r == R"(Test: end)");
 }
 
+SSVUT_TEST(TemplateSystemTestsParentInheritance)
+{
+	using namespace std;
+	using namespace ssvu;
+	using namespace ssvu::TemplateSystem;
+
+	string src{R"({{#sect}}{{parentVar}}{{childVar}}{{/sect}})"};
+
+	Dictionary d
+	{
+		"parentVar",	"Meow",
+		"sect",			Dictionary::DictVec
+						{
+							{"childVar", "Woof0"},
+							{"childVar", "Woof1"}
+						}
+	};
+
+	auto r(d.getExpanded(src));
+	SSVUT_EXPECT(r == R"(MeowWoof0MeowWoof1)");
+}
+
 #endif
+
+// TODO: empty case? escaped section?
