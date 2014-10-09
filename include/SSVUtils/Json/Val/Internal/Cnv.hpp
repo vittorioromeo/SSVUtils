@@ -42,7 +42,7 @@ namespace ssvu
 				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI == sizeof...(TArgs)> fromTpl(Arr&, T&&) { }
 				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI < sizeof...(TArgs)> fromTpl(Arr& mArr, T&& mX)
 				{
-					mArr.emplace_back(moveIfRValue<decltype(mX)>(std::get<TI>(mX))); // TODO: emplace_back or []?
+					mArr.emplace_back(moveIfRValue<decltype(mX)>(std::get<TI>(mX)));
 					fromTpl<TI + 1, TArgs...>(mArr, fwd<T>(mX));
 				}
 			}
@@ -55,7 +55,6 @@ namespace ssvu
 				};
 
 			// TODO: try getTypeMove() && std::move(...) ?
-			// TODO: should as<> always return a copy? Or are refs acceptable like in the case of as<Arr>()?
 			#define SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
