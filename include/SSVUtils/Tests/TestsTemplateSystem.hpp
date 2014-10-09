@@ -26,11 +26,11 @@ SSVUT_TEST(TemplateSystemTests1)
 
 	// Test basic expansion, removing "empty" keys
 	auto r(d.getExpanded(src));
-	SSVUT_EXPECT(r == R"(\{{ Hello, my name is Meow. My skills are meowing, jumping, dancing.)");
+	SSVUT_EXPECT_OP(r, ==, R"({{ Hello, my name is Meow. My skills are meowing, jumping, dancing.)");
 
 	// Test basic expansion, maintaining "empty" keys
 	auto r2(d.getExpanded(src, true));
-	SSVUT_EXPECT(r2 == R"(\{{ Hello, my name is Meow.{{null}} My skills are meowing, jumping, dancing.)");
+	SSVUT_EXPECT_OP(r2, ==, R"({{ Hello, my name is Meow.{{null}} My skills are meowing, jumping, dancing.)");
 }
 
 SSVUT_TEST(TemplateSystemTestsRecursion)
@@ -50,7 +50,7 @@ SSVUT_TEST(TemplateSystemTestsRecursion)
 
 
 	auto r(d.getExpanded(src));
-	SSVUT_EXPECT(r == R"(Test: end)");
+	SSVUT_EXPECT_OP(r, ==, R"(Test: end)");
 }
 
 SSVUT_TEST(TemplateSystemTestsParentInheritance)
@@ -72,9 +72,49 @@ SSVUT_TEST(TemplateSystemTestsParentInheritance)
 	};
 
 	auto r(d.getExpanded(src));
-	SSVUT_EXPECT(r == R"(MeowWoof0MeowWoof1)");
+	SSVUT_EXPECT_OP(r, ==, R"(MeowWoof0MeowWoof1)");
+}
+
+SSVUT_TEST(TemplateSystemTestsEdgeCases)
+{
+	using namespace std;
+	using namespace ssvu;
+	using namespace ssvu::TemplateSystem;
+
+	{
+		string src{R"(\{{test}}{{test}}\\{{test}})"};
+		Dictionary d{"test", "exp"};
+		SSVUT_EXPECT_OP(d.getExpanded(src), ==, R"({{test}}exp\{{test}})");
+	}
+
+	{
+		string src{R"(\{{#test}}{{#test}}{{t}}{{/test}}\\{{/test}})"};
+		Dictionary d{"test",	Dictionary::DictVec
+								{
+									{"t", "0"}, {"t", "1"}, {"t", "2"}
+								}
+		};
+		SSVUT_EXPECT_OP(d.getExpanded(src), ==, R"({{#test}}012\{{/test}})");
+	}
+
+	{
+		string src{R"(\{{}}{{}}\\{{}})"};
+		Dictionary d{"", "exp"};
+		SSVUT_EXPECT_OP(d.getExpanded(src), ==, R"({{}}exp\{{}})");
+	}
+
+	{
+		string src{R"()"};
+		Dictionary d{"", "exp"};
+		SSVUT_EXPECT_OP(d.getExpanded(src), ==, R"()");
+	}
+
+	{
+		string src{R"({{}})"};
+		Dictionary d{"x", "y"};
+		SSVUT_EXPECT_OP(d.getExpanded(src), ==, R"()");
+		SSVUT_EXPECT_OP(d.getExpanded(src, true), ==, R"({{}})");
+	}
 }
 
 #endif
-
-// TODO: empty case? escaped section?

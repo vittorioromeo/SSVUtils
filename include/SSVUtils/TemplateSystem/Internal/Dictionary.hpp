@@ -109,7 +109,19 @@ namespace ssvu
 						buf.clear();
 					}
 
-					return mSrc;
+					// De-escape '{'
+					if(mSrc.size() > 0)
+					{
+						for(auto i(0u); i < mSrc.size() - 1; ++i)
+						{
+							if(mSrc[i] == '\\' && mSrc[i + 1] == '{') ++i;
+							buf += mSrc[i];
+						}
+
+						buf += mSrc[mSrc.size() - 1];
+					}
+
+					return buf;
 				}
 
 				template<typename T> inline auto operator[](T&& mKey) noexcept { return Proxy<T>{fwd<T>(mKey), *this}; }
