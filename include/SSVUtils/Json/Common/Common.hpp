@@ -11,10 +11,16 @@ namespace ssvu
 {
 	namespace Json
 	{
+		// Val representations
 		using Idx = std::size_t;
 		using Key = std::string;
 		using Str = std::string;
 		using Bln = bool;
+
+		// Num representations
+		using IntS = long int;
+		using IntU = unsigned long int;
+		using Real = double;
 
 		namespace Internal
 		{
