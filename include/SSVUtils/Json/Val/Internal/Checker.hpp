@@ -15,21 +15,25 @@ namespace ssvu
 			{
 				template<std::size_t TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
 
-				template<std::size_t TI = 0, typename... TArgs> inline EnableIf<TI == sizeof...(TArgs), bool> isTpl(const Val&) noexcept { return true; }
-				template<std::size_t TI = 0, typename... TArgs> inline EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
+				struct IsTplHelper
 				{
-					SSVU_ASSERT(mV.is<Arr>() && mV.as<Arr>().size() > TI);
-					if(!mV[TI].is<TplArg<TI, std::tuple<TArgs...>>>()) return false;
-					return isTpl<TI + 1, TArgs...>(mV);
-				}
 
-				/// @brief Returns `true` if all items of an `Arr` are of type `T`.
-				template<typename T> inline bool areArrItemsOfType(const Val& mV) noexcept
-				{
-					SSVU_ASSERT(mV.is<Arr>());
-					for(const auto& v : mV.forArr()) if(!v.template is<T>()) return false;
-					return true;
-				}
+					template<std::size_t TI = 0, typename... TArgs> inline static EnableIf<TI == sizeof...(TArgs), bool> isTpl(const Val&) noexcept { return true; }
+					template<std::size_t TI = 0, typename... TArgs> inline static EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
+					{
+						SSVU_ASSERT(mV.is<Arr>() && mV.getArr().size() > TI);
+						if(!mV[TI].is<TplArg<TI, std::tuple<TArgs...>>>()) return false;
+						return isTpl<TI + 1, TArgs...>(mV);
+					}
+
+					/// @brief Returns `true` if all items of an `Arr` are of type `T`.
+					template<typename T> inline static bool areArrItemsOfType(const Val& mV) noexcept
+					{
+						SSVU_ASSERT(mV.is<Arr>());
+						for(const auto& v : mV.getArr()) if(!v.template is<T>()) return false;
+						return true;
+					}
+				};
 			}
 
 			template<typename T> struct Checker
@@ -49,6 +53,7 @@ namespace ssvu
 					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::mType); } \
 				};
 
+			// TODO: make stashed changes work
 			SSVU_JSON_DEFINE_CHECKER_NUM(char)
 			SSVU_JSON_DEFINE_CHECKER_NUM(int)
 			SSVU_JSON_DEFINE_CHECKER_NUM(long int)
@@ -92,20 +97,20 @@ namespace ssvu
 			{
 				inline static auto is(const Val& mV) noexcept
 				{
-					return mV.getType() == Val::Type::Arr && mV.getArr().size() == sizeof...(TArgs) && Impl::isTpl<0, TArgs...>(mV);
+					return mV.getType() == Val::Type::Arr && mV.getArr().size() == sizeof...(TArgs) && Impl::IsTplHelper::isTpl<0, TArgs...>(mV);
 				}
 			};
 
 			template<typename TItem> struct Checker<std::vector<TItem>> final
 			{
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && Impl::areArrItemsOfType<TItem>(mV); }
+				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && Impl::IsTplHelper::areArrItemsOfType<TItem>(mV); }
 			};
 
 			template<typename TItem, std::size_t TS> struct Checker<TItem[TS]> final
 			{
 				inline static auto is(const Val& mV) noexcept
 				{
-					return mV.getType() == Val::Type::Arr && mV.getArr().size() == TS && Impl::areArrItemsOfType<TItem>(mV);
+					return mV.getType() == Val::Type::Arr && mV.getArr().size() == TS && Impl::IsTplHelper::areArrItemsOfType<TItem>(mV);
 				}
 			};
 		}

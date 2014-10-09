@@ -17,6 +17,16 @@ namespace ssvu
 
 		template<typename TWS> inline void Val::writeToStream(std::ostream& mStream) const { Internal::Writer<TWS> w; w.write(*this, mStream); mStream.flush(); }
 		template<typename TRS, typename T> inline void Val::readFromStr(T&& mStr) { Internal::Reader<TRS> r{fwd<T>(mStr)}; Internal::tryParse<TRS>(*this, r); }
+
+		inline auto Val::forUncheckedObj() noexcept			{ return forUncheckedObjAs<Val>(); }
+		inline auto Val::forUncheckedObj() const noexcept	{ return forUncheckedObjAs<Val>(); }
+		inline auto Val::forUncheckedArr() noexcept			{ return forUncheckedArrAs<Val>(); }
+		inline auto Val::forUncheckedArr() const noexcept	{ return forUncheckedArrAs<Val>(); }
+
+		inline auto Val::forObj() noexcept		{ return forObjAs<Val>(); }
+		inline auto Val::forObj() const noexcept	{ return forObjAs<Val>(); }
+		inline auto Val::forArr() noexcept		{ return forArrAs<Val>(); }
+		inline auto Val::forArr() const noexcept	{ return forArrAs<Val>(); }
 	}
 }
 

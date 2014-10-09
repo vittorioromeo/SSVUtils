@@ -16,6 +16,12 @@ namespace ssvu
 			template<typename T> struct Cnv;
 			template<typename T> struct Checker;
 			template<typename T> struct AsHelper;
+
+			namespace Impl
+			{
+				struct TplHelper;
+				struct IsTplHelper;
+			}
 		}
 	}
 }

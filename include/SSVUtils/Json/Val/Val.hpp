@@ -17,6 +17,8 @@ namespace ssvu
 			template<typename T> friend struct Internal::Cnv;
 			template<typename T> friend struct Internal::Checker;
 			template<typename T> friend struct Internal::AsHelper;
+			friend struct Internal::Impl::TplHelper;
+			friend struct Internal::Impl::IsTplHelper;
 
 			public:
 				enum class Type{Obj, Arr, Str, Num, Bln, Nll};
@@ -218,15 +220,15 @@ namespace ssvu
 				template<typename T> inline auto forArrAs() noexcept		{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::end(h.hArr))>(); }
 				template<typename T> inline auto forArrAs() const noexcept	{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::cend(h.hArr))>(); }
 
-				inline auto forUncheckedObj() noexcept			{ return forUncheckedObjAs<Val>(); }
-				inline auto forUncheckedObj() const noexcept	{ return forUncheckedObjAs<Val>(); }
-				inline auto forUncheckedArr() noexcept			{ return forUncheckedArrAs<Val>(); }
-				inline auto forUncheckedArr() const noexcept	{ return forUncheckedArrAs<Val>(); }
+				inline auto forUncheckedObj() noexcept;//			{ return forUncheckedObjAs<Val>(); }
+				inline auto forUncheckedObj() const noexcept;//	{ return forUncheckedObjAs<Val>(); }
+				inline auto forUncheckedArr() noexcept;//			{ return forUncheckedArrAs<Val>(); }
+				inline auto forUncheckedArr() const noexcept;//	{ return forUncheckedArrAs<Val>(); }
 
-				inline auto forObj() noexcept		{ return forObjAs<Val>(); }
-				inline auto forObj() const noexcept	{ return forObjAs<Val>(); }
-				inline auto forArr() noexcept		{ return forArrAs<Val>(); }
-				inline auto forArr() const noexcept	{ return forArrAs<Val>(); }
+				inline auto forObj() noexcept;//		{ return forObjAs<Val>(); }
+				inline auto forObj() const noexcept;//	{ return forObjAs<Val>(); }
+				inline auto forArr() noexcept;//		{ return forArrAs<Val>(); }
+				inline auto forArr() const noexcept;//	{ return forArrAs<Val>(); }
 		};
 
 		using Obj = Val::Obj;

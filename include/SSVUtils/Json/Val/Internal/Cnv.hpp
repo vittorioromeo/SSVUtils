@@ -31,20 +31,23 @@ namespace ssvu
 			{
 				template<std::size_t TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
 
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
+				struct TplHelper
 				{
-					SSVU_ASSERT(mV.template is<Arr>() && mV.template as<Arr>().size() > TI);
-					std::get<TI>(mX) = moveIfRValue<decltype(mV)>(mV[TI].template as<TplArg<TI, decltype(mX)>>());
-					toTpl<TI + 1, TArgs...>(fwd<T>(mV), mX);
-				}
+					template<std::size_t TI = 0, typename... TArgs, typename T> inline static EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
+					template<std::size_t TI = 0, typename... TArgs, typename T> inline static EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
+					{
+						SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > TI);
+						std::get<TI>(mX) = moveIfRValue<decltype(mV)>(mV[TI].template as<TplArg<TI, decltype(mX)>>());
+						toTpl<TI + 1, TArgs...>(fwd<T>(mV), mX);
+					}
 
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI == sizeof...(TArgs)> fromTpl(Arr&, T&&) { }
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline EnableIf<TI < sizeof...(TArgs)> fromTpl(Arr& mArr, T&& mX)
-				{
-					mArr.emplace_back(moveIfRValue<decltype(mX)>(std::get<TI>(mX)));
-					fromTpl<TI + 1, TArgs...>(mArr, fwd<T>(mX));
-				}
+					template<std::size_t TI = 0, typename... TArgs, typename T> inline static EnableIf<TI == sizeof...(TArgs)> fromTpl(Arr&, T&&) { }
+					template<std::size_t TI = 0, typename... TArgs, typename T> inline static EnableIf<TI < sizeof...(TArgs)> fromTpl(Arr& mArr, T&& mX)
+					{
+						mArr.emplace_back(moveIfRValue<decltype(mX)>(std::get<TI>(mX)));
+						fromTpl<TI + 1, TArgs...>(mArr, fwd<T>(mX));
+					}
+				};
 			}
 
 			#define SSVU_JSON_DEFINE_CNV_NUM(mType) \
@@ -145,10 +148,10 @@ namespace ssvu
 				template<typename T> inline static void toVal(Val& mV, T&& mX)
 				{
 					Arr result; result.reserve(sizeof...(TArgs));
-					Impl::fromTpl<0, TArgs...>(result, fwd<T>(mX));
+					Impl::TplHelper::fromTpl<0, TArgs...>(result, fwd<T>(mX));
 					mV.setArr(std::move(result));
 				}
-				template<typename T> inline static void fromVal(T&& mV, Type& mX) { Impl::toTpl<0, TArgs...>(fwd<T>(mV), mX); }
+				template<typename T> inline static void fromVal(T&& mV, Type& mX) { Impl::TplHelper::toTpl<0, TArgs...>(fwd<T>(mV), mX); }
 			};
 
 			// Convert `std::vector`
@@ -164,7 +167,7 @@ namespace ssvu
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{
-					const auto& arr(mV.template as<Arr>());
+					const auto& arr(mV.getArr());
 					mX.reserve(arr.size()); mX.clear();
 					for(auto i(0u); i < arr.size(); ++i) mX.emplace_back(moveIfRValue<decltype(mV)>(arr[i].template as<TItem>()));
 				}
@@ -178,7 +181,7 @@ namespace ssvu
 				template<typename T> inline static void toVal(Val& mVal, T&& mX)
 				{
 					mVal = Arr{};
-					for(auto& p : mX) mVal.as<Arr>().emplace_back(moveIfRValue<decltype(mX)>(p));
+					for(auto& p : mX) mVal.getArr().emplace_back(moveIfRValue<decltype(mX)>(p));
 				}
 				template<typename T> inline static void fromVal(T&& mVal, Type& mX)
 				{
@@ -202,7 +205,7 @@ namespace ssvu
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{
-					SSVU_ASSERT(mV.template as<Arr>().size() >= TS);
+					SSVU_ASSERT(mV.getArr().size() >= TS);
 					for(auto i(0u); i < TS; ++i) mX[i] = moveIfRValue<decltype(mV)>(mV[i].template as<TItem>());
 				}
 			};
