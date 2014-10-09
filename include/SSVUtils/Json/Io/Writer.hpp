@@ -125,9 +125,9 @@ namespace ssvu
 
 						switch(mNum.getType())
 						{
-							case Num::Type::IntS: wOut(toStr(mNum.as<Num::IntS>())); break;
-							case Num::Type::IntU: wOut(toStr(mNum.as<Num::IntU>())); break;
-							case Num::Type::Real: wOut(toStr(mNum.as<Num::Real>())); break;
+							case Num::Type::IntS: wOut(toStr(mNum.as<IntS>())); break;
+							case Num::Type::IntU: wOut(toStr(mNum.as<IntU>())); break;
+							case Num::Type::Real: wOut(toStr(mNum.as<Real>())); break;
 						}
 					}
 
