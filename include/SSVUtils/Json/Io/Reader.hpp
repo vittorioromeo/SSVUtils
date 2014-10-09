@@ -170,13 +170,15 @@ namespace ssvu
 					{
 						char* endChar;
 
-						auto realN(static_cast<Num::Real>(std::strtod(src.data() + idx, &endChar)));
-						auto intSN(static_cast<Num::IntS>(realN));
+						Real realN(static_cast<Real>(std::strtod(src.data() + idx, &endChar)));
+						IntS intSN(static_cast<IntS>(realN));
 
 						idx = endChar - src.data();
 
 						auto isDecimal(intSN != realN);
-						return Val{Num{isDecimal ? realN : intSN}};
+						if(isDecimal) return Val{Num{realN}};
+
+						return Val{Num{intSN}};
 					}
 
 					inline Val parseStr() { return Val{readStr()}; }
