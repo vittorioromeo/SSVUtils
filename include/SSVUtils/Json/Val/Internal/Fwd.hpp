@@ -13,9 +13,10 @@ namespace ssvu
 
 		namespace Internal
 		{
-			template<typename T> struct Cnv;
-			template<typename T> struct Checker;
-			template<typename T> struct AsHelper;
+			template<typename> struct Cnv;
+			template<typename> struct Checker;
+			template<typename> struct AsHelper;
+			template<typename> struct ValMoveHelper;
 
 			namespace Impl
 			{

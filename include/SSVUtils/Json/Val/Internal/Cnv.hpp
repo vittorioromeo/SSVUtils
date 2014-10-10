@@ -84,8 +84,8 @@ namespace ssvu
 			SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(Obj)
 			SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(Arr)
 			SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(Str)
+			SSVU_JSON_DEFINE_CNV_BIG_MUTABLE(Num)
 
-			SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(Num)
 			SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(Bln)
 			SSVU_JSON_DEFINE_CNV_SMALL_IMMUTABLE(Nll)
 
@@ -97,7 +97,6 @@ namespace ssvu
 			template<> struct Cnv<Val> final
 			{
 				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(fwd<T>(mX)))) { mV.init(fwd<T>(mX)); }
-				template<typename T> inline static void fromVal(T&& mV, Val& mX) noexcept { mX = fwd<T>(mV); }
 			};
 
 			// Convert enums

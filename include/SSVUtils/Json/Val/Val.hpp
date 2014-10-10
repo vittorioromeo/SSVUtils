@@ -17,6 +17,7 @@ namespace ssvu
 			template<typename T> friend struct Internal::Cnv;
 			template<typename T> friend struct Internal::Checker;
 			template<typename T> friend struct Internal::AsHelper;
+			template<typename T> friend struct Internal::ValMoveHelper;
 			friend struct Internal::Impl::TplHelper;
 			friend struct Internal::Impl::IsTplHelper;
 
@@ -34,22 +35,12 @@ namespace ssvu
 
 				#if SSVU_DEBUG
 					bool clean{true};
+					inline void setClean(bool mClean) noexcept { clean = mClean; }
+					inline bool isClean() const noexcept { return clean; }
+				#else
+					inline void setClean(bool) noexcept { }
+					inline bool isClean() const noexcept { return true; }
 				#endif
-
-				inline void setClean(bool mClean) noexcept
-				{
-					#if SSVU_DEBUG
-						clean = mClean;
-					#endif
-				}
-				inline bool isClean() const noexcept
-				{
-					#if SSVU_DEBUG
-						return clean;
-					#else
-						return true;
-					#endif
-				}
 
 				union Holder
 				{
@@ -80,7 +71,9 @@ namespace ssvu
 				inline auto& getStr() noexcept				{ SSVU_ASSERT(is<Str>() && !isClean()); return h.hStr; }
 				inline const auto& getStr() const noexcept	{ SSVU_ASSERT(is<Str>() && !isClean()); return h.hStr; }
 
-				inline auto getNum() const noexcept			{ SSVU_ASSERT(is<Num>() && !isClean()); return h.hNum; }
+				inline auto& getNum() noexcept				{ SSVU_ASSERT(is<Num>() && !isClean()); return h.hNum; }
+				inline const auto& getNum() const noexcept	{ SSVU_ASSERT(is<Num>() && !isClean()); return h.hNum; }
+
 				inline auto getBln() const noexcept			{ SSVU_ASSERT(is<Bln>() && !isClean()); return h.hBool; }
 				inline auto getNll() const noexcept			{ SSVU_ASSERT(is<Nll>() && !isClean()); return Nll{}; }
 
@@ -111,12 +104,14 @@ namespace ssvu
 						case Type::Nll: setNll(Nll{}); break;
 					}
 
+					Internal::ValMoveHelper<decltype(mV)>::exec(fwd<T>(mV));
+
 					setClean(false);
 				}
 
 			public:
 				inline Val() noexcept = default;
-				inline Val(const Val& mV)	{ init(mV);  }
+				inline Val(const Val& mV)	{ init(mV); }
 				inline Val(Val&& mV)		{ init(std::move(mV)); }
 
 				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Val)> inline Val(T&& mX) { set(fwd<T>(mX)); }
@@ -138,9 +133,6 @@ namespace ssvu
 				}
 
 				// "Explicit" `as` function gets the inner contents of the value
-				//template<typename T> decltype(auto) as() &;
-				//template<typename T> decltype(auto) as() const&;
-				//template<typename T> decltype(auto) as() &&;
 				template<typename T> decltype(auto) as();
 				template<typename T> decltype(auto) as() const;
 
@@ -220,19 +212,26 @@ namespace ssvu
 				template<typename T> inline auto forArrAs() noexcept		{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::end(h.hArr))>(); }
 				template<typename T> inline auto forArrAs() const noexcept	{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::cend(h.hArr))>(); }
 
-				inline auto forUncheckedObj() noexcept;//			{ return forUncheckedObjAs<Val>(); }
-				inline auto forUncheckedObj() const noexcept;//	{ return forUncheckedObjAs<Val>(); }
-				inline auto forUncheckedArr() noexcept;//			{ return forUncheckedArrAs<Val>(); }
-				inline auto forUncheckedArr() const noexcept;//	{ return forUncheckedArrAs<Val>(); }
+				inline auto forUncheckedObj() noexcept;
+				inline auto forUncheckedObj() const noexcept;
+				inline auto forUncheckedArr() noexcept;
+				inline auto forUncheckedArr() const noexcept;
 
-				inline auto forObj() noexcept;//		{ return forObjAs<Val>(); }
-				inline auto forObj() const noexcept;//	{ return forObjAs<Val>(); }
-				inline auto forArr() noexcept;//		{ return forArrAs<Val>(); }
-				inline auto forArr() const noexcept;//	{ return forArrAs<Val>(); }
+				inline auto forObj() noexcept;
+				inline auto forObj() const noexcept;
+				inline auto forArr() noexcept;
+				inline auto forArr() const noexcept;
 		};
 
 		using Obj = Val::Obj;
 		using Arr = Val::Arr;
+
+		namespace Internal
+		{
+			template<> struct ValMoveHelper<const Val&>	{ inline static void exec(const Val&) noexcept { } };
+			template<> struct ValMoveHelper<Val&>		{ inline static void exec(Val&) noexcept { } };
+			template<> struct ValMoveHelper<Val&&>		{ inline static void exec(Val&& mV) noexcept { mV.type = Val::Type::Nll; } };
+		}
 	}
 }
 
