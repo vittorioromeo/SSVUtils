@@ -207,7 +207,8 @@ namespace ssvu
 		return costs[n];
 	}
 
-	namespace Impl
+	// Implementation details for `appendTo`.
+	namespace Internal
 	{
 		inline auto& appendToImpl(std::string& mStr) noexcept { return mStr; }
 		template<typename T, typename... TArgs> inline auto& appendToImpl(std::string& mStr, T&& mA, TArgs&&... mArgs)
@@ -217,10 +218,10 @@ namespace ssvu
 		}
 	}
 
-	// TODO: docs
+	/// @brief Appends a variadic number of strings to an `std::string`. Returns `mStr` after finishing the appends.
 	template<typename... TArgs> inline auto& appendTo(std::string& mStr, TArgs&&... mArgs)
 	{
-		return Impl::appendToImpl(mStr, fwd<TArgs>(mArgs)...);
+		return Internal::appendToImpl(mStr, fwd<TArgs>(mArgs)...);
 	}
 }
 

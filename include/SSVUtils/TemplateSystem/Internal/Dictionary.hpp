@@ -32,22 +32,16 @@ namespace ssvu
 						inline Proxy(TKey mKey, Dictionary& mDict) : key{mKey}, dict{mDict} { }
 
 						template<typename T> inline auto& operator=(T&& mReplacement) { dict.replacements[key] = fwd<T>(mReplacement); return *this; }
-
-						inline auto& operator+=(const Dictionary& mDict)	{ dict.sections[key].emplace_back(mDict); return *this; }
-						inline auto& operator+=(Dictionary&& mDict)			{ dict.sections[key].emplace_back(std::move(mDict)); return *this; }
+						template<typename T> inline auto& operator+=(T&& mDict)	{ dict.sections[key].emplace_back(fwd<T>(mDict)); return *this; }
 				};
 
 				// Init single replacement
-				inline void initImpl(const std::string& mKey,	const std::string& mReplacement)	{ replacements[mKey] 			= mReplacement; }
-				inline void initImpl(std::string&& mKey,		const std::string& mReplacement)	{ replacements[std::move(mKey)]	= mReplacement; }
-				inline void initImpl(const std::string& mKey,	std::string&& mReplacement)			{ replacements[mKey]			= std::move(mReplacement); }
-				inline void initImpl(std::string&& mKey,		std::string&& mReplacement)			{ replacements[std::move(mKey)]	= std::move(mReplacement); }
+				template<typename T> inline void initImpl(T&& mKey, const std::string& mReplacement)	{ replacements[fwd<T>(mKey)] = mReplacement; }
+				template<typename T> inline void initImpl(T&& mKey, std::string&& mReplacement)			{ replacements[fwd<T>(mKey)] = std::move(mReplacement); }
 
 				// Init section replacement
-				inline void initImpl(const std::string& mKey,	const DictVec& mDicts)	{ sections[mKey]			= mDicts; }
-				inline void initImpl(std::string&& mKey,		const DictVec& mDicts)	{ sections[std::move(mKey)]	= mDicts; }
-				inline void initImpl(const std::string& mKey,	DictVec&& mDicts)		{ sections[mKey]			= std::move(mDicts); }
-				inline void initImpl(std::string&& mKey,		DictVec&& mDicts)		{ sections[std::move(mKey)]	= std::move(mDicts); }
+				template<typename T> inline void initImpl(T&& mKey, const DictVec& mDicts)	{ sections[fwd<T>(mKey)] = mDicts; }
+				template<typename T> inline void initImpl(T&& mKey, DictVec&& mDicts)		{ sections[fwd<T>(mKey)] = std::move(mDicts); }
 
 				// Copy/move init
 				inline void initImpl(const Dictionary& mDict)

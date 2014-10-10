@@ -31,8 +31,8 @@ namespace ssvu
 				Settings settings;
 				bool separate;
 
-				inline auto getC() const noexcept 					{ SSVU_ASSERT(idx >= 0 && idx < src.size()); return src[idx]; }
 				inline auto getC(std::size_t mIdx) const noexcept 	{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size()); return src[mIdx]; }
+				inline auto getC() const noexcept 					{ return getC(idx); }
 
 				bool replace();
 				bool replaceSection();

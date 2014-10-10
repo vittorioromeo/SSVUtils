@@ -11,5 +11,3 @@
 #include "SSVUtils/TemplateSystem/Internal/Expander.inl"
 
 #endif
-
-// TODO: fix/improve all code
