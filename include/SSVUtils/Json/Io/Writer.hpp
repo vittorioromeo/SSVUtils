@@ -11,7 +11,7 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<typename TWS = WriterSettings<WMode::Pretty>> class Writer
+			template<typename TWS = WSPretty> class Writer
 			{
 				private:
 					using FmtCC = Console::Color;

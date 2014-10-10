@@ -185,13 +185,13 @@ namespace ssvu
 
 
 				// IO
-				template<typename TWS = WriterSettings<WMode::Pretty>> void writeToStream(std::ostream&) const;
-				template<typename TWS = WriterSettings<WMode::Pretty>> inline void writeToStr(std::string& mStr) const			{ std::ostringstream o; writeToStream<TWS>(o); mStr = o.str(); }
-				template<typename TWS = WriterSettings<WMode::Pretty>> inline void writeToFile(const ssvufs::Path& mPath) const	{ std::ofstream o{mPath}; writeToStream<TWS>(o); o.close(); }
-				template<typename TWS = WriterSettings<WMode::Pretty>> inline auto getWriteToStr() const						{ std::string result; writeToStr<TWS>(result); return result; }
+				template<typename TWS = WSPretty> void writeToStream(std::ostream&) const;
+				template<typename TWS = WSPretty> inline void writeToStr(std::string& mStr) const			{ std::ostringstream o; writeToStream<TWS>(o); mStr = o.str(); }
+				template<typename TWS = WSPretty> inline void writeToFile(const ssvufs::Path& mPath) const	{ std::ofstream o{mPath}; writeToStream<TWS>(o); o.close(); }
+				template<typename TWS = WSPretty> inline auto getWriteToStr() const							{ std::string result; writeToStr<TWS>(result); return result; }
 
-				template<typename TRS = ReaderSettings<RMode::Default>, typename T> void readFromStr(T&& mStr);
-				template<typename TRS = ReaderSettings<RMode::Default>> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(mPath.getContentsAsString()); }
+				template<typename TRS = RSDefault, typename T> void readFromStr(T&& mStr);
+				template<typename TRS = RSDefault> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(mPath.getContentsAsString()); }
 
 				template<typename T> inline static Val fromStr(T&& mStr)	{ Val result; result.readFromStr(fwd<T>(mStr)); return result; }
 				inline static Val fromFile(const ssvufs::Path& mPath)		{ Val result; result.readFromFile(mPath); return result; }

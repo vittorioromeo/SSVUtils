@@ -32,21 +32,24 @@ namespace ssvu
 
 
 
-		// TODO: can be better?
-		enum class WMode{Pretty, Minified, PrettyConsole};
+		template<bool TFmt, bool TPretty> struct WriterSettings
+		{
+			enum { fmt = TFmt, pretty = TPretty };
+		};
 
-		template<WMode TWM> struct WriterSettings;
-		template<> struct WriterSettings<WMode::Pretty>			{ enum { fmt = false,	pretty = true }; };
-		template<> struct WriterSettings<WMode::Minified>		{ enum { fmt = false,	pretty = false }; };
-		template<> struct WriterSettings<WMode::PrettyConsole>	{ enum { fmt = true,	pretty = true }; };
+		using WSPretty = WriterSettings<false, true>;
+		using WSMinified = WriterSettings<false, false>;
+		using WSPrettyLog = WriterSettings<true, true>;
 
 
 
-		enum class RMode{Default, NoComments};
+		template<bool TNoComments> struct ReaderSettings
+		{
+			enum { noComments = TNoComments };
+		};
 
-		template<RMode TRM> struct ReaderSettings;
-		template<> struct ReaderSettings<RMode::Default>		{ enum { noComments = false }; };
-		template<> struct ReaderSettings<RMode::NoComments>		{ enum { noComments = true }; };
+		using RSDefault = ReaderSettings<false>;
+		using RSNoComments = ReaderSettings<true>;
 	}
 }
 

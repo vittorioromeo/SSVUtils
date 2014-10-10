@@ -33,7 +33,7 @@ namespace ssvu
 				}
 			}
 
-			template<typename TRS = ReaderSettings<RMode::Default>> class Reader
+			template<typename TRS = RSDefault> class Reader
 			{
 				private:
 					std::string src;

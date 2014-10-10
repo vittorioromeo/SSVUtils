@@ -11,7 +11,6 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			// TODO: BUG: Clang does not compile - templatize ValItrHelper<TValue> ?
 			struct ValItrHelper
 			{
 				template<typename TK, typename TV> struct KVPair { TK key; TV value; };
