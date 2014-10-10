@@ -101,12 +101,8 @@ namespace ssvu
 	/// @param mTo Replacement string.
 	inline void replaceAll(std::string& mStr, const std::string& mFrom, const std::string& mTo)
 	{
-		std::size_t startPos{mStr.find(mFrom)};
-		while(startPos != std::string::npos)
-		{
+		for(auto startPos(mStr.find(mFrom)); startPos != std::string::npos; startPos = mStr.find(mFrom))
 			mStr.replace(startPos, mFrom.size(), mTo);
-			startPos = mStr.find(mFrom);
-		}
 	}
 
 	/// @brief Returns whether a string starts with a specific string.

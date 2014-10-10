@@ -16,28 +16,28 @@ namespace ssvu
 				if(!mPath.exists<Type::Folder>()) throw std::runtime_error{"Directory \"" + mPath + "\" not found"};
 
 				DIR* dir{opendir(mPath.getCStr())};
-				dirent* entry{readdir(dir)};
+				std::string bufName;
+				Path bufPath;
 
-				while(entry != nullptr)
+				for(dirent* entry{readdir(dir)}; entry != nullptr; entry = readdir(dir))
 				{
-					std::string name{entry->d_name};
-					Path path{mPath + name};
-					if(!path.isRootOrParent())
+					bufName = entry->d_name;
+					bufPath = mPath + bufName;
+
+					if(!bufPath.isRootOrParent())
 					{
-						if(path.exists<Type::Folder>())
+						if(bufPath.exists<Type::Folder>())
 						{
-							if(TT == Type::All || TT == Type::Folder) { mTarget.emplace_back(path); }
-							if(TM == Mode::Recurse) { Internal::scan<Mode::Recurse, TT, TP, TS>(mTarget, path, mDesired); }
+							if(TT == Type::All || TT == Type::Folder) { mTarget.emplace_back(bufPath); }
+							if(TM == Mode::Recurse) { Internal::scan<Mode::Recurse, TT, TP, TS>(mTarget, bufPath, mDesired); }
 						}
 						else if(TT == Type::All || TT == Type::File)
 						{
-							if(TP == Pick::Any)			{ mTarget.emplace_back(path); }
-							else if(TP == Pick::ByExt)	{ if(endsWith(name, mDesired)) mTarget.emplace_back(path); }
-							else if(TP == Pick::ByName)	{ if(name == mDesired) mTarget.emplace_back(path); }
+							if(TP == Pick::Any)			{ mTarget.emplace_back(bufPath); }
+							else if(TP == Pick::ByExt)	{ if(endsWith(bufName, mDesired)) mTarget.emplace_back(bufPath); }
+							else if(TP == Pick::ByName)	{ if(bufName == mDesired) mTarget.emplace_back(bufPath); }
 						}
 					}
-
-					entry = readdir(dir);
 				}
 
 				closedir(dir);

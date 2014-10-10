@@ -55,7 +55,7 @@ namespace ssvu
 		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, TFunc1 mFunc, TFunc2 mFuncSeparator, std::bidirectional_iterator_tag)
 		{
 			auto itrPenultimate(--mEnd);
-			while(mBegin != itrPenultimate) { mFunc(*mBegin); mFuncSeparator(*mBegin); ++mBegin; }
+			for(; mBegin != itrPenultimate; ++mBegin) { mFunc(*mBegin); mFuncSeparator(*mBegin); }
 			mFunc(*itrPenultimate);
 		}
 

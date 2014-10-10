@@ -112,7 +112,7 @@ namespace ssvu
 				if(argPack.isInfinite())
 				{
 					if(i != cmd.getCount<EType::ArgPack>() -1) throw Exception::createArgPackInfinitePositionError();
-					while(!entered.empty()) { toPack.emplace_back(entered.front()); entered.pop_front(); }
+					for(; !entered.empty(); entered.pop_front()) toPack.emplace_back(entered.front());
 				}
 				else
 				{
