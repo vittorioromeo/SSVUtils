@@ -18,7 +18,6 @@ namespace ssvu
 			{
 				SSVU_ASSERT(mV.template is<Arr>() && mV.template as<Arr>().size() > TI && mV[TI].template is<TArg>());
 				extr<TArg>(moveIfRValue<decltype(mV)>(mV[TI]), mArg);
-				//mArg = moveIfRValue<decltype(mV)>(mV[TI].template as<TArg>());
 			}
 			template<Idx TI, typename TArg, typename... TArgs, typename T> inline void extrArrHelper(T&& mV, TArg& mArg, TArgs&... mArgs)
 			{
@@ -40,7 +39,6 @@ namespace ssvu
 			{
 				SSVU_ASSERT(mV.template is<Obj>() && mV.has(mKey));
 				extr<TArg>(moveIfRValue<decltype(mV)>(mV[mKey]), mArg);
-				//mArg = moveIfRValue<decltype(mV)>(mV[mKey].template as<TArg>());
 			}
 			template<typename TArg, typename... TArgs, typename T> inline void extrObjHelper(T&& mV, const Key& mKey, TArg& mArg, TArgs&... mArgs)
 			{
