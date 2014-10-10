@@ -13,17 +13,14 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		inline void assertImpl(bool mExpression, const std::string& mMsg) noexcept
+		inline void assertImpl(AssertData mAD, bool mExpression, const std::string& mMsg) noexcept
 		{
 			if(SSVU_LIKELY(mExpression)) return;
 
-			// Data must be cached because other assertions may be tested during logging
-			auto cachedData(getAssertState());
-
 			lo() << "\n";
 			lo("ASSERTION FAILED") << mMsg << "\n\n"
-				<< "Line " << cachedData.line << " in file " << cachedData.file << "\n"
-				<< "Code: " << cachedData.code << "\n\n";
+				<< "Line " << mAD.line << " in file " << mAD.file << "\n"
+				<< "Code: " << mAD.code << "\n\n";
 
 			if(getAssertState().skip)
 			{

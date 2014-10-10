@@ -37,18 +37,18 @@
 	{
 		namespace Internal
 		{
-			/// @brief Internal struct storing data and state for assertions.
-			struct AssertState
-			{
-				std::string code, line, file;
-				bool skip{false};
-			};
+			/// @brief Internal struct storing data for an assertion.
+			struct AssertData { std::string code, line, file; };
+
+			/// @brief Internal struct storing global state for assertions.
+			struct AssertState { bool skip{false}; };
 
 			/// @brief Returns a reference to the global static thread_local AssertState instance.
 			inline auto& getAssertState() noexcept { thread_local AssertState result; return result; }
+
 			/// @brief Assert implementation: if mExpression is false, the assertion fires.
 			/// @details Called via the SSVU_ASSERT macro.
-			void assertImpl(bool mExpression, const std::string& mMsg = "") noexcept;
+			void assertImpl(AssertData mAD, bool mExpression, const std::string& mMsg = "") noexcept;
 		}
 	}
 
@@ -57,10 +57,11 @@
 	#define SSVU_ASSERT(...) \
 		do \
 		{ \
-			::ssvu::Internal::getAssertState().code = SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), __VA_ARGS__); \
-			::ssvu::Internal::getAssertState().line = SSVPP_TOSTR(__LINE__); \
-			::ssvu::Internal::getAssertState().file = __FILE__; \
-			::ssvu::Internal::assertImpl(__VA_ARGS__); \
+			::ssvu::Internal::AssertData ad{}; \
+			ad.code = SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), __VA_ARGS__); \
+			ad.line = SSVPP_TOSTR(__LINE__); \
+			ad.file = __FILE__; \
+			::ssvu::Internal::assertImpl(ad, __VA_ARGS__); \
 		} while(false)
 
 	// TODO: BUG: gcc - doesn't work yet
