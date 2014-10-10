@@ -29,8 +29,12 @@ SSVUT_TEST(TemplateSystemTests1)
 	SSVUT_EXPECT_OP(r, ==, R"({{ Hello, my name is Meow. My skills are meowing, jumping, dancing.)");
 
 	// Test basic expansion, maintaining "empty" keys
-	auto r2(d.getExpanded(src, true));
+	auto r2(d.getExpanded(src, Settings::MaintainUnexisting));
 	SSVUT_EXPECT_OP(r2, ==, R"({{ Hello, my name is Meow.{{null}} My skills are meowing, jumping, dancing.)");
+
+	// Test basic expansion, maintaining only content from "empty" keys
+	auto r3(d.getExpanded(src, Settings::MaintainUnexistingOnlyCnt));
+	SSVUT_EXPECT_OP(r3, ==, R"({{ Hello, my name is Meow. My skills are meowing, jumping, dancing.)");
 }
 
 SSVUT_TEST(TemplateSystemTestsRecursion)
@@ -113,7 +117,16 @@ SSVUT_TEST(TemplateSystemTestsEdgeCases)
 		string src{R"({{}})"};
 		Dictionary d{"x", "y"};
 		SSVUT_EXPECT_OP(d.getExpanded(src), ==, R"()");
-		SSVUT_EXPECT_OP(d.getExpanded(src, true), ==, R"({{}})");
+		SSVUT_EXPECT_OP(d.getExpanded(src, Settings::MaintainUnexisting), ==, R"({{}})");
+		SSVUT_EXPECT_OP(d.getExpanded(src, Settings::MaintainUnexistingOnlyCnt), ==, R"()");
+	}
+
+	{
+		string src{R"(abcd{{#xsect}}efgh{{/xsect}}ilmn)"};
+		Dictionary d{};
+		SSVUT_EXPECT_OP(d.getExpanded(src), ==, R"(abcdilmn)");
+		SSVUT_EXPECT_OP(d.getExpanded(src, Settings::MaintainUnexisting), ==, R"(abcd{{#xsect}}efgh{{/xsect}}ilmn)");
+		SSVUT_EXPECT_OP(d.getExpanded(src, Settings::MaintainUnexistingOnlyCnt), ==, R"(abcdefghilmn)");
 	}
 }
 

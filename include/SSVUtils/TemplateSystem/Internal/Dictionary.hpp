@@ -92,7 +92,7 @@ namespace ssvu
 			public:
 				template<typename... TArgs> inline Dictionary(TArgs&&... mArgs) { init(fwd<TArgs>(mArgs)...); }
 
-				inline std::string getExpanded(std::string mSrc, bool mMaintainNotFound = false)
+				inline std::string getExpanded(std::string mSrc, Settings mSettings = Settings::EraseUnexisting)
 				{
 					refreshParents();
 
@@ -103,7 +103,7 @@ namespace ssvu
 					bool found{true};
 					while(found)
 					{
-						found = expandImpl(mSrc, buf, bufKey, 0, mSrc.size(), 0, mMaintainNotFound);
+						found = expandImpl(mSrc, buf, bufKey, 0, mSrc.size(), 0, mSettings);
 
 						mSrc = buf;
 						buf.clear();

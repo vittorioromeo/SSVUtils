@@ -20,12 +20,19 @@ namespace ssvu
 				return true;
 			}
 
-			if(maintainNotFound) appendTo(bufResult, "{{", bufKey, "}}");
+			if(settings == Settings::MaintainUnexisting)
+			{
+				// Write the template symbols back
+				appendTo(bufResult, "{{", bufKey, "}}");
+			}
+
 			return false;
 		}
 
 		inline bool Expander::replaceSection()
 		{
+			auto tmpb(bufKey);
+
 			for(const auto* cd(&dict); cd != nullptr; cd = cd->parentDict)
 			{
 				if(cd->sections.count(bufKey) <= 0) continue;
@@ -35,16 +42,24 @@ namespace ssvu
 
 				// Separated expansions
 				for(auto i(0u); i < dictVec.size() - 1; ++i)
-					dictVec[i].expandImpl(src, bufResult, bufKey, sectIdxStart, sectIdxEnd, true, maintainNotFound);
+					dictVec[i].expandImpl(src, bufResult, bufKey, sectIdxCntStart, sectIdxCntEnd, true, settings);
 
 				// Non-separated expansion
-				dictVec[dictVec.size() - 1].expandImpl(src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false, maintainNotFound);
+				dictVec[dictVec.size() - 1].expandImpl(src, bufResult, bufKey, sectIdxCntStart, sectIdxCntEnd, false, settings);
 
 				return true;
 			}
 
-			if(maintainNotFound) appendTo(bufResult, "{{#", bufKey, "}}");
-			else Dictionary{}.expandImpl(src, bufResult, bufKey, sectIdxStart, sectIdxEnd, false, maintainNotFound);
+			if(settings == Settings::MaintainUnexisting)
+			{
+				// Write the whole section back (both symbols and contents)
+				for(auto i(sectIdxStart); i < sectIdxEnd; ++i) bufResult += getC(i);
+			}
+			else if(settings == Settings::MaintainUnexistingOnlyCnt)
+			{
+				// Write only the sections contents back, once
+				for(auto i(sectIdxCntStart); i < sectIdxCntEnd; ++i) bufResult += getC(i);
+			}
 
 			return false;
 		}
@@ -64,6 +79,9 @@ namespace ssvu
 					bufResult += getC();
 					continue;
 				}
+
+				// Beginning of "{{..."
+				sectIdxStart = idx;
 
 				// "{{" combination
 				// Skip "{{"
@@ -92,11 +110,13 @@ namespace ssvu
 				if(type == Type::Separator)	{ if(separate) bufResult += bufKey; continue; }
 
 				// Section
+				SSVU_ASSERT(type == Type::Section);
+
 				// Skip second '}'
 				SSVU_ASSERT(getC() == '}' && getC(idx + 1) != '}');
 				++idx;
 
-				sectIdxStart = sectIdxEnd = idx;
+				sectIdxCntStart = sectIdxCntEnd = idx;
 
 				// Find section end
 				for(; true; ++idx)
@@ -105,7 +125,7 @@ namespace ssvu
 					if(getC() != '{') continue;
 					if(getC(idx - 1) == '\\') continue;
 
-					sectIdxEnd = idx;
+					sectIdxCntEnd = idx;
 
 					if(getC(idx + 1) == '{' && getC(idx + 2) == '/')
 					{
@@ -122,6 +142,10 @@ namespace ssvu
 
 						// Skip first '}', second one will be skipped by the for's `idx` increment
 						++idx;
+
+						// Ending of "...}}"
+						sectIdxEnd = idx + 1;
+
 						break;
 					}
 
