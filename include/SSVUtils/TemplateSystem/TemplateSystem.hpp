@@ -12,6 +12,4 @@
 
 #endif
 
-// TODO:
-// fix/improve all code
-// settings struct instead of maintainNotFound
+// TODO: fix/improve all code

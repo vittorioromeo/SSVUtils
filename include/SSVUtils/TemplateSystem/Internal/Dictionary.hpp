@@ -58,7 +58,7 @@ namespace ssvu
 				}
 				inline void initImpl(Dictionary&& mDict) noexcept
 				{
-					parentDict = mDict.parentDict;
+					parentDict = mDict.parentDict; mDict.parentDict = nullptr;
 					replacements = std::move(mDict.replacements);
 					sections = std::move(mDict.sections);
 				}
@@ -96,9 +96,9 @@ namespace ssvu
 				{
 					refreshParents();
 
-										// corrupted linked list? BUG ?
-					std::string buf; // result.reserve(mSrc.size());
-					std::string bufKey; bufKey.reserve(25);
+					std::string buf, bufKey;
+					buf.reserve(static_cast<std::size_t>(mSrc.size() * 1.5));
+					bufKey.reserve(25);
 
 					bool found{true};
 					while(found)
