@@ -11,45 +11,43 @@ SSVUT_TEST(SSVUJsonVecMapTests)
 	using namespace ssvu::Json;
 	using namespace ssvu::Json::Internal;
 
-	{
-		VecMap<int, int> tm;
+	VecMap<int, int> tm;
 
-		SSVUT_EXPECT(tm.empty());
-		SSVUT_EXPECT(tm.size() == 0);
+	SSVUT_EXPECT(tm.empty());
+	SSVUT_EXPECT(tm.size() == 0);
 
-		tm.reserve(3);
+	tm.reserve(3);
 
-		SSVUT_EXPECT(tm.empty());
-		SSVUT_EXPECT(tm.size() == 0);
+	SSVUT_EXPECT(tm.empty());
+	SSVUT_EXPECT(tm.size() == 0);
 
-		tm[0] = 0;
-		tm[1] = 2;
-		tm[2] = 4;
+	tm[0] = 0;
+	tm[1] = 2;
+	tm[2] = 4;
 
-		SSVUT_EXPECT(!tm.empty());
-		SSVUT_EXPECT(tm.size() == 3);
+	SSVUT_EXPECT(!tm.empty());
+	SSVUT_EXPECT(tm.size() == 3);
 
-		SSVUT_EXPECT(tm[0] == 0 && tm.at(0) == 0);
-		SSVUT_EXPECT(tm[1] == 2 && tm.at(1) == 2);
-		SSVUT_EXPECT(tm[2] == 4 && tm.at(2) == 4);
+	SSVUT_EXPECT(tm[0] == 0 && tm.at(0) == 0);
+	SSVUT_EXPECT(tm[1] == 2 && tm.at(1) == 2);
+	SSVUT_EXPECT(tm[2] == 4 && tm.at(2) == 4);
 
-		auto tmc(tm);
+	auto tmc(tm);
 
-		SSVUT_EXPECT(tm == tmc);
+	SSVUT_EXPECT(tm == tmc);
 
-		VecMap<int, int> tmil{{0, 0}, {1, 2}, {2, 4}};
+	VecMap<int, int> tmil{{0, 0}, {1, 2}, {2, 4}};
 
-		SSVUT_EXPECT(tm == tmil);
+	SSVUT_EXPECT(tm == tmil);
 
-		auto tm2(std::move(tm));
+	auto tm2(std::move(tm));
 
-		SSVUT_EXPECT(tm2[0] == 0 && tm2.at(0) == 0);
-		SSVUT_EXPECT(tm2[1] == 2 && tm2.at(1) == 2);
-		SSVUT_EXPECT(tm2[2] == 4 && tm2.at(2) == 4);
+	SSVUT_EXPECT(tm2[0] == 0 && tm2.at(0) == 0);
+	SSVUT_EXPECT(tm2[1] == 2 && tm2.at(1) == 2);
+	SSVUT_EXPECT(tm2[2] == 4 && tm2.at(2) == 4);
 
-		tm2[0] = 5;
-		SSVUT_EXPECT(tm2[0] == 5 && tm2.at(0) == 5);
-	}
+	tm2[0] = 5;
+	SSVUT_EXPECT(tm2[0] == 5 && tm2.at(0) == 5);
 }
 
 SSVUT_TEST(SSVUJsonNumTests)
@@ -93,50 +91,65 @@ SSVUT_TEST(SSVUJsonNumTests)
 	SSVUT_EXPECT(nf == nd);
 }
 
-SSVUT_TEST(SSVUJsonValTests)
+#define EXEC_TEST_BASIC(mType, mVal) \
+	{ \
+		Val v0, v1, v2; \
+		v0 = mVal; \
+		SSVUT_EXPECT(v0.is<mType>()); \
+		v1 = v0; \
+		SSVUT_EXPECT(v1.is<mType>()); \
+		SSVUT_EXPECT(v0.as<Val>() == v0); \
+		SSVUT_EXPECT(v0.as<mType>() == mVal); \
+		SSVUT_EXPECT(v1.as<mType>() == mVal); \
+		SSVUT_EXPECT(v0 == v1); \
+		v2 = std::move(v1); \
+		SSVUT_EXPECT(v2.is<mType>()); \
+		SSVUT_EXPECT(v2.as<mType>() == mVal); \
+		v0 = Obj{}; \
+		v0["inner"] = v2; \
+		SSVUT_EXPECT(v0["inner"] == v2); \
+		auto sv0(v0.getWriteToStr()); \
+		auto sv2(v2.getWriteToStr()); \
+		auto osv0(Val::fromStr(sv0)); \
+		auto osv2(Val::fromStr(sv2)); \
+		SSVUT_EXPECT(v0 == osv0); \
+		SSVUT_EXPECT(v2 == osv2); \
+		SSVUT_EXPECT(v0["inner"] == osv2); \
+		SSVUT_EXPECT(osv0["inner"] == v2); \
+		SSVUT_EXPECT(osv0["inner"] == osv2); \
+	}
+
+SSVUT_TEST(SSVUJsonValTests1)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
 	using namespace ssvu::Json::Internal;
-
-	#define EXEC_TEST_BASIC(mType, mVal) \
-		{ \
-			Val v0, v1, v2; \
-			v0 = mVal; \
-			SSVUT_EXPECT(v0.is<mType>()); \
-			v1 = v0; \
-			SSVUT_EXPECT(v1.is<mType>()); \
-			SSVUT_EXPECT(v0.as<Val>() == v0); \
-			SSVUT_EXPECT(v0.as<mType>() == mVal); \
-			SSVUT_EXPECT(v1.as<mType>() == mVal); \
-			SSVUT_EXPECT(v0 == v1); \
-			v2 = std::move(v1); \
-			SSVUT_EXPECT(v2.is<mType>()); \
-			SSVUT_EXPECT(v2.as<mType>() == mVal); \
-			v0 = Obj{}; \
-			v0["inner"] = v2; \
-			SSVUT_EXPECT(v0["inner"] == v2); \
-			auto sv0(v0.getWriteToStr()); \
-			auto sv2(v2.getWriteToStr()); \
-			auto osv0(Val::fromStr(sv0)); \
-			auto osv2(Val::fromStr(sv2)); \
-			SSVUT_EXPECT(v0 == osv0); \
-			SSVUT_EXPECT(v2 == osv2); \
-			SSVUT_EXPECT(v0["inner"] == osv2); \
-			SSVUT_EXPECT(osv0["inner"] == v2); \
-			SSVUT_EXPECT(osv0["inner"] == osv2); \
-		}
 
 	EXEC_TEST_BASIC(bool, true)
 	EXEC_TEST_BASIC(bool, false)
 	EXEC_TEST_BASIC(char, 'a')
 	EXEC_TEST_BASIC(int, 10)
 	EXEC_TEST_BASIC(long int, 10l)
+}
+
+SSVUT_TEST(SSVUJsonValTests2)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
+
 	EXEC_TEST_BASIC(unsigned char, static_cast<unsigned char>('a'))
 	EXEC_TEST_BASIC(unsigned int, 10u)
 	EXEC_TEST_BASIC(unsigned long int, 10ul)
 	EXEC_TEST_BASIC(float, 10.f)
 	EXEC_TEST_BASIC(double, 10.)
+}
+
+SSVUT_TEST(SSVUJsonValTests3)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
 
 	EXEC_TEST_BASIC(Str, "hello")
 	EXEC_TEST_BASIC(Str, "hello"s)
@@ -186,34 +199,41 @@ SSVUT_TEST(SSVUJsonValTests)
 		PP p{10, 15.5f, "ULTRA SWAG"s, 22, std::pair<double, int>{10.5, 99}, 0.f, std::tuple<int, int, int>{0, 1, 2}};
 		EXEC_TEST_BASIC(PP, p)
 	}
+}
 
-	// Equality with C-style arrays doesn't work
-	#define EXEC_TEST_C_ARRAY(mType, mVal) \
-	{ \
-		Val v0, v1, v2; \
-		v0 = mVal; \
-		SSVUT_EXPECT(v0.is<mType>()); \
-		v1 = v0; \
-		SSVUT_EXPECT(v1.is<mType>()); \
-		SSVUT_EXPECT(v0 == v1); \
-		v2 = std::move(v1); \
-		SSVUT_EXPECT(v2.is<mType>()); \
-		v0 = Obj{}; \
-		v0["inner"] = v2; \
-		SSVUT_EXPECT(v0["inner"] == v2); \
-		auto sv0(v0.getWriteToStr()); \
-		auto sv2(v2.getWriteToStr()); \
-		auto osv0(Val::fromStr(sv0)); \
-		auto osv2(Val::fromStr(sv2)); \
-		SSVUT_EXPECT(v0 == osv0); \
-		SSVUT_EXPECT(v2 == osv2); \
-		SSVUT_EXPECT(v0["inner"] == osv2); \
-		SSVUT_EXPECT(osv0["inner"] == v2); \
-		SSVUT_EXPECT(osv0["inner"] == osv2); \
-		auto s = v0.getWriteToStr(); \
-		auto fs = Val::fromStr(s); \
-		SSVUT_EXPECT(fs == v0); \
-	}
+// Equality with C-style arrays doesn't work
+#define EXEC_TEST_C_ARRAY(mType, mVal) \
+{ \
+	Val v0, v1, v2; \
+	v0 = mVal; \
+	SSVUT_EXPECT(v0.is<mType>()); \
+	v1 = v0; \
+	SSVUT_EXPECT(v1.is<mType>()); \
+	SSVUT_EXPECT(v0 == v1); \
+	v2 = std::move(v1); \
+	SSVUT_EXPECT(v2.is<mType>()); \
+	v0 = Obj{}; \
+	v0["inner"] = v2; \
+	SSVUT_EXPECT(v0["inner"] == v2); \
+	auto sv0(v0.getWriteToStr()); \
+	auto sv2(v2.getWriteToStr()); \
+	auto osv0(Val::fromStr(sv0)); \
+	auto osv2(Val::fromStr(sv2)); \
+	SSVUT_EXPECT(v0 == osv0); \
+	SSVUT_EXPECT(v2 == osv2); \
+	SSVUT_EXPECT(v0["inner"] == osv2); \
+	SSVUT_EXPECT(osv0["inner"] == v2); \
+	SSVUT_EXPECT(osv0["inner"] == osv2); \
+	auto s = v0.getWriteToStr(); \
+	auto fs = Val::fromStr(s); \
+	SSVUT_EXPECT(fs == v0); \
+}
+
+SSVUT_TEST(SSVUJsonValTests4)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
 
 	{
 		using PP = int[3];
@@ -238,11 +258,10 @@ SSVUT_TEST(SSVUJsonValTests)
 		PP p{std::vector<std::string>{"10", "20", "35"}, std::pair<std::vector<int>, std::vector<float>>{std::vector<int>{1, 2}, std::vector<float>{1.f, 2.f}}, 20, std::vector<int>{}};
 		EXEC_TEST_BASIC(PP, p)
 	}
-
-
-	#undef EXEC_TEST_BASIC
-	#undef EXEC_TEST_C_ARRAY
 }
+
+#undef EXEC_TEST_BASIC
+#undef EXEC_TEST_C_ARRAY
 
 SSVUT_TEST(SSVUJsonReadTests)
 {
@@ -318,84 +337,84 @@ SSVUT_TEST(SSVUJsonWriteTests)
 	SSVUT_EXPECT(minified == R"({"a":15,"b":{"c":null},"c":["x","y",10.5]})");
 }
 
-SSVUT_TEST(SSVUJsonConvertTests)
+#define EXEC_CV_TEST(mType, mBV) \
+	{ \
+		using Type = mType; \
+		Val vIn; \
+		const Type& in = mBV; \
+		convert(vIn, in); \
+		SSVUT_EXPECT(vIn.as<Type>() == mBV); \
+		const Val& vOut{static_cast<Type>(mBV)}; \
+		Type out; \
+		convert(vOut, out); \
+		SSVUT_EXPECT(out == mBV); \
+		auto s = vOut.getWriteToStr(); \
+		auto fs = Val::fromStr(s); \
+		SSVUT_EXPECT(fs == vOut); \
+		SSVUT_EXPECT(fs.is<Type>()); \
+		SSVUT_EXPECT(fs.as<Type>() == out); \
+		SSVUT_EXPECT(fs.as<Type>() == mBV); \
+		Val eaVal; \
+		arch(eaVal, mBV); \
+		SSVUT_EXPECT(eaVal.as<Type>() == mBV); \
+		Type eaOut; \
+		extr(eaVal, eaOut); \
+		SSVUT_EXPECT(eaOut == mBV); \
+		auto getEaVal(getArch(mBV)); \
+		SSVUT_EXPECT(getEaVal.as<Type>() == mBV); \
+		auto getEaOut(getExtr<Type>(getEaVal)); \
+		SSVUT_EXPECT(getEaOut == mBV); \
+	}
+
+#define EXEC_CV_TEST_ARR(mType, mBV0, mBV1, mBV2) \
+	{ \
+		using Type = mType; \
+		Val vIn; \
+		const Type& in0 = mBV0; \
+		const Type& in1 = mBV1; \
+		const Type& in2 = mBV2; \
+		convertArr(vIn, in0, in1, in2); \
+		SSVUT_EXPECT(vIn[0].as<Type>() == mBV0); \
+		SSVUT_EXPECT(vIn[1].as<Type>() == mBV1); \
+		SSVUT_EXPECT(vIn[2].as<Type>() == mBV2); \
+		const Val& vOut(vIn); \
+		Type out0, out1, out2; \
+		convertArr(vOut, out0, out1, out2); \
+		SSVUT_EXPECT(out0 == mBV0); \
+		SSVUT_EXPECT(out1 == mBV1); \
+		SSVUT_EXPECT(out2 == mBV2); \
+		auto s = vOut.getWriteToStr(); \
+		auto fs = Val::fromStr(s); \
+		SSVUT_EXPECT(fs == vOut); \
+	}
+
+#define EXEC_CV_TEST_OBJ(mType, mBV0, mBV1, mBV2) \
+	{ \
+		using Type = mType; \
+		Val vIn; \
+		const Type& in0 = mBV0; \
+		const Type& in1 = mBV1; \
+		const Type& in2 = mBV2; \
+		convertObj(vIn, "k0", in0, "k1", in1, "k2", in2); \
+		SSVUT_EXPECT(vIn["k0"].as<Type>() == mBV0); \
+		SSVUT_EXPECT(vIn["k1"].as<Type>() == mBV1); \
+		SSVUT_EXPECT(vIn["k2"].as<Type>() == mBV2); \
+		const Val& vOut(vIn); \
+		Type out0, out1, out2; \
+		convertObj(vOut, "k0", out0, "k1", out1, "k2", out2); \
+		SSVUT_EXPECT(out0 == mBV0); \
+		SSVUT_EXPECT(out1 == mBV1); \
+		SSVUT_EXPECT(out2 == mBV2); \
+		auto s = vOut.getWriteToStr(); \
+		auto fs = Val::fromStr(s); \
+		SSVUT_EXPECT(fs == vOut); \
+	}
+
+SSVUT_TEST(SSVUJsonConvertTests1)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
 	using namespace ssvu::Json::Internal;
-
-	#define EXEC_CV_TEST(mType, mBV) \
-		{ \
-			using Type = mType; \
-			Val vIn; \
-			const Type& in = mBV; \
-			convert(vIn, in); \
-			SSVUT_EXPECT(vIn.as<Type>() == mBV); \
-			const Val& vOut{static_cast<Type>(mBV)}; \
-			Type out; \
-			convert(vOut, out); \
-			SSVUT_EXPECT(out == mBV); \
-			auto s = vOut.getWriteToStr(); \
-			auto fs = Val::fromStr(s); \
-			SSVUT_EXPECT(fs == vOut); \
-			SSVUT_EXPECT(fs.is<Type>()); \
-			SSVUT_EXPECT(fs.as<Type>() == out); \
-			SSVUT_EXPECT(fs.as<Type>() == mBV); \
-			Val eaVal; \
-			arch(eaVal, mBV); \
-			SSVUT_EXPECT(eaVal.as<Type>() == mBV); \
-			Type eaOut; \
-			extr(eaVal, eaOut); \
-			SSVUT_EXPECT(eaOut == mBV); \
-			auto getEaVal(getArch(mBV)); \
-			SSVUT_EXPECT(getEaVal.as<Type>() == mBV); \
-			auto getEaOut(getExtr<Type>(getEaVal)); \
-			SSVUT_EXPECT(getEaOut == mBV); \
-		}
-
-	#define EXEC_CV_TEST_ARR(mType, mBV0, mBV1, mBV2) \
-		{ \
-			using Type = mType; \
-			Val vIn; \
-			const Type& in0 = mBV0; \
-			const Type& in1 = mBV1; \
-			const Type& in2 = mBV2; \
-			convertArr(vIn, in0, in1, in2); \
-			SSVUT_EXPECT(vIn[0].as<Type>() == mBV0); \
-			SSVUT_EXPECT(vIn[1].as<Type>() == mBV1); \
-			SSVUT_EXPECT(vIn[2].as<Type>() == mBV2); \
-			const Val& vOut(vIn); \
-			Type out0, out1, out2; \
-			convertArr(vOut, out0, out1, out2); \
-			SSVUT_EXPECT(out0 == mBV0); \
-			SSVUT_EXPECT(out1 == mBV1); \
-			SSVUT_EXPECT(out2 == mBV2); \
-			auto s = vOut.getWriteToStr(); \
-			auto fs = Val::fromStr(s); \
-			SSVUT_EXPECT(fs == vOut); \
-		}
-
-	#define EXEC_CV_TEST_OBJ(mType, mBV0, mBV1, mBV2) \
-		{ \
-			using Type = mType; \
-			Val vIn; \
-			const Type& in0 = mBV0; \
-			const Type& in1 = mBV1; \
-			const Type& in2 = mBV2; \
-			convertObj(vIn, "k0", in0, "k1", in1, "k2", in2); \
-			SSVUT_EXPECT(vIn["k0"].as<Type>() == mBV0); \
-			SSVUT_EXPECT(vIn["k1"].as<Type>() == mBV1); \
-			SSVUT_EXPECT(vIn["k2"].as<Type>() == mBV2); \
-			const Val& vOut(vIn); \
-			Type out0, out1, out2; \
-			convertObj(vOut, "k0", out0, "k1", out1, "k2", out2); \
-			SSVUT_EXPECT(out0 == mBV0); \
-			SSVUT_EXPECT(out1 == mBV1); \
-			SSVUT_EXPECT(out2 == mBV2); \
-			auto s = vOut.getWriteToStr(); \
-			auto fs = Val::fromStr(s); \
-			SSVUT_EXPECT(fs == vOut); \
-		}
 
 	EXEC_CV_TEST(bool, true)
 	EXEC_CV_TEST(bool, false)
@@ -407,6 +426,13 @@ SSVUT_TEST(SSVUJsonConvertTests)
 	EXEC_CV_TEST(unsigned long int, 10ul)
 	EXEC_CV_TEST(float, 10.f)
 	EXEC_CV_TEST(double, 10.)
+}
+
+SSVUT_TEST(SSVUJsonConvertTests2)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
 
 	EXEC_CV_TEST_ARR(bool, true, true, false)
 	EXEC_CV_TEST_ARR(bool, false, false, true)
@@ -418,6 +444,13 @@ SSVUT_TEST(SSVUJsonConvertTests)
 	EXEC_CV_TEST_ARR(unsigned long int, 10ul, 22u, 314u)
 	EXEC_CV_TEST_ARR(float, 10.f, 5.f, 0.f)
 	EXEC_CV_TEST_ARR(double, 10., 5.5, 1.2)
+}
+
+SSVUT_TEST(SSVUJsonConvertTests3)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
 
 	EXEC_CV_TEST_OBJ(bool, true, true, false)
 	EXEC_CV_TEST_OBJ(bool, false, false, true)
@@ -429,44 +462,49 @@ SSVUT_TEST(SSVUJsonConvertTests)
 	EXEC_CV_TEST_OBJ(unsigned long int, 10ul, 22u, 314u)
 	EXEC_CV_TEST_OBJ(float, 10.f, 5.f, 0.f)
 	EXEC_CV_TEST_OBJ(double, 10., 5.5, 1.2)
-
-	#undef EXEC_CV_TEST
-	#undef EXEC_CV_TEST_ARR
-	#undef EXEC_CV_TEST_OBJ
-
-	{
-		// Simulation of converting a struct
-		int f0{10};
-		float f1{5.5f};
-		std::vector<std::pair<float, double>> f2
-		{
-			{5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}
-		};
-		std::string f3{"yo"};
-		std::tuple<std::string, int, int> f4{"hey", 5, 10};
-
-		Val vIn;
-		convertObj(vIn, "f0", f0, "f1", f1, "f2", f2, "f3", f3, "f4", f4);
-		SSVUT_EXPECT(f0 == vIn["f0"].as<decltype(f0)>());
-		SSVUT_EXPECT(f1 == vIn["f1"].as<decltype(f1)>());
-		SSVUT_EXPECT(f2 == vIn["f2"].as<decltype(f2)>());
-		SSVUT_EXPECT(f3 == vIn["f3"].as<decltype(f3)>());
-		SSVUT_EXPECT(f4 == vIn["f4"].as<decltype(f4)>());
-		const Val& vOut(vIn);
-		decltype(f0) of0;
-		decltype(f1) of1;
-		decltype(f2) of2;
-		decltype(f3) of3;
-		decltype(f4) of4;
-		convertObj(vOut, "f0", of0, "f1", of1, "f2", of2, "f3", of3, "f4", of4);
-		SSVUT_EXPECT(f0 == of0);
-		SSVUT_EXPECT(f1 == of1);
-		SSVUT_EXPECT(f2 == of2);
-		SSVUT_EXPECT(f3 == of3);
-		SSVUT_EXPECT(f4 == of4);
-	}
 }
 
+#undef EXEC_CV_TEST
+#undef EXEC_CV_TEST_ARR
+#undef EXEC_CV_TEST_OBJ
+
+SSVUT_TEST(SSVUJsonConvertTests4)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
+
+
+	// Simulation of converting a struct
+	int f0{10};
+	float f1{5.5f};
+	std::vector<std::pair<float, double>> f2
+	{
+		{5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}
+	};
+	std::string f3{"yo"};
+	std::tuple<std::string, int, int> f4{"hey", 5, 10};
+
+	Val vIn;
+	convertObj(vIn, "f0", f0, "f1", f1, "f2", f2, "f3", f3, "f4", f4);
+	SSVUT_EXPECT(f0 == vIn["f0"].as<decltype(f0)>());
+	SSVUT_EXPECT(f1 == vIn["f1"].as<decltype(f1)>());
+	SSVUT_EXPECT(f2 == vIn["f2"].as<decltype(f2)>());
+	SSVUT_EXPECT(f3 == vIn["f3"].as<decltype(f3)>());
+	SSVUT_EXPECT(f4 == vIn["f4"].as<decltype(f4)>());
+	const Val& vOut(vIn);
+	decltype(f0) of0;
+	decltype(f1) of1;
+	decltype(f2) of2;
+	decltype(f3) of3;
+	decltype(f4) of4;
+	convertObj(vOut, "f0", of0, "f1", of1, "f2", of2, "f3", of3, "f4", of4);
+	SSVUT_EXPECT(f0 == of0);
+	SSVUT_EXPECT(f1 == of1);
+	SSVUT_EXPECT(f2 == of2);
+	SSVUT_EXPECT(f3 == of3);
+	SSVUT_EXPECT(f4 == of4);
+}
 
 namespace ssvu
 {
@@ -503,7 +541,6 @@ namespace ssvu
 			}
 			SSVJ_CNV_END();
 		}
-
 	}
 }
 
