@@ -53,7 +53,6 @@ namespace ssvu
 					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::mType); } \
 				};
 
-			// TODO: make stashed changes work
 			SSVU_JSON_DEFINE_CHECKER_NUM(char)
 			SSVU_JSON_DEFINE_CHECKER_NUM(int)
 			SSVU_JSON_DEFINE_CHECKER_NUM(long int)

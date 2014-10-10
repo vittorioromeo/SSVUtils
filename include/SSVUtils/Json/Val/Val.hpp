@@ -129,6 +129,12 @@ namespace ssvu
 					return Internal::Checker<RemoveAll<T>>::is(*this);
 				}
 
+				// Check if it's Num and stored type
+				template<typename T> inline bool isNum() const noexcept
+				{
+					return is<Num>() && getNum().isStoredAs<T>();
+				}
+
 				// "Explicit" `as` function gets the inner contents of the value
 				template<typename T> decltype(auto) as();
 				template<typename T> decltype(auto) as() const;

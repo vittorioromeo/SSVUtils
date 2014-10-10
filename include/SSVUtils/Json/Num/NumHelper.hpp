@@ -30,6 +30,10 @@ namespace ssvu
 			SSVU_JSON_DEFINE_NUMHELPER(double, Real)
 
 			#undef SSVU_JSON_DEFINE_NUMHELPER
+
+			template<> struct ReprHelper<IntS> { inline static auto get() { return Num::Type::IntS; } };
+			template<> struct ReprHelper<IntU> { inline static auto get() { return Num::Type::IntU; } };
+			template<> struct ReprHelper<Real> { inline static auto get() { return Num::Type::Real; } };
 		}
 	}
 }
