@@ -16,7 +16,6 @@ namespace ssvu
 			template<typename> struct Cnv;
 			template<typename> struct Checker;
 			template<typename> struct AsHelper;
-			template<typename> struct ValMoveHelper;
 
 			namespace Impl
 			{

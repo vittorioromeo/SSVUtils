@@ -17,7 +17,6 @@ namespace ssvu
 			template<typename T> friend struct Internal::Cnv;
 			template<typename T> friend struct Internal::Checker;
 			template<typename T> friend struct Internal::AsHelper;
-			template<typename T> friend struct Internal::ValMoveHelper;
 			friend struct Internal::Impl::TplHelper;
 			friend struct Internal::Impl::IsTplHelper;
 
@@ -103,8 +102,6 @@ namespace ssvu
 						case Type::Bln: setBln(mV.getBln()); break;
 						case Type::Nll: setNll(Nll{}); break;
 					}
-
-					Internal::ValMoveHelper<decltype(mV)>::exec(fwd<T>(mV));
 
 					setClean(false);
 				}
@@ -225,13 +222,6 @@ namespace ssvu
 
 		using Obj = Val::Obj;
 		using Arr = Val::Arr;
-
-		namespace Internal
-		{
-			template<> struct ValMoveHelper<const Val&>	{ inline static void exec(const Val&) noexcept { } };
-			template<> struct ValMoveHelper<Val&>		{ inline static void exec(Val&) noexcept { } };
-			template<> struct ValMoveHelper<Val&&>		{ inline static void exec(Val&& mV) noexcept { mV.type = Val::Type::Nll; } };
-		}
 	}
 }
 
