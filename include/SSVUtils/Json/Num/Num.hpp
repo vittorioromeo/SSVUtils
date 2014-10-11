@@ -11,18 +11,24 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			template<typename T> struct NumHelper;
-			template<typename T> struct ReprHelper;
+			/// @brief Helper template for `Num` setters and getters.
+			template<typename> struct NumHelper;
 
+			/// @briewf Helper template to convert numeric types to representation types.
+			template<typename> struct ReprHelper;
+
+			/// @brief Internal class dedicated to the storage of numeric values.
 			class Num
 			{
-				template<typename T> friend struct Internal::NumHelper;
+				template<typename> friend struct Internal::NumHelper;
 
 				public:
-					enum class Type{IntS, IntU, Real};
+					/// @brief Representation/storage type of numeric values.
+					enum class Repr{IntS, IntU, Real};
 
 				private:
-					Type type;
+					/// @brief Current representation in use.
+					Repr repr;
 
 					union Holder
 					{
@@ -31,60 +37,71 @@ namespace ssvu
 						Real hReal;
 					} h;
 
-					inline void setIntS(const IntU& mX) noexcept { type = Type::IntS; h.hIntS = mX; }
-					inline void setIntU(const IntS& mX) noexcept { type = Type::IntU; h.hIntU = mX; }
-					inline void setReal(const Real& mX) noexcept { type = Type::Real; h.hReal = mX; }
+					// Union setters
+					inline void setIntS(const IntU& mX) noexcept { repr = Repr::IntS; h.hIntS = mX; }
+					inline void setIntU(const IntS& mX) noexcept { repr = Repr::IntU; h.hIntU = mX; }
+					inline void setReal(const Real& mX) noexcept { repr = Repr::Real; h.hReal = mX; }
 
+					/// @brief Returns the stored value as an `IntS`. The value is copied and casted if necessary.
 					inline IntS getIntS() const noexcept
 					{
-						switch(type)
+						switch(repr)
 						{
-							case Type::IntS: return h.hIntS;
-							case Type::IntU: return static_cast<IntS>(h.hIntU);
-							case Type::Real: return static_cast<IntS>(h.hReal);
+							case Repr::IntS: return h.hIntS;
+							case Repr::IntU: return static_cast<IntS>(h.hIntU);
+							case Repr::Real: return static_cast<IntS>(h.hReal);
 							default: SSVU_UNREACHABLE();
 						}
 					}
 
+					/// @brief Returns the stored value as an `IntU`. The value is copied and casted if necessary.
 					inline IntU getIntU() const noexcept
 					{
-						switch(type)
+						switch(repr)
 						{
-							case Type::IntS: return static_cast<IntU>(h.hIntS);
-							case Type::IntU: return h.hIntU;
-							case Type::Real: return static_cast<IntU>(h.hReal);
+							case Repr::IntS: return static_cast<IntU>(h.hIntS);
+							case Repr::IntU: return h.hIntU;
+							case Repr::Real: return static_cast<IntU>(h.hReal);
 							default: SSVU_UNREACHABLE();
 						}
 					}
 
+					/// @brief Returns the stored value as a `Real`. The value is copied and casted if necessary.
 					inline Real getReal() const noexcept
 					{
-						switch(type)
+						switch(repr)
 						{
-							case Type::IntS: return static_cast<Real>(h.hIntS);
-							case Type::IntU: return static_cast<Real>(h.hIntU);
-							case Type::Real: return h.hReal;
+							case Repr::IntS: return static_cast<Real>(h.hIntS);
+							case Repr::IntU: return static_cast<Real>(h.hIntU);
+							case Repr::Real: return h.hReal;
 							default: SSVU_UNREACHABLE();
 						}
 					}
 
 				public:
 					inline Num() noexcept = default;
+
+					/// @brief Constructs `Num` from the number `mX`.
 					template<typename T> inline Num(const T& mX) noexcept { set<T>(mX); }
 
-					template<typename T> inline void set(const T& mX) noexcept		{ Internal::NumHelper<T>::set(*this, mX); }
-					template<typename T> inline auto as() const noexcept			{ return Internal::NumHelper<T>::as(*this); }
-					template<typename T> inline bool isStoredAs() const noexcept	{ return getType() == ReprHelper<T>::get(); }
+					/// @brief Sets the stored number to `mX`. Representation may change depending on `mX`'s type.
+					template<typename T> inline void set(const T& mX) noexcept { Internal::NumHelper<T>::set(*this, mX); }
 
-					inline auto getType() const noexcept { return type; }
+					/// @brief Returns a copy of the stored number, as a `T`. Representation will not change.
+					/// @details The internal number will not change. The copy will be casted, if necessary.
+					template<typename T> inline auto as() const noexcept { return Internal::NumHelper<T>::as(*this); }
 
+					/// @brief Returns the current representation type.
+					inline auto getRepr() const noexcept { return repr; }
+
+					// Equality/inequality
 					inline bool operator==(const Num& mN) const noexcept
 					{
-						switch(type)
+						switch(repr)
 						{
-							case Type::IntS: return getIntS() == mN.getIntS();
-							case Type::IntU: return getIntU() == mN.getIntU();
-							case Type::Real: return getReal() == mN.getReal();
+							case Repr::IntS: return getIntS() == mN.getIntS();
+							case Repr::IntU: return getIntU() == mN.getIntU();
+							case Repr::Real: return getReal() == mN.getReal();
 							default: SSVU_UNREACHABLE();
 						}
 					}

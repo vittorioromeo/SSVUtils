@@ -70,15 +70,15 @@ SSVUT_TEST(SSVUJsonNumTests)
 		Num n;
 
 		n.set(10);
-		SSVUT_EXPECT(n.getType() == Num::Type::IntS);
+		SSVUT_EXPECT(n.getRepr() == Num::Repr::IntS);
 		EXEC_NUM_TESTS()
 
 		n.set(10u);
-		SSVUT_EXPECT(n.getType() == Num::Type::IntU);
+		SSVUT_EXPECT(n.getRepr() == Num::Repr::IntU);
 		EXEC_NUM_TESTS()
 
 		n.set(10.f);
-		SSVUT_EXPECT(n.getType() == Num::Type::Real);
+		SSVUT_EXPECT(n.getRepr() == Num::Repr::Real);
 		EXEC_NUM_TESTS()
 	}
 
@@ -91,19 +91,19 @@ SSVUT_TEST(SSVUJsonNumTests)
 	SSVUT_EXPECT(nf == nd);
 }
 
-#define EXEC_TEST_BASIC(mType, mVal) \
+#define EXEC_TEST_BASIC_IMPL(mType, mVal, mRepr) \
 	{ \
 		Val v0, v1, v2; \
 		v0 = mVal; \
-		SSVUT_EXPECT(v0.is<mType>()); \
+		SSVUT_EXPECT(v0.is<mRepr>()); \
 		v1 = v0; \
-		SSVUT_EXPECT(v1.is<mType>()); \
+		SSVUT_EXPECT(v1.is<mRepr>()); \
 		SSVUT_EXPECT(v0.as<Val>() == v0); \
 		SSVUT_EXPECT(v0.as<mType>() == mVal); \
 		SSVUT_EXPECT(v1.as<mType>() == mVal); \
 		SSVUT_EXPECT(v0 == v1); \
 		v2 = std::move(v1); \
-		SSVUT_EXPECT(v2.is<mType>()); \
+		SSVUT_EXPECT(v2.is<mRepr>()); \
 		SSVUT_EXPECT(v2.as<mType>() == mVal); \
 		v0 = Obj{}; \
 		v0["inner"] = v2; \
@@ -119,6 +119,8 @@ SSVUT_TEST(SSVUJsonNumTests)
 		SSVUT_EXPECT(osv0["inner"] == osv2); \
 	}
 
+#define EXEC_TEST_BASIC(mType, mVal) EXEC_TEST_BASIC_IMPL(mType, mVal, mType)
+
 SSVUT_TEST(SSVUJsonValTests1)
 {
 	using namespace ssvu;
@@ -127,9 +129,9 @@ SSVUT_TEST(SSVUJsonValTests1)
 
 	EXEC_TEST_BASIC(bool, true)
 	EXEC_TEST_BASIC(bool, false)
-	EXEC_TEST_BASIC(char, 'a')
-	EXEC_TEST_BASIC(int, 10)
-	EXEC_TEST_BASIC(long int, 10l)
+	EXEC_TEST_BASIC_IMPL(char, 'a', IntS)
+	EXEC_TEST_BASIC_IMPL(int, 10, IntS)
+	EXEC_TEST_BASIC_IMPL(long int, 10l, IntS)
 }
 
 SSVUT_TEST(SSVUJsonValTests2)
@@ -138,11 +140,11 @@ SSVUT_TEST(SSVUJsonValTests2)
 	using namespace ssvu::Json;
 	using namespace ssvu::Json::Internal;
 
-	EXEC_TEST_BASIC(unsigned char, static_cast<unsigned char>('a'))
-	EXEC_TEST_BASIC(unsigned int, 10u)
-	EXEC_TEST_BASIC(unsigned long int, 10ul)
-	EXEC_TEST_BASIC(float, 10.f)
-	EXEC_TEST_BASIC(double, 10.)
+	EXEC_TEST_BASIC_IMPL(unsigned char, static_cast<unsigned char>('a'), IntU)
+	EXEC_TEST_BASIC_IMPL(unsigned int, 10u, IntU)
+	EXEC_TEST_BASIC_IMPL(unsigned long int, 10ul, IntU)
+	EXEC_TEST_BASIC_IMPL(float, 10.f, Real)
+	EXEC_TEST_BASIC_IMPL(double, 10., Real)
 }
 
 SSVUT_TEST(SSVUJsonValTests3)
@@ -351,7 +353,6 @@ SSVUT_TEST(SSVUJsonWriteTests)
 		auto s = vOut.getWriteToStr(); \
 		auto fs = Val::fromStr(s); \
 		SSVUT_EXPECT(fs == vOut); \
-		SSVUT_EXPECT(fs.is<Type>()); \
 		SSVUT_EXPECT(fs.as<Type>() == out); \
 		SSVUT_EXPECT(fs.as<Type>() == mBV); \
 		Val eaVal; \
@@ -506,43 +507,38 @@ SSVUT_TEST(SSVUJsonConvertTests4)
 	SSVUT_EXPECT(f4 == of4);
 }
 
-namespace ssvu
+SSVJ_CNV_NAMESPACE()
 {
-	namespace Json
+	struct __ssvjTestStruct
 	{
-		namespace Internal
+		SSVJ_CNV_FRIEND();
+
+		int f0{10};
+		float f1{5.5f};
+		std::vector<std::pair<float, double>> f2
 		{
-			struct __ssvjTestStruct
-			{
-				SSVJ_CNV_FRIEND();
+			{5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}
+		};
+		std::string f3{"yo"};
+		std::tuple<std::string, int, int> f4{"hey", 5, 10};
 
-				int f0{10};
-				float f1{5.5f};
-				std::vector<std::pair<float, double>> f2
-				{
-					{5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}
-				};
-				std::string f3{"yo"};
-				std::tuple<std::string, int, int> f4{"hey", 5, 10};
-
-				inline bool operator==(const __ssvjTestStruct& mT) const noexcept
-				{
-					return f0 == mT.f0
-						&& f1 == mT.f1
-						&& f2 == mT.f2
-						&& f3 == mT.f3
-						&& f4 == mT.f4;
-				}
-			};
-
-			template<> SSVJ_CNV_SIMPLE(__ssvjTestStruct, mV, mX)
-			{
-				ssvj::convertArr(mV, mX.f0, mX.f1, mX.f2, mX.f3, mX.f4);
-			}
-			SSVJ_CNV_END();
+		inline bool operator==(const __ssvjTestStruct& mT) const noexcept
+		{
+			return f0 == mT.f0
+				&& f1 == mT.f1
+				&& f2 == mT.f2
+				&& f3 == mT.f3
+				&& f4 == mT.f4;
 		}
+	};
+
+	template<> SSVJ_CNV_SIMPLE(__ssvjTestStruct, mV, mX)
+	{
+		ssvj::convertArr(mV, mX.f0, mX.f1, mX.f2, mX.f3, mX.f4);
 	}
+	SSVJ_CNV_END()
 }
+SSVJ_CNV_NAMESPACE_END()
 
 SSVUT_TEST(SSVUJsonCnvTest)
 {

@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_JSON_VAL_INTERNAL_COPIER
-#define SSVU_JSON_VAL_INTERNAL_COPIER
+#ifndef SSVU_JSON_VAL_INTERNAL_ASHELPER
+#define SSVU_JSON_VAL_INTERNAL_ASHELPER
 
 namespace ssvu
 {

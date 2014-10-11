@@ -22,5 +22,4 @@
 // TODO: bottleneck: readStr reserve
 //       don't use exceptions and noexcept everything? (?)
 //       dispatch iteration based on types for obj and arr
-//       custom type support
 //       docs

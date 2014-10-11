@@ -123,11 +123,11 @@ namespace ssvu
 					{
 						wFmt(FmtCC::LightRed);
 
-						switch(mNum.getType())
+						switch(mNum.getRepr())
 						{
-							case Num::Type::IntS: wOut(toStr(mNum.as<IntS>())); break;
-							case Num::Type::IntU: wOut(toStr(mNum.as<IntU>())); break;
-							case Num::Type::Real: wOut(toStr(mNum.as<Real>())); break;
+							case Num::Repr::IntS: wOut(toStr(mNum.as<IntS>())); break;
+							case Num::Repr::IntU: wOut(toStr(mNum.as<IntU>())); break;
+							case Num::Repr::Real: wOut(toStr(mNum.as<Real>())); break;
 						}
 					}
 

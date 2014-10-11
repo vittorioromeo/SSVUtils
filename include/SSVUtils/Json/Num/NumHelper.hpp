@@ -11,29 +11,33 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			#define SSVU_JSON_DEFINE_NUMHELPER(mType, mRepresentation) \
+			#define SSVJ_DEFINE_NUMHELPER(mType, mRepr) \
 				template<> struct NumHelper<mType> \
 				{ \
-					inline static void set(Num& mN, const mType& mX) noexcept { return SSVPP_CAT(mN.set, mRepresentation)(mX); } \
-					inline static auto as(const Num& mN) noexcept { return static_cast<mType>(SSVPP_CAT(mN.get, mRepresentation)()); } \
+					inline static void set(Num& mN, const mType& mX) noexcept { return SSVPP_CAT(mN.set, mRepr)(mX); } \
+					inline static auto as(const Num& mN) noexcept { return static_cast<mType>(SSVPP_CAT(mN.get, mRepr)()); } \
 				};
 
-			SSVU_JSON_DEFINE_NUMHELPER(char, IntS)
-			SSVU_JSON_DEFINE_NUMHELPER(int, IntS)
-			SSVU_JSON_DEFINE_NUMHELPER(long int, IntS)
+			#define SSVJ_DEFINE_REPRHELPER(mType) \
+				template<> struct ReprHelper<mType> { inline static auto get() { return SSVPP_EXPAND(Num::Repr::mType); } };
 
-			SSVU_JSON_DEFINE_NUMHELPER(unsigned char, IntU)
-			SSVU_JSON_DEFINE_NUMHELPER(unsigned int, IntU)
-			SSVU_JSON_DEFINE_NUMHELPER(unsigned long int, IntU)
+			// Define helpers to set/get numeric types to/from specific representations
+			SSVJ_DEFINE_NUMHELPER(char, IntS)
+			SSVJ_DEFINE_NUMHELPER(int, IntS)
+			SSVJ_DEFINE_NUMHELPER(long int, IntS)
+			SSVJ_DEFINE_NUMHELPER(unsigned char, IntU)
+			SSVJ_DEFINE_NUMHELPER(unsigned int, IntU)
+			SSVJ_DEFINE_NUMHELPER(unsigned long int, IntU)
+			SSVJ_DEFINE_NUMHELPER(float, Real)
+			SSVJ_DEFINE_NUMHELPER(double, Real)
 
-			SSVU_JSON_DEFINE_NUMHELPER(float, Real)
-			SSVU_JSON_DEFINE_NUMHELPER(double, Real)
+			// Define helpers to get representation types from numeric types
+			SSVJ_DEFINE_REPRHELPER(IntS)
+			SSVJ_DEFINE_REPRHELPER(IntU)
+			SSVJ_DEFINE_REPRHELPER(Real)
 
-			#undef SSVU_JSON_DEFINE_NUMHELPER
-
-			template<> struct ReprHelper<IntS> { inline static auto get() { return Num::Type::IntS; } };
-			template<> struct ReprHelper<IntU> { inline static auto get() { return Num::Type::IntU; } };
-			template<> struct ReprHelper<Real> { inline static auto get() { return Num::Type::Real; } };
+			#undef SSVJ_DEFINE_NUMHELPER
+			#undef SSVJ_DEFINE_REPRHELPER
 		}
 	}
 }
