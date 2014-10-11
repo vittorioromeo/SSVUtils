@@ -13,7 +13,7 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		inline void assertImpl(AssertData mAD, bool mExpression, const std::string& mMsg) noexcept
+		inline void assertImpl(AssertData&& mAD, bool mExpression, const std::string& mMsg) noexcept
 		{
 			if(SSVU_LIKELY(mExpression)) return;
 

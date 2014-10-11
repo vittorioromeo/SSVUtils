@@ -48,7 +48,7 @@
 
 			/// @brief Assert implementation: if mExpression is false, the assertion fires.
 			/// @details Called via the SSVU_ASSERT macro.
-			void assertImpl(AssertData mAD, bool mExpression, const std::string& mMsg = "") noexcept;
+			void assertImpl(AssertData&& mAD, bool mExpression, const std::string& mMsg = "") noexcept;
 		}
 	}
 
@@ -61,7 +61,7 @@
 			ad.code = SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), __VA_ARGS__); \
 			ad.line = SSVPP_TOSTR(__LINE__); \
 			ad.file = __FILE__; \
-			::ssvu::Internal::assertImpl(ad, __VA_ARGS__); \
+			::ssvu::Internal::assertImpl(std::move(ad), __VA_ARGS__); \
 		} while(false)
 
 	// TODO: BUG: gcc - doesn't work yet
