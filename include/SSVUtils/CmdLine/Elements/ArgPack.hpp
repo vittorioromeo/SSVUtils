@@ -16,7 +16,7 @@ namespace ssvu
 
 			public:
 				inline ArgPack() = default;
-				inline ArgPack(std::size_t mMin, std::size_t mMax) noexcept : BaseArgPack{mMin, mMax} { }
+				inline ArgPack(SizeT mMin, SizeT mMax) noexcept : BaseArgPack{mMin, mMax} { }
 
 				inline void set(const std::vector<std::string>& mValues) override
 				{

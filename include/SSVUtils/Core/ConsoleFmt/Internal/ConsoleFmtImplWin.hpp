@@ -18,7 +18,7 @@ namespace ssvu
 		{
 			// TODO: fix (http://www.cplusplus.com/articles/2ywTURfi/)
 
-			inline int getColorCode(std::size_t mIdx) noexcept
+			inline int getColorCode(SizeT mIdx) noexcept
 			{
 				static int codes[]
 				{
@@ -100,7 +100,7 @@ namespace ssvu
 
 			struct InfoImpl
 			{
-				std::size_t columns, rows;
+				SizeT columns, rows;
 
 				inline InfoImpl()
 				{
@@ -118,8 +118,8 @@ namespace ssvu
 
 			namespace Info
 			{
-				inline std::size_t getColumnCount() noexcept	{ return getInfoImpl().columns; }
-				inline std::size_t getRowCount() noexcept		{ return getInfoImpl().rows; }
+				inline SizeT getColumnCount() noexcept	{ return getInfoImpl().columns; }
+				inline SizeT getRowCount() noexcept		{ return getInfoImpl().rows; }
 			}
 		}
 	}

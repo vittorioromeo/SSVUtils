@@ -22,7 +22,7 @@ namespace ssvu
 		/// @brief Implementation of the "cout-like" `lo()` object type.
 		struct LOut
 		{
-			static constexpr std::size_t leftW{38};
+			static constexpr SizeT leftW{38};
 
 			std::mutex mtx;
 			std::string title;

@@ -23,8 +23,8 @@ namespace ssvu
 
 			namespace Info
 			{
-				inline std::size_t getColumnCount() noexcept	{ return 80; }
-				inline std::size_t getRowCount() noexcept		{ return 50; }
+				inline SizeT getColumnCount() noexcept	{ return 80; }
+				inline SizeT getRowCount() noexcept		{ return 50; }
 			}
 		}
 	}

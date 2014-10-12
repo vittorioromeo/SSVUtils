@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<std::size_t N> struct Exploder
+		template<SizeT N> struct Exploder
 		{
 			template<typename TF, typename T, typename... TArgs> inline static auto explode(TF&& mF, T&& mT, TArgs&&... mArgs)
 			{

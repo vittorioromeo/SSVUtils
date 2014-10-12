@@ -139,7 +139,7 @@ namespace ssvu
 
 			struct InfoImpl
 			{
-				std::size_t columns, rows;
+				SizeT columns, rows;
 
 				inline InfoImpl()
 				{
@@ -156,8 +156,8 @@ namespace ssvu
 
 			namespace Info
 			{
-				inline std::size_t getColumnCount() noexcept	{ return getInfoImpl().columns; }
-				inline std::size_t getRowCount() noexcept		{ return getInfoImpl().rows; }
+				inline SizeT getColumnCount() noexcept	{ return getInfoImpl().columns; }
+				inline SizeT getRowCount() noexcept		{ return getInfoImpl().rows; }
 			}
 		}
 	}

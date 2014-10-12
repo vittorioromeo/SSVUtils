@@ -33,7 +33,7 @@ namespace ssvu
 		template<typename T> struct SplitFindHelper;
 		template<> struct SplitFindHelper<char> : public SplitFindHelperDefault<char> { };
 		template<> struct SplitFindHelper<std::string> : public SplitFindHelperDefault<std::string> { };
-		template<std::size_t TN> struct SplitFindHelper<char[TN]>
+		template<SizeT TN> struct SplitFindHelper<char[TN]>
 		{
 			inline static StringSize getNextIdx(const std::string& mStr, const char(&mSeparator)[TN], StringSize mStart)
 			{
@@ -44,7 +44,7 @@ namespace ssvu
 
 		template<typename T, Split TM> struct SplitHelperImpl
 		{
-			inline static void split(std::vector<std::string>& mTarget, const std::string& mStr, const T& mSeparator, std::size_t mSeparatorSize)
+			inline static void split(std::vector<std::string>& mTarget, const std::string& mStr, const T& mSeparator, SizeT mSeparatorSize)
 			{
 				StringSize pos{0}, startAt{0};
 				std::string token;
@@ -75,7 +75,7 @@ namespace ssvu
 				SplitHelperImpl<char, TM>::split(mTarget, mStr, mSeparator, 1);
 			}
 		};
-		template<Split TM, std::size_t TN> struct SplitHelper<char[TN], TM>
+		template<Split TM, SizeT TN> struct SplitHelper<char[TN], TM>
 		{
 			inline static void split(std::vector<std::string>& mTarget, const std::string& mStr, const char(&mSeparator)[TN])
 			{

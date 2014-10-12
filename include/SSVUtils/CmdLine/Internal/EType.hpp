@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		enum class EType : std::size_t {Arg, ArgOpt, ArgPack, Flag, FlagValue, FlagValueOpt};
+		enum class EType : SizeT {Arg, ArgOpt, ArgPack, Flag, FlagValue, FlagValueOpt};
 
 		namespace Internal
 		{

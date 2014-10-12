@@ -26,13 +26,13 @@ namespace ssvu
 			class ManagerElements
 			{
 				private:
-					static constexpr std::size_t maxTypes{50};
+					static constexpr SizeT maxTypes{50};
 					PolyFixedRecycler<BaseElement, maxTypes> recycler;
 					std::vector<decltype(recycler)::PtrType> elements;
 					std::array<std::vector<BaseElement*>, maxTypes> groupedElements;
 
-					template<EType TET> inline auto& getGroupVec() noexcept				{ return groupedElements[static_cast<std::size_t>(TET)]; }
-					template<EType TET> inline const auto& getGroupVec() const noexcept	{ return groupedElements[static_cast<std::size_t>(TET)]; }
+					template<EType TET> inline auto& getGroupVec() noexcept				{ return groupedElements[static_cast<SizeT>(TET)]; }
+					template<EType TET> inline const auto& getGroupVec() const noexcept	{ return groupedElements[static_cast<SizeT>(TET)]; }
 
 				public:
 					template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs)
@@ -50,8 +50,8 @@ namespace ssvu
 					template<EType TET> inline auto& getAll() noexcept				{ return getGroupVec<TET>(); }
 					template<EType TET> inline const auto& getAll() const noexcept	{ return getGroupVec<TET>(); }
 
-					template<EType TET> inline auto& getAt(std::size_t mIdx) noexcept				{ return castUp<ETypeBase<TET>>(*getAll<TET>()[mIdx]); }
-					template<EType TET> inline const auto& getAt(std::size_t mIdx) const noexcept	{ return castUp<ETypeBase<TET>>(*getAll<TET>()[mIdx]); }
+					template<EType TET> inline auto& getAt(SizeT mIdx) noexcept				{ return castUp<ETypeBase<TET>>(*getAll<TET>()[mIdx]); }
+					template<EType TET> inline const auto& getAt(SizeT mIdx) const noexcept	{ return castUp<ETypeBase<TET>>(*getAll<TET>()[mIdx]); }
 			};
 		}
 
@@ -75,7 +75,7 @@ namespace ssvu
 					throw Exception::createFlagNotFound(mName, getNamesStr());
 				}
 
-				template<EType TET> inline void setElementValue(std::size_t mIdx, const std::string& mValue) { mgr.getAt<TET>(mIdx).set(mValue); }
+				template<EType TET> inline void setElementValue(SizeT mIdx, const std::string& mValue) { mgr.getAt<TET>(mIdx).set(mValue); }
 
 			public:
 				inline Cmd(const std::initializer_list<std::string>& mNames) : names{mNames} { }
@@ -95,8 +95,8 @@ namespace ssvu
 				template<EType TET> inline auto getCount() const noexcept		{ return mgr.getCount<TET>(); }
 				template<EType TET> inline const auto& getAll() const noexcept	{ return mgr.getAll<TET>(); }
 
-				template<EType TET> inline auto& getAt(std::size_t mIdx) noexcept				{ return mgr.getAt<TET>(mIdx); }
-				template<EType TET> inline const auto& getAt(std::size_t mIdx) const noexcept	{ return mgr.getAt<TET>(mIdx); }
+				template<EType TET> inline auto& getAt(SizeT mIdx) noexcept				{ return mgr.getAt<TET>(mIdx); }
+				template<EType TET> inline const auto& getAt(SizeT mIdx) const noexcept	{ return mgr.getAt<TET>(mIdx); }
 
 				std::string getNamesStr() const			{ return Internal::buildCmdStr(names, "<", ">", " || "); }
 				template<EType TET> auto getStr() const	{ return Internal::buildCmdStr(getAll<TET>()); }

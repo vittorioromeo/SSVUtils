@@ -90,7 +90,7 @@ namespace ssvu
 	/// @param mTo Replacement string.
 	inline void replace(std::string& mStr, const std::string& mFrom, const std::string& mTo)
 	{
-		std::size_t startPos{mStr.find(mFrom)};
+		SizeT startPos{mStr.find(mFrom)};
 		if(startPos == std::string::npos) return;
 		mStr.replace(startPos, mFrom.size(), mTo);
 	}
@@ -169,7 +169,7 @@ namespace ssvu
 	/// Useful for mispelling detection, for example.
 	/// @param mA First string.
 	/// @param mB Second string.
-	/// @return Returns the levenshtein distance between two strings as an std::size_t.
+	/// @return Returns the levenshtein distance between two strings as an SizeT.
 	inline auto getDistLevenshtein(const std::string& mA, const std::string& mB)
 	{
 		const auto& m(mA.size());
@@ -177,16 +177,16 @@ namespace ssvu
 		if(m == 0) return n;
 		if(n == 0) return m;
 
-		auto costs(UPtr<std::size_t[]>(new std::size_t[n + 1]));
-		for(std::size_t k{0}; k <= n; ++k) costs[k] = k;
+		auto costs(UPtr<SizeT[]>(new SizeT[n + 1]));
+		for(SizeT k{0}; k <= n; ++k) costs[k] = k;
 
-		std::size_t i{0};
+		SizeT i{0};
 		for(auto it1(std::begin(mA)); it1 != std::end(mA); ++it1, ++i)
 		{
 			costs[0] = i + 1;
 			auto corner(i);
 
-			std::size_t j{0};
+			SizeT j{0};
 			for(auto it2(std::begin(mB)); it2 != std::end(mB); ++it2, ++j)
 			{
 				auto upper(costs[j + 1]);

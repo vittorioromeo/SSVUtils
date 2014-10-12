@@ -10,10 +10,10 @@ namespace ssvu
 	namespace Console
 	{
 		/// @brief Number of styles.
-		constexpr std::size_t styleCount{13};
+		constexpr SizeT styleCount{13};
 
 		/// @brief Number of colors.
-		constexpr std::size_t colorCount{16};
+		constexpr SizeT colorCount{16};
 
 		/// @brief Enum class representing all the possible styles.
 		enum class Style : int
@@ -95,10 +95,10 @@ namespace ssvu
 		namespace Info
 		{
 			/// @brief Returns then number of columns of the console screen.
-			inline std::size_t getColumnCount() noexcept { return Internal::Info::getColumnCount(); }
+			inline SizeT getColumnCount() noexcept { return Internal::Info::getColumnCount(); }
 
 			/// @brief Returns then number of rows of the console screen.
-			inline std::size_t getRowCount() noexcept { return Internal::Info::getRowCount(); }
+			inline SizeT getRowCount() noexcept { return Internal::Info::getRowCount(); }
 		}
 	}
 }

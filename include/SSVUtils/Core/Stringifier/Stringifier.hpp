@@ -40,10 +40,10 @@ namespace ssvu
 		}
 
 		/// @brief Tuple-printing implementation. (base of the recursion)
-		template<bool TFmt, std::size_t I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I == sizeof...(TArgs)> implTpl(std::ostream&, const T<TArgs...>&) { }
+		template<bool TFmt, SizeT I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I == sizeof...(TArgs)> implTpl(std::ostream&, const T<TArgs...>&) { }
 
 		/// @brief Tuple-printing implementation. (recursive step)
-		template<bool TFmt, std::size_t I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I < sizeof...(TArgs)> implTpl(std::ostream& mStream, const T<TArgs...>& mTpl)
+		template<bool TFmt, SizeT I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I < sizeof...(TArgs)> implTpl(std::ostream& mStream, const T<TArgs...>& mTpl)
 		{
 			callStringifyImpl<TFmt>(mStream, std::get<I>(mTpl));
 			if(I < sizeof...(TArgs) - 1) printBold<TFmt>(mStream, ", ");
@@ -127,7 +127,7 @@ namespace ssvu
 	template<typename T> struct Stringifier : public Internal::StringifierDefault<T> { };
 
 	// Stringify C-style strings
-	template<std::size_t TN> struct Stringifier<char[TN]> final : public Internal::StringifierDefault<char[TN]> { };
+	template<SizeT TN> struct Stringifier<char[TN]> final : public Internal::StringifierDefault<char[TN]> { };
 	template<> struct Stringifier<char*> final : public Internal::StringifierDefault<char*> { };
 	template<> struct Stringifier<const char*> final : public Internal::StringifierDefault<const char*> { };
 
@@ -158,8 +158,8 @@ namespace ssvu
 	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>> final : public Internal::StringifierTuple<std::tuple<TArgs...>> { };
 
 	// Stringify arrays
-	template<typename T, std::size_t TN> struct Stringifier<T[TN]> final : public Internal::StringifierContainer<T[TN]> { };
-	template<typename T, std::size_t TN> struct Stringifier<std::array<T, TN>> final : public Internal::StringifierContainer<std::array<T, TN>> { };
+	template<typename T, SizeT TN> struct Stringifier<T[TN]> final : public Internal::StringifierContainer<T[TN]> { };
+	template<typename T, SizeT TN> struct Stringifier<std::array<T, TN>> final : public Internal::StringifierContainer<std::array<T, TN>> { };
 
 	// Stringify linear containers (value type and allocator type)
 	template<template<typename, typename> class T, typename TV, typename TAlloc> struct Stringifier<T<TV, TAlloc>> final : public Internal::StringifierContainer<T<TV, TAlloc>> { };

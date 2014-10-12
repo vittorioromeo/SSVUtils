@@ -7,34 +7,36 @@
 
 namespace ssvu
 {
-	// Type traits aliases
-	template<typename T, typename TDeleter = std::default_delete<T>>	using UPtr = std::unique_ptr<T, TDeleter>;
-	template<typename T>												using SPtr = std::shared_ptr<T>;
-	template<typename... TArgs>											using Common = std::common_type_t<TArgs...>;
-	template<bool TBool, typename T = void>								using EnableIf = std::enable_if_t<TBool, T>;
-	template<typename T>												using Decay = std::decay_t<T>;
-	template<typename T>												using RemoveRef = std::remove_reference_t<T>;
-	template<typename T>												using RemoveExtent = std::remove_extent_t<T>;
-	template<typename T>												using RemoveVolatile = std::remove_volatile_t<T>;
-	template<typename T>												using RemoveConst = std::remove_const_t<T>;
-	template<typename T>												using RemoveCV = std::remove_cv_t<T>;
-	template<typename T>												using AddVolatile = std::add_volatile_t<T>;
-	template<typename T>												using AddConst = std::add_const_t<T>;
-	template<typename T>												using AddCv = std::add_cv_t<T>;
-	template<typename T>												using AddLValueRef = std::add_lvalue_reference_t<T>;
-	template<typename T>												using AddRValueRef = std::add_rvalue_reference_t<T>;
-	template<typename T>												using RemovePtr = std::remove_pointer_t<T>;
-	template<typename T>												using AddPtr = std::add_pointer_t<T>;
-	template<typename T>												using MakeUnsigned = std::make_unsigned_t<T>;
-	template<typename T>												using MakeSigned = std::make_signed_t<T>;
-	template<typename T>												using RemoveAllExtents = std::remove_all_extents_t<T>;
-	template<std::size_t TS, std::size_t TAlign>						using AlignedStorage = std::aligned_storage_t<TS, TAlign>;
-	template<typename T>												using AlignedStorageBasic = AlignedStorage<sizeof(T), alignof(T)>;
-	template<bool B, typename T, typename F>							using Conditional = std::conditional_t<B, T, F>;
-	template<typename T>												using Underlying = std::underlying_type_t<T>;
-	template<typename T1, typename T2>									using IsSame = typename std::is_same<T1, T2>::type;
-	template<std::size_t TS, typename T>								using TupleElem = std::tuple_element_t<TS, T>;
-	template<typename T>												using RemoveAll = RemoveCV<RemoveRef<T>>;
+	// STL aliases
+	using SizeT = std::size_t;
+	template<typename T>								using DefaultDel = typename std::default_delete<T>;
+	template<typename T, typename TD = DefaultDel<T>>	using UPtr = std::unique_ptr<T, TD>;
+	template<typename T>								using SPtr = std::shared_ptr<T>;
+	template<typename... TArgs>							using Common = std::common_type_t<TArgs...>;
+	template<bool TBool, typename T = void>				using EnableIf = std::enable_if_t<TBool, T>;
+	template<typename T>								using Decay = std::decay_t<T>;
+	template<typename T>								using RemoveRef = std::remove_reference_t<T>;
+	template<typename T>								using RemoveExtent = std::remove_extent_t<T>;
+	template<typename T>								using RemoveVolatile = std::remove_volatile_t<T>;
+	template<typename T>								using RemoveConst = std::remove_const_t<T>;
+	template<typename T>								using RemoveCV = std::remove_cv_t<T>;
+	template<typename T>								using AddVolatile = std::add_volatile_t<T>;
+	template<typename T>								using AddConst = std::add_const_t<T>;
+	template<typename T>								using AddCv = std::add_cv_t<T>;
+	template<typename T>								using AddLValueRef = std::add_lvalue_reference_t<T>;
+	template<typename T>								using AddRValueRef = std::add_rvalue_reference_t<T>;
+	template<typename T>								using RemovePtr = std::remove_pointer_t<T>;
+	template<typename T>								using AddPtr = std::add_pointer_t<T>;
+	template<typename T>								using MakeUnsigned = std::make_unsigned_t<T>;
+	template<typename T>								using MakeSigned = std::make_signed_t<T>;
+	template<typename T>								using RemoveAllExtents = std::remove_all_extents_t<T>;
+	template<SizeT TS, SizeT TAlign>					using AlignedStorage = std::aligned_storage_t<TS, TAlign>;
+	template<typename T>								using AlignedStorageBasic = AlignedStorage<sizeof(T), alignof(T)>;
+	template<bool B, typename T, typename F>			using Conditional = std::conditional_t<B, T, F>;
+	template<typename T>								using Underlying = std::underlying_type_t<T>;
+	template<typename T1, typename T2>					using IsSame = typename std::is_same<T1, T2>::type;
+	template<SizeT TS, typename T>						using TupleElem = std::tuple_element_t<TS, T>;
+	template<typename T>								using RemoveAll = RemoveCV<RemoveRef<T>>;
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>::value; }
 	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>::value; }
@@ -68,7 +70,7 @@ namespace ssvu
 	using HRClock = std::chrono::high_resolution_clock;
 
 	/// @typedef Alias for `std::vector<ssvu::UPtr<T>>`.
-	template<typename T, typename TDeleter = std::default_delete<T>> using VecUPtr = std::vector<UPtr<T, TDeleter>>;
+	template<typename T, typename TD = DefaultDel<T>> using VecUPtr = std::vector<UPtr<T, TD>>;
 
 	/// @brief Moves `mV` if `T` is an rvalue reference.
 	template<typename T, typename TV> inline constexpr decltype(auto) moveIfRValue(TV&& mV) noexcept

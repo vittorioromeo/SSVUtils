@@ -14,11 +14,11 @@ namespace ssvu
 			class BaseArgPack : public BaseElement
 			{
 				protected:
-					std::size_t min, max;
+					SizeT min, max;
 
 				public:
 					inline BaseArgPack() noexcept : min{0}, max{0} { }
-					inline BaseArgPack(std::size_t mMin, std::size_t mMax) noexcept : min{mMin}, max{mMax} { }
+					inline BaseArgPack(SizeT mMin, SizeT mMax) noexcept : min{mMin}, max{mMax} { }
 
 					virtual void set(const std::vector<std::string>&) = 0;
 
