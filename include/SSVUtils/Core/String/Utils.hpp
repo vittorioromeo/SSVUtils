@@ -169,7 +169,7 @@ namespace ssvu
 	/// Useful for mispelling detection, for example.
 	/// @param mA First string.
 	/// @param mB Second string.
-	/// @return Returns the levenshtein distance between two strings as an SizeT.
+	/// @return Returns the levenshtein distance between two strings as a SizeT.
 	inline auto getDistLevenshtein(const std::string& mA, const std::string& mB)
 	{
 		const auto& m(mA.size());
