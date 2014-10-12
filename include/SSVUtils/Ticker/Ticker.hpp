@@ -14,7 +14,7 @@ namespace ssvu
 		private:
 			FT target, current{0.f}, total{0.f};
 			bool running{true}, loop{true};
-			std::size_t ticks{0};
+			SizeT ticks{0};
 
 		public:
 			inline Ticker(FT mTarget, bool mRunning = true) noexcept : target{mTarget}, running{mRunning} { }

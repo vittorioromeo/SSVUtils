@@ -18,7 +18,7 @@ namespace ssvu
 					using FmtCS = Console::Style;
 
 					std::string out;
-					std::size_t depth{0};
+					SizeT depth{0};
 					bool needIndent{false};
 
 					inline auto isObjOrArr(const Val& mVal)

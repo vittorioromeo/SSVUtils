@@ -26,7 +26,7 @@
 
 /// @macro Defines a simple converter template specialization to convert classes that do not require special behavior.
 /// @details Must be called after `SSVJ_CNV_NAMESPACE()`. Semicolon must not be used.
-#define SSVJ_CNV_SIMPLE(mType, mVName, mXName) \
+#define SSVJ_CNV(mType, mVName, mXName) \
 	struct Cnv<mType> final : CnvImplSimple<mType> \
 	{ \
 		template<typename TV, typename TX> inline static void impl(TV mVName, TX mXName)
@@ -44,18 +44,18 @@ namespace ssvu
 			// Tuple conversion implementation
 			struct TplCnvHelper
 			{
-				template<std::size_t TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
+				template<SizeT TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
 
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline static EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline static EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
+				template<SizeT TI = 0, typename... TArgs, typename T> inline static EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
+				template<SizeT TI = 0, typename... TArgs, typename T> inline static EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
 				{
 					SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > TI);
 					std::get<TI>(mX) = moveIfRValue<decltype(mV)>(mV[TI].template as<TplArg<TI, decltype(mX)>>());
 					toTpl<TI + 1, TArgs...>(fwd<T>(mV), mX);
 				}
 
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline static EnableIf<TI == sizeof...(TArgs)> fromTpl(Arr&, T&&) { }
-				template<std::size_t TI = 0, typename... TArgs, typename T> inline static EnableIf<TI < sizeof...(TArgs)> fromTpl(Arr& mArr, T&& mX)
+				template<SizeT TI = 0, typename... TArgs, typename T> inline static EnableIf<TI == sizeof...(TArgs)> fromTpl(Arr&, T&&) { }
+				template<SizeT TI = 0, typename... TArgs, typename T> inline static EnableIf<TI < sizeof...(TArgs)> fromTpl(Arr& mArr, T&& mX)
 				{
 					mArr.emplace_back(moveIfRValue<decltype(mX)>(std::get<TI>(mX)));
 					fromTpl<TI + 1, TArgs...>(mArr, fwd<T>(mX));
@@ -122,7 +122,7 @@ namespace ssvu
 			};
 
 			// Convert C-style string arrays
-			template<std::size_t TS> struct Cnv<char[TS]> final
+			template<SizeT TS> struct Cnv<char[TS]> final
 			{
 				inline static void toVal(Val& mV, const char(&mX)[TS]) { mV.setStr(mX); }
 				inline static void fromVal(const Val& mV, char(&mX)[TS]) noexcept { for(auto i(0u); i < TS; ++i) mX[i] = mV.getStr()[i]; }
@@ -207,7 +207,7 @@ namespace ssvu
 			};
 
 			// Convert C-style array
-			template<typename TItem, std::size_t TS> struct Cnv<TItem[TS]>
+			template<typename TItem, SizeT TS> struct Cnv<TItem[TS]>
 			{
 				using Type = TItem[TS];
 

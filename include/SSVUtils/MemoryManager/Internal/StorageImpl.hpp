@@ -114,7 +114,7 @@ namespace ssvu
 				using ChunkType = Chunk<TBase, TLHelper>;
 
 			private:
-				std::map<std::size_t, ChunkType> chunks;
+				std::map<SizeT, ChunkType> chunks;
 
 			public:
 				template<typename T> inline auto& getChunk() { return chunks[sizeof(T)]; }
@@ -123,7 +123,7 @@ namespace ssvu
 		namespace FixedStorageImpl
 		{
 			/// @typedef Type of size index.
-			using SizeIdx = std::size_t;
+			using SizeIdx = SizeT;
 
 			/// @brief Returns a new unique idx.
 			inline auto getLastSizeIdx() noexcept
@@ -132,15 +132,15 @@ namespace ssvu
 			}
 
 			// Stores a specific index for a size
-			template<std::size_t TS> struct SizeIdxInfo { static SizeIdx idx; };
-			template<std::size_t TS> SizeIdx SizeIdxInfo<TS>::idx{getLastSizeIdx()};
+			template<SizeT TS> struct SizeIdxInfo { static SizeIdx idx; };
+			template<SizeT TS> SizeIdx SizeIdxInfo<TS>::idx{getLastSizeIdx()};
 
 			/// @brief Returns an unique idx attached to a specific object size.
-			template<std::size_t TS> inline auto getSizeIdx() noexcept { return SizeIdxInfo<TS>::idx; }
+			template<SizeT TS> inline auto getSizeIdx() noexcept { return SizeIdxInfo<TS>::idx; }
 		}
 
 		/// @brief Storage data structure for multiple types - uses a map of `Chunk` objects. Supports a limited number of object sizes.
-		template<typename TBase, template<typename> class TLHelper, std::size_t TMaxChunks> class PolyFixedStorage
+		template<typename TBase, template<typename> class TLHelper, SizeT TMaxChunks> class PolyFixedStorage
 		{
 			public:
 				using ChunkType = Chunk<TBase, TLHelper>;

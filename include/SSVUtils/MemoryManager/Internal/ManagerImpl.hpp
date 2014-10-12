@@ -38,7 +38,7 @@ namespace ssvu
 				inline void clear()	noexcept { items.clear(); toAdd.clear(); }
 				inline void del(TBase& mBase) noexcept { LayoutType::setBool(&mBase, false); }
 
-				inline void reserve(std::size_t mCapacity)
+				inline void reserve(SizeT mCapacity)
 				{
 					SSVU_ASSERT(items.capacity() < mCapacity);
 					items.reserve(mCapacity);

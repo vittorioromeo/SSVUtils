@@ -30,7 +30,7 @@ namespace ssvu
 				template<Idx TI, typename TArg> inline static void hArchArr(Val& mV, TArg&& mArg)
 				{
 					SSVU_ASSERT(mV.template is<Arr>());
-					mV.as<Arr>().emplace_back(fwd<TArg>(mArg));
+					mV.emplace(fwd<TArg>(mArg));
 				}
 				template<Idx TI, typename TArg, typename... TArgs> inline static void hArchArr(Val& mV, TArg&& mArg, TArgs&&... mArgs)
 				{
@@ -70,17 +70,17 @@ namespace ssvu
 		template<typename... TArgs> inline void archObj(Val& mV, TArgs&&... mArgs)				{ mV = Obj{}; Internal::CnvFuncHelper::hArchObj(mV, fwd<TArgs>(mArgs)...); }
 		template<typename... TArgs> inline Val getArchObj(TArgs&&... mArgs)						{ Val result; archObj(result, fwd<TArgs>(mArgs)...); return result; }
 
-		template<typename T> inline void convert(const Val& mV, T& mX) noexcept(noexcept(extr(mV, mX)))			{ extr(mV, mX); }
-		template<typename T> inline void convert(Val&& mV, T& mX) noexcept(noexcept(extr(std::move(mV), mX)))	{ extr(std::move(mV), mX); }
-		template<typename T> inline void convert(Val& mV, T&& mX) noexcept(noexcept(arch(mV, fwd<T>(mX))))		{ arch(mV, fwd<T>(mX)); }
+		template<typename T> inline void cnv(const Val& mV, T& mX) noexcept(noexcept(extr(mV, mX)))			{ extr(mV, mX); }
+		template<typename T> inline void cnv(Val&& mV, T& mX) noexcept(noexcept(extr(std::move(mV), mX)))	{ extr(std::move(mV), mX); }
+		template<typename T> inline void cnv(Val& mV, T&& mX) noexcept(noexcept(arch(mV, fwd<T>(mX))))		{ arch(mV, fwd<T>(mX)); }
 
-		template<typename... TArgs> inline void convertArr(const Val& mV, TArgs&... mArgs)	{ extrArr(mV, mArgs...); }
-		template<typename... TArgs> inline void convertArr(Val&& mV, TArgs&... mArgs)		{ extrArr(std::move(mV), mArgs...); }
-		template<typename... TArgs> inline void convertArr(Val& mV, TArgs&&... mArgs)		{ archArr(mV, fwd<TArgs>(mArgs)...); }
+		template<typename... TArgs> inline void cnvArr(const Val& mV, TArgs&... mArgs)	{ extrArr(mV, mArgs...); }
+		template<typename... TArgs> inline void cnvArr(Val&& mV, TArgs&... mArgs)		{ extrArr(std::move(mV), mArgs...); }
+		template<typename... TArgs> inline void cnvArr(Val& mV, TArgs&&... mArgs)		{ archArr(mV, fwd<TArgs>(mArgs)...); }
 
-		template<typename... TArgs> inline void convertObj(const Val& mV, TArgs&... mArgs)	{ extrObj(mV, mArgs...); }
-		template<typename... TArgs> inline void convertObj(Val&& mV, TArgs&... mArgs)		{ extrObj(std::move(mV), mArgs...); }
-		template<typename... TArgs> inline void convertObj(Val& mV, TArgs&&... mArgs)		{ archObj(mV, fwd<TArgs>(mArgs)...); }
+		template<typename... TArgs> inline void cnvObj(const Val& mV, TArgs&... mArgs)	{ extrObj(mV, mArgs...); }
+		template<typename... TArgs> inline void cnvObj(Val&& mV, TArgs&... mArgs)		{ extrObj(std::move(mV), mArgs...); }
+		template<typename... TArgs> inline void cnvObj(Val& mV, TArgs&&... mArgs)		{ archObj(mV, fwd<TArgs>(mArgs)...); }
 	}
 }
 

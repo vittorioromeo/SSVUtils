@@ -34,11 +34,11 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<std::size_t, typename> struct FatEnumMgrImpl;
+		template<SizeT, typename> struct FatEnumMgrImpl;
 
-		template<std::size_t TS, template<typename> class T, typename TEnum> struct FatEnumMgrImpl<TS, T<TEnum>>
+		template<SizeT TS, template<typename> class T, typename TEnum> struct FatEnumMgrImpl<TS, T<TEnum>>
 		{
-			inline static std::size_t getSize() noexcept							{ return TS; }
+			inline static SizeT getSize() noexcept									{ return TS; }
 			template<TEnum TVal> inline static const auto& getAsString() noexcept	{ return T<TEnum>::template getAsStringImpl<TVal>(); }
 			inline static auto& getAsString(TEnum mValue) noexcept					{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
 			inline static TEnum getFromString(const std::string& mValue) noexcept	{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }

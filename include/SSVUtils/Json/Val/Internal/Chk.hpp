@@ -14,10 +14,10 @@ namespace ssvu
 			// Tuple checking implementation
 			struct TplIsHelper
 			{
-				template<std::size_t TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
+				template<SizeT TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
 
-				template<std::size_t TI = 0, typename... TArgs> inline static EnableIf<TI == sizeof...(TArgs), bool> isTpl(const Val&) noexcept { return true; }
-				template<std::size_t TI = 0, typename... TArgs> inline static EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
+				template<SizeT TI = 0, typename... TArgs> inline static EnableIf<TI == sizeof...(TArgs), bool> isTpl(const Val&) noexcept { return true; }
+				template<SizeT TI = 0, typename... TArgs> inline static EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
 				{
 					SSVU_ASSERT(mV.is<Arr>() && mV.getArr().size() > TI);
 					if(!mV[TI].isNoNum<TplArg<TI, std::tuple<TArgs...>>>()) return false;
@@ -99,7 +99,7 @@ namespace ssvu
 			};
 
 			// Check C-style string
-			template<std::size_t TS> struct Chk<char[TS]> final
+			template<SizeT TS> struct Chk<char[TS]> final
 			{
 				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Str && mV.getStr().size() == TS; }
 			};
@@ -132,7 +132,7 @@ namespace ssvu
 			};
 
 			// Check C-style array
-			template<typename TItem, std::size_t TS> struct Chk<TItem[TS]> final
+			template<typename TItem, SizeT TS> struct Chk<TItem[TS]> final
 			{
 				inline static auto is(const Val& mV) noexcept
 				{

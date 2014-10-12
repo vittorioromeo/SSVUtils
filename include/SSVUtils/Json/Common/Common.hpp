@@ -12,7 +12,7 @@ namespace ssvu
 	namespace Json
 	{
 		/// @typedef Type of Arr indices.
-		using Idx = std::size_t;
+		using Idx = SizeT;
 
 		/// @typedef Type of Obj keys.
 		using Key = std::string;

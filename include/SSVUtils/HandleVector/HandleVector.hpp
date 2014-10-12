@@ -10,7 +10,7 @@
 namespace ssvu
 {
 	/// @typedef HandleVector index type.
-	using HIdx = std::size_t;
+	using HIdx = SizeT;
 
 	/// @typedef HandleVector counter type.
 	using HCtr = int;
@@ -51,16 +51,16 @@ namespace ssvu
 			std::vector<Mark> marks;
 
 			/// @brief Current size. Does not take into account newly created atoms.
-			std::size_t size{0u};
+			SizeT size{0u};
 
 			/// @brief Next size. Takes into account newly created atoms.
-			std::size_t sizeNext{0u};
+			SizeT sizeNext{0u};
 
 			/// @brief Returns the capacity of the internal storage.
 			inline auto getCapacity() const noexcept { return atoms.size(); }
 
 			/// @brief Increases internal storage capacity by mAmount.
-			inline void growCapacityBy(std::size_t mAmount)
+			inline void growCapacityBy(SizeT mAmount)
 			{
 				auto i(getCapacity()), newCapacity(getCapacity() + mAmount);
 				SSVU_ASSERT(newCapacity >= 0 && newCapacity >= getCapacity());
@@ -77,7 +77,7 @@ namespace ssvu
 			}
 
 			/// @brief Sets internal storage capacity to mCapacity.
-			inline void growCapacityTo(std::size_t mCapacity)
+			inline void growCapacityTo(SizeT mCapacity)
 			{
 				SSVU_ASSERT(getCapacity() < mCapacity);
 				growCapacityBy(mCapacity - getCapacity());
@@ -87,7 +87,7 @@ namespace ssvu
 			inline void growIfNeeded()
 			{
 				constexpr float growMultiplier{2.f};
-				constexpr std::size_t growAmount{5};
+				constexpr SizeT growAmount{5};
 
 				if(getCapacity() <= sizeNext) growCapacityTo((getCapacity() + growAmount) * growMultiplier);
 			}
@@ -129,7 +129,7 @@ namespace ssvu
 			}
 
 			/// @brief Reserves storage, increasing the capacity.
-			inline void reserve(std::size_t mCapacity) { if(getCapacity() < mCapacity) growCapacityTo(mCapacity); }
+			inline void reserve(SizeT mCapacity) { if(getCapacity() < mCapacity) growCapacityTo(mCapacity); }
 
 			/// @brief Creates and returns an handle pointing to mAtom.
 			/// @details The created atom will not be used until the HandleVector is refreshed.

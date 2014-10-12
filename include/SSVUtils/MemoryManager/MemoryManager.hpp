@@ -45,7 +45,7 @@ namespace ssvu
 	>;
 
 	/// @brief Memory recycler for multiple object types. Doesn't store additional information in the objects. Supports a fixed amount of object sizes.
-	template<typename TBase, std::size_t TMaxChunks> using PolyFixedRecycler = Internal::PolyRecyclerImpl
+	template<typename TBase, SizeT TMaxChunks> using PolyFixedRecycler = Internal::PolyRecyclerImpl
 	<
 		TBase,
 		Internal::LayoutImpl::LHelperNoBool,
@@ -68,7 +68,7 @@ namespace ssvu
 	>;
 
 	/// @brief Memory recycler manager for a multiple object types. Stores an additional bool in every object. Supports a fixed amount of object sizes.
-	template<typename TBase, std::size_t TMaxChunks> using PolyFixedManager = Internal::BaseManager<TBase, Internal::PolyRecyclerImpl
+	template<typename TBase, SizeT TMaxChunks> using PolyFixedManager = Internal::BaseManager<TBase, Internal::PolyRecyclerImpl
 	<
 		TBase,
 		Internal::LayoutImpl::LHelperBool,

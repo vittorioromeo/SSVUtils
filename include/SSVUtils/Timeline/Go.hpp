@@ -13,7 +13,7 @@ namespace ssvu
 		{
 			protected:
 				T target;
-				std::size_t times, currentTimes;
+				SizeT times, currentTimes;
 
 				inline void update(FT) override
 				{
