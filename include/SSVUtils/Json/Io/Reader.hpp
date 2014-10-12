@@ -102,15 +102,15 @@ namespace ssvu
 
 					inline char& getC() noexcept						{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
 					inline char getC() const noexcept					{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
-					inline char& getC(std::size_t mIdx) noexcept		{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
-					inline char getC(std::size_t mIdx) const noexcept	{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
+					inline char& getC(SizeT mIdx) noexcept		{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
+					inline char getC(SizeT mIdx) const noexcept	{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
 
 					inline auto isC(char mC) const noexcept	{ return getC() == mC; }
 					inline auto isCDigit() const noexcept	{ return isDigit(getC()); }
 
 					inline void skipWhitespace() noexcept { while(isWhitespace(getC())) ++idx; }
 
-					template<std::size_t TS> inline void match(const char(&mKeyword)[TS])
+					template<SizeT TS> inline void match(const char(&mKeyword)[TS])
 					{
 						for(auto i(0u); i < TS - 1; ++i)
 						{

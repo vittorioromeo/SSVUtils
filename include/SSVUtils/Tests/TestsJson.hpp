@@ -263,6 +263,7 @@ SSVUT_TEST(SSVUJsonValTests4)
 }
 
 #undef EXEC_TEST_BASIC
+#undef EXEC_TEST_BASIC_IMPL
 #undef EXEC_TEST_C_ARRAY
 
 SSVUT_TEST(SSVUJsonReadTests)
@@ -344,11 +345,11 @@ SSVUT_TEST(SSVUJsonWriteTests)
 		using Type = mType; \
 		Val vIn; \
 		const Type& in = mBV; \
-		convert(vIn, in); \
+		cnv(vIn, in); \
 		SSVUT_EXPECT(vIn.as<Type>() == mBV); \
 		const Val& vOut{static_cast<Type>(mBV)}; \
 		Type out; \
-		convert(vOut, out); \
+		cnv(vOut, out); \
 		SSVUT_EXPECT(out == mBV); \
 		auto s = vOut.getWriteToStr(); \
 		auto fs = Val::fromStr(s); \
@@ -374,13 +375,13 @@ SSVUT_TEST(SSVUJsonWriteTests)
 		const Type& in0 = mBV0; \
 		const Type& in1 = mBV1; \
 		const Type& in2 = mBV2; \
-		convertArr(vIn, in0, in1, in2); \
+		cnvArr(vIn, in0, in1, in2); \
 		SSVUT_EXPECT(vIn[0].as<Type>() == mBV0); \
 		SSVUT_EXPECT(vIn[1].as<Type>() == mBV1); \
 		SSVUT_EXPECT(vIn[2].as<Type>() == mBV2); \
 		const Val& vOut(vIn); \
 		Type out0, out1, out2; \
-		convertArr(vOut, out0, out1, out2); \
+		cnvArr(vOut, out0, out1, out2); \
 		SSVUT_EXPECT(out0 == mBV0); \
 		SSVUT_EXPECT(out1 == mBV1); \
 		SSVUT_EXPECT(out2 == mBV2); \
@@ -396,13 +397,13 @@ SSVUT_TEST(SSVUJsonWriteTests)
 		const Type& in0 = mBV0; \
 		const Type& in1 = mBV1; \
 		const Type& in2 = mBV2; \
-		convertObj(vIn, "k0", in0, "k1", in1, "k2", in2); \
+		cnvObj(vIn, "k0", in0, "k1", in1, "k2", in2); \
 		SSVUT_EXPECT(vIn["k0"].as<Type>() == mBV0); \
 		SSVUT_EXPECT(vIn["k1"].as<Type>() == mBV1); \
 		SSVUT_EXPECT(vIn["k2"].as<Type>() == mBV2); \
 		const Val& vOut(vIn); \
 		Type out0, out1, out2; \
-		convertObj(vOut, "k0", out0, "k1", out1, "k2", out2); \
+		cnvObj(vOut, "k0", out0, "k1", out1, "k2", out2); \
 		SSVUT_EXPECT(out0 == mBV0); \
 		SSVUT_EXPECT(out1 == mBV1); \
 		SSVUT_EXPECT(out2 == mBV2); \
@@ -487,7 +488,7 @@ SSVUT_TEST(SSVUJsonConvertTests4)
 	std::tuple<std::string, int, int> f4{"hey", 5, 10};
 
 	Val vIn;
-	convertObj(vIn, "f0", f0, "f1", f1, "f2", f2, "f3", f3, "f4", f4);
+	cnvObj(vIn, "f0", f0, "f1", f1, "f2", f2, "f3", f3, "f4", f4);
 	SSVUT_EXPECT(f0 == vIn["f0"].as<decltype(f0)>());
 	SSVUT_EXPECT(f1 == vIn["f1"].as<decltype(f1)>());
 	SSVUT_EXPECT(f2 == vIn["f2"].as<decltype(f2)>());
@@ -499,7 +500,7 @@ SSVUT_TEST(SSVUJsonConvertTests4)
 	decltype(f2) of2;
 	decltype(f3) of3;
 	decltype(f4) of4;
-	convertObj(vOut, "f0", of0, "f1", of1, "f2", of2, "f3", of3, "f4", of4);
+	cnvObj(vOut, "f0", of0, "f1", of1, "f2", of2, "f3", of3, "f4", of4);
 	SSVUT_EXPECT(f0 == of0);
 	SSVUT_EXPECT(f1 == of1);
 	SSVUT_EXPECT(f2 == of2);
@@ -532,9 +533,9 @@ SSVJ_CNV_NAMESPACE()
 		}
 	};
 
-	template<> SSVJ_CNV_SIMPLE(__ssvjTestStruct, mV, mX)
+	template<> SSVJ_CNV(__ssvjTestStruct, mV, mX)
 	{
-		ssvj::convertArr(mV, mX.f0, mX.f1, mX.f2, mX.f3, mX.f4);
+		ssvj::cnvArr(mV, mX.f0, mX.f1, mX.f2, mX.f3, mX.f4);
 	}
 	SSVJ_CNV_END()
 }
@@ -561,6 +562,151 @@ SSVUT_TEST(SSVUJsonCnvTest)
 	SSVUT_EXPECT(fs.as<Type>() == s1);
 }
 
-#endif
+#define EXEC_TEST_ITR_NUM_ARR(mType) \
+	{ \
+		using TT = mType; \
+		TT acc = TT(0); \
+		Val v{Arr{}}; \
+		v.emplace(TT(0)); \
+		v.emplace(TT(1)); \
+		v.emplace(TT(2)); \
+		v.emplace(TT(3)); \
+		v.emplace(TT(4)); \
+		acc = 0; \
+		for(const auto& i : v.forArr()) acc += i.as<TT>(); \
+		SSVUT_EXPECT_OP(acc, ==, 10); \
+		acc = 0; \
+		for(const auto& i : v.forArrAs<TT>()) acc += i; \
+		SSVUT_EXPECT_OP(acc, ==, 10); \
+		acc = 0; \
+		for(const auto& i : v.forUncheckedArr()) acc += i.as<TT>(); \
+		SSVUT_EXPECT_OP(acc, ==, 10); \
+		acc = 0; \
+		for(const auto& i : v.forUncheckedArrAs<TT>()) acc += i; \
+		SSVUT_EXPECT_OP(acc, ==, 10); \
+	} \
 
-// TODO: iteration tests, missing tests (check all source)
+SSVUT_TEST(SSVUJsonArrIterationTests)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
+
+	EXEC_TEST_ITR_NUM_ARR(char)
+	EXEC_TEST_ITR_NUM_ARR(int)
+	EXEC_TEST_ITR_NUM_ARR(long int)
+	EXEC_TEST_ITR_NUM_ARR(unsigned char)
+	EXEC_TEST_ITR_NUM_ARR(unsigned int)
+	EXEC_TEST_ITR_NUM_ARR(unsigned long int)
+	EXEC_TEST_ITR_NUM_ARR(float)
+	EXEC_TEST_ITR_NUM_ARR(double)
+
+	{
+		using TT = std::string;
+		Val v{Arr{}};
+		v.emplace("hi");
+		v.emplace(" my");
+		v.emplace(" name");
+		v.emplace(" is");
+		v.emplace(" meow");
+		TT acc;
+		for(const auto& i : v.forArr()) acc += i.as<TT>();
+		SSVUT_EXPECT_OP(acc, ==, "hi my name is meow");
+	}
+}
+
+#undef EXEC_TEST_ITR_NUM_ARR
+
+#define EXEC_TEST_ITR_NUM_OBJ(mType) \
+	{ \
+		using TT = mType; \
+		std::string keyacc = ""; \
+		TT acc = TT(0); \
+		Val v{Obj{}}; \
+		v["0"] = TT(0); \
+		v["1"] = TT(1); \
+		v["2"] = TT(2); \
+		v["3"] = TT(3); \
+		v["4"] = TT(4); \
+		keyacc = ""; \
+		acc = 0; \
+		for(const auto& i : v.forObj()) \
+		{ \
+			keyacc += i.key; \
+			acc += i.value.as<TT>(); \
+		} \
+		SSVUT_EXPECT_OP(keyacc, ==, "01234"); \
+		SSVUT_EXPECT_OP(acc, ==, 10); \
+		keyacc = ""; \
+		acc = 0; \
+		for(const auto& i : v.forObjAs<TT>()) \
+		{ \
+			keyacc += i.key; \
+			acc += i.value; \
+		} \
+		SSVUT_EXPECT_OP(keyacc, ==, "01234"); \
+		SSVUT_EXPECT_OP(acc, ==, 10); \
+		keyacc = ""; \
+		acc = 0; \
+		for(const auto& i : v.forUncheckedObj()) \
+		{ \
+			keyacc += i.key; \
+			acc += i.value.as<TT>(); \
+		} \
+		SSVUT_EXPECT_OP(keyacc, ==, "01234"); \
+		SSVUT_EXPECT_OP(acc, ==, 10); \
+		keyacc = ""; \
+		acc = 0; \
+		for(const auto& i : v.forUncheckedObjAs<TT>()) \
+		{ \
+			keyacc += i.key; \
+			acc += i.value; \
+		} \
+		SSVUT_EXPECT_OP(keyacc, ==, "01234"); \
+		SSVUT_EXPECT_OP(acc, ==, 10); \
+	} \
+
+SSVUT_TEST(SSVUJsonObjIterationTests)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
+
+	EXEC_TEST_ITR_NUM_OBJ(char)
+	EXEC_TEST_ITR_NUM_OBJ(int)
+	EXEC_TEST_ITR_NUM_OBJ(long int)
+	EXEC_TEST_ITR_NUM_OBJ(unsigned char)
+	EXEC_TEST_ITR_NUM_OBJ(unsigned int)
+	EXEC_TEST_ITR_NUM_OBJ(unsigned long int)
+	EXEC_TEST_ITR_NUM_OBJ(float)
+	EXEC_TEST_ITR_NUM_OBJ(double)
+}
+
+#undef EXEC_TEST_ITR_NUM_OBJ
+
+SSVUT_TEST(SSVUJsonGetIfHas)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Internal;
+
+	{
+		Val v{Obj{}};
+		auto k1 = v.getIfHas<int>("k", 10);
+		SSVUT_EXPECT_OP(k1, ==, 10);
+		v["k"] = 5;
+		k1 = v.getIfHas<int>("k", 10);
+		SSVUT_EXPECT_OP(k1, ==, 5);
+	}
+
+	{
+		Val v{Arr{}};
+		auto k1 = v.getIfHas<int>(0, 10);
+		SSVUT_EXPECT_OP(k1, ==, 10);
+		v.emplace(5);
+		k1 = v.getIfHas<int>(0, 10);
+		SSVUT_EXPECT_OP(k1, ==, 5);
+	}
+}
+
+#endif

@@ -257,16 +257,27 @@ namespace ssvu
 				template<typename T> inline auto forArrAs() const noexcept	{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::cend(h.hArr))>(); }
 
 				// Unchecked non-casted iteration
-				inline auto forUncheckedObj() noexcept;
-				inline auto forUncheckedObj() const noexcept;
-				inline auto forUncheckedArr() noexcept;
-				inline auto forUncheckedArr() const noexcept;
+				auto forUncheckedObj() noexcept;
+				auto forUncheckedObj() const noexcept;
+				auto forUncheckedArr() noexcept;
+				auto forUncheckedArr() const noexcept;
 
 				// Checked non-casted iteration
-				inline auto forObj() noexcept;
-				inline auto forObj() const noexcept;
-				inline auto forArr() noexcept;
-				inline auto forArr() const noexcept;
+				auto forObj() noexcept;
+				auto forObj() const noexcept;
+				auto forArr() noexcept;
+				auto forArr() const noexcept;
+
+				/// @brief Emplaces a value back into this `Val` instance's `Arr`.
+				/// @details Must only be called on `Val` instances storing an `Arr`.
+				template<typename T> inline void emplace(T&& mX) noexcept(noexcept(std::declval<Arr>().emplace_back(fwd<T>(mX))))
+				{
+					getArr().emplace_back(fwd<T>(mX));
+				}
+
+				// Size getters
+				inline auto getSizeArr() const noexcept { return getArr().size(); }
+				inline auto getSizeObj() const noexcept { return getObj().size(); }
 		};
 
 		/// @typedef `Obj` implementation typedef, templatized with `Val`.
