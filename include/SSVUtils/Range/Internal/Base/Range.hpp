@@ -25,7 +25,7 @@ namespace ssvu
 	template<typename TItr> inline constexpr auto makeRange(const TItr& mBegin, const TItr& mEnd)
 	{
 		return Range<TItr>(mBegin, mEnd);
-	};
+	}
 
 	/// @brief Returns a range made by `std::begin(mContainer)` and `std::end(mContainer)`.
 	template<typename TC> inline constexpr auto asRange(TC& mContainer) noexcept
