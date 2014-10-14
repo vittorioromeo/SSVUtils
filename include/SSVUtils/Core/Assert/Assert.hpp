@@ -43,7 +43,7 @@
 			/// @brief Internal struct storing global state for assertions.
 			struct AssertState { bool skip{false}; };
 
-			/// @brief Returns a reference to the global static thread_local AssertState instance.
+			/// @brief Returns a reference to the global thread_local AssertState instance.
 			inline auto& getAssertState() noexcept { thread_local AssertState result; return result; }
 
 			/// @brief Assert implementation: if mExpression is false, the assertion fires.

@@ -11,5 +11,6 @@
 #include "SSVUtils/Core/Common/Frametime.hpp"
 #include "SSVUtils/Core/Common/SmartPointers.hpp"
 #include "SSVUtils/Core/Common/EmptyString.hpp"
+#include "SSVUtils/Core/Common/MakeArray.hpp"
 
 #endif
