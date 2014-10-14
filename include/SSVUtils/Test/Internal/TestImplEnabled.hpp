@@ -16,19 +16,13 @@ namespace ssvu
 				template<typename T> inline Runner(const T& mAction) { mAction(); }
 			};
 
-			class TestBase
+			struct TestBase
 			{
-				private:
-					const std::string name, line, file;
+				const std::string name, line, file;
 
-				public:
-					inline TestBase(std::string mName, std::string mLine, std::string mFile) : name{std::move(mName)}, line{std::move(mLine)}, file{std::move(mFile)} { }
-					inline virtual ~TestBase() { }
-					inline virtual void run() const { }
-
-					inline const auto& getName() const	{ return name; }
-					inline const auto& getLine() const	{ return line; }
-					inline const auto& getFile() const	{ return file; }
+				inline TestBase(std::string mName, std::string mLine, std::string mFile) : name{std::move(mName)}, line{std::move(mLine)}, file{std::move(mFile)} { }
+				inline virtual ~TestBase() { }
+				inline virtual void run() const { }
 			};
 
 			struct TestFailException final : std::exception
@@ -71,9 +65,9 @@ namespace ssvu
 						auto& test(*mFail.test);
 
 						lo("Test") << "Test failure\n\n"
-							<< "Test:\t<"		<< test.getName() << ">\n"
-							<< "Line:\t<"		<< test.getLine() << ">\n"
-							<< "File:\t<"		<< test.getFile() << ">\n\n"
+							<< "Test:\t<"		<< test.name << ">\n"
+							<< "Line:\t<"		<< test.line << ">\n"
+							<< "File:\t<"		<< test.file << ">\n\n"
 							<< "Expression:\n"	<< mFail.expr << "\n"
 							<< "at line: "		<< mFail.line << "\n";
 

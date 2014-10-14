@@ -55,8 +55,8 @@ SSVUT_TEST(RangeCastTests)
 	v.emplace_back(makeUPtr<XTDer>());
 	v.emplace_back(makeUPtr<XTDer>());
 
-	for(const auto& i : asRangeCast<const XTDer&>(v)) { SSVUT_EXPECT(i.f(2) == 3); }
-	for(auto& i : asRangeCast<XTDer&>(v)) { i.n = 3; SSVUT_EXPECT(i.f(2) == 5); }
+	for(const auto& i : asRangeCastPtr<const XTDer&>(v)) { SSVUT_EXPECT(i.f(2) == 3); }
+	for(auto& i : asRangeCastPtr<XTDer&>(v)) { i.n = 3; SSVUT_EXPECT(i.f(2) == 5); }
 
 
 
@@ -67,8 +67,8 @@ SSVUT_TEST(RangeCastTests)
 	l.emplace_back(makeUPtr<XTDer>());
 	l.emplace_back(makeUPtr<XTDer>());
 
-	for(const auto& i : asRangeCast<const XTDer&>(l)) { SSVUT_EXPECT(i.f(2) == 3); }
-	for(auto& i : asRangeCast<XTDer&>(l)) { i.n = 3; SSVUT_EXPECT(i.f(2) == 5); }
+	for(const auto& i : asRangeCastPtr<const XTDer&>(l)) { SSVUT_EXPECT(i.f(2) == 3); }
+	for(auto& i : asRangeCastPtr<XTDer&>(l)) { i.n = 3; SSVUT_EXPECT(i.f(2) == 5); }
 }
 
 

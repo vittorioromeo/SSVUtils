@@ -14,6 +14,7 @@
 #include "SSVUtils/Tests/TestsUtilsContainer.hpp"
 #include "SSVUtils/Tests/TestsUtilsMath.hpp"
 #include "SSVUtils/Tests/TestsMacros.hpp"
+#include "SSVUtils/Tests/TestsMakeArray.hpp"
 
 // Modules
 #include "SSVUtils/Tests/TestsBenchmark.hpp"

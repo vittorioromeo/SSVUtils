@@ -14,8 +14,8 @@ SSVUT_TEST(PathTests)
 	Path path{"/usr"};
 	if(path.exists<ssvufs::Type::Folder>())
 	{
-		SSVUT_EXPECT(path.getStr() == "/usr/");
-		SSVUT_EXPECT(path.getFolderName() == "usr");
+		SSVUT_EXPECT_OP(path.getStr(), ==, "/usr/");
+		SSVUT_EXPECT_OP(path.getFolderName(), ==, "usr");
 	}
 
 	path = "/usr.txt";
