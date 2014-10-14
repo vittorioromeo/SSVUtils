@@ -697,6 +697,13 @@ SSVUT_TEST(SSVUJsonGetIfHas)
 		v["k"] = 5;
 		k1 = v.getIfHas<int>("k", 10);
 		SSVUT_EXPECT_OP(k1, ==, 5);
+
+		const int& def0(20);
+		int def1(25);
+		auto kyj = v.getIfHas<int>("kyj", def0);
+		SSVUT_EXPECT_OP(kyj, ==, def0);
+		kyj = v.getIfHas<int>("kyj", def1);
+		SSVUT_EXPECT_OP(kyj, ==, def1);
 	}
 
 	{

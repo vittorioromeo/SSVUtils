@@ -210,6 +210,20 @@ namespace ssvu
 					return has(mIdx) ? operator[](mIdx).as<T>() : fwd<T>(mDef);
 				}
 
+				/// @brief Returns the value with key `mKey` is existant, otherwise `mDef`. (const argument version)
+				/// @details Must only be called on `Val` instances storing an `Obj`.
+				template<typename T> inline decltype(auto) getIfHas(const Key& mKey, const T& mDef) const
+				{
+					return has(mKey) ? operator[](mKey).as<T>() : mDef;
+				}
+
+				/// @brief Returns the value with index `mIdx` is existant, otherwise `mDef`. (const argument version)
+				/// @details Must only be called on `Val` instances storing an `Arr`.
+				template<typename T> inline decltype(auto) getIfHas(Idx mIdx, const T& mDef) const
+				{
+					return has(mIdx) ? operator[](mIdx).as<T>() : mDef;
+				}
+
 				// Equality/inequality
 				inline bool operator==(const Val& mV) const noexcept
 				{
