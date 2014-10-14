@@ -100,8 +100,8 @@ namespace ssvu
 					inline static constexpr auto isWhitespace(char mC) noexcept	{ return mC == ' ' || mC == '\t' || mC == '\r' || mC == '\n'; }
 					inline static constexpr auto isNumStart(char mC) noexcept	{ return mC == '-' || isDigit(mC); }
 
-					inline char& getC() noexcept						{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
-					inline char getC() const noexcept					{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
+					inline char& getC() noexcept				{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
+					inline char getC() const noexcept			{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
 					inline char& getC(SizeT mIdx) noexcept		{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
 					inline char getC(SizeT mIdx) const noexcept	{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
 
