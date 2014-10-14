@@ -17,6 +17,9 @@ namespace ssvu
 		};
 
 		template<typename T> using StandardLayoutCheckerT = typename ssvu::Internal::StandardLayoutChecker<T>::Type;
+
+		template<typename... > struct Voider { using Type = void; };
+		template<typename... TArgs> using VoidT = typename Voider<TArgs...>::Type;
 	}
 }
 

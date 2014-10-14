@@ -26,9 +26,9 @@ namespace ssvu
 		};
 	}
 
-	template<typename F, typename T> inline auto explode(F&& f, T&& t)
+	template<typename TF, typename T> inline auto explode(TF&& mF, T&& mT)
 	{
-		return Internal::Exploder<getTupleSize<Decay<T>>()>::explode(fwd<F>(f), fwd<T>(t));
+		return Internal::Exploder<getTupleSize<Decay<T>>()>::explode(fwd<TF>(mF), fwd<T>(mT));
 	}
 }
 
