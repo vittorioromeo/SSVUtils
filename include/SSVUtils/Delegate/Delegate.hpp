@@ -51,7 +51,7 @@ namespace ssvu
 			/// @return void or std::vector containing return values from the functions
 			inline auto operator()(TArgs... mArgs)
 			{
-				return Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, fwd<TArgs>(mArgs)...);
+				return Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, mArgs...);
 			}
 
 			/// @brief Clears all the functions from the delegate.
@@ -68,7 +68,7 @@ namespace ssvu
 			inline static auto exec(Delegate<TReturn(TArgs...)>& mDelegate, TArgs... mArgs)
 			{
 				std::vector<TReturn> result; result.reserve(mDelegate.funcs.size());
-				for(const auto& f : mDelegate.funcs) result.emplace_back(f(fwd<TArgs>(mArgs)...));
+				for(const auto& f : mDelegate.funcs) result.emplace_back(f(mArgs...));
 				return result;
 			}
 		};
@@ -76,7 +76,7 @@ namespace ssvu
 		{
 			inline static void exec(Delegate<void(TArgs...)>& mDelegate, TArgs... mArgs)
 			{
-				for(const auto& f : mDelegate.funcs) f(fwd<TArgs>(mArgs)...);
+				for(const auto& f : mDelegate.funcs) f(mArgs...);
 			}
 		};
 	}
