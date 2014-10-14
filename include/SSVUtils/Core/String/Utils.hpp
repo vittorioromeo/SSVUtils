@@ -22,7 +22,7 @@ namespace ssvu
 	namespace Internal
 	{
 		void resetFmt(std::ostream& mStream);
-		inline auto& getStringifyStream() noexcept { static thread_local std::ostringstream oss; return oss; }
+		inline auto& getStringifyStream() noexcept { thread_local std::ostringstream oss; return oss; }
 		template<bool TFmt, bool TResetFmt = true, typename T> inline void callStringifyImpl(std::ostream& mStream, const T& mValue)
 		{
 			if(TResetFmt) resetFmt(mStream);
