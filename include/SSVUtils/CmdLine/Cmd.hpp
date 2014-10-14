@@ -71,7 +71,7 @@ namespace ssvu
 
 				inline auto& findFlag(const std::string& mName)
 				{
-					for(auto& f : asRangeCast<Flag&>(mgr.getAll<EType::Flag>())) if(f.hasName(mName)) return f;
+					for(auto& f : asRangeCastPtr<Flag&>(mgr.getAll<EType::Flag>())) if(f.hasName(mName)) return f;
 					throw Exception::createFlagNotFound(mName, getNamesStr());
 				}
 
