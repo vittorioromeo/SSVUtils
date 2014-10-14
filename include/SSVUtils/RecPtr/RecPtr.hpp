@@ -47,7 +47,7 @@ namespace ssvu
 				}
 		};
 
-		template<typename T> inline auto& getRecycler() noexcept { static Recycler<T> result; return result; }
+		template<typename T> inline auto& getRecycler() noexcept { thread_local Recycler<T> result; return result; }
 	}
 
 	template<typename T, typename TBase> using UPtrRecPoly = UPtr<T, void(*)(TBase*)>;
