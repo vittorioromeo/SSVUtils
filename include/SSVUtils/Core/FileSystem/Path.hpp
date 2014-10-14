@@ -75,6 +75,8 @@ namespace ssvu
 					mustNormalize = true; return *this;
 				}
 
+				// BUG: gcc ref qualifiers ambiguous... TODO: stackoverflow
+				// inline auto getStr() &	noexcept			{ normalize(); return path; }
 				inline const auto& getStr() const& noexcept	{ normalize(); return path; }
 				inline auto getStr() &&	noexcept			{ normalize(); return path; }
 				inline auto getCStr() const noexcept		{ return getStr().c_str(); }
