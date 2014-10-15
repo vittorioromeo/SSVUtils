@@ -47,39 +47,49 @@ namespace ssvu
 					// TODO: try purging whitespace here if RSDefault is enabled
 					inline void purgeSource()
 					{
+						auto purged(makeUPtr<char[]>(src.size()));
+						auto pi(0u);
+
 						for(auto i(0u); i < src.size(); ++i)
 						{
 							// Skip strings
 							if(getC(i) == '"')
 							{
 								// Skip opening '"'
-								++i;
+								purged[pi++] = src[i++];
 
 								// Move until closing '"', skipping '\"'
-								while(getC(i) != '"' || getC(i - 1) == '\\') ++i;
+								while(getC(i) != '"' || getC(i - 1) == '\\') purged[pi++] = src[i++];
 
-								// Skip closing '"'
-								++i;
+								// Add and skip closing '"' by continuing
+								purged[pi++] = src[i];
+								continue;
 							}
 
-							// Check for src end
-							if(i >= src.size()) return;
-
 							// Detect C++-style comment
-							if(getC(i) != '/' || getC(i + 1) != '/') continue;
+							if(getC(i) == '/' && getC(i + 1) == '/')
+							{
+								while(getC(i) != '\n') ++i;
+								continue;
+							}
 
-							// Replace comment with whitespace
-							for(; getC(i) != '\n'; ++i) getC(i) = ' ';
+							if(!isWhitespace(getC(i))) purged[pi++] = src[i];
 						}
+
+						purged[pi++] = '\0';
+						src = purged.get();
 					}
 
 					inline auto getErrorSrc()
 					{
-						auto iStart(std::max(Idx(0), idx - 20));
-						auto iEnd(std::min(src.size() - 1, idx + 20));
+						auto intSize(static_cast<int>(src.size()));
+						auto intIdx(static_cast<int>(idx));
 
-						auto iDStart(std::max(Idx(0), idx - 4));
-						auto iDEnd(std::min(src.size() - 1, idx + 4));
+						auto iStart(std::max(0, intIdx - 20));
+						auto iEnd(std::min(intSize - 1, intIdx + 20));
+
+						auto iDStart(std::max(0, intIdx - 4));
+						auto iDEnd(std::min(intSize - 1, intIdx + 4));
 
 						auto strMarked
 						(
@@ -108,8 +118,6 @@ namespace ssvu
 
 					inline auto isC(char mC) const noexcept	{ return getC() == mC; }
 					inline auto isCDigit() const noexcept	{ return isDigit(getC()); }
-
-					inline void skipWhitespace() noexcept { while(isWhitespace(getC())) ++idx; }
 
 					template<SizeT TS> inline void match(const char(&mKeyword)[TS])
 					{
@@ -191,8 +199,6 @@ namespace ssvu
 						// Skip '['
 						++idx;
 
-						skipWhitespace();
-
 						// Empty array
 						if(isC(']')) goto end;
 
@@ -202,9 +208,7 @@ namespace ssvu
 						while(true)
 						{
 							// Get value
-							skipWhitespace();
 							arr.emplace_back(parseVal());
-							skipWhitespace();
 
 							// Check for another value
 							if(isC(',')) { ++idx; continue; }
@@ -230,8 +234,6 @@ namespace ssvu
 						// Skip '{'
 						++idx;
 
-						skipWhitespace();
-
 						// Empty object
 						if(isC('}')) goto end;
 
@@ -241,21 +243,17 @@ namespace ssvu
 						while(true)
 						{
 							// Read string key
-							skipWhitespace();
 							if(!isC('"')) throwError("Invalid object", std::string{"Expected `\"` , got `"} + getC() + "`");
 							auto key(readStr());
 
 							// Read ':'
-							skipWhitespace();
 							if(!isC(':')) throwError("Invalid object", std::string{"Expected `:` , got `"} + getC() + "`");
 
 							// Skip ':'
 							++idx;
 
 							// Read value
-							skipWhitespace();
 							obj[std::move(key)] = parseVal();
-							skipWhitespace();
 
 							// Check for another key-value pair
 							if(isC(',')) { ++idx; continue; }
@@ -277,13 +275,11 @@ namespace ssvu
 				public:
 					template<typename T> inline Reader(T&& mSrc) : src{fwd<T>(mSrc)}
 					{
-						if(!TRS::noComments) purgeSource();
+						purgeSource();
 					}
 
 					inline Val parseVal()
 					{
-						skipWhitespace();
-
 						// Check value type
 						switch(getC())
 						{
