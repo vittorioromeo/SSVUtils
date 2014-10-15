@@ -6,7 +6,7 @@
 #define SSVU_JSON_VAL
 
 #include "SSVUtils/Json/Val/Internal/Fwd.hpp"
-#include "SSVUtils/Json/Val/Internal/ValItrHelper.hpp"
+#include "SSVUtils/Json/Val/Internal/ItrHelper.hpp"
 
 namespace ssvu
 {
@@ -34,7 +34,7 @@ namespace ssvu
 			private:
 				// Shortcut typedefs
 				using Num = Internal::Num;
-				using VIH = Internal::ValItrHelper;
+				using VIH = Internal::ItrHelper;
 
 				/// @brief Current storage type.
 				Type type{Type::Nll};

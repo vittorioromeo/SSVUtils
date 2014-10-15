@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_JSON_VAL_INTERNAL_VALITRHELPER
-#define SSVU_JSON_VAL_INTERNAL_VALITRHELPER
+#ifndef SSVU_JSON_VAL_INTERNAL_ITRHELPER
+#define SSVU_JSON_VAL_INTERNAL_ITRHELPER
 
 namespace ssvu
 {
@@ -12,7 +12,7 @@ namespace ssvu
 		namespace Internal
 		{
 			/// @brief Helper class for iteration on `Val` objects.
-			struct ValItrHelper
+			struct ItrHelper
 			{
 				// Key/value pair class and helper functions
 				template<typename TK, typename TV> struct KVPair { TK key; TV value; };
