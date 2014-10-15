@@ -49,6 +49,7 @@ namespace ssvu
 					inline bool isClean() const noexcept { return true; }
 				#endif
 
+				// TODO: variant type?
 				union Holder
 				{
 					Obj hObj;
@@ -65,27 +66,24 @@ namespace ssvu
 				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{fwd<T>(mX)}))	{ SSVU_ASSERT(isClean()); type = Type::Obj; new(&h.hObj) Obj{fwd<T>(mX)}; }
 				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{fwd<T>(mX)}))	{ SSVU_ASSERT(isClean()); type = Type::Arr; new(&h.hArr) Arr(fwd<T>(mX)); }
 				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{fwd<T>(mX)}))	{ SSVU_ASSERT(isClean()); type = Type::Str; new(&h.hStr) Str(fwd<T>(mX)); }
+				template<typename T> inline void setNum(T&& mX) noexcept(noexcept(Num{fwd<T>(mX)}))	{ SSVU_ASSERT(isClean()); type = Type::Num; new(&h.hNum) Num(fwd<T>(mX)); }
 
 				// Basic setters
-				inline void setNum(const Num& mX) noexcept											{ SSVU_ASSERT(isClean()); type = Type::Num; h.hNum = mX; }
 				inline void setBln(Bln mX) noexcept													{ SSVU_ASSERT(isClean()); type = Type::Bln; h.hBool = mX; }
 				inline void setNll(Nll) noexcept													{ SSVU_ASSERT(isClean()); type = Type::Nll; }
 
-				// `Obj` getters
-				inline auto& getObj() noexcept				{ SSVU_ASSERT(is<Obj>() && !isClean()); return h.hObj; }
-				inline const auto& getObj() const noexcept	{ SSVU_ASSERT(is<Obj>() && !isClean()); return h.hObj; }
+				// Ref-qualified getters
+				#define SSVJ_DEFINE_VAL_GETTER(mType, mMember) \
+					inline decltype(mMember)&		SSVPP_EXPAND(SSVPP_CAT(get, mType))() & noexcept		{ SSVU_ASSERT(is<mType>() && !isClean()); return mMember; } \
+					inline const decltype(mMember)&	SSVPP_EXPAND(SSVPP_CAT(get, mType))() const& noexcept	{ SSVU_ASSERT(is<mType>() && !isClean()); return mMember; } \
+					inline decltype(mMember)		SSVPP_EXPAND(SSVPP_CAT(get, mType))() && noexcept		{ SSVU_ASSERT(is<mType>() && !isClean()); return std::move(mMember); }
 
-				// `Arr` getters
-				inline auto& getArr() noexcept				{ SSVU_ASSERT(is<Arr>() && !isClean()); return h.hArr; }
-				inline const auto& getArr() const noexcept	{ SSVU_ASSERT(is<Arr>() && !isClean()); return h.hArr; }
+				SSVJ_DEFINE_VAL_GETTER(Obj, h.hObj)
+				SSVJ_DEFINE_VAL_GETTER(Arr, h.hArr)
+				SSVJ_DEFINE_VAL_GETTER(Str, h.hStr)
+				SSVJ_DEFINE_VAL_GETTER(Num, h.hNum)
 
-				// `Str` getters
-				inline auto& getStr() noexcept				{ SSVU_ASSERT(is<Str>() && !isClean()); return h.hStr; }
-				inline const auto& getStr() const noexcept	{ SSVU_ASSERT(is<Str>() && !isClean()); return h.hStr; }
-
-				// `Num` getters
-				inline auto& getNum() noexcept				{ SSVU_ASSERT(is<Num>() && !isClean()); return h.hNum; }
-				inline const auto& getNum() const noexcept	{ SSVU_ASSERT(is<Num>() && !isClean()); return h.hNum; }
+				#undef SSVJ_DEFINE_VAL_GETTER
 
 				// Other getters
 				inline auto getBln() const noexcept			{ SSVU_ASSERT(is<Bln>() && !isClean()); return h.hBool; }
@@ -161,11 +159,15 @@ namespace ssvu
 
 				/// @brief Gets the internal value as `T`. (non-const version)
 				/// @details Returns a copy for most types, a reference for `Obj`, `Arr` and `Str`.
-				template<typename T> decltype(auto) as();
+				template<typename T> auto as() & -> decltype(Internal::AsHelper<T>::as(*this));
 
 				/// @brief Gets the internal value as `T`. (const version)
 				/// @details Returns a copy for most types, a const reference for `Obj`, `Arr` and `Str`.
-				template<typename T> decltype(auto) as() const;
+				template<typename T> auto as() const& -> decltype(Internal::AsHelper<T>::as(*this));
+
+				/// @brief Gets the internal value as `T`. (rvalue version)
+				/// @details Returns a copy for most types, a const reference for `Obj`, `Arr` and `Str`.
+				template<typename T> auto as() && -> decltype(Internal::AsHelper<T>::as(*this));
 
 				// "Implicit" `set` function done via `operator=` overloading
 				auto& operator=(const Val& mV) noexcept;

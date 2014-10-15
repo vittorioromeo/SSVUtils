@@ -69,7 +69,6 @@ namespace ssvu
 					inline static void fromVal(const Val& mV, mType& mX) noexcept	{ mX = mV.getNum().as<mType>(); } \
 				};
 
-			// TODO: try getTypeMove() && std::move(...) ?
 			#define SSVJ_DEFINE_CNV_BIG_MUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \

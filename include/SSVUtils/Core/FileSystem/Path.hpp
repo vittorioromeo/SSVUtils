@@ -75,11 +75,17 @@ namespace ssvu
 					mustNormalize = true; return *this;
 				}
 
-				// BUG: gcc ref qualifiers ambiguous... TODO: stackoverflow
-				// inline auto getStr() &	noexcept			{ normalize(); return path; }
-				inline const auto& getStr() const& noexcept	{ normalize(); return path; }
-				inline auto getStr() &&	noexcept			{ normalize(); return path; }
-				inline auto getCStr() const noexcept		{ return getStr().c_str(); }
+				// Internal path string getters
+				inline const std::string& getStr() & noexcept		{ normalize(); return path; }
+				inline const std::string& getStr() const& noexcept	{ normalize(); return path; }
+				inline std::string&& getStr() && noexcept			{ normalize(); return std::move(path); }
+
+				// Implicit conversion to `std::string`
+				inline operator const std::string&() & noexcept			{ return getStr(); }
+				inline operator const std::string&() const& noexcept	{ return getStr(); }
+				inline operator std::string() && noexcept				{ return std::move(getStr()); }
+
+				inline auto getCStr() const noexcept { return getStr().c_str(); }
 
 				/// @brief Returns true if the path exists on the user's filesystem and respects the passed filter.
 				/// @tparam TType Existance type to check.
@@ -176,40 +182,25 @@ namespace ssvu
 				inline bool isNull() const noexcept { return path == ""; }
 
 				inline bool operator<(const Path& mPath) const noexcept { return getStr() < mPath.getStr(); }
-
-				inline operator const std::string&() const& noexcept	{ return getStr(); }
-				inline operator std::string() && noexcept				{ return getStr(); }
 		};
 
-		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath)	{ return mStream << mPath.getStr(); }
+		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath) { return mStream << mPath.getStr(); }
 
-		/*template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline Path operator+(const Path& mLhs, T&& mRhs)
+		#define ENABLEIF_ANY_PATH() EnableIf<isSame<RemoveAll<T1>, Path>() || isSame<RemoveAll<T2>, Path>()>* = nullptr
+
+		// Operator+
+		template<typename T1, typename T2, ENABLEIF_ANY_PATH()> inline Path operator+(T1&& mLhs, T2&& mRhs)
 		{
-			Path result{mLhs};
-			result += fwd<T>(mRhs);
+			Path result{fwd<T1>(mLhs)};
+			result += fwd<T2>(mRhs);
 			return result;
 		}
-		template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline Path operator+(T&& mLhs, const Path& mRhs)
-		{
-			Path result{mRhs};
-			result += fwd<T>(mLhs);
-			return result;
-		}*/
 
-		inline Path operator+(const std::string& mLhs, const Path& mRhs)	{ return {mLhs + mRhs.getStr()}; }
-		inline Path operator+(const Path& mLhs, const std::string& mRhs)	{ return {mLhs.getStr() + mRhs}; }
-		inline Path operator+(const Path& mLhs, const Path& mRhs)			{ return {mLhs.getStr() + mRhs.getStr()}; }
-		inline Path operator+(const char* mLhs, const Path& mRhs)			{ return {std::string(mLhs) + mRhs.getStr()}; }
-		inline Path operator+(const Path& mLhs, const char* mRhs)			{ return {mLhs.getStr() + std::string(mRhs)}; }
+		// Equality/inequality check
+		template<typename T1, typename T2, ENABLEIF_ANY_PATH()> inline bool operator==(const T1& mLhs, const T2& mRhs) { return mLhs == mRhs; }
+		template<typename T1, typename T2, ENABLEIF_ANY_PATH()> inline bool operator!=(const T1& mLhs, const T2& mRhs) { return mLhs != mRhs; }
 
-		inline Path operator+(std::string&& mLhs, const Path& mRhs)			{ return {std::move(mLhs) + mRhs.getStr()}; }
-		inline Path operator+(const Path& mLhs, std::string&& mRhs)			{ return {mLhs.getStr() + std::move(mRhs)}; }
-
-		inline bool operator==(const std::string& mLhs, const Path& mRhs)	{ return mLhs == mRhs.getStr(); }
-		inline bool operator==(const Path& mLhs, const std::string& mRhs)	{ return mLhs.getStr() == mRhs; }
-		inline bool operator==(const Path& mLhs, const Path& mRhs)			{ return mLhs.getStr() == mRhs.getStr(); }
-		inline bool operator==(const char* mLhs, const Path& mRhs)			{ return std::string(mLhs) == mRhs.getStr(); }
-		inline bool operator==(const Path& mLhs, const char* mRhs)			{ return mLhs.getStr() == std::string(mRhs); }
+		#undef ENABLEIF_ANY_PATH
 	}
 }
 
