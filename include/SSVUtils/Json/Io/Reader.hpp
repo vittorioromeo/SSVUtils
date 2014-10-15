@@ -44,6 +44,7 @@ namespace ssvu
 						throw ReadException{std::move(mTitle), std::move(mBody), getErrorSrc()};
 					}
 
+					// TODO: try purging whitespace here if RSDefault is enabled
 					inline void purgeSource()
 					{
 						for(auto i(0u); i < src.size(); ++i)
