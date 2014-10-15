@@ -37,32 +37,29 @@ namespace ssvu
 			{
 				private:
 					std::string src;
-					Idx idx{0u};
+					Idx idx{0u}, realSize{0u};
 
 					inline void throwError(std::string mTitle, std::string mBody)
 					{
 						throw ReadException{std::move(mTitle), std::move(mBody), getErrorSrc()};
 					}
 
-					// TODO: try purging whitespace here if RSDefault is enabled
 					inline void purgeSource()
 					{
-						auto purged(makeUPtr<char[]>(src.size()));
 						auto pi(0u);
-
 						for(auto i(0u); i < src.size(); ++i)
 						{
 							// Skip strings
 							if(getC(i) == '"')
 							{
 								// Skip opening '"'
-								purged[pi++] = src[i++];
+								getC(pi++) = getC(i++);
 
 								// Move until closing '"', skipping '\"'
-								while(getC(i) != '"' || getC(i - 1) == '\\') purged[pi++] = src[i++];
+								while(getC(i) != '"' || getC(i - 1) == '\\') getC(pi++) = getC(i++);
 
 								// Add and skip closing '"' by continuing
-								purged[pi++] = src[i];
+								getC(pi++) = getC(i);
 								continue;
 							}
 
@@ -73,16 +70,15 @@ namespace ssvu
 								continue;
 							}
 
-							if(!isWhitespace(getC(i))) purged[pi++] = src[i];
+							if(!isWhitespace(getC(i))) getC(pi++) = getC(i);
 						}
 
-						purged[pi++] = '\0';
-						src = purged.get();
+						realSize = pi;
 					}
 
 					inline auto getErrorSrc()
 					{
-						auto intSize(static_cast<int>(src.size()));
+						auto intSize(static_cast<int>(realSize));
 						auto intIdx(static_cast<int>(idx));
 
 						auto iStart(std::max(0, intIdx - 20));
@@ -135,23 +131,23 @@ namespace ssvu
 
 						// Find end index of the string
 						auto end(idx);
-						for(; true; ++end)
+						auto sz(0u);
+						for(; true; ++end, ++sz)
 						{
 							// End of the string
 							if(getC(end) == '"') break;
 
+							// Skip non-escape sequences
+							if(getC(end) != '\\') continue;
+
 							// Skip escape sequences
-							if(getC(end) == '\\')
-							{
-								++end;
-								SSVU_ASSERT(isValidEscapeSequenceChar(getC(end)));
-								continue;
-							}
+							++end;
+							SSVU_ASSERT(isValidEscapeSequenceChar(getC(end)));
 						}
 
 						// Reserve memory for the string (BOTTLENECK)
 						Str result;
-						result.reserve(end - idx);
+						result.reserve(sz);
 
 						for(; idx < end; ++idx)
 						{

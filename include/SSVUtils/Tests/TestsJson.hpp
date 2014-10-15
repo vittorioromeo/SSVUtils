@@ -306,11 +306,11 @@ SSVUT_TEST(SSVUJsonReadTests)
 
 	auto v(Val::fromStr(testSrc));
 
-	SSVUT_EXPECT(v["a"] == 1);
+	SSVUT_EXPECT_OP(v["a"], ==, 1);
 	SSVUT_EXPECT(v["b"] == Nll{});
-	SSVUT_EXPECT(v["c"] == "//");
-	SSVUT_EXPECT(v["d"] == true);
-	SSVUT_EXPECT(v["e"] == "//\"//");
+	SSVUT_EXPECT_OP(v["c"], ==, "//");
+	SSVUT_EXPECT_OP(v["d"], ==, true);
+	SSVUT_EXPECT_OP(v["e"], ==, "//\"//");
 }
 
 SSVUT_TEST(SSVUJsonWriteTests)

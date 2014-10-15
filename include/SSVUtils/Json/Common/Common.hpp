@@ -64,17 +64,10 @@ namespace ssvu
 
 
 		/// @brief Struct holding settings for `Reader`.
-		/// @tparam TNoComments If true, expects to read a file without comments.
-		template<bool TNoComments> struct ReaderSettings
-		{
-			enum { noComments = TNoComments };
-		};
+		struct ReaderSettings { };
 
 		/// @typedef `Reader` settings intended for any JSON file.
-		using RSDefault = ReaderSettings<false>;
-
-		/// @typedef `Reader` settings intended for JSON files without comments.
-		using RSNoComments = ReaderSettings<true>;
+		using RSDefault = ReaderSettings;
 	}
 }
 
