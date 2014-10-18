@@ -28,7 +28,7 @@ namespace ssvu
 
 	template<typename TF, typename T> inline auto explode(TF&& mF, T&& mT)
 	{
-		return Internal::Exploder<getTupleSize<Decay<T>>()>::explode(fwd<TF>(mF), fwd<T>(mT));
+		return Internal::Exploder<getTplSize<Decay<T>>()>::explode(fwd<TF>(mF), fwd<T>(mT));
 	}
 }
 
