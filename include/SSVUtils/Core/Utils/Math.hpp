@@ -332,7 +332,7 @@ namespace ssvu
 		inline constexpr Common<T1, T2, T3, T4, T5> getMap(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
 	{
 		SSVU_ASSERT_CONSTEXPR((mIMax - mIMin) != 0);
-		return mOMin + (mI - mIMin) * (mOMax - mOMin) / (mIMax - mIMin);
+		return (mI - mIMin) * (mOMax - mOMin) / (mIMax - mIMin) + mOMin;
 	}
 
 	/// @brief Lineally interpolates between two values using a [0..1] weight.
