@@ -13,8 +13,8 @@ namespace ssvu
 		template<typename> friend class HandleVector;
 
 		public:
-			/// @typedef Atom type.
-			using AtomType = typename Internal::Atom<T>;
+			/// @typedef Templatized `Internal::Atom<T>` type;
+			using Atom = typename Internal::Atom<T>;
 
 		private:
 			/// @brief Internal pointer to the HandleVector.
@@ -37,10 +37,10 @@ namespace ssvu
 
 		public:
 			/// @brief Returns a reference to the atom. Assumes the handle is valid.
-			inline auto& getAtom() noexcept { return getAtomImpl<AtomType&>(); }
+			inline auto& getAtom() noexcept { return getAtomImpl<Atom&>(); }
 
 			/// @brief Returns a const reference to the atom. Assumes the handle is valid.
-			inline const auto& getAtom() const noexcept { return getAtomImpl<const AtomType&>(); }
+			inline const auto& getAtom() const noexcept { return getAtomImpl<const Atom&>(); }
 
 			/// @brief Returns a reference to the data. Assumes the handle is valid.
 			inline T& get() noexcept { return getAtom().getData(); }
@@ -55,6 +55,7 @@ namespace ssvu
 			/// @brief Sets the pointed atom's status as dead.
 			void destroy() noexcept;
 
+			// Pointer-like interface
 			inline T& operator*() noexcept				{ return get(); }
 			inline const T& operator*() const noexcept	{ return get(); }
 			inline T* operator->() noexcept				{ return &(get()); }
