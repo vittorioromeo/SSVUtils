@@ -56,3 +56,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: use adaptor?
