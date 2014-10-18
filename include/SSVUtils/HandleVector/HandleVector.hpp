@@ -18,6 +18,7 @@ namespace ssvu
 	template<typename> class HandleVector;
 }
 
+#include "SSVUtils/HandleVector/Internal/GrowableArray.hpp"
 #include "SSVUtils/HandleVector/Internal/Uncertain.hpp"
 #include "SSVUtils/HandleVector/Internal/Atom.hpp"
 #include "SSVUtils/HandleVector/Internal/Iterator.hpp"
@@ -40,15 +41,15 @@ namespace ssvu
 			};
 
 		public:
-			/// @typedef Atom type.
-			using AtomType = typename Internal::Atom<T>;
+			/// @typedef Templatized `Internal::Atom<T>` type.
+			using Atom = typename Internal::Atom<T>;
 
 		private:
 			/// @brief Internal atom storage.
-			std::vector<AtomType> atoms;
+			Internal::GrowableArray<Atom> atoms;
 
 			/// @brief Internal mark storage.
-			std::vector<Mark> marks;
+			Internal::GrowableArray<Mark> marks;
 
 			/// @brief Current size. Does not take into account newly created atoms.
 			SizeT size{0u};
@@ -56,31 +57,31 @@ namespace ssvu
 			/// @brief Next size. Takes into account newly created atoms.
 			SizeT sizeNext{0u};
 
-			/// @brief Returns the capacity of the internal storage.
-			inline auto getCapacity() const noexcept { return atoms.size(); }
+			/// @brief Storage capacity for atoms/marks.
+			SizeT capacity{0u};
 
 			/// @brief Increases internal storage capacity by mAmount.
 			inline void growCapacityBy(SizeT mAmount)
 			{
-				auto i(getCapacity()), newCapacity(getCapacity() + mAmount);
-				SSVU_ASSERT(newCapacity >= 0 && newCapacity >= getCapacity());
+				auto capacityNew(capacity + mAmount);
+				SSVU_ASSERT(capacityNew >= 0 && capacityNew >= capacity);
 
-				atoms.reserve(newCapacity);
-				marks.reserve(newCapacity);
+				atoms.resize(capacity, capacityNew);
+				marks.resize(capacity, capacityNew);
 
 				// Initialize resized storage
-				for(; i < newCapacity; ++i)
+				for(; capacity < capacityNew; ++capacity)
 				{
-					atoms.emplace_back(i);
-					marks.emplace_back(i);
+					atoms.constructAt(capacity, capacity);
+					marks.constructAt(capacity, capacity);
 				}
 			}
 
 			/// @brief Sets internal storage capacity to mCapacity.
-			inline void growCapacityTo(SizeT mCapacity)
+			inline void growCapacityTo(SizeT mCapacityNew)
 			{
-				SSVU_ASSERT(getCapacity() < mCapacity);
-				growCapacityBy(mCapacity - getCapacity());
+				SSVU_ASSERT(capacity < mCapacityNew);
+				growCapacityBy(mCapacityNew - capacity);
 			}
 
 			/// @brief Checks if the current capacity is enough - if it isn't, increases it.
@@ -89,7 +90,7 @@ namespace ssvu
 				constexpr float growMultiplier{2.f};
 				constexpr SizeT growAmount{5};
 
-				if(getCapacity() <= sizeNext) growCapacityTo((getCapacity() + growAmount) * growMultiplier);
+				if(capacity <= sizeNext) growCapacityTo((capacity + growAmount) * growMultiplier);
 			}
 
 			/// @brief Sets the status of the atom pointed by the mark at mMarkIdx to dead.
@@ -99,18 +100,24 @@ namespace ssvu
 			}
 
 			/// @brief Returns a reference to mAtom's controller mark.
-			inline auto& getMarkFromAtom(const AtomType& mAtom)	noexcept { return marks[mAtom.markIdx]; }
+			inline auto& getMarkFromAtom(const Atom& mAtom)	noexcept { return marks[mAtom.markIdx]; }
 
 			/// @brief Returns a reference to mMark's controlled atom.
 			inline auto& getAtomFromMark(const Mark& mMark) noexcept { return atoms[mMark.atomIdx]; }
 
 		public:
-			inline HandleVector() = default;
-			inline ~HandleVector() { clear(); }
+			inline HandleVector() { growCapacityBy(10); }
+			inline ~HandleVector() noexcept(isNothrowDtor<T>()) { clear(); }
+
+			inline HandleVector(const HandleVector&) = delete;
+			inline HandleVector(HandleVector&&) = delete;
+
+			inline auto& operator=(const HandleVector&) = delete;
+			inline auto& operator=(HandleVector&&) = delete;
 
 			/// @brief Clears the HandleVector, destroying all elements.
 			/// @details Does not alter the capacity.
-			inline void clear() noexcept
+			inline void clear() noexcept(isNothrowDtor<T>())
 			{
 				refresh();
 
@@ -129,11 +136,11 @@ namespace ssvu
 			}
 
 			/// @brief Reserves storage, increasing the capacity.
-			inline void reserve(SizeT mCapacity) { if(getCapacity() < mCapacity) growCapacityTo(mCapacity); }
+			inline void reserve(SizeT mCapacity) { if(capacity < mCapacity) growCapacityTo(mCapacity); }
 
 			/// @brief Creates and returns an handle pointing to mAtom.
 			/// @details The created atom will not be used until the HandleVector is refreshed.
-			inline auto createHandleFromAtom(AtomType& mAtom) noexcept
+			inline auto createHandleFromAtom(Atom& mAtom) noexcept
 			{
 				return Handle<T>{*this, mAtom.markIdx, getMarkFromAtom(mAtom).ctr};
 			}
@@ -169,8 +176,10 @@ namespace ssvu
 
 			/// @brief Refreshes the HandleVector.
 			/// @details Dead atoms are deallocated and destroyed. Newly created atoms are now taken into account.
-			inline void refresh()
+			inline void refresh() noexcept(isNothrowDtor<T>())
 			{
+				// TODO: bottleneck - code review?
+
 				// Type must be signed, to check with negative values later
 				int iDead{0};
 
@@ -230,10 +239,10 @@ namespace ssvu
 			}
 
 			/// @brief Returns a reference to the atom at mIdx.
-			inline auto& getAtomAt(HIdx mIdx) noexcept { SSVU_ASSERT(mIdx < atoms.size()); return atoms[mIdx]; }
+			inline auto& getAtomAt(HIdx mIdx) noexcept { return atoms[mIdx]; }
 
 			/// @brief Returns a const reference to the atom at mIdx.
-			inline const auto& getAtomAt(HIdx mIdx) const noexcept { SSVU_ASSERT(mIdx < atoms.size()); return atoms[mIdx]; }
+			inline const auto& getAtomAt(HIdx mIdx) const noexcept { return atoms[mIdx]; }
 
 			/// @brief Returns a reference to the data at mIdx. Assumes the data is initialized.
 			inline T& getDataAt(HIdx mIdx) noexcept { return getAtomAt(mIdx).getData(); }
@@ -255,13 +264,16 @@ namespace ssvu
 
 			/// @brief Returns a reference to `mData`'s atom. Assumes `mData` is a member of an atom.
 			/// @details Will not work correctly if the HandleVector gets resized (either by reserving or adding elements).
-			inline constexpr AtomType& getAtomFromData(T& mData) noexcept
+			inline constexpr Atom& getAtomFromData(T& mData) noexcept
 			{
 				return *(Internal::Atom<T>::getAtomFromUncertain(Internal::Uncertain<T>::getUncertainFromData(&mData)));
 			}
 
 			/// @brief Returns a reference to `mHandle`'s atom.
-			inline constexpr AtomType& getAtomFromHandle(Handle<T>& mHandle) noexcept { return getAtomFromData(*mHandle); }
+			inline constexpr Atom& getAtomFromHandle(Handle<T>& mHandle) noexcept { return getAtomFromData(*mHandle); }
+
+			/// @brief Returns the capacity of the internal storage.
+			inline auto getCapacity() const noexcept { return capacity; }
 
 
 			// Fast iterators
@@ -323,3 +335,6 @@ namespace ssvu
 #include "SSVUtils/HandleVector/Handle.inl"
 
 #endif
+
+// TODO: docs for array, cast ranges, review
+// * forAtoms(), for(), forIdx()
