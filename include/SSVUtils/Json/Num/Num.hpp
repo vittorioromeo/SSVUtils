@@ -30,26 +30,22 @@ namespace ssvu
 					/// @brief Current representation in use.
 					Repr repr;
 
-					union Holder
-					{
-						IntS hIntS;
-						IntU hIntU;
-						Real hReal;
-					} h;
+					/// @brief Union POD storage for representation types.
+					UnionVariantPOD<IntS, IntU, Real> h;
 
 					// Union setters
-					inline void setIntS(const IntU& mX) noexcept { repr = Repr::IntS; h.hIntS = mX; }
-					inline void setIntU(const IntS& mX) noexcept { repr = Repr::IntU; h.hIntU = mX; }
-					inline void setReal(const Real& mX) noexcept { repr = Repr::Real; h.hReal = mX; }
+					inline void setIntS(const IntU& mX) noexcept { repr = Repr::IntS; h.init<IntS>(mX); }
+					inline void setIntU(const IntS& mX) noexcept { repr = Repr::IntU; h.init<IntU>(mX); }
+					inline void setReal(const Real& mX) noexcept { repr = Repr::Real; h.init<Real>(mX); }
 
 					/// @brief Returns the stored value as an `IntS`. The value is copied and casted if necessary.
 					inline IntS getIntS() const noexcept
 					{
 						switch(repr)
 						{
-							case Repr::IntS: return h.hIntS;
-							case Repr::IntU: return static_cast<IntS>(h.hIntU);
-							case Repr::Real: return static_cast<IntS>(h.hReal);
+							case Repr::IntS: return h.get<IntS>();
+							case Repr::IntU: return static_cast<IntS>(h.get<IntU>());
+							case Repr::Real: return static_cast<IntS>(h.get<Real>());
 							default: SSVU_UNREACHABLE();
 						}
 					}
@@ -59,9 +55,9 @@ namespace ssvu
 					{
 						switch(repr)
 						{
-							case Repr::IntS: return static_cast<IntU>(h.hIntS);
-							case Repr::IntU: return h.hIntU;
-							case Repr::Real: return static_cast<IntU>(h.hReal);
+							case Repr::IntS: return static_cast<IntU>(h.get<IntS>());
+							case Repr::IntU: return h.get<IntU>();
+							case Repr::Real: return static_cast<IntU>(h.get<Real>());
 							default: SSVU_UNREACHABLE();
 						}
 					}
@@ -71,9 +67,9 @@ namespace ssvu
 					{
 						switch(repr)
 						{
-							case Repr::IntS: return static_cast<Real>(h.hIntS);
-							case Repr::IntU: return static_cast<Real>(h.hIntU);
-							case Repr::Real: return h.hReal;
+							case Repr::IntS: return static_cast<Real>(h.get<IntS>());
+							case Repr::IntU: return static_cast<Real>(h.get<IntU>());
+							case Repr::Real: return h.get<Real>();
 							default: SSVU_UNREACHABLE();
 						}
 					}

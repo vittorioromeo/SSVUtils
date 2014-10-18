@@ -39,75 +39,53 @@ namespace ssvu
 				/// @brief Current storage type.
 				Type type{Type::Nll};
 
-				// If debug mode is enabled, store and check a "clean" storage flag for additional safety and debugging ease
-				#if SSVU_DEBUG
-					bool clean{true};
-					inline void setClean(bool mClean) noexcept { clean = mClean; }
-					inline bool isClean() const noexcept { return clean; }
-				#else
-					inline void setClean(bool) noexcept { }
-					inline bool isClean() const noexcept { return true; }
-				#endif
-
-				// TODO: variant type?
-				union Holder
-				{
-					Obj hObj;
-					Arr hArr;
-					Str hStr;
-					Num hNum;
-					Bln hBool;
-\
-					inline Holder() noexcept { }
-					inline ~Holder() noexcept { }
-				} h;
+				/// @brief Checked union storage for `Val` fundamental types.
+				UnionVariant<Obj, Arr, Str, Num, Bln> h;
 
 				// Perfect-forwarding setters
-				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{fwd<T>(mX)}))	{ SSVU_ASSERT(isClean()); type = Type::Obj; new(&h.hObj) Obj{fwd<T>(mX)}; }
-				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{fwd<T>(mX)}))	{ SSVU_ASSERT(isClean()); type = Type::Arr; new(&h.hArr) Arr(fwd<T>(mX)); }
-				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{fwd<T>(mX)}))	{ SSVU_ASSERT(isClean()); type = Type::Str; new(&h.hStr) Str(fwd<T>(mX)); }
-				template<typename T> inline void setNum(T&& mX) noexcept(noexcept(Num{fwd<T>(mX)}))	{ SSVU_ASSERT(isClean()); type = Type::Num; new(&h.hNum) Num(fwd<T>(mX)); }
+				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{fwd<T>(mX)}))	{ type = Type::Obj; h.init<Obj>(fwd<T>(mX)); }
+				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{fwd<T>(mX)}))	{ type = Type::Arr; h.init<Arr>(fwd<T>(mX)); }
+				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{fwd<T>(mX)}))	{ type = Type::Str; h.init<Str>(fwd<T>(mX)); }
+				template<typename T> inline void setNum(T&& mX) noexcept(noexcept(Num{fwd<T>(mX)}))	{ type = Type::Num; h.init<Num>(fwd<T>(mX)); }
 
 				// Basic setters
-				inline void setBln(Bln mX) noexcept													{ SSVU_ASSERT(isClean()); type = Type::Bln; h.hBool = mX; }
-				inline void setNll(Nll) noexcept													{ SSVU_ASSERT(isClean()); type = Type::Nll; }
+				inline void setBln(Bln mX) noexcept	{ type = Type::Bln; h.init<Bln>(mX); }
+				inline void setNll(Nll) noexcept	{ type = Type::Nll; }
 
 				// Ref-qualified getters
 				#define SSVJ_DEFINE_VAL_GETTER(mType, mMember) \
-					inline decltype(mMember)&		SSVPP_EXPAND(SSVPP_CAT(get, mType))() & noexcept		{ SSVU_ASSERT(is<mType>() && !isClean()); return mMember; } \
-					inline const decltype(mMember)&	SSVPP_EXPAND(SSVPP_CAT(get, mType))() const& noexcept	{ SSVU_ASSERT(is<mType>() && !isClean()); return mMember; } \
-					inline decltype(mMember)		SSVPP_EXPAND(SSVPP_CAT(get, mType))() && noexcept		{ SSVU_ASSERT(is<mType>() && !isClean()); return std::move(mMember); }
+					inline mType&		SSVPP_CAT(get, mType)() & noexcept		{ SSVU_ASSERT(is<mType>()); return mMember; } \
+					inline const mType&	SSVPP_CAT(get, mType)() const& noexcept	{ SSVU_ASSERT(is<mType>()); return mMember; } \
+					inline mType		SSVPP_CAT(get, mType)() && noexcept		{ SSVU_ASSERT(is<mType>()); return std::move(mMember); }
 
-				SSVJ_DEFINE_VAL_GETTER(Obj, h.hObj)
-				SSVJ_DEFINE_VAL_GETTER(Arr, h.hArr)
-				SSVJ_DEFINE_VAL_GETTER(Str, h.hStr)
-				SSVJ_DEFINE_VAL_GETTER(Num, h.hNum)
+				SSVJ_DEFINE_VAL_GETTER(Obj, h.get<Obj>())
+				SSVJ_DEFINE_VAL_GETTER(Arr, h.get<Arr>())
+				SSVJ_DEFINE_VAL_GETTER(Str, h.get<Str>())
+				SSVJ_DEFINE_VAL_GETTER(Num, h.get<Num>())
 
 				#undef SSVJ_DEFINE_VAL_GETTER
 
 				// Other getters
-				inline auto getBln() const noexcept			{ SSVU_ASSERT(is<Bln>() && !isClean()); return h.hBool; }
-				inline auto getNll() const noexcept			{ SSVU_ASSERT(is<Nll>() && !isClean()); return Nll{}; }
+				inline auto getBln() const noexcept { SSVU_ASSERT(is<Bln>()); return h.get<Bln>(); }
+				inline auto getNll() const noexcept { SSVU_ASSERT(is<Nll>()); return Nll{}; }
 
 				/// @brief Deinitializes the current storage, calling the appropriate destructor.
 				inline void deinitCurrent()
 				{
 					switch(type)
 					{
-						case Type::Obj: SSVU_ASSERT(!isClean()); h.hObj.~Obj(); break;
-						case Type::Arr: SSVU_ASSERT(!isClean()); h.hArr.~Arr(); break;
-						case Type::Str: SSVU_ASSERT(!isClean()); h.hStr.~Str(); break;
+						case Type::Obj: h.deinit<Obj>(); break;
+						case Type::Arr: h.deinit<Arr>(); break;
+						case Type::Str: h.deinit<Str>(); break;
+						case Type::Num: h.deinit<Num>(); break;
+						case Type::Bln: h.deinit<Bln>(); break;
 						default: break;
 					}
-
-					setClean(true);
 				}
 
 				/// @brief Initializes the current storage from `mV`, calling the appropriate setter function.
 				template<typename T> inline void init(T&& mV)
 				{
-					SSVU_ASSERT(isClean());
-
 					switch(mV.type)
 					{
 						case Type::Obj: setObj(moveIfRValue<decltype(mV)>(mV.getObj())); break;
@@ -115,10 +93,8 @@ namespace ssvu
 						case Type::Str: setStr(moveIfRValue<decltype(mV)>(mV.getStr())); break;
 						case Type::Num: setNum(mV.getNum()); break;
 						case Type::Bln: setBln(mV.getBln()); break;
-						case Type::Nll: setNll(Nll{}); break;
+						case Type::Nll: setNll({}); break;
 					}
-
-					setClean(false);
 				}
 
 				/// @brief Checks the stored type. Doesn't check number representation.
@@ -146,7 +122,6 @@ namespace ssvu
 				{
 					deinitCurrent();
 					Internal::Cnv<RemoveAll<T>>::toVal(*this, fwd<T>(mX));
-					setClean(false);
 				}
 
 				/// @brief Checks if the stored internal value is of type `T`.
@@ -215,8 +190,6 @@ namespace ssvu
 				// Equality/inequality
 				inline bool operator==(const Val& mV) const noexcept
 				{
-					SSVU_ASSERT(!isClean());
-
 					if(type != mV.type) return false;
 
 					switch(type)
@@ -253,10 +226,10 @@ namespace ssvu
 				template<typename T> inline auto forUncheckedArrAs() const noexcept	{ return VIH::makeItrArrRange<T>(std::cbegin(getArr()), std::cend(getArr())); }
 
 				// Checked casted iteration
-				template<typename T> inline auto forObjAs() noexcept		{ return is<Obj>() ? forUncheckedObjAs<T>() : VIH::makeItrObjRangeEmpty<T, decltype(std::end(h.hObj))>(); }
-				template<typename T> inline auto forObjAs() const noexcept	{ return is<Obj>() ? forUncheckedObjAs<T>() : VIH::makeItrObjRangeEmpty<T, decltype(std::cend(h.hObj))>(); }
-				template<typename T> inline auto forArrAs() noexcept		{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::end(h.hArr))>(); }
-				template<typename T> inline auto forArrAs() const noexcept	{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::cend(h.hArr))>(); }
+				template<typename T> inline auto forObjAs() noexcept		{ return is<Obj>() ? forUncheckedObjAs<T>() : VIH::makeItrObjRangeEmpty<T, decltype(std::end(h.get<Obj>()))>(); }
+				template<typename T> inline auto forObjAs() const noexcept	{ return is<Obj>() ? forUncheckedObjAs<T>() : VIH::makeItrObjRangeEmpty<T, decltype(std::cend(h.get<Obj>()))>(); }
+				template<typename T> inline auto forArrAs() noexcept		{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::end(h.get<Arr>()))>(); }
+				template<typename T> inline auto forArrAs() const noexcept	{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::cend(h.get<Arr>()))>(); }
 
 				// Unchecked non-casted iteration
 				auto forUncheckedObj() noexcept;
