@@ -31,6 +31,7 @@
 // #include "SSVUtils/Tests/TestsRecPtr.hpp"
 #include "SSVUtils/Tests/TestsTemplateSystem.hpp"
 #include "SSVUtils/Tests/TestsObfuscatedValue.hpp"
+#include "SSVUtils/Tests/TestsUnionVariant.hpp"
 // #include "SSVUtils/Tests/TestsTicker.hpp"
 // #include "SSVUtils/Tests/TestsTimeline.hpp"
 
