@@ -14,14 +14,14 @@ namespace ssvu
 			/// @brief Storage class for the alive/dead boolean and the item.
 			template<typename T> struct LBool
 			{
-				AlignedStorageBasic<bool> storageBool;
-				AlignedStorageBasic<T> storageItem;
+				AlignedStorageFor<bool> storageBool;
+				AlignedStorageFor<T> storageItem;
 			};
 
 			/// @brief Storage class for the the item, without a bool.
 			template<typename T> struct LNoBool
 			{
-				AlignedStorageBasic<T> storageItem;
+				AlignedStorageFor<T> storageItem;
 			};
 
 			/// @brief Base class used for Layout CRTP.

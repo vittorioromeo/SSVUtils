@@ -14,7 +14,7 @@ namespace ssvu
 			// Tuple checking implementation
 			struct TplIsHelper
 			{
-				template<SizeT TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
+				template<SizeT TI, typename TTpl> using TplArg = TplElem<TI, RemoveAll<TTpl>>;
 
 				template<SizeT TI = 0, typename... TArgs> inline static EnableIf<TI == sizeof...(TArgs), bool> isTpl(const Val&) noexcept { return true; }
 				template<SizeT TI = 0, typename... TArgs> inline static EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept

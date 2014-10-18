@@ -44,7 +44,7 @@ namespace ssvu
 			// Tuple conversion implementation
 			struct TplCnvHelper
 			{
-				template<SizeT TI, typename TTpl> using TplArg = TupleElem<TI, RemoveAll<TTpl>>;
+				template<SizeT TI, typename TTpl> using TplArg = TplElem<TI, RemoveAll<TTpl>>;
 
 				template<SizeT TI = 0, typename... TArgs, typename T> inline static EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
 				template<SizeT TI = 0, typename... TArgs, typename T> inline static EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
