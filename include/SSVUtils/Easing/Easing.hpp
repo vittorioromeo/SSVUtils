@@ -6,7 +6,7 @@
 #ifndef SSVU_EASING
 #define SSVU_EASING
 
-#include <cmath>
+#include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu
 {
@@ -233,8 +233,8 @@ namespace ssvu
 			inline static T inOut(T mT, T mB, T mC, T mD) noexcept
 			{
 				SSVU_ASSERT(mD != 0);
-				if((mT /= mD / T(2)) < T(1)) return ((mC / T(2)) * (mT * mT)) + mB;
-				return -mC / T(2) * (((mT - T(2)) * (--mT)) - T(1)) + mB;
+				if((mT /= mD / T(2)) < T(1)) return ((mC / T(2)) * mT * mT) + mB;
+				return -mC / T(2) * ((--mT) * (mT - T(2)) - T(1)) +mB;
 			}
 		};
 
