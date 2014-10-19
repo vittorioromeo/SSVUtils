@@ -70,7 +70,7 @@ namespace ssvu
 				{
 					char* result{ptrChain.isEmpty() ? LHelperType::template allocate<T>() : ptrChain.pop()};
 					LHelperType::template construct<T>(result, fwd<TArgs>(mArgs)...);
-					return LHelperType::template getItem<T>(result);
+					return LHelperType::template getItemPtr<T>(result);
 				}
 
 				/// @brief Destroys a pointer that is in use. Memory does not get allocated - it gets recycled instead.

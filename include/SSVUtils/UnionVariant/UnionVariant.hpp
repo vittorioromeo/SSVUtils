@@ -12,29 +12,29 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<typename... TTypes> class UnionVariantBase
+		template<typename... TTs> class UnionVariantBase
 		{
 			protected:
-				AlignedStorage<getCTMaxSize<TTypes...>(), getCTMaxAlign<TTypes...>()> data;
+				AlignedStorage<getCTMaxSize<TTs...>(), getCTMaxAlign<TTs...>()> data;
 
 				template<typename T, typename... TArgs> inline void initImpl(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
 				{
-					SSVU_ASSERT_STATIC_NM(CTHas<T, TTypes...>());
+					SSVU_ASSERT_STATIC_NM(CTHas<T, TTs...>());
 					new (&data) T(fwd<TArgs>(mArgs)...);
 				}
 				template<typename T> inline void deinitImpl() noexcept(isNothrowDtor<T>())
 				{
-					SSVU_ASSERT_STATIC_NM(CTHas<T, TTypes...>());
+					SSVU_ASSERT_STATIC_NM(CTHas<T, TTs...>());
 					getImpl<T>().~T();
 				}
 
-				template<typename T> inline T& getImpl() & noexcept				{ SSVU_ASSERT_STATIC_NM(CTHas<T, TTypes...>()); return reinterpret_cast<T&>(data); }
-				template<typename T> inline const T& getImpl() const& noexcept	{ SSVU_ASSERT_STATIC_NM(CTHas<T, TTypes...>()); return reinterpret_cast<const T&>(data); }
-				template<typename T> inline T getImpl() && noexcept				{ SSVU_ASSERT_STATIC_NM(CTHas<T, TTypes...>()); return std::move(reinterpret_cast<T&>(data)); }
+				template<typename T> inline T& getImpl() & noexcept				{ SSVU_ASSERT_STATIC_NM(CTHas<T, TTs...>()); return castStorage<T>(data); }
+				template<typename T> inline const T& getImpl() const& noexcept	{ SSVU_ASSERT_STATIC_NM(CTHas<T, TTs...>()); return castStorage<T>(data); }
+				template<typename T> inline T getImpl() && noexcept				{ SSVU_ASSERT_STATIC_NM(CTHas<T, TTs...>()); return std::move(castStorage<T>(data)); }
 		};
 	}
 
-	template<typename... TTypes> class UnionVariant : public Internal::UnionVariantBase<TTypes...>
+	template<typename... TTs> class UnionVariant : public Internal::UnionVariantBase<TTs...>
 	{
 		private:
 			// If debug mode is enabled, store and check a "clean" storage flag for additional safety and debugging ease
@@ -64,9 +64,9 @@ namespace ssvu
 			template<typename T> inline T get() && noexcept				{ SSVU_ASSERT(!isClean()); return std::move(this->template getImpl<T>()); }
 	};
 
-	template<typename... TTypes> class UnionVariantPOD : public Internal::UnionVariantBase<TTypes...>
+	template<typename... TTs> class UnionVariantPOD : public Internal::UnionVariantBase<TTs...>
 	{
-		SSVU_ASSERT_STATIC_NM(Internal::PODChecker<TTypes...>());
+		SSVU_ASSERT_STATIC_NM(Internal::PODChecker<TTs...>());
 
 		public:
 			template<typename T, typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())

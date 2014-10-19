@@ -91,6 +91,12 @@ namespace ssvu
 
 	/// @brief Returns a `const TBase*` casted to `const T*`. Asserts that `T` is derived from `TBase`.
 	template<typename T, typename TBase> inline const T* castUp(const TBase* mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<const T*>(mBase); }
+
+	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `T&`.
+	template<typename T, typename TStorage> inline T& castStorage(TStorage& mStorage) noexcept { return reinterpret_cast<T&>(mStorage); }
+
+	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `const T&`.
+	template<typename T, typename TStorage> inline const T& castStorage(const TStorage& mStorage) noexcept { return reinterpret_cast<const T&>(mStorage); }
 }
 
 #endif

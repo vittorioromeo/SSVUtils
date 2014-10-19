@@ -15,47 +15,46 @@ namespace ssvu
 				using TStorage = AlignedStorageFor<T>;
 				TStorage* data{nullptr};
 
-			public:
-				inline GrowableArray() = default;
-				inline GrowableArray(GrowableArray&& mRA) noexcept
+				inline void moveImpl(GrowableArray&& mGA) noexcept
 				{
-					mRA.data = data;
+					mGA.data = data;
 					data = nullptr;
 				}
 
+			public:
+				inline GrowableArray() noexcept = default;
 				inline ~GrowableArray() noexcept { delete[] data; }
 
-				inline auto& operator=(GrowableArray&& mRA) noexcept
-				{
-					mRA.data = data;
-					data = nullptr;
-					return *this;
-				}
+				inline GrowableArray(const GrowableArray& mGA) = delete;
+				inline GrowableArray(GrowableArray&& mGA) noexcept { moveImpl(mGA); }
 
-				inline void resize(SizeT mCapacityOld, SizeT mCapacityNew)
+				inline auto& operator=(const GrowableArray& mGA) = delete;
+				inline auto& operator=(GrowableArray&& mGA) noexcept { moveImpl(mGA); return *this; }
+
+				inline void grow(SizeT mCapacityOld, SizeT mCapacityNew)
 				{
 					SSVU_ASSERT(mCapacityOld <= mCapacityNew);
 
 					auto newData(new TStorage[mCapacityNew]);
 					for(auto i(0u); i < mCapacityOld; ++i) newData[i] = std::move(data[i]);
 
-					delete[] data;
-					data = newData;
+					std::swap(data, newData);
+					delete[] newData;
 				}
 
-				template<typename... TArgs> inline void constructAt(SizeT mI, TArgs&&... mArgs)
+				template<typename... TArgs> inline void initAt(SizeT mI, TArgs&&... mArgs)
 					noexcept(isNothrowCtor<T, TArgs...>())
 				{
 					new(&data[mI]) T(fwd<TArgs>(mArgs)...);
 				}
 
-				inline void destroyAt(SizeT mI) noexcept(isNothrowDtor<T>())
+				inline void deinitAt(SizeT mI) noexcept(isNothrowDtor<T>())
 				{
 					(*this)[mI].~T();
 				}
 
-				inline auto& operator[](SizeT mI) noexcept				{ return reinterpret_cast<T&>(data[mI]); }
-				inline const auto& operator[](SizeT mI) const noexcept	{ return reinterpret_cast<const T&>(data[mI]); }
+				inline T& operator[](SizeT mI) noexcept				{ return castStorage<T>(data[mI]); }
+				inline const T& operator[](SizeT mI) const noexcept	{ return castStorage<T>(data[mI]); }
 		};
 	}
 }

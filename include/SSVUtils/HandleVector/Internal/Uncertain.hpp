@@ -27,10 +27,10 @@ namespace ssvu
 				inline void deinit() noexcept(isNothrowDtor<T>()) { get().~T(); }
 
 				/// @brief Returns a reference to the T instance. Assumes `init()` was called.
-				inline T& get() noexcept { return reinterpret_cast<T&>(storage); }
+				inline T& get() noexcept { return castStorage<T>(storage); }
 
 				/// @brief Returns a const reference to the T instance. Assumes `init()` was called.
-				inline const T& get() const noexcept { return reinterpret_cast<const T&>(storage); }
+				inline const T& get() const noexcept { return castStorage<T>(storage); }
 
 				inline static constexpr Uncertain<T>* getUncertainFromData(T* mData) noexcept
 				{

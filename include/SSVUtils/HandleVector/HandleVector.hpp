@@ -76,14 +76,14 @@ namespace ssvu
 				auto capacityNew(capacity + mAmount);
 				SSVU_ASSERT(capacityNew >= 0 && capacityNew >= capacity);
 
-				atoms.resize(capacity, capacityNew);
-				marks.resize(capacity, capacityNew);
+				atoms.grow(capacity, capacityNew);
+				marks.grow(capacity, capacityNew);
 
 				// Initialize resized storage
 				for(; capacity < capacityNew; ++capacity)
 				{
-					atoms.constructAt(capacity, capacity);
-					marks.constructAt(capacity, capacity);
+					atoms.initAt(capacity, capacity);
+					marks.initAt(capacity, capacity);
 				}
 			}
 
@@ -146,7 +146,7 @@ namespace ssvu
 			}
 
 			/// @brief Reserves storage, increasing the capacity.
-			inline void reserve(SizeT mCapacity) { if(capacity < mCapacity) growCapacityTo(mCapacity); }
+			inline void reserve(SizeT mCapacityNew) { if(capacity < mCapacityNew) growCapacityTo(mCapacityNew); }
 
 			/// @brief Creates and returns an handle pointing to mAtom.
 			/// @details The created atom will not be used until the HandleVector is refreshed.
@@ -233,7 +233,8 @@ namespace ssvu
 					++(getMarkFromAtom(atoms[iD]).ctr);
 				}
 
-				size = sizeNext = iAlive + 1; // Update size
+				// Update size
+				size = sizeNext = iAlive + 1;
 			}
 
 			/// @brief Iterates over alive data. Newly created atoms aren't taken into account.
@@ -284,6 +285,7 @@ namespace ssvu
 
 			/// @brief Returns the capacity of the internal storage.
 			inline auto getCapacity() const noexcept { return capacity; }
+
 
 
 			// Fast iterators
