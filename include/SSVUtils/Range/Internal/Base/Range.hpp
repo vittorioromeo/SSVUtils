@@ -22,7 +22,7 @@ namespace ssvu
 	};
 
 	/// @brief Returns a range made from two iterators.
-	template<typename TItr> inline constexpr auto makeRange(const TItr& mBegin, const TItr& mEnd)
+	template<typename TItr> inline constexpr auto makeRange(const TItr& mBegin, const TItr& mEnd) noexcept
 	{
 		return Range<TItr>(mBegin, mEnd);
 	}
