@@ -18,6 +18,7 @@ namespace ssvu
 	template<typename> class HandleVector;
 }
 
+#include "SSVUtils/Range/Range.hpp"
 #include "SSVUtils/HandleVector/Internal/GrowableArray.hpp"
 #include "SSVUtils/HandleVector/Internal/Uncertain.hpp"
 #include "SSVUtils/HandleVector/Internal/Atom.hpp"
@@ -43,6 +44,15 @@ namespace ssvu
 		public:
 			/// @typedef Templatized `Internal::Atom<T>` type.
 			using Atom = typename Internal::Atom<T>;
+
+			/// @typedef Pointer-based fast iterator type.
+			using ItrFast = Internal::HVecItrFast<T>;
+
+			/// @typedef Index-based safe iterator type.
+			using ItrIdx = Internal::HVecItrIdx<T>;
+
+			/// @typedef Index-based safe atom iterator type.
+			using ItrAtom = Internal::HVecItrAtom<T>;
 
 		private:
 			/// @brief Internal atom storage.
@@ -280,27 +290,27 @@ namespace ssvu
 
 			/// @brief Returns a fast iterator pointing to the first data.
 			/// @details This iterator will be invalidated if the internal storage grows.
-			inline HVecItrFast<T> begin() noexcept { return {&atoms[0]}; }
+			inline auto begin() noexcept { return ItrFast{&atoms[0]}; }
 
 			/// @brief Returns a fast iterator pointing one after the last data. Newly created atoms aren't taken into account.
 			/// @details This iterator will be invalidated if the internal storage grows.
-			inline HVecItrFast<T> end() noexcept { return {&atoms[size]}; }
+			inline auto end() noexcept { return ItrFast{&atoms[size]}; }
 
 			/// @brief Returns a fast iterator pointing one after the last newly-created data. Newly created atoms are taken into account.
 			/// @details This iterator will be invalidated if the internal storage grows.
-			inline HVecItrFast<T> endNext() noexcept { return {&atoms[sizeNext]}; }
+			inline auto endNext() noexcept { return ItrFast{&atoms[sizeNext]}; }
 
 			/// @brief Returns a fast iterator pointing to the first data. (const version)
 			/// @details This iterator will be invalidated if the internal storage grows.
-			inline HVecItrFast<T> begin() const noexcept { return {&atoms[0]}; }
+			inline auto begin() const noexcept { return ItrFast{&atoms[0]}; }
 
 			/// @brief Returns a fast iterator pointing one after the last data. Newly created atoms aren't taken into account. (const version)
 			/// @details This iterator will be invalidated if the internal storage grows.
-			inline HVecItrFast<T> end() const noexcept { return {&atoms[size]}; }
+			inline auto end() const noexcept { return ItrFast{&atoms[size]}; }
 
 			/// @brief Returns a fast iterator pointing one after the last newly-created data. Newly created atoms are taken into account. (const version)
 			/// @details This iterator will be invalidated if the internal storage grows.
-			inline HVecItrFast<T> endNext() const noexcept { return {&atoms[sizeNext]}; }
+			inline auto endNext() const noexcept { return ItrFast{&atoms[sizeNext]}; }
 
 
 
@@ -308,27 +318,73 @@ namespace ssvu
 
 			/// @brief Returns an index iterator pointing to the first data.
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> beginIdx() noexcept { return {0, *this}; }
+			inline auto beginIdx() noexcept { return ItrIdx{0, *this}; }
 
 			/// @brief Returns an index iterator pointing one after the last data. Newly created atoms aren't taken into account.
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> endIdx() noexcept { return {size, *this}; }
+			inline auto endIdx() noexcept { return ItrIdx{size, *this}; }
 
 			/// @brief Returns an index iterator pointing one after the last newly-created data. Newly created atoms are taken into account.
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> endIdxNext() noexcept { return {sizeNext, *this}; }
+			inline auto endIdxNext() noexcept { return ItrIdx{sizeNext, *this}; }
 
 			/// @brief Returns an index iterator pointing to the first data. (const vesrion)
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> beginIdx() const noexcept { return {0, *this}; }
+			inline auto beginIdx() const noexcept { return ItrIdx{0, *this}; }
 
 			/// @brief Returns an index iterator pointing one after the last data. Newly created atoms aren't taken into account. (const version)
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> endIdx() const noexcept { return {size, *this}; }
+			inline auto endIdx() const noexcept { return ItrIdx{size, *this}; }
 
 			/// @brief Returns an index iterator pointing one after the last newly-created data. Newly created atoms are taken into account. (const version)
 			/// @details This iterator won't be invalidated if the internal storage grows.
-			inline HVecItrIdx<T> endIdxNext() const noexcept { return {sizeNext, *this}; }
+			inline auto endIdxNext() const noexcept { return ItrIdx{sizeNext, *this}; }
+
+
+
+			// Atom iterators
+
+			/// @brief Returns an index iterator pointing to the first atom.
+			/// @details This iterator won't be invalidated if the internal storage grows.
+			inline auto beginAtom() noexcept { return ItrAtom{0, *this}; }
+
+			/// @brief Returns an index iterator pointing one after the last atom.
+			/// @details This iterator won't be invalidated if the internal storage grows.
+			inline auto endAtom() noexcept { return ItrAtom{size, *this}; }
+
+			/// @brief Returns an index iterator pointing to one after the last newly-created atom.
+			/// @details This iterator won't be invalidated if the internal storage grows.
+			inline auto endAtomNext() noexcept { return ItrAtom{sizeNext, *this}; }
+
+			/// @brief Returns an index iterator pointing to the first atom. (const version)
+			/// @details This iterator won't be invalidated if the internal storage grows.
+			inline auto beginAtom() const noexcept { return ItrAtom{0, *this}; }
+
+			/// @brief Returns an index iterator pointing one after the last atom. (const version)
+			/// @details This iterator won't be invalidated if the internal storage grows.
+			inline auto endAtom() const noexcept { return ItrAtom{size, *this}; }
+
+			/// @brief Returns an index iterator pointing to one after the last newly-created atom. (const version)
+			/// @details This iterator won't be invalidated if the internal storage grows.
+			inline auto endAtomNext() const noexcept { return ItrAtom{sizeNext, *this}; }
+
+
+
+			// Range iteration helpers
+			inline auto forFast() noexcept				{ return makeRange(begin(), end()); }
+			inline auto forFast() const noexcept		{ return makeRange(begin(), end()); }
+			inline auto forNextFast() noexcept			{ return makeRange(begin(), endNext()); }
+			inline auto forNextFast() const noexcept	{ return makeRange(begin(), endNext()); }
+
+			inline auto forIdx() noexcept				{ return makeRange(beginIdx(), endIdx()); }
+			inline auto forIdx() const noexcept			{ return makeRange(beginIdx(), endIdx()); }
+			inline auto forNextIdx() noexcept			{ return makeRange(beginIdx(), endIdxNext()); }
+			inline auto forNextIdx() const noexcept		{ return makeRange(beginIdx(), endIdxNext()); }
+
+			inline auto forAtom() noexcept				{ return makeRange(beginAtom(), endAtom()); }
+			inline auto forAtom() const noexcept		{ return makeRange(beginAtom(), endAtom()); }
+			inline auto forNextAtom() noexcept			{ return makeRange(beginAtom(), endAtomNext()); }
+			inline auto forNextAtom() const noexcept	{ return makeRange(beginAtom(), endAtomNext()); }
 	};
 }
 

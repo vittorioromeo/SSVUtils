@@ -9,33 +9,18 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<typename T, typename TItrValue, typename TImpl> class HVecItrBase
+		template<typename T, typename TItrValue, typename TImpl> class HVecItrBase : public BaseAdaptorItrRnd<TItrValue, TImpl>
 		{
 			protected:
-				TItrValue value;
 				TImpl impl;
 
 			public:
-				template<typename... TArgs> inline HVecItrBase(TItrValue mValue, TArgs&&... mArgs) noexcept : value{mValue}, impl{fwd<TArgs>(mArgs)...} { }
+				template<typename... TArgs> inline HVecItrBase(TItrValue mValue, TArgs&&... mArgs) noexcept : BaseAdaptorItrRnd<TItrValue, TImpl>{mValue}, impl{fwd<TArgs>(mArgs)...} { }
 
-				inline auto& operator++() noexcept				{ ++value;			return *this; }
-				inline auto& operator++(int) noexcept			{ ++value;			return *this; }
-				inline auto& operator--() noexcept				{ --value;			return *this; }
-				inline auto& operator--(int) noexcept			{ --value;			return *this; }
-				inline auto& operator+=(int mOffset) noexcept	{ value += mOffset;	return *this; }
-				inline auto& operator-=(int mOffset) noexcept	{ value -= mOffset;	return *this; }
-
-				inline decltype(auto) operator*() noexcept			{ return impl.template get<T&>(value); }
-				inline decltype(auto) operator*() const noexcept	{ return impl.template get<const T&>(value); }
-				inline decltype(auto) operator->() noexcept			{ return &impl.template get<T&>(value); }
-				inline decltype(auto) operator->() const noexcept	{ return &impl.template get<const T&>(value); }
-
-				inline bool operator==(const HVecItrBase& mRhs) const noexcept	{ return value == mRhs.value; }
-				inline bool operator!=(const HVecItrBase& mRhs) const noexcept	{ return value != mRhs.value; }
-				inline bool operator<(const HVecItrBase& mRhs) const noexcept	{ return value < mRhs.value; }
-				inline bool operator>(const HVecItrBase& mRhs) const noexcept	{ return value > mRhs.value; }
-				inline bool operator<=(const HVecItrBase& mRhs) const noexcept	{ return value <= mRhs.value; }
-				inline bool operator>=(const HVecItrBase& mRhs) const noexcept	{ return value >= mRhs.value; }
+				inline decltype(auto) operator*() noexcept			{ return impl.template get<T&>(this->itr); }
+				inline decltype(auto) operator*() const noexcept	{ return impl.template get<const T&>(this->itr); }
+				inline decltype(auto) operator->() noexcept			{ return &impl.template get<T&>(this->itr); }
+				inline decltype(auto) operator->() const noexcept	{ return &impl.template get<const T&>(this->itr); }
 		};
 
 		struct HVecItrImplFast
@@ -49,10 +34,18 @@ namespace ssvu
 			inline HVecItrImplIdx(HandleVector<T>& mHVec) noexcept : hVec(&mHVec) { }
 			template<typename TR, typename TV> inline TR get(const TV& mValue) noexcept { return hVec->getDataAt(mValue); }
 		};
-	}
 
-	template<typename T> using HVecItrFast = Internal::HVecItrBase<T, Internal::Atom<T>*, Internal::HVecItrImplFast>;
-	template<typename T> using HVecItrIdx = Internal::HVecItrBase<T, HIdx, Internal::HVecItrImplIdx<T>>;
+		template<typename T> struct HVecItrImplAtom
+		{
+			HandleVector<T>* hVec;
+			inline HVecItrImplAtom(HandleVector<T>& mHVec) noexcept : hVec(&mHVec) { }
+			template<typename TR, typename TV> inline TR get(const TV& mValue) noexcept { return hVec->getAtomAt(mValue); }
+		};
+
+		template<typename T> using HVecItrFast = Internal::HVecItrBase<T, Internal::Atom<T>*, Internal::HVecItrImplFast>;
+		template<typename T> using HVecItrIdx = Internal::HVecItrBase<T, HIdx, Internal::HVecItrImplIdx<T>>;
+		template<typename T> using HVecItrAtom = Internal::HVecItrBase<T, HIdx, Internal::HVecItrImplAtom<Internal::Atom<T>>>;
+	}
 }
 
 #endif
