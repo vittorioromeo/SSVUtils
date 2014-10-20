@@ -17,6 +17,7 @@ namespace ssvu
 		{
 			private:
 				using LHelperType = TLHelper<TBase>;
+
 				struct Link { Link* next; };
 				Link* base{nullptr};
 
@@ -38,18 +39,18 @@ namespace ssvu
 				}
 
 				/// @brief Push a pointer in the chain. Assumes the contents of the pointer were destroyed.
-				inline void push(char* mItem) noexcept
+				template<typename T> inline void push(T* mItem) noexcept
 				{
 					reinterpret_cast<Link*>(mItem)->next = base;
 					base = reinterpret_cast<Link*>(mItem);
 				}
 
 				/// @brief Pops and returns a pointer from the chain.
-				inline char* pop() noexcept
+				template<typename T> inline T* pop() noexcept
 				{
 					auto result(reinterpret_cast<char*>(base));
 					base = base->next;
-					return result;
+					return reinterpret_cast<T*>(result);
 				}
 
 				/// @brief Returns true if the pointer chain is empty.
@@ -61,6 +62,8 @@ namespace ssvu
 		{
 			private:
 				using LHelperType = TLHelper<TBase>;
+				template<typename T> using Lyt = typename LHelperType::template Lyt<T>;
+
 				PtrChain<TBase, TLHelper> ptrChain;
 
 			public:
@@ -68,16 +71,16 @@ namespace ssvu
 				/// @details Uses one of the recyclable pointers if available, otherwise allocates new memory.
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
-					char* result{ptrChain.isEmpty() ? LHelperType::template allocate<T>() : ptrChain.pop()};
+					auto result(SSVU_UNLIKELY(ptrChain.isEmpty()) ? LHelperType::template allocate<T>() : ptrChain.template pop<Lyt<T>>());
 					LHelperType::template construct<T>(result, fwd<TArgs>(mArgs)...);
-					return LHelperType::template getItemPtr<T>(result);
+					return castStorage<T>(&result->storageItem);
 				}
 
 				/// @brief Destroys a pointer that is in use. Memory does not get allocated - it gets recycled instead.
 				inline void recycle(TBase* mBase) noexcept(noexcept(LHelperType::destroy(mBase)))
 				{
 					LHelperType::destroy(mBase);
-					ptrChain.push(LHelperType::getByte(mBase));
+					ptrChain.push(LHelperType::getLayout(mBase));
 				}
 		};
 

@@ -20,8 +20,9 @@ namespace ssvu
 			/// @brief Storage class for the alive/dead boolean and the item.
 			template<typename T> struct LBool
 			{
-				// TODO: BUG: ? - investigate: changing order of members breaks SSVBloodshed
-				// Adding additional fields seem to work...
+				// `bool` must be the first member of the struct, as `T` is of variable size.
+				// Since we get instances of this struct by `TBase`, we cannot reliably get the bool address unless
+				// it's the first member in the struct.
 				AlignedStorageFor<bool> storageBool;
 				AlignedStorageFor<T> storageItem;
 			};
@@ -30,44 +31,38 @@ namespace ssvu
 			template<typename TBase, template<typename> class TLT> struct LHelperBase
 			{
 				using TLType = TLT<TBase>;
+				template<typename T> using Lyt = TLT<T>;
 
-				template<typename T> inline static char* allocate()								{ return new char[sizeof(TLT<T>)]; }
+				template<typename T> inline static auto allocate()								{ return reinterpret_cast<TLT<T>*>(new char[sizeof(TLT<T>)]); }
 				inline static void deallocate(char* mPtr) noexcept								{ SSVU_ASSERT(mPtr != nullptr); delete[] mPtr; }
 				inline static void destroy(TBase* mBase) noexcept(noexcept(mBase->~TBase()))	{ SSVU_ASSERT(mBase != nullptr); mBase->~TBase(); }
 
 				inline static constexpr auto getLayout(TBase* mBase) noexcept		{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR(TLType, mBase, storageItem); }
 				inline static constexpr auto getLayout(const TBase* mBase) noexcept	{ return SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(TLType, mBase, storageItem); }
-				inline static constexpr char* getByte(TBase* mBase) noexcept		{ return reinterpret_cast<char*>(getLayout(mBase)); }
-
-				// TODO: the issue is probably here - what is mPtr pointing to? Is it a TBase*?
-				template<typename T> inline static constexpr T* getItemPtr(char* mPtr) noexcept { return reinterpret_cast<T*>(&reinterpret_cast<TLT<T>*>(mPtr)->storageItem); }
 			};
 
 			/// @brief CRTP implementation for a layout with no extra bool.
 			template<typename TBase> struct LHelperNoBool : public LHelperBase<TBase, LNoBool>
 			{
-				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(fwd<TArgs>(mArgs)...)))
+				template<typename T, typename... TArgs> inline static void construct(LNoBool<T>* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(fwd<TArgs>(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
-					new (LHelperNoBool::template getItemPtr<T>(mPtr)) T(fwd<TArgs>(mArgs)...);
+					new (&mPtr->storageItem) T(fwd<TArgs>(mArgs)...);
 				}
 			};
 
 			/// @brief CRTP implementation for a layout with a bool.
 			template<typename TBase> struct LHelperBool : public LHelperBase<TBase, LBool>
 			{
-				// TODO: the issue is probably here - what is mPtr pointing to? Is it a TBase*?
-				template<typename T> inline static constexpr bool* getBoolPtr(char* mPtr) noexcept { return reinterpret_cast<bool*>(&reinterpret_cast<LBool<T>*>(mPtr)->storageBool); }
-
-				template<typename T, typename... TArgs> inline static void construct(char* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(fwd<TArgs>(mArgs)...)))
+				template<typename T, typename... TArgs> inline static void construct(LBool<T>* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(fwd<TArgs>(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
-					new (getBoolPtr<T>(mPtr)) bool{true};
-					new (LHelperBool::template getItemPtr<T>(mPtr)) T(fwd<TArgs>(mArgs)...);
+					new (&mPtr->storageBool) bool{true};
+					new (&mPtr->storageItem) T(fwd<TArgs>(mArgs)...);
 				}
 
-				inline static void setBool(TBase* mBase, bool mBool) noexcept		{ castStorage<bool>(LHelperBool::getLayout(mBase)->storageBool) = mBool; }
-				inline static constexpr bool getBool(const TBase* mBase) noexcept	{ return castStorage<bool>(LHelperBool::getLayout(mBase)->storageBool); }
+				inline static void setBool(TBase* mBase, bool mX) noexcept	{ castStorage<bool>(LHelperBool::getLayout(mBase)->storageBool) = mX; }
+				inline static bool getBool(const TBase* mBase) noexcept		{ return castStorage<bool>(LHelperBool::getLayout(mBase)->storageBool); }
 			};
 		}
 	}
