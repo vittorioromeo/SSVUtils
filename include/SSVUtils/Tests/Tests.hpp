@@ -35,4 +35,6 @@
 // #include "SSVUtils/Tests/TestsTicker.hpp"
 // #include "SSVUtils/Tests/TestsTimeline.hpp"
 
+#include "SSVUtils/Tests/TestsGrowableArray.hpp"
+
 #endif
