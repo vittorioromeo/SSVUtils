@@ -14,8 +14,6 @@ namespace ssvu
 		/// @tparam TRecycler Internal recycler type. (MonoRecycler? PolyRecycler?)
 		template<typename TBase, typename TRecycler> class BaseManager
 		{
-			template<typename TC, typename TP> friend void ssvu::eraseRemoveIf(TC&, TP);
-
 			public:
 				using LayoutType = LayoutImpl::LHelperBool<TBase>;
 				using ChunkType = Chunk<TBase, LayoutImpl::LHelperBool>;
