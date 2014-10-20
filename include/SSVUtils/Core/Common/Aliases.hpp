@@ -95,8 +95,14 @@ namespace ssvu
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `T&`.
 	template<typename T, typename TStorage> inline T& castStorage(TStorage& mStorage) noexcept { return reinterpret_cast<T&>(mStorage); }
 
+	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `T*`.
+	template<typename T, typename TStorage> inline T* castStorage(TStorage* mStorage) noexcept { return reinterpret_cast<T*>(mStorage); }
+
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `const T&`.
 	template<typename T, typename TStorage> inline const T& castStorage(const TStorage& mStorage) noexcept { return reinterpret_cast<const T&>(mStorage); }
+
+	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `const T*`.
+	template<typename T, typename TStorage> inline const T* castStorage(const TStorage* mStorage) noexcept { return reinterpret_cast<const T*>(mStorage); }
 }
 
 #endif
