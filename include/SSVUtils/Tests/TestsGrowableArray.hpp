@@ -75,6 +75,53 @@ SSVUT_TEST(GrowableArrayTests)
 
 	SSVUT_EXPECT_OP(cc, ==, 4);
 	SSVUT_EXPECT_OP(dc, ==, 4);
+
+	cc = dc = 0;
+
+	{
+		GrowableArray<UPtr<TestItem>> g;
+		g.grow(0, 4);
+		g.initAt(0, makeUPtr<TestItem>(cc, dc, 0));
+		g.initAt(1, makeUPtr<TestItem>(cc, dc, 1));
+		g.initAt(2, makeUPtr<TestItem>(cc, dc, 2));
+		g.initAt(3, makeUPtr<TestItem>(cc, dc, 3));
+
+		SSVUT_EXPECT_OP(cc, ==, 4);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		SSVUT_EXPECT_OP(g[0]->k, ==, 0);
+		SSVUT_EXPECT_OP(g[1]->k, ==, 1);
+		SSVUT_EXPECT_OP(g[2]->k, ==, 2);
+		SSVUT_EXPECT_OP(g[3]->k, ==, 3);
+
+		g.grow(4, 8);
+
+		SSVUT_EXPECT_OP(cc, ==, 4);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		SSVUT_EXPECT_OP(g[0]->k, ==, 0);
+		SSVUT_EXPECT_OP(g[1]->k, ==, 1);
+		SSVUT_EXPECT_OP(g[2]->k, ==, 2);
+		SSVUT_EXPECT_OP(g[3]->k, ==, 3);
+
+		g.grow(8, 1000);
+
+		SSVUT_EXPECT_OP(cc, ==, 4);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		SSVUT_EXPECT_OP(g[0]->k, ==, 0);
+		SSVUT_EXPECT_OP(g[1]->k, ==, 1);
+		SSVUT_EXPECT_OP(g[2]->k, ==, 2);
+		SSVUT_EXPECT_OP(g[3]->k, ==, 3);
+
+		g.deinitAt(0);
+		g.deinitAt(1);
+		g.deinitAt(2);
+		g.deinitAt(3);
+
+		SSVUT_EXPECT_OP(cc, ==, 4);
+		SSVUT_EXPECT_OP(dc, ==, 4);
+	}
 }
 
 #endif
