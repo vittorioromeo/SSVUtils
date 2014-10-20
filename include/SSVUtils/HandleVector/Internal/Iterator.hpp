@@ -42,12 +42,10 @@ namespace ssvu
 			template<typename TR, typename TV> inline TR get(const TV& mValue) noexcept { return hVec->getAtomAt(mValue); }
 		};
 
-		template<typename T> using HVecItrFast = Internal::HVecItrBase<T, Internal::Atom<T>*, Internal::HVecItrImplFast>;
-		template<typename T> using HVecItrIdx = Internal::HVecItrBase<T, HIdx, Internal::HVecItrImplIdx<T>>;
-		template<typename T> using HVecItrAtom = Internal::HVecItrBase<T, HIdx, Internal::HVecItrImplAtom<Internal::Atom<T>>>;
+		template<typename T> using HVecItrFast = HVecItrBase<T, Atom<T>*, HVecItrImplFast>;
+		template<typename T> using HVecItrIdx = HVecItrBase<T, HIdx, HVecItrImplIdx<T>>;
+		template<typename T> using HVecItrAtom = HVecItrBase<T, HIdx, HVecItrImplAtom<Atom<T>>>;
 	}
 }
 
 #endif
-
-// TODO: use adaptor?
