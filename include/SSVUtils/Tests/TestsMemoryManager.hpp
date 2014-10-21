@@ -124,6 +124,287 @@ SSVUT_TEST(MemoryManagerTests)
 		mm.refresh();
 		SSVUT_EXPECT(cc == 4 && dc == 4);
 	}
+
+	cc = dc = 0;
+
+	{
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		ssvu::MonoManager<TMMItem> mm;
+
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		auto& i1 = mm.create(cc, dc);
+
+		SSVUT_EXPECT_OP(cc, ==, 1);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.refresh();
+
+		SSVUT_EXPECT_OP(cc, ==, 1);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.del(i1);
+
+		SSVUT_EXPECT_OP(cc, ==, 1);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.refresh();
+
+		SSVUT_EXPECT_OP(cc, ==, 1);
+		SSVUT_EXPECT_OP(dc, ==, 1);
+	}
+
+	cc = dc = 0;
+
+	{
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		ssvu::MonoManager<TMMItem> mm;
+
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		auto& i1 = mm.create(cc, dc);
+
+		SSVUT_EXPECT_OP(cc, ==, 1);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.refresh();
+	}
+
+	SSVUT_EXPECT_OP(cc, ==, 1);
+	SSVUT_EXPECT_OP(dc, ==, 1);
+
+	cc = dc = 0;
+
+	{
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		ssvu::PolyManager<TMMItem> mm;
+
+		{
+			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 1);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 2);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& i3 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 3);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+		}
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+	}
+
+	SSVUT_EXPECT_OP(cc, ==, 3);
+	SSVUT_EXPECT_OP(dc, ==, 3);
+
+	cc = dc = 0;
+
+	{
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		ssvu::PolyManager<TMMItem> mm;
+
+		{
+			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 1);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 2);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& i3 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 3);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+		}
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.refresh();
+	}
+
+	SSVUT_EXPECT_OP(cc, ==, 3);
+	SSVUT_EXPECT_OP(dc, ==, 3);
+
+	cc = dc = 0;
+
+	{
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		ssvu::PolyManager<TMMItem> mm;
+
+		{
+			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 1);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 2);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& i3 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 3);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+		}
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.refresh();
+	}
+
+	SSVUT_EXPECT_OP(cc, ==, 3);
+	SSVUT_EXPECT_OP(dc, ==, 3);
+
+	cc = dc = 0;
+
+	{
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		ssvu::PolyManager<TMMItem> mm;
+
+		{
+			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 1);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 2);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& i3 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 3);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+		}
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.refresh();
+
+		for(auto& i : mm) mm.del(*i);
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.refresh();
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 3);
+	}
+
+	SSVUT_EXPECT_OP(cc, ==, 3);
+	SSVUT_EXPECT_OP(dc, ==, 3);
+
+	cc = dc = 0;
+
+	{
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		ssvu::PolyManager<TMMItem> mm;
+
+		auto& i1 = mm.create<TMMItemS>(cc, dc);
+		SSVUT_EXPECT_OP(cc, ==, 1);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+		SSVUT_EXPECT_OP(mm.size(), ==, 0);
+
+		auto& i2 = mm.create<TMMItemB>(cc, dc);
+		SSVUT_EXPECT_OP(cc, ==, 2);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+		SSVUT_EXPECT_OP(mm.size(), ==, 0);
+
+		auto& i3 = mm.create<TMMItemB>(cc, dc);
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+		SSVUT_EXPECT_OP(mm.size(), ==, 0);
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+		SSVUT_EXPECT_OP(mm.size(), ==, 0);
+
+		mm.refresh();
+		SSVUT_EXPECT_OP(mm.size(), ==, 3);
+
+		mm.del(i2);
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+		SSVUT_EXPECT_OP(mm.size(), ==, 3);
+
+		mm.refresh();
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 1);
+		SSVUT_EXPECT_OP(mm.size(), ==, 2);
+
+		mm.refresh();
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 1);
+		SSVUT_EXPECT_OP(mm.size(), ==, 2);
+
+		mm.del(i1);
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 1);
+		SSVUT_EXPECT_OP(mm.size(), ==, 2);
+
+		mm.refresh();
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 2);
+		SSVUT_EXPECT_OP(mm.size(), ==, 1);
+
+		mm.create<TMMItemS>(cc, dc);
+		mm.create<TMMItemS>(cc, dc);
+		auto& i4 = mm.create<TMMItemB>(cc, dc);
+		mm.create<TMMItemB>(cc, dc);
+
+		SSVUT_EXPECT_OP(cc, ==, 7);
+		SSVUT_EXPECT_OP(dc, ==, 2);
+		SSVUT_EXPECT_OP(mm.size(), ==, 1);
+
+		mm.refresh();
+
+		SSVUT_EXPECT_OP(cc, ==, 7);
+		SSVUT_EXPECT_OP(dc, ==, 2);
+		SSVUT_EXPECT_OP(mm.size(), ==, 5);
+
+		mm.refresh();
+		SSVUT_EXPECT_OP(mm.size(), ==, 5);
+
+		mm.del(i4);
+		SSVUT_EXPECT_OP(mm.size(), ==, 5);
+
+		SSVUT_EXPECT_OP(cc, ==, 7);
+		SSVUT_EXPECT_OP(dc, ==, 2);
+		SSVUT_EXPECT_OP(mm.size(), ==, 5);
+
+		mm.refresh();
+
+		SSVUT_EXPECT_OP(cc, ==, 7);
+		SSVUT_EXPECT_OP(dc, ==, 3);
+		SSVUT_EXPECT_OP(mm.size(), ==, 4);
+	}
+
+	SSVUT_EXPECT_OP(cc, ==, 7);
+	SSVUT_EXPECT_OP(dc, ==, 7);
 }
 
 #endif

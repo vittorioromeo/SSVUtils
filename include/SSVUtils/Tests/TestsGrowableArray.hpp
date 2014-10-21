@@ -122,6 +122,22 @@ SSVUT_TEST(GrowableArrayTests)
 		SSVUT_EXPECT_OP(cc, ==, 4);
 		SSVUT_EXPECT_OP(dc, ==, 4);
 	}
+
+	cc = dc = 0;
+
+	{
+		GrowableArray<TestItem> g;
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+		g.grow(0, 1);
+		g.initAt(0, cc, dc, 0);
+		SSVUT_EXPECT_OP(cc, ==, 1);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+		SSVUT_EXPECT_OP(g[0].k, ==, 0);
+		g.deinitAt(0);
+		SSVUT_EXPECT_OP(cc, ==, 1);
+		SSVUT_EXPECT_OP(dc, ==, 1);
+	}
 }
 
 #endif
