@@ -19,6 +19,7 @@
 #include "SSVUtils/Bimap/Bimap.hpp"
 #include "SSVUtils/CmdLine/CmdLine.hpp"
 #include "SSVUtils/FatEnum/FatEnum.hpp"
+#include "SSVUtils/GrowableArray/GrowableArray.hpp"
 #include "SSVUtils/HandleVector/HandleVector.hpp"
 #include "SSVUtils/Easing/Easing.hpp"
 #include "SSVUtils/RecPtr/RecPtr.hpp"

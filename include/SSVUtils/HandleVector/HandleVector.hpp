@@ -19,7 +19,7 @@ namespace ssvu
 }
 
 #include "SSVUtils/Range/Range.hpp"
-#include "SSVUtils/HandleVector/Internal/GrowableArray.hpp"
+#include "SSVUtils/GrowableArray/GrowableArray.hpp"
 #include "SSVUtils/HandleVector/Internal/Uncertain.hpp"
 #include "SSVUtils/HandleVector/Internal/Atom.hpp"
 #include "SSVUtils/HandleVector/Internal/Iterator.hpp"
@@ -56,10 +56,10 @@ namespace ssvu
 
 		private:
 			/// @brief Internal atom storage.
-			Internal::GrowableArray<Atom> atoms;
+			GrowableArray<Atom> atoms;
 
 			/// @brief Internal mark storage.
-			Internal::GrowableArray<Mark> marks;
+			GrowableArray<Mark> marks;
 
 			/// @brief Current size. Does not take into account newly created atoms.
 			SizeT size{0u};
