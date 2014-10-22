@@ -115,6 +115,9 @@ namespace ssvu
 			/// @brief Returns a reference to mMark's controlled atom.
 			inline auto& getAtomFromMark(const Mark& mMark) noexcept { return atoms[mMark.atomIdx]; }
 
+			inline bool isAliveAt(SizeT mI) const noexcept	{ return atoms[mI].alive; }
+			inline bool isDeadAt(SizeT mI) const noexcept	{ return !atoms[mI].alive; }
+
 		public:
 			inline HandleVector() { growCapacityBy(10); }
 			inline ~HandleVector() noexcept(isNothrowDtor<T>()) { clear(); }
@@ -188,53 +191,51 @@ namespace ssvu
 			/// @details Dead atoms are deallocated and destroyed. Newly created atoms are now taken into account.
 			inline void refresh() noexcept(isNothrowDtor<T>())
 			{
-				// TODO: bottleneck - code review?
-
-				// Type must be signed, to check with negative values later
-				int iDead{0};
-
-				// Convert sizeNext to int to avoid warnings/issues
 				const int intSizeNext(sizeNext);
+				int iD{0}, iA{intSizeNext - 1};
 
-				// Find first alive and first dead atoms
-				while(iDead < intSizeNext && atoms[iDead].alive) ++iDead;
-				int iAlive{iDead - 1};
-
-				for(int iD{iDead}; iD < intSizeNext; ++iD)
+				do
 				{
-					// Skip alive atoms
-					if(atoms[iD].alive) continue;
-
-					// Found a dead atom - `i` now stores its index
-					// Look for an alive atom after the dead atom
-					for(int iA{iDead + 1}; true; ++iA)
+					// Find dead item from left
+					for(; true; ++iD)
 					{
-						// No more alive atoms, continue
-						if(iA == intSizeNext) goto finishRefresh;
-
-						// Skip dead atoms
-						if(!atoms[iA].alive) continue;
-
-						// Found an alive atom after dead `iD` atom - swap and update mark
-						std::swap(atoms[iA], atoms[iD]);
-						getMarkFromAtom(atoms[iD]).atomIdx = iD;
-						iAlive = iD; iDead = iA;
-
-						break;
+						// No more dead items
+						if(iD > iA) goto finishRefresh;
+						if(isDeadAt(iD)) break;
 					}
+
+					// Find alive item from right
+					for(; true; --iA)
+					{
+						// No more alive items
+						if(iA <= iD) goto finishRefresh;
+						if(isAliveAt(iA)) break;
+					}
+
+					SSVU_ASSERT(isDeadAt(iD) && isAliveAt(iA));
+					std::swap(atoms[iD], atoms[iA]);
+					getMarkFromAtom(atoms[iD]).atomIdx = iD;
+					SSVU_ASSERT(isAliveAt(iD) && isDeadAt(iA));
+
+					// Move both iterators
+					++iD; --iA;
 				}
+				while(true);
 
 				finishRefresh:
 
-				// [iAlive + 1, intSizeNext) contains only dead atoms, clean them up
-				for(int iD{iAlive + 1}; iD < intSizeNext; ++iD)
+				#if SSVU_DEBUG
+					for(iA = iA - 1; iA >= 0; --iA) SSVU_ASSERT(isAliveAt(iA));
+				#endif
+
+				size = sizeNext = iD;
+
+				for(; iD < intSizeNext; ++iD)
 				{
+					SSVU_ASSERT(isDeadAt(iD));
 					atoms[iD].deinitData();
 					++(getMarkFromAtom(atoms[iD]).ctr);
 				}
-
-				// Update size
-				size = sizeNext = iAlive + 1;
 			}
 
 			/// @brief Iterates over alive data. Newly created atoms aren't taken into account.

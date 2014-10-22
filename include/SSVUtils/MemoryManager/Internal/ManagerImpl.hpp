@@ -91,8 +91,7 @@ namespace ssvu
 
 				inline void refresh()
 				{
-					// TODO: code review
-					// TODO: compare to handlevector
+					// TODO: duplication with handlevector
 
 					const int intSizeNext(sizeNext);
 					int iD{0}, iA{intSizeNext - 1};
@@ -104,7 +103,6 @@ namespace ssvu
 						{
 							// No more dead items
 							if(iD > iA) goto finishRefresh;
-
 							if(isDeadAt(iD)) break;
 						}
 
@@ -113,7 +111,6 @@ namespace ssvu
 						{
 							// No more alive items
 							if(iA <= iD) goto finishRefresh;
-
 							if(isAliveAt(iA)) break;
 						}
 
