@@ -5,8 +5,6 @@
 #ifndef SSVU_JSON_COMMON
 #define SSVU_JSON_COMMON
 
-#include "SSVUtils/Json/Common/VecMap.hpp"
-
 namespace ssvu
 {
 	namespace Json
@@ -35,7 +33,7 @@ namespace ssvu
 		namespace Internal
 		{
 			/// @typedef Template for `Obj` type. Intended to be instantiated with `Val`.
-			template<typename T> using ObjImpl = Internal::VecMap<Key, T>;
+			template<typename T> using ObjImpl = VecMap<Key, T>;
 
 			/// @typedef Template for `Arr` type. Intended to be instantiated with `Val`.
 			template<typename T> using ArrImpl = std::vector<T>;

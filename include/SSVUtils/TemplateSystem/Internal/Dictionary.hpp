@@ -18,8 +18,8 @@ namespace ssvu
 				using DictVec = std::vector<Dictionary>;
 
 			private:
-				std::map<std::string, std::string> replacements;
-				std::map<std::string, DictVec> sections;
+				VecMap<std::string, std::string> replacements;
+				VecMap<std::string, DictVec> sections;
 				Dictionary* parentDict{nullptr};
 
 				template<typename TKey> class Proxy

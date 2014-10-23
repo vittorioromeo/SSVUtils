@@ -19,6 +19,7 @@
 // Modules
 #include "SSVUtils/Tests/TestsBenchmark.hpp"
 #include "SSVUtils/Tests/TestsBimap.hpp"
+#include "SSVUtils/Tests/TestsContainer.hpp"
 // #include "SSVUtils/Tests/TestsCmdLine.hpp"
 #include "SSVUtils/Tests/TestsDelegate.hpp"
 // #include "SSVUtils/Tests/TestsEasing.hpp"

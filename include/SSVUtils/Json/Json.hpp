@@ -6,6 +6,7 @@
 #define SSVU_JSON
 
 #include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Container/Container.hpp"
 #include "SSVUtils/Range/Range.hpp"
 #include "SSVUtils/UnionVariant/UnionVariant.hpp"
 
