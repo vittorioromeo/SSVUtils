@@ -29,10 +29,11 @@ namespace ssvu
 				template<typename TC> inline auto operator!=(const TC& mC) const noexcept { return !(operator==(mC)); }
 
 				// Standard (partial) vector interface support
-				inline void reserve(SizeT mV)		{ getData().reserve(mV); }
-				inline void clear() noexcept		{ getData().clear(); }
-				inline auto size() const noexcept	{ return getData().size(); }
-				inline auto empty() const noexcept	{ return getData().empty(); }
+				inline void reserve(SizeT mV)			{ getData().reserve(mV); }
+				inline void clear() noexcept			{ getData().clear(); }
+				inline auto size() const noexcept		{ return getData().size(); }
+				inline auto empty() const noexcept		{ return getData().empty(); }
+				inline auto capacity() const noexcept	{ return getData().capacity(); }
 
 				// Standard iterator support
 				inline auto begin()		noexcept		{ return std::begin(getData()); }

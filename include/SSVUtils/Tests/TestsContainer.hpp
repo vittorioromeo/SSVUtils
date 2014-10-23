@@ -93,4 +93,43 @@ SSVUT_TEST(ContainerVecMapNonPODTests)
 	SSVUT_EXPECT(tm.size() == 0);
 }
 
+SSVUT_TEST(ContainerVecSortedTests)
+{
+	using namespace ssvu;
+
+	VecSorted<std::string> vs;
+
+	SSVUT_EXPECT(vs.empty());
+	SSVUT_EXPECT(vs.size() == 0);
+
+	vs.reserve(5);
+
+	SSVUT_EXPECT(vs.empty());
+	SSVUT_EXPECT(vs.size() == 0);
+
+	std::vector<std::string> words
+	{
+		"a",
+		"klab",
+		"eacbds",
+		"haadfopja",
+		"bdasaa",
+		"aasdfpoasfas"
+	};
+
+	for(const auto& w : words) vs.insert(w);
+
+	sort(words);
+
+	for(auto i(0u); i < words.size(); ++i)
+	{
+		SSVUT_EXPECT_OP(words[i], ==, vs[i]);
+	}
+
+	vs.clear();
+
+	SSVUT_EXPECT(vs.empty());
+	SSVUT_EXPECT(vs.size() == 0);
+}
+
 #endif

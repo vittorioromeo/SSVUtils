@@ -40,7 +40,7 @@ namespace ssvu
 		public:
 			inline VecMap() = default;
 			inline VecMap(const VecMap& mVM) : data{mVM.data} { }
-			inline VecMap(VecMap&& mVM) : data{std::move(mVM.data)} { }
+			inline VecMap(VecMap&& mVM) noexcept : data{std::move(mVM.data)} { }
 			inline VecMap(std::initializer_list<Item>&& mIL) : data{std::move(mIL)}
 			{
 				sort(data, [](const auto& mA, const auto& mB){ return mA.first < mB.first; });
@@ -67,7 +67,7 @@ namespace ssvu
 				throw std::out_of_range{""};
 			}
 
-			/// @brief Returns a const reference to the value with key `mKey`. A default-constructed `TV` is returned if unexistant.
+			/// @brief Returns a const reference to the value with key `mKey`. A default-constructed static `TV` is returned if unexistant.
 			inline const auto& atOrDefault(const TK& mKey) const noexcept
 			{
 				static TV defValue;
@@ -76,9 +76,15 @@ namespace ssvu
 				if(is(itr, mKey)) return itr->second;
 				return defValue;
 			}
+
+			/// @brief Returns an iterator to the value with key `mKey`. A past-the-end iterator is returned if unexistant.
+			inline auto atItr(const TK& mKey) const noexcept
+			{
+				auto itr(lookup(mKey));
+				if(is(itr, mKey)) return itr;
+				return std::end(data);
+			}
 	};
 }
 
 #endif
-
-// TODO: docs, review

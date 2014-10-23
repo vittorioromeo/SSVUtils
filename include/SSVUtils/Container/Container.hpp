@@ -7,7 +7,7 @@
 
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Container/Internal/VecMapBase.hpp"
-#include "SSVUtils/Container/VecMap.hpp"
 #include "SSVUtils/Container/VecSorted.hpp"
+#include "SSVUtils/Container/VecMap.hpp"
 
 #endif
