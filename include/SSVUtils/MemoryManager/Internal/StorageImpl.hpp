@@ -27,6 +27,19 @@ namespace ssvu
 					SSVU_ASSERT_STATIC(sizeof(TBase) >= sizeof(char*), "sizeof(TBase) must be >= sizeof(char*)");
 				}
 
+				inline PtrChain(const PtrChain&) = delete;
+				inline PtrChain(PtrChain&& mPC) noexcept
+				{
+					base = mPC.base; mPC.base = nullptr;
+				}
+
+				inline auto& operator=(const PtrChain&) = delete;
+				inline auto& operator=(PtrChain&& mPC) noexcept
+				{
+					base = mPC.base; mPC.base = nullptr;
+					return *this;
+				}
+
 				inline ~PtrChain() noexcept
 				{
 					Link* temp;
@@ -67,6 +80,21 @@ namespace ssvu
 				PtrChain<TBase, TLHelper> ptrChain;
 
 			public:
+				inline Chunk() noexcept = default;
+
+				inline Chunk(const Chunk&) = delete;
+				inline Chunk(Chunk&& mC) noexcept
+				{
+					ptrChain = std::move(mC.ptrChain);
+				}
+
+				inline auto& operator=(const Chunk&) = delete;
+				inline auto& operator=(Chunk&& mC) noexcept
+				{
+					ptrChain = std::move(mC.ptrChain);
+					return *this;
+				}
+
 				/// @brief Creates and constructs a `T` instance.
 				/// @details Uses one of the recyclable pointers if available, otherwise allocates new memory.
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
@@ -117,7 +145,7 @@ namespace ssvu
 				using ChunkType = Chunk<TBase, TLHelper>;
 
 			private:
-				std::map<SizeT, ChunkType> chunks;
+				std::unordered_map<SizeT, ChunkType> chunks;
 
 			public:
 				template<typename T> inline auto& getChunk() { return chunks[sizeof(T)]; }
