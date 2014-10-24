@@ -24,6 +24,7 @@ namespace ssvu
 #include "SSVUtils/HandleVector/Internal/Atom.hpp"
 #include "SSVUtils/HandleVector/Internal/Iterator.hpp"
 #include "SSVUtils/HandleVector/Handle.hpp"
+#include "SSVUtils/Internal/SharedFuncs.hpp"
 
 namespace ssvu
 {
@@ -191,51 +192,18 @@ namespace ssvu
 			/// @details Dead atoms are deallocated and destroyed. Newly created atoms are now taken into account.
 			inline void refresh() noexcept(isNothrowDtor<T>())
 			{
-				const int intSizeNext(sizeNext);
-				int iD{0}, iA{intSizeNext - 1};
-
-				do
-				{
-					// Find dead item from left
-					for(; true; ++iD)
+				Internal::refreshImpl(size, sizeNext,
+					[this](SizeT mI){ return isAliveAt(mI); },
+					[this](SizeT mD, SizeT mA)
 					{
-						// No more dead items
-						if(iD > iA) goto finishRefresh;
-						if(isDeadAt(iD)) break;
-					}
-
-					// Find alive item from right
-					for(; true; --iA)
+						std::swap(atoms[mD], atoms[mA]);
+						getMarkFromAtom(atoms[mD]).atomIdx = mD;
+					},
+					[this](SizeT mD)
 					{
-						// No more alive items
-						if(iA <= iD) goto finishRefresh;
-						if(isAliveAt(iA)) break;
-					}
-
-					SSVU_ASSERT(isDeadAt(iD) && isAliveAt(iA));
-					std::swap(atoms[iD], atoms[iA]);
-					getMarkFromAtom(atoms[iD]).atomIdx = iD;
-					SSVU_ASSERT(isAliveAt(iD) && isDeadAt(iA));
-
-					// Move both iterators
-					++iD; --iA;
-				}
-				while(true);
-
-				finishRefresh:
-
-				#if SSVU_DEBUG
-					for(iA = iA - 1; iA >= 0; --iA) SSVU_ASSERT(isAliveAt(iA));
-				#endif
-
-				size = sizeNext = iD;
-
-				for(; iD < intSizeNext; ++iD)
-				{
-					SSVU_ASSERT(isDeadAt(iD));
-					atoms[iD].deinitData();
-					++(getMarkFromAtom(atoms[iD]).ctr);
-				}
+						atoms[mD].deinitData();
+						++(getMarkFromAtom(atoms[mD]).ctr);
+					});
 			}
 
 			/// @brief Iterates over alive data. Newly created atoms aren't taken into account.

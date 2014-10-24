@@ -5,9 +5,6 @@
 #ifndef SSVU_MEMORYMANAGER_INTERNAL_MANAGERIMPL
 #define SSVU_MEMORYMANAGER_INTERNAL_MANAGERIMPL
 
-#include "SSVUtils/Range/Range.hpp"
-#include "SSVUtils/GrowableArray/GrowableArray.hpp"
-
 namespace ssvu
 {
 	namespace Internal
@@ -89,53 +86,12 @@ namespace ssvu
 					capacity = mCapacityNew;
 				}
 
-				inline void refresh()
+				inline void refresh() noexcept
 				{
-					// TODO: duplication with handlevector
-
-					const int intSizeNext(sizeNext);
-					int iD{0}, iA{intSizeNext - 1};
-
-					do
-					{
-						// Find dead item from left
-						for(; true; ++iD)
-						{
-							// No more dead items
-							if(iD > iA) goto finishRefresh;
-							if(isDeadAt(iD)) break;
-						}
-
-						// Find alive item from right
-						for(; true; --iA)
-						{
-							// No more alive items
-							if(iA <= iD) goto finishRefresh;
-							if(isAliveAt(iA)) break;
-						}
-
-						SSVU_ASSERT(isDeadAt(iD) && isAliveAt(iA));
-						std::swap(items[iD], items[iA]);
-						SSVU_ASSERT(isAliveAt(iD) && isDeadAt(iA));
-
-						// Move both iterators
-						++iD; --iA;
-					}
-					while(true);
-
-					finishRefresh:
-
-					#if SSVU_DEBUG
-						for(iA = iA - 1; iA >= 0; --iA) SSVU_ASSERT(isAliveAt(iA));
-					#endif
-
-					msize = sizeNext = iD;
-
-					for(; iD < intSizeNext; ++iD)
-					{
-						SSVU_ASSERT(isDeadAt(iD));
-						items.deinitAt(iD);
-					}
+					Internal::refreshImpl(msize, sizeNext,
+						[this](SizeT mI){ return isAliveAt(mI); },
+						[this](SizeT mD, SizeT mA){ std::swap(items[mD], items[mA]); },
+						[this](SizeT mD){ items.deinitAt(mD); });
 				}
 
 				inline static bool isAlive(const TBase* mBase) noexcept	{ return LayoutType::getBool(mBase); }

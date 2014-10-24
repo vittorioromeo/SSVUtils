@@ -6,6 +6,9 @@
 #define SSVU_MEMORYMANAGER
 
 #include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Range/Range.hpp"
+#include "SSVUtils/GrowableArray/GrowableArray.hpp"
+#include "SSVUtils/Internal/SharedFuncs.hpp"
 
 // Forward declarations
 namespace ssvu
