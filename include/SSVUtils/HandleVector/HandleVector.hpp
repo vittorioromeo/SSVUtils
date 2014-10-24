@@ -373,27 +373,66 @@ namespace ssvu
 
 
 
-			// Range iteration helpers
-			inline auto forFast() noexcept				{ return makeRange(begin(), end()); }
-			inline auto forFast() const noexcept		{ return makeRange(begin(), end()); }
-			inline auto forNextFast() noexcept			{ return makeRange(begin(), endNext()); }
-			inline auto forNextFast() const noexcept	{ return makeRange(begin(), endNext()); }
+			// Fast ranges
 
-			inline auto forIdx() noexcept				{ return makeRange(beginIdx(), endIdx()); }
-			inline auto forIdx() const noexcept			{ return makeRange(beginIdx(), endIdx()); }
-			inline auto forNextIdx() noexcept			{ return makeRange(beginIdx(), endIdxNext()); }
-			inline auto forNextIdx() const noexcept		{ return makeRange(beginIdx(), endIdxNext()); }
+			/// @brief Returns a range using fast iterators. Newly created atoms aren't taken into account.
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forFast() noexcept { return makeRange(begin(), end()); }
 
-			inline auto forAtom() noexcept				{ return makeRange(beginAtom(), endAtom()); }
-			inline auto forAtom() const noexcept		{ return makeRange(beginAtom(), endAtom()); }
-			inline auto forNextAtom() noexcept			{ return makeRange(beginAtom(), endAtomNext()); }
-			inline auto forNextAtom() const noexcept	{ return makeRange(beginAtom(), endAtomNext()); }
+			/// @brief Returns a range using fast iterators. Newly created atoms aren't taken into account. (const version)
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forFast() const noexcept { return makeRange(begin(), end()); }
+
+			/// @brief Returns a range using fast iterators. Newly created atoms are taken into account.
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forNextFast() noexcept { return makeRange(begin(), endNext()); }
+
+			/// @brief Returns a range using fast iterators. Newly created atoms are taken into account. (const version)
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forNextFast() const noexcept { return makeRange(begin(), endNext()); }
+
+
+
+			// Idx ranges
+
+			/// @brief Returns a range using idx iterators. Newly created atoms aren't taken into account.
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forIdx() noexcept { return makeRange(beginIdx(), endIdx()); }
+
+			/// @brief Returns a range using idx iterators. Newly created atoms aren't taken into account. (const version)
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forIdx() const noexcept { return makeRange(beginIdx(), endIdx()); }
+
+			/// @brief Returns a range using idx iterators. Newly created atoms are taken into account.
+			/// @details This range will be invalidated if the internal storage gro-ws.
+			inline auto forNextIdx() noexcept { return makeRange(beginIdx(), endIdxNext()); }
+
+			/// @brief Returns a range using idx iterators. Newly created atoms are taken into account. (const version)
+			/// @details This range will be invalidated if the internal storage gro-ws.
+			inline auto forNextIdx() const noexcept { return makeRange(beginIdx(), endIdxNext()); }
+
+
+
+			// Atom ranges
+
+			/// @brief Returns a range for atom iteration. Newly created atoms aren't taken into account.
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forAtom() noexcept { return makeRange(beginAtom(), endAtom()); }
+
+			/// @brief Returns a range for atom iteration. Newly created atoms aren't taken into account. (const version)
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forAtom() const noexcept { return makeRange(beginAtom(), endAtom()); }
+
+			/// @brief Returns a range for atom iteration. Newly created atoms are taken into account.
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forNextAtom() noexcept { return makeRange(beginAtom(), endAtomNext()); }
+
+			/// @brief Returns a range for atom iteration. Newly created atoms are taken into account. (const version)
+			/// @details This range will be invalidated if the internal storage grows.
+			inline auto forNextAtom() const noexcept { return makeRange(beginAtom(), endAtomNext()); }
 	};
 }
 
 #include "SSVUtils/HandleVector/Handle.inl"
 
 #endif
-
-// TODO: docs for array, cast ranges, review
-// * forAtoms(), for(), forIdx()
