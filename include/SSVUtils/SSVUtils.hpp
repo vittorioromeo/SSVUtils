@@ -5,7 +5,10 @@
 #ifndef SSVUTILS
 #define SSVUTILS
 
-// "Core" module.
+// API configuration
+#include "SSVUtils/Internal/API.hpp"
+
+// "Core" module
 #include "SSVUtils/Core/Core.hpp"
 
 #include "SSVUtils/Test/Test.hpp"

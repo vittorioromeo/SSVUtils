@@ -14,7 +14,7 @@ namespace ssvu
 		/// @param mPath Path to non-existing folder, must end with '/'.
 		inline void createFolder(const Path& mPath)
 		{
-			#if SSVU_OS_WINDOWS
+			#if defined(SSVU_OS_WINDOWS)
 				mkdir(mPath.getCStr());
 			#else
 				mkdir(mPath.getCStr(), 0755);
@@ -34,7 +34,7 @@ namespace ssvu
 
 			std::string userHome;
 
-			#if SSVU_OS_WINDOWS
+			#if defined(SSVU_OS_WINDOWS)
 				if(std::getenv("HOME") != NULL) userHome = std::getenv("HOME");
 				else if(std::getenv("USERPROFILE") != NULL) userHome = std::getenv("USERPROFILE");
 				else if(std::getenv("HOMEPATH") == NULL) return;
