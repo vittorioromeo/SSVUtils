@@ -2,8 +2,9 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_ENCRYPTION_INTERNAL_BASE64_INL
-#define SSVU_ENCRYPTION_INTERNAL_BASE64_INL
+#include "SSVUtils/Internal/API.hpp"
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Encryption/Inc/Internal/MD5.hpp"
 
 namespace ssvu
 {
@@ -12,9 +13,9 @@ namespace ssvu
 		namespace Internal
 		{
 			static const std::string base64_chars{"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"};
-			inline bool is_base64(unsigned char c) { return (std::isalnum(c) || (c == '+') || (c == '/')); }
+			SSVU_INLINE bool is_base64(unsigned char c) { return (std::isalnum(c) || (c == '+') || (c == '/')); }
 
-			inline std::string Base64Encode(unsigned char const* bytes_to_encode, unsigned int in_len)
+			SSVU_INLINE std::string Base64Encode(unsigned char const* bytes_to_encode, unsigned int in_len)
 			{
 				std::string ret;
 				int i{0}, j{0};
@@ -51,7 +52,7 @@ namespace ssvu
 				return ret;
 			}
 
-			inline std::string Base64Decode(const std::string& mStr)
+			SSVU_INLINE std::string Base64Decode(const std::string& mStr)
 			{
 				int in_len(mStr.size()), i{0}, j{0}, in_{0};
 				unsigned char char_array_4[4], char_array_3[3];
@@ -89,9 +90,7 @@ namespace ssvu
 				return ret;
 			}
 
-			inline std::string Base64Encode(const std::string& mStr) { return Base64Encode(reinterpret_cast<const unsigned char*>(mStr.c_str()), mStr.size()); }
+			SSVU_INLINE std::string Base64Encode(const std::string& mStr) { return Base64Encode(reinterpret_cast<const unsigned char*>(mStr.c_str()), mStr.size()); }
 		}
 	}
 }
-
-#endif

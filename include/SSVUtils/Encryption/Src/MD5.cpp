@@ -2,8 +2,9 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_ENCRYPTION_INTERNAL_MD5_INL
-#define SSVU_ENCRYPTION_INTERNAL_MD5_INL
+#include "SSVUtils/Internal/API.hpp"
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Encryption/Inc/Internal/MD5.hpp"
 
 namespace ssvu
 {
@@ -37,7 +38,7 @@ namespace ssvu
 			void MD5Update(MD5_CTX*, const unsigned char*, unsigned int);
 			void MD5Final(unsigned char[16], MD5_CTX*);
 
-			inline std::string MD5::Calculate(std::ifstream& file)
+			SSVU_INLINE std::string MD5::Calculate(std::ifstream& file)
 			{
 				if(!file) return "";
 				file.seekg(0, std::ios::end);
@@ -51,7 +52,7 @@ namespace ssvu
 				delete[] buffer;
 				return m_sHash;
 			}
-			inline std::string MD5::Calculate(const unsigned char* source, uint32_t len)
+			SSVU_INLINE std::string MD5::Calculate(const unsigned char* source, uint32_t len)
 			{
 				MD5_CTX context;
 
@@ -144,7 +145,7 @@ namespace ssvu
 
 			/* MD5 initialization. Begins an MD5 operation, writing a new context.
 			 */
-			inline void MD5Init (MD5_CTX *context)
+			SSVU_INLINE void MD5Init (MD5_CTX *context)
 			{
 			  context->count[0] = context->count[1] = 0;
 			  /* Load magic initialization constants.
@@ -159,7 +160,7 @@ namespace ssvu
 			  operation, processing another message block, and updating the
 			  context.
 			 */
-			inline void MD5Update(MD5_CTX* context, const unsigned char* input, unsigned int inputLen)
+			SSVU_INLINE void MD5Update(MD5_CTX* context, const unsigned char* input, unsigned int inputLen)
 			{
 			  unsigned int i, index, partLen;
 
@@ -198,7 +199,7 @@ namespace ssvu
 			/* MD5 finalization. Ends an MD5 message-digest operation, writing the
 			  the message digest and zeroizing the context.
 			 */
-			inline void MD5Final(unsigned char digest[16], MD5_CTX *context)
+			SSVU_INLINE void MD5Final(unsigned char digest[16], MD5_CTX *context)
 			{
 			  unsigned char bits[8];
 			  unsigned int index, padLen;
@@ -224,7 +225,7 @@ namespace ssvu
 
 			/* MD5 basic transformation. Transforms state based on block.
 			 */
-			inline void MD5Transform(UINT4 state[4], const unsigned char block[64])
+			SSVU_INLINE void MD5Transform(UINT4 state[4], const unsigned char block[64])
 			{
 			  UINT4 a = state[0], b = state[1], c = state[2], d = state[3], x[16];
 
@@ -315,7 +316,7 @@ namespace ssvu
 			/* Encodes input (UINT4) into output (unsigned char). Assumes len is
 			  a multiple of 4.
 			 */
-			inline void Encode (unsigned char *output, const UINT4 *input, unsigned int len)
+			SSVU_INLINE void Encode (unsigned char *output, const UINT4 *input, unsigned int len)
 			{
 				unsigned int i, j;
 				for(i = 0, j = 0; j < len; ++i, j += 4)
@@ -330,7 +331,7 @@ namespace ssvu
 			/* Decodes input (unsigned char) into output (UINT4). Assumes len is
 			  a multiple of 4.
 			 */
-			inline void Decode(UINT4 *output, const unsigned char *input, unsigned int len)
+			SSVU_INLINE void Decode(UINT4 *output, const unsigned char *input, unsigned int len)
 			{
 				unsigned int i, j;
 				for(i = 0, j = 0; j < len; ++i, j += 4) output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8) | (((UINT4)input[j+2]) << 16) | (((UINT4)input[j+3]) << 24);
@@ -339,7 +340,7 @@ namespace ssvu
 			/* Note: Replace "for loop" with standard memcpy if possible.
 			 */
 
-			inline void MD5_memcpy(POINTER output, POINTER input, unsigned int len)
+			SSVU_INLINE void MD5_memcpy(POINTER output, POINTER input, unsigned int len)
 			{
 				unsigned int i;
 				for(i = 0; i < len; ++i) output[i] = input[i];
@@ -347,7 +348,7 @@ namespace ssvu
 
 			/* Note: Replace "for loop" with standard memset if possible.
 			 */
-			inline void MD5_memset(POINTER output, int value, unsigned int len)
+			SSVU_INLINE void MD5_memset(POINTER output, int value, unsigned int len)
 			{
 				unsigned int i;
 				for(i = 0; i < len; ++i) ((char *)output)[i] = (char)value;
@@ -381,5 +382,3 @@ namespace ssvu
 #undef GG
 #undef HH
 #undef II
-
-#endif

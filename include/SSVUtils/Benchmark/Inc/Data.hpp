@@ -7,7 +7,8 @@
 
 #include "SSVUtils/Internal/API.hpp"
 #include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/Benchmark/Inc/Benchmark.hpp"
+#include "SSVUtils/Benchmark/Inc/Typedefs.hpp"
+#include "SSVUtils/Benchmark/Inc/DataBase.hpp"
 
 namespace ssvu
 {

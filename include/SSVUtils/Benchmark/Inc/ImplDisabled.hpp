@@ -6,6 +6,7 @@
 #define SSVU_BENCHMARK_INTERNAL_IMPL_DISABLED
 
 #include <string>
+#include "SSVUtils/Benchmark/Inc/Data.hpp"
 
 namespace ssvu
 {
@@ -14,7 +15,7 @@ namespace ssvu
 		namespace Internal
 		{
 			void start(std::string);
-			auto getEndData();
+			Data getEndData();
 			void endLo();
 			void groupReset(const std::string&);
 			void groupResume(const std::string&);

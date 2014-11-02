@@ -5,6 +5,7 @@
 #include "SSVUtils/Internal/API.hpp"
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Benchmark/Inc/Benchmark.hpp"
+#include "SSVUtils/Benchmark/Inc/Data.hpp"
 
 #ifndef SSVU_BENCHMARK_DISABLE
 	#include "SSVUtils/Benchmark/Inc/ImplEnabled.hpp"
@@ -21,7 +22,7 @@ namespace ssvu
 			return Internal::start(std::move(mTitle));
 		}
 
-		SSVU_INLINE auto getEndData()
+		SSVU_INLINE Internal::Data getEndData()
 		{
 			return Internal::getEndData();
 		}

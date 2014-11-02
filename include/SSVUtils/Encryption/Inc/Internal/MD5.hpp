@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_ENCRYPTION_INTERNAL_MD5
-#define SSVU_ENCRYPTION_INTERNAL_MD5
+#ifndef SSVU_IMPL_ENCRYPTION_INTERNAL_MD5
+#define SSVU_IMPL_ENCRYPTION_INTERNAL_MD5
 
 /* Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
 rights reserved.

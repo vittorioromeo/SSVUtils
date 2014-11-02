@@ -39,10 +39,36 @@
 #endif
 
 // TODO:
-// * .inl and .cpp FILES and SSVU_INLINE macro
 // * Fix includes (old method was better)
 // * investigate metaprogramming code generation
 // * test framework - write expected and actual value and more...
 // * ModuleName/Impl/...
 // * zip iterator
 // * experiment/consider reimplementing vector/map/flatmap with no exceptions and only asserts
+// * Internal:: -> Impl:: ?
+
+// * .inl and .cpp FILES and SSVU_INLINE macro
+/*
+	* Benchmark
+	* Bimap
+	CmdLine
+	Container
+	Core
+	Delegate
+	Easing
+	Encryption
+	FatEnum
+	GrowableArray
+	HandleVector
+	Internal
+	Json
+	Memorymanager
+	Range
+	RecPtr
+	TemplateSystem
+	Test
+	Tests
+	* Ticker
+	Timeline
+	UnionVariant
+*/

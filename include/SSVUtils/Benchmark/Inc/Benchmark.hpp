@@ -9,8 +9,6 @@
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Benchmark/Inc/Macros.hpp"
 #include "SSVUtils/Benchmark/Inc/Typedefs.hpp"
-
-
 #include "SSVUtils/Benchmark/Inc/DataBase.hpp"
 #include "SSVUtils/Benchmark/Inc/Data.hpp"
 #include "SSVUtils/Benchmark/Inc/DataGroup.hpp"
@@ -24,7 +22,7 @@ namespace ssvu
 
 		/// @brief Ends the current benchmark timer and returns the data.
 		/// @return Returns the elapsed time as a std::chrono::milliseconds.
-		auto getEndData();
+		Internal::Data getEndData();
 
 		/// @brief Ends the current benchmark timer and logs the elapsed time.
 		void endLo();

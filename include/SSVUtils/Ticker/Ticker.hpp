@@ -5,58 +5,10 @@
 #ifndef SSVU_TICKER
 #define SSVU_TICKER
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Ticker/Inc/Ticker.hpp"
 
-namespace ssvu
-{
-	class Ticker
-	{
-		private:
-			FT target, current{0.f}, total{0.f};
-			bool running{true}, loop{true};
-			SizeT ticks{0};
-
-		public:
-			inline Ticker(FT mTarget, bool mRunning = true) noexcept : target{mTarget}, running{mRunning} { }
-
-			inline bool update(FT mFT) noexcept
-			{
-				const auto& increment(mFT * running);
-				current += increment;
-				total += increment;
-
-				if(current < target) return false;
-
-				++ticks;
-				resetCurrent();
-				running = loop;
-				return true;
-			}
-			inline bool update(FT mFT, FT mTarget) noexcept { target = mTarget; return update(mFT); }
-
-			inline void pause() noexcept				{ running = false; }
-			inline void resume() noexcept				{ running = true; }
-			inline void stop() noexcept					{ resetCurrent(); running = false; }
-			inline void restart() noexcept				{ resetCurrent(); running = true; }
-			inline void restart(FT mTarget) noexcept	{ resetCurrent(); target = mTarget; running = true; }
-
-			inline void resetCurrent() noexcept			{ current = 0.f; }
-			inline void resetTicks() noexcept			{ ticks = 0; }
-			inline void resetTotal() noexcept			{ total = 0.f; }
-			inline void resetAll() noexcept				{ resetCurrent(); resetTicks(); resetTotal(); }
-
-			inline void setLoop(bool mLoop) noexcept	{ loop = mLoop; }
-
-			inline bool getLoop() const noexcept		{ return loop; }
-			inline bool isRunning() const noexcept		{ return running; }
-			inline auto getTarget() const noexcept		{ return target; }
-			inline auto getCurrent() const noexcept		{ return current; }
-			inline auto getTotal() const noexcept		{ return total; }
-			inline auto getTicks() const noexcept		{ return ticks; }
-
-			template<typename T = FT> inline T getTotalSecs() const noexcept	{ return static_cast<T>(getFTToSeconds(total)); }
-			template<typename T = FT> inline T getCurrentSecs() const noexcept	{ return static_cast<T>(getFTToSeconds(current)); }
-	};
-}
+#if defined(SSVU_API_HEADERONLY)
+	#include "SSVUtils/Ticker/Src/Ticker.cpp"
+#endif
 
 #endif
