@@ -14,7 +14,7 @@ namespace ssvu
 		namespace Internal
 		{
 			SSVU_INLINE void start(std::string)					{ }
-			SSVU_INLINE auto getEndData()						{ return Internal::Data{}; }
+			SSVU_INLINE Data getEndData()						{ return Data{}; }
 			SSVU_INLINE void endLo()							{ }
 			SSVU_INLINE void groupReset(const std::string&)		{ }
 			SSVU_INLINE void groupResume(const std::string&)	{ }
