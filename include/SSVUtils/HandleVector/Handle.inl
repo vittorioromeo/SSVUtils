@@ -14,7 +14,7 @@ namespace ssvu
 
 	template<typename T> inline void Handle<T>::destroy() noexcept
 	{
-		return hVec->destroy(markIdx);
+		hVec->destroy(markIdx);
 	}
 }
 
