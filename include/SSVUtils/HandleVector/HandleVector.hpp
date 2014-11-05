@@ -16,6 +16,17 @@ namespace ssvu
 	using HCtr = int;
 
 	template<typename> class HandleVector;
+
+	namespace Internal
+	{
+		struct HVStat
+		{
+			HIdx markIdx;
+			bool alive{false};
+
+			inline HVStat(HIdx mMarkIdx) noexcept : markIdx{mMarkIdx} { }
+		};
+	}
 }
 
 #include "SSVUtils/Range/Range.hpp"
@@ -111,13 +122,13 @@ namespace ssvu
 			}
 
 			/// @brief Returns a reference to mAtom's controller mark.
-			inline auto& getMarkFromAtom(const Atom& mAtom)	noexcept { return marks[mAtom.markIdx]; }
+			inline auto& getMarkFromAtom(const Atom& mAtom)	noexcept { return marks[mAtom.getMarkIdx()]; }
 
 			/// @brief Returns a reference to mMark's controlled atom.
 			inline auto& getAtomFromMark(const Mark& mMark) noexcept { return atoms[mMark.atomIdx]; }
 
-			inline bool isAliveAt(SizeT mI) const noexcept	{ return atoms[mI].alive; }
-			inline bool isDeadAt(SizeT mI) const noexcept	{ return !atoms[mI].alive; }
+			inline bool isAliveAt(SizeT mI) const noexcept	{ return atoms[mI].isAlive(); }
+			inline bool isDeadAt(SizeT mI) const noexcept	{ return !isAliveAt(mI); }
 
 		public:
 			inline HandleVector() { growCapacityBy(10); }
@@ -140,8 +151,8 @@ namespace ssvu
 					auto& atom(atoms[i]);
 					auto& mark(marks[i]);
 
-					SSVU_ASSERT(atom.alive);
-					atom.alive = false;
+					SSVU_ASSERT(atom.isAlive());
+					atom.setDead();
 					atom.deinitData();
 					++mark.ctr;
 				}
@@ -156,7 +167,7 @@ namespace ssvu
 			/// @details The created atom will not be used until the HandleVector is refreshed.
 			inline auto createHandleFromAtom(Atom& mAtom) noexcept
 			{
-				return Handle<T>{*this, mAtom.markIdx, getMarkFromAtom(mAtom).ctr};
+				return Handle<T>{*this, mAtom.getMarkIdx(), getMarkFromAtom(mAtom).ctr};
 			}
 
 			/// @brief Creates an atom, returning a reference to it.
@@ -169,7 +180,7 @@ namespace ssvu
 				// `sizeNext` now is the first empty valid index - we create our atom there
 				auto& atom(atoms[sizeNext]);
 				atom.initData(fwd<TArgs>(mArgs)...);
-				atom.alive = true;
+				atom.setAlive();
 
 				// Update the mark
 				auto& mark(getMarkFromAtom(atom));
@@ -246,7 +257,7 @@ namespace ssvu
 			/// @details Will not work correctly if the HandleVector gets resized (either by reserving or adding elements).
 			inline constexpr Atom& getAtomFromData(T& mData) noexcept
 			{
-				return *(Internal::Atom<T>::getAtomFromUncertain(Internal::Uncertain<T>::getUncertainFromData(&mData)));
+				return *(Internal::Atom<T>::getAtomFromPtr(&mData));
 			}
 
 			/// @brief Returns a reference to `mHandle`'s atom.
