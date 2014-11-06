@@ -7,6 +7,8 @@
 
 namespace ssvu
 {
+	template<typename> class HandleVector;
+
 	namespace Internal
 	{
 		/// @brief Internal HandleVector class storing data and metadata.

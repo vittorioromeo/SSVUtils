@@ -6,32 +6,9 @@
 #define SSVU_HANDLEVECTOR
 
 #include "SSVUtils/Core/Core.hpp"
-
-namespace ssvu
-{
-	/// @typedef HandleVector index type.
-	using HIdx = SizeT;
-
-	/// @typedef HandleVector counter type.
-	using HCtr = int;
-
-	template<typename> class HandleVector;
-
-	namespace Internal
-	{
-		struct HVStat
-		{
-			HIdx markIdx;
-			bool alive{false};
-
-			inline HVStat(HIdx mMarkIdx) noexcept : markIdx{mMarkIdx} { }
-		};
-	}
-}
-
 #include "SSVUtils/Range/Range.hpp"
 #include "SSVUtils/GrowableArray/GrowableArray.hpp"
-#include "SSVUtils/HandleVector/Internal/Uncertain.hpp"
+#include "SSVUtils/HandleVector/Internal/Common.hpp"
 #include "SSVUtils/HandleVector/Internal/Atom.hpp"
 #include "SSVUtils/HandleVector/Internal/Iterator.hpp"
 #include "SSVUtils/HandleVector/Handle.hpp"
@@ -44,14 +21,8 @@ namespace ssvu
 		template<typename> friend class Handle;
 
 		private:
-			/// @brief Structure controlling validity of the atoms and handles.
-			struct Mark
-			{
-				HIdx atomIdx;
-				HCtr ctr;
-
-				inline Mark(HIdx mAtomIdx) noexcept : atomIdx{mAtomIdx} { }
-			};
+			using Stat = Internal::HVStat;
+			using Mark = Internal::HVMark;
 
 		public:
 			/// @typedef Templatized `Internal::Atom<T>` type.
