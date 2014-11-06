@@ -38,6 +38,9 @@ namespace ssvu
 	template<SizeT TS, typename T>					using TplElem = std::tuple_element_t<TS, T>;
 	template<typename T>							using RemoveAll = RemoveCV<RemoveRef<T>>;
 	template<typename T, T TV>						using IntegralConstant = std::integral_constant<T, TV>;
+	template<typename T, T... TVals>				using IntSeq = std::integer_sequence<T, TVals...>;
+	template<SizeT... TS>							using IdxSeq = std::index_sequence<TS...>;
+	template<typename... T>							using IdxSeqFor = std::make_index_sequence<sizeof...(T)>;
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>(); }
 	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>(); }
