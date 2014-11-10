@@ -83,7 +83,7 @@ namespace ssvu
 				set1.erase(&pair.first);
 				set2.erase(&pair.second);
 
-				eraseRemoveIf(storage, [&pair](const UPtr<BMPair>& mI){ return mI.get() == &pair; });
+				eraseRemoveIf(storage, [&pair](const auto& mI){ return mI.get() == &pair; });
 
 				SSVU_ASSERT(!this->has(mKey));
 			}

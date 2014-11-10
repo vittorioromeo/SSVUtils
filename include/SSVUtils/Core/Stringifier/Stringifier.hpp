@@ -42,6 +42,7 @@ namespace ssvu
 		/// @brief Tuple-printing implementation. (base of the recursion)
 		template<bool TFmt, SizeT I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I == sizeof...(TArgs)> implTpl(std::ostream&, const T<TArgs...>&) { }
 
+		// TODO: tplForIdx
 		/// @brief Tuple-printing implementation. (recursive step)
 		template<bool TFmt, SizeT I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I < sizeof...(TArgs)> implTpl(std::ostream& mStream, const T<TArgs...>& mTpl)
 		{
