@@ -39,19 +39,6 @@ namespace ssvu
 			printFmt<TFmt>(mStream, mValue, mColor, Console::Style::None);
 		}
 
-		/// @brief Tuple-printing implementation. (base of the recursion)
-		template<bool TFmt, SizeT I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I == sizeof...(TArgs)> implTpl(std::ostream&, const T<TArgs...>&) { }
-
-		// TODO: tplForIdx
-		/// @brief Tuple-printing implementation. (recursive step)
-		template<bool TFmt, SizeT I = 0, typename... TArgs, template<typename...> class T> inline EnableIf<I < sizeof...(TArgs)> implTpl(std::ostream& mStream, const T<TArgs...>& mTpl)
-		{
-			callStringifyImpl<TFmt>(mStream, std::get<I>(mTpl));
-			if(I < sizeof...(TArgs) - 1) printBold<TFmt>(mStream, ", ");
-			implTpl<TFmt, I + 1>(mStream, mTpl);
-
-		}
-
 		/// @brief Utility function to avoid repetition. (implementation for BidirectionalIterator)
 		template<typename TItr, typename TFunc1, typename TFunc2> inline void repeatPenultimateImpl(TItr mBegin, TItr mEnd, TFunc1 mFunc, TFunc2 mFuncSeparator, std::bidirectional_iterator_tag)
 		{
@@ -100,7 +87,11 @@ namespace ssvu
 			template<bool TFmt> inline static void impl(std::ostream& mStream, const T& mValue)
 			{
 				printBold<TFmt>(mStream, "{");
-				implTpl<TFmt>(mStream, mValue);
+				tplForIdx(mValue, [&mStream](auto mIdx, const auto& mX)
+				{
+					callStringifyImpl<TFmt>(mStream, mX);
+					if(mIdx < getTplSize<T>() - 1) printBold<TFmt>(mStream, ", ");
+				});
 				printBold<TFmt>(mStream, "}");
 			}
 		};
