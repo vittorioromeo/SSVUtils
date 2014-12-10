@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_UTILS_TUPLE
 #define SSVU_CORE_UTILS_TUPLE
 
+#include "SSVUtils/UnionVariant/Internal/CTUtils.hpp"
+
 namespace ssvu
 {
 	namespace Internal
@@ -26,42 +28,50 @@ namespace ssvu
 			}
 		};
 
-		template<typename... TArgs> struct ForHelper
+		template<SizeT TS, typename... TTpls> struct ForHelper
 		{
-			template<SizeT TI, typename T, typename TF> inline static EnableIf<TI == sizeof...(TArgs), void> exec(T&&, TF) noexcept { }
+			template<SizeT TI, typename TF> inline static EnableIf<TI == TS, void> exec(TF, TTpls&&...) noexcept { }
 
-			template<SizeT TI = 0, typename T, typename TF> inline static EnableIf<TI < sizeof...(TArgs), void> exec(T&& mT, TF&& mF)
+			template<SizeT TI = 0, typename TF> inline static EnableIf<TI < TS, void> exec(TF&& mF, TTpls&&... mTpls)
 				noexcept(true)
 			{
-				fwd<TF>(mF)(std::get<TI>(fwd<T>(mT)));
-				exec<TI + 1, T, TF>(fwd<T>(mT), fwd<TF>(mF));
+				fwd<TF>(mF)(std::get<TI>(fwd<TTpls>(mTpls))...);
+				exec<TI + 1, TF>(fwd<TF>(mF), fwd<TTpls>(mTpls)...);
 			}
 		};
 
-		template<typename... TArgs> struct ForIdxHelper
+		template<SizeT TS, typename... TTpls> struct ForIdxHelper
 		{
-			template<SizeT TI, typename T, typename TF> inline static EnableIf<TI == sizeof...(TArgs), void> exec(T&&, TF) noexcept { }
+			template<SizeT TI, typename TF> inline static EnableIf<TI == TS, void> exec(TF, TTpls&&...) noexcept { }
 
-			template<SizeT TI = 0, typename T, typename TF> inline static EnableIf<TI < sizeof...(TArgs), void> exec(T&& mT, TF&& mF)
+			template<SizeT TI = 0, typename TF> inline static EnableIf<TI < TS, void> exec(TF&& mF, TTpls&&... mTpls)
 				noexcept(true)
 			{
-				fwd<TF>(mF)(TI, std::get<TI>(fwd<T>(mT)));
-				exec<TI + 1, T, TF>(fwd<T>(mT), fwd<TF>(mF));
+				fwd<TF>(mF)(TI, std::get<TI>(fwd<TTpls>(mTpls))...);
+				exec<TI + 1, TF>(fwd<TF>(mF), fwd<TTpls>(mTpls)...);
 			}
 		};
 
-		template<typename T, SizeT TI> using IndexDep = T;
-		template<typename T, SizeT TN, typename TIdxs = IdxSeq<TN>> struct TplRepeatImpl;
+		template<typename, SizeT, typename> struct TplRepeatImplHelper;
 
-		template<typename T, SizeT TN, SizeT... TIdxs>
-		struct TplRepeatImpl<T, TN, IdxSeq<TIdxs...>>
+		template<typename T, SizeT TS, typename... TArgs> struct TplRepeatImplHelper<T, TS, std::tuple<TArgs...>>
 		{
-			using Type = std::tuple<IndexDep<T, TIdxs>...>;
+			using Type = typename TplRepeatImplHelper<T, TS - 1, std::tuple<TArgs..., T>>::Type;
+		};
+
+		template<typename T, typename... TArgs> struct TplRepeatImplHelper<T, 0, std::tuple<TArgs...>>
+		{
+			using Type = std::tuple<TArgs...>;
+		};
+
+		template<typename T, SizeT TS> struct TplRepeatImpl
+		{
+			using Type = typename TplRepeatImplHelper<T, TS, std::tuple<>>::Type;
 		};
 	}
 
 	template<typename T, SizeT TN, typename TIdxs = IdxSeq<TN>>
-	using TplRepeat = typename Internal::TplRepeatImpl<T, TN, TIdxs>::Type;
+	using TplRepeat = typename Internal::TplRepeatImpl<T, TN>::Type;
 
 	template<typename T, typename TTpl> struct TplIdxOf;
 
@@ -83,33 +93,24 @@ namespace ssvu
 		return Internal::Exploder<getTplSize<Decay<T>>()>::explode(fwd<TF>(mF), fwd<T>(mT));
 	}
 
-	#define SSVU_DEFINE_TPLFOR(mName, mType, mHelper) \
-		template<typename TF, typename... TArgs> inline void mName (mType mT, TF&& mF) \
-			noexcept(noexcept(Internal:: mHelper <TArgs...>::exec(mT, fwd<TF>(mF)))) \
-		{ \
-			Internal:: mHelper <TArgs...>::exec(mT, fwd<TF>(mF)); \
-		}
+	template<typename TF, typename... TTpls> inline void tplFor(TF&& mF, TTpls&&... mTpls)
+		noexcept(true)
+	{
+		// TODO: change to static_assert that sizes are the same or min size
+		constexpr SizeT maxSize(Internal::CTMax<getTplSize<TTpls>()...>::value);
+		Internal::ForHelper<maxSize, TTpls...>::exec(fwd<TF>(mF), fwd<TTpls>(mTpls)...);
+	}
 
-	SSVU_DEFINE_TPLFOR(tplFor, std::tuple<TArgs...>&, ForHelper)
-	SSVU_DEFINE_TPLFOR(tplFor, const std::tuple<TArgs...>&, ForHelper)
-	SSVU_DEFINE_TPLFOR(tplFor, std::tuple<TArgs...>&&, ForHelper)
-
-	SSVU_DEFINE_TPLFOR(tplFor, std::pair<TArgs...>&, ForHelper)
-	SSVU_DEFINE_TPLFOR(tplFor, const std::pair<TArgs...>&, ForHelper)
-	SSVU_DEFINE_TPLFOR(tplFor, std::pair<TArgs...>&&, ForHelper)
-
-	SSVU_DEFINE_TPLFOR(tplForIdx, std::tuple<TArgs...>&, ForIdxHelper)
-	SSVU_DEFINE_TPLFOR(tplForIdx, const std::tuple<TArgs...>&, ForIdxHelper)
-	SSVU_DEFINE_TPLFOR(tplForIdx, std::tuple<TArgs...>&&, ForIdxHelper)
-
-	SSVU_DEFINE_TPLFOR(tplForIdx, std::pair<TArgs...>&, ForIdxHelper)
-	SSVU_DEFINE_TPLFOR(tplForIdx, const std::pair<TArgs...>&, ForIdxHelper)
-	SSVU_DEFINE_TPLFOR(tplForIdx, std::pair<TArgs...>&&, ForIdxHelper)
-
-	#undef SSVU_DEFINE_TPLFOR
+	template<typename TF, typename... TTpls> inline void tplForIdx(TF&& mF, TTpls&&... mTpls)
+		noexcept(true)
+	{
+		// TODO: change to static_assert that sizes are the same or min size
+		constexpr SizeT maxSize(Internal::CTMax<getTplSize<TTpls>()...>::value);
+		Internal::ForIdxHelper<maxSize, TTpls...>::exec(fwd<TF>(mF), fwd<TTpls>(mTpls)...);
+	}
 }
 
 #endif
 
-// TODO: docs
+// TODO: docs, fix, noexcept(...), static asserts for tuple sizes
 

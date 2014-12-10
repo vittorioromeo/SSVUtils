@@ -156,7 +156,7 @@ namespace ssvu
 				{
 					Arr result; result.reserve(sizeof...(TArgs));
 					// TODO: fwd macro?
-					tplFor(fwd<T>(mX), [&result](auto&& mI){ result.emplace_back(fwd<decltype(mI)>(mI)); });
+					tplFor([&result](auto&& mI){ result.emplace_back(fwd<decltype(mI)>(mI)); }, fwd<T>(mX));
 					mV.setArr(std::move(result));
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)

@@ -53,7 +53,7 @@ namespace ssvu
 	template<typename T> inline constexpr auto isNothrowMoveCtor() noexcept					{ return std::is_nothrow_move_constructible<T>(); }
 	template<typename T> inline constexpr auto isNothrowDtor() noexcept						{ return std::is_nothrow_destructible<T>(); }
 	template<typename T> inline constexpr auto isPolymorphic() noexcept						{ return std::is_polymorphic<T>(); }
-	template<typename T> inline constexpr auto getTplSize() noexcept						{ return std::tuple_size<T>(); }
+	template<typename T> inline constexpr auto getTplSize() noexcept						{ return std::tuple_size<RemoveAll<T>>(); }
 	template<typename T> inline constexpr auto isLVRef() noexcept							{ return std::is_lvalue_reference<T>(); }
 	template<typename T> inline constexpr auto isRVRef() noexcept							{ return std::is_rvalue_reference<T>(); }
 	template<typename T, typename... TArgs> inline constexpr auto isNothrowCtor() noexcept	{ return std::is_nothrow_constructible<T, TArgs...>(); }

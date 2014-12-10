@@ -87,11 +87,11 @@ namespace ssvu
 			template<bool TFmt> inline static void impl(std::ostream& mStream, const T& mValue)
 			{
 				printBold<TFmt>(mStream, "{");
-				tplForIdx(mValue, [&mStream](auto mIdx, const auto& mX)
+				tplForIdx( [&mStream](auto mIdx, const auto& mX)
 				{
 					callStringifyImpl<TFmt>(mStream, mX);
 					if(mIdx < getTplSize<T>() - 1) printBold<TFmt>(mStream, ", ");
-				});
+				}, mValue);
 				printBold<TFmt>(mStream, "}");
 			}
 		};
