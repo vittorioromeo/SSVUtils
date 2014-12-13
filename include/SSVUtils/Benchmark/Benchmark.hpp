@@ -5,6 +5,7 @@
 #ifndef SSVU_BENCHMARK
 #define SSVU_BENCHMARK
 
+#include "SSVUtils/Internal/API.hpp"
 #include "SSVUtils/Benchmark/Inc/Benchmark.hpp"
 
 #if defined(SSVU_API_HEADERONLY)

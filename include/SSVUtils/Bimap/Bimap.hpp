@@ -5,6 +5,7 @@
 #ifndef SSVU_BIMAP
 #define SSVU_BIMAP
 
+#include "SSVUtils/Internal/API.hpp"
 #include "SSVUtils/Bimap/Inc/Internal.hpp"
 #include "SSVUtils/Bimap/Inc/Bimap.hpp"
 #include "SSVUtils/Bimap/Inc/Stringifier.hpp"

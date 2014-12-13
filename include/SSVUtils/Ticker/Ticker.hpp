@@ -5,6 +5,7 @@
 #ifndef SSVU_TICKER
 #define SSVU_TICKER
 
+#include "SSVUtils/Internal/API.hpp"
 #include "SSVUtils/Ticker/Inc/Ticker.hpp"
 
 #if defined(SSVU_API_HEADERONLY)
