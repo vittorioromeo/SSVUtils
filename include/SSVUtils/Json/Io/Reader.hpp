@@ -291,6 +291,8 @@ namespace ssvu
 						if(isNumStart(getC())) return parseNum();
 
 						throwError("Invalid value", std::string{"No match for values beginning with `"} + getC() + "`");
+
+						return Val{Nll{}};
 					}
 			};
 		}

@@ -28,8 +28,8 @@ namespace ssvu
 				std::string& bufKey;
 				const SizeT idxBegin, idxEnd;
 				SizeT idx, sectIdxCntStart, sectIdxCntEnd, sectIdxStart, sectIdxEnd;
-				Settings settings;
 				bool separate;
+				Settings settings;
 
 				inline auto getC(SizeT mIdx) const noexcept	{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size()); return src[mIdx]; }
 				inline auto getC() const noexcept 			{ return getC(idx); }
