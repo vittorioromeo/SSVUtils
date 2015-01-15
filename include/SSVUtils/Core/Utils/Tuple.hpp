@@ -11,11 +11,11 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		template<SizeT N> struct Exploder
+		template<SizeT TN> struct Exploder
 		{
 			template<typename TF, typename T, typename... TArgs> inline static auto explode(TF&& mF, T&& mT, TArgs&&... mArgs) noexcept
 			{
-				return Exploder<N - 1>::explode(fwd<TF>(mF), fwd<T>(mT), ::std::get<N - 1>(fwd<T>(mT)), fwd<TArgs>(mArgs)...);
+				return Exploder<TN - 1>::explode(fwd<TF>(mF), fwd<T>(mT), ::std::get<TN - 1>(fwd<T>(mT)), fwd<TArgs>(mArgs)...);
 			}
 		};
 
@@ -113,4 +113,6 @@ namespace ssvu
 #endif
 
 // TODO: docs, fix, noexcept(...), static asserts for tuple sizes
-
+// TODO: static assert that:
+//	1) arity of the passed function is equal to tuple count
+//	2) tuple type count is equal (or loop until min value?)

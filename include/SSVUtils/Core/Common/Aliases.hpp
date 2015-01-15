@@ -58,6 +58,8 @@ namespace ssvu
 	template<typename T> inline constexpr auto isRVRef() noexcept							{ return std::is_rvalue_reference<T>(); }
 	template<typename T, typename... TArgs> inline constexpr auto isNothrowCtor() noexcept	{ return std::is_nothrow_constructible<T, TArgs...>(); }
 	template<typename T> inline constexpr auto isPOD() noexcept								{ return std::is_pod<T>(); }
+	template<typename T> inline constexpr auto isConst() noexcept							{ return std::is_const<T>(); }
+	template<typename T> inline constexpr auto isVolatile() noexcept						{ return std::is_volatile<T>(); }
 
 	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>& mA) noexcept		{ return std::forward<T>(mA); }
 	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>&& mA) noexcept	{ return std::forward<T>(mA); }
