@@ -14,13 +14,7 @@ namespace ssvu
 			return Console::setColorFG(Console::Color::Default);
 		}
 
-		struct LOut
-		{
-			inline void flush() const { }
-		};
-
-		template<typename T> inline LOut& operator<<(LOut& mLOut, const T&) { return mLOut; }
-		inline LOut& operator<<(LOut& mLOut, StdEndLine) { return mLOut; }
+		using LOut = NullLOut;
 
 		inline LOut& lo() noexcept { static LOut result; return result; }
 		template<typename T> inline LOut& lo(const T&) { return lo(); }
