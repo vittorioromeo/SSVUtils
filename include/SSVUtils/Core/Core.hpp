@@ -54,6 +54,10 @@
 // the whole library.
 #include "SSVUtils/Core/Utils/Utils.hpp"
 
+// "Core/Tuple/Tuple" module has many tuple utility functions that are used throughout
+// the whole library.
+#include "SSVUtils/Core/Tuple/Tuple.hpp"
+
 // "Core/String/String" and its utilities are required for logging and stringification.
 // It needs to be included before the logging module.
 #include "SSVUtils/Core/String/String.hpp"

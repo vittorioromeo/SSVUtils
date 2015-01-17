@@ -13,6 +13,7 @@
 #include "SSVUtils/Tests/TestsStringUtils.hpp"
 #include "SSVUtils/Tests/TestsUtilsContainer.hpp"
 #include "SSVUtils/Tests/TestsUtilsMath.hpp"
+#include "SSVUtils/Tests/TestsUtilsTuple.hpp"
 #include "SSVUtils/Tests/TestsMacros.hpp"
 #include "SSVUtils/Tests/TestsMakeArray.hpp"
 
