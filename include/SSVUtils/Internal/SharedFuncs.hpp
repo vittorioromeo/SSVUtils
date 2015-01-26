@@ -43,7 +43,7 @@ namespace ssvu
 
 			finishRefresh:
 
-			#if SSVU_DEBUG
+			#if defined(SSVU_DEBUG)
 				for(iA = iA - 1; iA >= 0; --iA) SSVU_ASSERT(mFAliveChk(iA));
 			#endif
 

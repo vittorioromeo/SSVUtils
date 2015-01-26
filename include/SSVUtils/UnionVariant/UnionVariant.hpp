@@ -46,7 +46,7 @@ namespace ssvu
 	{
 		private:
 			// If debug mode is enabled, store and check a "clean" storage flag for additional safety and debugging ease
-			#if SSVU_DEBUG
+			#if defined(SSVU_DEBUG)
 				bool clean{true};
 				inline void setClean(bool mClean) noexcept { clean = mClean; }
 				inline bool isClean() const noexcept { return clean; }
