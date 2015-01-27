@@ -41,21 +41,6 @@ namespace ssvu
 	{
 		namespace Internal
 		{
-			// Tuple conversion implementation
-			struct TplCnvHelper
-			{
-				template<SizeT TI, typename TTpl> using TplArg = TplElem<TI, RemoveAll<TTpl>>;
-
-				// TODO: ssvu::tplForIdx
-				template<SizeT TI = 0, typename... TArgs, typename T> inline static EnableIf<TI == sizeof...(TArgs)> toTpl(T&&, std::tuple<TArgs...>&) { }
-				template<SizeT TI = 0, typename... TArgs, typename T> inline static EnableIf<TI < sizeof...(TArgs)> toTpl(T&& mV, std::tuple<TArgs...>& mX)
-				{
-					SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > TI);
-					std::get<TI>(mX) = moveIfRValue<decltype(mV)>(fwd<T>(mV)[TI].template as<TplArg<TI, decltype(mX)>>());
-					toTpl<TI + 1, TArgs...>(fwd<T>(mV), mX);
-				}
-			};
-
 			#define SSVJ_DEFINE_CNV_NUM(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
@@ -161,12 +146,14 @@ namespace ssvu
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{
-					/*tplFor(mX, [&mV](auto& mI)
+					tplForIdx([&mV](auto mIdx, auto& mE)
 					{
-						SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > TI);
-						mI = moveIfRValue<decltype(mV)>(fwd<T>(mV)[TI].template as<decltype(mI)>());
-					});*/
-					TplCnvHelper::toTpl<0, TArgs...>(fwd<T>(mV), mX);
+						SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > mIdx);
+
+						// BUG: gcc complains
+						// mE = moveIfRValue<decltype(mV)>(fwd<T>(mV)[mIdx].template as<RemoveRef<decltype(mE)>>());
+						mE = fwd<T>(mV)[mIdx].template as<RemoveRef<decltype(mE)>>();
+					}, mX);
 				}
 			};
 
