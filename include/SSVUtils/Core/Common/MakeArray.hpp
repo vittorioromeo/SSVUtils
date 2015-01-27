@@ -8,7 +8,7 @@
 // C++14/C++17: hopefully will be in standard
 namespace ssvu
 {
-	template<typename... TArgs> constexpr auto make_array(TArgs&&... mArgs)
+	template<typename... TArgs> constexpr auto makeArray(TArgs&&... mArgs)
 	{
 		return std::array<Decay<Common<TArgs...>>, sizeof...(TArgs)>{fwd<TArgs>(mArgs)...};
 	}
