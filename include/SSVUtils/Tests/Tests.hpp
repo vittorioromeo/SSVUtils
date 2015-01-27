@@ -11,6 +11,7 @@
 #include "SSVUtils/Tests/TestsStringifier.hpp"
 #include "SSVUtils/Tests/TestsStringSplit.hpp"
 #include "SSVUtils/Tests/TestsStringUtils.hpp"
+#include "SSVUtils/Tests/TestsUtilsForArgs.hpp"
 #include "SSVUtils/Tests/TestsUtilsContainer.hpp"
 #include "SSVUtils/Tests/TestsUtilsMath.hpp"
 #include "SSVUtils/Tests/TestsUtilsTuple.hpp"

@@ -8,7 +8,7 @@
 #define EXECTEST(mType) \
 	{ \
 		using TT = mType; \
-		auto x = ssvu::make_array(TT(0), TT(1), TT(2)); \
+		auto x = ssvu::makeArray(TT(0), TT(1), TT(2)); \
 		SSVU_ASSERT_STATIC_NM(ssvu::isSame<decltype(x), std::array<TT, 3>>()); \
 		TT acc = TT(0); for(const auto& i : x) acc += TT(i); SSVUT_EXPECT(acc == TT(3)); \
 	}
