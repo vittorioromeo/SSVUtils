@@ -6,6 +6,7 @@
 #define SSVU_CORE_UTILS
 
 #include "SSVUtils/Core/Utils/Macros.hpp"
+#include "SSVUtils/Core/Utils/ForArgs.hpp"
 #include "SSVUtils/Core/Utils/Math.hpp"
 #include "SSVUtils/Core/Utils/Containers.hpp"
 
