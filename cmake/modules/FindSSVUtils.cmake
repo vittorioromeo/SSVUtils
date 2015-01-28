@@ -1,8 +1,8 @@
 FIND_PATH(SSVUTILS_INCLUDE_DIR
   NAMES SSVUtils/SSVUtils.hpp
   PATH_SUFFIXES include/
-  PATHS "${PROJECT_SOURCE_DIR}/../SSVUtils/"
-  "${PROJECT_SOURCE_DIR}/extlibs/SSVUtils/"
+  PATHS 
+  "${PROJECT_SOURCE_DIR}/../SSVUtils/"
   ${SSVUTILS_ROOT}
   $ENV{SSVUTILS_ROOT}
   /usr/local/
@@ -11,6 +11,10 @@ FIND_PATH(SSVUTILS_INCLUDE_DIR
   /opt/local/
   /opt/csw/  
   /opt/
+  "${PROJECT_SOURCE_DIR}/extlibs/SSVUtils/"
+  "${CMAKE_CURRENT_LIST_DIR}/../../"  
+
+  NO_DEFAULT_PATH
 )
 
 message("\nFound SSVUtils include at: ${SSVUTILS_INCLUDE_DIR}.\n")
@@ -32,3 +36,4 @@ ENDIF(SSVUTILS_FOUND)
 MARK_AS_ADVANCED(
   SSVUTILS_INCLUDE_DIR
 )
+
