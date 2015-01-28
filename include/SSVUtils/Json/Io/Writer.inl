@@ -15,12 +15,12 @@ namespace ssvu
 			{
 				switch(mVal.getType())
 				{
-					case Val::Type::Obj: write(mVal.as<Obj>()); break;
-					case Val::Type::Arr: write(mVal.as<Arr>()); break;
-					case Val::Type::Str: write(mVal.as<Str>()); break;
-					case Val::Type::Num: write(mVal.as<Num>()); break;
-					case Val::Type::Bln: write(mVal.as<Bln>()); break;
-					case Val::Type::Nll: write(Nll{}); break;
+					case Val::Type::TObj: write(mVal.as<Obj>()); break;
+					case Val::Type::TArr: write(mVal.as<Arr>()); break;
+					case Val::Type::TStr: write(mVal.as<Str>()); break;
+					case Val::Type::TNum: write(mVal.as<Num>()); break;
+					case Val::Type::TBln: write(mVal.as<Bln>()); break;
+					case Val::Type::TNll: write(Nll{}); break;
 					default: SSVU_UNREACHABLE();
 				}
 			}

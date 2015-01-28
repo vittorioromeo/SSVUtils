@@ -24,7 +24,7 @@ namespace ssvu
 				inline void reset() override { currentTimes = times; }
 
 			public:
-				inline GoImpl(Timeline& mTimeline, T mTarget, int mTimes = -1) noexcept : Command{mTimeline}, target(mTarget), times{mTimes}, currentTimes{mTimes} { }
+				inline GoImpl(Timeline& mTimeline, T mTarget, SizeT mTimes = -1) noexcept : Command{mTimeline}, target(mTarget), times{mTimes}, currentTimes{mTimes} { }
 		};
 	}
 

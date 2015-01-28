@@ -16,8 +16,8 @@ namespace ssvu
 	namespace Internal
 	{
 		template<typename, template<typename> class, typename, typename> class BaseRecycler;
-		template<typename, template<typename> class> class MonoRecyclerImpl;
-		template<typename, template<typename> class, typename> class PolyRecyclerImpl;
+		template<typename, template<typename> class> struct MonoRecyclerImpl;
+		template<typename, template<typename> class, typename> struct PolyRecyclerImpl;
 
 		template<typename, typename> class BaseManager;
 	}

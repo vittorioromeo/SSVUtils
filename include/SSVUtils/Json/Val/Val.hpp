@@ -24,7 +24,7 @@ namespace ssvu
 			public:
 				/// @brief Internal storage type.
 				// TODO: warning: declaration of ‘Bln’ shadows a global declaration [-Wshadow]
-				enum class Type{Obj, Arr, Str, Num, Bln, Nll};
+				enum class Type{TObj, TArr, TStr, TNum, TBln, TNll};
 
 				/// @typedef `Obj` implementation type, templatized with `Val`.
 				using Obj = Internal::ObjImpl<Val>;
@@ -38,20 +38,20 @@ namespace ssvu
 				using VIH = Internal::ItrHelper;
 
 				/// @brief Current storage type.
-				Type type{Type::Nll};
+				Type type{Type::TNll};
 
 				/// @brief Checked union storage for `Val` fundamental types.
 				UnionVariant<Obj, Arr, Str, Num, Bln> h;
 
 				// Perfect-forwarding setters
-				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{fwd<T>(mX)}))	{ type = Type::Obj; h.init<Obj>(fwd<T>(mX)); }
-				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{fwd<T>(mX)}))	{ type = Type::Arr; h.init<Arr>(fwd<T>(mX)); }
-				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{fwd<T>(mX)}))	{ type = Type::Str; h.init<Str>(fwd<T>(mX)); }
-				template<typename T> inline void setNum(T&& mX) noexcept(noexcept(Num{fwd<T>(mX)}))	{ type = Type::Num; h.init<Num>(fwd<T>(mX)); }
+				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{fwd<T>(mX)}))	{ type = Type::TObj; h.init<Obj>(fwd<T>(mX)); }
+				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{fwd<T>(mX)}))	{ type = Type::TArr; h.init<Arr>(fwd<T>(mX)); }
+				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{fwd<T>(mX)}))	{ type = Type::TStr; h.init<Str>(fwd<T>(mX)); }
+				template<typename T> inline void setNum(T&& mX) noexcept(noexcept(Num{fwd<T>(mX)}))	{ type = Type::TNum; h.init<Num>(fwd<T>(mX)); }
 
 				// Basic setters
-				inline void setBln(Bln mX) noexcept	{ type = Type::Bln; h.init<Bln>(mX); }
-				inline void setNll(Nll) noexcept	{ type = Type::Nll; }
+				inline void setBln(Bln mX) noexcept	{ type = Type::TBln; h.init<Bln>(mX); }
+				inline void setNll(Nll) noexcept	{ type = Type::TNll; }
 
 				// Ref-qualified getters
 				#define SSVJ_DEFINE_VAL_GETTER(mType, mMember) \
@@ -75,11 +75,11 @@ namespace ssvu
 				{
 					switch(type)
 					{
-						case Type::Obj: h.deinit<Obj>(); break;
-						case Type::Arr: h.deinit<Arr>(); break;
-						case Type::Str: h.deinit<Str>(); break;
-						case Type::Num: h.deinit<Num>(); break;
-						case Type::Bln: h.deinit<Bln>(); break;
+						case Type::TObj: h.deinit<Obj>(); break;
+						case Type::TArr: h.deinit<Arr>(); break;
+						case Type::TStr: h.deinit<Str>(); break;
+						case Type::TNum: h.deinit<Num>(); break;
+						case Type::TBln: h.deinit<Bln>(); break;
 						default: break;
 					}
 				}
@@ -89,12 +89,12 @@ namespace ssvu
 				{
 					switch(mV.type)
 					{
-						case Type::Obj: setObj(moveIfRValue<decltype(mV)>(mV.getObj())); break;
-						case Type::Arr: setArr(moveIfRValue<decltype(mV)>(mV.getArr())); break;
-						case Type::Str: setStr(moveIfRValue<decltype(mV)>(mV.getStr())); break;
-						case Type::Num: setNum(mV.getNum()); break;
-						case Type::Bln: setBln(mV.getBln()); break;
-						case Type::Nll: setNll({}); break;
+						case Type::TObj: setObj(moveIfRValue<decltype(mV)>(mV.getObj())); break;
+						case Type::TArr: setArr(moveIfRValue<decltype(mV)>(mV.getArr())); break;
+						case Type::TStr: setStr(moveIfRValue<decltype(mV)>(mV.getStr())); break;
+						case Type::TNum: setNum(mV.getNum()); break;
+						case Type::TBln: setBln(mV.getBln()); break;
+						case Type::TNll: setNll({}); break;
 					}
 				}
 
@@ -195,12 +195,12 @@ namespace ssvu
 
 					switch(type)
 					{
-						case Type::Obj: return getObj() == mV.getObj();
-						case Type::Arr: return getArr() == mV.getArr();
-						case Type::Str: return getStr() == mV.getStr();
-						case Type::Num: return getNum() == mV.getNum();
-						case Type::Bln: return getBln() == mV.getBln();
-						case Type::Nll: return true;
+						case Type::TObj: return getObj() == mV.getObj();
+						case Type::TArr: return getArr() == mV.getArr();
+						case Type::TStr: return getStr() == mV.getStr();
+						case Type::TNum: return getNum() == mV.getNum();
+						case Type::TBln: return getBln() == mV.getBln();
+						case Type::TNll: return true;
 						default: SSVU_UNREACHABLE();
 					}
 				}

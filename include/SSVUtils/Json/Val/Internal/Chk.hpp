@@ -46,12 +46,12 @@ namespace ssvu
 				template<> struct Chk<mType> final { };
 
 			#define SSVJ_DEFINE_CHK_NUM_REPR(mType) \
-				template<> struct Chk<mType> final { inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Num && mV.getNum().getRepr() == SSVPP_EXPAND(Num::Repr::mType); } };
+				template<> struct Chk<mType> final { inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::TNum && mV.getNum().getRepr() == SSVPP_EXPAND(Num::Repr::mType); } };
 
 			#define SSVJ_DEFINE_CHK_BASIC(mType) \
 				template<> struct Chk<mType> final \
 				{ \
-					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::mType); } \
+					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_EXPAND(Val::Type::SSVPP_CAT(T, mType)); } \
 				};
 
 			#define SSVJ_DEFINE_CHKNONUM(mType) \
@@ -101,19 +101,19 @@ namespace ssvu
 			// Check C-style string
 			template<SizeT TS> struct Chk<char[TS]> final
 			{
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Str && mV.getStr().size() == TS; }
+				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::TStr && mV.getStr().size() == TS; }
 			};
 
 			// Check C-style string
 			template<> struct Chk<const char*> final
 			{
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Str; }
+				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::TStr; }
 			};
 
 			// Check `std::pair`
 			template<typename T1, typename T2> struct Chk<std::pair<T1, T2>> final
 			{
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && mV.getArr().size() == 2 && mV[0].isNoNum<T1>() && mV[1].isNoNum<T2>(); }
+				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::TArr && mV.getArr().size() == 2 && mV[0].isNoNum<T1>() && mV[1].isNoNum<T2>(); }
 			};
 
 			// Check `std::tuple`
@@ -121,14 +121,14 @@ namespace ssvu
 			{
 				inline static auto is(const Val& mV) noexcept
 				{
-					return mV.getType() == Val::Type::Arr && mV.getArr().size() == sizeof...(TArgs) && TplIsHelper::isTpl<0, TArgs...>(mV);
+					return mV.getType() == Val::Type::TArr && mV.getArr().size() == sizeof...(TArgs) && TplIsHelper::isTpl<0, TArgs...>(mV);
 				}
 			};
 
 			// Check `std::vector`
 			template<typename TItem> struct Chk<std::vector<TItem>> final
 			{
-				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::Arr && TplIsHelper::areArrItemsOfType<TItem>(mV); }
+				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::TArr && TplIsHelper::areArrItemsOfType<TItem>(mV); }
 			};
 
 			// Check C-style array
@@ -136,7 +136,7 @@ namespace ssvu
 			{
 				inline static auto is(const Val& mV) noexcept
 				{
-					return mV.getType() == Val::Type::Arr && mV.getArr().size() == TS && TplIsHelper::areArrItemsOfType<TItem>(mV);
+					return mV.getType() == Val::Type::TArr && mV.getArr().size() == TS && TplIsHelper::areArrItemsOfType<TItem>(mV);
 				}
 			};
 		}

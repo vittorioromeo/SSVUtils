@@ -23,7 +23,7 @@ namespace ssvu
 
 					inline auto isObjOrArr(const Val& mVal)
 					{
-						return mVal.getType() == Val::Type::Obj || mVal.getType() == Val::Type::Arr;
+						return mVal.getType() == Val::Type::TObj || mVal.getType() == Val::Type::TArr;
 					}
 
 					inline void indent()

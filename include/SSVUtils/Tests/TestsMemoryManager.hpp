@@ -74,10 +74,10 @@ SSVUT_TEST(MemoryManagerTests)
 		ssvu::MonoManager<TMMItem> mm;
 
 		{
-			auto& i1 = mm.create(cc, dc);
+			auto& i1 __attribute__((unused)) = mm.create(cc, dc);
 			SSVUT_EXPECT(cc == 1 && dc == 0);
 
-			auto& i2 = mm.create(cc, dc);
+			auto& i2 __attribute__((unused)) = mm.create(cc, dc);
 			SSVUT_EXPECT(cc == 2 && dc == 0);
 
 			mm.create(cc, dc);
@@ -102,10 +102,10 @@ SSVUT_TEST(MemoryManagerTests)
 		ssvu::PolyManager<TMMItem> mm;
 
 		{
-			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			auto& i1 __attribute__((unused)) = mm.create<TMMItemS>(cc, dc);
 			SSVUT_EXPECT(cc == 1 && dc == 0);
 
-			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			auto& i2 __attribute__((unused)) = mm.create<TMMItemB>(cc, dc);
 			SSVUT_EXPECT(cc == 2 && dc == 0);
 
 			mm.create<TMMItemS>(cc, dc);
@@ -168,7 +168,7 @@ SSVUT_TEST(MemoryManagerTests)
 		SSVUT_EXPECT_OP(cc, ==, 0);
 		SSVUT_EXPECT_OP(dc, ==, 0);
 
-		auto& i1 = mm.create(cc, dc);
+		auto& i1 __attribute__((unused)) = mm.create(cc, dc);
 
 		SSVUT_EXPECT_OP(cc, ==, 1);
 		SSVUT_EXPECT_OP(dc, ==, 0);
@@ -188,15 +188,15 @@ SSVUT_TEST(MemoryManagerTests)
 		ssvu::PolyManager<TMMItem> mm;
 
 		{
-			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			auto& i1 __attribute__((unused)) = mm.create<TMMItemS>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 1);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 
-			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			auto& i2 __attribute__((unused)) = mm.create<TMMItemB>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 2);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 
-			auto& i3 = mm.create<TMMItemB>(cc, dc);
+			auto& i3 __attribute__((unused)) = mm.create<TMMItemB>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 3);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 		}
@@ -217,46 +217,15 @@ SSVUT_TEST(MemoryManagerTests)
 		ssvu::PolyManager<TMMItem> mm;
 
 		{
-			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			auto& i1 __attribute__((unused)) = mm.create<TMMItemS>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 1);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 
-			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			auto& i2 __attribute__((unused)) = mm.create<TMMItemB>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 2);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 
-			auto& i3 = mm.create<TMMItemB>(cc, dc);
-			SSVUT_EXPECT_OP(cc, ==, 3);
-			SSVUT_EXPECT_OP(dc, ==, 0);
-		}
-
-		SSVUT_EXPECT_OP(cc, ==, 3);
-		SSVUT_EXPECT_OP(dc, ==, 0);
-
-		mm.refresh();
-	}
-
-	SSVUT_EXPECT_OP(cc, ==, 3);
-	SSVUT_EXPECT_OP(dc, ==, 3);
-
-	cc = dc = 0;
-
-	{
-		SSVUT_EXPECT_OP(cc, ==, 0);
-		SSVUT_EXPECT_OP(dc, ==, 0);
-
-		ssvu::PolyManager<TMMItem> mm;
-
-		{
-			auto& i1 = mm.create<TMMItemS>(cc, dc);
-			SSVUT_EXPECT_OP(cc, ==, 1);
-			SSVUT_EXPECT_OP(dc, ==, 0);
-
-			auto& i2 = mm.create<TMMItemB>(cc, dc);
-			SSVUT_EXPECT_OP(cc, ==, 2);
-			SSVUT_EXPECT_OP(dc, ==, 0);
-
-			auto& i3 = mm.create<TMMItemB>(cc, dc);
+			auto& i3 __attribute__((unused)) = mm.create<TMMItemB>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 3);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 		}
@@ -279,15 +248,46 @@ SSVUT_TEST(MemoryManagerTests)
 		ssvu::PolyManager<TMMItem> mm;
 
 		{
-			auto& i1 = mm.create<TMMItemS>(cc, dc);
+			auto& __attribute__((unused)) i1 = mm.create<TMMItemS>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 1);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 
-			auto& i2 = mm.create<TMMItemB>(cc, dc);
+			auto& __attribute__((unused)) i2 = mm.create<TMMItemB>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 2);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 
-			auto& i3 = mm.create<TMMItemB>(cc, dc);
+			auto& __attribute__((unused)) i3 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 3);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+		}
+
+		SSVUT_EXPECT_OP(cc, ==, 3);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		mm.refresh();
+	}
+
+	SSVUT_EXPECT_OP(cc, ==, 3);
+	SSVUT_EXPECT_OP(dc, ==, 3);
+
+	cc = dc = 0;
+
+	{
+		SSVUT_EXPECT_OP(cc, ==, 0);
+		SSVUT_EXPECT_OP(dc, ==, 0);
+
+		ssvu::PolyManager<TMMItem> mm;
+
+		{
+			auto& __attribute__((unused)) i1 = mm.create<TMMItemS>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 1);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& __attribute__((unused)) i2 = mm.create<TMMItemB>(cc, dc);
+			SSVUT_EXPECT_OP(cc, ==, 2);
+			SSVUT_EXPECT_OP(dc, ==, 0);
+
+			auto& __attribute__((unused)) i3 = mm.create<TMMItemB>(cc, dc);
 			SSVUT_EXPECT_OP(cc, ==, 3);
 			SSVUT_EXPECT_OP(dc, ==, 0);
 		}
@@ -329,7 +329,7 @@ SSVUT_TEST(MemoryManagerTests)
 		SSVUT_EXPECT_OP(dc, ==, 0);
 		SSVUT_EXPECT_OP(mm.size(), ==, 0);
 
-		auto& i3 = mm.create<TMMItemB>(cc, dc);
+		auto& __attribute__((unused)) i3 = mm.create<TMMItemB>(cc, dc);
 		SSVUT_EXPECT_OP(cc, ==, 3);
 		SSVUT_EXPECT_OP(dc, ==, 0);
 		SSVUT_EXPECT_OP(mm.size(), ==, 0);

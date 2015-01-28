@@ -32,8 +32,11 @@ namespace ssvu
 	template<typename T1 = int, typename T2 = int>
 	inline auto getRnd(const T1& mMin, const T2& mMax)
 	{
-		SSVU_ASSERT(mMin < mMax);
-		return RndDistributionI<Common<T1, T2>>(mMin, mMax - 1)(getRndEngine());
+		using CT = Common<T1, T2>;
+		CT min(mMin), max(mMax);
+
+		SSVU_ASSERT(min < max);
+		return RndDistributionI<CT>{min, max - 1}(getRndEngine());
 	}
 
 	/// @brief Gets a random real value between [mMin and mMax].
@@ -44,8 +47,11 @@ namespace ssvu
 	template<typename T1 = float, typename T2 = float>
 	inline auto getRndR(const T1& mMin, const T2& mMax)
 	{
+		using CT = Common<T1, T2>;
+		CT min(mMin), max(mMax);
+
 		SSVU_ASSERT(mMin <= mMax);
-		return RndDistributionR<Common<T1, T2>>{mMin, mMax}(getRndEngine());
+		return RndDistributionR<CT>(min, max)(getRndEngine());
 	}
 
 	/// @brief Gets a random sign.
@@ -103,8 +109,10 @@ namespace ssvu
 	/// @return Returns mMax if mValue > mMax, mMin if mValue < mMin, mValue if mMin < mValue < mMax.
 	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> getClamped(const T1& mValue, const T2& mMin, const T3& mMax) noexcept
 	{
-		SSVU_ASSERT_CONSTEXPR(mMin <= mMax);
-		return mValue < mMin ? mMin : (mValue > mMax ? mMax : mValue);
+		using CT = Common<T1, T2, T3>;
+
+		SSVU_ASSERT_CONSTEXPR(CT(mMin) <= CT(mMax));
+		return CT(mValue) < CT(mMin) ? CT(mMin) : (CT(mValue) > CT(mMax) ? CT(mMax) : CT(mValue));
 	}
 
 	/// @brief Cycles a value in a range.

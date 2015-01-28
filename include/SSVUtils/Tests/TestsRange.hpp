@@ -11,7 +11,7 @@ SSVUT_TEST(RangeTests)
 
 	int valsr[]{6, 5, 4, 3, 2, 1};
 
-	std::array<int, 6> ca{1, 2, 3, 4, 5, 6};
+	std::array<int, 6> ca{{1, 2, 3, 4, 5, 6}};
 	std::vector<int> cv{1, 2, 3, 4, 5, 6};
 	std::list<int> cl{1, 2, 3, 4, 5, 6};
 

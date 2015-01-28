@@ -173,7 +173,7 @@ namespace ssvu
 
 					auto buffer(makeUPtr<char[]>(size));
 					ifs.read(&buffer[0], size);
-					std::string result{buffer.get(), size};
+					std::string result{buffer.get(), static_cast<SizeT>(size)};
 
 					return result;
 				}
