@@ -106,3 +106,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: rename to TaggedUnion?
