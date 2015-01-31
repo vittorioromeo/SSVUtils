@@ -8,8 +8,9 @@
 namespace ssvu
 {
 	inline std::minstd_rand& getRndEngine()	noexcept { static std::minstd_rand rndEngine(std::time(0)); return rndEngine; }
-	template<typename T> using RndDistributionI = std::uniform_int_distribution<T>;
-	template<typename T> using RndDistributionR = std::uniform_real_distribution<T>;
+	template<typename T> using RndDistUniformI = std::uniform_int_distribution<T>;
+	template<typename T> using RndDistUniformR = std::uniform_real_distribution<T>;
+	template<typename T> using RndDistNormalR = std::normal_distribution<T>;
 
 	// C++14: templatized values (GCC 5?)
 	/// @brief Value of pi. (pi radians = 180 degrees)
@@ -24,40 +25,47 @@ namespace ssvu
 	/// @brief Ratio between radians and degrees.
 	constexpr float radDegRatio{pi / 180.f};
 
-	/// @brief Gets a random integer value between [mMin and mMax).
+	/// @brief Gets a random integer value between [mMin and mMax). (Uniform distribution)
 	/// @tparam T Type of integer value. (default int)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper exclusive bound.
 	/// @return Returns a random integer value, between [mMin and mMax).
-	template<typename T1 = int, typename T2 = int>
-	inline auto getRnd(const T1& mMin, const T2& mMax)
+	template<typename T1, typename T2> inline auto getRnd(const T1& mMin, const T2& mMax)
 	{
 		using CT = Common<T1, T2>;
 		CT min(mMin), max(mMax);
 
 		SSVU_ASSERT(min < max);
-		return RndDistributionI<CT>{min, max - 1}(getRndEngine());
+		return RndDistUniformI<CT>{min, max - 1}(getRndEngine());
 	}
 
-	/// @brief Gets a random real value between [mMin and mMax].
+	/// @brief Gets a random real value between [mMin and mMax]. (Uniform distribution)
 	/// @tparam T Type of real value. (default float)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper inclusive bound.
 	/// @return Returns a random real value, between [mMin and mMax].
-	template<typename T1 = float, typename T2 = float>
-	inline auto getRndR(const T1& mMin, const T2& mMax)
+	template<typename T1, typename T2> inline auto getRndR(const T1& mMin, const T2& mMax)
 	{
 		using CT = Common<T1, T2>;
 		CT min(mMin), max(mMax);
 
 		SSVU_ASSERT(mMin <= mMax);
-		return RndDistributionR<CT>(min, max)(getRndEngine());
+		return RndDistUniformR<CT>(min, max)(getRndEngine());
+	}
+
+	// TODO: docs
+	template<typename T1, typename T2> inline auto getRndRNormal(const T1& mMean, const T2& mDeviation)
+	{
+		using CT = Common<T1, T2>;
+		CT mean(mMean), deviation(mDeviation);
+
+		return RndDistNormalR<CT>(mean, deviation)(getRndEngine());
 	}
 
 	/// @brief Gets a random sign.
 	/// @tparam T Type of integer value. (default int)
 	/// @return Returns -1 or 1.
-	template<typename T = int> inline T getRndSign() { return RndDistributionI<T>{0, 1}(getRndEngine()) > 0 ? -1 : 1; }
+	template<typename T = int> inline T getRndSign() { return RndDistUniformI<T>{0, 1}(getRndEngine()) > 0 ? -1 : 1; }
 
 	/// @brief Gets the sign of a numeric value. (unsigned version)
 	/// @param mValue Value to use.
