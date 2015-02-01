@@ -110,4 +110,7 @@ namespace ssvu
 	template<typename T, typename TStorage> inline const T* castStorage(const TStorage* mStorage) noexcept { return reinterpret_cast<const T*>(mStorage); }
 }
 
+/// @macro Perfect-forwards the arguments by using `ssvu::fwd` and `decltype`.
+#define SSVU_FWD(...) ::ssvu::fwd<decltype(__VA_ARGS__)>(__VA_ARGS__)
+
 #endif

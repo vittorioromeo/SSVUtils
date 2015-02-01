@@ -224,14 +224,14 @@ namespace ssvu
 		/// @brief Internal implementation method for UPtr emplacement in linear containers.
 		template<typename T, typename TC, typename TM, typename... TArgs> inline T& getEmplaceUPtrImpl(TC& mContainer, TArgs&&... mArgs)
 		{
-			mContainer.emplace_back(TM::template make<TArgs...>(fwd<TArgs>(mArgs)...));
+			mContainer.emplace_back(TM::template make<TArgs...>(SSVU_FWD(mArgs)...));
 			return castUp<T>(*mContainer.back());
 		}
 
 		/// @brief Internal implementation method for UPtr emplacement in map containers.
 		template<typename T, typename TC, typename TK, typename TM, typename... TArgs> inline T& getEmplaceUPtrMapImpl(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 		{
-			return castUp<T>(*(*(mContainer.emplace(fwd<TK>(mKey), TM::template make<TArgs...>(fwd<TArgs>(mArgs)...)).first)).second);
+			return castUp<T>(*(*(mContainer.emplace(SSVU_FWD(mKey), TM::template make<TArgs...>(SSVU_FWD(mArgs)...)).first)).second);
 		}
 	}
 
@@ -242,7 +242,7 @@ namespace ssvu
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename TC, typename... TArgs> inline T& getEmplaceUPtr(TC& mContainer, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUPtrImpl<T, TC, Internal::MakerUPtr<T>>(mContainer, fwd<TArgs>(mArgs)...);
+		return Internal::getEmplaceUPtrImpl<T, TC, Internal::MakerUPtr<T>>(mContainer, SSVU_FWD(mArgs)...);
 	}
 
 	/// @brief Emplaces a `ssvu::UPtr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
@@ -253,7 +253,7 @@ namespace ssvu
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUPtrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUPtrMapImpl<T, TC, TK, Internal::MakerUPtr<T>>(mContainer, mKey, fwd<TArgs>(mArgs)...);
+		return Internal::getEmplaceUPtrMapImpl<T, TC, TK, Internal::MakerUPtr<T>>(mContainer, mKey, SSVU_FWD(mArgs)...);
 	}
 
 	/// @brief Shuffles a container, using the default random engine.

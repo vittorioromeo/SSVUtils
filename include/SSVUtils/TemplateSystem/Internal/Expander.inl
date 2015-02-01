@@ -71,7 +71,7 @@ namespace ssvu
 
 			for(; idx < idxEnd; ++idx)
 			{
-				SSVU_ASSERT(idx >= 0 && idx < src.size());
+				SSVU_ASSERT(idx < src.size());
 
 				// Skip non-special characters or escaped special characters
 				if(getC() != '{' || (idx > 0 && getC(idx - 1) == '\\') || getC(idx + 1) != '{')

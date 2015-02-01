@@ -18,7 +18,7 @@
 			noexcept(noexcept(mBody)) \
 		{ \
 			mBody ; \
-			exec<TI + 1, TF>(fwd<TF>(mF), fwd<TTpls>(mTpls)...); \
+			exec<TI + 1, TF>(SSVU_FWD(mF), SSVU_FWD(mTpls)...); \
 		} \
 	};
 
@@ -26,8 +26,8 @@ namespace ssvu
 {
 	namespace Internal
 	{
-		SSVU_IMPL_DEFINE_FORHELPER(ForHelper,		(fwd<TF>(mF)(std::get<TI>(fwd<TTpls>(mTpls))...)))
-		SSVU_IMPL_DEFINE_FORHELPER(ForIdxHelper,	(fwd<TF>(mF)(TI, std::get<TI>(fwd<TTpls>(mTpls))...)))
+		SSVU_IMPL_DEFINE_FORHELPER(ForHelper,		(SSVU_FWD(mF)(std::get<TI>(SSVU_FWD(mTpls))...)))
+		SSVU_IMPL_DEFINE_FORHELPER(ForIdxHelper,	(SSVU_FWD(mF)(TI, std::get<TI>(SSVU_FWD(mTpls))...)))
 	}
 }
 

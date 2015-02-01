@@ -23,10 +23,6 @@ namespace ssvu
 	}
 }
 
-// TODO: can be applied to fwd<TArgs>(mArgs)... ???
-/// @macro Perfect-forwards the arguments by using `ssvu::fwd` and `decltype`.
-#define SSVU_FWD(...) ::ssvu::fwd<decltype(__VA_ARGS__)>(__VA_ARGS__)
-
 /// @macro Defines a dummy struct with a name generated from the current line and passed variadic args.
 /// @details Must end with semicolon.
 #define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVPP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))
@@ -62,7 +58,7 @@ namespace ssvu
 		{ \
 			inline static auto call(T& mArg, TArgs&&... mArgs) \
 			{ \
-				return mArg.mMemberName(ssvu::fwd<TArgs>(mArgs)...); \
+				return mArg.mMemberName(SSVU_FWD(mArgs)...); \
 			} \
 		}; \
 		template<typename T, typename... TArgs> struct _ ## mName ## Impl<T, false, TArgs...> \
@@ -72,7 +68,7 @@ namespace ssvu
 	} \
 	template<typename T, typename... TArgs> inline auto mName(T& mArg, TArgs&&... mArgs) \
 	{ \
-		return __ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, ssvu::fwd<TArgs>(mArgs)...); \
+		return __ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, SSVU_FWD(mArgs)...); \
 	}
 
 /// @macro Define a template function with name `mName` that invokes `mMemberName` on objects

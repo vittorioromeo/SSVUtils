@@ -54,7 +54,7 @@ namespace ssvu
 			template<typename... TArgs> inline void initAt(SizeT mI, TArgs&&... mArgs)
 				noexcept(isNothrowCtor<T, TArgs...>())
 			{
-				new(&data[mI]) T(fwd<TArgs>(mArgs)...);
+				new(&data[mI]) T(SSVU_FWD(mArgs)...);
 			}
 
 			/// @brief Destroyes a `T` instance at index `mI`.

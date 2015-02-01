@@ -55,7 +55,7 @@ namespace ssvu
 			template<typename TTK> inline auto& operator[](TTK&& mKey)
 			{
 				auto itr(lookup(mKey));
-				return is(itr, mKey) ? itr->second : data.emplace(itr, fwd<TTK>(mKey), TV{})->second;
+				return is(itr, mKey) ? itr->second : data.emplace(itr, SSVU_FWD(mKey), TV{})->second;
 			}
 
 			/// @brief Returns a const reference to the value with key `mKey`. An exception is thrown if unexistant.

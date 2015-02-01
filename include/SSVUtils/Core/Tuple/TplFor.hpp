@@ -11,7 +11,7 @@
 #include "SSVUtils/Core/Tuple/Internal/TplForHelper.hpp"
 
 #define SSVU_IMPL_TPLFOR_CALL(mHelper) \
-	Internal:: mHelper < Internal::getCTMin<getTplSize<TTpls>()...>() , TTpls...>::exec(fwd<TF>(mF), fwd<TTpls>(mTpls)...)
+	Internal:: mHelper < Internal::getCTMin<getTplSize<TTpls>()...>() , TTpls...>::exec(SSVU_FWD(mF), SSVU_FWD(mTpls)...)
 
 #define SSVU_IMPL_DEFINE_TPLFOR_FN(mName, mHelper) \
 	template<typename TF, typename... TTpls> inline void mName (TF&& mF, TTpls&&... mTpls) \

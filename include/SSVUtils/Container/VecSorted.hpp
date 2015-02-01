@@ -47,7 +47,7 @@ namespace ssvu
 			template<typename TT> inline auto insert(TT&& mX)
 			{
 				auto itr(lookup(mX));
-				return data.emplace(itr, fwd<TT>(mX));
+				return data.emplace(itr, SSVU_FWD(mX));
 			}
 
 			/// @brief Returns an iterator to the value `mX`. A past-the-end iterator is returned if unexistant.

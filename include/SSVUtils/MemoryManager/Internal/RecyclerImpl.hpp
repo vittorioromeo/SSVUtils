@@ -37,14 +37,14 @@ namespace ssvu
 				/// @brief Creates a `T` instance and returns a `PtrType` to it.
 				template<typename T = TBase, typename... TArgs> inline auto create(TArgs&&... mArgs)
 				{
-					return getTD().template createImpl<T>(fwd<TArgs>(mArgs)...);
+					return getTD().template createImpl<T>(SSVU_FWD(mArgs)...);
 				}
 
 				/// @brief Creates a `T` instance and emplaces its `PtrType` back into `mContainer`. Returns a reference to the instance.
 				/// @param mContainer Container where the created `PtrType` will be emplaced back.
 				template<typename T = TBase, typename TContainer, typename... TArgs> inline T& getCreateEmplace(TContainer& mContainer, TArgs&&... mArgs)
 				{
-					mContainer.emplace_back(create<T>(fwd<TArgs>(mArgs)...));
+					mContainer.emplace_back(create<T>(SSVU_FWD(mArgs)...));
 					return castUp<T>(*mContainer.back());
 				}
 		};
@@ -59,7 +59,7 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline auto createImpl(TArgs&&... mArgs)
 			{
 				SSVU_ASSERT_STATIC(isSame<TBase, T>(), "MonoRecyclerImpl can only allocate objects of the same type");
-				return PtrType{this->storage.chunk.template create<T>(fwd<TArgs>(mArgs)...), ChunkDeleterType{this->storage.chunk}};
+				return PtrType{this->storage.chunk.template create<T>(SSVU_FWD(mArgs)...), ChunkDeleterType{this->storage.chunk}};
 			}
 		};
 
@@ -74,7 +74,7 @@ namespace ssvu
 			{
 				SSVU_ASSERT_STATIC(isSameOrBaseOf<TBase, T>(), "PolyRecyclerImpl can only allocate types that belong to the same hierarchy");
 				auto& chunk(this->storage.template getChunk<T>());
-				return PtrType{chunk.template create<T>(fwd<TArgs>(mArgs)...), ChunkDeleterType{chunk}};
+				return PtrType{chunk.template create<T>(SSVU_FWD(mArgs)...), ChunkDeleterType{chunk}};
 			}
 		};
 	}

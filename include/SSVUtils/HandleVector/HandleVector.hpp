@@ -150,7 +150,7 @@ namespace ssvu
 
 				// `sizeNext` now is the first empty valid index - we create our atom there
 				auto& atom(atoms[sizeNext]);
-				atom.initData(fwd<TArgs>(mArgs)...);
+				atom.initData(SSVU_FWD(mArgs)...);
 				atom.setAlive();
 
 				// Update the mark
@@ -167,7 +167,7 @@ namespace ssvu
 			/// @details The created atom will not be used until the HandleVector is refreshed.
 			template<typename... TArgs> inline auto create(TArgs&&... mArgs)
 			{
-				return createHandleFromAtom(createAtom(fwd<TArgs>(mArgs)...));
+				return createHandleFromAtom(createAtom(SSVU_FWD(mArgs)...));
 			}
 
 			/// @brief Refreshes the HandleVector.

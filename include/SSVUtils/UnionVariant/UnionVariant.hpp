@@ -23,7 +23,7 @@ namespace ssvu
 				template<typename T, typename... TArgs> inline void initImpl(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
 				{
 					SSVU_ASSERT_STATIC_NM(CTHas<T, TTs...>());
-					new (&data) T(fwd<TArgs>(mArgs)...);
+					new (&data) T(SSVU_FWD(mArgs)...);
 				}
 
 				/// @brief Destructs the internal `T` data.
@@ -61,7 +61,7 @@ namespace ssvu
 			template<typename T, typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
 			{
 				SSVU_ASSERT(isClean()); setClean(false);
-				this->template initImpl<T>(fwd<TArgs>(mArgs)...);
+				this->template initImpl<T>(SSVU_FWD(mArgs)...);
 			}
 
 			/// @brief Destroys the internal `T` data.
@@ -89,7 +89,7 @@ namespace ssvu
 			/// @brief Constructs and sets the internal data to `T`.
 			template<typename T, typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
 			{
-				this->template initImpl<T>(fwd<TArgs>(mArgs)...);
+				this->template initImpl<T>(SSVU_FWD(mArgs)...);
 			}
 
 			/// @brief Destroys the internal `T` data.

@@ -27,7 +27,7 @@ namespace ssvu
 				template<typename... TArgs> inline void initData(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
 				{
 					SSVU_ASSERT(!stat.alive);
-					new (&data) T(fwd<TArgs>(mArgs)...);
+					new (&data) T(SSVU_FWD(mArgs)...);
 				}
 
 				/// @brief Deallocates and destroys the data. Assumes the atom is alive.

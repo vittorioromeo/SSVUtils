@@ -39,7 +39,7 @@ namespace ssvu
 					{
 						SSVU_ASSERT_STATIC(isBaseOf<BaseElement, T>(), "`T` must derive from `BaseElement`");
 
-						auto& result(recycler.getCreateEmplace<T>(elements, fwd<TArgs>(mArgs)...));
+						auto& result(recycler.getCreateEmplace<T>(elements, SSVU_FWD(mArgs)...));
 						getGroupVec<T::getEType()>().emplace_back(&result);
 						return result;
 					}
@@ -83,7 +83,7 @@ namespace ssvu
 				inline Cmd& operator+=(const Action& mFunc) { onAction += mFunc; return *this; }
 				inline Cmd& operator()() { onAction(); return *this; }
 
-				template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return mgr.create<T>(fwd<TArgs>(mArgs)...); }
+				template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs) { return mgr.create<T>(SSVU_FWD(mArgs)...); }
 
 				inline void activateFlag(const std::string& mName) { findFlag(mName) = true; }
 

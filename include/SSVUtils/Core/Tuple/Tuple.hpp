@@ -33,9 +33,9 @@ namespace ssvu
 
 	/// @brief Calls the function `mF` using `mT`'s values as arguments.
 	template<typename TF, typename T> inline auto explode(TF&& mF, T&& mT)
-		noexcept(noexcept(Internal::Exploder<getTplSize<Decay<T>>()>::explode(fwd<TF>(mF), fwd<T>(mT))))
+		noexcept(noexcept(Internal::Exploder<getTplSize<Decay<T>>()>::explode(SSVU_FWD(mF), SSVU_FWD(mT))))
 	{
-		return Internal::Exploder<getTplSize<Decay<T>>()>::explode(fwd<TF>(mF), fwd<T>(mT));
+		return Internal::Exploder<getTplSize<Decay<T>>()>::explode(SSVU_FWD(mF), SSVU_FWD(mT));
 	}
 }
 

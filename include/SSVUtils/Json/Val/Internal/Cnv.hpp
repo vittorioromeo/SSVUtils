@@ -51,7 +51,7 @@ namespace ssvu
 			#define SSVJ_DEFINE_CNV_BIG_MUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
-					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(fwd<T>(mX)))) { SSVPP_CAT(mV.set, mType)(fwd<T>(mX)); } \
+					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(SSVU_FWD(mX)))) { SSVPP_CAT(mV.set, mType)(SSVU_FWD(mX)); } \
 					template<typename T> inline static void fromVal(T&& mV, mType& mX) { mX = moveIfRValue<decltype(mV)>(SSVPP_CAT(mV.get, mType)()); } \
 				};
 
@@ -89,7 +89,7 @@ namespace ssvu
 			// Convert values to themselves
 			template<> struct Cnv<Val> final
 			{
-				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(fwd<T>(mX)))) { mV.init(fwd<T>(mX)); }
+				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(SSVU_FWD(mX)))) { mV.init(SSVU_FWD(mX)); }
 			};
 
 			// Convert enums
@@ -140,7 +140,7 @@ namespace ssvu
 				template<typename T> inline static void toVal(Val& mV, T&& mX)
 				{
 					Arr result; result.reserve(sizeof...(TArgs));
-					tplFor([&result](auto&& mI){ result.emplace_back(SSVU_FWD(mI)); }, fwd<T>(mX));
+					tplFor([&result](auto&& mI){ result.emplace_back(SSVU_FWD(mI)); }, SSVU_FWD(mX));
 					mV.setArr(std::move(result));
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
@@ -150,8 +150,8 @@ namespace ssvu
 						SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > mIdx);
 
 						// BUG: gcc complains
-						// mE = moveIfRValue<decltype(mV)>(fwd<T>(mV)[mIdx].template as<RemoveRef<decltype(mE)>>());
-						mE = fwd<T>(mV)[mIdx].template as<RemoveRef<decltype(mE)>>();
+						// mE = moveIfRValue<decltype(mV)>(SSVU_FWD(mV)[mIdx].template as<RemoveRef<decltype(mE)>>());
+						mE = SSVU_FWD(mV)[mIdx].template as<RemoveRef<decltype(mE)>>();
 					}, mX);
 				}
 			};

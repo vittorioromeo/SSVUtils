@@ -39,7 +39,7 @@ namespace ssvu
 
 			template<typename T, typename... TArgs> inline Idx insertImpl(Idx mIdx, TArgs&&... mArgs)
 			{
-				commands.emplace(std::begin(commands) + mIdx, recycler.create<T>(*this, fwd<TArgs>(mArgs)...));
+				commands.emplace(std::begin(commands) + mIdx, recycler.create<T>(*this, SSVU_FWD(mArgs)...));
 
 				// If the current command is null, set it to the newly added one
 				if(isCIdxNull()) cIdx = mIdx;
@@ -59,8 +59,8 @@ namespace ssvu
 		public:
 			inline Timeline(bool mStart = true) noexcept { if(!mStart) stop(); }
 
-			template<typename T, typename... TArgs> inline auto append(TArgs&&... mArgs)			{ return insertImpl<T>(commands.size(), fwd<TArgs>(mArgs)...); }
-			template<typename T, typename... TArgs> inline auto insert(Idx mIdx, TArgs&&... mArgs)	{ return insertImpl<T>(mIdx, fwd<TArgs>(mArgs)...); }
+			template<typename T, typename... TArgs> inline auto append(TArgs&&... mArgs)			{ return insertImpl<T>(commands.size(), SSVU_FWD(mArgs)...); }
+			template<typename T, typename... TArgs> inline auto insert(Idx mIdx, TArgs&&... mArgs)	{ return insertImpl<T>(mIdx, SSVU_FWD(mArgs)...); }
 
 			inline void jumpTo(Idx mIdx) noexcept	{ cIdx = mIdx; }
 			inline void start()	noexcept			{ finished = false; ready = true; }

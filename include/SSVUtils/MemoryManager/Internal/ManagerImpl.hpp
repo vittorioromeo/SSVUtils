@@ -16,7 +16,7 @@ namespace ssvu
 
 			public:
 				template<typename... TArgs> inline MMItrBase(TItrValue mValue, TArgs&&... mArgs) noexcept
-					: BaseAdaptorItrRnd<TItrValue, TImpl>{mValue}, impl{fwd<TArgs>(mArgs)...} { }
+					: BaseAdaptorItrRnd<TItrValue, TImpl>{mValue}, impl{SSVU_FWD(mArgs)...} { }
 
 				inline decltype(auto) operator*() noexcept			{ return impl.get(this->itr); }
 				inline decltype(auto) operator*() const noexcept	{ return impl.get(this->itr); }
@@ -64,7 +64,7 @@ namespace ssvu
 
 				template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
 				{
-					auto uPtr(recycler.template create<T>(fwd<TArgs>(mArgs)...));
+					auto uPtr(recycler.template create<T>(SSVU_FWD(mArgs)...));
 
 					if(capacity <= sizeNext) reserve(capacity * 3);
 

@@ -209,15 +209,15 @@ namespace ssvu
 		inline auto& appendToImpl(std::string& mStr) noexcept { return mStr; }
 		template<typename T, typename... TArgs> inline auto& appendToImpl(std::string& mStr, T&& mA, TArgs&&... mArgs)
 		{
-			mStr += fwd<T>(mA);
-			return appendToImpl(mStr, fwd<TArgs>(mArgs)...);
+			mStr += SSVU_FWD(mA);
+			return appendToImpl(mStr, SSVU_FWD(mArgs)...);
 		}
 	}
 
 	/// @brief Appends a variadic number of strings to an `std::string`. Returns `mStr` after finishing the appends.
 	template<typename... TArgs> inline auto& appendTo(std::string& mStr, TArgs&&... mArgs)
 	{
-		return Internal::appendToImpl(mStr, fwd<TArgs>(mArgs)...);
+		return Internal::appendToImpl(mStr, SSVU_FWD(mArgs)...);
 	}
 }
 

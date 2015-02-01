@@ -17,7 +17,7 @@ namespace ssvu
 				template<typename TFwd> inline static auto as(TFwd&& mV)
 				{
 					T result;
-					Cnv<RemoveAll<T>>::fromVal(fwd<TFwd>(mV), result);
+					Cnv<RemoveAll<T>>::fromVal(SSVU_FWD(mV), result);
 					return result;
 				}
 			};
