@@ -23,6 +23,10 @@ namespace ssvu
 	}
 }
 
+// TODO: can be applied to fwd<TArgs>(mArgs)... ???
+/// @macro Perfect-forwards the arguments by using `ssvu::fwd` and `decltype`.
+#define SSVU_FWD(...) ::ssvu::fwd<decltype(__VA_ARGS__)>(__VA_ARGS__)
+
 /// @macro Defines a dummy struct with a name generated from the current line and passed variadic args.
 /// @details Must end with semicolon.
 #define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVPP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))

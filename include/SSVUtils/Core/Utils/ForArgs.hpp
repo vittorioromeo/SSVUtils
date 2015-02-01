@@ -8,9 +8,9 @@
 namespace ssvu
 {
 	/// @brief Calls `mFn` for each argument passed to the function.
-	template<typename TF, typename... TArgs> inline TF forArgs(TF mFn, TArgs&&... mArgs)
+	template<typename TF, typename... TArgs> inline TF forArgs(TF&& mFn, TArgs&&... mArgs)
 	{
-		return (void) std::initializer_list<int>{(std::ref(mFn)((TArgs&&) mArgs), 0)...}, mFn;
+		return (void) std::initializer_list<int>{(std::ref(mFn)((TArgs&&) mArgs), 0)...}, ssvu::fwd<TF>(mFn);
 	}
 }
 
