@@ -149,9 +149,10 @@ namespace ssvu
 					{
 						SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > mIdx);
 
-						// BUG: gcc complains
+						// TODO: BUG: gcc complains
+						// http://stackoverflow.com/questions/28264628/possible-gcc-bug-with-c14-polymorphic-lambdas
 						// mE = moveIfRValue<decltype(mV)>(SSVU_FWD(mV)[mIdx].template as<RemoveRef<decltype(mE)>>());
-						mE = SSVU_FWD(mV)[mIdx].template as<RemoveRef<decltype(mE)>>();
+						mE = ssvu::fwd<T>(mV)[mIdx].template as<RemoveRef<decltype(mE)>>();
 					}, mX);
 				}
 			};
