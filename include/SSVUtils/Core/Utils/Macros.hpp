@@ -41,7 +41,7 @@ namespace ssvu
 	template<typename TC, typename TReturn, typename... TArgs> struct SSVPP_CAT(__, mName, __impl)<TC, TReturn(TArgs...)> \
 	{ \
 		template<typename T> inline static constexpr auto check(T*) -> ssvu::IsSame<decltype(std::declval<T>().mMemberName(std::declval<TArgs>()...)), TReturn> { return {}; } \
-		template<typename> inline static constexpr std::false_type check(...) { return {}; } \
+		template<typename> inline static constexpr ssvu::FalseT check(...) { return {}; } \
 		static constexpr bool value{decltype(check<TC>(0))::value}; \
 	}; \
 	template<typename T, typename TSignature> inline constexpr bool mName() noexcept { return SSVPP_CAT(__, mName, __impl) < T, TSignature > :: value; }

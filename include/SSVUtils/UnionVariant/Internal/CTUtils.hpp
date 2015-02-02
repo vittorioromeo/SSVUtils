@@ -16,12 +16,12 @@ namespace ssvu
 		template<typename... TArgs> inline constexpr auto getCTMaxSize() noexcept	{ return CTMax<sizeof(TArgs)...>(); }
 		template<typename... TArgs> inline constexpr auto getCTMaxAlign() noexcept	{ return CTMax<alignof(TArgs)...>(); }
 
-		template<typename T, typename... TArgs> struct CTHas : std::true_type { };
-		template<typename T, typename TH, typename... TArgs> struct CTHas<T, TH, TArgs...> : Conditional<isSame<T, TH>(), std::true_type, CTHas<T, TArgs...>> { };
-		template<typename T> struct CTHas<T> : std::false_type { };
+		template<typename T, typename... TArgs> struct CTHas : TrueT { };
+		template<typename T, typename TH, typename... TArgs> struct CTHas<T, TH, TArgs...> : Conditional<isSame<T, TH>(), TrueT, CTHas<T, TArgs...>> { };
+		template<typename T> struct CTHas<T> : FalseT { };
 
 		template<typename...> struct PODChecker;
-		template<typename T> struct PODChecker<T> : Conditional<isPOD<T>(), std::true_type, std::false_type> { };
+		template<typename T> struct PODChecker<T> : Conditional<isPOD<T>(), TrueT, FalseT> { };
 		template<typename T1, typename T2, typename... TArgs> struct PODChecker<T1, T2, TArgs...> : IntegralConstant<bool, PODChecker<T1>() && PODChecker<T2, TArgs...>()> { };
 	}
 }

@@ -49,10 +49,12 @@ namespace ssvu
 			#if defined(SSVU_DEBUG)
 				bool clean{true};
 				inline void setClean(bool mClean) noexcept { clean = mClean; }
-				inline bool isClean() const noexcept { return clean; }
+				inline void assertClean() const noexcept { SSVU_ASSERT(clean, "UnionVariant needs to be clean"); }
+				inline void assertNotClean() const noexcept { SSVU_ASSERT(!clean, "UnionVariant needs to be dirty"); }
 			#else
 				inline void setClean(bool) noexcept { }
-				inline bool isClean() const noexcept { return true; }
+				inline void assertClean() const noexcept { }
+				inline void assertNotClean() const noexcept { }
 			#endif
 
 		public:
@@ -60,7 +62,7 @@ namespace ssvu
 			/// @details Asserts that any previous data was destroyed.
 			template<typename T, typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
 			{
-				SSVU_ASSERT(isClean()); setClean(false);
+				assertClean(); setClean(false);
 				this->template initImpl<T>(SSVU_FWD(mArgs)...);
 			}
 
@@ -68,18 +70,21 @@ namespace ssvu
 			/// @details Asserts that any previous data was constructed.
 			template<typename T> inline void deinit() noexcept(isNothrowDtor<T>())
 			{
-				SSVU_ASSERT(!isClean()); setClean(true);
+				assertNotClean(); setClean(true);
 				this->template deinitImpl<T>();
 			}
 
+			// The UnionVariant should be cleaned before being destroyed
+			inline ~UnionVariant() noexcept { assertClean(); }
+
 			// Getters
-			template<typename T> inline T& get() & noexcept				{ SSVU_ASSERT(!isClean()); return this->template getImpl<T>(); }
-			template<typename T> inline const T& get() const& noexcept	{ SSVU_ASSERT(!isClean()); return this->template getImpl<T>(); }
-			template<typename T> inline T get() && noexcept				{ SSVU_ASSERT(!isClean()); return std::move(this->template getImpl<T>()); }
+			template<typename T> inline T& get() & noexcept				{ assertNotClean(); return this->template getImpl<T>(); }
+			template<typename T> inline const T& get() const& noexcept	{ assertNotClean(); return this->template getImpl<T>(); }
+			template<typename T> inline T get() && noexcept				{ assertNotClean(); return std::move(this->template getImpl<T>()); }
 	};
 
 	/// @brief Union variant class that can store one of any `TTs` POD types at one time.
-	/// @details Intended for use only with POD types.
+	/// @details Intended for use only with POD types. Data cannot be deinitialized.
 	/// No checks are performed on construction/destruction of the data.
 	template<typename... TTs> class UnionVariantPOD : public Internal::UnionVariantBase<TTs...>
 	{
@@ -92,12 +97,6 @@ namespace ssvu
 				this->template initImpl<T>(SSVU_FWD(mArgs)...);
 			}
 
-			/// @brief Destroys the internal `T` data.
-			template<typename T> inline void deinit() noexcept(isNothrowDtor<T>())
-			{
-				this->template deinitImpl<T>();
-			}
-
 			// Getters
 			template<typename T> inline T& get() & noexcept				{ return this->template getImpl<T>(); }
 			template<typename T> inline const T& get() const& noexcept	{ return this->template getImpl<T>(); }
@@ -107,4 +106,4 @@ namespace ssvu
 
 #endif
 
-// TODO: rename to TaggedUnion?
+// TODO: rename to something else? Add Experiments/Random/maybe.cpp?

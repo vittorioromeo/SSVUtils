@@ -9,6 +9,9 @@ namespace ssvu
 {
 	// STL aliases/shortcuts
 	using SizeT = std::size_t;
+	using TrueT = std::true_type;
+	using FalseT = std::false_type;
+
 	template<typename T>							using DefDel = typename std::default_delete<T>;
 	template<typename T, typename TD = DefDel<T>>	using UPtr = std::unique_ptr<T, TD>;
 	template<typename T>							using SPtr = std::shared_ptr<T>;
