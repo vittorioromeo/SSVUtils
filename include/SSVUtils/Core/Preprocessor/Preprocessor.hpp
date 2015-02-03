@@ -5,11 +5,11 @@
 #ifndef SSVU_CORE_PREPROCESSOR
 #define SSVU_CORE_PREPROCESSOR
 
+#include "SSVUtils/Core/Preprocessor/Internal/Generated.hpp"
 #include "SSVUtils/Core/Preprocessor/Utils.hpp"
 #include "SSVUtils/Core/Preprocessor/ArgCount.hpp"
 #include "SSVUtils/Core/Preprocessor/Tuple.hpp"
-#include "SSVUtils/Core/Preprocessor/Aritmethic/Increment.hpp"
-#include "SSVUtils/Core/Preprocessor/Aritmethic/Decrement.hpp"
+#include "SSVUtils/Core/Preprocessor/Aritmethic.hpp"
 #include "SSVUtils/Core/Preprocessor/Bool.hpp"
 #include "SSVUtils/Core/Preprocessor/ForEach.hpp"
 #include "SSVUtils/Core/Preprocessor/Cat.hpp"
