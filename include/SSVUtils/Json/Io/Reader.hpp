@@ -5,6 +5,9 @@
 #ifndef SSVU_JSON_IO_READER
 #define SSVU_JSON_IO_READER
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Json/Common/Common.hpp"
+
 namespace ssvu
 {
 	namespace Json

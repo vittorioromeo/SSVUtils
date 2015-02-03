@@ -5,6 +5,9 @@
 #ifndef SSVU_JSON_COMMON
 #define SSVU_JSON_COMMON
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Container/Container.hpp"
+
 namespace ssvu
 {
 	namespace Json

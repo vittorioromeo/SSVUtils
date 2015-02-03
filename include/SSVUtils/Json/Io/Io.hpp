@@ -5,6 +5,8 @@
 #ifndef SSVU_JSON_IO
 #define SSVU_JSON_IO
 
+#include "SSVUtils/Core/Core.hpp"
+
 namespace ssvu
 {
 	namespace Json
