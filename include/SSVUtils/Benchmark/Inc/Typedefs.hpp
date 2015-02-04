@@ -11,7 +11,7 @@ namespace ssvu
 {
 	namespace Benchmark
 	{
-		namespace Internal
+		namespace Impl
 		{
 			/// @typedef Shortcut typedef for `std::chrono::timepoint<HRClock>`.
 			using TP = std::chrono::time_point<HRClock>;

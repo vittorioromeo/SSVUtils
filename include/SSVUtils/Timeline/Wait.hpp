@@ -29,7 +29,7 @@ namespace ssvu
 			inline Wait(Timeline& mTimeline, FT mTime) noexcept : Command{mTimeline}, time{mTime}, currentTime{mTime} { SSVU_ASSERT(time >= 0); }
 	};
 
-	namespace Internal
+	namespace Impl
 	{
 		template<bool TWhile> class WaitLoop final : public Command
 		{
@@ -44,8 +44,8 @@ namespace ssvu
 		};
 	}
 
-	using WaitWhile = Internal::WaitLoop<true>;
-	using WaitUntil = Internal::WaitLoop<false>;
+	using WaitWhile = Impl::WaitLoop<true>;
+	using WaitUntil = Impl::WaitLoop<false>;
 }
 
 #endif

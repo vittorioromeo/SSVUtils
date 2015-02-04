@@ -9,7 +9,7 @@ SSVUT_TEST(SSVUJsonNumTests)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	#define EXEC_NUM_TESTS() \
 		SSVUT_EXPECT(n.as<char>() == char{10}); \
@@ -80,7 +80,7 @@ SSVUT_TEST(SSVUJsonValTests1)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	EXEC_TEST_BASIC(bool, true)
 	EXEC_TEST_BASIC(bool, false)
@@ -93,7 +93,7 @@ SSVUT_TEST(SSVUJsonValTests2)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	EXEC_TEST_BASIC_IMPL(unsigned char, static_cast<unsigned char>('a'), IntU)
 	EXEC_TEST_BASIC_IMPL(unsigned int, 10u, IntU)
@@ -106,7 +106,7 @@ SSVUT_TEST(SSVUJsonValTests3)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	EXEC_TEST_BASIC(Str, "hello")
 	EXEC_TEST_BASIC(Str, "hello"s)
@@ -190,7 +190,7 @@ SSVUT_TEST(SSVUJsonValTests4)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	{
 		using PP = int[3];
@@ -225,7 +225,7 @@ SSVUT_TEST(SSVUJsonReadTests)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	auto testSrc(R"(
 	{
@@ -272,7 +272,7 @@ SSVUT_TEST(SSVUJsonWriteTests)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	auto testSrc(R"(
 	{
@@ -371,7 +371,7 @@ SSVUT_TEST(SSVUJsonConvertTests1)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	EXEC_CV_TEST(bool, true)
 	EXEC_CV_TEST(bool, false)
@@ -389,7 +389,7 @@ SSVUT_TEST(SSVUJsonConvertTests2)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	EXEC_CV_TEST_ARR(bool, true, true, false)
 	EXEC_CV_TEST_ARR(bool, false, false, true)
@@ -407,7 +407,7 @@ SSVUT_TEST(SSVUJsonConvertTests3)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	EXEC_CV_TEST_OBJ(bool, true, true, false)
 	EXEC_CV_TEST_OBJ(bool, false, false, true)
@@ -429,7 +429,7 @@ SSVUT_TEST(SSVUJsonConvertTests4)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 
 	// Simulation of converting a struct
@@ -499,7 +499,7 @@ SSVJ_CNV_NAMESPACE_END()
 SSVUT_TEST(SSVUJsonCnvTest)
 {
 	using namespace ssvj;
-	using Type = ssvu::Json::Internal::__ssvjTestStruct;
+	using Type = ssvu::Json::Impl::__ssvjTestStruct;
 
 	Type s1;
 	Val k = s1;
@@ -545,7 +545,7 @@ SSVUT_TEST(SSVUJsonArrIterationTests)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	EXEC_TEST_ITR_NUM_ARR(char)
 	EXEC_TEST_ITR_NUM_ARR(int)
@@ -625,7 +625,7 @@ SSVUT_TEST(SSVUJsonObjIterationTests)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	EXEC_TEST_ITR_NUM_OBJ(char)
 	EXEC_TEST_ITR_NUM_OBJ(int)
@@ -643,7 +643,7 @@ SSVUT_TEST(SSVUJsonGetIfHas)
 {
 	using namespace ssvu;
 	using namespace ssvu::Json;
-	using namespace ssvu::Json::Internal;
+	using namespace ssvu::Json::Impl;
 
 	{
 		Val v{Obj{}};

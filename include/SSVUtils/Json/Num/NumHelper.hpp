@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			#define SSVJ_DEFINE_NUMHELPER(mType, mRepr) \
 				template<> struct NumHelper<mType> \

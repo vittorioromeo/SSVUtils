@@ -13,7 +13,7 @@
 // Forward declarations
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<typename, template<typename> class, typename, typename> class BaseRecycler;
 		template<typename, template<typename> class> struct MonoRecyclerImpl;
@@ -33,49 +33,49 @@ namespace ssvu
 namespace ssvu
 {
 	/// @brief Memory recycler for a single object type. Doesn't store additional information in the object.
-	template<typename TBase> using MonoRecycler = Internal::MonoRecyclerImpl
+	template<typename TBase> using MonoRecycler = Impl::MonoRecyclerImpl
 	<
 		TBase,
-		Internal::LayoutImpl::LHelperNoBool
+		Impl::LayoutImpl::LHelperNoBool
 	>;
 
 	/// @brief Memory recycler for multiple object types. Doesn't store additional information in the objects.
-	template<typename TBase> using PolyRecycler = Internal::PolyRecyclerImpl
+	template<typename TBase> using PolyRecycler = Impl::PolyRecyclerImpl
 	<
 		TBase,
-		Internal::LayoutImpl::LHelperNoBool,
-		Internal::PolyStorage<TBase, Internal::LayoutImpl::LHelperNoBool>
+		Impl::LayoutImpl::LHelperNoBool,
+		Impl::PolyStorage<TBase, Impl::LayoutImpl::LHelperNoBool>
 	>;
 
 	/// @brief Memory recycler for multiple object types. Doesn't store additional information in the objects. Supports a fixed amount of object sizes.
-	template<typename TBase, SizeT TMaxChunks> using PolyFixedRecycler = Internal::PolyRecyclerImpl
+	template<typename TBase, SizeT TMaxChunks> using PolyFixedRecycler = Impl::PolyRecyclerImpl
 	<
 		TBase,
-		Internal::LayoutImpl::LHelperNoBool,
-		Internal::PolyFixedStorage<TBase, Internal::LayoutImpl::LHelperNoBool, TMaxChunks>
+		Impl::LayoutImpl::LHelperNoBool,
+		Impl::PolyFixedStorage<TBase, Impl::LayoutImpl::LHelperNoBool, TMaxChunks>
 	>;
 
 	/// @brief Memory recycler manager for a single object type. Stores an additional bool in every object.
-	template<typename TBase> using MonoManager = Internal::BaseManager
+	template<typename TBase> using MonoManager = Impl::BaseManager
 	<
 		TBase,
-		Internal::MonoRecyclerImpl<TBase, Internal::LayoutImpl::LHelperBool>
+		Impl::MonoRecyclerImpl<TBase, Impl::LayoutImpl::LHelperBool>
 	>;
 
 	/// @brief Memory recycler manager for a multiple object types. Stores an additional bool in every object.
-	template<typename TBase> using PolyManager = Internal::BaseManager<TBase, Internal::PolyRecyclerImpl
+	template<typename TBase> using PolyManager = Impl::BaseManager<TBase, Impl::PolyRecyclerImpl
 	<
 		TBase,
-		Internal::LayoutImpl::LHelperBool,
-		Internal::PolyStorage<TBase, Internal::LayoutImpl::LHelperBool>>
+		Impl::LayoutImpl::LHelperBool,
+		Impl::PolyStorage<TBase, Impl::LayoutImpl::LHelperBool>>
 	>;
 
 	/// @brief Memory recycler manager for a multiple object types. Stores an additional bool in every object. Supports a fixed amount of object sizes.
-	template<typename TBase, SizeT TMaxChunks> using PolyFixedManager = Internal::BaseManager<TBase, Internal::PolyRecyclerImpl
+	template<typename TBase, SizeT TMaxChunks> using PolyFixedManager = Impl::BaseManager<TBase, Impl::PolyRecyclerImpl
 	<
 		TBase,
-		Internal::LayoutImpl::LHelperBool,
-		Internal::PolyFixedStorage<TBase, Internal::LayoutImpl::LHelperBool, TMaxChunks>>
+		Impl::LayoutImpl::LHelperBool,
+		Impl::PolyFixedStorage<TBase, Impl::LayoutImpl::LHelperBool, TMaxChunks>>
 	>;
 }
 

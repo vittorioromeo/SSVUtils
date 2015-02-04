@@ -9,7 +9,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		// TODO: to (new) mpl module along with CTUtils?
 		template<SizeT...> struct CTMin;

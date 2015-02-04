@@ -30,7 +30,7 @@ namespace ssvu
 {
 	namespace Encryption
 	{
-		namespace Internal
+		namespace Impl
 		{
 			class MD5
 			{

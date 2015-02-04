@@ -17,7 +17,7 @@ namespace ssvu
 
 				inline bool beginsAsFlag(const std::string& mStr) const noexcept
 				{
-					return beginsWith(mStr, Internal::flagPrefixShort) || beginsWith(mStr, Internal::flagPrefixLong);
+					return beginsWith(mStr, Impl::flagPrefixShort) || beginsWith(mStr, Impl::flagPrefixLong);
 				}
 
 				inline auto getForCmdPhrase(Cmd& mCmd) const noexcept

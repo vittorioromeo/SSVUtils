@@ -35,7 +35,7 @@
 #else
 	namespace ssvu
 	{
-		namespace Internal
+		namespace Impl
 		{
 			/// @brief Internal struct storing data for an assertion.
 			struct AssertData { std::string code, line, file; };
@@ -53,15 +53,15 @@
 	}
 
 	/// @macro Normal assertion. Requires a boolean expression and an optional string message.
-	///	@details If the expression returns false, the assertion fires, calling `ssvu::Internal::assertImpl`.
+	///	@details If the expression returns false, the assertion fires, calling `ssvu::Impl::assertImpl`.
 	#define SSVU_ASSERT(...) \
 		do \
 		{ \
-			::ssvu::Internal::AssertData ad{}; \
+			::ssvu::Impl::AssertData ad{}; \
 			ad.code = SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), __VA_ARGS__); \
 			ad.line = SSVPP_TOSTR(__LINE__); \
 			ad.file = __FILE__; \
-			::ssvu::Internal::assertImpl(std::move(ad), __VA_ARGS__); \
+			::ssvu::Impl::assertImpl(std::move(ad), __VA_ARGS__); \
 		} while(false)
 
 	// TODO: BUG: gcc - doesn't work yet

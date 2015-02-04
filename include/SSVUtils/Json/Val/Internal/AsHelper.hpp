@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<typename T> struct AsHelper
 			{

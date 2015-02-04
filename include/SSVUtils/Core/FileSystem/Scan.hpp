@@ -30,7 +30,7 @@ namespace ssvu
 		/// @param mDesired Optional: only set if using Pick::ByExt or Pick::ByName.
 		template<Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any, Sort TS = Sort::Alphabetic> inline void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired = "")
 		{
-			Internal::scan<TM, TT, TP, TS>(mTarget, mPath, mDesired);
+			Impl::scan<TM, TT, TP, TS>(mTarget, mPath, mDesired);
 		}
 
 		/// @brief Returns an std::vector filled with paths.

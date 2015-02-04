@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<EType TET> struct ETypeBaseInfo;
 

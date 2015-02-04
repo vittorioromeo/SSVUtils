@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<typename T, typename TItrValue, typename TImpl> class MMItrBase : public BaseAdaptorItrRnd<TItrValue, TImpl>
 		{
@@ -88,7 +88,7 @@ namespace ssvu
 
 				inline void refresh() noexcept
 				{
-					Internal::refreshImpl(msize, sizeNext,
+					Impl::refreshImpl(msize, sizeNext,
 						[this](SizeT mI){ return isAliveAt(mI); },
 						[this](SizeT mD, SizeT mA){ std::swap(items[mD], items[mA]); },
 						[this](SizeT mD){ items.deinitAt(mD); });

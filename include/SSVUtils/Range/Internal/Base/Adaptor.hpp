@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Iterator adaptor for forward iterators. Implementation of the dereference is used via `TImpl::get`.
 		template<typename TItr, typename TImpl> class BaseAdaptorItrFwd
@@ -69,7 +69,7 @@ namespace ssvu
 			template<typename TItr> struct AdaptorFromItr
 			{
 				using Tag = typename std::iterator_traits<TItr>::iterator_category;
-				template<typename TImpl> using Type = Internal::AdaptorFromTag<Tag, TItr, TImpl>;
+				template<typename TImpl> using Type = Impl::AdaptorFromTag<Tag, TItr, TImpl>;
 			};
 		}
 
@@ -80,7 +80,7 @@ namespace ssvu
 		{
 			template<typename TC> struct AdaptorFromContainer
 			{
-				template<typename TImpl> using Type = Internal::AdaptorFromItr<decltype(std::begin(std::declval<TC>())), TImpl>;
+				template<typename TImpl> using Type = Impl::AdaptorFromItr<decltype(std::begin(std::declval<TC>())), TImpl>;
 			};
 		}
 

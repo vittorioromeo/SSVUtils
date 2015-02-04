@@ -14,16 +14,16 @@ namespace ssvu
 	{
 		template<> SSVU_INLINE std::string encrypt<Type::Base64>(const std::string& mStr)
 		{
-			return Internal::Base64Encode(mStr);
+			return Impl::Base64Encode(mStr);
 		}
 		template<> SSVU_INLINE std::string encrypt<Type::MD5>(const std::string& mStr)
 		{
-			return Internal::MD5{mStr}.GetHash();
+			return Impl::MD5{mStr}.GetHash();
 		}
 
 		template<> SSVU_INLINE std::string decrypt<Type::Base64>(const std::string& mStr)
 		{
-			return Internal::Base64Decode(mStr);
+			return Impl::Base64Decode(mStr);
 		}
 	}
 }

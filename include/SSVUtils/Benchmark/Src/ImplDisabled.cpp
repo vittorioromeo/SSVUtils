@@ -11,7 +11,7 @@ namespace ssvu
 {
 	namespace Benchmark
 	{
-		namespace Internal
+		namespace Impl
 		{
 			SSVU_INLINE void start(std::string)					{ }
 			SSVU_INLINE Data getEndData()						{ return Data{}; }

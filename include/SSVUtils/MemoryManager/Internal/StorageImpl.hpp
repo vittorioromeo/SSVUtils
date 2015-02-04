@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Internal pointer chain data structure.
 		/// @details Stored pointers contain a link to the next one in the chain when unused,

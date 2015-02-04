@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		namespace Internal
+		namespace Impl
 		{
 			class BaseArgPack : public BaseElement
 			{

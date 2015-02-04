@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		namespace Internal
+		namespace Impl
 		{
 			// These functions exist only to avoid some code repetition below
 			template<typename T> std::string buildCmdStr(const T& mC, std::string mStart = "", const std::string& mEnd = "", const std::string& mSep = " ")
@@ -61,7 +61,7 @@ namespace ssvu
 
 			private:
 				std::vector<std::string> names;
-				Internal::ManagerElements mgr;
+				Impl::ManagerElements mgr;
 				Delegate<void()> onAction;
 				std::string desc;
 				bool mainCmd{false}; // Is this the main cmd?
@@ -98,8 +98,8 @@ namespace ssvu
 				template<EType TET> inline auto& getAt(SizeT mIdx) noexcept				{ return mgr.getAt<TET>(mIdx); }
 				template<EType TET> inline const auto& getAt(SizeT mIdx) const noexcept	{ return mgr.getAt<TET>(mIdx); }
 
-				std::string getNamesStr() const			{ return Internal::buildCmdStr(names, "<", ">", " || "); }
-				template<EType TET> auto getStr() const	{ return Internal::buildCmdStr(getAll<TET>()); }
+				std::string getNamesStr() const			{ return Impl::buildCmdStr(names, "<", ">", " || "); }
+				template<EType TET> auto getStr() const	{ return Impl::buildCmdStr(getAll<TET>()); }
 
 				auto getHelpStr() const
 				{

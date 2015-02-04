@@ -10,7 +10,7 @@ namespace ssvu
 {
 	namespace Benchmark
 	{
-		namespace Internal
+		namespace Impl
 		{
 			SSVU_INLINE void DataGroup::reset() noexcept
 			{

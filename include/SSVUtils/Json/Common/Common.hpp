@@ -33,7 +33,7 @@ namespace ssvu
 		/// @typedef Representation/storage for a real value.
 		using Real = double;
 
-		namespace Internal
+		namespace Impl
 		{
 			/// @typedef Template for `Obj` type. Intended to be instantiated with `Val`.
 			template<typename T> using ObjImpl = VecMap<Key, T>;

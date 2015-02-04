@@ -11,9 +11,9 @@ namespace ssvu
 	/// @details Values are stored in a sorted vector of `T`.
 	/// @tparam T Value type.
 	/// @tparam TCmp Comparer type.
-	template<typename T, typename TCmp = std::less<T>> class VecSorted : public Internal::VecMapBase<VecSorted<T>>
+	template<typename T, typename TCmp = std::less<T>> class VecSorted : public Impl::VecMapBase<VecSorted<T>>
 	{
-		template<typename> friend class Internal::VecMapBase;
+		template<typename> friend class Impl::VecMapBase;
 
 		private:
 			std::vector<T> data;

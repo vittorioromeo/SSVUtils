@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			/// @brief Helper template for `Num` setters and getters.
 			template<typename> struct NumHelper;
@@ -20,7 +20,7 @@ namespace ssvu
 			/// @brief Internal class dedicated to the storage of numeric values.
 			class Num
 			{
-				template<typename> friend struct Internal::NumHelper;
+				template<typename> friend struct Impl::NumHelper;
 
 				public:
 					/// @brief Representation/storage type of numeric values.
@@ -81,11 +81,11 @@ namespace ssvu
 					template<typename T> inline Num(const T& mX) noexcept { set<T>(mX); }
 
 					/// @brief Sets the stored number to `mX`. Representation may change depending on `mX`'s type.
-					template<typename T> inline void set(const T& mX) noexcept { Internal::NumHelper<T>::set(*this, mX); }
+					template<typename T> inline void set(const T& mX) noexcept { Impl::NumHelper<T>::set(*this, mX); }
 
 					/// @brief Returns a copy of the stored number, as a `T`. Representation will not change.
 					/// @details The internal number will not change. The copy will be casted, if necessary.
-					template<typename T> inline auto as() const noexcept { return Internal::NumHelper<T>::as(*this); }
+					template<typename T> inline auto as() const noexcept { return Impl::NumHelper<T>::as(*this); }
 
 					/// @brief Returns the current representation type.
 					inline auto getRepr() const noexcept { return repr; }

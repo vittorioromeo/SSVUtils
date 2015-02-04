@@ -10,7 +10,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<typename T, typename TTpl> struct TplIdxOf;
 

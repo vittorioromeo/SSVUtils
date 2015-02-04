@@ -11,9 +11,9 @@ namespace ssvu
 	/// @details Key/value pairs are stored in a sorted vector of `std::pair<TK, TV>`.
 	/// @tparam TK Key type.
 	/// @tparam TV Value type.
-	template<typename TK, typename TV> class VecMap : public Internal::VecMapBase<VecMap<TK, TV>>
+	template<typename TK, typename TV> class VecMap : public Impl::VecMapBase<VecMap<TK, TV>>
 	{
-		template<typename> friend class Internal::VecMapBase;
+		template<typename> friend class Impl::VecMapBase;
 
 		public:
 			/// @typedef Type of object stored in the internal vector.

@@ -14,7 +14,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<typename TWS> inline void Writer<TWS>::write(const Val& mVal)
 			{

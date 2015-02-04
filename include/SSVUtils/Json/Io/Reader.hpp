@@ -12,7 +12,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			inline bool isValidEscapeSequenceChar(char mC) noexcept
 			{

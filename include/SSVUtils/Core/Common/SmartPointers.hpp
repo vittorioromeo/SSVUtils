@@ -15,7 +15,7 @@ namespace ssvu
 	/// @details Wraps `std::make_shared<T>`.
 	template<typename T, typename... TArgs> inline decltype(auto) makeSPtr(TArgs&&... mArgs) { return std::make_shared<T>(SSVU_FWD(mArgs)...); }
 
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Internal functor that creates an `ssvu::UPtr`.
 		template<typename T> struct MakerUPtr { template<typename... TArgs> inline static auto make(TArgs&&... mArgs) { return makeUPtr<T>(SSVU_FWD(mArgs)...); } };

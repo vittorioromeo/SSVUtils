@@ -13,7 +13,7 @@ namespace ssvu
 	/// @typedef HandleVector counter type.
 	using HCtr = int;
 
-	namespace Internal
+	namespace Impl
 	{
 		struct HVStat
 		{

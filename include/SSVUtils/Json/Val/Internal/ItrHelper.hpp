@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			/// @brief Helper class for iteration on `Val` objects.
 			struct ItrHelper
@@ -31,7 +31,7 @@ namespace ssvu
 				};
 
 				// Range creation helper functions
-				template<template<typename> class TImpl, typename T, typename TItr> using ItrAs = ssvu::Internal::AdaptorFromItr<TItr, TImpl<T>>;
+				template<template<typename> class TImpl, typename T, typename TItr> using ItrAs = ssvu::Impl::AdaptorFromItr<TItr, TImpl<T>>;
 				template<template<typename> class TImpl, typename T, typename TItr> inline constexpr static auto makeItrAs(TItr mItr) noexcept { return ItrAs<TImpl, T, TItr>{mItr}; }
 				template<template<typename> class TImpl, typename T, typename TItr> inline constexpr static auto makeItrAsRange(TItr mBegin, TItr mEnd) noexcept { return makeRange(makeItrAs<TImpl, T>(mBegin), makeItrAs<TImpl, T>(mEnd)); }
 

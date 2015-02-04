@@ -10,7 +10,7 @@ namespace ssvu
 {
 	namespace Encryption
 	{
-		namespace Internal
+		namespace Impl
 		{
 			using POINTER = unsigned char*;
 

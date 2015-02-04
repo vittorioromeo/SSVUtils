@@ -11,7 +11,7 @@ namespace ssvu
 	{
 		enum class EType : SizeT {Arg, ArgOpt, ArgPack, Flag, FlagValue, FlagValueOpt};
 
-		namespace Internal
+		namespace Impl
 		{
 			template<EType TET> struct ETypeInfo
 			{

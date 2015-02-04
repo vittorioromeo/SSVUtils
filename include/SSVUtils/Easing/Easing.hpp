@@ -16,7 +16,7 @@ namespace ssvu
 		template<typename T> struct Out		{ inline static auto get() noexcept { return &T::out; } };
 		template<typename T> struct InOut	{ inline static auto get() noexcept { return &T::inOut; } };
 
-		namespace Internal
+		namespace Impl
 		{
 			template<typename T> struct Dispatcher
 			{
@@ -288,7 +288,7 @@ namespace ssvu
 	template<template<typename> class TEase, template<typename> class TKind, typename T1, typename T2, typename T3>
 		inline Common<T1, T2, T3> getEased(const T1& mI, const T2& mIMin, const T3& mIMax) noexcept
 	{
-		return Easing::Internal::Dispatcher<Common<T1, T2, T3>>::template getMap<TEase, TKind>(mI, mIMin, mIMax, mIMin, mIMax);
+		return Easing::Impl::Dispatcher<Common<T1, T2, T3>>::template getMap<TEase, TKind>(mI, mIMin, mIMax, mIMin, mIMax);
 	}
 
 	/// @brief Returns a value eased in a range and mapped to an output range.
@@ -302,7 +302,7 @@ namespace ssvu
 	template<template<typename> class TEase, template<typename> class TKind, typename T1, typename T2, typename T3, typename T4, typename T5>
 		inline Common<T1, T2, T3, T4, T5> getMapEased(const T1& mI, const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
 	{
-		return Easing::Internal::Dispatcher<Common<T1, T2, T3, T4, T5>>::template getMap<TEase, TKind>(mI, mIMin, mIMax, mOMin, mOMax);
+		return Easing::Impl::Dispatcher<Common<T1, T2, T3, T4, T5>>::template getMap<TEase, TKind>(mI, mIMin, mIMax, mOMin, mOMax);
 	}
 }
 

@@ -11,7 +11,7 @@ namespace ssvu
 {
 	namespace Benchmark
 	{
-		namespace Internal
+		namespace Impl
 		{
 			SSVU_INLINE Data::Data(const TP& mTP, std::string mName) : tp{mTP}, name{std::move(mName)}
 			{

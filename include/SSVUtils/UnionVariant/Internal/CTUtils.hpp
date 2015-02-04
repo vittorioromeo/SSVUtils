@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<SizeT...> struct CTMax;
 		template<SizeT TV0> struct CTMax<TV0> : IntegralConstant<SizeT, TV0> { };

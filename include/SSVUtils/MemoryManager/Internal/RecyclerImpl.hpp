@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<typename TBase, template<typename> class TLHelper>						using MonoRecyclerBase = BaseRecycler<TBase, TLHelper, MonoStorage<TBase, TLHelper>, MonoRecyclerImpl<TBase, TLHelper>>;
 		template<typename TBase, template<typename> class TLHelper, typename TStorage>	using PolyRecyclerBase = BaseRecycler<TBase, TLHelper, TStorage, PolyRecyclerImpl<TBase, TLHelper, TStorage>>;

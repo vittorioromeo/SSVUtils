@@ -219,7 +219,7 @@ namespace ssvu
 	/// @return Returns a copy of the container, trimmed.
 	template<typename TC, typename TP> inline TC getTrimLR(TC mContainer, TP mPredicate) { trimLR(mContainer, mPredicate); return mContainer; }
 
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Internal implementation method for UPtr emplacement in linear containers.
 		template<typename T, typename TC, typename TM, typename... TArgs> inline T& getEmplaceUPtrImpl(TC& mContainer, TArgs&&... mArgs)
@@ -242,7 +242,7 @@ namespace ssvu
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename TC, typename... TArgs> inline T& getEmplaceUPtr(TC& mContainer, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUPtrImpl<T, TC, Internal::MakerUPtr<T>>(mContainer, SSVU_FWD(mArgs)...);
+		return Impl::getEmplaceUPtrImpl<T, TC, Impl::MakerUPtr<T>>(mContainer, SSVU_FWD(mArgs)...);
 	}
 
 	/// @brief Emplaces a `ssvu::UPtr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
@@ -253,7 +253,7 @@ namespace ssvu
 	/// @return Returns a reference to the newly allocated T instance.
 	template<typename T, typename... TArgs, typename TC, typename TK> inline T& getEmplaceUPtrMap(TC& mContainer, TK&& mKey, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUPtrMapImpl<T, TC, TK, Internal::MakerUPtr<T>>(mContainer, mKey, SSVU_FWD(mArgs)...);
+		return Impl::getEmplaceUPtrMapImpl<T, TC, TK, Impl::MakerUPtr<T>>(mContainer, mKey, SSVU_FWD(mArgs)...);
 	}
 
 	/// @brief Shuffles a container, using the default random engine.

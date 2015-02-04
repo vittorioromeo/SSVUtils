@@ -14,7 +14,7 @@ namespace ssvu
 		// `Val` forward declaration.
 		class Val;
 
-		namespace Internal
+		namespace Impl
 		{
 			/// @brief Helper class to convert C++ objects to/from `Val`.
 			template<typename> struct Cnv;

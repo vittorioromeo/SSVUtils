@@ -32,7 +32,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<typename TRS> inline bool tryParse(Val& mVal, Reader<TRS>& mReader)
 			{

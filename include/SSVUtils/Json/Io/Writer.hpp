@@ -13,7 +13,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<typename TWS = WSPretty> class Writer
 			{

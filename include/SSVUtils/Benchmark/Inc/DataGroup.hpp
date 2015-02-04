@@ -13,7 +13,7 @@ namespace ssvu
 {
 	namespace Benchmark
 	{
-		namespace Internal
+		namespace Impl
 		{
 			/// @brief Benchmark group data structure storing a time point and a duration.
 			struct DataGroup : public DataBase<DataGroup>

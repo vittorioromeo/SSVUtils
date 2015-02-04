@@ -41,7 +41,7 @@ namespace ssvu
 				return {"Infinite ArgPack position error", "Infinite ArgPacks must be specified last in the command"};
 			}
 
-			inline Base createArgPackSignatureMismatch(Internal::BaseArgPack& mArgPack)
+			inline Base createArgPackSignatureMismatch(Impl::BaseArgPack& mArgPack)
 			{
 				return {"ArgPack signature mismatch", "Incorrect number of parameters for ArgPack `" + mArgPack.getName() + "` - expected (" + toStr(mArgPack.getMin()) + " .. " + toStr(mArgPack.getMax()) + ")"};
 			}

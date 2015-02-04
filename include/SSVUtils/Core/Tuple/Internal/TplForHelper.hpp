@@ -24,7 +24,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		SSVU_IMPL_DEFINE_FORHELPER(ForHelper,		(SSVU_FWD(mF)(std::get<TI>(SSVU_FWD(mTpls))...)))
 		SSVU_IMPL_DEFINE_FORHELPER(ForIdxHelper,	(SSVU_FWD(mF)(TI, std::get<TI>(SSVU_FWD(mTpls))...)))

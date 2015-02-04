@@ -19,22 +19,22 @@ namespace ssvu
 	{
 		SSVU_INLINE void start(std::string mTitle)
 		{
-			return Internal::start(std::move(mTitle));
+			return Impl::start(std::move(mTitle));
 		}
 
-		SSVU_INLINE Internal::Data getEndData()
+		SSVU_INLINE Impl::Data getEndData()
 		{
-			return Internal::getEndData();
+			return Impl::getEndData();
 		}
 
 		SSVU_INLINE void endLo()
 		{
-			Internal::endLo();
+			Impl::endLo();
 		}
 
-		SSVU_INLINE void groupReset(const std::string& mGroup)	{ Internal::groupReset(mGroup); }
-		SSVU_INLINE void groupResume(const std::string& mGroup)	{ Internal::groupResume(mGroup); }
-		SSVU_INLINE void groupPause(const std::string& mGroup)	{ Internal::groupPause(mGroup); }
-		SSVU_INLINE void groupEndLo(const std::string& mGroup)	{ Internal::groupEndLo(mGroup); }
+		SSVU_INLINE void groupReset(const std::string& mGroup)	{ Impl::groupReset(mGroup); }
+		SSVU_INLINE void groupResume(const std::string& mGroup)	{ Impl::groupResume(mGroup); }
+		SSVU_INLINE void groupPause(const std::string& mGroup)	{ Impl::groupPause(mGroup); }
+		SSVU_INLINE void groupEndLo(const std::string& mGroup)	{ Impl::groupEndLo(mGroup); }
 	}
 }

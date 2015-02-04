@@ -11,7 +11,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		inline void assertImpl(AssertData&& mAD, bool mExpression, const std::string& mMsg) noexcept
 		{

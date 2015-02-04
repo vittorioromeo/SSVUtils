@@ -14,7 +14,7 @@ namespace ssvu
 {
 	namespace Console
 	{
-		namespace Internal
+		namespace Impl
 		{
 			// TODO: fix (http://www.cplusplus.com/articles/2ywTURfi/)
 
