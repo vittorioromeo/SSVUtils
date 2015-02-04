@@ -53,7 +53,7 @@ namespace ssvu
 			inline bool operator>=(const BaseAdaptorItrRnd& mRhs) const noexcept	{ return this->itr >= mRhs.itr; }
 		};
 
-		namespace Impl
+		namespace Spec
 		{
 			template<typename> struct AdaptorFromTag;
 			template<> struct AdaptorFromTag<std::forward_iterator_tag>			{ template<typename TItr, typename TImpl> using Type = BaseAdaptorItrFwd<TItr, TImpl>; };
@@ -62,9 +62,9 @@ namespace ssvu
 		}
 
 		/// @typedef Adaptor type for a specific iterator tag type.
-		template<typename T, typename TItr, typename TImpl> using AdaptorFromTag = typename Impl::AdaptorFromTag<T>::template Type<TItr, TImpl>;
+		template<typename T, typename TItr, typename TImpl> using AdaptorFromTag = typename Spec::AdaptorFromTag<T>::template Type<TItr, TImpl>;
 
-		namespace Impl
+		namespace Spec
 		{
 			template<typename TItr> struct AdaptorFromItr
 			{
@@ -74,9 +74,9 @@ namespace ssvu
 		}
 
 		/// @typedef Adaptor type for a specific iterator type.
-		template<typename TItr, typename TImpl> using AdaptorFromItr = typename Impl::AdaptorFromItr<TItr>::template Type<TImpl>;
+		template<typename TItr, typename TImpl> using AdaptorFromItr = typename Spec::AdaptorFromItr<TItr>::template Type<TImpl>;
 
-		namespace Impl
+		namespace Spec
 		{
 			template<typename TC> struct AdaptorFromContainer
 			{
@@ -85,7 +85,7 @@ namespace ssvu
 		}
 
 		/// @typedef Adaptor type for a specific container type.
-		template<typename TC, typename TImpl> using AdaptorFromContainer = typename Impl::AdaptorFromContainer<TC>::template Type<TImpl>;
+		template<typename TC, typename TImpl> using AdaptorFromContainer = typename Spec::AdaptorFromContainer<TC>::template Type<TImpl>;
 	}
 }
 
