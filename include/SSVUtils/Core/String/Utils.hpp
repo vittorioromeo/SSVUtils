@@ -19,7 +19,7 @@ namespace ssvu
 		Stringifier<T>::template impl<TFmt>(mStream, mValue);
 	}
 
-	namespace Internal
+	namespace Impl
 	{
 		void resetFmt(std::ostream& mStream);
 		inline auto& getStringifyStream() noexcept { thread_local std::ostringstream oss; return oss; }
@@ -37,9 +37,9 @@ namespace ssvu
 	/// @return Returns a std::string representing the stringified value.
 	template<typename T> inline auto toStr(const T& mValue)
 	{
-		Internal::getStringifyStream().str("");
-		Internal::callStringifyImpl<false, false>(Internal::getStringifyStream(), mValue);
-		return Internal::getStringifyStream().str();
+		Impl::getStringifyStream().str("");
+		Impl::callStringifyImpl<false, false>(Impl::getStringifyStream(), mValue);
+		return Impl::getStringifyStream().str();
 	}
 
 	/// @brief Returns true if mChar is a digit. (Wraps std::isdigit)
@@ -204,7 +204,7 @@ namespace ssvu
 	}
 
 	// Implementation details for `appendTo`.
-	namespace Internal
+	namespace Impl
 	{
 		inline auto& appendToImpl(std::string& mStr) noexcept { return mStr; }
 		template<typename T, typename... TArgs> inline auto& appendToImpl(std::string& mStr, T&& mA, TArgs&&... mArgs)
@@ -217,7 +217,7 @@ namespace ssvu
 	/// @brief Appends a variadic number of strings to an `std::string`. Returns `mStr` after finishing the appends.
 	template<typename... TArgs> inline auto& appendTo(std::string& mStr, TArgs&&... mArgs)
 	{
-		return Internal::appendToImpl(mStr, SSVU_FWD(mArgs)...);
+		return Impl::appendToImpl(mStr, SSVU_FWD(mArgs)...);
 	}
 }
 

@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Test
 	{
-		namespace Internal
+		namespace Impl
 		{
 			struct Runner
 			{

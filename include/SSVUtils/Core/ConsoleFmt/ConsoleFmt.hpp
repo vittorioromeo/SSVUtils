@@ -72,33 +72,33 @@ namespace ssvu
 	namespace Console
 	{
 		/// @brief Returns a format string that resets the current formatting.
-		inline const auto& resetFmt() noexcept { return Internal::getStrResetFmt(); }
+		inline const auto& resetFmt() noexcept { return Impl::getStrResetFmt(); }
 
 		/// @brief Returns a format string that sets the current style.
 		/// @param mStyle Desired style. (ssvu::Console::Style member)
-		inline const auto& setStyle(Style mStyle) noexcept { return Internal::getStrStyle(mStyle); }
+		inline const auto& setStyle(Style mStyle) noexcept { return Impl::getStrStyle(mStyle); }
 
 		/// @brief Returns a format string that sets the current foreground color.
 		/// @param mStyle Desired color. (ssvu::Console::Color member)
-		inline const auto& setColorFG(Color mColor) noexcept { return Internal::getStrColorFG(mColor); }
+		inline const auto& setColorFG(Color mColor) noexcept { return Impl::getStrColorFG(mColor); }
 
 		/// @brief Returns a format string that sets the current background color.
 		/// @param mStyle Desired color. (ssvu::Console::Color member)
-		inline const auto& setColorBG(Color mColor) noexcept { return Internal::getStrColorBG(mColor); }
+		inline const auto& setColorBG(Color mColor) noexcept { return Impl::getStrColorBG(mColor); }
 
 		/// @brief Returns a format string that clears the console window.
-		inline const auto& clear() noexcept { return Internal::getStrClear(); }
+		inline const auto& clear() noexcept { return Impl::getStrClear(); }
 
 		/// @brief Returns true if valid console information is available.
-		inline bool isInfoValid() noexcept { return Internal::isInfoValid(); }
+		inline bool isInfoValid() noexcept { return Impl::isInfoValid(); }
 
 		namespace Info
 		{
 			/// @brief Returns then number of columns of the console screen.
-			inline SizeT getColumnCount() noexcept { return Internal::Info::getColumnCount(); }
+			inline SizeT getColumnCount() noexcept { return Impl::Info::getColumnCount(); }
 
 			/// @brief Returns then number of rows of the console screen.
-			inline SizeT getRowCount() noexcept { return Internal::Info::getRowCount(); }
+			inline SizeT getRowCount() noexcept { return Impl::Info::getRowCount(); }
 		}
 	}
 }

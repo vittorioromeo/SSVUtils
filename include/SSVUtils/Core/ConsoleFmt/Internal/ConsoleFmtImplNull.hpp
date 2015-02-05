@@ -12,7 +12,7 @@ namespace ssvu
 {
 	namespace Console
 	{
-		namespace Internal
+		namespace Impl
 		{
 			inline const auto& getStrResetFmt() noexcept		{ return getEmptyString(); }
 			inline const auto& getStrStyle(Style) noexcept		{ return getEmptyString(); }

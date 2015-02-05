@@ -9,9 +9,9 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		namespace Internal
+		namespace Impl
 		{
-			template<typename T> class ArgImpl : public Internal::BaseArg
+			template<typename T> class ArgImpl : public Impl::BaseArg
 			{
 				protected:
 					T value;
@@ -22,7 +22,7 @@ namespace ssvu
 			};
 		}
 
-		template<typename T> class Arg final : public Internal::ArgImpl<T>, public Internal::ETypeInfo<EType::Arg> { };
+		template<typename T> class Arg final : public Impl::ArgImpl<T>, public Impl::ETypeInfo<EType::Arg> { };
 	}
 }
 

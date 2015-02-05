@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			// Tuple checking implementation
 			struct TplIsHelper

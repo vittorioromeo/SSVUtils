@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<Type TType> struct ExistsFilter;
 			template<> struct ExistsFilter<Type::All>		{ inline static bool get(const CStat&) noexcept			{ return true; } };
@@ -93,7 +93,7 @@ namespace ssvu
 				{
 					CStat fileStat;
 					int err{stat(getCStr(), &fileStat)};
-					return err == 0 && Internal::ExistsFilter<TType>::get(fileStat);
+					return err == 0 && Impl::ExistsFilter<TType>::get(fileStat);
 				}
 
 				/// @brief Returns true if the path ends with a specified extension. Case-insensitive.

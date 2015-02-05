@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		namespace Internal
+		namespace Impl
 		{
 			constexpr const char* flagPrefixShort{"-"};
 			constexpr const char* flagPrefixLong{"--"};

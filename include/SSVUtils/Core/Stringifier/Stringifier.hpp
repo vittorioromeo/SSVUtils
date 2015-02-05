@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Streams a "formatting reset sequence" to mStream.
 		inline void resetFmt(std::ostream& mStream) { mStream << Console::resetFmt(); }
@@ -116,12 +116,12 @@ namespace ssvu
 	}
 
 	// Stringify common types
-	template<typename T> struct Stringifier : public Internal::StringifierDefault<T> { };
+	template<typename T> struct Stringifier : public Impl::StringifierDefault<T> { };
 
 	// Stringify C-style strings
-	template<SizeT TN> struct Stringifier<char[TN]> final : public Internal::StringifierDefault<char[TN]> { };
-	template<> struct Stringifier<char*> final : public Internal::StringifierDefault<char*> { };
-	template<> struct Stringifier<const char*> final : public Internal::StringifierDefault<const char*> { };
+	template<SizeT TN> struct Stringifier<char[TN]> final : public Impl::StringifierDefault<char[TN]> { };
+	template<> struct Stringifier<char*> final : public Impl::StringifierDefault<char*> { };
+	template<> struct Stringifier<const char*> final : public Impl::StringifierDefault<const char*> { };
 
 	// Stringify base types
 	#define SSVU_IMPL_DEFINE_BASE_STRINGIFIER(mType, mColor, mStyle, mPostfix) \
@@ -146,22 +146,22 @@ namespace ssvu
 	#undef SSVU_IMPL_DEFINE_BASE_STRINGIFIER
 
 	// Stringify tuples
-	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>> final : public Internal::StringifierTuple<std::pair<T1, T2>> { };
-	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>> final : public Internal::StringifierTuple<std::tuple<TArgs...>> { };
+	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>> final : public Impl::StringifierTuple<std::pair<T1, T2>> { };
+	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>> final : public Impl::StringifierTuple<std::tuple<TArgs...>> { };
 
 	// Stringify arrays
-	template<typename T, SizeT TN> struct Stringifier<T[TN]> final : public Internal::StringifierContainer<T[TN]> { };
-	template<typename T, SizeT TN> struct Stringifier<std::array<T, TN>> final : public Internal::StringifierContainer<std::array<T, TN>> { };
+	template<typename T, SizeT TN> struct Stringifier<T[TN]> final : public Impl::StringifierContainer<T[TN]> { };
+	template<typename T, SizeT TN> struct Stringifier<std::array<T, TN>> final : public Impl::StringifierContainer<std::array<T, TN>> { };
 
 	// Stringify linear containers (value type and allocator type)
-	template<template<typename, typename> class T, typename TV, typename TAlloc> struct Stringifier<T<TV, TAlloc>> final : public Internal::StringifierContainer<T<TV, TAlloc>> { };
+	template<template<typename, typename> class T, typename TV, typename TAlloc> struct Stringifier<T<TV, TAlloc>> final : public Impl::StringifierContainer<T<TV, TAlloc>> { };
 
 	// Stringify map-like containers
 	template<template<typename, typename, typename, typename...> class TM, typename TK, typename TV, typename TComp, typename TAlloc, typename... TArgs> struct Stringifier<TM<TK, TV, TComp, TAlloc, TArgs...>>
 	{
 		template<bool TFmt> inline static void impl(std::ostream& mStream, const TM<TK, TV, TComp, TAlloc, TArgs...>& mValue)
 		{
-			Internal::stringifyMapImpl<TFmt>(mStream, mValue, " -> ");
+			Impl::stringifyMapImpl<TFmt>(mStream, mValue, " -> ");
 		}
 	};
 
@@ -170,9 +170,9 @@ namespace ssvu
 	{
 		template<bool TFmt> inline static void impl(std::ostream& mStream, const T* mValue, EnableIf<!isSame<RemoveConst<T>, char>()>* = nullptr)
 		{
-			Internal::printBold<TFmt>(mStream, "[", Console::Color::Blue);
-			Internal::printFmt<TFmt>(mStream, mValue != nullptr ? static_cast<const void*>(mValue) : "nullptr", Console::Color::Cyan, Console::Style::Underline);
-			Internal::printBold<TFmt>(mStream, "]", Console::Color::Blue);
+			Impl::printBold<TFmt>(mStream, "[", Console::Color::Blue);
+			Impl::printFmt<TFmt>(mStream, mValue != nullptr ? static_cast<const void*>(mValue) : "nullptr", Console::Color::Cyan, Console::Style::Underline);
+			Impl::printBold<TFmt>(mStream, "]", Console::Color::Blue);
 		}
 	};
 }

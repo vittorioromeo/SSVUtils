@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<typename T> class GoImpl final : public Command
 		{
@@ -28,7 +28,7 @@ namespace ssvu
 		};
 	}
 
-	using Go = Internal::GoImpl<Timeline::Idx>;
+	using Go = Impl::GoImpl<Timeline::Idx>;
 }
 
 #endif

@@ -9,7 +9,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<typename T> class Recycler
 		{
@@ -56,11 +56,11 @@ namespace ssvu
 
 	template<typename T, typename TBase, typename... TArgs> inline UPtrRecPoly<T, TBase> makeUPtrRecPoly(TArgs&&... mArgs)
 	{
-		return {Internal::getRecycler<T>().create(SSVU_FWD(mArgs)...), [](TBase* mPtr){ Internal::getRecycler<T>().recycle(mPtr); }};
+		return {Impl::getRecycler<T>().create(SSVU_FWD(mArgs)...), [](TBase* mPtr){ Impl::getRecycler<T>().recycle(mPtr); }};
 	}
 	template<typename T, typename... TArgs> inline UPtrRec<T> makeUPtrRec(TArgs&&... mArgs) { return makeUPtrRecPoly<T, T>(SSVU_FWD(mArgs)...); }
 
-	namespace Internal
+	namespace Impl
 	{
 		template<typename T, typename TBase> struct MakerUPtrRecPoly
 		{
@@ -73,7 +73,7 @@ namespace ssvu
 
 	template<typename T, typename TBase, typename... TArgs, typename TC> inline T& getEmplaceUPtrRecPoly(TC& mContainer, TArgs&&... mArgs)
 	{
-		return Internal::getEmplaceUPtrImpl<T, TC, Internal::MakerUPtrRecPoly<T, TBase>>(mContainer, SSVU_FWD(mArgs)...);
+		return Impl::getEmplaceUPtrImpl<T, TC, Impl::MakerUPtrRecPoly<T, TBase>>(mContainer, SSVU_FWD(mArgs)...);
 	}
 	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceUPtrRec(TC& mContainer, TArgs&&... mArgs)
 	{

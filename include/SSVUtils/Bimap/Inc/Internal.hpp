@@ -9,8 +9,8 @@
 
 namespace ssvu
 {
-	/// @namespace Internal bimap implementation details.
-	namespace Internal
+	/// @namespace Impl bimap implementation details.
+	namespace Impl
 	{
 		/// @brief Comparison functor that compares pointer's values.
 		template<typename T> struct PtrComparator
@@ -19,7 +19,7 @@ namespace ssvu
 		};
 
 		/// @typedef Set of pointers, sorted by pointer values.
-		template<typename T> using PtrSet = std::set<const T*, Internal::PtrComparator<T>>;
+		template<typename T> using PtrSet = std::set<const T*, Impl::PtrComparator<T>>;
 
 		/// @brief Helper bimap struct.
 		template<typename T1, typename T2, typename T> struct BimapHelper;

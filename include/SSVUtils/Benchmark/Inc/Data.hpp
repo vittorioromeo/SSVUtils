@@ -14,7 +14,7 @@ namespace ssvu
 {
 	namespace Benchmark
 	{
-		namespace Internal
+		namespace Impl
 		{
 			/// @brief Benchmark data structure storing a time point and a name.
 			struct Data : public DataBase<Data>

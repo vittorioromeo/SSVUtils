@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		template<typename T> class ArgPack final : public Internal::BaseArgPack, public Internal::ETypeInfo<EType::ArgPack>
+		template<typename T> class ArgPack final : public Impl::BaseArgPack, public Impl::ETypeInfo<EType::ArgPack>
 		{
 			private:
 				std::vector<T> values;
@@ -20,7 +20,7 @@ namespace ssvu
 
 				inline void set(const std::vector<std::string>& mValues) override
 				{
-					for(const auto& v : mValues) values.emplace_back(Internal::Parser<T>::parse(v));
+					for(const auto& v : mValues) values.emplace_back(Impl::Parser<T>::parse(v));
 				}
 
 				inline auto begin() noexcept		{ return values.begin(); }

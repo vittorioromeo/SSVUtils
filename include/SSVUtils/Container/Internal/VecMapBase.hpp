@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Base CRTP class for vector-based sorted containers.
 		template<typename TDerived> class VecMapBase

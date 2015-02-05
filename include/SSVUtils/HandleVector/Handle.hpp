@@ -13,8 +13,8 @@ namespace ssvu
 		template<typename> friend class HandleVector;
 
 		public:
-			/// @typedef Templatized `Internal::Atom<T>` type;
-			using Atom = typename Internal::Atom<T>;
+			/// @typedef Templatized `Impl::Atom<T>` type;
+			using Atom = typename Impl::Atom<T>;
 
 		private:
 			/// @brief Internal pointer to the HandleVector.

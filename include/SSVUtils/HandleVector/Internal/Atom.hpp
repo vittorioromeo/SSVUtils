@@ -9,7 +9,7 @@ namespace ssvu
 {
 	template<typename> class HandleVector;
 
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Internal HandleVector class storing data and metadata.
 		template<typename T> class Atom

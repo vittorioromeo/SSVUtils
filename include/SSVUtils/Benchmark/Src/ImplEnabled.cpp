@@ -11,7 +11,7 @@ namespace ssvu
 {
 	namespace Benchmark
 	{
-		namespace Internal
+		namespace Impl
 		{
 			SSVU_INLINE auto& getStack() noexcept
 			{

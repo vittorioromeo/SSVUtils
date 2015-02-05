@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<typename T, typename TItrValue, typename TImpl> class HVecItrBase : public BaseAdaptorItrRnd<TItrValue, TImpl>
 		{

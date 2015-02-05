@@ -9,10 +9,10 @@ namespace ssvu
 {
 	namespace Json
 	{
-		template<typename T, typename TFwd> inline void extr(TFwd&& mV, T& mX) noexcept(noexcept(Internal::Cnv<RemoveAll<T>>::fromVal(SSVU_FWD(mV), mX))) { Internal::Cnv<RemoveAll<T>>::fromVal(SSVU_FWD(mV), mX); }
+		template<typename T, typename TFwd> inline void extr(TFwd&& mV, T& mX) noexcept(noexcept(Impl::Cnv<RemoveAll<T>>::fromVal(SSVU_FWD(mV), mX))) { Impl::Cnv<RemoveAll<T>>::fromVal(SSVU_FWD(mV), mX); }
 		template<typename T> inline void arch(Val& mV, T&& mX) noexcept(noexcept(mV = SSVU_FWD(mX))) { mV = SSVU_FWD(mX); }
 
-		namespace Internal
+		namespace Impl
 		{
 			struct CnvFuncHelper
 			{
@@ -62,12 +62,12 @@ namespace ssvu
 		template<typename T, typename TFwd> inline T getExtr(TFwd&& mV) { T result; extr(SSVU_FWD(mV), result); return result; }
 		template<typename T> inline Val getArch(T&& mX) { Val result; arch(result, SSVU_FWD(mX)); return result; }
 
-		template<typename... TArgs, typename T> inline void extrArr(T&& mV, TArgs&... mArgs)	{ Internal::CnvFuncHelper::hExtrArr<0>(SSVU_FWD(mV), mArgs...); }
-		template<typename... TArgs> inline void archArr(Val& mV, TArgs&&... mArgs)				{ mV = Arr{}; Internal::CnvFuncHelper::hArchArr<0>(mV, SSVU_FWD(mArgs)...); }
+		template<typename... TArgs, typename T> inline void extrArr(T&& mV, TArgs&... mArgs)	{ Impl::CnvFuncHelper::hExtrArr<0>(SSVU_FWD(mV), mArgs...); }
+		template<typename... TArgs> inline void archArr(Val& mV, TArgs&&... mArgs)				{ mV = Arr{}; Impl::CnvFuncHelper::hArchArr<0>(mV, SSVU_FWD(mArgs)...); }
 		template<typename... TArgs> inline Val getArchArr(TArgs&&... mArgs)						{ Val result; archArr(result, SSVU_FWD(mArgs)...); return result; }
 
-		template<typename... TArgs, typename T> inline void extrObj(T&& mV, TArgs&... mArgs)	{ Internal::CnvFuncHelper::hExtrObj(SSVU_FWD(mV), mArgs...); }
-		template<typename... TArgs> inline void archObj(Val& mV, TArgs&&... mArgs)				{ mV = Obj{}; Internal::CnvFuncHelper::hArchObj(mV, SSVU_FWD(mArgs)...); }
+		template<typename... TArgs, typename T> inline void extrObj(T&& mV, TArgs&... mArgs)	{ Impl::CnvFuncHelper::hExtrObj(SSVU_FWD(mV), mArgs...); }
+		template<typename... TArgs> inline void archObj(Val& mV, TArgs&&... mArgs)				{ mV = Obj{}; Impl::CnvFuncHelper::hArchObj(mV, SSVU_FWD(mArgs)...); }
 		template<typename... TArgs> inline Val getArchObj(TArgs&&... mArgs)						{ Val result; archObj(result, SSVU_FWD(mArgs)...); return result; }
 
 		template<typename T> inline void cnv(const Val& mV, T& mX) noexcept(noexcept(extr(mV, mX)))			{ extr(mV, mX); }

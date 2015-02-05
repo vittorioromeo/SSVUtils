@@ -15,7 +15,7 @@ namespace ssvu
 	/// @tparam T2 Key/Value type 2
 	template<typename T1, typename T2> class Bimap
 	{
-		template<typename, typename, typename> friend struct Internal::BimapHelper;
+		template<typename, typename, typename> friend struct Impl::BimapHelper;
 
 		public:
 			/// @typedef Type of pair.
@@ -36,10 +36,10 @@ namespace ssvu
 			Storage storage;
 
 			/// @brief Set of the first type.
-			Internal::PtrSet<T1> set1;
+			Impl::PtrSet<T1> set1;
 
 			/// @brief Set of the second type.
-			Internal::PtrSet<T2> set2;
+			Impl::PtrSet<T2> set2;
 
 			/// @brief Internal method to get a BMPair from a pointer.
 			template<typename T> inline constexpr BMPair& getPairImpl(const T* mPtr) const noexcept { return *(const_cast<BMPair*>(reinterpret_cast<const BMPair*>(mPtr))); }
@@ -66,7 +66,7 @@ namespace ssvu
 			/// @details Throws an `std::out_of_range` exception if the value isn't found.
 			template<typename T> const auto& atImpl(const T& mKey) const noexcept
 			{
-				const auto& set(Internal::BimapHelper<T1, T2, T>::getSetCurrent(*this));
+				const auto& set(Impl::BimapHelper<T1, T2, T>::getSetCurrent(*this));
 				const auto& itr(this->find(mKey));
 				if(itr == std::end(set)) throw std::out_of_range{"mKey was not found in set"};
 				return getItem(*itr);

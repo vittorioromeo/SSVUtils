@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Returns an unique color based of `mStr`'s hash.
 		inline const auto& getUniqueColor(const std::string& mStr)

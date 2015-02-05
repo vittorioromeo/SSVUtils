@@ -5,11 +5,16 @@
 #ifndef SSVU_JSON_IO_WRITER_INL
 #define SSVU_JSON_IO_WRITER_INL
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Json/Common/Common.hpp"
+#include "SSVUtils/Json/Val/Val.hpp"
+#include "SSVUtils/Json/Io/Writer.hpp"
+
 namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<typename TWS> inline void Writer<TWS>::write(const Val& mVal)
 			{

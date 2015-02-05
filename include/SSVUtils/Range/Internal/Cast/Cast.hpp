@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Cast ptr iterator adaptor implementation.
 		template<typename T> struct AdaptorImplCastPtr
@@ -31,14 +31,14 @@ namespace ssvu
 	/// @details The cast range automatically dereferences pointer-like objects and casts them to `T`.
 	template<typename T, typename TC> inline auto asRangeCastPtr(TC& mContainer) noexcept
 	{
-		return makeRange(Internal::makeItrCastPtr<T>(std::begin(mContainer)), Internal::makeItrCastPtr<T>(std::end(mContainer)));
+		return makeRange(Impl::makeItrCastPtr<T>(std::begin(mContainer)), Impl::makeItrCastPtr<T>(std::end(mContainer)));
 	}
 
 	/// @brief Creates and returns a const cast iterator range.
 	/// @details The cast range automatically dereferences pointer-like objects and casts them to `const T`.
 	template<typename T, typename TC> inline auto asRangeCastPtr(const TC& mContainer) noexcept
 	{
-		return makeRange(Internal::makeItrCastPtrConst<T>(std::cbegin(mContainer)), Internal::makeItrCastPtrConst<T>(std::cend(mContainer)));
+		return makeRange(Impl::makeItrCastPtrConst<T>(std::cbegin(mContainer)), Impl::makeItrCastPtrConst<T>(std::cend(mContainer)));
 	}
 }
 

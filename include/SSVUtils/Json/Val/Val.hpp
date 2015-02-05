@@ -5,6 +5,10 @@
 #ifndef SSVU_JSON_VAL
 #define SSVU_JSON_VAL
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/UnionVariant/UnionVariant.hpp"
+#include "SSVUtils/Json/Common/Common.hpp"
+#include "SSVUtils/Json/Num/Num.hpp"
 #include "SSVUtils/Json/Val/Internal/Fwd.hpp"
 #include "SSVUtils/Json/Val/Internal/ItrHelper.hpp"
 
@@ -14,12 +18,12 @@ namespace ssvu
 	{
 		class Val
 		{
-			template<typename> friend struct Internal::Cnv;
-			template<typename> friend struct Internal::Chk;
-			template<typename> friend struct Internal::AsHelper;
-			friend struct Internal::TplCnvHelper;
-			friend struct Internal::TplIsHelper;
-			friend struct Internal::CnvFuncHelper;
+			template<typename> friend struct Impl::Cnv;
+			template<typename> friend struct Impl::Chk;
+			template<typename> friend struct Impl::AsHelper;
+			friend struct Impl::TplCnvHelper;
+			friend struct Impl::TplIsHelper;
+			friend struct Impl::CnvFuncHelper;
 
 			public:
 				/// @brief Internal storage type.
@@ -27,15 +31,15 @@ namespace ssvu
 				enum class Type{TObj, TArr, TStr, TNum, TBln, TNll};
 
 				/// @typedef `Obj` implementation type, templatized with `Val`.
-				using Obj = Internal::ObjImpl<Val>;
+				using Obj = Impl::ObjImpl<Val>;
 
 				/// @typedef `Arr` implementation type, templatized with `Val`.
-				using Arr = Internal::ArrImpl<Val>;
+				using Arr = Impl::ArrImpl<Val>;
 
 			private:
 				// Shortcut typedefs
-				using Num = Internal::Num;
-				using VIH = Internal::ItrHelper;
+				using Num = Impl::Num;
+				using VIH = Impl::ItrHelper;
 
 				/// @brief Current storage type.
 				Type type{Type::TNll};
@@ -101,7 +105,7 @@ namespace ssvu
 				/// @brief Checks the stored type. Doesn't check number representation.
 				template<typename T> inline bool isNoNum() const noexcept
 				{
-					return Internal::ChkNoNum<RemoveAll<T>>::is(*this);
+					return Impl::ChkNoNum<RemoveAll<T>>::is(*this);
 				}
 
 			public:
@@ -119,10 +123,10 @@ namespace ssvu
 
 				/// @brief Sets the `Val`'s internal value to `mX`.
 				///	@details The current stored value is deinitialized first.
-				template<typename T> inline void set(T&& mX) noexcept(noexcept(Internal::Cnv<RemoveAll<T>>::toVal(std::declval<Val&>(), SSVU_FWD(mX))))
+				template<typename T> inline void set(T&& mX) noexcept(noexcept(Impl::Cnv<RemoveAll<T>>::toVal(std::declval<Val&>(), SSVU_FWD(mX))))
 				{
 					deinitCurrent();
-					Internal::Cnv<RemoveAll<T>>::toVal(*this, SSVU_FWD(mX));
+					Impl::Cnv<RemoveAll<T>>::toVal(*this, SSVU_FWD(mX));
 				}
 
 				/// @brief Checks if the stored internal value is of type `T`.
@@ -130,20 +134,20 @@ namespace ssvu
 				///	Any other numeric type will not work.
 				template<typename T> inline bool is() const noexcept
 				{
-					return Internal::Chk<RemoveAll<T>>::is(*this);
+					return Impl::Chk<RemoveAll<T>>::is(*this);
 				}
 
 				/// @brief Gets the internal value as `T`. (non-const version)
 				/// @details Returns a copy for most types, a reference for `Obj`, `Arr` and `Str`.
-				template<typename T> auto as() & -> decltype(Internal::AsHelper<T>::as(*this));
+				template<typename T> auto as() & -> decltype(Impl::AsHelper<T>::as(*this));
 
 				/// @brief Gets the internal value as `T`. (const version)
 				/// @details Returns a copy for most types, a const reference for `Obj`, `Arr` and `Str`.
-				template<typename T> auto as() const& -> decltype(Internal::AsHelper<T>::as(*this));
+				template<typename T> auto as() const& -> decltype(Impl::AsHelper<T>::as(*this));
 
 				/// @brief Gets the internal value as `T`. (rvalue version)
 				/// @details Returns a copy for most types, a const reference for `Obj`, `Arr` and `Str`.
-				template<typename T> auto as() && -> decltype(Internal::AsHelper<T>::as(*this));
+				template<typename T> auto as() && -> decltype(Impl::AsHelper<T>::as(*this));
 
 				// "Implicit" `set` function done via `operator=` overloading
 				auto& operator=(const Val& mV) noexcept;

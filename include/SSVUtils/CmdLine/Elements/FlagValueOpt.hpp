@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		template<typename T> class FlagValueOpt final : public Internal::FlagValueImpl<T>, public Internal::ETypeInfo<EType::FlagValueOpt>
+		template<typename T> class FlagValueOpt final : public Impl::FlagValueImpl<T>, public Impl::ETypeInfo<EType::FlagValueOpt>
 		{
 			private:
 				T valueDefault;
@@ -17,12 +17,12 @@ namespace ssvu
 
 			public:
 				inline FlagValueOpt(const std::string& mNameShort, const std::string& mNameLong, const T& mValueDefault) noexcept
-					: Internal::FlagValueImpl<T>{mNameShort, mNameLong}, valueDefault{mValueDefault} { }
+					: Impl::FlagValueImpl<T>{mNameShort, mNameLong}, valueDefault{mValueDefault} { }
 
 				inline void set(const std::string& mValue) override	{ FlagValue<T>::set(mValue); active = true; }
 				inline auto get() const noexcept					{ return active ? FlagValue<T>::get() : valueDefault; }
 
-				inline std::string getUsageStr() const override { return "[OPT " + Internal::BaseFlag::getNameShort() + "=(...) || OPT " + Internal::BaseFlag::getNameLong() + "=(...)]"; }
+				inline std::string getUsageStr() const override { return "[OPT " + Impl::BaseFlag::getNameShort() + "=(...) || OPT " + Impl::BaseFlag::getNameLong() + "=(...)]"; }
 		};
 	}
 }

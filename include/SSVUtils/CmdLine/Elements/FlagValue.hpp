@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<typename T> class FlagValueImpl : public BaseFlagValue
 			{
@@ -26,11 +26,11 @@ namespace ssvu
 			};
 		}
 
-		template<typename T> class FlagValue final : public Internal::FlagValueImpl<T>, public Internal::ETypeInfo<EType::FlagValue>
+		template<typename T> class FlagValue final : public Impl::FlagValueImpl<T>, public Impl::ETypeInfo<EType::FlagValue>
 		{
 			public:
 				inline FlagValue(const std::string& mNameShort, const std::string& mNameLong) noexcept
-					: Internal::FlagValueImpl<T>{mNameShort, mNameLong} { }
+					: Impl::FlagValueImpl<T>{mNameShort, mNameLong} { }
 		};
 	}
 }

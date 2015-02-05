@@ -22,7 +22,7 @@ namespace ssvu
 
 		/// @brief Ends the current benchmark timer and returns the data.
 		/// @return Returns the elapsed time as a std::chrono::milliseconds.
-		Internal::Data getEndData();
+		Impl::Data getEndData();
 
 		/// @brief Ends the current benchmark timer and logs the elapsed time.
 		void endLo();
@@ -39,7 +39,7 @@ namespace ssvu
 		/// @brief Stops and logs on `ssvu::lo()` the accumulated time of the `mGroup` benchmark group.
 		void groupEndLo(const std::string& mGroup);
 
-		namespace Internal
+		namespace Impl
 		{
 			/// @brief RAII struct used for LOG_SCOPE_EXIT benchmarks.
 			struct LogScopeExit

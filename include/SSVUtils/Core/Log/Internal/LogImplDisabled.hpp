@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		inline const auto& getUniqueColor(const std::string&)
 		{

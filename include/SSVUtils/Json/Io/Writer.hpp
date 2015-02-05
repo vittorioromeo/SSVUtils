@@ -5,11 +5,15 @@
 #ifndef SSVU_JSON_IO_WRITER
 #define SSVU_JSON_IO_WRITER
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Json/Common/Common.hpp"
+#include "SSVUtils/Json/Val/Val.hpp"
+
 namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<typename TWS = WSPretty> class Writer
 			{

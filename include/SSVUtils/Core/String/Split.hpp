@@ -17,7 +17,7 @@ namespace ssvu
 	/// @param mSeparator Separator to split at. Every occurrence of the separator will cause a split.
 	template<Split TM = Split::Normal, typename T> inline void split(std::vector<std::string>& mTarget, const std::string& mStr, const T& mSeparator)
 	{
-		Internal::SplitHelper<T, TM>::split(mTarget, mStr, mSeparator);
+		Impl::SplitHelper<T, TM>::split(mTarget, mStr, mSeparator);
 	}
 
 	/// @brief Splits a string in smaller strings, returning a vector<string>.

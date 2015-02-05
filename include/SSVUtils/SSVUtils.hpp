@@ -45,8 +45,9 @@
 // * ModuleName/Impl/...
 // * zip iterator
 // * experiment/consider reimplementing vector/map/flatmap with no exceptions and only asserts
-// * Internal:: -> Impl:: ?
 // * remove "include/" folder
+
+// TODO: Internal/ -> Impl/ ?
 
 // * .inl and .cpp FILES and SSVU_INLINE macro
 /*

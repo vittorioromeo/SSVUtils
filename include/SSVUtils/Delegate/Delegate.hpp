@@ -11,7 +11,7 @@
 namespace ssvu
 {
 	template<typename> class Delegate;
-	namespace Internal { template<typename, typename...> struct DelegateHelper; }
+	namespace Impl { template<typename, typename...> struct DelegateHelper; }
 
 	/// @brief C#-like delegate class.
 	/// @details A collection of functions with the same signature that can be dynamically changed.
@@ -19,7 +19,7 @@ namespace ssvu
 	/// @tparam TArgs Function signature variadic arguments.
 	template<typename TReturn, typename... TArgs> class Delegate<TReturn(TArgs...)>
 	{
-		template<typename, typename...> friend struct Internal::DelegateHelper;
+		template<typename, typename...> friend struct Impl::DelegateHelper;
 
 		private:
 			using FuncType = Func<TReturn(TArgs...)>;
@@ -51,7 +51,7 @@ namespace ssvu
 			/// @return void or std::vector containing return values from the functions
 			inline auto operator()(TArgs... mArgs)
 			{
-				return Internal::DelegateHelper<TReturn, TArgs...>::exec(*this, mArgs...);
+				return Impl::DelegateHelper<TReturn, TArgs...>::exec(*this, mArgs...);
 			}
 
 			/// @brief Clears all the functions from the delegate.
@@ -61,7 +61,7 @@ namespace ssvu
 			inline bool isEmpty() const noexcept { return funcs.empty(); }
 	};
 
-	namespace Internal
+	namespace Impl
 	{
 		template<typename TReturn, typename... TArgs> struct DelegateHelper
 		{

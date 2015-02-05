@@ -11,7 +11,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<bool> class WaitLoop;
 		template<typename> class GoImpl;
@@ -21,8 +21,8 @@ namespace ssvu
 	{
 		friend class Do;
 		friend class Wait;
-		template<bool> friend class Internal::WaitLoop;
-		template<typename> friend class Internal::GoImpl;
+		template<bool> friend class Impl::WaitLoop;
+		template<typename> friend class Impl::GoImpl;
 
 		public:
 			using Idx = int;

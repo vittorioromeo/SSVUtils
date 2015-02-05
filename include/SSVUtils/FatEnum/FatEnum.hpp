@@ -32,7 +32,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<SizeT, typename> struct FatEnumMgrImpl;
 
@@ -51,7 +51,7 @@ namespace ssvu
 	{ \
 		SSVPP_FOREACH(SSVU_FATENUM_IMPL_MK_ELEM_DISPATCH(mDispatch), SSVPP_EMPTY(), __VA_ARGS__) \
 	}; \
-	template<> struct mMgr<mName> final : public ssvu::Internal::FatEnumMgrImpl<SSVPP_ARGCOUNT(__VA_ARGS__), mMgr<mName>> \
+	template<> struct mMgr<mName> final : public ssvu::Impl::FatEnumMgrImpl<SSVPP_ARGCOUNT(__VA_ARGS__), mMgr<mName>> \
 	{ \
 		template<mName TVal> inline static const auto& getAsStringImpl() noexcept; \
 		inline static const auto& getBimap() noexcept \

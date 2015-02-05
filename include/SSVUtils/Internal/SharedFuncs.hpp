@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		template<typename TF1, typename TF2, typename TF3> inline void refreshImpl(SizeT& mSize, SizeT& mSizeNext, const TF1& mFAliveChk, const TF2& mFSwap, const TF3& mFDeinit) noexcept
 		{

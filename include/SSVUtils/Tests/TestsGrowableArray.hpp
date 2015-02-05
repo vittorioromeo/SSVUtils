@@ -26,7 +26,7 @@ SSVUT_TEST(GrowableArrayTests)
 	};
 
 	using namespace ssvu;
-	using namespace ssvu::Internal;
+	using namespace ssvu::Impl;
 
 	SSVUT_EXPECT_OP(cc, ==, 0);
 	SSVUT_EXPECT_OP(dc, ==, 0);

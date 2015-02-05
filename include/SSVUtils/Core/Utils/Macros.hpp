@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Internal structure with `isStandardLayout` static assertion used for "baseptr" macros.
 		template<typename T> struct StandardLayoutChecker
@@ -16,7 +16,7 @@ namespace ssvu
 			using Type = T;
 		};
 
-		template<typename T> using StandardLayoutCheckerT = typename ssvu::Internal::StandardLayoutChecker<T>::Type;
+		template<typename T> using StandardLayoutCheckerT = typename ssvu::Impl::StandardLayoutChecker<T>::Type;
 
 		template<typename... > struct Voider { using Type = void; };
 		template<typename... TArgs> using VoidT = typename Voider<TArgs...>::Type;
@@ -89,7 +89,7 @@ namespace ssvu
 /// Assumes that `mMemberPtr` actually points to an inner member of an existing `mType` instance.
 /// Must end with semicolon.
 #define SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(mType, mMemberPtr, mMemberName) \
-	reinterpret_cast<const ssvu::Internal::StandardLayoutCheckerT<mType>*>(reinterpret_cast<const char*>(mMemberPtr) - offsetof(mType, mMemberName))
+	reinterpret_cast<const ssvu::Impl::StandardLayoutCheckerT<mType>*>(reinterpret_cast<const char*>(mMemberPtr) - offsetof(mType, mMemberName))
 
 /// @macro Gets the base `mType*` structure pointer from a `mMemberPointer` pointer to a member of `mType`, with member name `mMemberName`.
 /// @details Requires `mType` to be a standard-layout type. Uses offsetof(...) internally.

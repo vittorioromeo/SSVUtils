@@ -5,6 +5,8 @@
 #ifndef SSVU_JSON_IO
 #define SSVU_JSON_IO
 
+#include "SSVUtils/Core/Core.hpp"
+
 namespace ssvu
 {
 	namespace Json
@@ -30,7 +32,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<typename TRS> inline bool tryParse(Val& mVal, Reader<TRS>& mReader)
 			{

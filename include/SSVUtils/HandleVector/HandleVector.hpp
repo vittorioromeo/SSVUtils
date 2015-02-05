@@ -21,21 +21,21 @@ namespace ssvu
 		template<typename> friend class Handle;
 
 		private:
-			using Stat = Internal::HVStat;
-			using Mark = Internal::HVMark;
+			using Stat = Impl::HVStat;
+			using Mark = Impl::HVMark;
 
 		public:
-			/// @typedef Templatized `Internal::Atom<T>` type.
-			using Atom = typename Internal::Atom<T>;
+			/// @typedef Templatized `Impl::Atom<T>` type.
+			using Atom = typename Impl::Atom<T>;
 
 			/// @typedef Pointer-based fast iterator type.
-			using ItrFast = Internal::HVecItrFast<T>;
+			using ItrFast = Impl::HVecItrFast<T>;
 
 			/// @typedef Index-based safe iterator type.
-			using ItrIdx = Internal::HVecItrIdx<T>;
+			using ItrIdx = Impl::HVecItrIdx<T>;
 
 			/// @typedef Index-based safe atom iterator type.
-			using ItrAtom = Internal::HVecItrAtom<T>;
+			using ItrAtom = Impl::HVecItrAtom<T>;
 
 		private:
 			/// @brief Internal atom storage.
@@ -174,7 +174,7 @@ namespace ssvu
 			/// @details Dead atoms are deallocated and destroyed. Newly created atoms are now taken into account.
 			inline void refresh() noexcept(isNothrowDtor<T>())
 			{
-				Internal::refreshImpl(size, sizeNext,
+				Impl::refreshImpl(size, sizeNext,
 					[this](SizeT mI){ return isAliveAt(mI); },
 					[this](SizeT mD, SizeT mA)
 					{
@@ -228,7 +228,7 @@ namespace ssvu
 			/// @details Will not work correctly if the HandleVector gets resized (either by reserving or adding elements).
 			inline constexpr Atom& getAtomFromData(T& mData) noexcept
 			{
-				return *(Internal::Atom<T>::getAtomFromPtr(&mData));
+				return *(Impl::Atom<T>::getAtomFromPtr(&mData));
 			}
 
 			/// @brief Returns a reference to `mHandle`'s atom.

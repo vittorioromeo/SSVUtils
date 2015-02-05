@@ -16,7 +16,7 @@ namespace ssvu
 {
 	namespace Console
 	{
-		namespace Internal
+		namespace Impl
 		{
 			constexpr const char* prefix{"\033["};
 			constexpr const char* postfix{"m"};

@@ -6,7 +6,7 @@
 #define SSVU_JSON_VAL_INTERNAL_CNV
 
 /// @macro Class mixin that allows SSVJ converters to access the current class's private members.
-#define SSVJ_CNV_FRIEND() template<typename> friend struct ssvu::Json::Internal::Cnv
+#define SSVJ_CNV_FRIEND() template<typename> friend struct ssvu::Json::Impl::Cnv
 
 /// @macro Shortcut to serialize a class member as an object with the same name as the member.
 #define SSVJ_CNV_OBJ_AUTO(mValue, mVar) #mVar, mValue.mVar
@@ -18,7 +18,7 @@
 	{ \
 		namespace Json \
 		{ \
-			namespace Internal
+			namespace Impl
 
 /// @macro Closes a namespace for user-defined converters implementation.
 /// @details Must be called after `SSVU_CNV_NAMESPACE()`. Semicolon must not be used.
@@ -39,7 +39,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		namespace Internal
+		namespace Impl
 		{
 			#define SSVJ_DEFINE_CNV_NUM(mType) \
 				template<> struct Cnv<mType> final \

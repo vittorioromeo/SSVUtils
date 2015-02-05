@@ -10,7 +10,7 @@
 
 namespace ssvu
 {
-	namespace Internal
+	namespace Impl
 	{
 		/// @brief Base implementation for `UnionVariant` types.
 		template<typename... TTs> class UnionVariantBase
@@ -42,7 +42,7 @@ namespace ssvu
 	/// @brief Union variant class that can store one of any `TTs` types at one time.
 	/// @details Intended for use with types that require construction and destruction.
 	/// In debug mode, checks are performed to make sure the data was correctly constructed/destructed.
-	template<typename... TTs> class UnionVariant : public Internal::UnionVariantBase<TTs...>
+	template<typename... TTs> class UnionVariant : public Impl::UnionVariantBase<TTs...>
 	{
 		private:
 			// If debug mode is enabled, store and check a "clean" storage flag for additional safety and debugging ease
@@ -86,9 +86,9 @@ namespace ssvu
 	/// @brief Union variant class that can store one of any `TTs` POD types at one time.
 	/// @details Intended for use only with POD types. Data cannot be deinitialized.
 	/// No checks are performed on construction/destruction of the data.
-	template<typename... TTs> class UnionVariantPOD : public Internal::UnionVariantBase<TTs...>
+	template<typename... TTs> class UnionVariantPOD : public Impl::UnionVariantBase<TTs...>
 	{
-		SSVU_ASSERT_STATIC_NM(Internal::PODChecker<TTs...>());
+		SSVU_ASSERT_STATIC_NM(Impl::PODChecker<TTs...>());
 
 		public:
 			/// @brief Constructs and sets the internal data to `T`.

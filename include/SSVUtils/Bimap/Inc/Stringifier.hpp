@@ -15,18 +15,18 @@ namespace ssvu
 		template<bool TFmt> inline static void impl(std::ostream& mStream, const Bimap<T1, T2>& mValue)
 		{
 			auto itrBegin(std::begin(mValue));
-			if(itrBegin == std::end(mValue)) { Internal::printBold<TFmt>(mStream, "{ EMPTY }"); return; }
+			if(itrBegin == std::end(mValue)) { Impl::printBold<TFmt>(mStream, "{ EMPTY }"); return; }
 
-			Internal::printBold<TFmt>(mStream, "{");
+			Impl::printBold<TFmt>(mStream, "{");
 
-			Internal::repeatPenultimate(itrBegin, std::end(mValue), [&mStream](const auto& mE)
+			Impl::repeatPenultimate(itrBegin, std::end(mValue), [&mStream](const auto& mE)
 			{
-				Internal::callStringifyImpl<TFmt>(mStream, mE->first);
-				Internal::printBold<TFmt>(mStream, " <-> ");
-				Internal::callStringifyImpl<TFmt>(mStream, mE->second);
-			}, [&mStream](const auto&){ Internal::printBold<TFmt>(mStream, "\n"); });
+				Impl::callStringifyImpl<TFmt>(mStream, mE->first);
+				Impl::printBold<TFmt>(mStream, " <-> ");
+				Impl::callStringifyImpl<TFmt>(mStream, mE->second);
+			}, [&mStream](const auto&){ Impl::printBold<TFmt>(mStream, "\n"); });
 
-			Internal::printBold<TFmt>(mStream, "}");
+			Impl::printBold<TFmt>(mStream, "}");
 		}
 	};
 }

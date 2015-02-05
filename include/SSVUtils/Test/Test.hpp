@@ -21,20 +21,20 @@
 
 /// @macro Generates the test struct.
 #define SSVUT_IMPL_GENERATE_STRUCT(mName) \
-	struct SSVUT_IMPL_GET_NAME_TYPE(mName) final : public ::ssvu::Test::Internal::TestBase \
+	struct SSVUT_IMPL_GET_NAME_TYPE(mName) final : public ::ssvu::Test::Impl::TestBase \
 	{ \
-		inline SSVUT_IMPL_GET_NAME_TYPE(mName) () : ::ssvu::Test::Internal::TestBase{SSVPP_TOSTR(mName), SSVPP_TOSTR(__LINE__), SSVPP_TOSTR(__FILE__)} { } \
+		inline SSVUT_IMPL_GET_NAME_TYPE(mName) () : ::ssvu::Test::Impl::TestBase{SSVPP_TOSTR(mName), SSVPP_TOSTR(__LINE__), SSVPP_TOSTR(__FILE__)} { } \
 		virtual void run() const override; \
 	}; \
 	static SSVUT_IMPL_GET_NAME_TYPE(mName) SSVUT_IMPL_GET_NAME_INSTANCE(mName);
 
 /// @macro Generates the test runner.
 #define SSVUT_IMPL_GENERATE_RUNNER(mName) \
-	static ::ssvu::Test::Internal::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName) {[] \
+	static ::ssvu::Test::Impl::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName) {[] \
 	{ \
-		if(::ssvu::Test::Internal::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) return; \
-		::ssvu::Test::Internal::setTestExecuted(SSVUT_IMPL_GET_KEY(mName)); \
-		ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Internal::getTestStorage(), SSVUT_IMPL_GET_NAME_INSTANCE(mName)); \
+		if(::ssvu::Test::Impl::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) return; \
+		::ssvu::Test::Impl::setTestExecuted(SSVUT_IMPL_GET_KEY(mName)); \
+		ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Impl::getTestStorage(), SSVUT_IMPL_GET_NAME_INSTANCE(mName)); \
 	}};
 
 #ifndef SSVUT_DISABLE
@@ -48,18 +48,18 @@
 	#define SSVUT_EXPECT(mExpr) \
 		do \
 		{ \
-			if(!(mExpr)) throw ::ssvu::Test::Internal::TestFailException{this, #mExpr, SSVPP_TOSTR(__LINE__), ::ssvu::toStr(mExpr)}; \
+			if(!(mExpr)) throw ::ssvu::Test::Impl::TestFailException{this, #mExpr, SSVPP_TOSTR(__LINE__), ::ssvu::toStr(mExpr)}; \
 		} while(false)
 
 	/// @macro Test check. If `mExpr mOp mRes` is false, the test fails.
 	#define SSVUT_EXPECT_OP(mExpr, mOp, mRes) \
 		do \
 		{ \
-			if(!(mExpr mOp mRes)) throw ::ssvu::Test::Internal::TestFailException{this, #mExpr, SSVPP_TOSTR(__LINE__), ::ssvu::toStr(mExpr), ::ssvu::toStr(mRes)}; \
+			if(!(mExpr mOp mRes)) throw ::ssvu::Test::Impl::TestFailException{this, #mExpr, SSVPP_TOSTR(__LINE__), ::ssvu::toStr(mExpr), ::ssvu::toStr(mRes)}; \
 		} while(false)
 
 	/// @macro Runs all tests.
-	#define SSVUT_RUN() ::ssvu::Test::Internal::runAllTests()
+	#define SSVUT_RUN() ::ssvu::Test::Impl::runAllTests()
 
 	#include "SSVUtils/Test/Internal/TestImplEnabled.hpp"
 #else

@@ -9,13 +9,13 @@ namespace ssvu
 {
 	namespace CmdLine
 	{
-		class Flag final : public Internal::BaseFlag, public Internal::ETypeInfo<EType::Flag>
+		class Flag final : public Impl::BaseFlag, public Impl::ETypeInfo<EType::Flag>
 		{
 			private:
 				bool active{false};
 
 			public:
-				inline Flag(const std::string& mNameShort, const std::string& mNameLong) noexcept : Internal::BaseFlag{mNameShort, mNameLong} { }
+				inline Flag(const std::string& mNameShort, const std::string& mNameLong) noexcept : Impl::BaseFlag{mNameShort, mNameLong} { }
 
 				inline auto& operator=(bool mActive) noexcept	{ active = mActive; return *this; }
 				inline operator bool() const noexcept			{ return active; }

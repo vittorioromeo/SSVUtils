@@ -12,7 +12,7 @@ namespace ssvu
 {
 	namespace Benchmark
 	{
-		namespace Internal
+		namespace Impl
 		{
 			/// @brief CRTP struct for data classes' shared methods.
 			template<typename TDerived> struct DataBase

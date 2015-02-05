@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace FileSystem
 	{
-		namespace Internal
+		namespace Impl
 		{
 			template<Mode TM, Type TT, Pick TP, Sort TS> inline void scan(std::vector<Path>& mTarget, const Path& mPath, const std::string& mDesired)
 			{
@@ -29,7 +29,7 @@ namespace ssvu
 						if(bufPath.exists<Type::Folder>())
 						{
 							if(TT == Type::All || TT == Type::Folder) { mTarget.emplace_back(bufPath); }
-							if(TM == Mode::Recurse) { Internal::scan<Mode::Recurse, TT, TP, TS>(mTarget, bufPath, mDesired); }
+							if(TM == Mode::Recurse) { Impl::scan<Mode::Recurse, TT, TP, TS>(mTarget, bufPath, mDesired); }
 						}
 						else if(TT == Type::All || TT == Type::File)
 						{
