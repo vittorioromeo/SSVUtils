@@ -6,7 +6,7 @@
 #define SSVU_JSON_VAL
 
 #include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/UnionVariant/UnionVariant.hpp"
+#include "SSVUtils/Union/Union.hpp"
 #include "SSVUtils/Json/Common/Common.hpp"
 #include "SSVUtils/Json/Num/Num.hpp"
 #include "SSVUtils/Json/Val/Internal/Fwd.hpp"
@@ -45,13 +45,13 @@ namespace ssvu
 				Type type{Type::TNll};
 
 				/// @brief Checked union storage for `Val` fundamental types.
-				UnionVariant<Obj, Arr, Str, Num, Bln> h;
+				Union<Obj, Arr, Str, Num, Bln> h;
 
 				// Perfect-forwarding setters
-				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{SSVU_FWD(mX)}))	{ type = Type::TObj; h.init<Obj>(SSVU_FWD(mX)); }
-				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{SSVU_FWD(mX)}))	{ type = Type::TArr; h.init<Arr>(SSVU_FWD(mX)); }
-				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{SSVU_FWD(mX)}))	{ type = Type::TStr; h.init<Str>(SSVU_FWD(mX)); }
-				template<typename T> inline void setNum(T&& mX) noexcept(noexcept(Num{SSVU_FWD(mX)}))	{ type = Type::TNum; h.init<Num>(SSVU_FWD(mX)); }
+				template<typename T> inline void setObj(T&& mX) noexcept(noexcept(Obj{FWD(mX)}))	{ type = Type::TObj; h.init<Obj>(FWD(mX)); }
+				template<typename T> inline void setArr(T&& mX) noexcept(noexcept(Arr{FWD(mX)}))	{ type = Type::TArr; h.init<Arr>(FWD(mX)); }
+				template<typename T> inline void setStr(T&& mX) noexcept(noexcept(Str{FWD(mX)}))	{ type = Type::TStr; h.init<Str>(FWD(mX)); }
+				template<typename T> inline void setNum(T&& mX) noexcept(noexcept(Num{FWD(mX)}))	{ type = Type::TNum; h.init<Num>(FWD(mX)); }
 
 				// Basic setters
 				inline void setBln(Bln mX) noexcept	{ type = Type::TBln; h.init<Bln>(mX); }
@@ -116,17 +116,17 @@ namespace ssvu
 				inline Val(Val&& mV)		{ init(std::move(mV)); }
 
 				/// @brief Constructs the `Val` from `mX`.
-				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Val)> inline Val(T&& mX) { set(SSVU_FWD(mX)); }
+				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Val)> inline Val(T&& mX) { set(FWD(mX)); }
 
 				// Destructor must deinitalize
 				inline ~Val() { deinitCurrent(); }
 
 				/// @brief Sets the `Val`'s internal value to `mX`.
 				///	@details The current stored value is deinitialized first.
-				template<typename T> inline void set(T&& mX) noexcept(noexcept(Impl::Cnv<RemoveAll<T>>::toVal(std::declval<Val&>(), SSVU_FWD(mX))))
+				template<typename T> inline void set(T&& mX) noexcept(noexcept(Impl::Cnv<RemoveAll<T>>::toVal(std::declval<Val&>(), FWD(mX))))
 				{
 					deinitCurrent();
-					Impl::Cnv<RemoveAll<T>>::toVal(*this, SSVU_FWD(mX));
+					Impl::Cnv<RemoveAll<T>>::toVal(*this, FWD(mX));
 				}
 
 				/// @brief Checks if the stored internal value is of type `T`.
@@ -152,9 +152,9 @@ namespace ssvu
 				// "Implicit" `set` function done via `operator=` overloading
 				auto& operator=(const Val& mV) noexcept;
 				auto& operator=(Val&& mV) noexcept;
-				template<typename T> inline auto& operator=(T&& mX) noexcept(noexcept(std::declval<Val&>().set(SSVU_FWD(mX))))
+				template<typename T> inline auto& operator=(T&& mX) noexcept(noexcept(std::declval<Val&>().set(FWD(mX))))
 				{
-					set(SSVU_FWD(mX));
+					set(FWD(mX));
 					return *this;
 				}
 
@@ -221,7 +221,7 @@ namespace ssvu
 				template<typename TRS = RSDefault> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(mPath.getContentsAsString()); }
 
 				// Construction from strings or files
-				template<typename T> inline static Val fromStr(T&& mStr)	{ Val result; result.readFromStr(SSVU_FWD(mStr)); return result; }
+				template<typename T> inline static Val fromStr(T&& mStr)	{ Val result; result.readFromStr(FWD(mStr)); return result; }
 				inline static Val fromFile(const ssvufs::Path& mPath)		{ Val result; result.readFromFile(mPath); return result; }
 
 				// Unchecked casted iteration
@@ -250,9 +250,9 @@ namespace ssvu
 
 				/// @brief Emplaces a value back into this `Val` instance's `Arr`.
 				/// @details Must only be called on `Val` instances storing an `Arr`.
-				template<typename T> inline void emplace(T&& mX) noexcept(noexcept(std::declval<Arr>().emplace_back(SSVU_FWD(mX))))
+				template<typename T> inline void emplace(T&& mX) noexcept(noexcept(std::declval<Arr>().emplace_back(FWD(mX))))
 				{
-					getArr().emplace_back(SSVU_FWD(mX));
+					getArr().emplace_back(FWD(mX));
 				}
 
 				// Size getters

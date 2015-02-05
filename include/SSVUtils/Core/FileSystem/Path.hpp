@@ -58,9 +58,9 @@ namespace ssvu
 				inline auto& operator=(const Path& mPath)		{ path = mPath.path; mustNormalize = true; return *this; }
 				inline auto& operator=(Path&& mPath) noexcept	{ path = std::move(mPath.path); mustNormalize = true; return *this; }
 
-				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = SSVU_FWD(mPath)))
+				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = FWD(mPath)))
 				{
-					path = SSVU_FWD(mPath);
+					path = FWD(mPath);
 					mustNormalize = true; return *this;
 				}
 
@@ -69,9 +69,9 @@ namespace ssvu
 					path += moveIfRValue<decltype(mPath)>(mPath.path);
 					mustNormalize = true; return *this;
 				}
-				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline auto& operator+=(T&& mPath) noexcept(noexcept(path += SSVU_FWD(mPath)))
+				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline auto& operator+=(T&& mPath) noexcept(noexcept(path += FWD(mPath)))
 				{
-					path += SSVU_FWD(mPath);
+					path += FWD(mPath);
 					mustNormalize = true; return *this;
 				}
 
@@ -191,8 +191,8 @@ namespace ssvu
 		// Operator+
 		template<typename T1, typename T2, ENABLEIF_ANY_PATH()> inline Path operator+(T1&& mLhs, T2&& mRhs)
 		{
-			Path result{SSVU_FWD(mLhs)};
-			result += SSVU_FWD(mRhs);
+			Path result{FWD(mLhs)};
+			result += FWD(mRhs);
 			return result;
 		}
 

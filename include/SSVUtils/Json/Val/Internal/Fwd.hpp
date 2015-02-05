@@ -32,10 +32,10 @@ namespace ssvu
 			/// @brief Helper class for `arch`/`extr` conversion functions.
 			struct CnvFuncHelper;
 
-			/// @brief Helper class for conversion to/from `std::tuple`.
+			/// @brief Helper class for conversion to/from `Tpl`.
 			struct TplCnvHelper;
 
-			/// @brief Helper class for checking types to/from `std::tuple`.
+			/// @brief Helper class for checking types to/from `Tpl`.
 			struct TplIsHelper;
 		}
 	}

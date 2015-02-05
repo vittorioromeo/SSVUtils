@@ -213,7 +213,7 @@ namespace ssvu
 	/// @details Useful when dealing with "implicit 2D" arrays, that are stored as 1D arrays.
 	/// @param mIdx 1D index.
 	/// @param mCols Number of columns of the 2D array.
-	/// @return Returns a 2D index (under the form of an std::tuple) for a 2D array with `mCols` columns.
+	/// @return Returns a 2D index (under the form of an Tpl) for a 2D array with `mCols` columns.
 	template<typename T1, typename T2> inline auto get2DIdxFrom1D(const T1& mIdx, const T2& mCols) noexcept
 	{
 		SSVU_ASSERT(mIdx > 0 && mCols != 0);
@@ -226,7 +226,7 @@ namespace ssvu
 	/// @param mIdx 1D index.
 	/// @param mCols Number of columns of the 2D array.
 	/// @param mRows Number of rows of the 3D array.
-	/// @return Returns a 3D index (under the form of an std::tuple) for an "implicit 3D" array.
+	/// @return Returns a 3D index (under the form of an Tpl) for an "implicit 3D" array.
 	template<typename T1, typename T2, typename T3> inline auto get3DIdxFrom1D(const T1& mIdx, const T2& mCols, const T3& mRows) noexcept
 	{
 		SSVU_ASSERT(mIdx > 0 && mRows != 0 && mCols != 0);

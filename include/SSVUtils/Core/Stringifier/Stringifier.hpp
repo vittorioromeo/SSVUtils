@@ -147,7 +147,7 @@ namespace ssvu
 
 	// Stringify tuples
 	template<typename T1, typename T2> struct Stringifier<std::pair<T1, T2>> final : public Impl::StringifierTuple<std::pair<T1, T2>> { };
-	template<typename... TArgs> struct Stringifier<std::tuple<TArgs...>> final : public Impl::StringifierTuple<std::tuple<TArgs...>> { };
+	template<typename... TArgs> struct Stringifier<Tpl<TArgs...>> final : public Impl::StringifierTuple<Tpl<TArgs...>> { };
 
 	// Stringify arrays
 	template<typename T, SizeT TN> struct Stringifier<T[TN]> final : public Impl::StringifierContainer<T[TN]> { };

@@ -7,7 +7,6 @@
 
 #include <tuple>
 #include "SSVUtils/Core/Common/Common.hpp"
-#include "SSVUtils/Core/Tuple/Internal/CTMin.hpp"
 #include "SSVUtils/Core/Tuple/Internal/Exploder.hpp"
 #include "SSVUtils/Core/Tuple/Internal/TplForHelper.hpp"
 #include "SSVUtils/Core/Tuple/Internal/TplIdxOfHelper.hpp"
@@ -20,7 +19,7 @@ namespace ssvu
 	/// @code
 	///	ssvu::TplRepeat<int, 5>
 	/// // ...is equal to...
-	/// std::tuple<int, int, int, int, int>
+	/// Tpl<int, int, int, int, int>
 	/// @endcode
 	template<typename T, SizeT TN, typename TIdxs = IdxSeq<TN>>
 	using TplRepeat = typename Impl::TplRepeatImpl<T, TN>::Type;
@@ -33,9 +32,9 @@ namespace ssvu
 
 	/// @brief Calls the function `mF` using `mT`'s values as arguments.
 	template<typename TF, typename T> inline auto explode(TF&& mF, T&& mT)
-		noexcept(noexcept(Impl::Exploder<getTplSize<Decay<T>>()>::explode(SSVU_FWD(mF), SSVU_FWD(mT))))
+		noexcept(noexcept(Impl::Exploder<getTplSize<Decay<T>>()>::explode(FWD(mF), FWD(mT))))
 	{
-		return Impl::Exploder<getTplSize<Decay<T>>()>::explode(SSVU_FWD(mF), SSVU_FWD(mT));
+		return Impl::Exploder<getTplSize<Decay<T>>()>::explode(FWD(mF), FWD(mT));
 	}
 }
 

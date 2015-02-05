@@ -17,7 +17,7 @@ namespace ssvu
 		template<typename T> inline auto Val::as() && -> decltype(Impl::AsHelper<T>::as(*this))		{ SSVU_ASSERT(isNoNum<T>()); return std::move(Impl::AsHelper<T>::as(*this)); }
 
 		template<typename TWS> inline void Val::writeToStream(std::ostream& mStream) const { Impl::Writer<TWS> w; w.write(*this, mStream); mStream.flush(); }
-		template<typename TRS, typename T> inline void Val::readFromStr(T&& mStr) { Impl::Reader<TRS> r{SSVU_FWD(mStr)}; Impl::tryParse<TRS>(*this, r); }
+		template<typename TRS, typename T> inline void Val::readFromStr(T&& mStr) { Impl::Reader<TRS> r{FWD(mStr)}; Impl::tryParse<TRS>(*this, r); }
 
 		inline auto Val::forUncheckedObj() noexcept			{ return forUncheckedObjAs<Val>(); }
 		inline auto Val::forUncheckedObj() const noexcept	{ return forUncheckedObjAs<Val>(); }

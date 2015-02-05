@@ -28,7 +28,7 @@
 #include "SSVUtils/RecPtr/RecPtr.hpp"
 #include "SSVUtils/Ticker/Ticker.hpp"
 #include "SSVUtils/Range/Range.hpp"
-#include "SSVUtils/UnionVariant/UnionVariant.hpp"
+#include "SSVUtils/Union/Union.hpp"
 #include "SSVUtils/Container/Container.hpp"
 #include "SSVUtils/Json/Json.hpp"
 
@@ -54,10 +54,10 @@
 	* Benchmark
 	* Bimap
 	CmdLine
-	Container
+	* Container
 	Core
-	Delegate
-	Easing
+	* Delegate
+	* Easing
 	Encryption
 	FatEnum
 	GrowableArray
@@ -72,7 +72,8 @@
 	Tests
 	* Ticker
 	Timeline
-	UnionVariant
+	* Union
 */
 
+// TODO: TArgs -> Ts (?)
 // TODO: add FnTraits arity utils in Experiments/

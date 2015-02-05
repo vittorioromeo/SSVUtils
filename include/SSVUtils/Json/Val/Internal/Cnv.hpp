@@ -51,7 +51,7 @@ namespace ssvu
 			#define SSVJ_DEFINE_CNV_BIG_MUTABLE(mType) \
 				template<> struct Cnv<mType> final \
 				{ \
-					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(SSVU_FWD(mX)))) { SSVPP_CAT(mV.set, mType)(SSVU_FWD(mX)); } \
+					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(FWD(mX)))) { SSVPP_CAT(mV.set, mType)(FWD(mX)); } \
 					template<typename T> inline static void fromVal(T&& mV, mType& mX) { mX = moveIfRValue<decltype(mV)>(SSVPP_CAT(mV.get, mType)()); } \
 				};
 
@@ -89,7 +89,7 @@ namespace ssvu
 			// Convert values to themselves
 			template<> struct Cnv<Val> final
 			{
-				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(SSVU_FWD(mX)))) { mV.init(SSVU_FWD(mX)); }
+				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(FWD(mX)))) { mV.init(FWD(mX)); }
 			};
 
 			// Convert enums
@@ -132,15 +132,15 @@ namespace ssvu
 				}
 			};
 
-			// Convert `std::tuple`
-			template<typename... TArgs> struct Cnv<std::tuple<TArgs...>> final
+			// Convert `Tpl`
+			template<typename... TArgs> struct Cnv<Tpl<TArgs...>> final
 			{
-				using Type = std::tuple<TArgs...>;
+				using Type = Tpl<TArgs...>;
 
 				template<typename T> inline static void toVal(Val& mV, T&& mX)
 				{
 					Arr result; result.reserve(sizeof...(TArgs));
-					tplFor([&result](auto&& mI){ result.emplace_back(SSVU_FWD(mI)); }, SSVU_FWD(mX));
+					tplFor([&result](auto&& mI){ result.emplace_back(FWD(mI)); }, FWD(mX));
 					mV.setArr(std::move(result));
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
@@ -151,7 +151,7 @@ namespace ssvu
 
 						// TODO: BUG: gcc complains
 						// http://stackoverflow.com/questions/28264628/possible-gcc-bug-with-c14-polymorphic-lambdas
-						// mE = moveIfRValue<decltype(mV)>(SSVU_FWD(mV)[mIdx].template as<RemoveRef<decltype(mE)>>());
+						// mE = moveIfRValue<decltype(mV)>(FWD(mV)[mIdx].template as<RemoveRef<decltype(mE)>>());
 						mE = ssvu::fwd<T>(mV)[mIdx].template as<RemoveRef<decltype(mE)>>();
 					}, mX);
 				}

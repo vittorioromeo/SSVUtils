@@ -16,16 +16,16 @@ namespace ssvu
 		{
 			template<typename TF, typename T, typename... TArgs> inline static auto explode(TF&& mF, T&& mT, TArgs&&... mArgs) noexcept
 			{
-				return Exploder<TN - 1>::explode(SSVU_FWD(mF), SSVU_FWD(mT), ::std::get<TN - 1>(SSVU_FWD(mT)), SSVU_FWD(mArgs)...);
+				return Exploder<TN - 1>::explode(FWD(mF), FWD(mT), ::std::get<TN - 1>(FWD(mT)), FWD(mArgs)...);
 			}
 		};
 
 		template<> struct Exploder<0>
 		{
 			template<typename TF, typename T, typename... TArgs> inline static auto explode(TF&& mF, T&&, TArgs&&... mArgs)
-				noexcept(noexcept(SSVU_FWD(mF)(SSVU_FWD(mArgs)...)))
+				noexcept(noexcept(FWD(mF)(FWD(mArgs)...)))
 			{
-				return SSVU_FWD(mF)(SSVU_FWD(mArgs)...);
+				return FWD(mF)(FWD(mArgs)...);
 			}
 		};
 	}

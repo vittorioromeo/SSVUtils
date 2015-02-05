@@ -10,7 +10,7 @@ namespace ssvu
 {
 	template<typename... TArgs> constexpr auto makeArray(TArgs&&... mArgs)
 	{
-		return std::array<Decay<Common<TArgs...>>, sizeof...(TArgs)>{{SSVU_FWD(mArgs)...}};
+		return std::array<Decay<Common<TArgs...>>, sizeof...(TArgs)>{{FWD(mArgs)...}};
 	}
 }
 

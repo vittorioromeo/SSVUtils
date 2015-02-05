@@ -7,11 +7,10 @@
 
 #include <tuple>
 #include "SSVUtils/Core/Common/Common.hpp"
-#include "SSVUtils/Core/Tuple/Internal/CTMin.hpp"
 #include "SSVUtils/Core/Tuple/Internal/TplForHelper.hpp"
 
 #define SSVU_IMPL_TPLFOR_CALL(mHelper) \
-	Impl:: mHelper < Impl::getCTMin<getTplSize<TTpls>()...>() , TTpls...>::exec(SSVU_FWD(mF), SSVU_FWD(mTpls)...)
+	Impl:: mHelper < MPL::getMin<SizeT>(getTplSize<TTpls>()...) , TTpls...>::exec(FWD(mF), FWD(mTpls)...)
 
 #define SSVU_IMPL_DEFINE_TPLFOR_FN(mName, mHelper) \
 	template<typename TF, typename... TTpls> inline void mName (TF&& mF, TTpls&&... mTpls) \

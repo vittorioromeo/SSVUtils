@@ -272,7 +272,7 @@ namespace ssvu
 					}
 
 				public:
-					template<typename T> inline Reader(T&& mSrc) : src{SSVU_FWD(mSrc)}
+					template<typename T> inline Reader(T&& mSrc) : src{FWD(mSrc)}
 					{
 						purgeSource();
 					}

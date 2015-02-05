@@ -8,7 +8,7 @@
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Container/Container.hpp"
 #include "SSVUtils/Range/Range.hpp"
-#include "SSVUtils/UnionVariant/UnionVariant.hpp"
+#include "SSVUtils/Union/Union.hpp"
 
 #include "SSVUtils/Json/Common/Common.hpp"
 #include "SSVUtils/Json/Num/Num.hpp"

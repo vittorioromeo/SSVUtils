@@ -31,7 +31,7 @@ namespace ssvu
 					Repr repr;
 
 					/// @brief Union POD storage for representation types.
-					UnionVariantPOD<IntS, IntU, Real> h;
+					UnionPOD<IntS, IntU, Real> h;
 
 					// Union setters
 					inline void setIntS(const IntU& mX) noexcept { repr = Repr::IntS; h.init<IntS>(mX); }

@@ -16,7 +16,7 @@ namespace ssvu
 			{
 				// Key/value pair class and helper functions
 				template<typename TK, typename TV> struct KVPair { TK key; TV value; };
-				template<typename TK, typename TV> inline static constexpr auto makeKVPair(TK&& mK, TV&& mV) noexcept { return KVPair<TK, TV>{SSVU_FWD(mK), SSVU_FWD(mV)}; }
+				template<typename TK, typename TV> inline static constexpr auto makeKVPair(TK&& mK, TV&& mV) noexcept { return KVPair<TK, TV>{FWD(mK), FWD(mV)}; }
 
 				// Iterator adaptor implementation that returns casted KVPair objects from `Obj` iteration
 				template<typename T> struct ImplAsObj

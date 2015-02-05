@@ -15,7 +15,7 @@ namespace ssvu
 				TImpl impl;
 
 			public:
-				template<typename... TArgs> inline HVecItrBase(TItrValue mValue, TArgs&&... mArgs) noexcept : BaseAdaptorItrRnd<TItrValue, TImpl>{mValue}, impl{SSVU_FWD(mArgs)...} { }
+				template<typename... TArgs> inline HVecItrBase(TItrValue mValue, TArgs&&... mArgs) noexcept : BaseAdaptorItrRnd<TItrValue, TImpl>{mValue}, impl{FWD(mArgs)...} { }
 
 				inline decltype(auto) operator*() noexcept			{ return impl.template get<T&>(this->itr); }
 				inline decltype(auto) operator*() const noexcept	{ return impl.template get<const T&>(this->itr); }

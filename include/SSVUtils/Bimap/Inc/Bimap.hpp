@@ -106,7 +106,7 @@ namespace ssvu
 			{
 				SSVU_ASSERT(!this->has(mArg1) && !this->has(mArg2));
 
-				auto& pair(getEmplaceUPtr<BMPair>(storage, SSVU_FWD(mArg1), SSVU_FWD(mArg2)));
+				auto& pair(getEmplaceUPtr<BMPair>(storage, FWD(mArg1), FWD(mArg2)));
 				set1.emplace(&pair.first);
 				set2.emplace(&pair.second);
 

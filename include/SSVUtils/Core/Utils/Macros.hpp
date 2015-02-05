@@ -58,7 +58,7 @@ namespace ssvu
 		{ \
 			inline static auto call(T& mArg, TArgs&&... mArgs) \
 			{ \
-				return mArg.mMemberName(SSVU_FWD(mArgs)...); \
+				return mArg.mMemberName(FWD(mArgs)...); \
 			} \
 		}; \
 		template<typename T, typename... TArgs> struct _ ## mName ## Impl<T, false, TArgs...> \
@@ -68,7 +68,7 @@ namespace ssvu
 	} \
 	template<typename T, typename... TArgs> inline auto mName(T& mArg, TArgs&&... mArgs) \
 	{ \
-		return __ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, SSVU_FWD(mArgs)...); \
+		return __ssvuMacroImpl::_ ## mName ## Impl<T, mChecker, TArgs...>::call(mArg, FWD(mArgs)...); \
 	}
 
 /// @macro Define a template function with name `mName` that invokes `mMemberName` on objects

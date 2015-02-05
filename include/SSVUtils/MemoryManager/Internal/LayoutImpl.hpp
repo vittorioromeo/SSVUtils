@@ -44,21 +44,21 @@ namespace ssvu
 			/// @brief CRTP implementation for a layout with no extra bool.
 			template<typename TBase> struct LHelperNoBool : public LHelperBase<TBase, LNoBool>
 			{
-				template<typename T, typename... TArgs> inline static void construct(LNoBool<T>* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(SSVU_FWD(mArgs)...)))
+				template<typename T, typename... TArgs> inline static void construct(LNoBool<T>* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(FWD(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
-					new (&mPtr->storageItem) T(SSVU_FWD(mArgs)...);
+					new (&mPtr->storageItem) T(FWD(mArgs)...);
 				}
 			};
 
 			/// @brief CRTP implementation for a layout with a bool.
 			template<typename TBase> struct LHelperBool : public LHelperBase<TBase, LBool>
 			{
-				template<typename T, typename... TArgs> inline static void construct(LBool<T>* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(SSVU_FWD(mArgs)...)))
+				template<typename T, typename... TArgs> inline static void construct(LBool<T>* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(FWD(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
 					new (&mPtr->storageBool) bool{true};
-					new (&mPtr->storageItem) T(SSVU_FWD(mArgs)...);
+					new (&mPtr->storageItem) T(FWD(mArgs)...);
 				}
 
 				inline static void setBool(TBase* mBase, bool mX) noexcept	{ castStorage<bool>(LHelperBool::getLayout(mBase)->storageBool) = mX; }

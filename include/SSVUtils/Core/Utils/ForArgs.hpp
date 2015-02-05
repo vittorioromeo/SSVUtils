@@ -10,7 +10,7 @@ namespace ssvu
 	/// @brief Calls `mFn` for each argument passed to the function.
 	template<typename TF, typename... TArgs> inline auto forArgs(TF&& mFn, TArgs&&... mArgs)
 	{
-		return (void) std::initializer_list<int>{0, (std::ref(mFn)(SSVU_FWD(mArgs)), 0)...}, SSVU_FWD(mFn);
+		return (void) std::initializer_list<int>{0, (std::ref(mFn)(FWD(mArgs)), 0)...}, FWD(mFn);
 	}
 }
 

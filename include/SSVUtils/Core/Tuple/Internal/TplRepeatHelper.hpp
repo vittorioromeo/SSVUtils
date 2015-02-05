@@ -14,19 +14,19 @@ namespace ssvu
 	{
 		template<typename, SizeT, typename> struct TplRepeatImplHelper;
 
-		template<typename T, SizeT TS, typename... TArgs> struct TplRepeatImplHelper<T, TS, std::tuple<TArgs...>>
+		template<typename T, SizeT TS, typename... TArgs> struct TplRepeatImplHelper<T, TS, Tpl<TArgs...>>
 		{
-			using Type = typename TplRepeatImplHelper<T, TS - 1, std::tuple<TArgs..., T>>::Type;
+			using Type = typename TplRepeatImplHelper<T, TS - 1, Tpl<TArgs..., T>>::Type;
 		};
 
-		template<typename T, typename... TArgs> struct TplRepeatImplHelper<T, 0, std::tuple<TArgs...>>
+		template<typename T, typename... TArgs> struct TplRepeatImplHelper<T, 0, Tpl<TArgs...>>
 		{
-			using Type = std::tuple<TArgs...>;
+			using Type = Tpl<TArgs...>;
 		};
 
 		template<typename T, SizeT TS> struct TplRepeatImpl
 		{
-			using Type = typename TplRepeatImplHelper<T, TS, std::tuple<>>::Type;
+			using Type = typename TplRepeatImplHelper<T, TS, Tpl<>>::Type;
 		};
 	}
 }

@@ -100,7 +100,7 @@ namespace ssvu
 				template<typename T, typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					auto result(SSVU_UNLIKELY(ptrChain.isEmpty()) ? LHelperType::template allocate<T>() : ptrChain.template pop<Lyt<T>>());
-					LHelperType::template construct<T>(result, SSVU_FWD(mArgs)...);
+					LHelperType::template construct<T>(result, FWD(mArgs)...);
 					return castStorage<T>(&result->storageItem);
 				}
 

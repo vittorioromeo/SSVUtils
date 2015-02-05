@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_COMMON_ALIASES
 #define SSVU_CORE_COMMON_ALIASES
 
+#include <type_traits>
+
 namespace ssvu
 {
 	// STL aliases/shortcuts
@@ -44,6 +46,8 @@ namespace ssvu
 	template<typename T, T... TVals>				using IntSeq = std::integer_sequence<T, TVals...>;
 	template<SizeT... TS>							using IdxSeq = std::index_sequence<TS...>;
 	template<typename... T>							using IdxSeqFor = std::make_index_sequence<sizeof...(T)>;
+	template<typename... Ts>						using Tpl = std::tuple<Ts...>;
+
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>(); }
 	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>(); }
@@ -66,6 +70,15 @@ namespace ssvu
 
 	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>& mA) noexcept		{ return std::forward<T>(mA); }
 	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>&& mA) noexcept	{ return std::forward<T>(mA); }
+
+	/// @macro Perfect-forwards the arguments by using `ssvu::fwd` and `decltype`.
+	#define SSVU_FWD(...) ::ssvu::fwd<decltype(__VA_ARGS__)>(__VA_ARGS__)
+
+	/// @macro Alias for `SSVU_FWD` macro.
+	#define FWD(...) SSVU_FWD(__VA_ARGS__)
+
+	template<typename... Ts> inline constexpr decltype(auto) tplCat(Ts&&... mS) noexcept	{ return std::tuple_cat(FWD(mS)...); }
+	template<typename... Ts> inline constexpr decltype(auto) fwdAsTpl(Ts&&... mS) noexcept	{ return std::forward_as_tuple(FWD(mS)...); }
 
 	/// @typedef Alias for `std::function`.
 	template<typename T> using Func = std::function<T>;
@@ -113,7 +126,6 @@ namespace ssvu
 	template<typename T, typename TStorage> inline const T* castStorage(const TStorage* mStorage) noexcept { return reinterpret_cast<const T*>(mStorage); }
 }
 
-/// @macro Perfect-forwards the arguments by using `ssvu::fwd` and `decltype`.
-#define SSVU_FWD(...) ::ssvu::fwd<decltype(__VA_ARGS__)>(__VA_ARGS__)
+
 
 #endif

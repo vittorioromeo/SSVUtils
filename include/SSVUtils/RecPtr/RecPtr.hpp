@@ -42,7 +42,7 @@ namespace ssvu
 				template<typename... TArgs> inline T* create(TArgs&&... mArgs)
 				{
 					auto result(ptrs.empty() ? alloc.allocate(1) : pop());
-					alloc.construct(result, SSVU_FWD(mArgs)...);
+					alloc.construct(result, FWD(mArgs)...);
 					return result;
 				}
 		};
@@ -56,9 +56,9 @@ namespace ssvu
 
 	template<typename T, typename TBase, typename... TArgs> inline UPtrRecPoly<T, TBase> makeUPtrRecPoly(TArgs&&... mArgs)
 	{
-		return {Impl::getRecycler<T>().create(SSVU_FWD(mArgs)...), [](TBase* mPtr){ Impl::getRecycler<T>().recycle(mPtr); }};
+		return {Impl::getRecycler<T>().create(FWD(mArgs)...), [](TBase* mPtr){ Impl::getRecycler<T>().recycle(mPtr); }};
 	}
-	template<typename T, typename... TArgs> inline UPtrRec<T> makeUPtrRec(TArgs&&... mArgs) { return makeUPtrRecPoly<T, T>(SSVU_FWD(mArgs)...); }
+	template<typename T, typename... TArgs> inline UPtrRec<T> makeUPtrRec(TArgs&&... mArgs) { return makeUPtrRecPoly<T, T>(FWD(mArgs)...); }
 
 	namespace Impl
 	{
@@ -66,18 +66,18 @@ namespace ssvu
 		{
 			template<typename... TArgs> inline static UPtrRecPoly<T, TBase> make(TArgs&&... mArgs)
 			{
-				return makeUPtrRecPoly<T, TBase, TArgs...>(SSVU_FWD(mArgs)...);
+				return makeUPtrRecPoly<T, TBase, TArgs...>(FWD(mArgs)...);
 			}
 		};
 	}
 
 	template<typename T, typename TBase, typename... TArgs, typename TC> inline T& getEmplaceUPtrRecPoly(TC& mContainer, TArgs&&... mArgs)
 	{
-		return Impl::getEmplaceUPtrImpl<T, TC, Impl::MakerUPtrRecPoly<T, TBase>>(mContainer, SSVU_FWD(mArgs)...);
+		return Impl::getEmplaceUPtrImpl<T, TC, Impl::MakerUPtrRecPoly<T, TBase>>(mContainer, FWD(mArgs)...);
 	}
 	template<typename T, typename... TArgs, typename TC> inline T& getEmplaceUPtrRec(TC& mContainer, TArgs&&... mArgs)
 	{
-		return getEmplaceUPtrRecPoly<T, T>(mContainer, SSVU_FWD(mArgs)...);
+		return getEmplaceUPtrRecPoly<T, T>(mContainer, FWD(mArgs)...);
 	}
 }
 

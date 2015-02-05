@@ -20,7 +20,7 @@ namespace ssvu
 				template<SizeT TI = 0, typename... TArgs> inline static EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
 				{
 					SSVU_ASSERT(mV.is<Arr>() && mV.getArr().size() > TI);
-					if(!mV[TI].isNoNum<TplArg<TI, std::tuple<TArgs...>>>()) return false;
+					if(!mV[TI].isNoNum<TplArg<TI, Tpl<TArgs...>>>()) return false;
 					return isTpl<TI + 1, TArgs...>(mV);
 				}
 
@@ -116,8 +116,8 @@ namespace ssvu
 				inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::TArr && mV.getArr().size() == 2 && mV[0].isNoNum<T1>() && mV[1].isNoNum<T2>(); }
 			};
 
-			// Check `std::tuple`
-			template<typename... TArgs> struct Chk<std::tuple<TArgs...>> final
+			// Check `Tpl`
+			template<typename... TArgs> struct Chk<Tpl<TArgs...>> final
 			{
 				inline static auto is(const Val& mV) noexcept
 				{
