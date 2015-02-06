@@ -12,5 +12,3 @@
 #include "SSVUtils/Union/Inc/Maybe.hpp"
 
 #endif
-
-// TODO: rename to something else?
