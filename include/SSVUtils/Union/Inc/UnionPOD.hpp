@@ -11,12 +11,12 @@
 
 namespace ssvu
 {
-	/// @brief Union variant class that can store one of any `TTs` POD types at one time.
+	/// @brief Union variant class that can store one of any `Ts` POD types at one time.
 	/// @details Intended for use only with POD types. Data cannot be deinitialized.
 	/// No checks are performed on construction/destruction of the data.
-	template<typename... TTs> class UnionPOD : public Impl::UnionBase<TTs...>
+	template<typename... Ts> class UnionPOD : public Impl::UnionBase<Ts...>
 	{
-		SSVU_ASSERT_STATIC_NM(MPL::arePOD<TTs...>());
+		SSVU_ASSERT_STATIC(MPL::all<IsPod, Ts...>(), "All types must be POD");
 
 		public:
 			/// @brief Constructs and sets the internal data to `T`.

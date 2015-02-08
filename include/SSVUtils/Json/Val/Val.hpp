@@ -27,7 +27,6 @@ namespace ssvu
 
 			public:
 				/// @brief Internal storage type.
-				// TODO: warning: declaration of ‘Bln’ shadows a global declaration [-Wshadow]
 				enum class Type{TObj, TArr, TStr, TNum, TBln, TNll};
 
 				/// @typedef `Obj` implementation type, templatized with `Val`.

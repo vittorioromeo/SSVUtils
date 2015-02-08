@@ -47,7 +47,7 @@ namespace ssvu
 				template<typename T, typename... TArgs> inline static void construct(LNoBool<T>* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(FWD(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
-					new (&mPtr->storageItem) T(FWD(mArgs)...);
+					new(&mPtr->storageItem) T(FWD(mArgs)...);
 				}
 			};
 
@@ -57,8 +57,8 @@ namespace ssvu
 				template<typename T, typename... TArgs> inline static void construct(LBool<T>* mPtr, TArgs&&... mArgs) noexcept(noexcept(T(FWD(mArgs)...)))
 				{
 					SSVU_ASSERT(mPtr != nullptr);
-					new (&mPtr->storageBool) bool{true};
-					new (&mPtr->storageItem) T(FWD(mArgs)...);
+					new(&mPtr->storageBool) bool{true};
+					new(&mPtr->storageItem) T(FWD(mArgs)...);
 				}
 
 				inline static void setBool(TBase* mBase, bool mX) noexcept	{ castStorage<bool>(LHelperBool::getLayout(mBase)->storageBool) = mX; }

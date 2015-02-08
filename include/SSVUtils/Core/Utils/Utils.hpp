@@ -9,5 +9,6 @@
 #include "SSVUtils/Core/Utils/ForArgs.hpp"
 #include "SSVUtils/Core/Utils/Math.hpp"
 #include "SSVUtils/Core/Utils/Containers.hpp"
+#include "SSVUtils/Core/Utils/FnTraits.hpp"
 
 #endif

@@ -10,18 +10,20 @@
 
 namespace ssvu
 {
-	/// @brief Union variant class that can store one of any `TTs` types at one time.
+	/// @brief Union variant class that can store one of any `Ts` types at one time.
 	/// @details Intended for use with types that require construction and destruction.
 	/// In debug mode, checks are performed to make sure the data was correctly constructed/destructed.
-	template<typename... TTs> class Union : public Impl::UnionBase<TTs...>
+	template<typename... Ts> class Union : public Impl::UnionBase<Ts...>
 	{
 		private:
 			// If debug mode is enabled, store and check a "clean" storage flag for additional safety and debugging ease
 			#if defined(SSVU_DEBUG)
-				bool clean{true};
-				inline void setClean(bool mClean) noexcept { clean = mClean; }
-				inline void assertClean() const noexcept { SSVU_ASSERT(clean, "Union needs to be clean"); }
-				inline void assertNotClean() const noexcept { SSVU_ASSERT(!clean, "Union needs to be dirty"); }
+				// `-1` means clean, other numbers refer to the types in the list
+				int dirtyFlag{-1};
+				inline void setClean() noexcept { dirtyFlag = -1; }
+				inline void assertClean() const noexcept { SSVU_ASSERT(dirtyFlag == -1, "Union needs to be clean"); }
+				template<typename T> inline void setDirty() noexcept { dirtyFlag = MPL::getIdxOf<T, Ts...>(); }
+				template<typename T> inline void assertDirty() const noexcept { SSVU_ASSERT(dirtyFlag == MPL::getIdxOf<T, Ts...>(), "Union needs to be dirty with the correct type"); }
 			#else
 				inline void setClean(bool) noexcept { }
 				inline void assertClean() const noexcept { }
@@ -33,7 +35,7 @@ namespace ssvu
 			/// @details Asserts that any previous data was destroyed.
 			template<typename T, typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
 			{
-				assertClean(); setClean(false);
+				assertClean(); setDirty<T>();
 				this->template initImpl<T>(FWD(mArgs)...);
 			}
 
@@ -41,7 +43,7 @@ namespace ssvu
 			/// @details Asserts that any previous data was constructed.
 			template<typename T> inline void deinit() noexcept(isNothrowDtor<T>())
 			{
-				assertNotClean(); setClean(true);
+				assertDirty<T>(); setClean();
 				this->template deinitImpl<T>();
 			}
 
@@ -49,12 +51,10 @@ namespace ssvu
 			inline ~Union() noexcept { assertClean(); }
 
 			// Getters
-			template<typename T> inline T& get() & noexcept				{ assertNotClean(); return this->template getImpl<T>(); }
-			template<typename T> inline const T& get() const& noexcept	{ assertNotClean(); return this->template getImpl<T>(); }
-			template<typename T> inline T get() && noexcept				{ assertNotClean(); return std::move(this->template getImpl<T>()); }
+			template<typename T> inline T& get() & noexcept				{ assertDirty<T>(); return this->template getImpl<T>(); }
+			template<typename T> inline const T& get() const& noexcept	{ assertDirty<T>(); return this->template getImpl<T>(); }
+			template<typename T> inline T get() && noexcept				{ assertDirty<T>(); return std::move(this->template getImpl<T>()); }
 	};
 }
 
 #endif
-
-// TODO: assert correct type is being used?

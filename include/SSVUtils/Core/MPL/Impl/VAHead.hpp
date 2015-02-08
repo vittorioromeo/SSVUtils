@@ -13,7 +13,7 @@ namespace ssvu
 	{
 		namespace Impl
 		{
-			template<typename... Ts> struct VAHeadHlpr;
+			template<typename...> struct VAHeadHlpr;
 			template<typename T, typename... Ts> struct VAHeadHlpr<T, Ts...>	{ using Type = T; };
 			template<> struct VAHeadHlpr<>										{ using Type = Null; };
 

@@ -303,3 +303,5 @@ namespace ssvu
 }
 
 #endif
+
+// BUG: string literal operator""s?

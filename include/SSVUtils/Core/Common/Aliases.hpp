@@ -47,7 +47,7 @@ namespace ssvu
 	template<SizeT... TS>							using IdxSeq = std::index_sequence<TS...>;
 	template<typename... T>							using IdxSeqFor = std::make_index_sequence<sizeof...(T)>;
 	template<typename... Ts>						using Tpl = std::tuple<Ts...>;
-
+	template<typename T>							using IsPod = std::is_pod<T>;
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>(); }
 	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>(); }

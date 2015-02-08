@@ -38,5 +38,3 @@ namespace ssvu
 #undef SSVU_IMPL_DEFINE_TPLFOR_FN
 
 #endif
-
-// TODO: static assert that: arity of the passed function is equal to minsize(CTMin)
