@@ -59,6 +59,21 @@ namespace ssvu
 	}
 }
 
-
-
 #endif
+
+/* TODO: impl + macro
+ *
+struct BenchmarkGroupRAII
+{
+	std::string groupName;
+	inline BenchmarkGroupRAII(const std::string& mGroupName) : groupName{mGroupName}
+	{
+		ssvu::Benchmark::groupReset(groupName);
+	}
+	inline ~BenchmarkGroupRAII()
+	{
+		ssvu::Benchmark::groupEndLo(groupName);
+	}
+};
+*/
+
