@@ -18,8 +18,8 @@ namespace ssvu
 		template<int TS, typename... Ts> using At = typename List<Ts...>::template At<TS>;
 
 		// List function shortcuts
-		template<typename... Ts> inline constexpr auto getSize() noexcept						{ return List<Ts...>::getSize(); }
-		template<typename... Ts> inline constexpr auto isEmpty() noexcept						{ return List<Ts...>::isEmpty(); }
+		template<typename... Ts> inline constexpr auto getSize() noexcept						{ return List<Ts...>::size; }
+		template<typename... Ts> inline constexpr auto isEmpty() noexcept						{ return List<Ts...>::empty; }
 		template<typename... Ts> inline constexpr auto getMaxSize() noexcept					{ return List<Ts...>::getMaxSize(); }
 		template<typename... Ts> inline constexpr auto getMaxAlign() noexcept					{ return List<Ts...>::getMaxAlign(); }
 		template<typename T, typename... Ts> inline constexpr auto has() noexcept				{ return List<Ts...>::template has<T>(); }

@@ -25,7 +25,7 @@ namespace ssvu
 			};
 			template<SizeT TS1, SizeT TS2, SizeT TSC, typename TL1, typename TL2> struct SliceDispatch
 			{
-				using Type = typename SliceImpl<TS1, TS2, TSC, TL1, TL2, TSC == TS2 || TSC >= TL1::getSize()>::Type;
+				using Type = typename SliceImpl<TS1, TS2, TSC, TL1, TL2, TSC == TS2 || TSC >= TL1::size>::Type;
 			};
 			template<SizeT, SizeT, SizeT, typename> struct SliceHlpr;
 			template<SizeT TS1, SizeT TS2, SizeT TSC, typename... TLAs> struct SliceHlpr<TS1, TS2, TSC, List<TLAs...>>
