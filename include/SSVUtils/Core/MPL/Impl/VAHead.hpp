@@ -15,7 +15,6 @@ namespace ssvu
 		{
 			template<typename...> struct VAHeadHlpr;
 			template<typename T, typename... Ts> struct VAHeadHlpr<T, Ts...>	{ using Type = T; };
-			template<> struct VAHeadHlpr<>										{ using Type = Null; };
 
 			template<typename... Ts> using VAHead = typename Impl::VAHeadHlpr<Ts...>::Type;
 		}

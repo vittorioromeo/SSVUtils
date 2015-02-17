@@ -13,8 +13,8 @@ namespace ssvu
 	{
 		namespace Impl
 		{
-			template<typename, typename> struct AppendHlpr;
-			template<typename... Ts1, typename... Ts2> struct AppendHlpr<List<Ts1...>, List<Ts2...>>
+			template<typename, typename> struct Append;
+			template<typename... Ts1, typename... Ts2> struct Append<List<Ts1...>, List<Ts2...>>
 			{
 				using Type = List<Ts1..., Ts2...>;
 			};

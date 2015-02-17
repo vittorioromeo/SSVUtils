@@ -13,12 +13,12 @@ namespace ssvu
 	{
 		namespace Impl
 		{
-			template<typename T, typename... Ts> struct ContainsHlpr : TrueT { };
+			template<typename T, typename... Ts> struct Contains : TrueT { };
 
-			template<typename T, typename THead, typename... Ts> struct ContainsHlpr<T, THead, Ts...>
-				: Conditional<isSame<T, THead>(), TrueT, ContainsHlpr<T, Ts...>> { };
+			template<typename T, typename THead, typename... Ts> struct Contains<T, THead, Ts...>
+				: Conditional<isSame<T, THead>(), TrueT, Contains<T, Ts...>> { };
 
-			template<typename T> struct ContainsHlpr<T> : FalseT { };
+			template<typename T> struct Contains<T> : FalseT { };
 		}
 	}
 }

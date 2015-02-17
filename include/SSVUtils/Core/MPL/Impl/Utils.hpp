@@ -20,11 +20,11 @@ namespace ssvu
 		// List function shortcuts
 		template<typename... Ts> inline constexpr auto getSize() noexcept						{ return List<Ts...>::size; }
 		template<typename... Ts> inline constexpr auto isEmpty() noexcept						{ return List<Ts...>::empty; }
-		template<typename... Ts> inline constexpr auto getMaxSize() noexcept					{ return List<Ts...>::getMaxSize(); }
-		template<typename... Ts> inline constexpr auto getMaxAlign() noexcept					{ return List<Ts...>::getMaxAlign(); }
+		template<typename... Ts> inline constexpr auto getMaxSize() noexcept					{ return List<Ts...>::typeMaxSize; }
+		template<typename... Ts> inline constexpr auto getMaxAlign() noexcept					{ return List<Ts...>::typeMaxAlign; }
 		template<typename T, typename... Ts> inline constexpr auto has() noexcept				{ return List<Ts...>::template has<T>(); }
 		template<typename T, typename... Ts> inline constexpr auto getCountOf() noexcept		{ return List<Ts...>::template getCountOf<T>(); }
-		template<typename... Ts> inline constexpr bool isUnique() noexcept						{ return List<Ts...>::isUnique(); }
+		template<typename... Ts> inline constexpr bool isUnique() noexcept						{ return List<Ts...>::unique; }
 		template<template<typename> class TFilter, typename... Ts> inline constexpr auto all()	{ return List<Ts...>::template all<TFilter>(); }
 		template<template<typename> class TFilter, typename... Ts> inline constexpr auto any()	{ return List<Ts...>::template any<TFilter>(); }
 		template<typename T, typename... Ts> inline constexpr auto getIdxOf() noexcept			{ return List<Ts...>::template getIdxOf<T>(); }

@@ -16,7 +16,6 @@ namespace ssvu
 			template<typename...> struct VATailHlpr;
 			template<typename T, typename... Ts> struct VATailHlpr<T, Ts...>	{ using Type = typename VATailHlpr<Ts...>::Type; };
 			template<typename T> struct VATailHlpr<T>							{ using Type = T; };
-			template<> struct VATailHlpr<>										{ using Type = Null; };
 
 			template<typename... Ts> using VATail = typename Impl::VATailHlpr<Ts...>::Type;
 		}

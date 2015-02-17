@@ -12,7 +12,6 @@ namespace ssvu
 	namespace MPL
 	{
 		template<typename...> struct List;
-		struct Null { };
 	}
 }
 

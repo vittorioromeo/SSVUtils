@@ -44,8 +44,10 @@ namespace ssvu
 	template<typename T>							using RemoveAll = RemoveCV<RemoveRef<T>>;
 	template<typename T, T TV>						using IntegralConstant = std::integral_constant<T, TV>;
 	template<typename T, T... TVals>				using IntSeq = std::integer_sequence<T, TVals...>;
+	template<typename T, T TN>						using MkIntSeq = std::make_integer_sequence<T, TN>;
 	template<SizeT... TS>							using IdxSeq = std::index_sequence<TS...>;
-	template<typename... T>							using IdxSeqFor = std::make_index_sequence<sizeof...(T)>;
+	template<SizeT TN>								using MkIdxSeq = std::make_index_sequence<TN>;
+	template<typename... T>							using IdxSeqFor = MkIdxSeq<sizeof...(T)>;
 	template<typename... Ts>						using Tpl = std::tuple<Ts...>;
 	template<typename T>							using IsPod = std::is_pod<T>;
 
