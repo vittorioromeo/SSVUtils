@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2014 Vittorio Romeo
+// Copyright (c) 2013-2015 Vittorio Romeo
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 // Thanks to sim642 - http://www.facepunch.com/showthread.php?t=1239244&p=39204496&viewfull=1#post39204496
