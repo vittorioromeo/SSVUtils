@@ -11,9 +11,6 @@
 #include "SSVUtils/Core/MPL/Impl/VAHead.hpp"
 #include "SSVUtils/Core/MPL/Impl/VATail.hpp"
 #include "SSVUtils/Core/MPL/Impl/VACount.hpp"
-#include "SSVUtils/Core/MPL/Impl/PopFront.hpp"
-#include "SSVUtils/Core/MPL/Impl/RemoveLast.hpp"
-#include "SSVUtils/Core/MPL/Impl/PopBack.hpp"
 #include "SSVUtils/Core/MPL/Impl/SubList.hpp"
 #include "SSVUtils/Core/MPL/Impl/Contains.hpp"
 #include "SSVUtils/Core/MPL/Impl/Append.hpp"
@@ -196,6 +193,7 @@ namespace ssvu
 			// TODO: replace first/all
 			// TODO: has subsequence
 			// TODO: find subsequences
+			// TODO. sort
 		};
 
 		// TODO: template<typename T, T... Ts> struct ValueList
