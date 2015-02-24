@@ -25,23 +25,18 @@ namespace ssvu
 			inline ~GrowableArray() noexcept { delete[] data; }
 
 			inline GrowableArray(const GrowableArray& mGA) = delete;
-			inline GrowableArray(GrowableArray&& mGA) noexcept
-				: data(mGA.data)
-			{
-				mGA.data = nullptr;
-			}
+			inline GrowableArray(GrowableArray&& mGA) noexcept : data{mGA.data} { mGA.data = nullptr; }
 
 			inline auto& operator=(const GrowableArray& mGA) = delete;
 			inline auto& operator=(GrowableArray&& mGA) noexcept
 			{
-				if (this != &mGA)
+				if(this != &mGA)
 				{
 					delete[] data;
 					data = mGA.data;
-					
 					mGA.data = nullptr;
 				}
-				
+
 				return *this;
 			}
 
