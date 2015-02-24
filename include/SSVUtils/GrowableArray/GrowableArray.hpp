@@ -20,22 +20,30 @@ namespace ssvu
 			/// @brief Internal storage.
 			TStorage* data{nullptr};
 
-			/// @brief Implementation of move operations.
-			inline void moveImpl(GrowableArray&& mGA) noexcept
-			{
-				mGA.data = data;
-				data = nullptr;
-			}
-
 		public:
 			inline GrowableArray() noexcept = default;
 			inline ~GrowableArray() noexcept { delete[] data; }
 
 			inline GrowableArray(const GrowableArray& mGA) = delete;
-			inline GrowableArray(GrowableArray&& mGA) noexcept { moveImpl(mGA); }
+			inline GrowableArray(GrowableArray&& mGA) noexcept
+				: data(mGA.data)
+			{
+				mGA.data = nullptr;
+			}
 
 			inline auto& operator=(const GrowableArray& mGA) = delete;
-			inline auto& operator=(GrowableArray&& mGA) noexcept { moveImpl(mGA); return *this; }
+			inline auto& operator=(GrowableArray&& mGA) noexcept
+			{
+				if (this != &mGA)
+				{
+					delete[] data;
+					data = mGA.data;
+					
+					mGA.data = nullptr;
+				}
+				
+				return *this;
+			}
 
 			/// @brief Grows the internal storage from `mCapacityOld` to `mCapacityNew`.
 			/// @details The new capacity must be greater or equal than the old one.
