@@ -65,52 +65,25 @@ namespace ssvu
 
 		namespace Impl
 		{
-			template<typename, typename, typename, int, bool> struct IdxsOfHelper;
-
-			template<typename T, typename... Ts, typename TR, int TI, bool TB> struct IdxsOfHelper<List<T, Ts...>, List<>, TR, TI, TB>
-			{
-				using Type = List<>;
-			};
-
-			template<typename T, typename... Ts, typename TR, int TI, bool TB> struct IdxsOfHelper<List<>, List<T, Ts...>, TR, TI, TB>
-			{
-				using Type = List<>;
-			};
-
-			template<typename TR, int TI, bool TB> struct IdxsOfHelper<List<>, List<>, TR, TI, TB>
-			{
-				using Type = List<>;
-			};
-
-			template<typename TR, int TI> struct IdxsOfHelper<List<>, List<>, TR, TI, true>
-			{
-				using Type = List<>;
-			};
-
-			template<typename TS1, typename TM1, typename... Ts, typename... Tm, typename... Tr, int TI>
-			struct IdxsOfHelper<List<TS1, Ts...>, List<TM1, Tm...>, List<Tr...>, TI, true>
-			{
-				using LS = List<TS1, Ts...>;
-				using LM = List<TM1, Tm...>;
-				using LR = List<Tr...>;
-				using LRPushed = typename LR::template PushBack<CTInt<TI>>;
-				using LSSlice = typename LS::template Slice<TI, TI + LM::size>;
-				static constexpr bool bln{TI <= LS::size - LM::size};
-
-				using Type = Conditional
-				<
-					isSame<LSSlice, LM>(),
-					typename IdxsOfHelper<LS, LM, LRPushed, TI + 1, bln>::Type,
-					typename IdxsOfHelper<LS, LM, LR, TI + 1, bln>::Type
-				>;
-			};
-
-			template<typename TS, typename TM, typename TR, int TI> struct IdxsOfHelper<TS, TM, TR, TI, false>
+			template<typename, typename, typename TR, int, bool> struct IdxsOfSeqHelper
 			{
 				using Type = TR;
 			};
 
-			template<typename TS, typename TM> using IdxsOf = typename IdxsOfHelper<TS, TM, List<>, 0, true>::Type;
+			template<typename TS1, typename TM1, typename... Ts, typename... Tm, int... Tr, int TI>
+			struct IdxsOfSeqHelper<List<TS1, Ts...>, List<TM1, Tm...>, ListInt<Tr...>, TI, true>
+			{
+				using LS = List<TS1, Ts...>;
+				using LM = List<TM1, Tm...>;
+				using LR = ListInt<Tr...>;
+				using LSSlice = typename LS::template Slice<TI, TI + LM::size>;
+				using LRPushed = typename LR::template PushBack<CTInt<TI>>;
+				using LRNext = Conditional<isSame<LSSlice, LM>(), LRPushed, LR>;
+				static constexpr bool bln{TI <= LS::size - LM::size};
+				using Type = typename IdxsOfSeqHelper<LS, LM, LRNext, TI + 1, bln>::Type;
+			};
+
+			template<typename TS, typename TM> using IdxsOfSeq = typename IdxsOfSeqHelper<TS, TM, ListInt<>, 0, true>::Type;
 		}
 
 		// Empty list implementation
@@ -144,7 +117,7 @@ namespace ssvu
 			template<template<typename> class> inline static constexpr bool any() noexcept { return false; }
 			template<typename TL> inline static constexpr bool isEqualTo() noexcept { return isSame<Type, TL>(); }
 
-			template<typename TL> using IdxsOf = List<>;
+			template<typename TL> using IdxsOfSeq = List<>;
 		};
 
 		// Non-empty list implementation
@@ -243,23 +216,21 @@ namespace ssvu
 
 
 
-			template<typename TL> using IdxsOf = Impl::IdxsOf<Type, TL>;
+			template<typename TL> using IdxsOfSeq = Impl::IdxsOfSeq<Type, TL>;
+			template<typename TL> inline static constexpr auto getCountOfSeq() noexcept { return IdxsOfSeq<TL>::size; }
+			template<typename TL> inline static constexpr auto hasSeq() noexcept { return getCountOfSeq() > 0; }
 
 			// TODO
 			// template<int TS1, int TS2> using Slice = typename Impl::SliceHlpr<getCycleIdx(TS1), getCycleIdx(TS2), getCycleIdx(TS1), List<Ts...>>::Type;
 			template<int TS1, int TS2> using Slice = typename Impl::SliceHlpr<TS1, TS2, TS1, List<Ts...>>::Type;
 
 
-
-			// TODO: insert
 			// TODO: reverse
 			// TODO: replace first/all
-			// TODO: has subsequence
-			// TODO: find subsequences
 			// TODO. sort
 		};
 
-		// TODO: template<typename T, T... Ts> struct ValueList
+		//template<typename T, T... Ts> struct ListIC : public List<IntegralConstant<T, Ts>...> { };
 
 
 

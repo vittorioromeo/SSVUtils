@@ -219,53 +219,53 @@ SSVUT_TEST(MPLTests)
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<int>::IdxsOf<List<>>,
-		List<>
+		List<int>::IdxsOfSeq<List<>>,
+		ListIC<int>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<>::IdxsOf<List<int>>,
-		List<>
+		List<>::IdxsOfSeq<List<int>>,
+		ListIC<int>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(!isSame<
-		List<>::IdxsOf<List<>>,
-		List<CTInt<0>>
+		List<>::IdxsOfSeq<List<>>,
+		ListInt<0>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<int>::IdxsOf<List<int>>,
-		List<CTInt<0>>
+		List<int>::IdxsOfSeq<List<int>>,
+		ListInt<0>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<int, int>::IdxsOf<List<int>>,
-		List<CTInt<0>, CTInt<1>>
+		List<int, int>::IdxsOfSeq<List<int>>,
+		ListInt<0, 1>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<int, char, int>::IdxsOf<List<int>>,
-		List<CTInt<0>, CTInt<2>>
+		List<int, char, int>::IdxsOfSeq<List<int>>,
+		ListInt<0, 2>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<int, char, int>::IdxsOf<List<int, char>>,
-		List<CTInt<0>>
+		List<int, char, int>::IdxsOfSeq<List<int, char>>,
+		ListInt<0>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<int, char, char>::IdxsOf<List<int, char>>,
-		List<CTInt<0>>
+		List<int, char, char>::IdxsOfSeq<List<int, char>>,
+		ListInt<0>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<int, char, int, char>::IdxsOf<List<int, char>>,
-		List<CTInt<0>, CTInt<2>>
+		List<int, char, int, char>::IdxsOfSeq<List<int, char>>,
+		ListInt<0, 2>
 	>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<
-		List<int, char, char, int, char>::IdxsOf<List<int, char>>,
-		List<CTInt<0>, CTInt<3>>
+		List<int, char, char, int, char>::IdxsOfSeq<List<int, char>>,
+		ListInt<0, 3>
 	>());
 }
 
