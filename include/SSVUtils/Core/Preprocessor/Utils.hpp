@@ -12,8 +12,8 @@
 #define SSVPP_RAW(...)	__VA_ARGS__
 #define __R(...)		SSVPP_RAW(__VA_ARGS__)
 
-#define SSVPP_TOSTR_IMPL(mX)	#mX
-#define SSVPP_TOSTR(mX)			SSVPP_TOSTR_IMPL(mX)
+#define SSVPP_TOSTR_IMPL(...)	#__VA_ARGS__
+#define SSVPP_TOSTR(...)		SSVPP_TOSTR_IMPL(__VA_ARGS__)
 
 #define SSVPP_IMPL_TKNCAT_2(m0, m1)				m0 ## m1
 #define SSVPP_IMPL_TKNCAT_3(m0, m1, m2)			m0 ## m1 ## m2
