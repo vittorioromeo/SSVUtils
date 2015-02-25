@@ -12,7 +12,6 @@ namespace ssvu
 	namespace MPL
 	{
 		template<typename...> struct List;
-
 		template<typename T, T... Ts> using ListIC = List<IntegralConstant<T, Ts>...>;
 		template<int... Ts> using ListInt = ListIC<int, Ts...>;
 	}

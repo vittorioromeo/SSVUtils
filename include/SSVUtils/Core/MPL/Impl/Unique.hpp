@@ -27,23 +27,6 @@ namespace ssvu
 			};
 
 			template<typename... Ts> using Unique = typename UniqueHlpr<List<Ts...>, List<>>::Type;
-
-
-			// TODO: move
-			template<template<typename> class, typename, typename> struct FilterHlpr;
-			template<template<typename> class TFilter, typename TResult> struct FilterHlpr<TFilter, List<>, TResult>
-			{
-				using Type = TResult;
-			};
-			template<template<typename> class TFilter, typename T, typename... T1s, typename TResult> struct FilterHlpr<TFilter, List<T, T1s...>, TResult>
-			{
-				using CurrentList = typename FilterHlpr<TFilter, List<T1s...>, TResult>::Type;
-				using AddedList = typename FilterHlpr<TFilter, List<T1s...>, typename TResult::template PushBack<T>>::Type;
-
-				using Type = Conditional<!TFilter<T>{}(), CurrentList, AddedList>;
-			};
-
-			template<template<typename> class TFilter, typename... Ts> using Filter = typename FilterHlpr<TFilter, List<Ts...>, List<>>::Type;
 		}
 	}
 }
