@@ -14,8 +14,8 @@ namespace ssvu
 		namespace Impl
 		{
 			template<typename T, typename... Ts> struct IdxOf;
-			template<typename T, typename... Ts> struct IdxOf<T, T, Ts...> : IntegralConstant<SizeT, 0>{ };
-			template<typename T, typename TTail, typename... Ts> struct IdxOf<T, TTail, Ts...> : IntegralConstant<SizeT, 1 + IdxOf<T, Ts...>::value>{ };
+			template<typename T, typename... Ts> struct IdxOf<T, T, Ts...> : CTInt<0>{ };
+			template<typename T, typename TTail, typename... Ts> struct IdxOf<T, TTail, Ts...> : CTInt<1 + IdxOf<T, Ts...>::value>{ };
 		}
 	}
 }

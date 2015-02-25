@@ -50,6 +50,8 @@ namespace ssvu
 	template<typename... T>							using IdxSeqFor = MkIdxSeq<sizeof...(T)>;
 	template<typename... Ts>						using Tpl = std::tuple<Ts...>;
 	template<typename T>							using IsPod = std::is_pod<T>;
+	template<int TI>								using CTInt = IntegralConstant<int, TI>;
+	template<bool TB>								using CTBool = IntegralConstant<bool, TB>;
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>(); }
 	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>(); }

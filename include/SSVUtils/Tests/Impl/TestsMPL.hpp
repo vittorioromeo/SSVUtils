@@ -172,6 +172,101 @@ SSVUT_TEST(MPLTests)
 		List<char>::Remove<0>,
 		List<>
 	>());
+
+	SSVU_ASSERT_STATIC_NM(
+		List<>::isEqualTo<
+		List<>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<int>::isEqualTo<
+		List<>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<>::isEqualTo<
+		List<int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(
+		List<int>::isEqualTo<
+		List<int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<int, char>::isEqualTo<
+		List<int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<int>::isEqualTo<
+		List<int, char>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(
+		List<int, char>::isEqualTo<
+		List<int, char>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<int, char>::isEqualTo<
+		List<char, int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!isSame<
+		List<int, char>,
+		List<char, int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int>::IdxsOf<List<>>,
+		List<>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<>::IdxsOf<List<int>>,
+		List<>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!isSame<
+		List<>::IdxsOf<List<>>,
+		List<CTInt<0>>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int>::IdxsOf<List<int>>,
+		List<CTInt<0>>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, int>::IdxsOf<List<int>>,
+		List<CTInt<0>, CTInt<1>>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, int>::IdxsOf<List<int>>,
+		List<CTInt<0>, CTInt<2>>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, int>::IdxsOf<List<int, char>>,
+		List<CTInt<0>>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, char>::IdxsOf<List<int, char>>,
+		List<CTInt<0>>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, int, char>::IdxsOf<List<int, char>>,
+		List<CTInt<0>, CTInt<2>>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, char, int, char>::IdxsOf<List<int, char>>,
+		List<CTInt<0>, CTInt<3>>
+	>());
 }
 
 #endif

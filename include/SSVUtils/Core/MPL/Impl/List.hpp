@@ -62,6 +62,57 @@ namespace ssvu
 
 		}
 
+
+		namespace Impl
+		{
+			template<typename, typename, typename, int, bool> struct IdxsOfHelper;
+
+			template<typename T, typename... Ts, typename TR, int TI, bool TB> struct IdxsOfHelper<List<T, Ts...>, List<>, TR, TI, TB>
+			{
+				using Type = List<>;
+			};
+
+			template<typename T, typename... Ts, typename TR, int TI, bool TB> struct IdxsOfHelper<List<>, List<T, Ts...>, TR, TI, TB>
+			{
+				using Type = List<>;
+			};
+
+			template<typename TR, int TI, bool TB> struct IdxsOfHelper<List<>, List<>, TR, TI, TB>
+			{
+				using Type = List<>;
+			};
+
+			template<typename TR, int TI> struct IdxsOfHelper<List<>, List<>, TR, TI, true>
+			{
+				using Type = List<>;
+			};
+
+			template<typename TS1, typename TM1, typename... Ts, typename... Tm, typename... Tr, int TI>
+			struct IdxsOfHelper<List<TS1, Ts...>, List<TM1, Tm...>, List<Tr...>, TI, true>
+			{
+				using LS = List<TS1, Ts...>;
+				using LM = List<TM1, Tm...>;
+				using LR = List<Tr...>;
+				using LRPushed = typename LR::template PushBack<CTInt<TI>>;
+				using LSSlice = typename LS::template Slice<TI, TI + LM::size>;
+				static constexpr bool bln{TI <= LS::size - LM::size};
+
+				using Type = Conditional
+				<
+					isSame<LSSlice, LM>(),
+					typename IdxsOfHelper<LS, LM, LRPushed, TI + 1, bln>::Type,
+					typename IdxsOfHelper<LS, LM, LR, TI + 1, bln>::Type
+				>;
+			};
+
+			template<typename TS, typename TM, typename TR, int TI> struct IdxsOfHelper<TS, TM, TR, TI, false>
+			{
+				using Type = TR;
+			};
+
+			template<typename TS, typename TM> using IdxsOf = typename IdxsOfHelper<TS, TM, List<>, 0, true>::Type;
+		}
+
 		// Empty list implementation
 		template<> struct List<>
 		{
@@ -89,8 +140,11 @@ namespace ssvu
 
 			template<typename> inline static constexpr SizeT getCountOf() noexcept { return 0; }
 			template<typename> inline static constexpr bool has() noexcept { return false; }
-			template<template<typename> class> inline static constexpr bool all() { return false; }
-			template<template<typename> class> inline static constexpr bool any() { return false; }
+			template<template<typename> class> inline static constexpr bool all() noexcept { return false; }
+			template<template<typename> class> inline static constexpr bool any() noexcept { return false; }
+			template<typename TL> inline static constexpr bool isEqualTo() noexcept { return isSame<Type, TL>(); }
+
+			template<typename TL> using IdxsOf = List<>;
 		};
 
 		// Non-empty list implementation
@@ -184,9 +238,18 @@ namespace ssvu
 			/// @brief Returns the index of the first occurence of `T` in the type list. Asserts that `T` is in the list.
 			template<typename T> inline static constexpr SizeT getIdxOf() { SSVU_ASSERT_STATIC_NM(has<T>()); return Impl::IdxOf<T, Ts...>{}(); }
 
+
+			template<typename TL> inline static constexpr bool isEqualTo() noexcept { return isSame<Type, TL>(); }
+
+
+
+			template<typename TL> using IdxsOf = Impl::IdxsOf<Type, TL>;
+
 			// TODO
 			// template<int TS1, int TS2> using Slice = typename Impl::SliceHlpr<getCycleIdx(TS1), getCycleIdx(TS2), getCycleIdx(TS1), List<Ts...>>::Type;
 			template<int TS1, int TS2> using Slice = typename Impl::SliceHlpr<TS1, TS2, TS1, List<Ts...>>::Type;
+
+
 
 			// TODO: insert
 			// TODO: reverse
@@ -197,6 +260,13 @@ namespace ssvu
 		};
 
 		// TODO: template<typename T, T... Ts> struct ValueList
+
+
+
+	// A B A A B A B B A B A A B A B A B
+	//
+
+
 	}
 }
 
