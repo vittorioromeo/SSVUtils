@@ -36,7 +36,7 @@ namespace ssvu
 
 				template<typename T> inline T& getImpl() & noexcept				{ SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>()); return castStorage<T>(data); }
 				template<typename T> inline const T& getImpl() const& noexcept	{ SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>()); return castStorage<T>(data); }
-				template<typename T> inline T getImpl() && noexcept				{ SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>()); return std::move(castStorage<T>(data)); }
+				template<typename T> inline T getImpl() && noexcept				{ SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>()); return move(castStorage<T>(data)); }
 		};
 	}
 }

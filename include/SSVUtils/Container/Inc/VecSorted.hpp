@@ -40,11 +40,11 @@ namespace ssvu
 		public:
 			inline VecSorted() = default;
 			inline VecSorted(const VecSorted& mVM) : data{mVM.data} { }
-			inline VecSorted(VecSorted&& mVM) noexcept : data{std::move(mVM.data)} { }
-			inline VecSorted(std::initializer_list<T>&& mIL) : data{std::move(mIL)} { sort(data, cmp); }
+			inline VecSorted(VecSorted&& mVM) noexcept : data{move(mVM.data)} { }
+			inline VecSorted(std::initializer_list<T>&& mIL) : data{move(mIL)} { sort(data, cmp); }
 
 			inline auto& operator=(const VecSorted& mVS) { data = mVS.data; return *this; }
-			inline auto& operator=(VecSorted&& mVS) noexcept { data = std::move(mVS.data); return *this; }
+			inline auto& operator=(VecSorted&& mVS) noexcept { data = move(mVS.data); return *this; }
 
 			/// @brief Inserts a value in the sorted vector. Returns an iterator to the emplaced value.
 			template<typename TT> inline auto insert(TT&& mX)

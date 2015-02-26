@@ -61,7 +61,7 @@ SSVUT_TEST(SSVUJsonNumTests)
 		SSVUT_EXPECT(v0.as<mType>() == mVal); \
 		SSVUT_EXPECT(v1.as<mType>() == mVal); \
 		SSVUT_EXPECT(v0 == v1); \
-		v2 = std::move(v1); \
+		v2 = move(v1); \
 		SSVUT_EXPECT(v2.is<mRepr>()); \
 		SSVUT_EXPECT(v2.as<mType>() == mVal); \
 		v0 = Obj{}; \
@@ -171,7 +171,7 @@ SSVUT_TEST(SSVUJsonValTests3)
 	v1 = v0; \
 	SSVUT_EXPECT(v1.is<mType>()); \
 	SSVUT_EXPECT(v0 == v1); \
-	v2 = std::move(v1); \
+	v2 = move(v1); \
 	SSVUT_EXPECT(v2.is<mType>()); \
 	v0 = Obj{}; \
 	v0["inner"] = v2; \

@@ -44,7 +44,7 @@ namespace ssvu
 
 					inline void throwError(std::string mTitle, std::string mBody)
 					{
-						throw ReadException{std::move(mTitle), std::move(mBody), getErrorSrc()};
+						throw ReadException{move(mTitle), move(mBody), getErrorSrc()};
 					}
 
 					inline void purgeSource()
@@ -252,7 +252,7 @@ namespace ssvu
 							++idx;
 
 							// Read value
-							obj[std::move(key)] = parseVal();
+							obj[move(key)] = parseVal();
 
 							// Check for another key-value pair
 							if(isC(',')) { ++idx; continue; }

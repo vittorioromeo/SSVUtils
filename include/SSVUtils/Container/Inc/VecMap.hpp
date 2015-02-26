@@ -44,14 +44,14 @@ namespace ssvu
 		public:
 			inline VecMap() = default;
 			inline VecMap(const VecMap& mVM) : data{mVM.data} { }
-			inline VecMap(VecMap&& mVM) noexcept : data{std::move(mVM.data)} { }
-			inline VecMap(std::initializer_list<Item>&& mIL) : data{std::move(mIL)}
+			inline VecMap(VecMap&& mVM) noexcept : data{move(mVM.data)} { }
+			inline VecMap(std::initializer_list<Item>&& mIL) : data{move(mIL)}
 			{
 				sort(data, [](const auto& mA, const auto& mB){ return mA.first < mB.first; });
 			}
 
 			inline auto& operator=(const VecMap& mVM) { data = mVM.data; return *this; }
-			inline auto& operator=(VecMap&& mVM) noexcept { data = std::move(mVM.data); return *this; }
+			inline auto& operator=(VecMap&& mVM) noexcept { data = move(mVM.data); return *this; }
 
 			inline SizeT count(const TK& mKey) const noexcept { return is(lookup(mKey), mKey) ? 1 : 0; }
 

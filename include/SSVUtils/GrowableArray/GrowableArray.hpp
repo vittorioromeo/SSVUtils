@@ -47,7 +47,7 @@ namespace ssvu
 				SSVU_ASSERT(mCapacityOld <= mCapacityNew);
 
 				auto newData(new TStorage[mCapacityNew]);
-				for(auto i(0u); i < mCapacityOld; ++i) newData[i] = std::move(data[i]);
+				for(auto i(0u); i < mCapacityOld; ++i) newData[i] = move(data[i]);
 
 				std::swap(data, newData);
 				delete[] newData;

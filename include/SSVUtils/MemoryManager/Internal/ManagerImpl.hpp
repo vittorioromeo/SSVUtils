@@ -68,7 +68,7 @@ namespace ssvu
 
 					if(capacity <= sizeNext) reserve(capacity * 3);
 
-					items.initAt(sizeNext, std::move(uPtr));
+					items.initAt(sizeNext, move(uPtr));
 					return ssvu::castUp<T>(*items[sizeNext++]);
 				}
 

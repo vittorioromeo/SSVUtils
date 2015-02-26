@@ -42,7 +42,7 @@ SSVUT_TEST(ContainerVecMapPODTests)
 
 	SSVUT_EXPECT(tm == tmil);
 
-	auto tm2(std::move(tm));
+	auto tm2(move(tm));
 
 	SSVUT_EXPECT(tm2[0] == 0 && tm2.at(0) == 0);
 	SSVUT_EXPECT(tm2[1] == 2 && tm2.at(1) == 2);

@@ -44,7 +44,7 @@ namespace ssvu
 			/// @brief RAII struct used for LOG_SCOPE_EXIT benchmarks.
 			struct LogScopeExit
 			{
-				inline LogScopeExit(std::string mTitle = "") { start(std::move(mTitle)); }
+				inline LogScopeExit(std::string mTitle = "") { start(move(mTitle)); }
 				inline ~LogScopeExit() { endLo(); }
 			};
 
@@ -52,14 +52,14 @@ namespace ssvu
 			struct RunGroupScopeExit
 			{
 				std::string group;
-				inline RunGroupScopeExit(std::string mGroup) : group{std::move(mGroup)} { groupResume(group); }
+				inline RunGroupScopeExit(std::string mGroup) : group{move(mGroup)} { groupResume(group); }
 				inline ~RunGroupScopeExit() { groupPause(group); }
 			};
 
 			struct InitGroupScopeExit
 			{
 				std::string group;
-				inline InitGroupScopeExit(std::string mGroup) : group{std::move(mGroup)} { groupReset(group); }
+				inline InitGroupScopeExit(std::string mGroup) : group{move(mGroup)} { groupReset(group); }
 				inline ~InitGroupScopeExit() { groupEndLo(group); }
 			};
 		}

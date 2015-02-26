@@ -61,7 +61,7 @@
 			ad.code = SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), __VA_ARGS__); \
 			ad.line = SSVPP_TOSTR(__LINE__); \
 			ad.file = __FILE__; \
-			::ssvu::Impl::assertImpl(std::move(ad), __VA_ARGS__); \
+			::ssvu::Impl::assertImpl(::ssvu::move(ad), __VA_ARGS__); \
 		} while(false)
 
 	// TODO: BUG: gcc - doesn't work yet

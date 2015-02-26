@@ -39,7 +39,7 @@ namespace ssvu
 
 			SSVU_INLINE void start(std::string mTitle)
 			{
-				getStack().emplace_back(HRClock::now(), std::move(mTitle));
+				getStack().emplace_back(HRClock::now(), move(mTitle));
 				if(getStack().size() > 1) hadNested() = true;
 			}
 

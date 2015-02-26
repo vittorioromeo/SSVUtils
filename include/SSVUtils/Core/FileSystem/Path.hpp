@@ -50,13 +50,13 @@ namespace ssvu
 			public:
 				inline Path() = default;
 				inline Path(const Path& mPath) : path{mPath.path} { }
-				inline Path(Path&& mPath) noexcept : path{std::move(mPath.path)} { }
+				inline Path(Path&& mPath) noexcept : path{move(mPath.path)} { }
 				inline Path(const std::string& mPath) : path{mPath} { }
-				inline Path(std::string&& mPath) noexcept : path{std::move(mPath)} { }
+				inline Path(std::string&& mPath) noexcept : path{move(mPath)} { }
 				inline Path(const char* mPath) : path{mPath} { }
 
 				inline auto& operator=(const Path& mPath)		{ path = mPath.path; mustNormalize = true; return *this; }
-				inline auto& operator=(Path&& mPath) noexcept	{ path = std::move(mPath.path); mustNormalize = true; return *this; }
+				inline auto& operator=(Path&& mPath) noexcept	{ path = move(mPath.path); mustNormalize = true; return *this; }
 
 				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Path)> inline auto& operator=(T&& mPath) noexcept(noexcept(path = FWD(mPath)))
 				{
@@ -78,12 +78,12 @@ namespace ssvu
 				// Internal path string getters
 				inline const std::string& getStr() & noexcept		{ normalize(); return path; }
 				inline const std::string& getStr() const& noexcept	{ normalize(); return path; }
-				inline std::string&& getStr() && noexcept			{ normalize(); return std::move(path); }
+				inline std::string&& getStr() && noexcept			{ normalize(); return move(path); }
 
 				// Implicit conversion to `std::string`
 				inline operator const std::string&() & noexcept			{ return getStr(); }
 				inline operator const std::string&() const& noexcept	{ return getStr(); }
-				inline operator std::string() && noexcept				{ return std::move(getStr()); }
+				inline operator std::string() && noexcept				{ return move(getStr()); }
 
 				inline auto getCStr() const noexcept { return getStr().c_str(); }
 

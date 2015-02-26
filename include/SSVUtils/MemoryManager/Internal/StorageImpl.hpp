@@ -85,13 +85,13 @@ namespace ssvu
 				inline Chunk(const Chunk&) = delete;
 				inline Chunk(Chunk&& mC) noexcept
 				{
-					ptrChain = std::move(mC.ptrChain);
+					ptrChain = move(mC.ptrChain);
 				}
 
 				inline auto& operator=(const Chunk&) = delete;
 				inline auto& operator=(Chunk&& mC) noexcept
 				{
-					ptrChain = std::move(mC.ptrChain);
+					ptrChain = move(mC.ptrChain);
 					return *this;
 				}
 

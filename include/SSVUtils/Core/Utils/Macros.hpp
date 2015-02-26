@@ -103,23 +103,23 @@ namespace ssvu
 /// Must end without semicolon.
 #define SSVU_DEFINE_SINK_SETTER_SIMPLE(mName, mMember) \
 	inline void mName(const decltype(mMember)& mParam)		{ mMember = mParam; } \
-	inline void mName(decltype(mMember)&& mParam) noexcept	{ mMember = std::move(mParam); }
+	inline void mName(decltype(mMember)&& mParam) noexcept	{ mMember = move(mParam); }
 
 /// @macro Defines a basic "sink" constructor for a class, taking one argument.
 /// @details Generates two constructors.
 /// Must end without semicolon.
 #define SSVU_DEFINE_SINK_CTOR_SIMPLE_1(mClassName, mMember) \
 	inline mClassName(const decltype(mMember)& mParam)		: mMember{mParam} { } \
-	inline mClassName(decltype(mMember)&& mParam) noexcept	: mMember{std::move(mParam)} { }
+	inline mClassName(decltype(mMember)&& mParam) noexcept	: mMember{move(mParam)} { }
 
 /// @macro Defines a basic "sink" constructor for a class, taking two arguments.
 /// @details Generates four constructors.
 /// Must end without semicolon.
 #define SSVU_DEFINE_SINK_CTOR_SIMPLE_2(mClassName, mMember1, mMember2) \
 	inline mClassName(const decltype(mMember1)& mParam1,	const decltype(mMember2)& mParam2)		: mMember1{mParam1},			mMember2{mParam2} { } \
-	inline mClassName(const decltype(mMember1)& mParam1,	decltype(mMember2)&& mParam2)			: mMember1{mParam1},			mMember2{std::move(mParam2)} { } \
-	inline mClassName(decltype(mMember1)&& mParam1,			const decltype(mMember2)& mParam2)		: mMember1{std::move(mParam1)},	mMember2{mParam2} { } \
-	inline mClassName(decltype(mMember1)&& mParam1,			decltype(mMember2)&& mParam2) noexcept	: mMember1{std::move(mParam1)},	mMember2{std::move(mParam2)} { }
+	inline mClassName(const decltype(mMember1)& mParam1,	decltype(mMember2)&& mParam2)			: mMember1{mParam1},			mMember2{move(mParam2)} { } \
+	inline mClassName(decltype(mMember1)&& mParam1,			const decltype(mMember2)& mParam2)		: mMember1{move(mParam1)},	mMember2{mParam2} { } \
+	inline mClassName(decltype(mMember1)&& mParam1,			decltype(mMember2)&& mParam2) noexcept	: mMember1{move(mParam1)},	mMember2{move(mParam2)} { }
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
 /// @details Enables if `mT` has the same type of `mType`. Uses `RemoveAll` on the passed type.

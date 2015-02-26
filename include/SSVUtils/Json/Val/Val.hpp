@@ -60,7 +60,7 @@ namespace ssvu
 				#define SSVJ_DEFINE_VAL_GETTER(mType, mMember) \
 					inline mType&		SSVPP_CAT(get, mType)() & noexcept		{ SSVU_ASSERT(is<mType>()); return mMember; } \
 					inline const mType&	SSVPP_CAT(get, mType)() const& noexcept	{ SSVU_ASSERT(is<mType>()); return mMember; } \
-					inline mType		SSVPP_CAT(get, mType)() && noexcept		{ SSVU_ASSERT(is<mType>()); return std::move(mMember); }
+					inline mType		SSVPP_CAT(get, mType)() && noexcept		{ SSVU_ASSERT(is<mType>()); return move(mMember); }
 
 				SSVJ_DEFINE_VAL_GETTER(Obj, h.get<Obj>())
 				SSVJ_DEFINE_VAL_GETTER(Arr, h.get<Arr>())
@@ -112,7 +112,7 @@ namespace ssvu
 
 				// Copy/move constructors
 				inline Val(const Val& mV)	{ init(mV); }
-				inline Val(Val&& mV)		{ init(std::move(mV)); }
+				inline Val(Val&& mV)		{ init(move(mV)); }
 
 				/// @brief Constructs the `Val` from `mX`.
 				template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Val)> inline Val(T&& mX) { set(FWD(mX)); }
@@ -158,7 +158,7 @@ namespace ssvu
 				}
 
 				// "Implicit" Val from Obj by Key getters
-				inline auto& operator[](Key&& mKey)								{ return getObj()[std::move(mKey)]; }
+				inline auto& operator[](Key&& mKey)								{ return getObj()[move(mKey)]; }
 				inline auto& operator[](const Key& mKey)						{ return getObj()[mKey]; }
 				inline const auto& operator[](const Key& mKey) const noexcept	{ return getObj().atOrDefault(mKey); }
 

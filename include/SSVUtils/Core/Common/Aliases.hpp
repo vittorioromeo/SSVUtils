@@ -75,7 +75,8 @@ namespace ssvu
 	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>& mA) noexcept		{ return std::forward<T>(mA); }
 	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>&& mA) noexcept	{ return std::forward<T>(mA); }
 
-	template<typename T> inline constexpr decltype(auto) move(T&& mX) { return std::move(mX); }
+	/// @brief Bring `std::move` into the `ssvu` namespace.
+	using std::move;
 
 	/// @macro Perfect-forwards the arguments by using `ssvu::fwd` and `decltype`.
 	#define SSVU_FWD(...) ::ssvu::fwd<decltype(__VA_ARGS__)>(__VA_ARGS__)

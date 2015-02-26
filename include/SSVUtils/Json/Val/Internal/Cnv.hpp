@@ -141,7 +141,7 @@ namespace ssvu
 				{
 					Arr result; result.reserve(sizeof...(TArgs));
 					tplFor([&result](auto&& mI){ result.emplace_back(FWD(mI)); }, FWD(mX));
-					mV.setArr(std::move(result));
+					mV.setArr(move(result));
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{
@@ -166,7 +166,7 @@ namespace ssvu
 				{
 					Arr result; result.reserve(mX.size());
 					for(const auto& v : mX) result.emplace_back(moveIfRValue<decltype(mX)>(v));
-					mV.setArr(std::move(result));
+					mV.setArr(move(result));
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{
@@ -204,7 +204,7 @@ namespace ssvu
 				{
 					Arr result; result.reserve(TS);
 					for(auto i(0u); i < TS; ++i) result.emplace_back(moveIfRValue<decltype(mX)>(mX[i]));
-					mV.setArr(std::move(result));
+					mV.setArr(move(result));
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{

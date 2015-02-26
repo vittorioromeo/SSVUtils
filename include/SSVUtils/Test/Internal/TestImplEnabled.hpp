@@ -20,7 +20,7 @@ namespace ssvu
 			{
 				const std::string name, line, file;
 
-				inline TestBase(std::string mName, std::string mLine, std::string mFile) : name{std::move(mName)}, line{std::move(mLine)}, file{std::move(mFile)} { }
+				inline TestBase(std::string mName, std::string mLine, std::string mFile) : name{move(mName)}, line{move(mLine)}, file{move(mFile)} { }
 				inline virtual ~TestBase() { }
 				inline virtual void run() const { }
 			};
@@ -31,7 +31,7 @@ namespace ssvu
 				const std::string expr, line, current, expected;
 
 				inline TestFailException(const TestBase* mTest, std::string mExpr, std::string mLine, std::string mCurrent = "", std::string mExpected = "")
-					: test{mTest}, expr{std::move(mExpr)}, line{std::move(mLine)}, current(std::move(mCurrent)), expected(std::move(mExpected)) { }
+					: test{mTest}, expr{move(mExpr)}, line{move(mLine)}, current(move(mCurrent)), expected(move(mExpected)) { }
 			};
 
 			using TestStorage = VecUPtr<TestBase>;

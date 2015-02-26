@@ -55,7 +55,7 @@ namespace ssvu
 			// Getters
 			template<typename T> inline T& get() & noexcept				{ assertDirty<T>(); return this->template getImpl<T>(); }
 			template<typename T> inline const T& get() const& noexcept	{ assertDirty<T>(); return this->template getImpl<T>(); }
-			template<typename T> inline T get() && noexcept				{ assertDirty<T>(); return std::move(this->template getImpl<T>()); }
+			template<typename T> inline T get() && noexcept				{ assertDirty<T>(); return move(this->template getImpl<T>()); }
 	};
 }
 
