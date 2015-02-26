@@ -36,12 +36,16 @@ SSVUT_TEST(BenchmarkTests)
 	{
 		ssvu::Benchmark::groupReset("__testGroup1");
 		ssvu::Benchmark::groupReset("__testGroup2");
+		SSVU_BENCHMARK_INIT_GROUP_SCOPE_EXIT("__testGroup3");
 
 		ssvu::Benchmark::groupResume("__testGroup1");
 		ssvu::Benchmark::groupPause("__testGroup1");
 
 		ssvu::Benchmark::groupResume("__testGroup2");
 		ssvu::Benchmark::groupPause("__testGroup2");
+
+		ssvu::Benchmark::groupResume("__testGroup3");
+		ssvu::Benchmark::groupPause("__testGroup3");
 
 		ssvu::Benchmark::groupEndLo("__testGroup1");
 		ssvu::Benchmark::groupEndLo("__testGroup2");

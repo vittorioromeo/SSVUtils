@@ -55,25 +55,15 @@ namespace ssvu
 				inline RunGroupScopeExit(std::string mGroup) : group{std::move(mGroup)} { groupResume(group); }
 				inline ~RunGroupScopeExit() { groupPause(group); }
 			};
+
+			struct InitGroupScopeExit
+			{
+				std::string group;
+				inline InitGroupScopeExit(std::string mGroup) : group{std::move(mGroup)} { groupReset(group); }
+				inline ~InitGroupScopeExit() { groupEndLo(group); }
+			};
 		}
 	}
 }
 
 #endif
-
-/* TODO: impl + macro
- *
-struct BenchmarkGroupRAII
-{
-	std::string groupName;
-	inline BenchmarkGroupRAII(const std::string& mGroupName) : groupName{mGroupName}
-	{
-		ssvu::Benchmark::groupReset(groupName);
-	}
-	inline ~BenchmarkGroupRAII()
-	{
-		ssvu::Benchmark::groupEndLo(groupName);
-	}
-};
-*/
-
