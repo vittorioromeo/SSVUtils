@@ -25,9 +25,11 @@ namespace ssvu
 				template<typename T> inline void setDirty() noexcept { dirtyFlag = MPL::getIdxOf<T, Ts...>(); }
 				template<typename T> inline void assertDirty() const noexcept { SSVU_ASSERT(dirtyFlag == MPL::getIdxOf<T, Ts...>(), "Union needs to be dirty with the correct type"); }
 			#else
-				inline void setClean(bool) noexcept { }
+				inline void setClean() noexcept { }
 				inline void assertClean() const noexcept { }
 				inline void assertNotClean() const noexcept { }
+				template<typename> inline void setDirty() const noexcept { }
+				template<typename> inline void assertDirty() const noexcept { }
 			#endif
 
 		public:

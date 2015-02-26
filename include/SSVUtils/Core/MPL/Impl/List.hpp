@@ -26,42 +26,6 @@ namespace ssvu
 			inline constexpr int getCycleIdx(int mX, int mSize) noexcept { return mX >= 0 ? mX : mSize + mX; }
 		}
 
-		// TODO: move
-		namespace Impl
-		{
-			inline constexpr SizeT getMapIns(SizeT mI, SizeT mFrom, SizeT mTo) noexcept
-			{
-				return mI < mTo ? mI : mI == mTo ? mFrom : mI - 1;
-			}
-
-			template<typename, typename, SizeT, typename...> struct Insert;
-
-			template<SizeT... TIs, typename T, SizeT TN, typename... Ts> struct Insert<IdxSeq<TIs...>, T, TN, Ts...>
-			{
-				SSVU_ASSERT_STATIC(TN <= sizeof...(Ts), "Insert index smaller or equal to the size of the list");
-				using Type = List<TplElem<getMapIns(TIs, sizeof...(Ts), TN), Tpl<Ts..., T>>...>;
-			};
-
-			inline constexpr SizeT getMapRem(SizeT mI, SizeT mIdx) noexcept
-			{
-				return mI < mIdx ? mI : mI + 1;
-			}
-
-			template<typename, SizeT, typename...> struct RemoveHlpr;
-
-			template<SizeT... TIs, SizeT TN, typename... Ts> struct RemoveHlpr<IdxSeq<TIs...>, TN, Ts...>
-			{
-				using Type = List<TplElem<getMapRem(TIs, TN), Tpl<Ts...>>...>;
-			};
-
-			template<SizeT TN, typename... Ts> struct Remove
-			{
-				SSVU_ASSERT_STATIC(TN < sizeof...(Ts), "Remove index smaller than the size of the list");
-				using Type = typename RemoveHlpr<MkIdxSeq<sizeof...(Ts) - 1>, TN, Ts...>::Type;
-			};
-
-		}
-
 		// Empty list implementation
 		template<> struct List<>
 		{
@@ -89,8 +53,14 @@ namespace ssvu
 
 			template<typename> inline static constexpr SizeT getCountOf() noexcept { return 0; }
 			template<typename> inline static constexpr bool has() noexcept { return false; }
-			template<template<typename> class> inline static constexpr bool all() { return false; }
-			template<template<typename> class> inline static constexpr bool any() { return false; }
+			template<template<typename> class> inline static constexpr bool all() noexcept { return false; }
+			template<template<typename> class> inline static constexpr bool any() noexcept { return false; }
+			template<typename TL> inline static constexpr bool isEqualTo() noexcept { return isSame<Type, TL>(); }
+
+			template<typename TL> using IdxsOfSeq = ListInt<>;
+			template<typename TL> inline static constexpr auto getCountOfSeq() noexcept { return IdxsOfSeq<TL>::size; }
+			template<typename TL> inline static constexpr auto hasSeq() noexcept { return getCountOfSeq<TL>() > 0; }
+			template<typename TL, typename TN> using ReplaceAllOfSeq = Impl::ReplaceAllOfSeq<Type, TL, TN>;
 		};
 
 		// Non-empty list implementation
@@ -184,19 +154,25 @@ namespace ssvu
 			/// @brief Returns the index of the first occurence of `T` in the type list. Asserts that `T` is in the list.
 			template<typename T> inline static constexpr SizeT getIdxOf() { SSVU_ASSERT_STATIC_NM(has<T>()); return Impl::IdxOf<T, Ts...>{}(); }
 
+
+			template<typename TL> inline static constexpr bool isEqualTo() noexcept { return isSame<Type, TL>(); }
+
+
+
+			template<typename TL> using IdxsOfSeq = Impl::IdxsOfSeq<Type, TL>;
+			template<typename TL> inline static constexpr auto getCountOfSeq() noexcept { return IdxsOfSeq<TL>::size; }
+			template<typename TL> inline static constexpr auto hasSeq() noexcept { return getCountOfSeq<TL>() > 0; }
+			template<typename TL, typename TN> using ReplaceAllOfSeq = Impl::ReplaceAllOfSeq<Type, TL, TN>;
+
 			// TODO
 			// template<int TS1, int TS2> using Slice = typename Impl::SliceHlpr<getCycleIdx(TS1), getCycleIdx(TS2), getCycleIdx(TS1), List<Ts...>>::Type;
 			template<int TS1, int TS2> using Slice = typename Impl::SliceHlpr<TS1, TS2, TS1, List<Ts...>>::Type;
 
-			// TODO: insert
+
 			// TODO: reverse
 			// TODO: replace first/all
-			// TODO: has subsequence
-			// TODO: find subsequences
 			// TODO. sort
 		};
-
-		// TODO: template<typename T, T... Ts> struct ValueList
 	}
 }
 

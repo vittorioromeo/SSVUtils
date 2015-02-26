@@ -16,6 +16,10 @@
 #include "SSVUtils/Core/MPL/Impl/Append.hpp"
 #include "SSVUtils/Core/MPL/Impl/Unique.hpp"
 #include "SSVUtils/Core/MPL/Impl/IdxOf.hpp"
+#include "SSVUtils/Core/MPL/Impl/Insert.hpp"
+#include "SSVUtils/Core/MPL/Impl/Remove.hpp"
+#include "SSVUtils/Core/MPL/Impl/Filter.hpp"
+#include "SSVUtils/Core/MPL/Impl/IdxsOfSeq.hpp"
 #include "SSVUtils/Core/MPL/Impl/List.hpp"
 #include "SSVUtils/Core/MPL/Impl/Utils.hpp"
 

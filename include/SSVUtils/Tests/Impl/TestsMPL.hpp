@@ -172,6 +172,141 @@ SSVUT_TEST(MPLTests)
 		List<char>::Remove<0>,
 		List<>
 	>());
+
+	SSVU_ASSERT_STATIC_NM(
+		List<>::isEqualTo<
+		List<>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<int>::isEqualTo<
+		List<>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<>::isEqualTo<
+		List<int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(
+		List<int>::isEqualTo<
+		List<int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<int, char>::isEqualTo<
+		List<int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<int>::isEqualTo<
+		List<int, char>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(
+		List<int, char>::isEqualTo<
+		List<int, char>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!
+		List<int, char>::isEqualTo<
+		List<char, int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!isSame<
+		List<int, char>,
+		List<char, int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int>::IdxsOfSeq<List<>>,
+		ListIC<int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<>::IdxsOfSeq<List<int>>,
+		ListIC<int>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(!isSame<
+		List<>::IdxsOfSeq<List<>>,
+		ListInt<0>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int>::IdxsOfSeq<List<int>>,
+		ListInt<0>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, int>::IdxsOfSeq<List<int>>,
+		ListInt<0, 1>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, int>::IdxsOfSeq<List<int>>,
+		ListInt<0, 2>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, int>::IdxsOfSeq<List<int, char>>,
+		ListInt<0>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, char>::IdxsOfSeq<List<int, char>>,
+		ListInt<0>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, int, char>::IdxsOfSeq<List<int, char>>,
+		ListInt<0, 2>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, char, char, int, char>::IdxsOfSeq<List<int, char>>,
+		ListInt<0, 3>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int>::ReplaceAllOfSeq<List<int>, List<>>,
+		List<>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int>::ReplaceAllOfSeq<List<int>, List<char>>,
+		List<char>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, float>::ReplaceAllOfSeq<List<int>, List<char>>,
+		List<char, float>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, float, int>::ReplaceAllOfSeq<List<int>, List<char>>,
+		List<char, float, char>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, float>::ReplaceAllOfSeq<List<int, float>, List<char>>,
+		List<char>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, float, int, int, int, float, int, float, float>::ReplaceAllOfSeq<List<int, float>, List<char>>,
+		List<char, int, int, char, char, float>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, float, int, int, int, float, int, float, float>::ReplaceAllOfSeq<List<int, float>, List<>>,
+		List<int, int, float>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<int, float, int, int, int, float, int, float, float>::ReplaceAllOfSeq<List<int, float>, List<char, double>>,
+		List<char, double, int, int, char, double, char, double, float>
+	>());
 }
 
 #endif

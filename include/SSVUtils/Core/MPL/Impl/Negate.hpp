@@ -13,9 +13,9 @@ namespace ssvu
 	{
 		namespace Impl
 		{
-			template<template<typename...>class TP> struct Negate
+			template<template<typename...> class TP> struct Negate
 			{
-				template<typename T> using Type = IntegralConstant<bool, !TP<T>{}()>;
+				template<typename T> using Type = CTBool<!TP<T>{}()>;
 			};
 		}
 	}
