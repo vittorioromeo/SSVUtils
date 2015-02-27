@@ -174,6 +174,25 @@ SSVUT_TEST(PreprocessorTests)
 
 		#undef SSVU_TEST_GEN_LMBD
 	}
+
+
+	{
+		#define SSVU_TEST_ACTION_REPEAT(mIdx, mData) SSVPP_TOSTR(mIdx)
+
+		auto sinc1 = SSVPP_IMPL_REPEAT_INC(1, SSVU_TEST_ACTION_REPEAT, ());
+		SSVUT_EXPECT_OP(sinc1, ==, "0");
+
+		auto sdec1 = SSVPP_IMPL_REPEAT_DEC(1, SSVU_TEST_ACTION_REPEAT, ());
+		SSVUT_EXPECT_OP(sdec1, ==, "0");
+
+		auto sinc5 = SSVPP_IMPL_REPEAT_INC(5, SSVU_TEST_ACTION_REPEAT, ());
+		SSVUT_EXPECT_OP(sinc5, ==, "01234");
+
+		auto sdec5 = SSVPP_IMPL_REPEAT_DEC(5, SSVU_TEST_ACTION_REPEAT, ());
+		SSVUT_EXPECT_OP(sdec5, ==, "43210");
+
+		#undef SSVU_TEST_ACTION_REPEAT
+	}
 }
 
 #endif

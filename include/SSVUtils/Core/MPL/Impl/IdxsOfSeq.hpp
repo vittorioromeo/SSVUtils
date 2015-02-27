@@ -18,15 +18,17 @@ namespace ssvu
 				using Type = TR;
 			};
 
-			template<typename TS1, typename TM1, typename... Ts, typename... Tm, int... Tr, int TI>
-			struct IdxsOfSeqHelper<List<TS1, Ts...>, List<TM1, Tm...>, ListInt<Tr...>, TI, true>
+			template<typename TS1, typename TM1, typename... Ts, typename... Tm, typename TR, int TI>
+			struct IdxsOfSeqHelper<List<TS1, Ts...>, List<TM1, Tm...>, TR, TI, true>
 			{
 				using LS = List<TS1, Ts...>;
 				using LM = List<TM1, Tm...>;
-				using LR = ListInt<Tr...>;
+
+					// TODO: bottleneck, use a matching index algorithm instead
 				using LSSlice = typename LS::template Slice<TI, TI + LM::size>;
-				using LRPushed = typename LR::template PushBack<CTInt<TI>>;
-				using LRNext = Conditional<isSame<LSSlice, LM>(), LRPushed, LR>;
+
+				using LRPushed = typename TR::template PushBack<CTInt<TI>>;
+				using LRNext = Conditional<isSame<LSSlice, LM>(), LRPushed, TR>;
 				static constexpr bool bln{TI <= LS::size - LM::size};
 				using Type = typename IdxsOfSeqHelper<LS, LM, LRNext, TI + 1, bln>::Type;
 			};

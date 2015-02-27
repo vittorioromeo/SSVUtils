@@ -11,5 +11,3 @@
 #define SSVPP_FOREACH(...)						SSVPP_IMPL_FOREACH(__VA_ARGS__)
 
 #endif
-
-// TODO: SSVPP_REPEAT

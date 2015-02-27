@@ -12,6 +12,7 @@
 #include "SSVUtils/Core/Preprocessor/Aritmethic.hpp"
 #include "SSVUtils/Core/Preprocessor/Bool.hpp"
 #include "SSVUtils/Core/Preprocessor/ForEach.hpp"
+#include "SSVUtils/Core/Preprocessor/Repeat.hpp"
 #include "SSVUtils/Core/Preprocessor/Cat.hpp"
 #include "SSVUtils/Core/Preprocessor/ToStrSep.hpp"
 
