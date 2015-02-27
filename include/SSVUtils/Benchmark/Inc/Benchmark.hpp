@@ -41,14 +41,14 @@ namespace ssvu
 
 		namespace Impl
 		{
-			/// @brief RAII struct used for LOG_SCOPE_EXIT benchmarks.
+			/// @brief RAII struct used for `SSVU_BENCHMARK_LOG_SCOPE_EXIT` benchmarks.
 			struct LogScopeExit
 			{
 				inline LogScopeExit(std::string mTitle = "") { start(move(mTitle)); }
 				inline ~LogScopeExit() { endLo(); }
 			};
 
-			/// @brief RAII struct used for RUN_GROUP_SCOPE_EXIT benchmarks.
+			/// @brief RAII struct used for `SSVU_BENCHMARK_RUN_GROUP_SCOPE_EXIT` benchmarks.
 			struct RunGroupScopeExit
 			{
 				std::string group;
@@ -56,6 +56,7 @@ namespace ssvu
 				inline ~RunGroupScopeExit() { groupPause(group); }
 			};
 
+			/// @brief RAII struct used for `SSVU_BENCHMARK_INIT_GROUP_SCOPE_EXIT` benchmarks.
 			struct InitGroupScopeExit
 			{
 				std::string group;

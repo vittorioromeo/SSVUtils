@@ -116,18 +116,21 @@ namespace ssvu
 /// @details Generates four constructors.
 /// Must end without semicolon.
 #define SSVU_DEFINE_SINK_CTOR_SIMPLE_2(mClassName, mMember1, mMember2) \
-	inline mClassName(const decltype(mMember1)& mParam1,	const decltype(mMember2)& mParam2)		: mMember1{mParam1},			mMember2{mParam2} { } \
-	inline mClassName(const decltype(mMember1)& mParam1,	decltype(mMember2)&& mParam2)			: mMember1{mParam1},			mMember2{move(mParam2)} { } \
+	inline mClassName(const decltype(mMember1)& mParam1,	const decltype(mMember2)& mParam2)		: mMember1{mParam1},		mMember2{mParam2} { } \
+	inline mClassName(const decltype(mMember1)& mParam1,	decltype(mMember2)&& mParam2)			: mMember1{mParam1},		mMember2{move(mParam2)} { } \
 	inline mClassName(decltype(mMember1)&& mParam1,			const decltype(mMember2)& mParam2)		: mMember1{move(mParam1)},	mMember2{mParam2} { } \
 	inline mClassName(decltype(mMember1)&& mParam1,			decltype(mMember2)&& mParam2) noexcept	: mMember1{move(mParam1)},	mMember2{move(mParam2)} { }
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
+#define SSVU_ENABLEIF(...) EnableIf<__VA_ARGS__>* = nullptr
+
+/// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
 /// @details Enables if `mT` has the same type of `mType`. Uses `RemoveAll` on the passed type.
-#define SSVU_ENABLEIF_RA_IS(mT, mType) EnableIf<isSame<RemoveAll<mT>, mType>()>* = nullptr
+#define SSVU_ENABLEIF_RA_IS(mT, mType) SSVU_ENABLEIF(isSame<RemoveAll<mT>, mType>())
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
 /// /// @details Enables if `mT` has not the same type of `mType`. Uses `RemoveAll` on the passed type.
-#define SSVU_ENABLEIF_RA_IS_NOT(mT, mType) EnableIf<!isSame<RemoveAll<mT>, mType>()>* = nullptr
+#define SSVU_ENABLEIF_RA_IS_NOT(mT, mType) SSVU_ENABLEIF(!isSame<RemoveAll<mT>, mType>())
 
 // Unreachable macro
 #if (defined(SSVU_COMPILER_CLANG) || defined(SSVU_COMPILER_GCC))

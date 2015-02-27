@@ -50,12 +50,12 @@
 // It also includes some commonly used STL header files and checks the current OS.
 #include "SSVUtils/Core/Common/Common.hpp"
 
-// The "Core/MPL/MPL" module defines various metaprogramming facilities used throughout the library.
-#include "SSVUtils/Core/MPL/MPL.hpp"
-
 // "Core/Utils/Utils" module has many utility functions that are used heavily throughout
 // the whole library.
 #include "SSVUtils/Core/Utils/Utils.hpp"
+
+// The "Core/MPL/MPL" module defines various metaprogramming facilities used throughout the library.
+#include "SSVUtils/Core/MPL/MPL.hpp"
 
 // "Core/Tuple/Tuple" module has many tuple utility functions that are used throughout
 // the whole library.

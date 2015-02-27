@@ -33,8 +33,6 @@ SSVUT_TEST(MPLTests)
 
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::Head, PT0>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::Tail, PT2>());
-	//SSVU_ASSERT_STATIC_NM(isSame<List<>::Head, Null>());
-	//SSVU_ASSERT_STATIC_NM(isSame<List<>::Tail, Null>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<List<>::AsTpl, Tpl<>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::AsTpl, Tpl<PT0>>());
@@ -44,10 +42,6 @@ SSVUT_TEST(MPLTests)
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::At<0>, PT0>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::At<1>, PT1>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::At<2>, PT2>());
-
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::At<-1>, PT2>());
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::At<-2>, PT1>());
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::At<-3>, PT0>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<List<>::PushBack<PT0>, List<PT0>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::PushBack<PT1>, List<PT0, PT1>>());
@@ -60,29 +54,16 @@ SSVUT_TEST(MPLTests)
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::PopBack, List<PT0, PT1>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1>::PopBack, List<PT0>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::PopBack, List<>>());
-	//SSVU_ASSERT_STATIC_NM(isSame<List<>::PopBack, List<>>());
 
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::PopFront, List<PT1, PT2>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT1, PT2>::PopFront, List<PT2>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT2>::PopFront, List<>>());
-	//SSVU_ASSERT_STATIC_NM(isSame<List<>::PopFront, List<>>());
 
-	//						         0      1     2      3    4
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 0>, List<>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 1>, List<PT0>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 3>, List<PT0, PT1, PT2>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<2, 4>, List<PT2, PT1>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 999>, List<PT0, PT1, PT2, PT1, PT0>>());
-
-	/* TODO
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 0>, List<>>());
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<-1, 0>, List<PT0>>());
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<-2, 0>, List<PT1, PT0>>());
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<-3, 0>, List<PT2, PT1, PT0>>());
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<-4, 0>, List<PT1, PT2, PT1, PT0>>());
-	//SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<-5, 0>, List<PT0, PT1, PT2, PT1, PT0>>());
-	//SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<-999, 0>, List<PT0, PT1, PT2, PT1, PT0>>());*/
-
 
 	SSVU_ASSERT_STATIC_NM(List<PT0, PT1, PT2, PT1, PT0>::has<PT0>());
 	SSVU_ASSERT_STATIC_NM(List<PT0, PT1, PT2, PT1, PT0>::has<PT1>());
@@ -306,6 +287,26 @@ SSVUT_TEST(MPLTests)
 	SSVU_ASSERT_STATIC_NM(isSame<
 		List<int, float, int, int, int, float, int, float, float>::ReplaceAllOfSeq<List<int, float>, List<char, double>>,
 		List<char, double, int, int, char, double, char, double, float>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<>::Reverse,
+		List<>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<PT0>::Reverse,
+		List<PT0>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<PT0, PT1>::Reverse,
+		List<PT1, PT0>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame<
+		List<PT0, PT1, PT2>::Reverse,
+		List<PT2, PT1, PT0>
 	>());
 }
 

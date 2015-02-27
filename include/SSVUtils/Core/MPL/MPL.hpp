@@ -20,6 +20,7 @@
 #include "SSVUtils/Core/MPL/Impl/Remove.hpp"
 #include "SSVUtils/Core/MPL/Impl/Filter.hpp"
 #include "SSVUtils/Core/MPL/Impl/IdxsOfSeq.hpp"
+#include "SSVUtils/Core/MPL/Impl/Reverse.hpp"
 #include "SSVUtils/Core/MPL/Impl/List.hpp"
 #include "SSVUtils/Core/MPL/Impl/Utils.hpp"
 

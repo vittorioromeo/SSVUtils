@@ -78,3 +78,4 @@
 // TODO: TArgs -> Ts (?)
 // TODO: size_t literal operator, replace auto(0u), and SizeT() casts
 // TODO: SSVCMAKE: release disable tests
+// TODO: replace for loops with for(auto x : range())
