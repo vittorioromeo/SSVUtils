@@ -205,7 +205,7 @@ namespace ssvu
 
 
 			/// @brief Returns the sublist of this list [TS1, TS2).
-			template<int TS1, int TS2> using Slice = typename Impl::SliceHlpr<TS1, TS2, TS1, List<Ts...>>::Type;
+			template<int TS1, int TS2> using Slice = Impl::Slice<Type, TS1, TS2>;
 		};
 	}
 }

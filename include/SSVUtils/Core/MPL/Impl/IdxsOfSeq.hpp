@@ -13,27 +13,56 @@ namespace ssvu
 	{
 		namespace Impl
 		{
-			template<typename, typename, typename TR, int, bool> struct IdxsOfSeqHelper
+			template<typename...> struct AreAllTrue : FalseT { };
+			template<typename... Ts> struct AreAllTrue<FalseT, Ts...> : FalseT { };
+			template<typename... Ts> struct AreAllTrue<TrueT, Ts...> : CTBool<AreAllTrue<Ts...>{}()> { };
+			template<> struct AreAllTrue<> : TrueT { };
+
+			template<bool TAllTrue, int TStart> struct Matches;
+			template<int TStart> struct Matches<true, TStart>	{ using Type = ListInt<TStart>; };
+			template<int TStart> struct Matches<false, TStart>	{ using Type = ListInt<>; };
+
+			template<typename TS, typename TM, int TStart, typename TMIdxs> struct GetMatch;
+			template<typename TS, typename TM, int TStart, SizeT... TMIdxs> struct GetMatch<TS, TM, TStart, IdxSeq<TMIdxs...>>
+			{
+				using Type = typename Matches
+				<
+					AreAllTrue
+					<
+						IsSame
+						<
+							typename TS::template At<TStart + TMIdxs>,
+							typename TM::template At<TMIdxs>
+						>...
+					>{}(),
+					TStart
+				>::Type;
+			};
+
+
+			template<typename TR, typename... TLs> struct ConcatTest;
+			template<typename TR, typename TL, typename... TLs> struct ConcatTest<TR, TL, TLs...>
+			{
+				using Type = typename TR::template Append<TL>::template Append<typename ConcatTest<TR, TLs...>::Type>;
+			};
+			template<typename TR> struct ConcatTest<TR>
 			{
 				using Type = TR;
 			};
 
-			template<typename TS1, typename TM1, typename... Ts, typename... Tm, typename TR, int TI>
-			struct IdxsOfSeqHelper<List<TS1, Ts...>, List<TM1, Tm...>, TR, TI, true>
+			template<typename TS, typename TM, typename TSIdxs, typename TMIdxs> struct IdxsOfSeqNewHelper;
+			template<typename TS, typename TM, SizeT... TSIdxs, typename TMIdxs> struct IdxsOfSeqNewHelper<TS, TM, IdxSeq<TSIdxs...>, TMIdxs>
 			{
-				using LS = List<TS1, Ts...>;
-				using LM = List<TM1, Tm...>;
-
-					// TODO: bottleneck, use a matching index algorithm instead
-				using LSSlice = typename LS::template Slice<TI, TI + LM::size>;
-
-				using LRPushed = typename TR::template PushBack<CTInt<TI>>;
-				using LRNext = Conditional<isSame<LSSlice, LM>(), LRPushed, TR>;
-				static constexpr bool bln{TI <= LS::size - LM::size};
-				using Type = typename IdxsOfSeqHelper<LS, LM, LRNext, TI + 1, bln>::Type;
+				using Type = typename ConcatTest<ListInt<>, typename GetMatch<TS, TM, TSIdxs, TMIdxs>::Type...>::Type;
+			};
+			template<typename TS, SizeT... TSIdxs, typename TMIdxs> struct IdxsOfSeqNewHelper<TS, List<>, IdxSeq<TSIdxs...>, TMIdxs>
+			{
+				using Type = ListInt<>;
 			};
 
-			template<typename TS, typename TM> using IdxsOfSeq = typename IdxsOfSeqHelper<TS, TM, ListInt<>, 0, true>::Type;
+
+
+			template<typename TS, typename TM> using IdxsOfSeq = typename IdxsOfSeqNewHelper<TS, TM, MkIdxSeq<getClampedMin(int(TS::size - TM::size + 1), 0)>, MkIdxSeq<TM::size>>::Type;
 
 
 

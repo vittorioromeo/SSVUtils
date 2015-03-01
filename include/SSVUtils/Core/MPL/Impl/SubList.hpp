@@ -13,25 +13,14 @@ namespace ssvu
 	{
 		namespace Impl
 		{
-			template<int, int, int, typename, typename, bool> struct SliceImpl;
-			template<int, int, int, typename, typename> struct SliceDispatch;
-			template<int TS1, int TS2, int TSC, typename... TLA1s, typename... TLA2s> struct SliceImpl<TS1, TS2, TSC, List<TLA1s...>, List<TLA2s...>, false>
+			template<typename TL, typename TIdxs, int TS> struct SliceHlpr;
+			template<typename TL, SizeT... TIdxs, int TS> struct SliceHlpr<TL, IdxSeq<TIdxs...>, TS>
 			{
-				using Type = typename SliceDispatch<TS1, TS2, TSC + 1, List<TLA1s...>, typename List<TLA2s...>::template PushBack<typename List<TLA1s...>::template At<TSC>>>::Type;
+				using Type = List<typename TL::template At<TS + TIdxs>...>;
 			};
-			template<int TS1, int TS2, int TSC, typename... TLA1s, typename... TLA2s> struct SliceImpl<TS1, TS2, TSC, List<TLA1s...>, List<TLA2s...>, true>
-			{
-				using Type = List<TLA2s...>;
-			};
-			template<int TS1, int TS2, int TSC, typename TL1, typename TL2> struct SliceDispatch
-			{
-				using Type = typename SliceImpl<TS1, TS2, TSC, TL1, TL2, TSC == TS2 || TSC >= int(TL1::size)>::Type;
-			};
-			template<int, int, int, typename> struct SliceHlpr;
-			template<int TS1, int TS2, int TSC, typename... TLAs> struct SliceHlpr<TS1, TS2, TSC, List<TLAs...>>
-			{
-				using Type = typename SliceDispatch<TS1, TS2, TSC, List<TLAs...>, List<>>::Type;
-			};
+
+			template<typename TL> inline constexpr int clampListIdx(int mX) noexcept { return getClamped(mX, 0, TL::size); }
+			template<typename TL, int TS1, int TS2> using Slice = typename SliceHlpr<TL, MkIdxSeq<clampListIdx<TL>(TS2) - clampListIdx<TL>(TS1)>, clampListIdx<TL>(TS1)>::Type;
 		}
 	}
 }

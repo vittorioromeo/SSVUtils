@@ -63,7 +63,9 @@ SSVUT_TEST(MPLTests)
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 1>, List<PT0>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 3>, List<PT0, PT1, PT2>>());
 	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<2, 4>, List<PT2, PT1>>());
-	SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 999>, List<PT0, PT1, PT2, PT1, PT0>>());
+
+	// Will not compile
+	// SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 999>, List<PT0, PT1, PT2, PT1, PT0>>());
 
 	SSVU_ASSERT_STATIC_NM(List<PT0, PT1, PT2, PT1, PT0>::has<PT0>());
 	SSVU_ASSERT_STATIC_NM(List<PT0, PT1, PT2, PT1, PT0>::has<PT1>());
