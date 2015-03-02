@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_TIMELINE_GO
-#define SSVU_TIMELINE_GO
+#ifndef SSVU_IMPL_TIMELINE_GO
+#define SSVU_IMPL_TIMELINE_GO
 
 namespace ssvu
 {

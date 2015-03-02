@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_TIMELINE_WAIT
-#define SSVU_TIMELINE_WAIT
+#ifndef SSVU_IMPL_TIMELINE_WAIT
+#define SSVU_IMPL_TIMELINE_WAIT
 
 namespace ssvu
 {
@@ -13,20 +13,11 @@ namespace ssvu
 			FT time, currentTime;
 
 		protected:
-			inline void update(FT mFT) override
-			{
-				timeline.ready = false;
-
-				currentTime -= mFT;
-				if(currentTime > 0) return;
-
-				timeline.remainder = currentTime;
-				timeline.next(); reset();
-			}
-			inline void reset() override { currentTime = time; }
+			void update(FT mFT) override;
+			void reset() override;
 
 		public:
-			inline Wait(Timeline& mTimeline, FT mTime) noexcept : Command{mTimeline}, time{mTime}, currentTime{mTime} { SSVU_ASSERT(time >= 0); }
+			inline Wait(Timeline& mTimeline, FT mTime) noexcept;
 	};
 
 	namespace Impl

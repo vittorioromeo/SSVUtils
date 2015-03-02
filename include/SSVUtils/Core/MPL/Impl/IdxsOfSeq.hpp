@@ -50,43 +50,43 @@ namespace ssvu
 				using Type = TR;
 			};
 
-			template<typename TS, typename TM, typename TSIdxs, typename TMIdxs> struct IdxsOfSeqNewHelper;
-			template<typename TS, typename TM, SizeT... TSIdxs, typename TMIdxs> struct IdxsOfSeqNewHelper<TS, TM, IdxSeq<TSIdxs...>, TMIdxs>
+			template<typename TS, typename TM, typename TSIdxs, typename TMIdxs> struct IdxsOfSeqHlpr;
+			template<typename TS, typename TM, SizeT... TSIdxs, typename TMIdxs> struct IdxsOfSeqHlpr<TS, TM, IdxSeq<TSIdxs...>, TMIdxs>
 			{
 				using Type = typename ConcatTest<ListInt<>, typename GetMatch<TS, TM, TSIdxs, TMIdxs>::Type...>::Type;
 			};
-			template<typename TS, SizeT... TSIdxs, typename TMIdxs> struct IdxsOfSeqNewHelper<TS, List<>, IdxSeq<TSIdxs...>, TMIdxs>
+			template<typename TS, SizeT... TSIdxs, typename TMIdxs> struct IdxsOfSeqHlpr<TS, List<>, IdxSeq<TSIdxs...>, TMIdxs>
 			{
 				using Type = ListInt<>;
 			};
 
 
 
-			template<typename TS, typename TM> using IdxsOfSeq = typename IdxsOfSeqNewHelper<TS, TM, MkIdxSeq<getClampedMin(int(TS::size - TM::size + 1), 0)>, MkIdxSeq<TM::size>>::Type;
+			template<typename TS, typename TM> using IdxsOfSeq = typename IdxsOfSeqHlpr<TS, TM, MkIdxSeq<getClampedMin(int(TS::size - TM::size + 1), 0)>, MkIdxSeq<TM::size>>::Type;
 
 
 
-			template<typename, typename, typename, typename, typename, int> struct ReplaceAllOfSeqHelper;
+			template<typename, typename, typename, typename, typename, int> struct ReplaceAllOfSeqHlpr;
 
 			template<typename TS, typename TM, typename TN, typename TR, int TI>
-			struct ReplaceAllOfSeqHelper<TS, TM, TN, TR, ListInt<>, TI>
+			struct ReplaceAllOfSeqHlpr<TS, TM, TN, TR, ListInt<>, TI>
 			{
 				using SliceLast = typename TS::template Slice<TI, TS::size>;
 				using Type = typename TR::template Append<SliceLast>;
 			};
 
 			template<typename TS, typename TM, typename TN, typename TR, int TILast, int TI, int... TIs>
-			struct ReplaceAllOfSeqHelper<TS, TM, TN, TR, ListInt<TI, TIs...>, TILast>
+			struct ReplaceAllOfSeqHlpr<TS, TM, TN, TR, ListInt<TI, TIs...>, TILast>
 			{
 				using SliceBefore = typename TS::template Slice<TILast, TI>;
 
 				using Append1 = typename TR::template Append<SliceBefore>;
 				using Append2 = typename Append1::template Append<TN>;
 
-				using Type = typename ReplaceAllOfSeqHelper<TS, TM, TN, Append2, ListInt<TIs...>, TI + TM::size>::Type;
+				using Type = typename ReplaceAllOfSeqHlpr<TS, TM, TN, Append2, ListInt<TIs...>, TI + TM::size>::Type;
 			};
 
-			template<typename TS, typename TM, typename TN> using ReplaceAllOfSeq = typename ReplaceAllOfSeqHelper<TS, TM, TN, List<>, IdxsOfSeq<TS, TM>, 0>::Type;
+			template<typename TS, typename TM, typename TN> using ReplaceAllOfSeq = typename ReplaceAllOfSeqHlpr<TS, TM, TN, List<>, IdxsOfSeq<TS, TM>, 0>::Type;
 		}
 	}
 }

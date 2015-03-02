@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVU_TIMELINE_DO
-#define SSVU_TIMELINE_DO
+#ifndef SSVU_IMPL_TIMELINE_DO
+#define SSVU_IMPL_TIMELINE_DO
 
 namespace ssvu
 {
@@ -11,10 +11,10 @@ namespace ssvu
 	{
 		protected:
 			Action action;
-			inline void update(FT) override { action(); timeline.next(); }
+			void update(FT) override;
 
 		public:
-			inline Do(Timeline& mTimeline, const Action& mAction) noexcept : Command{mTimeline}, action{mAction} { }
+			Do(Timeline& mTimeline, const Action& mAction) noexcept;
 	};
 }
 
