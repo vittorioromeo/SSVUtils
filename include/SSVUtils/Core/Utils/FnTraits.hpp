@@ -46,7 +46,7 @@ namespace ssvu
 		static constexpr SizeT arity{sizeof...(TArgs)};
 
 		/// @brief Type of the n-th argument of the function.
-		template<SizeT TI> using Arg = TplElem<TI, std::tuple<TArgs...>>;
+		template<SizeT TI> using Arg = TplElem<TI, Tpl<TArgs...>>;
 	};
 
 	// Match function pointers
