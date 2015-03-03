@@ -9,7 +9,7 @@ namespace ssvu
 {
 	namespace Json
 	{
-		template<typename T, typename TFwd> inline void extr(TFwd&& mV, T& mX) noexcept(noexcept(Impl::Cnv<RemoveAll<T>>::fromVal(FWD(mV), mX))) { Impl::Cnv<RemoveAll<T>>::fromVal(FWD(mV), mX); }
+		template<typename T, typename TFwd> inline void extr(TFwd&& mV, T& mX) noexcept(noexcept(Impl::Cnv<RmAll<T>>::fromVal(FWD(mV), mX))) { Impl::Cnv<RmAll<T>>::fromVal(FWD(mV), mX); }
 		template<typename T> inline void arch(Val& mV, T&& mX) noexcept(noexcept(mV = FWD(mX))) { mV = FWD(mX); }
 
 		namespace Impl

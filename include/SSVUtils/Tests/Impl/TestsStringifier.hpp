@@ -8,6 +8,7 @@
 #include <list>
 #include <forward_list>
 #include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Bimap/Bimap.hpp"
 #include "SSVUtils/Test/Test.hpp"
 
 SSVUT_TEST(StringifierTests)
@@ -36,6 +37,8 @@ SSVUT_TEST(StringifierTests)
 	SSVUT_STRINGIFY_TEST(__R(ssvu::Bimap<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
 	SSVUT_STRINGIFY_TEST(__R(ssvu::Tpl<int, int, int>{1, 2, 3}));
 	SSVUT_STRINGIFY_TEST(__R(std::pair<int, int>{2, 3}));
+
+	#undef SSVUT_STRINGIFY_TEST
 }
 
 #endif

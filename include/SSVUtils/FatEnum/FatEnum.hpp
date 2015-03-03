@@ -64,18 +64,18 @@ namespace ssvu
 		} \
 		inline static const auto& getValues() noexcept \
 		{ \
-			static std::array<mName, SSVPP_ARGCOUNT(__VA_ARGS__)> result \
-			{{ \
+			static auto result(::ssvu::mkArray \
+			( \
 				SSVPP_FOREACH(SSVU_FATENUM_IMPL_MK_ARRAY_ENTRY(mDispatch), mName, __VA_ARGS__) \
-			}}; \
+			)); \
 			return result; \
 		} \
 		inline static const auto& getElementNames() noexcept \
 		{ \
-			static std::array<std::string, SSVPP_ARGCOUNT(__VA_ARGS__)> result \
-			{{ \
+			static auto result(::ssvu::mkArray \
+			( \
 				SSVPP_FOREACH(SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY(mDispatch), mName, __VA_ARGS__) \
-			}}; \
+			)); \
 			return result; \
 		} \
 	}; \
@@ -107,6 +107,7 @@ namespace ssvu
 /// SSVU_ASSERT(EnumManager<EnumName>::getFromString("EName0") == EnumName::EName0);
 /// @endcode
 /// @details Must end without semicolon.
+// TODO: since integer values cannot be specified for this enum, use an array for string-value lookup?
 #define SSVU_FATENUM_DEFS(mMgr, mName, mUnderlying, ...) SSVU_FATENUM_IMPL(mMgr, mName, mUnderlying, DEFS, __VA_ARGS__)
 
 #endif

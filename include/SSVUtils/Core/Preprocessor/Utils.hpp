@@ -6,6 +6,7 @@
 #define SSVU_CORE_PREPROCESSOR_UTILS
 
 #define SSVPP_EMPTY()
+#define SSVPP_DOT()			.
 #define SSVPP_COMMA()		,
 #define SSVPP_EXPAND(mX)	mX
 

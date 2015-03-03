@@ -95,8 +95,8 @@ namespace ssvu
 			// Convert enums
 			template<typename T> struct Cnv final
 			{
-				inline static void toVal(Val& mV, const T& mX, EnableIf<isEnum<RemoveAll<T>>()>* = nullptr) noexcept { mV = Underlying<T>(mX);  }
-				inline static void fromVal(const Val& mV, T& mX, EnableIf<isEnum<RemoveAll<T>>()>* = nullptr) noexcept { mX = T(mV.template as<Underlying<T>>()); }
+				inline static void toVal(Val& mV, const T& mX, EnableIf<isEnum<RmAll<T>>()>* = nullptr) noexcept { mV = Underlying<T>(mX);  }
+				inline static void fromVal(const Val& mV, T& mX, EnableIf<isEnum<RmAll<T>>()>* = nullptr) noexcept { mX = T(mV.template as<Underlying<T>>()); }
 			};
 
 			// Convert C-style string arrays
@@ -151,8 +151,8 @@ namespace ssvu
 
 						// TODO: BUG: gcc complains
 						// http://stackoverflow.com/questions/28264628/possible-gcc-bug-with-c14-polymorphic-lambdas
-						// mE = moveIfRValue<decltype(mV)>(FWD(mV)[mIdx].template as<RemoveRef<decltype(mE)>>());
-						mE = ssvu::fwd<T>(mV)[mIdx].template as<RemoveRef<decltype(mE)>>();
+						// mE = moveIfRValue<decltype(mV)>(FWD(mV)[mIdx].template as<RmRef<decltype(mE)>>());
+						mE = ssvu::fwd<T>(mV)[mIdx].template as<RmRef<decltype(mE)>>();
 					}, mX);
 				}
 			};
@@ -225,5 +225,68 @@ namespace ssvu
 	}
 }
 
-#endif
+// TODO: document, rename, move
+#define SSVJ_CNV_TO_ARR_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)	mData . mArg SSVPP_COMMA_IF(mIdx)
+#define SSVJ_CNV_TO_ARR_IMPL_SEP_ARG(mX, ...)					SSVPP_FOREACH(SSVJ_CNV_TO_ARR_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
 
+#define SSVJ_CNV_TO_ARR(mType, ...) \
+	SSVJ_CNV_NAMESPACE() \
+	{ \
+		template<> \
+		SSVJ_CNV(mType, mV, mX) \
+		{ \
+			ssvj::cnvArr \
+			( \
+				mV, \
+				SSVJ_CNV_TO_ARR_IMPL_SEP_ARG(mX, __VA_ARGS__) \
+			); \
+		} \
+		SSVJ_CNV_END() \
+	} \
+	SSVJ_CNV_NAMESPACE_END()
+
+#define SSVJ_CNV_TO_ARR_TEMPLATE(mTemplateArgs, mType, ...) \
+	SSVJ_CNV_NAMESPACE() \
+	{ \
+		template< mTemplateArgs > \
+		SSVJ_CNV(mType, mV, mX) \
+		{ \
+			ssvj::cnvArr \
+			( \
+				mV, \
+				SSVJ_CNV_TO_ARR_IMPL_SEP_ARG(mX, __VA_ARGS__) \
+			); \
+		} \
+		SSVJ_CNV_END() \
+	} \
+	SSVJ_CNV_NAMESPACE_END()
+
+#define SSVJ_CNV_TO_VAL(mType, mArg) \
+	SSVJ_CNV_NAMESPACE() \
+	{ \
+		template<> \
+		SSVJ_CNV(mType, mV, mX) \
+		{ \
+			ssvj::cnv \
+			( \
+				mV, \
+				mX . mArg \
+			); \
+		} \
+		SSVJ_CNV_END() \
+	} \
+	SSVJ_CNV_NAMESPACE_END()
+
+
+#define SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)		SSVJ_CNV_OBJ_AUTO(mData, mArg) SSVPP_COMMA_IF(mIdx)
+#define SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG(mX, ...)					SSVPP_FOREACH(SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
+
+#define SSVJ_SERIALIZE_TO_OBJ_AUTO(mV, mX, ...) \
+	::ssvj::cnvObj \
+	( \
+		mV, \
+		SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG(mX, __VA_ARGS__)\
+	)
+
+
+#endif

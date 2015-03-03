@@ -14,7 +14,7 @@ namespace ssvu
 			// Tuple checking implementation
 			struct TplIsHelper
 			{
-				template<SizeT TI, typename TTpl> using TplArg = TplElem<TI, RemoveAll<TTpl>>;
+				template<SizeT TI, typename TTpl> using TplArg = TplElem<TI, RmAll<TTpl>>;
 
 				template<SizeT TI = 0, typename... TArgs> inline static EnableIf<TI == sizeof...(TArgs), bool> isTpl(const Val&) noexcept { return true; }
 				template<SizeT TI = 0, typename... TArgs> inline static EnableIf<TI < sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
@@ -39,7 +39,7 @@ namespace ssvu
 			};
 			template<typename T> struct ChkNoNum
 			{
-				inline static bool is(const Val& mV) noexcept { return Chk<RemoveAll<T>>::is(mV); }
+				inline static bool is(const Val& mV) noexcept { return Chk<RmAll<T>>::is(mV); }
 			};
 
 			#define SSVJ_DEFINE_CHK_NUM_DISALLOWED(mType) \

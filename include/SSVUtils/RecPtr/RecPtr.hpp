@@ -54,11 +54,11 @@ namespace ssvu
 	template<typename T> using UPtrRec = UPtrRecPoly<T, T>;
 	template<typename TBase> using VecUPtrRec = std::vector<UPtrRec<TBase>>;
 
-	template<typename T, typename TBase, typename... TArgs> inline UPtrRecPoly<T, TBase> makeUPtrRecPoly(TArgs&&... mArgs)
+	template<typename T, typename TBase, typename... TArgs> inline UPtrRecPoly<T, TBase> mkUPtrRecPoly(TArgs&&... mArgs)
 	{
 		return {Impl::getRecycler<T>().create(FWD(mArgs)...), [](TBase* mPtr){ Impl::getRecycler<T>().recycle(mPtr); }};
 	}
-	template<typename T, typename... TArgs> inline UPtrRec<T> makeUPtrRec(TArgs&&... mArgs) { return makeUPtrRecPoly<T, T>(FWD(mArgs)...); }
+	template<typename T, typename... TArgs> inline UPtrRec<T> mkUPtrRec(TArgs&&... mArgs) { return mkUPtrRecPoly<T, T>(FWD(mArgs)...); }
 
 	namespace Impl
 	{
@@ -66,7 +66,7 @@ namespace ssvu
 		{
 			template<typename... TArgs> inline static UPtrRecPoly<T, TBase> make(TArgs&&... mArgs)
 			{
-				return makeUPtrRecPoly<T, TBase, TArgs...>(FWD(mArgs)...);
+				return mkUPtrRecPoly<T, TBase, TArgs...>(FWD(mArgs)...);
 			}
 		};
 	}

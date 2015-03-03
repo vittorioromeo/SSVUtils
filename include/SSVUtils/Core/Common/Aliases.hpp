@@ -20,29 +20,28 @@ namespace ssvu
 	template<typename... TArgs>						using Common = std::common_type_t<TArgs...>;
 	template<bool TBool, typename T = void>			using EnableIf = std::enable_if_t<TBool, T>;
 	template<typename T>							using Decay = std::decay_t<T>;
-	template<typename T>							using RemoveRef = std::remove_reference_t<T>;
-	template<typename T>							using RemoveExtent = std::remove_extent_t<T>;
-	template<typename T>							using RemoveVolatile = std::remove_volatile_t<T>;
-	template<typename T>							using RemoveConst = std::remove_const_t<T>;
-	template<typename T>							using RemoveCV = std::remove_cv_t<T>;
+	template<typename T>							using RmRef = std::remove_reference_t<T>;
+	template<typename T>							using RmExtent = std::remove_extent_t<T>;
+	template<typename T>							using RmVolatile = std::remove_volatile_t<T>;
+	template<typename T>							using RmConst = std::remove_const_t<T>;
+	template<typename T>							using RmCV = std::remove_cv_t<T>;
 	template<typename T>							using AddVolatile = std::add_volatile_t<T>;
 	template<typename T>							using AddConst = std::add_const_t<T>;
 	template<typename T>							using AddCv = std::add_cv_t<T>;
 	template<typename T>							using AddLVRef = std::add_lvalue_reference_t<T>;
 	template<typename T>							using AddRVRef = std::add_rvalue_reference_t<T>;
-	template<typename T>							using RemovePtr = std::remove_pointer_t<T>;
+	template<typename T>							using RmPtr = std::remove_pointer_t<T>;
 	template<typename T>							using AddPtr = std::add_pointer_t<T>;
-	template<typename T>							using MakeUnsigned = std::make_unsigned_t<T>;
-	template<typename T>							using MakeSigned = std::make_signed_t<T>;
-	template<typename T>							using RemoveAllExtents = std::remove_all_extents_t<T>;
+	template<typename T>							using MkUnsigned = std::make_unsigned_t<T>;
+	template<typename T>							using MkSigned = std::make_signed_t<T>;
+	template<typename T>							using RmAllExtents = std::remove_all_extents_t<T>;
 	template<SizeT TS, SizeT TAlign>				using AlignedStorage = std::aligned_storage_t<TS, TAlign>;
 	template<typename T>							using AlignedStorageFor = AlignedStorage<sizeof(T), alignof(T)>;
 	template<bool B, typename T, typename F>		using Conditional = std::conditional_t<B, T, F>;
 	template<typename T>							using Underlying = std::underlying_type_t<T>;
 	template<typename T1, typename T2>				using IsSame = typename std::is_same<T1, T2>::type;
 	template<SizeT TS, typename T>					using TplElem = std::tuple_element_t<TS, T>;
-	template<typename T>							using RemoveAll = RemoveCV<RemoveRef<T>>;
-	template<typename T, T TV>						using IntegralConstant = std::integral_constant<T, TV>;
+	template<typename T>							using RmAll = RmCV<RmRef<T>>;
 	template<typename T, T... TVals>				using IntSeq = std::integer_sequence<T, TVals...>;
 	template<typename T, T TN>						using MkIntSeq = std::make_integer_sequence<T, TN>;
 	template<SizeT... TS>							using IdxSeq = std::index_sequence<TS...>;
@@ -50,8 +49,9 @@ namespace ssvu
 	template<typename... T>							using IdxSeqFor = MkIdxSeq<sizeof...(T)>;
 	template<typename... Ts>						using Tpl = std::tuple<Ts...>;
 	template<typename T>							using IsPod = std::is_pod<T>;
-	template<int TI>								using CTInt = IntegralConstant<int, TI>;
-	template<bool TB>								using CTBool = IntegralConstant<bool, TB>;
+	template<typename T, T TV>						using CTVal = std::integral_constant<T, TV>;
+	template<int TI>								using CTInt = CTVal<int, TI>;
+	template<bool TB>								using CTBool = CTVal<bool, TB>;
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>(); }
 	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>(); }
@@ -64,7 +64,7 @@ namespace ssvu
 	template<typename T> inline constexpr auto isNothrowMoveCtor() noexcept					{ return std::is_nothrow_move_constructible<T>(); }
 	template<typename T> inline constexpr auto isNothrowDtor() noexcept						{ return std::is_nothrow_destructible<T>(); }
 	template<typename T> inline constexpr auto isPolymorphic() noexcept						{ return std::is_polymorphic<T>(); }
-	template<typename T> inline constexpr auto getTplSize() noexcept						{ return std::tuple_size<RemoveAll<T>>(); }
+	template<typename T> inline constexpr auto getTplSize() noexcept						{ return std::tuple_size<RmAll<T>>(); }
 	template<typename T> inline constexpr auto isLVRef() noexcept							{ return std::is_lvalue_reference<T>(); }
 	template<typename T> inline constexpr auto isRVRef() noexcept							{ return std::is_rvalue_reference<T>(); }
 	template<typename T, typename... TArgs> inline constexpr auto isNothrowCtor() noexcept	{ return std::is_nothrow_constructible<T, TArgs...>(); }
@@ -72,8 +72,8 @@ namespace ssvu
 	template<typename T> inline constexpr auto isConst() noexcept							{ return std::is_const<T>(); }
 	template<typename T> inline constexpr auto isVolatile() noexcept						{ return std::is_volatile<T>(); }
 
-	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>& mA) noexcept		{ return std::forward<T>(mA); }
-	template<typename T> inline constexpr decltype(auto) fwd(RemoveRef<T>&& mA) noexcept	{ return std::forward<T>(mA); }
+	template<typename T> inline constexpr decltype(auto) fwd(RmRef<T>& mA) noexcept		{ return std::forward<T>(mA); }
+	template<typename T> inline constexpr decltype(auto) fwd(RmRef<T>&& mA) noexcept	{ return std::forward<T>(mA); }
 
 	/// @brief Bring `std::move` into the `ssvu` namespace.
 	using std::move;
@@ -105,7 +105,7 @@ namespace ssvu
 	/// @brief Moves `mV` if `T` is an rvalue reference.
 	template<typename T, typename TV> inline constexpr decltype(auto) moveIfRValue(TV&& mV) noexcept
 	{
-		return static_cast<Conditional<isRVRef<T>(), RemoveRef<TV>&&, const TV&>>(mV);
+		return static_cast<Conditional<isRVRef<T>(), RmRef<TV>&&, const TV&>>(mV);
 	}
 
 	/// @brief Returns a `TBase&` casted to `T&`. Asserts that `T` is derived from `TBase`.

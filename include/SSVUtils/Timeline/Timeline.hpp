@@ -20,7 +20,6 @@
 	#include "SSVUtils/Timeline/Src/Command.cpp"
 	#include "SSVUtils/Timeline/Src/Do.cpp"
 	#include "SSVUtils/Timeline/Src/Wait.cpp"
-	#include "SSVUtils/Timeline/Src/Go.cpp"
 	#include "SSVUtils/Timeline/Src/TimelineManager.cpp"
 #endif
 

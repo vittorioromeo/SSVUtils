@@ -8,7 +8,12 @@
 #include "SSVUtils/Core/Preprocessor/Utils.hpp"
 #include "SSVUtils/Core/Preprocessor/ForEach.hpp"
 
+// TODO: tests
 #define SSVPP_IMPL_TOSTR_SEP(mIdx, mData, mArg)	SSVPP_TOSTR(mArg) SSVPP_IF(mIdx, mData, SSVPP_EMPTY())
 #define SSVPP_TOSTR_SEP(mSeparator, ...)		SSVPP_FOREACH(SSVPP_IMPL_TOSTR_SEP, mSeparator, __VA_ARGS__)
+
+// TODO: move, tests
+#define SSVPP_IMPL_SEP(mIdx, mData, mArg)	mArg SSVPP_IF(mIdx, mData, SSVPP_EMPTY())
+#define SSVPP_SEP(mSeparator, ...)			SSVPP_FOREACH(SSVPP_IMPL_SEP, mSeparator, __VA_ARGS__)
 
 #endif

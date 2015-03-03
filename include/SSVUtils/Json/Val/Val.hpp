@@ -104,11 +104,13 @@ namespace ssvu
 				/// @brief Checks the stored type. Doesn't check number representation.
 				template<typename T> inline bool isNoNum() const noexcept
 				{
-					return Impl::ChkNoNum<RemoveAll<T>>::is(*this);
+					return Impl::ChkNoNum<RmAll<T>>::is(*this);
 				}
 
 			public:
 				inline Val() noexcept = default;
+
+				// TODO: initalizer_list ctors
 
 				// Copy/move constructors
 				inline Val(const Val& mV)	{ init(mV); }
@@ -122,10 +124,10 @@ namespace ssvu
 
 				/// @brief Sets the `Val`'s internal value to `mX`.
 				///	@details The current stored value is deinitialized first.
-				template<typename T> inline void set(T&& mX) noexcept(noexcept(Impl::Cnv<RemoveAll<T>>::toVal(std::declval<Val&>(), FWD(mX))))
+				template<typename T> inline void set(T&& mX) noexcept(noexcept(Impl::Cnv<RmAll<T>>::toVal(std::declval<Val&>(), FWD(mX))))
 				{
 					deinitCurrent();
-					Impl::Cnv<RemoveAll<T>>::toVal(*this, FWD(mX));
+					Impl::Cnv<RmAll<T>>::toVal(*this, FWD(mX));
 				}
 
 				/// @brief Checks if the stored internal value is of type `T`.
@@ -133,7 +135,7 @@ namespace ssvu
 				///	Any other numeric type will not work.
 				template<typename T> inline bool is() const noexcept
 				{
-					return Impl::Chk<RemoveAll<T>>::is(*this);
+					return Impl::Chk<RmAll<T>>::is(*this);
 				}
 
 				/// @brief Gets the internal value as `T`. (non-const version)
@@ -163,7 +165,7 @@ namespace ssvu
 				inline const auto& operator[](const Key& mKey) const noexcept	{ return getObj().atOrDefault(mKey); }
 
 				// "Implicit" Val from Arr by Idx getters
-				inline auto& operator[](Idx mIdx) 				{ return getArr()[mIdx]; }
+				inline auto& operator[](Idx mIdx) noexcept		{ return getArr()[mIdx]; }
 				inline const auto& operator[](Idx mIdx) const	{ return getArr().at(mIdx); }
 
 				/// @brief Returns true if this `Obj` `Val` instance has a value with key `mKey`.
@@ -264,6 +266,18 @@ namespace ssvu
 
 		/// @typedef `Arr` implementation typedef, templatized with `Val`.
 		using Arr = Val::Arr;
+
+		// TODO: docs, make old syntax invalid
+		template<typename... TArgs> inline auto mkObj(TArgs&&... mArgs) { Val result{Obj{FWD(mArgs)...}}; return result; }
+
+		// TODO: docs, make old syntax invalid
+		template<typename... TArgs> inline auto mkArr(TArgs&&... mArgs) { Val result{Arr{FWD(mArgs)...}}; return result; }
+
+		// TODO: docs, make old syntax invalid
+		template<typename T> inline auto fromStr(T&& mStr) { return Val::fromStr(FWD(mStr)); }
+
+		// TODO: docs, make old syntax invalid
+		inline auto fromFile(const ssvufs::Path& mPath) { return Val::fromFile(mPath); }
 	}
 }
 

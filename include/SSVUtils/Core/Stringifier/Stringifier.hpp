@@ -168,7 +168,7 @@ namespace ssvu
 	// Stringify pointer
 	template<typename T> struct Stringifier<T*>
 	{
-		template<bool TFmt> inline static void impl(std::ostream& mStream, const T* mValue, EnableIf<!isSame<RemoveConst<T>, char>()>* = nullptr)
+		template<bool TFmt> inline static void impl(std::ostream& mStream, const T* mValue, EnableIf<!isSame<RmConst<T>, char>()>* = nullptr)
 		{
 			Impl::printBold<TFmt>(mStream, "[", Console::Color::Blue);
 			Impl::printFmt<TFmt>(mStream, mValue != nullptr ? static_cast<const void*>(mValue) : "nullptr", Console::Color::Cyan, Console::Style::Underline);

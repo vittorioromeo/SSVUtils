@@ -236,7 +236,7 @@ namespace ssvu
 	}
 
 	/// @brief Emplaces a `ssvu::UPtr<T>` inside mContainer and returns a reference to the allocated T instance.
-	/// @details Internally uses `ssvu::makeUPtr` and `ssvu::UPtr<T>::get`.
+	/// @details Internally uses `ssvu::mkUPtr` and `ssvu::UPtr<T>::get`.
 	/// @param mContainer Container of `ssvu::UPtr<T>` where the newly created smart pointer will be emplaced.
 	/// @param mArgs Emplacement variadic arguments.
 	/// @return Returns a reference to the newly allocated T instance.
@@ -246,7 +246,7 @@ namespace ssvu
 	}
 
 	/// @brief Emplaces a `ssvu::UPtr<T>` inside a map-like mContainer and returns a reference to the allocated T instance.
-	/// @details Internally uses `ssvu::makeUPtr` and `ssvu::UPtr<T>::get`.
+	/// @details Internally uses `ssvu::mkUPtr` and `ssvu::UPtr<T>::get`.
 	/// @param mContainer Map container of `ssvu::UPtr<T>` where the newly created smart pointer will be emplaced.
 	/// @param mKey Key of the element.
 	/// @param mArgs Emplacement variadic arguments.

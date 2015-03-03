@@ -171,7 +171,7 @@ namespace ssvu
 					auto size(ifs.tellg());
 					ifs.seekg(0, std::ios::beg);
 
-					auto buffer(makeUPtr<char[]>(size));
+					auto buffer(mkUPtr<char[]>(size));
 					ifs.read(&buffer[0], size);
 					std::string result{buffer.get(), static_cast<SizeT>(size)};
 
@@ -186,7 +186,7 @@ namespace ssvu
 
 		inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath) { return mStream << mPath.getStr(); }
 
-		#define ENABLEIF_ANY_PATH() EnableIf<isSame<RemoveAll<T1>, Path>() || isSame<RemoveAll<T2>, Path>()>* = nullptr
+		#define ENABLEIF_ANY_PATH() EnableIf<isSame<RmAll<T1>, Path>() || isSame<RmAll<T2>, Path>()>* = nullptr
 
 		// Operator+
 		template<typename T1, typename T2, ENABLEIF_ANY_PATH()> inline Path operator+(T1&& mLhs, T2&& mRhs)

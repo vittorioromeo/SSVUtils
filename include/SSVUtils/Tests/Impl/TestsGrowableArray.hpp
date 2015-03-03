@@ -85,10 +85,10 @@ SSVUT_TEST(GrowableArrayTests)
 	{
 		GrowableArray<UPtr<TestItem>> g;
 		g.grow(0, 4);
-		g.initAt(0, makeUPtr<TestItem>(cc, dc, 0));
-		g.initAt(1, makeUPtr<TestItem>(cc, dc, 1));
-		g.initAt(2, makeUPtr<TestItem>(cc, dc, 2));
-		g.initAt(3, makeUPtr<TestItem>(cc, dc, 3));
+		g.initAt(0, mkUPtr<TestItem>(cc, dc, 0));
+		g.initAt(1, mkUPtr<TestItem>(cc, dc, 1));
+		g.initAt(2, mkUPtr<TestItem>(cc, dc, 2));
+		g.initAt(3, mkUPtr<TestItem>(cc, dc, 3));
 
 		SSVUT_EXPECT_OP(cc, ==, 4);
 		SSVUT_EXPECT_OP(dc, ==, 0);

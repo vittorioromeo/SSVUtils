@@ -32,8 +32,8 @@ namespace ssvu
 
 				// Range creation helper functions
 				template<template<typename> class TImpl, typename T, typename TItr> using ItrAs = ssvu::Impl::AdaptorFromItr<TItr, TImpl<T>>;
-				template<template<typename> class TImpl, typename T, typename TItr> inline constexpr static auto makeItrAs(TItr mItr) noexcept { return ItrAs<TImpl, T, TItr>{mItr}; }
-				template<template<typename> class TImpl, typename T, typename TItr> inline constexpr static auto makeItrAsRange(TItr mBegin, TItr mEnd) noexcept { return makeRange(makeItrAs<TImpl, T>(mBegin), makeItrAs<TImpl, T>(mEnd)); }
+				template<template<typename> class TImpl, typename T, typename TItr> inline static constexpr auto makeItrAs(TItr mItr) noexcept { return ItrAs<TImpl, T, TItr>{mItr}; }
+				template<template<typename> class TImpl, typename T, typename TItr> inline static constexpr auto makeItrAsRange(TItr mBegin, TItr mEnd) noexcept { return makeRange(makeItrAs<TImpl, T>(mBegin), makeItrAs<TImpl, T>(mEnd)); }
 
 				// Valid range creation helper functions
 				template<typename T, typename TItr> inline static constexpr auto makeItrObjRange(TItr mBegin, TItr mEnd) noexcept { return makeItrAsRange<ImplAsObj, T>(mBegin, mEnd); }

@@ -53,11 +53,11 @@ SSVUT_TEST(RangeCastTests)
 	};
 
 	std::vector<UPtr<XTBase>> v;
-	v.emplace_back(makeUPtr<XTDer>());
-	v.emplace_back(makeUPtr<XTDer>());
-	v.emplace_back(makeUPtr<XTDer>());
-	v.emplace_back(makeUPtr<XTDer>());
-	v.emplace_back(makeUPtr<XTDer>());
+	v.emplace_back(mkUPtr<XTDer>());
+	v.emplace_back(mkUPtr<XTDer>());
+	v.emplace_back(mkUPtr<XTDer>());
+	v.emplace_back(mkUPtr<XTDer>());
+	v.emplace_back(mkUPtr<XTDer>());
 
 	for(const auto& i : asRangeCastPtr<const XTDer&>(v)) { SSVUT_EXPECT(i.f(2) == 3); }
 	for(auto& i : asRangeCastPtr<XTDer&>(v)) { i.n = 3; SSVUT_EXPECT(i.f(2) == 5); }
@@ -65,11 +65,11 @@ SSVUT_TEST(RangeCastTests)
 
 
 	std::list<UPtr<XTBase>> l;
-	l.emplace_back(makeUPtr<XTDer>());
-	l.emplace_back(makeUPtr<XTDer>());
-	l.emplace_back(makeUPtr<XTDer>());
-	l.emplace_back(makeUPtr<XTDer>());
-	l.emplace_back(makeUPtr<XTDer>());
+	l.emplace_back(mkUPtr<XTDer>());
+	l.emplace_back(mkUPtr<XTDer>());
+	l.emplace_back(mkUPtr<XTDer>());
+	l.emplace_back(mkUPtr<XTDer>());
+	l.emplace_back(mkUPtr<XTDer>());
 
 	for(const auto& i : asRangeCastPtr<const XTDer&>(l)) { SSVUT_EXPECT(i.f(2) == 3); }
 	for(auto& i : asRangeCastPtr<XTDer&>(l)) { i.n = 3; SSVUT_EXPECT(i.f(2) == 5); }

@@ -40,7 +40,7 @@ namespace ssvu
 		using Type = TR(TArgs...);
 
 		/// @brief Function type as if this function were a member function of the `TOwner` class.
-		template<typename TOwner> using MemFnType = typename Impl::MemFnType<RemovePtr<RemoveRef<TOwner>>, TR, TArgs...>::Type;
+		template<typename TOwner> using MemFnType = typename Impl::MemFnType<RmPtr<RmRef<TOwner>>, TR, TArgs...>::Type;
 
 		/// @brief Arity of the function.
 		static constexpr SizeT arity{sizeof...(TArgs)};
