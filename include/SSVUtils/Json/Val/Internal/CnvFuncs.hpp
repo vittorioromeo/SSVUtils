@@ -63,11 +63,11 @@ namespace ssvu
 		template<typename T> inline Val getArch(T&& mX) { Val result; arch(result, FWD(mX)); return result; }
 
 		template<typename... TArgs, typename T> inline void extrArr(T&& mV, TArgs&... mArgs)	{ Impl::CnvFuncHelper::hExtrArr<0>(FWD(mV), mArgs...); }
-		template<typename... TArgs> inline void archArr(Val& mV, TArgs&&... mArgs)				{ mV = Arr{}; Impl::CnvFuncHelper::hArchArr<0>(mV, FWD(mArgs)...); }
+		template<typename... TArgs> inline void archArr(Val& mV, TArgs&&... mArgs)				{ mV = Impl::Arr{}; Impl::CnvFuncHelper::hArchArr<0>(mV, FWD(mArgs)...); }
 		template<typename... TArgs> inline Val getArchArr(TArgs&&... mArgs)						{ Val result; archArr(result, FWD(mArgs)...); return result; }
 
 		template<typename... TArgs, typename T> inline void extrObj(T&& mV, TArgs&... mArgs)	{ Impl::CnvFuncHelper::hExtrObj(FWD(mV), mArgs...); }
-		template<typename... TArgs> inline void archObj(Val& mV, TArgs&&... mArgs)				{ mV = Obj{}; Impl::CnvFuncHelper::hArchObj(mV, FWD(mArgs)...); }
+		template<typename... TArgs> inline void archObj(Val& mV, TArgs&&... mArgs)				{ mV = Impl::Obj{}; Impl::CnvFuncHelper::hArchObj(mV, FWD(mArgs)...); }
 		template<typename... TArgs> inline Val getArchObj(TArgs&&... mArgs)						{ Val result; archObj(result, FWD(mArgs)...); return result; }
 
 		template<typename T> inline void cnv(const Val& mV, T& mX) noexcept(noexcept(extr(mV, mX)))			{ extr(mV, mX); }

@@ -46,6 +46,7 @@ namespace ssvu
 		struct Nll { };
 
 
+
 		/// @brief Struct holding settings for `Writer`.
 		/// @tparam TFmt If true, applies console color/style formatting.
 		/// @tparam TPretty If true, applies indentation and newlines.
@@ -62,6 +63,7 @@ namespace ssvu
 
 		/// @typedef `Writer` settings intended for console logging.
 		using WSPrettyLog = WriterSettings<true, true>;
+
 
 
 		/// @brief Struct holding settings for `Reader`.

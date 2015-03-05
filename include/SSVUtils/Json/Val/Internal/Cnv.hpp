@@ -8,9 +8,6 @@
 /// @macro Class mixin that allows SSVJ converters to access the current class's private members.
 #define SSVJ_CNV_FRIEND() template<typename> friend struct ssvu::Json::Impl::Cnv
 
-/// @macro Shortcut to serialize a class member as an object with the same name as the member.
-#define SSVJ_CNV_OBJ_AUTO(mValue, mVar) #mVar, mValue.mVar
-
 /// @macro Opens a namespace for user-defined converters implementation.
 /// @details Must be called outside of any namespace. Semicolon must not be used.
 #define SSVJ_CNV_NAMESPACE() \
@@ -225,68 +222,47 @@ namespace ssvu
 	}
 }
 
-// TODO: document, rename, move
-#define SSVJ_CNV_TO_ARR_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)	mData . mArg SSVPP_COMMA_IF(mIdx)
-#define SSVJ_CNV_TO_ARR_IMPL_SEP_ARG(mX, ...)					SSVPP_FOREACH(SSVJ_CNV_TO_ARR_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
+// TODO: name refactoring and docs!
 
-#define SSVJ_CNV_TO_ARR(mType, ...) \
-	SSVJ_CNV_NAMESPACE() \
-	{ \
-		template<> \
-		SSVJ_CNV(mType, mV, mX) \
-		{ \
-			ssvj::cnvArr \
-			( \
-				mV, \
-				SSVJ_CNV_TO_ARR_IMPL_SEP_ARG(mX, __VA_ARGS__) \
-			); \
-		} \
-		SSVJ_CNV_END() \
-	} \
-	SSVJ_CNV_NAMESPACE_END()
+// Serialize single member to val
+#define SSVJ_SERIALIZE_TO_VAL(mV, mX, mArg) ::ssvj::cnv(mV, mX . mArg)
 
-#define SSVJ_CNV_TO_ARR_TEMPLATE(mTemplateArgs, mType, ...) \
-	SSVJ_CNV_NAMESPACE() \
-	{ \
-		template< mTemplateArgs > \
-		SSVJ_CNV(mType, mV, mX) \
-		{ \
-			ssvj::cnvArr \
-			( \
-				mV, \
-				SSVJ_CNV_TO_ARR_IMPL_SEP_ARG(mX, __VA_ARGS__) \
-			); \
-		} \
-		SSVJ_CNV_END() \
-	} \
-	SSVJ_CNV_NAMESPACE_END()
+// Serialize members to array
+#define SSVJ_SERIALIZE_TO_ARR_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)	mData . mArg SSVPP_COMMA_IF(mIdx)
+#define SSVJ_SERIALIZE_TO_ARR_IMPL_SEP_ARG(mX, ...)					SSVPP_FOREACH(SSVJ_SERIALIZE_TO_ARR_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
+#define SSVJ_SERIALIZE_TO_ARR(mV, mX, ...)							::ssvj::cnvArr(mV, SSVJ_SERIALIZE_TO_ARR_IMPL_SEP_ARG(mX, __VA_ARGS__))
 
-#define SSVJ_CNV_TO_VAL(mType, mArg) \
-	SSVJ_CNV_NAMESPACE() \
-	{ \
-		template<> \
-		SSVJ_CNV(mType, mV, mX) \
-		{ \
-			ssvj::cnv \
-			( \
-				mV, \
-				mX . mArg \
-			); \
-		} \
-		SSVJ_CNV_END() \
-	} \
-	SSVJ_CNV_NAMESPACE_END()
-
-
-#define SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)		SSVJ_CNV_OBJ_AUTO(mData, mArg) SSVPP_COMMA_IF(mIdx)
+// Serialize members to obj with same name
+#define SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)		SSVPP_TOSTR(mArg), mData . mArg SSVPP_COMMA_IF(mIdx)
 #define SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG(mX, ...)					SSVPP_FOREACH(SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
+#define SSVJ_SERIALIZE_TO_OBJ_AUTO(mV, mX, ...)								::ssvj::cnvObj(mV, SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG(mX, __VA_ARGS__))
 
-#define SSVJ_SERIALIZE_TO_OBJ_AUTO(mV, mX, ...) \
-	::ssvj::cnvObj \
-	( \
-		mV, \
-		SSVJ_SERIALIZE_TO_OBJ_AUTO_IMPL_SEP_ARG(mX, __VA_ARGS__)\
-	)
+// Wrapper macro to avoid repetition
+#define SSVJ_CNV_WRAPPER(mType, mTemplateArgs, mBody) \
+	SSVJ_CNV_NAMESPACE() \
+	{ \
+		template< SSVPP_TPL_EXPLODE(mTemplateArgs) > SSVJ_CNV(mType, mV, mX) \
+		{ \
+			SSVPP_TPL_EXPLODE(mBody) \
+		} \
+		SSVJ_CNV_END() \
+	} \
+	SSVJ_CNV_NAMESPACE_END()
 
+// Define converter to val
+#define SSVJ_CNV_VAL(mType, mArg) \
+	SSVJ_CNV_WRAPPER(mType, (), (SSVJ_SERIALIZE_TO_VAL(mV, mX, mArg);))
+
+// Define converter to arr
+#define SSVJ_CNV_ARR(mType, ...) \
+	SSVJ_CNV_WRAPPER(mType, (), (SSVJ_SERIALIZE_TO_ARR(mV, mX, __VA_ARGS__);))
+
+// Define converter to arr (templatized)
+#define SSVJ_CNV_ARR_TEMPLATE(mTemplateArgs, mType, ...) \
+	SSVJ_CNV_WRAPPER(mType, (mTemplateArgs), (SSVJ_SERIALIZE_TO_ARR(mV, mX, __VA_ARGS__);))
+
+// Define converter to obj auto
+#define SSVJ_CNV_OBJ_AUTO(mType, ...) \
+	SSVJ_CNV_WRAPPER(mType, (), (SSVJ_SERIALIZE_TO_OBJ_AUTO(mV, mX, __VA_ARGS__);))
 
 #endif

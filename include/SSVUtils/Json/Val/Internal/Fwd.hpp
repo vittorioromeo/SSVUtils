@@ -11,11 +11,11 @@ namespace ssvu
 {
 	namespace Json
 	{
-		// `Val` forward declaration.
-		class Val;
-
 		namespace Impl
 		{
+			// `Val` forward declaration.
+			class Val;
+
 			/// @brief Helper class to convert C++ objects to/from `Val`.
 			template<typename> struct Cnv;
 
