@@ -58,7 +58,7 @@
 		do \
 		{ \
 			::ssvu::Impl::AssertData ad{}; \
-			ad.code = SSVPP_TOSTR_SEP(",", SSVPP_EMPTY(), __VA_ARGS__); \
+			ad.code = SSVPP_SEP_TOSTR(",", SSVPP_EMPTY(), __VA_ARGS__); \
 			ad.line = SSVPP_TOSTR(__LINE__); \
 			ad.file = __FILE__; \
 			::ssvu::Impl::assertImpl(::ssvu::move(ad), __VA_ARGS__); \

@@ -14,6 +14,7 @@
 #include "SSVUtils/Core/Preprocessor/ForEach.hpp"
 #include "SSVUtils/Core/Preprocessor/Repeat.hpp"
 #include "SSVUtils/Core/Preprocessor/Cat.hpp"
-#include "SSVUtils/Core/Preprocessor/ToStrSep.hpp"
+#include "SSVUtils/Core/Preprocessor/Sep.hpp"
+#include "SSVUtils/Core/Preprocessor/SepToStr.hpp"
 
 #endif
