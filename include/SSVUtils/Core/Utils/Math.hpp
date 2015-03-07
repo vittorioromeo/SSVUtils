@@ -25,11 +25,9 @@ namespace ssvu
 	/// @brief Ratio between radians and degrees.
 	constexpr float radDegRatio{pi / 180.f};
 
-	/// @brief Gets a random integer value between [mMin and mMax). (Uniform distribution)
-	/// @tparam T Type of integer value. (default int)
+	/// @brief Returns a random integer value between [mMin and mMax). (Uniform distribution)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper exclusive bound.
-	/// @return Returns a random integer value, between [mMin and mMax).
 	template<typename T1, typename T2> inline auto getRnd(const T1& mMin, const T2& mMax)
 	{
 		using CT = Common<T1, T2>;
@@ -39,11 +37,9 @@ namespace ssvu
 		return RndDistUniformI<CT>{min, max - 1}(getRndEngine());
 	}
 
-	/// @brief Gets a random real value between [mMin and mMax]. (Uniform distribution)
-	/// @tparam T Type of real value. (default float)
+	/// @brief Returns a random real value between [mMin and mMax]. (Uniform distribution)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper inclusive bound.
-	/// @return Returns a random real value, between [mMin and mMax].
 	template<typename T1, typename T2> inline auto getRndR(const T1& mMin, const T2& mMax)
 	{
 		using CT = Common<T1, T2>;
@@ -53,7 +49,10 @@ namespace ssvu
 		return RndDistUniformR<CT>(min, max)(getRndEngine());
 	}
 
-	// TODO: docs
+	/// @brief Returns a random real value. (Normal distribution)
+	/// @tparam T Type of real value. (default float)
+	/// @param mMean Mean of the distribution.
+	/// @param mDeviation Deviation of the distribution.
 	template<typename T1, typename T2> inline auto getRndRNormal(const T1& mMean, const T2& mDeviation)
 	{
 		using CT = Common<T1, T2>;
