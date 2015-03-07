@@ -112,8 +112,6 @@ namespace ssvu
 				public:
 					inline Val() noexcept = default;
 
-					// TODO: initalizer_list ctors
-
 					// Copy/move constructors
 					inline Val(const Val& mV)	{ init(mV); }
 					inline Val(Val&& mV)		{ init(move(mV)); }
@@ -277,22 +275,26 @@ namespace ssvu
 		/// @typedef `Val` - json value.
 		using Val = Impl::Val;
 
-		// TODO: docs, make old syntax invalid
+		/// @brief Returns a JSON value containing an empty JSON object.
 		inline auto mkObj() { return Val{Impl::Obj{}}; }
+
+		/// @brief Returns a JSON value containing a JSON object filled with the passed key-value pairs.
 		inline auto mkObj(std::initializer_list<std::pair<Key, Val>>&& mX) { return Val{Impl::Obj{std::move(mX)}}; }
 
-		// TODO: docs, make old syntax invalid
+		/// @brief Returns a JSON value containing a JSON array filled with the passed arguments.
 		template<typename... TArgs> inline auto mkArr(TArgs&&... mArgs) { return Val{Impl::Arr{FWD(mArgs)...}}; }
 
-		// TODO: docs, make old syntax invalid
+		/// @brief Returns a JSON value constructed from the string `mStr`.
 		template<typename T> inline auto fromStr(T&& mStr) { return Val::fromStr(FWD(mStr)); }
 
-		// TODO: docs, make old syntax invalid
+		/// @brief Returns a JSON value constructed from the file in `mPath`.
 		inline auto fromFile(const ssvufs::Path& mPath) { return Val::fromFile(mPath); }
 	}
 }
 
 #include "SSVUtils/Json/Val/Internal/Cnv.hpp"
+#include "SSVUtils/Json/Val/Internal/CnvFuncs.hpp"
+#include "SSVUtils/Json/Val/Internal/CnvMacros.hpp"
 #include "SSVUtils/Json/Val/Internal/Chk.hpp"
 #include "SSVUtils/Json/Val/Internal/AsHelper.hpp"
 

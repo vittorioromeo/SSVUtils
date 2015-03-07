@@ -71,7 +71,7 @@ SSVUT_TEST(PreprocessorTests)
 	}
 
 	{
-		std::string s(SSVPP_TOSTR_SEP(", ", 1, 2, 3));
+		std::string s(SSVPP_SEP_TOSTR(", ", 1, 2, 3));
 		SSVUT_EXPECT(s == "1, 2, 3");
 	}
 
@@ -79,7 +79,7 @@ SSVUT_TEST(PreprocessorTests)
 		#define SSVU_TEST_ADDTEN(mX)					SSVPP_CAT(1, mX)
 		#define SSVU_TEST_FOREFFECT(mIdx, mData, mArg)	SSVU_TEST_ADDTEN(mArg)SSVPP_COMMA_IF(mIdx)
 
-		std::string s(SSVPP_TOSTR_SEP(", ", SSVPP_FOREACH(SSVU_TEST_FOREFFECT, SSVPP_EMPTY(), 1, 2, 3, 4)));
+		std::string s(SSVPP_SEP_TOSTR(", ", SSVPP_FOREACH(SSVU_TEST_FOREFFECT, SSVPP_EMPTY(), 1, 2, 3, 4)));
 		SSVUT_EXPECT(s == "11, 12, 13, 14");
 
 		#undef SSVU_TEST_ADDTEN
@@ -96,7 +96,7 @@ SSVUT_TEST(PreprocessorTests)
 		SSVUT_EXPECT(SSVPP_TPL_ELEM(SSVPP_TPL_MAKE(1, 2, 3), 2) == 3);
 
 		SSVUT_EXPECT(SSVPP_TPL_ELEM(SSVPP_TPL_EXPLODE(((1, 2))), 0) == 1);
-		SSVUT_EXPECT(std::string{SSVPP_TOSTR_SEP(", ", SSVPP_TPL_EXPLODE((1, 2)))} == "1, 2");
+		SSVUT_EXPECT(std::string{SSVPP_SEP_TOSTR(", ", SSVPP_TPL_EXPLODE((1, 2)))} == "1, 2");
 
 		#define SSVU_TEST_CONCATENATED_TPLS SSVPP_TPL_CAT((1, 2), (3, 4))
 		SSVUT_EXPECT(SSVPP_TPL_ELEM(SSVU_TEST_CONCATENATED_TPLS, 0) == 1);
@@ -192,6 +192,15 @@ SSVUT_TEST(PreprocessorTests)
 		SSVUT_EXPECT_OP(sdec5, ==, "43210"s);
 
 		#undef SSVU_TEST_ACTION_REPEAT
+	}
+
+	{
+		SSVUT_EXPECT_OP(SSVPP_SEP_TOSTR(";", a, b, c), ==, "a;b;c"s);
+		SSVUT_EXPECT_OP(SSVPP_SEP_TOSTR(",", a, b, c), ==, "a,b,c"s);
+		SSVUT_EXPECT_OP(SSVPP_SEP_TOSTR(", ", a, b, c), ==, "a, b, c"s);
+
+		std::string ss{";"}, s1{"a"}, s2{"b"}, s3{"c"};
+		SSVUT_EXPECT_OP(SSVPP_SEP(+, s1, s2, s3), ==, "abc");
 	}
 }
 
