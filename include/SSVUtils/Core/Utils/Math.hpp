@@ -147,6 +147,7 @@ namespace ssvu
 	/// @brief Restricts a radian value between 0 and 6.28f.
 	/// @param mValue Const reference to the value. (original value won't be changed)
 	/// @return Returns the restricted value in radians.
+	// TODO: getWrapped(T) - wrap(T&)
 	template<typename T> inline T wrapRad(T mValue) noexcept { mValue = std::fmod(mValue, tau); return mValue < 0 ? mValue + tau : mValue; }
 
 	/// @brief Restricts a degree value between 0 and 360.f.
