@@ -131,8 +131,9 @@ namespace ssvu
 
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `const T*`.
 	template<typename T, typename TStorage> inline const T* castStorage(const TStorage* mStorage) noexcept { return reinterpret_cast<const T*>(mStorage); }
+
+	// TODO: move
+	template<typename TArray, SizeT TS> inline constexpr SizeT getCArraySize(TArray(&)[TS]) noexcept { return TS; }
 }
-
-
 
 #endif

@@ -33,6 +33,9 @@
 	/// @macro Assertion in release mode: this macro does nothing.
 	#define SSVU_ASSERT_CONSTEXPR(...)
 #else
+	/// @macro Defined if asserts are enabled. Should be used for user-code checks.
+	#define SSVU_ASSERT_IS_ENABLED 1
+
 	namespace ssvu
 	{
 		namespace Impl
