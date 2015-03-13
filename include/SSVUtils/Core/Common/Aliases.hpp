@@ -86,6 +86,7 @@ namespace ssvu
 
 	template<typename... Ts> inline constexpr decltype(auto) tplCat(Ts&&... mS) noexcept	{ return std::tuple_cat(FWD(mS)...); }
 	template<typename... Ts> inline constexpr decltype(auto) fwdAsTpl(Ts&&... mS) noexcept	{ return std::forward_as_tuple(FWD(mS)...); }
+	template<typename... Ts> inline constexpr decltype(auto) mkTpl(Ts&&... mS) noexcept		{ return std::make_tuple(FWD(mS)...); }
 
 	/// @typedef Alias for `std::function`.
 	template<typename T> using Func = std::function<T>;
@@ -131,9 +132,6 @@ namespace ssvu
 
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `const T*`.
 	template<typename T, typename TStorage> inline const T* castStorage(const TStorage* mStorage) noexcept { return reinterpret_cast<const T*>(mStorage); }
-
-	// TODO: move
-	template<typename TArray, SizeT TS> inline constexpr SizeT getCArraySize(TArray(&)[TS]) noexcept { return TS; }
 }
 
 #endif

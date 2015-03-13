@@ -259,6 +259,9 @@ namespace ssvu
 	/// @brief Shuffles a container, using the default random engine.
 	/// @param mContainer Reference to the container.
 	template<typename TC> inline void shuffle(TC& mContainer) { std::shuffle(std::begin(mContainer), std::end(mContainer), ssvu::getRndEngine()); }
+
+	/// @brief Returns the size of a non-dynamic C-array.
+	template<typename TArray, SizeT TS> inline constexpr SizeT getCArraySize(TArray(&)[TS]) noexcept { return TS; }
 }
 
 #endif
