@@ -15,11 +15,11 @@ SSVUT_TEST(UtilsMathTests)
 
 	for(int i{0}; i < 100; ++i)
 	{
-		auto r(getRnd<int>(-10, 10));
+		auto r(getRndI<int>(-10, 10));
 		SSVUT_EXPECT(r >= -10 && r < 10);
 
 		// getRnd is [a, b)
-		auto ru(getRnd<unsigned int>(1, 10));
+		auto ru(getRndI<unsigned int>(1, 10));
 		SSVUT_EXPECT(ru > 0 && ru < 10);
 
 		// getRndR is [a, b]
@@ -50,8 +50,8 @@ SSVUT_TEST(UtilsMathTests)
 	SSVUT_EXPECT(getClamped(1000, 0, 500) == 500);
 	SSVUT_EXPECT(getClamped(1000, 1500, 2500) == 1500);
 
-	SSVUT_EXPECT(wrapDeg(720) == 0);
-	SSVUT_EXPECT(wrapDeg(720 + 180) == 180);
+	SSVUT_EXPECT(getWrapDeg(720) == 0);
+	SSVUT_EXPECT(getWrapDeg(720 + 180) == 180);
 
 	SSVUT_EXPECT(getMod(10, 9) == 1);
 	SSVUT_EXPECT(getMod(-10, 9) == 8);

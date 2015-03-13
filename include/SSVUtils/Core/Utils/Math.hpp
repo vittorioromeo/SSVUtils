@@ -7,7 +7,7 @@
 
 namespace ssvu
 {
-	inline std::minstd_rand& getRndEngine()	noexcept { static std::minstd_rand rndEngine(std::time(0)); return rndEngine; }
+	inline auto& getRndEngine()	noexcept { static std::minstd_rand rndEngine(std::time(0)); return rndEngine; }
 	template<typename T> using RndDistUniformI = std::uniform_int_distribution<T>;
 	template<typename T> using RndDistUniformR = std::uniform_real_distribution<T>;
 	template<typename T> using RndDistNormalR = std::normal_distribution<T>;
@@ -28,7 +28,7 @@ namespace ssvu
 	/// @brief Returns a random integer value between [mMin and mMax). (Uniform distribution)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper exclusive bound.
-	template<typename T1, typename T2> inline auto getRnd(const T1& mMin, const T2& mMax)
+	template<typename T1, typename T2> inline auto getRndI(const T1& mMin, const T2& mMax)
 	{
 		using CT = Common<T1, T2>;
 		CT min(mMin), max(mMax);
@@ -67,93 +67,92 @@ namespace ssvu
 	template<typename T = int> inline T getRndSign() { return RndDistUniformI<T>{0, 1}(getRndEngine()) > 0 ? -1 : 1; }
 
 	/// @brief Gets the sign of a numeric value. (unsigned version)
-	/// @param mValue Value to use.
+	/// @param mX Value to use.
 	/// @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
-	template<typename T> inline constexpr int getSign(const T& mValue, EnableIf<!isSigned<T>()>* = nullptr) noexcept { return 0 < mValue; }
+	template<typename T> inline constexpr int getSign(const T& mX, EnableIf<!isSigned<T>()>* = nullptr) noexcept { return 0 < mX; }
 
 	/// @brief Gets the sign of a numeric value. (signed version)
-	/// @param mValue Value to use.
+	/// @param mX Value to use.
 	/// @return Returns 1 if the value is >0, -1 if the value is < 0, 0 if the value == 0.
-	template<typename T> inline constexpr int getSign(const T& mValue, EnableIf<isSigned<T>()>* = nullptr) noexcept { return (0 < mValue) - (mValue < 0); }
+	template<typename T> inline constexpr int getSign(const T& mX, EnableIf<isSigned<T>()>* = nullptr) noexcept { return (0 < mX) - (mX < 0); }
 
 	/// @brief Clamps a numeric value. (lower-bound only)
-	/// @param mValue Reference to the value. (will be modified)
+	/// @param mX Reference to the value. (will be modified)
 	/// @param mMin Lower bound.
-	template<typename T1, typename T2> inline void clampMin(T1& mValue, const T2& mMin) noexcept { if(mValue < mMin) mValue = mMin; }
+	template<typename T1, typename T2> inline void clampMin(T1& mX, const T2& mMin) noexcept { if(mX < mMin) mX = mMin; }
 
 	/// @brief Clamps a numeric value. (upper-bound only)
-	/// @param mValue Reference to the value. (will be modified)
+	/// @param mX Reference to the value. (will be modified)
 	/// @param mMax Upper bound.
-	template<typename T1, typename T2> inline void clampMax(T1& mValue, const T2& mMax) noexcept { if(mValue > mMax) mValue = mMax; }
+	template<typename T1, typename T2> inline void clampMax(T1& mX, const T2& mMax) noexcept { if(mX > mMax) mX = mMax; }
 
 	/// @brief Clamps a numeric value.
-	/// @param mValue Reference to the value. (will be modified)
+	/// @param mX Reference to the value. (will be modified)
 	/// @param mMin Lower bound.
 	/// @param mMax Upper bound.
-	template<typename T1, typename T2, typename T3> inline void clamp(T1& mValue, const T2& mMin, const T3& mMax) noexcept
+	template<typename T1, typename T2, typename T3> inline void clamp(T1& mX, const T2& mMin, const T3& mMax) noexcept
 	{
 		SSVU_ASSERT(mMin <= mMax);
-		if(mValue < mMin) mValue = mMin;
-		else if(mValue > mMax) mValue = mMax;
+		if(mX < mMin) mX = mMin;
+		else if(mX > mMax) mX = mMax;
 	}
 
 	/// @brief Gets a clamped numeric value. (lower-bound only)
-	/// @param mValue Const reference to the value. (original value won't be changed)
+	/// @param mX Const reference to the value. (original value won't be changed)
 	/// @param mMin Lower bound.
-	/// @return Returns mMin if mValue < mMin, mValue otherwise.
-	template<typename T1, typename T2> inline constexpr	Common<T1, T2> getClampedMin(const T1& mValue, const T2& mMin) noexcept { return mValue < mMin ? mMin : mValue; }
+	/// @return Returns mMin if mX < mMin, mX otherwise.
+	template<typename T1, typename T2> inline constexpr	Common<T1, T2> getClampedMin(const T1& mX, const T2& mMin) noexcept { return mX < mMin ? mMin : mX; }
 
 	/// @brief Gets a clamped numeric value. (upper-bound only)
-	/// @param mValue Const reference to the value. (original value won't be changed)
+	/// @param mX Const reference to the value. (original value won't be changed)
 	/// @param mMax Upper bound.
-	/// @return Returns mMax if mValue > mMax, mValue otherwise.
-	template<typename T1, typename T2> inline constexpr Common<T1, T2> getClampedMax(const T1& mValue, const T2& mMax) noexcept { return mValue > mMax ? mMax : mValue; }
+	/// @return Returns mMax if mX > mMax, mX otherwise.
+	template<typename T1, typename T2> inline constexpr Common<T1, T2> getClampedMax(const T1& mX, const T2& mMax) noexcept { return mX > mMax ? mMax : mX; }
 
 	/// @brief Gets a clamped numeric value.
-	/// @param mValue Const reference to the value. (original value won't be changed)
+	/// @param mX Const reference to the value. (original value won't be changed)
 	/// @param mMin Lower bound.
 	/// @param mMax Upper bound.
-	/// @return Returns mMax if mValue > mMax, mMin if mValue < mMin, mValue if mMin < mValue < mMax.
-	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> getClamped(const T1& mValue, const T2& mMin, const T3& mMax) noexcept
+	/// @return Returns mMax if mX > mMax, mMin if mX < mMin, mX if mMin < mX < mMax.
+	template<typename T1, typename T2, typename T3> inline constexpr Common<T1, T2, T3> getClamped(const T1& mX, const T2& mMin, const T3& mMax) noexcept
 	{
 		using CT = Common<T1, T2, T3>;
 
 		SSVU_ASSERT_CONSTEXPR(CT(mMin) <= CT(mMax));
-		return CT(mValue) < CT(mMin) ? CT(mMin) : (CT(mValue) > CT(mMax) ? CT(mMax) : CT(mValue));
+		return CT(mX) < CT(mMin) ? CT(mMin) : (CT(mX) > CT(mMax) ? CT(mMax) : CT(mX));
 	}
 
 	/// @brief Cycles a value in a range.
-	/// @param mValue Const reference to the value. (original value won't be changed)
+	/// @param mX Const reference to the value. (original value won't be changed)
 	/// @param mMin Range min.
 	/// @param mMax Range max.
 	/// @return Returns the cycled value.
-	template<typename T1, typename T2, typename T3> inline auto getCycledValue(const T1& mValue, const T2& mMin, const T3& mMax)
+	template<typename T1, typename T2, typename T3> inline auto getCycledValue(const T1& mX, const T2& mMin, const T3& mMax)
 	{
-		Common<T1, T2, T3> delta{mMax - mMin}, result{std::fmod(mValue - mMin, delta)};
+		Common<T1, T2, T3> delta{mMax - mMin}, result{std::fmod(mX - mMin, delta)};
 		if(result < 0) result += delta;
 		return mMin + result;
 	}
 
 	/// @brief Converts degrees to radians.
-	/// @param mValue Const reference to the value. (original value won't be changed)
+	/// @param mX Const reference to the value. (original value won't be changed)
 	/// @return Returns the value in radians.
-	template<typename T> inline constexpr T toRad(const T& mValue) noexcept { return mValue * radDegRatio; }
+	template<typename T> inline constexpr T toRad(const T& mX) noexcept { return mX * radDegRatio; }
 
 	/// @brief Converts radians to degrees.
-	/// @param mValue Const reference to the value. (original value won't be changed)
+	/// @param mX Const reference to the value. (original value won't be changed)
 	/// @return Returns the value in degrees.
-	template<typename T> inline constexpr T toDeg(const T& mValue) noexcept { return mValue / radDegRatio; }
+	template<typename T> inline constexpr T toDeg(const T& mX) noexcept { return mX / radDegRatio; }
 
 	/// @brief Restricts a radian value between 0 and 6.28f.
-	/// @param mValue Const reference to the value. (original value won't be changed)
+	/// @param mX Const reference to the value. (original value won't be changed)
 	/// @return Returns the restricted value in radians.
-	// TODO: getWrapped(T) - wrap(T&)
-	template<typename T> inline T wrapRad(T mValue) noexcept { mValue = std::fmod(mValue, tau); return mValue < 0 ? mValue + tau : mValue; }
+	template<typename T> inline T getWrapRad(T mX) noexcept { mX = std::fmod(mX, tau); return mX < 0 ? mX + tau : mX; }
 
 	/// @brief Restricts a degree value between 0 and 360.f.
-	/// @param mValue Const reference to the value. (original value won't be changed)
+	/// @param mX Const reference to the value. (original value won't be changed)
 	/// @return Returns the restricted value in degrees.
-	template<typename T> inline T wrapDeg(T mValue) noexcept { mValue = std::fmod(mValue, 360.f); return mValue < 0 ? mValue + 360.f : mValue; }
+	template<typename T> inline T getWrapDeg(T mX) noexcept { mX = std::fmod(mX, 360.f); return mX < 0 ? mX + 360.f : mX; }
 
 	/// @brief Gets a rotated angle in degrees.
 	/// @details Example use: a character slowly aiming towards the mouse position.
@@ -164,7 +163,7 @@ namespace ssvu
 	template<typename T1, typename T2, typename T3> inline auto getRotatedDeg(const T1& mStart, const T2& mEnd, const T3& mSpeed) noexcept
 	{
 		using CT = Common<T1, T2, T3>;
-		CT diff{getCycledValue(wrapDeg(mEnd) - wrapDeg(mStart), -CT(180), CT(180))};
+		CT diff{getCycledValue(getWrapDeg(mEnd) - getWrapDeg(mStart), -CT(180), CT(180))};
 		if(diff < -mSpeed) return mStart - mSpeed;
 		if(diff > mSpeed) return mStart + mSpeed;
 		return mEnd;
@@ -218,7 +217,7 @@ namespace ssvu
 	{
 		SSVU_ASSERT(mIdx > 0 && mCols != 0);
 		Common<T1, T2> y{mIdx / mCols};
-		return std::make_tuple(mIdx - y * mCols, y);
+		return mkTpl(mIdx - y * mCols, y);
 	}
 
 	/// @brief Gets a 3D index from an 1D index.
@@ -231,7 +230,7 @@ namespace ssvu
 	{
 		SSVU_ASSERT(mIdx > 0 && mRows != 0 && mCols != 0);
 		Common<T1, T2, T3> y{mIdx / mCols};
-		return std::make_tuple(y, y % mRows, mIdx / (mCols * mRows));
+		return mkTpl(y, y % mRows, mIdx / (mCols * mRows));
 	}
 
 	/// @brief Gets mathematically correct modulo calculation.
