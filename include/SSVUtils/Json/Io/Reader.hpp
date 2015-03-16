@@ -81,8 +81,8 @@ namespace ssvu
 
 					inline auto getErrorSrc()
 					{
-						auto intSize(static_cast<int>(realSize));
-						auto intIdx(static_cast<int>(idx));
+						auto intSize(ssvu::toInt(realSize));
+						auto intIdx(ssvu::toInt(idx));
 
 						auto iStart(std::max(0, intIdx - 20));
 						auto iEnd(std::min(intSize - 1, intIdx + 20));
@@ -178,8 +178,8 @@ namespace ssvu
 					{
 						char* endChar;
 
-						Real realN(static_cast<Real>(std::strtod(src.data() + idx, &endChar)));
-						IntS intSN(static_cast<IntS>(realN));
+						Real realN(toNum<Real>(std::strtod(src.data() + idx, &endChar)));
+						IntS intSN(toNum<IntS>(realN));
 
 						idx = endChar - src.data();
 

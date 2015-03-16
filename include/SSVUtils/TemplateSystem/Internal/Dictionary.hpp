@@ -91,7 +91,7 @@ namespace ssvu
 					refreshParents();
 
 					std::string buf, bufKey;
-					buf.reserve(static_cast<SizeT>(mSrc.size() * 1.5));
+					buf.reserve(toSizeT(mSrc.size() * 1.5));
 					bufKey.reserve(25);
 
 					bool found{true};

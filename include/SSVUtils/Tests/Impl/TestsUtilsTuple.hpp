@@ -35,7 +35,7 @@ SSVUT_TEST(TestsUtilsTuple)
 	SSVUT_EXPECT_OP((explode(lbd0, t0)), ==, 4);
 	SSVUT_EXPECT_OP((explode(lbd1, t1)), ==, (1.5f + 3));
 	SSVUT_EXPECT_OP((explode(lbd1, t0)), ==, 4);
-	SSVUT_EXPECT_OP((explode(lbd0, t1)), ==, (static_cast<int>(1.5f) + 3));
+	SSVUT_EXPECT_OP((explode(lbd0, t1)), ==, (ssvu::toInt(1.5f) + 3));
 
 	double acc{0};
 	tplFor([&acc](auto x)

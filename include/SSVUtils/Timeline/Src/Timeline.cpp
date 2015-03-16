@@ -52,6 +52,6 @@ namespace ssvu
 	SSVU_INLINE int Timeline::getCurrentIndex() const
 	{
 		if(isCIdxNull()) return 0;
-		return cIdx < static_cast<Idx>(commands.size()) ? cIdx : nullIdx;
+		return cIdx < toNum<Idx>(commands.size()) ? cIdx : nullIdx;
 	}
 }

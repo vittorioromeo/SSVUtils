@@ -44,8 +44,8 @@ namespace ssvu
 						switch(repr)
 						{
 							case Repr::IntS: return h.get<IntS>();
-							case Repr::IntU: return static_cast<IntS>(h.get<IntU>());
-							case Repr::Real: return static_cast<IntS>(h.get<Real>());
+							case Repr::IntU: return toNum<IntS>(h.get<IntU>());
+							case Repr::Real: return toNum<IntS>(h.get<Real>());
 							default: SSVU_UNREACHABLE();
 						}
 					}
@@ -55,9 +55,9 @@ namespace ssvu
 					{
 						switch(repr)
 						{
-							case Repr::IntS: return static_cast<IntU>(h.get<IntS>());
+							case Repr::IntS: return toNum<IntU>(h.get<IntS>());
 							case Repr::IntU: return h.get<IntU>();
-							case Repr::Real: return static_cast<IntU>(h.get<Real>());
+							case Repr::Real: return toNum<IntU>(h.get<Real>());
 							default: SSVU_UNREACHABLE();
 						}
 					}
@@ -67,8 +67,8 @@ namespace ssvu
 					{
 						switch(repr)
 						{
-							case Repr::IntS: return static_cast<Real>(h.get<IntS>());
-							case Repr::IntU: return static_cast<Real>(h.get<IntU>());
+							case Repr::IntS: return toNum<Real>(h.get<IntS>());
+							case Repr::IntU: return toNum<Real>(h.get<IntU>());
 							case Repr::Real: return h.get<Real>();
 							default: SSVU_UNREACHABLE();
 						}

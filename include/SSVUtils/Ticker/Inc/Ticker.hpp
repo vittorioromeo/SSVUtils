@@ -42,8 +42,8 @@ namespace ssvu
 			FT getTotal() const noexcept;
 			SizeT getTicks() const noexcept;
 
-			template<typename T = FT> inline T getTotalSecs() const noexcept	{ return static_cast<T>(getFTToSeconds(total)); }
-			template<typename T = FT> inline T getCurrentSecs() const noexcept	{ return static_cast<T>(getFTToSeconds(current)); }
+			template<typename T = FT> inline T getTotalSecs() const noexcept	{ return toNum<T>(getFTToSeconds(total)); }
+			template<typename T = FT> inline T getCurrentSecs() const noexcept	{ return toNum<T>(getFTToSeconds(current)); }
 	};
 }
 

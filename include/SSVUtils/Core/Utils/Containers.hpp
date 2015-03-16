@@ -5,8 +5,22 @@
 #ifndef SSVU_CORE_UTILS_CONTAINERS
 #define SSVU_CORE_UTILS_CONTAINERS
 
+#include <algorithm>
+
 namespace ssvu
 {
+	/// @brief Wrapper around `std::iota` that takes a container instead of two iterators.
+	template<typename TC, typename TV> inline auto iota(TC& mContainer, const TV& mX)
+	{
+		std::iota(std::begin(mContainer), std::end(mContainer), mX);
+	}
+
+	/// @brief Wrapper around `std::fill` that takes a container instead of two iterators.
+	template<typename TC, typename TV> inline auto fill(TC& mContainer, const TV& mX)
+	{
+		std::fill(std::begin(mContainer), std::end(mContainer), mX);
+	}
+
 	/// @brief Wrapper around `std::any_of` that takes a container instead of two iterators.
 	/// @param mContainer Reference to the container.
 	/// @param mPredicate Predicate to use.

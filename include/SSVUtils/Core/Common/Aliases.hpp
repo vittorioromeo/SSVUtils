@@ -71,9 +71,14 @@ namespace ssvu
 	template<typename T> inline constexpr auto isPOD() noexcept								{ return std::is_pod<T>(); }
 	template<typename T> inline constexpr auto isConst() noexcept							{ return std::is_const<T>(); }
 	template<typename T> inline constexpr auto isVolatile() noexcept						{ return std::is_volatile<T>(); }
+	template<typename T> inline constexpr auto isIntegral() noexcept						{ return std::is_integral<T>(); }
+	template<typename T> inline constexpr auto isFloatingPoint() noexcept					{ return std::is_floating_point<T>(); }
 
-	template<typename T> inline constexpr decltype(auto) fwd(RmRef<T>& mA) noexcept		{ return std::forward<T>(mA); }
-	template<typename T> inline constexpr decltype(auto) fwd(RmRef<T>&& mA) noexcept	{ return std::forward<T>(mA); }
+	/// @brief Wrapper for `std::forward`.
+	template<typename T> inline constexpr decltype(auto) fwd(RmRef<T>& mA) noexcept { return std::forward<T>(mA); }
+
+	/// @brief Wrapper for `std::forward`.
+	template<typename T> inline constexpr decltype(auto) fwd(RmRef<T>&& mA) noexcept { return std::forward<T>(mA); }
 
 	/// @brief Bring `std::move` into the `ssvu` namespace.
 	using std::move;
@@ -84,9 +89,14 @@ namespace ssvu
 	/// @macro Alias for `SSVU_FWD` macro.
 	#define FWD(...) SSVU_FWD(__VA_ARGS__)
 
-	template<typename... Ts> inline constexpr decltype(auto) tplCat(Ts&&... mS) noexcept	{ return std::tuple_cat(FWD(mS)...); }
-	template<typename... Ts> inline constexpr decltype(auto) fwdAsTpl(Ts&&... mS) noexcept	{ return std::forward_as_tuple(FWD(mS)...); }
-	template<typename... Ts> inline constexpr decltype(auto) mkTpl(Ts&&... mS) noexcept		{ return std::make_tuple(FWD(mS)...); }
+	/// @brief Wrapper for `std::tuple_cat`.
+	template<typename... Ts> inline constexpr decltype(auto) tplCat(Ts&&... mS) noexcept { return std::tuple_cat(FWD(mS)...); }
+
+	/// @brief Wrapper for `std::forward_as_tuple`.
+	template<typename... Ts> inline constexpr decltype(auto) fwdAsTpl(Ts&&... mS) noexcept { return std::forward_as_tuple(FWD(mS)...); }
+
+	/// @brief Wrapper for `std::make_tuple`.
+	template<typename... Ts> inline constexpr decltype(auto) mkTpl(Ts&&... mS) noexcept { return std::make_tuple(FWD(mS)...); }
 
 	/// @typedef Alias for `std::function`.
 	template<typename T> using Func = std::function<T>;
@@ -110,28 +120,54 @@ namespace ssvu
 	}
 
 	/// @brief Returns a `TBase&` casted to `T&`. Asserts that `T` is derived from `TBase`.
-	template<typename T, typename TBase> inline T& castUp(TBase& mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<T&>(mBase); }
+	template<typename T, typename TBase> inline constexpr T& castUp(TBase& mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<T&>(mBase); }
 
 	/// @brief Returns a `TBase*` casted to `T*`. Asserts that `T` is derived from `TBase`.
-	template<typename T, typename TBase> inline T* castUp(TBase* mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<T*>(mBase); }
+	template<typename T, typename TBase> inline constexpr T* castUp(TBase* mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<T*>(mBase); }
 
 	/// @brief Returns a `const TBase&` casted to `const T&`. Asserts that `T` is derived from `TBase`.
-	template<typename T, typename TBase> inline const T& castUp(const TBase& mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<const T&>(mBase); }
+	template<typename T, typename TBase> inline constexpr const T& castUp(const TBase& mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<const T&>(mBase); }
 
 	/// @brief Returns a `const TBase*` casted to `const T*`. Asserts that `T` is derived from `TBase`.
-	template<typename T, typename TBase> inline const T* castUp(const TBase* mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<const T*>(mBase); }
+	template<typename T, typename TBase> inline constexpr const T* castUp(const TBase* mBase) noexcept { SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>()); return static_cast<const T*>(mBase); }
 
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `T&`.
-	template<typename T, typename TStorage> inline T& castStorage(TStorage& mStorage) noexcept { return reinterpret_cast<T&>(mStorage); }
+	template<typename T, typename TStorage> inline constexpr T& castStorage(TStorage& mStorage) noexcept { return reinterpret_cast<T&>(mStorage); }
 
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `T*`.
-	template<typename T, typename TStorage> inline T* castStorage(TStorage* mStorage) noexcept { return reinterpret_cast<T*>(mStorage); }
+	template<typename T, typename TStorage> inline constexpr T* castStorage(TStorage* mStorage) noexcept { return reinterpret_cast<T*>(mStorage); }
 
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `const T&`.
-	template<typename T, typename TStorage> inline const T& castStorage(const TStorage& mStorage) noexcept { return reinterpret_cast<const T&>(mStorage); }
+	template<typename T, typename TStorage> inline constexpr const T& castStorage(const TStorage& mStorage) noexcept { return reinterpret_cast<const T&>(mStorage); }
 
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `const T*`.
-	template<typename T, typename TStorage> inline const T* castStorage(const TStorage* mStorage) noexcept { return reinterpret_cast<const T*>(mStorage); }
+	template<typename T, typename TStorage> inline constexpr const T* castStorage(const TStorage* mStorage) noexcept { return reinterpret_cast<const T*>(mStorage); }
+
+	// TODO: undefined behavior?
+	// /// @brief Wrapper around `reinterpret_cast`, intended for use with enum classes. Returns a non-const reference to the underlying value type.
+	//template<typename T> inline auto& castEnum(T& mX) noexcept { return reinterpret_cast<Underlying<T>&>(mX); }
+
+	/// @brief Wrapper around `static_cast`, intended for use with enums. Returns the underlying value.
+	template<typename T> inline constexpr auto castEnum(const T& mX) noexcept { return static_cast<Underlying<T>>(mX); }
+
+	/// @brief Converts a number to another number type.
+	template<typename TOut, typename TIn> inline constexpr auto toNum(const TIn& mX) noexcept
+		-> EnableIf<isArithmetic<TOut>() && isArithmetic<TIn>() && !isEnum<TOut>() && !isEnum<TIn>(), TOut>
+	{
+		return static_cast<TOut>(mX);
+	}
+
+	/// @brief Converts a number to `int`.
+	template<typename T> inline constexpr auto toInt(const T& mX) noexcept { return toNum<int>(mX); }
+
+	/// @brief Converts a number to `float`.
+	template<typename T> inline constexpr auto toFloat(const T& mX) noexcept { return toNum<float>(mX); }
+
+	/// @brief Converts a number to `SizeT`.
+	template<typename T> inline constexpr auto toSizeT(const T& mX) noexcept { return toNum<SizeT>(mX); }
+
+	// TODO: docs
+	template<typename T, typename TV> inline constexpr auto toEnum(const TV& mX) noexcept -> EnableIf<isEnum<T>() && isSame<Underlying<T>, TV>(), T> { return static_cast<T>(mX); }
 }
 
 #endif

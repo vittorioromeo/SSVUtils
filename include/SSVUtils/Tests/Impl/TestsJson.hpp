@@ -19,7 +19,7 @@ SSVUT_TEST(SSVUJsonNumTests)
 		SSVUT_EXPECT(n.as<char>() == char{10}); \
 		SSVUT_EXPECT(n.as<int>() == 10); \
 		SSVUT_EXPECT(n.as<long int>() == 10l); \
-		SSVUT_EXPECT(n.as<unsigned char>() == static_cast<unsigned char>(10)); \
+		SSVUT_EXPECT(n.as<unsigned char>() == ssvu::toNum<unsigned char>(10)); \
 		SSVUT_EXPECT(n.as<unsigned int>() == 10u); \
 		SSVUT_EXPECT(n.as<unsigned long int>() == 10ul); \
 		SSVUT_EXPECT(n.as<float>() == 10.f); \
@@ -99,7 +99,7 @@ SSVUT_TEST(SSVUJsonValTests2)
 	using namespace ssvu::Json;
 	using namespace ssvu::Json::Impl;
 
-	EXEC_TEST_BASIC_IMPL(unsigned char, static_cast<unsigned char>('a'), IntU)
+	EXEC_TEST_BASIC_IMPL(unsigned char, ssvu::toNum<unsigned char>('a'), IntU)
 	EXEC_TEST_BASIC_IMPL(unsigned int, 10u, IntU)
 	EXEC_TEST_BASIC_IMPL(unsigned long int, 10ul, IntU)
 	EXEC_TEST_BASIC_IMPL(float, 10.f, Real)

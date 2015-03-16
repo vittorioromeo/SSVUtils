@@ -31,8 +31,8 @@ namespace ssvu
 					std::vector<decltype(recycler)::PtrType> elements;
 					std::array<std::vector<BaseElement*>, maxTypes> groupedElements;
 
-					template<EType TET> inline auto& getGroupVec() noexcept				{ return groupedElements[static_cast<SizeT>(TET)]; }
-					template<EType TET> inline const auto& getGroupVec() const noexcept	{ return groupedElements[static_cast<SizeT>(TET)]; }
+					template<EType TET> inline auto& getGroupVec() noexcept				{ return groupedElements[castEnum(TET)]; }
+					template<EType TET> inline const auto& getGroupVec() const noexcept	{ return groupedElements[castEnum(TET)]; }
 
 				public:
 					template<typename T, typename... TArgs> inline T& create(TArgs&&... mArgs)
