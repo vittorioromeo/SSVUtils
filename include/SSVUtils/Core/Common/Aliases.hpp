@@ -143,10 +143,6 @@ namespace ssvu
 	/// @brief Wrapper around `reinterpret_cast`, intended for use with aligned storages. Returns a `const T*`.
 	template<typename T, typename TStorage> inline constexpr const T* castStorage(const TStorage* mStorage) noexcept { return reinterpret_cast<const T*>(mStorage); }
 
-	// TODO: undefined behavior?
-	// /// @brief Wrapper around `reinterpret_cast`, intended for use with enum classes. Returns a non-const reference to the underlying value type.
-	//template<typename T> inline auto& castEnum(T& mX) noexcept { return reinterpret_cast<Underlying<T>&>(mX); }
-
 	/// @brief Wrapper around `static_cast`, intended for use with enums. Returns the underlying value.
 	template<typename T> inline constexpr auto castEnum(const T& mX) noexcept { return static_cast<Underlying<T>>(mX); }
 
@@ -166,7 +162,7 @@ namespace ssvu
 	/// @brief Converts a number to `SizeT`.
 	template<typename T> inline constexpr auto toSizeT(const T& mX) noexcept { return toNum<SizeT>(mX); }
 
-	// TODO: docs
+	/// @brief Converts a number to an enum of type `T`. The number type and `Underlying<T>` must match.
 	template<typename T, typename TV> inline constexpr auto toEnum(const TV& mX) noexcept -> EnableIf<isEnum<T>() && isSame<Underlying<T>, TV>(), T> { return static_cast<T>(mX); }
 }
 

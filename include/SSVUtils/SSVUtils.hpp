@@ -76,6 +76,6 @@
 
 // TODO: TArgs -> Ts (?)
 // TODO: size_t literal operator, replace auto(0u), and SizeT() casts
-// TODO: SSVCMAKE: release disable tests
+// TODO: SSVCMAKE: release disable tests, maybe enable lfto optimizations
 // TODO: replace for loops with for(auto x : range())
 // TODO: check for functionality in GGJ and ASG that can be brought in SSVU
