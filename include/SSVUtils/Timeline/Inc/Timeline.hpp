@@ -29,6 +29,8 @@ namespace ssvu
 			static constexpr Idx nullIdx{-1};
 
 		private:
+
+			// TODO: abstract
 			PolyRecycler<Command> recycler;
 			std::vector<decltype(recycler)::PtrType> commands;
 			Idx cIdx{nullIdx};

@@ -29,6 +29,12 @@ namespace ssvu
 				inline T& get() & noexcept { return uv.template get<T>(); }
 				inline const T& get() const& noexcept { return uv.template get<T>(); }
 				inline const T get() && noexcept { return move(uv.template get<T>()); }
+
+				inline T& operator*() noexcept { return get(); }
+				inline const T& operator*() const noexcept { return get(); }
+
+				inline T* operator->() noexcept { return &get(); }
+				inline const T* operator->() const noexcept { return &get(); }
 		};
 	}
 
@@ -38,6 +44,7 @@ namespace ssvu
 		{
 			this->uv.template deinit<T>();
 		}
+
 	};
 
 	template<typename T> using MaybePOD = Impl::MaybeImpl<T, UnionPOD>;

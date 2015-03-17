@@ -27,6 +27,8 @@ namespace ssvu
 			{
 				private:
 					static constexpr SizeT maxTypes{50};
+
+					// TODO: abstract recycler + vector
 					PolyFixedRecycler<BaseElement, maxTypes> recycler;
 					std::vector<decltype(recycler)::PtrType> elements;
 					std::array<std::vector<BaseElement*>, maxTypes> groupedElements;
