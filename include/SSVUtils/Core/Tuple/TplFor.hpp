@@ -38,3 +38,11 @@ namespace ssvu
 #undef SSVU_IMPL_DEFINE_TPLFOR_FN
 
 #endif
+
+// TODO: tpl for idx at compile time
+/*
+	ssvu::tplForIdx(auto ctdata, auto& x)
+	{
+		decltype(ctdata)::Idx <- COMPILE TIME
+	}
+*/
