@@ -13,7 +13,7 @@ namespace ssvu
 		{
 			for(const auto& c : cmds) if(c->hasName(mName)) return *c;
 
-			auto closestMatch(std::make_pair(std::numeric_limits<SizeT>::max(), std::string{}));
+			auto closestMatch(std::make_pair(NumLimits<SizeT>::max(), std::string{}));
 
 			for(const auto& c : cmds)
 				for(const auto& n : c->getNames())

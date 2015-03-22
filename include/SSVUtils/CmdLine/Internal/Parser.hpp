@@ -22,7 +22,7 @@ namespace ssvu
 			{
 				inline static int parse(const std::string& mStr)
 				{
-					try { return std::stoi(mStr); }
+					try { return sToInt(mStr); }
 					catch(...) { throw std::runtime_error("Cannot parse '" + mStr + "' to int"); }
 				}
 			};
@@ -31,7 +31,7 @@ namespace ssvu
 			{
 				inline static float parse(const std::string& mStr)
 				{
-					try { return std::stof(mStr); }
+					try { return sToFloat(mStr); }
 					catch(...) { throw std::runtime_error("Cannot parse '" + mStr + "' to float"); }
 				}
 			};

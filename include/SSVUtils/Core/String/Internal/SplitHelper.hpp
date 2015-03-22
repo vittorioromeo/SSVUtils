@@ -13,7 +13,7 @@ namespace ssvu
 
 		inline StringSize findFirstOf(const std::string& mStr, const StringSize& mStartAt, const std::vector<std::string>& mSeparator, StringSize& mLength)
 		{
-			StringSize result{std::numeric_limits<StringSize>::max()};
+			StringSize result{NumLimits<StringSize>::max()};
 			for(const auto& s : mSeparator)
 			{
 				StringSize temp{mStr.find(s, mStartAt)};
