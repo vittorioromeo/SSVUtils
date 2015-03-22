@@ -52,6 +52,7 @@ namespace ssvu
 	template<typename T, T TV>						using CTVal = std::integral_constant<T, TV>;
 	template<int TI>								using CTInt = CTVal<int, TI>;
 	template<bool TB>								using CTBool = CTVal<bool, TB>;
+	template<typename T>							using NumLimits = std::numeric_limits<T>;
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>(); }
 	template<typename T> inline constexpr auto isSigned() noexcept							{ return std::is_signed<T>(); }
@@ -73,6 +74,7 @@ namespace ssvu
 	template<typename T> inline constexpr auto isVolatile() noexcept						{ return std::is_volatile<T>(); }
 	template<typename T> inline constexpr auto isIntegral() noexcept						{ return std::is_integral<T>(); }
 	template<typename T> inline constexpr auto isFloatingPoint() noexcept					{ return std::is_floating_point<T>(); }
+	template<typename T> inline constexpr auto isUnsigned() noexcept						{ return std::is_unsigned<T>(); }
 
 	/// @brief Wrapper for `std::forward`.
 	template<typename T> inline constexpr decltype(auto) fwd(RmRef<T>& mA) noexcept { return std::forward<T>(mA); }
@@ -153,14 +155,31 @@ namespace ssvu
 		return static_cast<TOut>(mX);
 	}
 
+	// TODO: move
+
 	/// @brief Converts a number to `int`.
 	template<typename T> inline constexpr auto toInt(const T& mX) noexcept { return toNum<int>(mX); }
 
 	/// @brief Converts a number to `float`.
 	template<typename T> inline constexpr auto toFloat(const T& mX) noexcept { return toNum<float>(mX); }
 
+	/// @brief Converts a number to `double`.
+	template<typename T> inline constexpr auto toDouble(const T& mX) noexcept { return toNum<double>(mX); }
+
 	/// @brief Converts a number to `SizeT`.
 	template<typename T> inline constexpr auto toSizeT(const T& mX) noexcept { return toNum<SizeT>(mX); }
+
+	/// @brief Converts a string to `int`.
+	inline auto sToInt(const std::string& mX) noexcept { return toInt(std::stoi(mX)); }
+
+	/// @brief Converts a string to `float`.
+	inline auto sToFloat(const std::string& mX) noexcept { return toFloat(std::stof(mX)); }
+
+	/// @brief Converts a string to `double`.
+	inline auto sToDouble(const std::string& mX) noexcept { return toDouble(std::stod(mX)); }
+
+	/// @brief Converts a string to `SizeT`.
+	inline auto sToSizeT(const std::string& mX) noexcept { return toSizeT(std::stol(mX)); }
 
 	/// @brief Converts a number to an enum of type `T`. The number type and `Underlying<T>` must match.
 	template<typename T, typename TV> inline constexpr auto toEnum(const TV& mX) noexcept -> EnableIf<isEnum<T>() && isSame<Underlying<T>, TV>(), T> { return static_cast<T>(mX); }
