@@ -74,6 +74,16 @@ SSVUT_TEST(StringUtilsTests)
 	SSVUT_EXPECT(isPunctuation('.'));
 	SSVUT_EXPECT(isPunctuation(','));
 	SSVUT_EXPECT(isPunctuation('!'));
+
+	// Fast integer tests
+	for(auto i(0u); i < 100; ++i)
+	{
+		auto is = ssvu::getRndI<int, int>(NumLimits<int>::min(), NumLimits<int>::max());
+		auto iu = ssvu::getRndI<unsigned int, unsigned int>(NumLimits<unsigned int>::min(), NumLimits<unsigned int>::max());
+
+		SSVUT_EXPECT_OP(ssvu::toStr(is), ==, std::to_string(is));
+		SSVUT_EXPECT_OP(ssvu::toStr(iu), ==, std::to_string(iu));
+	}
 }
 
 #endif
