@@ -26,18 +26,21 @@ namespace ssvu
 
 			std::mutex mtx;
 			std::string title;
+			std::ostream& stream;
+
+			inline LOut(std::ostream& mStream) noexcept : stream{mStream} { }
 
 			inline void flush()
 			{
 				std::lock_guard<std::mutex> lg{mtx};
 
-				std::cout.flush();
+				stream.flush();
 				getLogStream().flush();
 			}
 		};
 
 		/// @brief Returns a reference to the statically allocated global `LOut` instance.
-		inline auto& lo() noexcept { static LOut result; return result; }
+		inline auto& lo() noexcept { static LOut result{std::cout}; return result; }
 
 		/// @brief Interaction between the `lo()` object and a "stringificable" object.
 		template<typename T> inline auto& operator<<(LOut& mLOut, const T& mValue)
@@ -54,9 +57,9 @@ namespace ssvu
 					mLOut.title.clear();
 				}
 
-				std::cout << Console::resetFmt();
-				stringify<true>(std::cout, mValue);
-				std::cout << Console::resetFmt();
+				mLOut.stream << Console::resetFmt();
+				stringify<true>(mLOut.stream, mValue);
+				mLOut.stream << Console::resetFmt();
 
 				stringify<false>(getLogStream(), mValue);
 			}

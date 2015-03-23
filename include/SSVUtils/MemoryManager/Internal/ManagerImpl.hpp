@@ -32,6 +32,8 @@ namespace ssvu
 
 		template<typename TBase, typename TBM> using MMItrIdx = MMItrBase<TBase, SizeT, MMItrImplIdx<TBM>>;
 
+		// TODO: need manager without boolean and refresh
+
 		/// @brief Base memory recycler manager class.
 		/// @tparam TBase Base type of manager objects.
 		/// @tparam TRecycler Internal recycler type. (MonoRecycler? PolyRecycler?)

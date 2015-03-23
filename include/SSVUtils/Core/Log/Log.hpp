@@ -69,3 +69,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: polymorphic logging object that can forward all to null stream (disable/enable at runtime)
