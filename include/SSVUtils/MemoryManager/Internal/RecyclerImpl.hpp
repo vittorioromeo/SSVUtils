@@ -47,6 +47,14 @@ namespace ssvu
 					mContainer.emplace_back(create<T>(FWD(mArgs)...));
 					return castUp<T>(*mContainer.back());
 				}
+
+				/// @brief Creates a `T` instance and emplaces its `PtrType` into `mContainer` at a specifix index. Returns a reference to the instance.
+				/// @param mContainer Container where the created `PtrType` will be emplaced.
+				template<typename T = TBase, typename TContainer, typename... TArgs> inline T& getCreateEmplaceAt(TContainer& mContainer, SizeT mIdx, TArgs&&... mArgs)
+				{
+					auto itr(mContainer.emplace(std::begin(mContainer) + mIdx, create<T>(FWD(mArgs)...)));
+					return castUp<T>(**itr);
+				}
 		};
 
 		/// @brief CRTP implementation for `MonoRecycler`.

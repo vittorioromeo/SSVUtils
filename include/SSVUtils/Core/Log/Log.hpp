@@ -61,7 +61,7 @@ namespace ssvu
 	/// @details While the log is being suppressed, no output will be given to either `std::cout` or to the file log stream.
 	inline void setLogSuppressed(bool mLogSuppressed) noexcept { Impl::getLogSuppressed() = mLogSuppressed; }
 
-	/// @brief Returns a `LOut`-like log object that uses the same syntax but does nothing.
+	/// @brief Returns a `LOut`-like log object that uses the same syntax but does nothing.%
 	inline auto loNull() noexcept { return Impl::NullLOut{}; }
 
 	/// @brief Returns a `LOut`-like log object that uses the same syntax but does nothing.

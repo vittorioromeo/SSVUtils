@@ -29,10 +29,7 @@ namespace ssvu
 			static constexpr Idx nullIdx{-1};
 
 		private:
-
-			// TODO: abstract
-			PolyRecycler<Command> recycler;
-			std::vector<decltype(recycler)::PtrType> commands;
+			PolyRecVector<Command> commands;
 			Idx cIdx{nullIdx};
 			FT remainder{0.f};
 			bool ready{true}, finished{false};
@@ -41,7 +38,7 @@ namespace ssvu
 
 			template<typename T, typename... TArgs> inline Idx insertImpl(Idx mIdx, TArgs&&... mArgs)
 			{
-				commands.emplace(std::begin(commands) + mIdx, recycler.create<T>(*this, FWD(mArgs)...));
+				commands.createAt<T>(mIdx, *this, FWD(mArgs)...);
 
 				// If the current command is null, set it to the newly added one
 				if(isCIdxNull()) cIdx = mIdx;

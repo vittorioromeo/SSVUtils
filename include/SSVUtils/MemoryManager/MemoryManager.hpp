@@ -77,6 +77,31 @@ namespace ssvu
 		Impl::LayoutImpl::LHelperBool,
 		Impl::PolyFixedStorage<TBase, Impl::LayoutImpl::LHelperBool, TMaxChunks>>
 	>;
+
+	// TODO: docs
+	template<typename TBase> using MonoRecVector = Impl::BaseRecVector
+	<
+		TBase,
+		Impl::MonoRecyclerImpl<TBase, Impl::LayoutImpl::LHelperNoBool>
+	>;
+
+	// TODO: docs
+	template<typename TBase> using PolyRecVector = Impl::BaseRecVector<TBase, Impl::PolyRecyclerImpl
+	<
+		TBase,
+		Impl::LayoutImpl::LHelperNoBool,
+		Impl::PolyStorage<TBase, Impl::LayoutImpl::LHelperNoBool>>
+	>;
+
+	// TODO: docs
+	template<typename TBase, SizeT TMaxChunks> using PolyFixedRecVector = Impl::BaseRecVector<TBase, Impl::PolyRecyclerImpl
+	<
+		TBase,
+		Impl::LayoutImpl::LHelperNoBool,
+		Impl::PolyFixedStorage<TBase, Impl::LayoutImpl::LHelperNoBool, TMaxChunks>>
+	>;
 }
 
 #endif
+
+// TODO: polyrecyclerfor<...>

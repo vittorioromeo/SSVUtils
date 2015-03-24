@@ -28,9 +28,7 @@ namespace ssvu
 				private:
 					static constexpr SizeT maxTypes{50};
 
-					// TODO: abstract recycler + vector
-					PolyFixedRecycler<BaseElement, maxTypes> recycler;
-					std::vector<decltype(recycler)::PtrType> elements;
+					PolyFixedRecVector<BaseElement, maxTypes> elements;
 					std::array<std::vector<BaseElement*>, maxTypes> groupedElements;
 
 					template<EType TET> inline auto& getGroupVec() noexcept				{ return groupedElements[castEnum(TET)]; }
@@ -41,7 +39,7 @@ namespace ssvu
 					{
 						SSVU_ASSERT_STATIC(isBaseOf<BaseElement, T>(), "`T` must derive from `BaseElement`");
 
-						auto& result(recycler.getCreateEmplace<T>(elements, FWD(mArgs)...));
+						auto& result(elements.create<T>(FWD(mArgs)...));
 						getGroupVec<T::getEType()>().emplace_back(&result);
 						return result;
 					}

@@ -32,7 +32,60 @@ namespace ssvu
 
 		template<typename TBase, typename TBM> using MMItrIdx = MMItrBase<TBase, SizeT, MMItrImplIdx<TBM>>;
 
-		// TODO: need manager without boolean and refresh
+		// TODO: docs, move, cleanup, tests
+		template<typename TBase, typename TRecycler> class BaseRecVector
+		{
+			public:
+				using LayoutType = LayoutImpl::LHelperNoBool<TBase>;
+				using ChunkType = Chunk<TBase, LayoutImpl::LHelperNoBool>;
+				using ChunkDeleterType = ChunkDeleter<TBase, LayoutImpl::LHelperNoBool>;
+				using PtrType = UPtr<TBase, ChunkDeleterType>;
+				using RecyclerType = TRecycler;
+				using Container = std::vector<PtrType>;
+				using ItrIdx = MMItrIdx<PtrType, BaseRecVector<TBase, TRecycler>>;
+				using ItrIdxC = MMItrIdx<PtrType, const BaseRecVector<TBase, TRecycler>>;
+
+			private:
+				RecyclerType recycler;
+				Container items;
+
+			public:
+				inline BaseRecVector() { items.reserve(25); }
+				inline BaseRecVector(BaseRecVector&&) = default;
+
+				inline ~BaseRecVector() { items.clear(); }
+
+				template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
+				{
+					return recycler.template getCreateEmplace<T>(items, FWD(mArgs)...);
+				}
+
+				template<typename T = TBase, typename... TArgs> inline T& createAt(SizeT mIdx, TArgs&&... mArgs)
+				{
+					return recycler.template getCreateEmplaceAt<T>(items, mIdx, FWD(mArgs)...);
+				}
+
+				inline decltype(auto) operator[](SizeT mI) noexcept { return items[mI]; }
+
+				// Standard (partial) vector interface support
+				inline void reserve(SizeT mV)			{ items.reserve(mV); }
+				inline void clear() noexcept			{ items.clear(); }
+				inline auto size() const noexcept		{ return items.size(); }
+				inline auto empty() const noexcept		{ return items.empty(); }
+				inline auto capacity() const noexcept	{ return items.capacity(); }
+
+				// Standard iterator support
+				inline auto begin()		noexcept		{ return std::begin(items); }
+				inline auto end()		noexcept		{ return std::end(items); }
+				inline auto begin()		const noexcept	{ return std::begin(items); }
+				inline auto end()		const noexcept	{ return std::end(items); }
+				inline auto cbegin()	const noexcept	{ return std::cbegin(items); }
+				inline auto cend()		const noexcept	{ return std::cend(items); }
+				inline auto rbegin()	noexcept		{ return std::rbegin(items); }
+				inline auto rend()		noexcept		{ return std::rend(items); }
+				inline auto crbegin()	const noexcept	{ return std::crbegin(items); }
+				inline auto crend()		const noexcept	{ return std::crend(items); }
+		};
 
 		/// @brief Base memory recycler manager class.
 		/// @tparam TBase Base type of manager objects.
