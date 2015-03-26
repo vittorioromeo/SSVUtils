@@ -232,10 +232,11 @@ namespace ssvu
 					template<typename T> inline auto forUncheckedArrAs() const noexcept	{ return VIH::makeItrArrRange<T>(std::cbegin(getArr()), std::cend(getArr())); }
 
 					// Checked casted iteration
-					template<typename T> inline auto forObjAs() noexcept		{ return is<Obj>() ? forUncheckedObjAs<T>() : VIH::makeItrObjRangeEmpty<T, decltype(std::end(h.get<Obj>()))>(); }
-					template<typename T> inline auto forObjAs() const noexcept	{ return is<Obj>() ? forUncheckedObjAs<T>() : VIH::makeItrObjRangeEmpty<T, decltype(std::cend(h.get<Obj>()))>(); }
-					template<typename T> inline auto forArrAs() noexcept		{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::end(h.get<Arr>()))>(); }
-					template<typename T> inline auto forArrAs() const noexcept	{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRangeEmpty<T, decltype(std::cend(h.get<Arr>()))>(); }
+					// TODO: when is this needed?
+					template<typename T> inline auto forObjAs() noexcept		{ return is<Obj>() ? forUncheckedObjAs<T>() : VIH::makeItrObjRange<T>(std::begin(VIH::getEmptyObj()), std::end(VIH::getEmptyObj())); }
+					template<typename T> inline auto forObjAs() const noexcept	{ return is<Obj>() ? forUncheckedObjAs<T>() : VIH::makeItrObjRange<T>(std::cbegin(VIH::getEmptyObj()), std::cend(VIH::getEmptyObj())); }
+					template<typename T> inline auto forArrAs() noexcept		{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRange<T>(std::begin(VIH::getEmptyArr()), std::end(VIH::getEmptyArr())); }
+					template<typename T> inline auto forArrAs() const noexcept	{ return is<Arr>() ? forUncheckedArrAs<T>() : VIH::makeItrArrRange<T>(std::cbegin(VIH::getEmptyArr()), std::cend(VIH::getEmptyArr())); }
 
 					// Unchecked non-casted iteration
 					auto forUncheckedObj() noexcept;

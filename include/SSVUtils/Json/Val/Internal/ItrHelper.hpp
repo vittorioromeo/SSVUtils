@@ -40,8 +40,8 @@ namespace ssvu
 				template<typename T, typename TItr> inline static constexpr auto makeItrArrRange(TItr mBegin, TItr mEnd) noexcept { return makeItrAsRange<ImplAsArr, T>(mBegin, mEnd); }
 
 				// Empty range creation helper functions
-				template<typename T, typename TItr> inline static constexpr auto makeItrObjRangeEmpty() noexcept { return makeItrAsRange<ImplAsObj, T>(TItr{}, TItr{}); }
-				template<typename T, typename TItr> inline static constexpr auto makeItrArrRangeEmpty() noexcept { return makeItrAsRange<ImplAsArr, T>(TItr{}, TItr{}); }
+				template<typename T = Val> inline static auto& getEmptyObj() noexcept { static ObjImpl<T> result; return result; }
+				template<typename T = Val> inline static auto& getEmptyArr() noexcept { static ArrImpl<T> result; return result; }
 			};
 		}
 	}
