@@ -44,7 +44,7 @@ SSVUT_TEST(RangeCastTests)
 
 	struct XTBase
 	{
-		inline ~XTBase() { }
+		inline virtual ~XTBase() { }
 	};
 	struct XTDer : public XTBase
 	{
