@@ -79,7 +79,7 @@ namespace ssvu
 						*it = '-';
 					}
 
-					return std::string(it, &buf[bufferSize] - it);
+					return std::string(it, (static_cast<char*>(buf.data()) + bufferSize) - it);
 				}
 			};
 
@@ -105,7 +105,7 @@ namespace ssvu
 					std::memcpy(it, &digits[2 * val], 2);
 					if(val < 10) it++;
 
-					return std::string(it, &buf[bufferSize] - it);
+					return std::string(it, (static_cast<char*>(buf.data()) + bufferSize) - it);
 				}
 			};
 
