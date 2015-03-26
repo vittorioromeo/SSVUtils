@@ -22,10 +22,10 @@ namespace ssvu
 			constexpr const char* postfix{"m"};
 			constexpr const char* clear{"\033[1;1H\033[2J"};
 
-			inline auto& getStyleCodes() noexcept
+			inline const auto& getStyleCodes() noexcept
 			{
-				static int codes[]
-				{
+				static auto codes(mkArray
+				(
 					0,		// 0 = Style::None
 					1,		// 1 = Style::Bold
 					2,		// 2 = Style::Dim
@@ -39,14 +39,14 @@ namespace ssvu
 					25,		// 10 = Style::ResetBlink
 					27,		// 11 = Style::ResetReverse
 					28		// 12 = Style::ResetHidden
-				};
+				));
 
 				return codes;
 			}
-			inline auto& getColorFGCodes() noexcept
+			inline const auto& getColorFGCodes() noexcept
 			{
-				static int codes[]
-				{
+				static auto codes(mkArray
+				(
 					39,		// 0 = Color::Default
 					30,		// 1 = Color::Black
 					31,		// 2 = Color::Red
@@ -64,14 +64,14 @@ namespace ssvu
 					95,		// 14 = Color::LightMagenta
 					96,		// 15 = Color::LightCyan
 					97		// 16 = Color::LightWhite
-				};
+				));
 
 				return codes;
 			}
-			inline auto& getColorBGCodes() noexcept
+			inline const auto& getColorBGCodes() noexcept
 			{
-				static int codes[]
-				{
+				static auto codes(mkArray
+				(
 					49,		// 0 = Color::Default
 					40,		// 1 = Color::Black
 					41,		// 2 = Color::Red
@@ -89,7 +89,7 @@ namespace ssvu
 					105,	// 14 = Color::LightMagenta
 					106,	// 15 = Color::LightCyan
 					107		// 16 = Color::LightWhite
-				};
+				));
 
 				return codes;
 			}
