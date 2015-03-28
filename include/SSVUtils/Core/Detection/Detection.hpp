@@ -49,5 +49,14 @@
 	#define SSVU_DEBUG 1
 #endif
 
+// Standard library detection
+#if defined(_LIBCPP_VERSION)
+	#define SSVU_STDLIB_LIBCXX 1
+#elif defined(__GLIBCXX__)
+	#define SSVU_STDLIB_LIBSTDCXX 1
+#else
+	#define SSVU_STDLIB_UNKNOWN 1
+#endif
+
 
 #endif
