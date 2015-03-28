@@ -47,6 +47,9 @@ namespace ssvu
 				SSVU_ASSERT(mCapacityOld <= mCapacityNew);
 
 				auto newData(new TStorage[mCapacityNew]);
+
+				// TODO: may be undefined behavior
+				// should be castStorage<T>(...) = castStorage<T>(...)
 				for(auto i(0u); i < mCapacityOld; ++i) newData[i] = move(data[i]);
 
 				std::swap(data, newData);
@@ -73,3 +76,4 @@ namespace ssvu
 }
 
 #endif
+
