@@ -141,6 +141,9 @@ namespace ssvu
 	#define SSVU_UNREACHABLE() do { SSVU_ASSERT(false); std::terminate(); } while(false)
 #endif
 
+// TODO: docs
+#define SSVU_UNIQUE_NAME SSVPP_CAT(__tempVar, __LINE)
+
 #endif
 
 // TODO: void_t callers?
