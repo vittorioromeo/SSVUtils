@@ -165,7 +165,7 @@ namespace ssvu
 					SSVU_ASSERT(exists<Type::File>());
 
 					std::ifstream ifs{getCStr(), std::ios_base::binary};
-					SSVU_ASSERT(ifs);
+					SSVU_ASSERT(!ifs.fail());
 
 					ifs.seekg(0, std::ios::end);
 					auto size(ifs.tellg());

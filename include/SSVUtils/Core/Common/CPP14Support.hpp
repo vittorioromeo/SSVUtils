@@ -11,15 +11,19 @@ using namespace std::chrono_literals;
 
 namespace std
 {
-	// C++14: will be in standard (should be?)
-	template<typename TC> inline auto cbegin(const TC& mContainer) noexcept		{ return mContainer.cbegin(); }
-	template<typename TC> inline auto rbegin(const TC& mContainer) noexcept		{ return mContainer.rbegin(); }
-	template<typename TC> inline auto rbegin(TC& mContainer) noexcept			{ return mContainer.rbegin(); }
-	template<typename TC> inline auto crbegin(const TC& mContainer) noexcept	{ return rbegin(mContainer); }
-	template<typename TC> inline auto cend(const TC& mContainer) noexcept		{ return mContainer.cend(); }
-	template<typename TC> inline auto rend(const TC& mContainer) noexcept		{ return mContainer.rend(); }
-	template<typename TC> inline auto rend(TC& mContainer) noexcept				{ return mContainer.rend(); }
-	template<typename TC> inline auto crend(const TC& mContainer) noexcept		{ return rend(mContainer); }
+	// TODO: GCC: BUG: C++14: will be in standard (should be?)
+	// libc++ has these in stndard, but not libstdc++
+
+	#if defined(SSVU_STDLIB_LIBSTDCXX)
+		template<typename TC> inline auto cbegin(const TC& mContainer) noexcept		{ return mContainer.cbegin(); }
+		template<typename TC> inline auto rbegin(const TC& mContainer) noexcept		{ return mContainer.rbegin(); }
+		template<typename TC> inline auto rbegin(TC& mContainer) noexcept			{ return mContainer.rbegin(); }
+		template<typename TC> inline auto crbegin(const TC& mContainer) noexcept	{ return rbegin(mContainer); }
+		template<typename TC> inline auto cend(const TC& mContainer) noexcept		{ return mContainer.cend(); }
+		template<typename TC> inline auto rend(const TC& mContainer) noexcept		{ return mContainer.rend(); }
+		template<typename TC> inline auto rend(TC& mContainer) noexcept				{ return mContainer.rend(); }
+		template<typename TC> inline auto crend(const TC& mContainer) noexcept		{ return rend(mContainer); }
+	#endif
 }
 
 #endif
