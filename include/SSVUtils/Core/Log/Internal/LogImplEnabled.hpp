@@ -32,7 +32,7 @@ namespace ssvu
 
 			inline void flush()
 			{
-				std::lock_guard<std::mutex> lg{mtx};
+				std::lock_guard<std::mutex> SSVU_UNIQUE_NAME{mtx};
 
 				stream.flush();
 				getLogStream().flush();
@@ -45,7 +45,7 @@ namespace ssvu
 		/// @brief Interaction between the `lo()` object and a "stringificable" object.
 		template<typename T> inline auto& operator<<(LOut& mLOut, const T& mValue)
 		{
-			std::lock_guard<std::mutex> lg{lo().mtx};
+			std::lock_guard<std::mutex> SSVU_UNIQUE_NAME{lo().mtx};
 
 			if(!getLogSuppressed())
 			{
@@ -70,7 +70,7 @@ namespace ssvu
 		/// @brief Interaction between the `lo()` object and a stream manipulator.
 		inline auto& operator<<(LOut& mLOut, StdEndLine mManip)
 		{
-			std::lock_guard<std::mutex> lg{lo().mtx};
+			std::lock_guard<std::mutex> SSVU_UNIQUE_NAME{lo().mtx};
 
 			mManip(std::cout);
 			mManip(getLogStream());
@@ -89,7 +89,7 @@ namespace ssvu
 		{
 			if(!getLogSuppressed())
 			{
-				std::lock_guard<std::mutex> lg{lo().mtx};
+				std::lock_guard<std::mutex> SSVU_UNIQUE_NAME{lo().mtx};
 
 				lo().title = toStr(mTitle);
 			}
