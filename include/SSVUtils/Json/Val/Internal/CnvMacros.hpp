@@ -6,7 +6,7 @@
 #define SSVU_JSON_VAL_INTERNAL_CNVMACROS
 
 /// @macro Class mixin that allows SSVJ converters to access the current class's private members.
-#define SSVJ_CNV_FRIEND() template<typename> friend struct ssvu::Json::Impl::Cnv
+#define SSVJ_CNV_FRIEND() template<typename, typename> friend struct ssvu::Json::Impl::Cnv
 
 /// @macro Opens a namespace for user-defined converters implementation.
 /// @details Must be called outside of any namespace. Semicolon must not be used.

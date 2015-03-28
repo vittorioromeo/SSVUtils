@@ -20,7 +20,7 @@ namespace ssvu
 		{
 			class Val
 			{
-				template<typename> friend struct Impl::Cnv;
+				template<typename, typename> friend struct Impl::Cnv;
 				template<typename> friend struct Impl::Chk;
 				template<typename> friend struct Impl::AsHelper;
 				friend struct Impl::TplCnvHelper;
@@ -124,10 +124,10 @@ namespace ssvu
 
 					/// @brief Sets the `Val`'s internal value to `mX`.
 					///	@details The current stored value is deinitialized first.
-					template<typename T> inline void set(T&& mX) noexcept(noexcept(Impl::Cnv<RmAll<T>>::toVal(std::declval<Val&>(), FWD(mX))))
+					template<typename T> inline void set(T&& mX) noexcept(noexcept(Impl::Cnv<RmAll<T>, void>::toVal(std::declval<Val&>(), FWD(mX))))
 					{
 						deinitCurrent();
-						Impl::Cnv<RmAll<T>>::toVal(*this, FWD(mX));
+						Impl::Cnv<RmAll<T>, void>::toVal(*this, FWD(mX));
 					}
 
 					/// @brief Checks if the stored internal value is of type `T`.

@@ -12,21 +12,21 @@ namespace ssvu
 		namespace Impl
 		{
 			#define SSVJ_DEFINE_CNV_NUM(mType) \
-				template<> struct Cnv<mType> final \
+				template<> struct Cnv<mType, void> final \
 				{ \
 					inline static void toVal(Val& mV, const mType& mX) noexcept		{ mV.setNum(Num{mX}); } \
 					inline static void fromVal(const Val& mV, mType& mX) noexcept	{ mX = mV.getNum().as<mType>(); } \
 				};
 
 			#define SSVJ_DEFINE_CNV_BIG_MUTABLE(mType) \
-				template<> struct Cnv<mType> final \
+				template<> struct Cnv<mType, void> final \
 				{ \
 					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(FWD(mX)))) { SSVPP_CAT(mV.set, mType)(FWD(mX)); } \
 					template<typename T> inline static void fromVal(T&& mV, mType& mX) { mX = moveIfRValue<decltype(mV)>(SSVPP_CAT(mV.get, mType)()); } \
 				};
 
 			#define SSVJ_DEFINE_CNV_SMALL_IMMUTABLE(mType) \
-				template<> struct Cnv<mType> final \
+				template<> struct Cnv<mType, void> final \
 				{ \
 					inline static void toVal(Val& mV, const mType& mX) noexcept		{ SSVPP_CAT(mV.set, mType)(mX); } \
 					inline static void fromVal(const Val& mV, mType& mX) noexcept	{ mX = SSVPP_CAT(mV.get, mType)(); } \
@@ -57,16 +57,19 @@ namespace ssvu
 			#undef SSVJ_DEFINE_CNV_SMALL_IMMUTABLE
 
 			// Convert values to themselves
-			template<> struct Cnv<Val> final
+			template<> struct Cnv<Val, void> final
 			{
 				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(FWD(mX)))) { mV.init(FWD(mX)); }
 			};
 
+			// TODO: = {}
+			template<typename T, typename = void> struct Cnv final { };
+
 			// Convert enums
-			template<typename T> struct Cnv final
+			template<typename T> struct Cnv<T, EnableIf<isEnum<RmAll<T>>()>> final
 			{
-				inline static void toVal(Val& mV, const T& mX, EnableIf<isEnum<RmAll<T>>()>* = nullptr) noexcept { mV = Underlying<T>(mX);  }
-				inline static void fromVal(const Val& mV, T& mX, EnableIf<isEnum<RmAll<T>>()>* = nullptr) noexcept { mX = T(mV.template as<Underlying<T>>()); }
+				inline static void toVal(Val& mV, const T& mX) noexcept { mV = Underlying<T>(mX);  }
+				inline static void fromVal(const Val& mV, T& mX) noexcept { mX = T(mV.template as<Underlying<T>>()); }
 			};
 
 			// Convert C-style string arrays
@@ -147,9 +150,9 @@ namespace ssvu
 			};
 
 			// Convert map-like objects
-			template<typename TKey, typename TValue, template<typename, typename, typename...> class TMap> struct Cnv<TMap<TKey, TValue>> final
+			template<typename TKey, typename TValue, template<typename, typename, typename...> class TMap, typename... TExtra> struct Cnv<TMap<TKey, TValue, TExtra...>> final
 			{
-				using Type = TMap<TKey, TValue>;
+				using Type = TMap<TKey, TValue, TExtra...>;
 
 				template<typename T> inline static void toVal(Val& mVal, T&& mX)
 				{

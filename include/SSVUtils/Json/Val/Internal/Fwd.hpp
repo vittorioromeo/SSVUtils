@@ -17,7 +17,7 @@ namespace ssvu
 			class Val;
 
 			/// @brief Helper class to convert C++ objects to/from `Val`.
-			template<typename> struct Cnv;
+			template<typename, typename> struct Cnv;
 
 			/// @brief Helper class to check if `Val` contains a specific type.
 			template<typename> struct Chk;
