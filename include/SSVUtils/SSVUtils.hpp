@@ -79,3 +79,4 @@
 // TODO: SSVCMAKE: release disable tests, maybe enable lfto optimizations, -ffast-math
 // TODO: replace for loops with for(auto x : range())
 // TODO: check for functionality in GGJ and ASG that can be brought in SSVU
+// TODO: BTR::Ptr -> ssvu::Ptr (?)
