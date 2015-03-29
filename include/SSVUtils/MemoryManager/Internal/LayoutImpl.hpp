@@ -5,7 +5,7 @@
 #ifndef SSVU_MEMORYMANAGER_INTERNAL_LAYOUTIMPL
 #define SSVU_MEMORYMANAGER_INTERNAL_LAYOUTIMPL
 
-#include <SSVUtils/Core/Core.hpp>
+#include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu
 {

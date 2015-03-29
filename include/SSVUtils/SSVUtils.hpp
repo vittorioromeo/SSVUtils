@@ -24,7 +24,6 @@
 #include "SSVUtils/GrowableArray/GrowableArray.hpp"
 #include "SSVUtils/HandleVector/HandleVector.hpp"
 #include "SSVUtils/Easing/Easing.hpp"
-#include "SSVUtils/RecPtr/RecPtr.hpp"
 #include "SSVUtils/Ticker/Ticker.hpp"
 #include "SSVUtils/Range/Range.hpp"
 #include "SSVUtils/Union/Union.hpp"
@@ -65,7 +64,6 @@
 	Json
 	Memorymanager
 	Range
-	RecPtr
 	TemplateSystem
 	Test
 	Tests

@@ -5,7 +5,7 @@
 #ifndef SSVU_MEMORYMANAGER_INTERNAL_RECYCLERIMPL
 #define SSVU_MEMORYMANAGER_INTERNAL_RECYCLERIMPL
 
-#include <SSVUtils/Core/Core.hpp>
+#include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu
 {
