@@ -5,6 +5,8 @@
 #ifndef SSVU_MEMORYMANAGER_INTERNAL_LAYOUTIMPL
 #define SSVU_MEMORYMANAGER_INTERNAL_LAYOUTIMPL
 
+#include <SSVUtils/Core/Core.hpp>
+
 namespace ssvu
 {
 	namespace Impl
@@ -69,3 +71,5 @@ namespace ssvu
 }
 
 #endif
+
+// TODO: rewrite to be safer and aligned
