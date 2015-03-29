@@ -62,7 +62,7 @@ namespace ssvu
 		Impl::MonoRecyclerImpl<TBase, Impl::LayoutImpl::LHelperBool>
 	>;
 
-	/// @brief Memory recycler manager for a multiple object types. Stores an additional bool in every object.
+	/// @brief Memory recycler manager for multiple object types. Stores an additional bool in every object.
 	template<typename TBase> using PolyManager = Impl::BaseManager<TBase, Impl::PolyRecyclerImpl
 	<
 		TBase,
@@ -70,7 +70,7 @@ namespace ssvu
 		Impl::PolyStorage<TBase, Impl::LayoutImpl::LHelperBool>>
 	>;
 
-	/// @brief Memory recycler manager for a multiple object types. Stores an additional bool in every object. Supports a fixed amount of object sizes.
+	/// @brief Memory recycler manager for multiple object types. Stores an additional bool in every object. Supports a fixed amount of object sizes.
 	template<typename TBase, SizeT TMaxChunks> using PolyFixedManager = Impl::BaseManager<TBase, Impl::PolyRecyclerImpl
 	<
 		TBase,
@@ -78,14 +78,14 @@ namespace ssvu
 		Impl::PolyFixedStorage<TBase, Impl::LayoutImpl::LHelperBool, TMaxChunks>>
 	>;
 
-	// TODO: docs
+	/// @brief `std::vector` + recycler wrapper class for a single object type. Doesn't store addiitional data in the object.
 	template<typename TBase> using MonoRecVector = Impl::BaseRecVector
 	<
 		TBase,
 		Impl::MonoRecyclerImpl<TBase, Impl::LayoutImpl::LHelperNoBool>
 	>;
 
-	// TODO: docs
+	/// @brief `std::vector` + recycler wrapper class multiple object types. Doesn't store addiitional data in the objects.
 	template<typename TBase> using PolyRecVector = Impl::BaseRecVector<TBase, Impl::PolyRecyclerImpl
 	<
 		TBase,
@@ -93,7 +93,7 @@ namespace ssvu
 		Impl::PolyStorage<TBase, Impl::LayoutImpl::LHelperNoBool>>
 	>;
 
-	// TODO: docs
+	/// @brief `std::vector` + recycler wrapper class multiple object types. Doesn't store addiitional data in the objects.upports a fixed amount of object sizes.
 	template<typename TBase, SizeT TMaxChunks> using PolyFixedRecVector = Impl::BaseRecVector<TBase, Impl::PolyRecyclerImpl
 	<
 		TBase,
@@ -103,5 +103,3 @@ namespace ssvu
 }
 
 #endif
-
-// TODO: polyrecyclerfor<...>

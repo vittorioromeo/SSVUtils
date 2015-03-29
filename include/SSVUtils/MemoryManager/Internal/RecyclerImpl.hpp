@@ -5,6 +5,8 @@
 #ifndef SSVU_MEMORYMANAGER_INTERNAL_RECYCLERIMPL
 #define SSVU_MEMORYMANAGER_INTERNAL_RECYCLERIMPL
 
+#include <SSVUtils/Core/Core.hpp>
+
 namespace ssvu
 {
 	namespace Impl
@@ -17,6 +19,7 @@ namespace ssvu
 		/// @tparam TLHelper Type of layout helper. (bool or no bool?)
 		/// @tparam TStorage Type of storage. (MonoStorage? PolyStorage?)
 		/// @tparam TDerived Type of derived class. (CRTP)
+		/// @details Recycler instances must be destroyed AFTER the destruction of pointers created by them.
 		template<typename TBase, template<typename> class TLHelper, typename TStorage, typename TDerived> class BaseRecycler
 		{
 			public:
@@ -42,7 +45,7 @@ namespace ssvu
 
 				/// @brief Creates a `T` instance and emplaces its `PtrType` back into `mContainer`. Returns a reference to the instance.
 				/// @param mContainer Container where the created `PtrType` will be emplaced back.
-				template<typename T = TBase, typename TContainer, typename... TArgs> inline T& getCreateEmplace(TContainer& mContainer, TArgs&&... mArgs)
+				template<typename T = TBase, typename TC, typename... TArgs> inline T& getCreateEmplace(TC& mContainer, TArgs&&... mArgs)
 				{
 					mContainer.emplace_back(create<T>(FWD(mArgs)...));
 					return castUp<T>(*mContainer.back());
@@ -50,7 +53,7 @@ namespace ssvu
 
 				/// @brief Creates a `T` instance and emplaces its `PtrType` into `mContainer` at a specifix index. Returns a reference to the instance.
 				/// @param mContainer Container where the created `PtrType` will be emplaced.
-				template<typename T = TBase, typename TContainer, typename... TArgs> inline T& getCreateEmplaceAt(TContainer& mContainer, SizeT mIdx, TArgs&&... mArgs)
+				template<typename T = TBase, typename TC, typename... TArgs> inline T& getCreateEmplaceAt(TC& mContainer, SizeT mIdx, TArgs&&... mArgs)
 				{
 					auto itr(mContainer.emplace(std::begin(mContainer) + mIdx, create<T>(FWD(mArgs)...)));
 					return castUp<T>(**itr);
