@@ -5,6 +5,8 @@
 #ifndef SSVU_MEMORYMANAGER_INTERNAL_MANAGERIMPL
 #define SSVU_MEMORYMANAGER_INTERNAL_MANAGERIMPL
 
+#include <SSVUtils/Core/Core.hpp>
+
 namespace ssvu
 {
 	namespace Impl
@@ -32,7 +34,11 @@ namespace ssvu
 
 		template<typename TBase, typename TBM> using MMItrIdx = MMItrBase<TBase, SizeT, MMItrImplIdx<TBM>>;
 
-		// TODO: docs, move, cleanup, tests
+		/// @brief Base recycled vector class.
+		/// @tparam TBase Base type of manager objects.
+		/// @tparam TRecycler Internal recycler type. (MonoRecycler? PolyRecycler?)
+		/// @details Simple wrapper around an `std::vector` and a recycler.
+		// TODO: tests!
 		template<typename TBase, typename TRecycler> class BaseRecVector
 		{
 			public:
@@ -53,7 +59,7 @@ namespace ssvu
 				inline BaseRecVector() { items.reserve(25); }
 				inline BaseRecVector(BaseRecVector&&) = default;
 
-				inline ~BaseRecVector() { items.clear(); }
+				inline ~BaseRecVector() { clear(); }
 
 				template<typename T = TBase, typename... TArgs> inline T& create(TArgs&&... mArgs)
 				{
@@ -124,7 +130,7 @@ namespace ssvu
 					if(capacity <= sizeNext) reserve(capacity * 3);
 
 					items.initAt(sizeNext, move(uPtr));
-					return ssvu::castUp<T>(*items[sizeNext++]);
+					return castUp<T>(*items[sizeNext++]);
 				}
 
 				inline void clear()	noexcept
