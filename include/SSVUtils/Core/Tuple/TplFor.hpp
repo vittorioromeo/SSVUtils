@@ -27,22 +27,15 @@ namespace ssvu
 	/// If the tuples have different sizes, the minimum size will be used.
 	SSVU_IMPL_DEFINE_TPLFOR_FN(tplFor, ForHelper)
 
+	// TODO: better docs
 	/// @brief Iterates over a tuple's elements passing the current index and them to `mF` one at a time.
 	/// @details Can iterate over multiple tuples at once, passing the Nth element of every tuple to
 	/// `mF` simultaneously.
 	/// If the tuples have different sizes, the minimum size will be used.
-	SSVU_IMPL_DEFINE_TPLFOR_FN(tplForIdx, ForIdxHelper)
+	SSVU_IMPL_DEFINE_TPLFOR_FN(tplForData, ForDataHelper)
 }
 
 #undef SSVU_IMPL_TPLFOR_CALL
 #undef SSVU_IMPL_DEFINE_TPLFOR_FN
 
 #endif
-
-// TODO: tpl for idx at compile time
-/*
-	ssvu::tplForIdx(auto ctdata, auto& x)
-	{
-		decltype(ctdata)::Idx <- COMPILE TIME
-	}
-*/

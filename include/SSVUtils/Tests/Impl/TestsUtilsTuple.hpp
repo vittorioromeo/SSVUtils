@@ -55,11 +55,11 @@ SSVUT_TEST(TestsUtilsTuple)
 	SSVUT_EXPECT_OP(acc, ==, 1 + 2.f + 1 + 2);
 
 	acc = 0;
-	tplForIdx([&acc](auto i, auto x, auto y)
+	tplForData([&acc](auto data, auto x, auto y)
 	{
 		acc += x;
 		acc += y;
-		acc += i;
+		acc += getIdx(data);
 	}, tuple<int, float, int, double>(1, 2.f, 3, 4.), tuple<int, int>(1, 2));
 
 	SSVUT_EXPECT_OP(acc, ==, 1 + 2.f + 1 + 2 + 0 + 1);

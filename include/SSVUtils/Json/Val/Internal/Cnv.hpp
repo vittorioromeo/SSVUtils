@@ -62,7 +62,6 @@ namespace ssvu
 				template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(mV.init(FWD(mX)))) { mV.init(FWD(mX)); }
 			};
 
-			// TODO: = {}
 			template<typename T, typename = void> struct Cnv final { };
 
 			// Convert enums
@@ -118,14 +117,14 @@ namespace ssvu
 				}
 				template<typename T> inline static void fromVal(T&& mV, Type& mX)
 				{
-					tplForIdx([&mV](auto mIdx, auto& mE)
+					tplForData([&mV](auto mD, auto& mE)
 					{
-						SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > mIdx);
+						SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > getIdx(mD));
 
 						// TODO: BUG: gcc complains
 						// http://stackoverflow.com/questions/28264628/possible-gcc-bug-with-c14-polymorphic-lambdas
 						// mE = moveIfRValue<decltype(mV)>(FWD(mV)[mIdx].template as<RmRef<decltype(mE)>>());
-						mE = ssvu::fwd<T>(mV)[mIdx].template as<RmRef<decltype(mE)>>();
+						mE = ssvu::fwd<T>(mV)[getIdx(mD)].template as<RmRef<decltype(mE)>>();
 					}, mX);
 				}
 			};

@@ -25,9 +25,17 @@ namespace ssvu
 {
 	namespace Impl
 	{
+		template<typename TTypes, SizeT TIdx> struct TplForData
+		{
+			using Types = TTypes;
+			static constexpr SizeT idx{TIdx};
+		};
+
 		SSVU_IMPL_DEFINE_FORHELPER(ForHelper,		(FWD(mF)(std::get<TI>(FWD(mTpls))...)))
-		SSVU_IMPL_DEFINE_FORHELPER(ForIdxHelper,	(FWD(mF)(TI, std::get<TI>(FWD(mTpls))...)))
+		SSVU_IMPL_DEFINE_FORHELPER(ForDataHelper,	(FWD(mF)(TplForData<MPL::List<decltype(std::get<TI>(FWD(mTpls)))...>, TI>{}, std::get<TI>(FWD(mTpls))...)))
 	}
+
+	template<typename T> inline constexpr auto getIdx(const T&) noexcept { return T::idx; }
 }
 
 #undef SSVU_IMPL_DEFINE_FORHELPER
