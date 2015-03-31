@@ -141,7 +141,8 @@ namespace ssvu
 	#define SSVU_UNREACHABLE() do { SSVU_ASSERT(false); std::terminate(); } while(false)
 #endif
 
-// TODO: docs
+/// @macro Returns an unique name for a temporary variable, based on the current line number.
+/// @details Useful for temporary variables that require a name to make RAII work properly.
 #define SSVU_UNIQUE_NAME SSVPP_CAT(__tempVar, __LINE)
 
 #endif
