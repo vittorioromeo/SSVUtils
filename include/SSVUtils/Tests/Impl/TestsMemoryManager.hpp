@@ -9,6 +9,44 @@
 #include "SSVUtils/Test/Test.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 
+SSVUT_TEST(RecycledVectorTests)
+{
+	volatile int cc{0};
+	volatile int dc{0};
+
+	struct TMMItem
+	{
+		volatile int& dcRef;
+		inline TMMItem(volatile int& mCC, volatile int& mDC) : dcRef(mDC) { ++mCC; }
+		inline virtual ~TMMItem() { ++dcRef; }
+	};
+
+	struct TMMItemS : public TMMItem { char stuff[2]; using TMMItem::TMMItem; };
+	struct TMMItemB : public TMMItem { char stuff[20]; using TMMItem::TMMItem; };
+
+	SSVUT_EXPECT(cc == 0 && dc == 0);
+
+	{
+		ssvu::MonoRecVector<TMMItem> mrv;
+		auto& i1 __attribute__((unused)) = mrv.create(cc, dc);
+		auto& i2 __attribute__((unused)) = mrv.create(cc, dc);
+	}
+
+	{
+		ssvu::PolyRecVector<TMMItem> prv;
+		auto& i1 __attribute__((unused)) = prv.template create<TMMItemS>(cc, dc);
+		auto& i2 __attribute__((unused)) = prv.template create<TMMItemB>(cc, dc);
+	}
+
+	{
+		ssvu::PolyFixedRecVector<TMMItem, 2> prvf;
+		auto& i1 __attribute__((unused)) = prvf.template create<TMMItemS>(cc, dc);
+		auto& i2 __attribute__((unused)) = prvf.template create<TMMItemB>(cc, dc);
+	}
+
+	SSVUT_EXPECT(cc > 0 && dc > 0);
+}
+
 SSVUT_TEST(MemoryManagerTests)
 {
 	volatile int cc{0};
@@ -410,5 +448,7 @@ SSVUT_TEST(MemoryManagerTests)
 	SSVUT_EXPECT_OP(cc, ==, 7);
 	SSVUT_EXPECT_OP(dc, ==, 7);
 }
+
+
 
 #endif

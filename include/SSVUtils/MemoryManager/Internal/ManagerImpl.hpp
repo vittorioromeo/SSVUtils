@@ -38,7 +38,6 @@ namespace ssvu
 		/// @tparam TBase Base type of manager objects.
 		/// @tparam TRecycler Internal recycler type. (MonoRecycler? PolyRecycler?)
 		/// @details Simple wrapper around an `std::vector` and a recycler.
-		// TODO: tests!
 		template<typename TBase, typename TRecycler> class BaseRecVector
 		{
 			public:
@@ -48,8 +47,6 @@ namespace ssvu
 				using PtrType = UPtr<TBase, ChunkDeleterType>;
 				using RecyclerType = TRecycler;
 				using Container = std::vector<PtrType>;
-				using ItrIdx = MMItrIdx<PtrType, BaseRecVector<TBase, TRecycler>>;
-				using ItrIdxC = MMItrIdx<PtrType, const BaseRecVector<TBase, TRecycler>>;
 
 			private:
 				RecyclerType recycler;
