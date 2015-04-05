@@ -22,15 +22,12 @@
 namespace ssvu
 {
 	/// @brief Iterates over a tuple's elements passing them to `mF` one at a time.
-	/// @details Can iterate over multiple tuples at once, passing the Nth element of every tuple to
-	/// `mF` simultaneously.
+	/// @details Can iterate over multiple tuples at once, passing the Nth element of every tuple to `mF` simultaneously.
 	/// If the tuples have different sizes, the minimum size will be used.
 	SSVU_IMPL_DEFINE_TPLFOR_FN(tplFor, ForHelper)
 
-	// TODO: better docs
-	/// @brief Iterates over a tuple's elements passing the current index and them to `mF` one at a time.
-	/// @details Can iterate over multiple tuples at once, passing the Nth element of every tuple to
-	/// `mF` simultaneously.
+	/// @brief Iterates over a tuple's elements passing current iteration data and them to `mF` one at a time.
+	/// @details Can iterate over multiple tuples at once, passing the Nth element of every tuple to `mF` simultaneously.
 	/// If the tuples have different sizes, the minimum size will be used.
 	SSVU_IMPL_DEFINE_TPLFOR_FN(tplForData, ForDataHelper)
 }

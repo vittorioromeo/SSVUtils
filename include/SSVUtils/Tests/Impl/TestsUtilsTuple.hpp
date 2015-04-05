@@ -59,10 +59,27 @@ SSVUT_TEST(TestsUtilsTuple)
 	{
 		acc += x;
 		acc += y;
-		acc += getIdx(data);
+		acc += data.getIdx();
 	}, tuple<int, float, int, double>(1, 2.f, 3, 4.), tuple<int, int>(1, 2));
 
 	SSVUT_EXPECT_OP(acc, ==, 1 + 2.f + 1 + 2 + 0 + 1);
+
+	#if defined(__GXX_RTTI)
+	{
+		ssvu::Tpl<int, char, float> tt1{1, 'c', 3.4f};
+		ssvu::Tpl<double, std::string> tt2{10.55, "banana"};
+
+		ssvu::tplForData([this](auto mD, const auto& mA, const auto& mB)
+		{
+			using ts = typename decltype(mD)::Types;
+
+			SSVUT_EXPECT((typeid(typename ts::template At<0>)) == (typeid(ssvu::TplElem<mD.getIdx(), decltype(tt1)>)));
+			SSVUT_EXPECT((typeid(typename ts::template At<1>)) == (typeid(ssvu::TplElem<mD.getIdx(), decltype(tt2)>)));
+			SSVUT_EXPECT((typeid(typename ts::template At<0>)) == (typeid(mA)));
+			SSVUT_EXPECT((typeid(typename ts::template At<1>)) == (typeid(mB)));
+		}, tt1, tt2);
+	}
+	#endif
 }
 
 #endif

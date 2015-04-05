@@ -90,7 +90,7 @@ namespace ssvu
 				tplForData([&mStream](auto mD, const auto& mX)
 				{
 					callStringifyImpl<TFmt>(mStream, mX);
-					if(getIdx(mD) < getTplSize<T>() - 1) printBold<TFmt>(mStream, ", ");
+					if(mD.getIdx() < getTplSize<T>() - 1) printBold<TFmt>(mStream, ", ");
 				}, mValue);
 				printBold<TFmt>(mStream, "}");
 			}
