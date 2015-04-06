@@ -69,12 +69,12 @@ SSVUT_TEST(TestsUtilsTuple)
 		ssvu::Tpl<int, char, float> tt1{1, 'c', 3.4f};
 		ssvu::Tpl<double, std::string> tt2{10.55, "banana"};
 
-		ssvu::tplForData([this](auto mD, const auto& mA, const auto& mB)
+		ssvu::tplForData([this, &tt1, &tt2](auto mD, const auto& mA, const auto& mB)
 		{
 			using ts = typename decltype(mD)::Types;
 
-			SSVUT_EXPECT((typeid(typename ts::template At<0>)) == (typeid(ssvu::TplElem<mD.getIdx(), decltype(tt1)>)));
-			SSVUT_EXPECT((typeid(typename ts::template At<1>)) == (typeid(ssvu::TplElem<mD.getIdx(), decltype(tt2)>)));
+			SSVUT_EXPECT((typeid(typename ts::template At<0>)) == (typeid(ssvu::TplElem<mD.getIdx(), ssvu::Tpl<int, char, float> >)));
+			SSVUT_EXPECT((typeid(typename ts::template At<1>)) == (typeid(ssvu::TplElem<mD.getIdx(), ssvu::Tpl<double, std::string>>)));
 			SSVUT_EXPECT((typeid(typename ts::template At<0>)) == (typeid(mA)));
 			SSVUT_EXPECT((typeid(typename ts::template At<1>)) == (typeid(mB)));
 		}, tt1, tt2);
