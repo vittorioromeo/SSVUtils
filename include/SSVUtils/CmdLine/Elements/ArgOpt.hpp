@@ -5,6 +5,8 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_ARGOPT
 #define SSVU_CMDLINE_ELEMENTS_ARGOPT
 
+#include "SSVUtils/Core/Core.hpp"
+
 namespace ssvu
 {
 	namespace CmdLine

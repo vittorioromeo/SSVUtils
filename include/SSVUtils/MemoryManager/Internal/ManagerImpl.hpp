@@ -111,7 +111,6 @@ namespace ssvu
 				SizeT msize{0u}, sizeNext{0u}, capacity{0u};
 
 				inline bool isAliveAt(SizeT mI) const noexcept	{ return isAlive(items[mI].get()); }
-				inline bool isDeadAt(SizeT mI) const noexcept	{ return isDead(items[mI].get()); }
 
 			public:
 				inline BaseManager() { reserve(25); }

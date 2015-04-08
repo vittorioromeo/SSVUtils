@@ -64,7 +64,7 @@ namespace ssvu
 
 			/// @brief Internal implementation of the `at` method.
 			/// @details Throws an `std::out_of_range` exception if the value isn't found.
-			template<typename T> const auto& atImpl(const T& mKey) const noexcept
+			template<typename T> const auto& atImpl(const T& mKey) const
 			{
 				const auto& set(Impl::BimapHelper<T1, T2, T>::getSetCurrent(*this));
 				const auto& itr(this->find(mKey));
@@ -128,12 +128,12 @@ namespace ssvu
 			/// @brief Returns a const reference to a value of a bimap pair.
 			/// @details Throws an `std::out_of_range` exception if the value isn't found.
 			/// @param mKey Key of the pair.
-			inline const T2& at(const T1& mKey) const noexcept { return this->atImpl(mKey); }
+			inline const T2& at(const T1& mKey) const { return this->atImpl(mKey); }
 
 			/// @brief Returns a const reference to a value of a bimap pair.
 			/// @details Throws an `std::out_of_range` exception if the value isn't found.
 			/// @param mKey Key of the pair.
-			inline const T1& at(const T2& mKey) const noexcept { return this->atImpl(mKey); }
+			inline const T1& at(const T2& mKey) const { return this->atImpl(mKey); }
 
 			/// @brief Returns a reference to a value of a bimap pair, or creates it if unexistant.
 			/// @details Checks if the value exists.

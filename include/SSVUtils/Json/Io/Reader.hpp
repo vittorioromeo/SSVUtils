@@ -114,9 +114,7 @@ namespace ssvu
 					inline char getC() const noexcept			{ SSVU_ASSERT(idx >= 0 && idx < src.size());	return src[idx]; }
 					inline char& getC(SizeT mIdx) noexcept		{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
 					inline char getC(SizeT mIdx) const noexcept	{ SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());	return src[mIdx]; }
-
-					inline auto isC(char mC) const noexcept	{ return getC() == mC; }
-					inline auto isCDigit() const noexcept	{ return isDigit(getC()); }
+					inline auto isC(char mC) const noexcept		{ return getC() == mC; }
 
 					template<SizeT TS> inline void match(const char(&mKeyword)[TS])
 					{

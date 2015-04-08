@@ -44,10 +44,9 @@ namespace ssvu
 
 				inline ~PtrChain() noexcept
 				{
-					Link* temp;
 					while(base != nullptr)
 					{
-						temp = base;
+						auto temp(base);
 						base = base->next;
 						LHelperType::deallocate(reinterpret_cast<char*>(temp));
 					}
@@ -83,12 +82,8 @@ namespace ssvu
 
 			public:
 				inline Chunk() noexcept = default;
-
 				inline Chunk(const Chunk&) = delete;
-				inline Chunk(Chunk&& mC) noexcept
-				{
-					ptrChain = move(mC.ptrChain);
-				}
+				inline Chunk(Chunk&& mC) noexcept : ptrChain(move(mC.ptrChain)) { }
 
 				inline auto& operator=(const Chunk&) = delete;
 				inline auto& operator=(Chunk&& mC) noexcept

@@ -20,7 +20,7 @@ namespace ssvu
 
 		private:
 			std::vector<T> data;
-			TCmp cmp;
+			TCmp cmp{};
 
 			// Value lookup helper
 			template<typename TT> inline static auto lookupHelper(TT& mVecSorted, const T& mX) noexcept
