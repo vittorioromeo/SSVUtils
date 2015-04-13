@@ -179,7 +179,7 @@ namespace ssvu
 				}
 
 				/// @brief Returns true if the path is empty.
-				inline bool isNull() const noexcept { return path == ""; }
+				inline bool isNull() const noexcept { return path.empty(); }
 
 				inline bool operator<(const Path& mPath) const noexcept { return getStr() < mPath.getStr(); }
 		};

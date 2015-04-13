@@ -185,6 +185,21 @@ namespace ssvu
 				}
 			};
 
+			// Convert `std::bitset`
+			template<SizeT TS> struct Cnv<std::bitset<TS>>
+			{
+				using Type = std::bitset<TS>;
+
+				template<typename T> inline static void toVal(Val& mV, T&& mX)
+				{
+					mV = mX.to_string();
+				}
+				template<typename T> inline static void fromVal(T&& mV, Type& mX)
+				{
+					mX = Type{mV.template as<Str>()};
+				}
+			};
+
 			// Implementation for simple macro-based user-defined converters
 			template<typename T> struct CnvImplSimple
 			{

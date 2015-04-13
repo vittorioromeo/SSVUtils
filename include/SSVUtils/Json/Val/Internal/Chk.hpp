@@ -139,6 +139,15 @@ namespace ssvu
 					return mV.getType() == Val::Type::TArr && mV.getArr().size() == TS && TplIsHelper::areArrItemsOfType<TItem>(mV);
 				}
 			};
+
+			// Check `std::bitset`
+			template<SizeT TS> struct Chk<std::bitset<TS>> final
+			{
+				inline static auto is(const Val& mV) noexcept
+				{
+					return mV.getType() == Val::Type::TStr && mV.getStr().size() == TS;
+				}
+			};
 		}
 	}
 }

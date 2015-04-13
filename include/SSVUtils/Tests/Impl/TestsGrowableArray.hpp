@@ -11,6 +11,28 @@
 
 SSVUT_TEST(GrowableArrayTests)
 {
+	using namespace ssvu;
+
+	{
+		GrowableArray<int> gab;
+		gab.grow(0, 10);
+
+		for(int i = 0; i < 10; ++i) gab[i] = i;
+		for(int i = 0; i < 10; ++i)
+		{
+			SSVUT_EXPECT_OP(gab[i], ==, i);
+		}
+
+		gab.grow(10, 20);
+		for(int i = 0; i < 10; ++i)
+		{
+			SSVUT_EXPECT_OP(gab[i], ==, i);
+		}
+	}
+}
+
+SSVUT_TEST(GrowableArrayASTests)
+{
 	volatile int cc{0};
 	volatile int dc{0};
 
@@ -36,14 +58,14 @@ SSVUT_TEST(GrowableArrayTests)
 	SSVUT_EXPECT_OP(dc, ==, 0);
 
 	{
-		GrowableArray<TestItem> temp;
+		GrowableArrayAS<TestItem> temp;
 	}
 
 	SSVUT_EXPECT_OP(cc, ==, 0);
 	SSVUT_EXPECT_OP(dc, ==, 0);
 
 	{
-		GrowableArray<TestItem> g;
+		GrowableArrayAS<TestItem> g;
 		g.grow(0, 4);
 		g.initAt(0, cc, dc, 0);
 		g.initAt(1, cc, dc, 1);
@@ -83,7 +105,7 @@ SSVUT_TEST(GrowableArrayTests)
 	cc = dc = 0;
 
 	{
-		GrowableArray<UPtr<TestItem>> g;
+		GrowableArrayAS<UPtr<TestItem>> g;
 		g.grow(0, 4);
 		g.initAt(0, mkUPtr<TestItem>(cc, dc, 0));
 		g.initAt(1, mkUPtr<TestItem>(cc, dc, 1));
@@ -130,7 +152,7 @@ SSVUT_TEST(GrowableArrayTests)
 	cc = dc = 0;
 
 	{
-		GrowableArray<TestItem> g;
+		GrowableArrayAS<TestItem> g;
 		SSVUT_EXPECT_OP(cc, ==, 0);
 		SSVUT_EXPECT_OP(dc, ==, 0);
 		g.grow(0, 1);

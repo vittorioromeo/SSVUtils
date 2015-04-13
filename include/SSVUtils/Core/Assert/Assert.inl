@@ -22,6 +22,11 @@ namespace ssvu
 				<< "Line " << mAD.line << " in file " << mAD.file << "\n"
 				<< "Code: " << mAD.code << "\n\n";
 
+			if(!mAD.rhs.empty() && !mAD.lhs.empty())
+			{
+				lo() << mAD.lhs << "\n" << mAD.rhs << "\n\n";
+			}
+
 			if(getAssertState().skip)
 			{
 				lo() << "Skipping assertion..." << std::endl;

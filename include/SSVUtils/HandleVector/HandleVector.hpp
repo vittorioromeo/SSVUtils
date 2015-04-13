@@ -39,10 +39,10 @@ namespace ssvu
 
 		private:
 			/// @brief Internal atom storage.
-			GrowableArray<Atom> atoms;
+			GrowableArrayAS<Atom> atoms;
 
 			/// @brief Internal mark storage.
-			GrowableArray<Mark> marks;
+			GrowableArrayAS<Mark> marks;
 
 			/// @brief Current size. Does not take into account newly created atoms.
 			SizeT size{0u};

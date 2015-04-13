@@ -675,4 +675,21 @@ SSVUT_TEST(SSVUJsonGetIfHas)
 	}
 }
 
+SSVUT_TEST(SSVUJsonBitset)
+{
+	using namespace ssvu;
+	using namespace ssvu::Json;
+	using namespace ssvu::Json::Impl;
+
+	{
+		using Bts = std::bitset<10>;
+		Val v;
+		Bts b{"1000101111"};
+
+		v = b;
+		SSVUT_EXPECT_OP(v.as<Bts>(), ==, b);
+		SSVUT_EXPECT_OP(v.is<Bts>(), ==, true);
+	}
+}
+
 #endif

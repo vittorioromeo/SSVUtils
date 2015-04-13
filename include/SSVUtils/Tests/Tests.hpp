@@ -29,6 +29,7 @@
 // #include "SSVUtils/Tests/Impl/TestsEasing.hpp"
 #include "SSVUtils/Tests/Impl/TestsEncryption.hpp"
 #include "SSVUtils/Tests/Impl/TestsFatEnum.hpp"
+#include "SSVUtils/Tests/Impl/TestsGrowableArray.hpp"
 #include "SSVUtils/Tests/Impl/TestsHandleManager.hpp"
 #include "SSVUtils/Tests/Impl/TestsJson.hpp"
 #include "SSVUtils/Tests/Impl/TestsMemoryManager.hpp"
@@ -39,6 +40,5 @@
 // #include "SSVUtils/Tests/Impl/TestsTicker.hpp"
 // #include "SSVUtils/Tests/Impl/TestsTimeline.hpp"
 
-#include "SSVUtils/Tests/Impl/TestsGrowableArray.hpp"
 
 #endif

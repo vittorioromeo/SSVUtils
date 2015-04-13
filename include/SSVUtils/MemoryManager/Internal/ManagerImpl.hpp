@@ -101,7 +101,7 @@ namespace ssvu
 				using ChunkDeleterType = ChunkDeleter<TBase, LayoutImpl::LHelperBool>;
 				using PtrType = UPtr<TBase, ChunkDeleterType>;
 				using RecyclerType = TRecycler;
-				using Container = GrowableArray<PtrType>;
+				using Container = GrowableArrayAS<PtrType>;
 				using ItrIdx = MMItrIdx<PtrType, BaseManager<TBase, TRecycler>>;
 				using ItrIdxC = MMItrIdx<PtrType, const BaseManager<TBase, TRecycler>>;
 

@@ -58,7 +58,7 @@
 	* Easing
 	Encryption
 	FatEnum
-	GrowableArray
+	GrowableArrayAS
 	HandleVector
 	Internal
 	Json

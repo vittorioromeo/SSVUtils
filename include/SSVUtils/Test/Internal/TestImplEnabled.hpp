@@ -71,8 +71,8 @@ namespace ssvu
 							<< "Expression:\n"	<< mFail.expr << "\n"
 							<< "at line: "		<< mFail.line << "\n";
 
-						if(mFail.current != "") lo() << "\nExpression result: " << mFail.current << "\n";
-						if(mFail.expected != "") lo() <<  "Expected result:   " << mFail.expected << "\n";
+						if(!mFail.current.empty()) lo() << "\nExpression result: " << mFail.current << "\n";
+						if(!mFail.expected.empty()) lo() <<  "Expected result:   " << mFail.expected << "\n";
 
 						lo() << hr() << "\n\n";
 					}

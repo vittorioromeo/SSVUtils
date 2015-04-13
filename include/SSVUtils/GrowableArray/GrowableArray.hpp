@@ -9,36 +9,23 @@
 
 namespace ssvu
 {
-	/// @brief Low-level growable array storage class.
-	/// @details Data must be explicitly constructed and destroyed.
+	/// @brief Low-level array unique ptr wrapper.
+	/// @details Wraps a `UPtr<T[]>` instance and provides functions to retrieve items and grow the buffer size.
+	/// `T` must be movable in order to use the `grow` function.
 	template<typename T> class GrowableArray
 	{
 		private:
-			/// @typedef Aligned storage type for `T`.
-			using TStorage = AlignedStorageFor<T>;
-
-			/// @brief Internal storage.
-			TStorage* data{nullptr};
+			UPtr<T[]> data;
 
 		public:
 			inline GrowableArray() noexcept = default;
-			inline ~GrowableArray() noexcept { delete[] data; }
+			inline ~GrowableArray() noexcept = default;
 
-			inline GrowableArray(const GrowableArray& mGA) = delete;
-			inline GrowableArray(GrowableArray&& mGA) noexcept : data{mGA.data} { mGA.data = nullptr; }
+			inline GrowableArray(GrowableArray&&) noexcept = default;
+			inline GrowableArray& operator=(GrowableArray&&) noexcept = default;
 
-			inline auto& operator=(const GrowableArray& mGA) = delete;
-			inline auto& operator=(GrowableArray&& mGA) noexcept
-			{
-				if(this != &mGA)
-				{
-					delete[] data;
-					data = mGA.data;
-					mGA.data = nullptr;
-				}
-
-				return *this;
-			}
+			inline GrowableArray(const GrowableArray&) = delete;
+			inline GrowableArray& operator=(const GrowableArray&) = delete;
 
 			/// @brief Grows the internal storage from `mCapacityOld` to `mCapacityNew`.
 			/// @details The new capacity must be greater or equal than the old one.
@@ -46,14 +33,38 @@ namespace ssvu
 			{
 				SSVU_ASSERT(mCapacityOld <= mCapacityNew);
 
-				auto newData(new TStorage[mCapacityNew]);
-
-				// TODO: may be undefined behavior
-				// should be castStorage<T>(...) = castStorage<T>(...)
+				auto newData(mkUPtr<T[]>(mCapacityNew));
 				for(auto i(0u); i < mCapacityOld; ++i) newData[i] = move(data[i]);
+				data = move(newData);
+			}
 
-				std::swap(data, newData);
-				delete[] newData;
+			// Getters
+			inline T& operator[](SizeT mI) noexcept				{ return data[mI]; }
+			inline const T& operator[](SizeT mI) const noexcept	{ return data[mI]; }
+	};
+
+	/// @brief Low-level growable array storage class.
+	/// @details Data must be explicitly constructed and destroyed.
+	template<typename T> class GrowableArrayAS
+	{
+		private:
+			GrowableArray<AlignedStorageFor<T>> data;
+
+		public:
+			inline GrowableArrayAS() noexcept = default;
+			inline ~GrowableArrayAS() noexcept = default;
+
+			inline GrowableArrayAS(GrowableArrayAS&& mGA) noexcept = default;
+			inline GrowableArrayAS& operator=(GrowableArrayAS&& mGA) noexcept = default;
+
+			inline GrowableArrayAS(const GrowableArrayAS& mGA) = delete;
+			inline auto& operator=(const GrowableArrayAS& mGA) = delete;
+
+			/// @brief Grows the internal storage from `mCapacityOld` to `mCapacityNew`.
+			/// @details The new capacity must be greater or equal than the old one.
+			inline void grow(SizeT mCapacityOld, SizeT mCapacityNew)
+			{
+				data.grow(mCapacityOld, mCapacityNew);
 			}
 
 			/// @brief Constructs a `T` instance at index `mI`.
