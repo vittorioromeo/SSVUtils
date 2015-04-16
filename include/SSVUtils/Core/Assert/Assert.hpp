@@ -58,15 +58,19 @@
 		}
 	}
 
+	// TODO: docs
+	#define SSVU_IMPL_ASSERT_INIT(...) \
+		::ssvu::Impl::AssertData ad{}; \
+		ad.code = SSVPP_SEP_TOSTR(",", SSVPP_EMPTY(), __VA_ARGS__); \
+		ad.line = SSVPP_TOSTR(__LINE__); \
+		ad.file = __FILE__;
+
 	/// @macro Normal assertion. Requires a boolean expression and an optional string message.
 	///	@details If the expression returns false, the assertion fires, calling `ssvu::Impl::assertImpl`.
 	#define SSVU_ASSERT(...) \
 		do \
 		{ \
-			::ssvu::Impl::AssertData ad{}; \
-			ad.code = SSVPP_SEP_TOSTR(",", SSVPP_EMPTY(), __VA_ARGS__); \
-			ad.line = SSVPP_TOSTR(__LINE__); \
-			ad.file = __FILE__; \
+			SSVU_IMPL_ASSERT_INIT(__VA_ARGS__) \
 			::ssvu::Impl::assertImpl(::ssvu::move(ad), __VA_ARGS__); \
 		} while(false)
 
@@ -74,10 +78,7 @@
 	#define SSVU_ASSERT_OP_MSG(mLhs, mOp, mRhs, ...) \
 		do \
 		{ \
-			::ssvu::Impl::AssertData ad{}; \
-			ad.code = SSVPP_SEP_TOSTR(",", SSVPP_EMPTY(), mLhs, mOp, mRhs, __VA_ARGS__); \
-			ad.line = SSVPP_TOSTR(__LINE__); \
-			ad.file = __FILE__; \
+			SSVU_IMPL_ASSERT_INIT(mLhs, mOp, mRhs, __VA_ARGS__) \
 			ad.lhs = SSVPP_TOSTR(mLhs) + std::string{" = "} + ::ssvu::toStr(mLhs); \
 			ad.rhs = SSVPP_TOSTR(mRhs) + std::string{" = "} + ::ssvu::toStr(mRhs); \
 			::ssvu::Impl::assertImpl(::ssvu::move(ad), mLhs mOp mRhs, __VA_ARGS__); \
