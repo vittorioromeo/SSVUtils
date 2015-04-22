@@ -65,6 +65,7 @@
 #else
 	#define SSVUT_TEST(mName) inline void SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), unused) ()
 	#define SSVUT_EXPECT(...)
+	#define SSVUT_EXPECT_OP(...)
 	#define SSVUT_RUN() while(false){ }
 #endif
 

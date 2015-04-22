@@ -19,7 +19,7 @@ namespace ssvu
 				};
 
 			#define SSVJ_DEFINE_REPRHELPER(mType) \
-				template<> struct ReprHelper<mType> { inline static auto get() { return SSVPP_EXPAND(Num::Repr::mType); } };
+				template<> struct ReprHelper<mType> { inline static auto get() { return SSVPP_DEFER(Num::Repr::mType); } };
 
 			// Define helpers to set/get numeric types to/from specific representations
 			SSVJ_DEFINE_NUMHELPER(char, IntS)
