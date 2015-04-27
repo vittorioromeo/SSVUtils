@@ -28,7 +28,7 @@ namespace ssvu
 	/// @brief Returns a random integer value between [mMin and mMax). (Uniform distribution)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper exclusive bound.
-	template<typename T1, typename T2> inline auto getRndI(const T1& mMin, const T2& mMax)
+	template<typename T1, typename T2> inline auto getRndI(const T1& mMin, const T2& mMax) noexcept
 	{
 		using CT = Common<T1, T2>;
 		CT min(mMin), max(mMax);
@@ -40,7 +40,7 @@ namespace ssvu
 	/// @brief Returns a random real value between [mMin and mMax]. (Uniform distribution)
 	/// @param mMin Lower inclusive bound.
 	/// @param mMax Upper inclusive bound.
-	template<typename T1, typename T2> inline auto getRndR(const T1& mMin, const T2& mMax)
+	template<typename T1, typename T2> inline auto getRndR(const T1& mMin, const T2& mMax) noexcept
 	{
 		using CT = Common<T1, T2>;
 		CT min(mMin), max(mMax);
@@ -53,7 +53,7 @@ namespace ssvu
 	/// @tparam T Type of real value. (default float)
 	/// @param mMean Mean of the distribution.
 	/// @param mDeviation Deviation of the distribution.
-	template<typename T1, typename T2> inline auto getRndRNormal(const T1& mMean, const T2& mDeviation)
+	template<typename T1, typename T2> inline auto getRndRNormal(const T1& mMean, const T2& mDeviation) noexcept
 	{
 		using CT = Common<T1, T2>;
 		CT mean(mMean), deviation(mDeviation);
@@ -64,7 +64,7 @@ namespace ssvu
 	/// @brief Gets a random sign.
 	/// @tparam T Type of integer value. (default int)
 	/// @return Returns -1 or 1.
-	template<typename T = int> inline T getRndSign() { return RndDistUniformI<T>{0, 1}(getRndEngine()) > 0 ? -1 : 1; }
+	template<typename T = int> inline T getRndSign() noexcept { return RndDistUniformI<T>{0, 1}(getRndEngine()) > 0 ? -1 : 1; }
 
 	/// @brief Gets the sign of a numeric value. (unsigned version)
 	/// @param mX Value to use.
@@ -127,7 +127,7 @@ namespace ssvu
 	/// @param mMin Range min.
 	/// @param mMax Range max.
 	/// @return Returns the cycled value.
-	template<typename T1, typename T2, typename T3> inline auto getCycledValue(const T1& mX, const T2& mMin, const T3& mMax)
+	template<typename T1, typename T2, typename T3> inline auto getCycledValue(const T1& mX, const T2& mMin, const T3& mMax) noexcept
 	{
 		Common<T1, T2, T3> delta{mMax - mMin}, result{std::fmod(mX - mMin, delta)};
 		if(result < 0) result += delta;
