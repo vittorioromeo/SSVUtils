@@ -51,4 +51,40 @@ SSVUT_TEST(UtilsForArgs)
 	}
 }
 
+SSVUT_TEST(UtilsForArgsN)
+{
+	using namespace std;
+	using namespace ssvu;
+
+	{
+		int acc{0};
+		forArgs<1>([&acc](auto x){ acc += x; }, 0, 1, 2, 3, 4, 5);
+		SSVUT_EXPECT_OP(acc, ==, (0+1+2+3+4+5));
+
+		acc = 0;
+		forArgs<1>([&acc](auto&& x){ acc += x; }, 0, 1, 2, 3, 4, 5);
+		SSVUT_EXPECT_OP(acc, ==, (0+1+2+3+4+5));
+	}
+
+	{
+		int acc{0};
+		forArgs<2>([&acc](auto x, auto y){ acc += x + y; }, 0, 1, 2, 3, 4, 5);
+		SSVUT_EXPECT_OP(acc, ==, (0+1+2+3+4+5));
+
+		acc = 0;
+		forArgs<2>([&acc](auto&& x, auto&& y){ acc += x + y; }, 0, 1, 2, 3, 4, 5);
+		SSVUT_EXPECT_OP(acc, ==, (0+1+2+3+4+5));
+	}
+
+	{
+		int acc{0};
+		forArgs<3>([&acc](auto x, auto y, auto z){ acc += x + y + z; }, 0, 1, 2, 3, 4, 5);
+		SSVUT_EXPECT_OP(acc, ==, (0+1+2+3+4+5));
+
+		acc = 0;
+		forArgs<3>([&acc](auto&& x, auto&& y, auto&& z){ acc += x + y + z; }, 0, 1, 2, 3, 4, 5);
+		SSVUT_EXPECT_OP(acc, ==, (0+1+2+3+4+5));
+	}
+}
+
 #endif

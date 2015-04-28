@@ -167,6 +167,8 @@ namespace ssvu
 			template<SizeT TS> inline auto getSizeIdx() noexcept { return SizeIdxInfo<TS>::idx; }
 		}
 
+		// TODO: update docs
+		// TODO: fix sizeIdx (global??) -> do it with tuple + variadic type list
 		/// @brief Storage data structure for multiple types - uses a map of `Chunk` objects. Supports a limited number of object sizes.
 		template<typename TBase, template<typename> class TLHelper, SizeT TMaxChunks> class PolyFixedStorage
 		{
@@ -179,10 +181,27 @@ namespace ssvu
 			public:
 				template<typename T> inline auto& getChunk() noexcept
 				{
-					SSVU_ASSERT(FixedStorageImpl::getSizeIdx<sizeof(T)>() < TMaxChunks);
+					SSVU_ASSERT_OP(FixedStorageImpl::getSizeIdx<sizeof(T)>(), <, TMaxChunks);
 					return chunks[FixedStorageImpl::getSizeIdx<sizeof(T)>()];
 				}
 		};
+
+		// TODO: fix impement and replace fixedstorage
+		/*template<typename TBase, template<typename> class TLHelper, typename TTypes> class PolyFixedStorageVariadic
+		{
+			public:
+				using ChunkType = Chunk<TBase, TLHelper>;
+
+			private:
+				std::array<ChunkType, TMaxChunks> chunks;
+
+			public:
+				template<typename T> inline auto& getChunk() noexcept
+				{
+					SSVU_ASSERT_OP(FixedStorageImpl::getSizeIdx<sizeof(T)>(), <, TMaxChunks);
+					return chunks[FixedStorageImpl::getSizeIdx<sizeof(T)>()];
+				}
+		};*/
 	}
 }
 

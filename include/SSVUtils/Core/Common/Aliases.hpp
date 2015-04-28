@@ -48,10 +48,11 @@ namespace ssvu
 	template<SizeT TN>								using MkIdxSeq = std::make_index_sequence<TN>;
 	template<typename... T>							using IdxSeqFor = MkIdxSeq<sizeof...(T)>;
 	template<typename... Ts>						using Tpl = std::tuple<Ts...>;
-	template<typename T>							using IsPod = std::is_pod<T>;
+	template<typename T>							using IsPOD = std::is_pod<T>;
 	template<typename T, T TV>						using CTVal = std::integral_constant<T, TV>;
 	template<int TI>								using CTInt = CTVal<int, TI>;
 	template<bool TB>								using CTBool = CTVal<bool, TB>;
+	template<SizeT TS>								using CTSizeT = CTVal<SizeT, TS>;
 	template<typename T>							using NumLimits = std::numeric_limits<T>;
 
 	template<typename T> inline constexpr auto isArithmetic() noexcept						{ return std::is_arithmetic<T>(); }

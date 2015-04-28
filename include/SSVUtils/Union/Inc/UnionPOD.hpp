@@ -16,7 +16,7 @@ namespace ssvu
 	/// No checks are performed on construction/destruction of the data.
 	template<typename... Ts> class UnionPOD : public Impl::UnionBase<Ts...>
 	{
-		SSVU_ASSERT_STATIC(MPL::all<IsPod, Ts...>(), "All types must be POD");
+		SSVU_ASSERT_STATIC(MPL::all<IsPOD, Ts...>(), "All types must be POD");
 
 		public:
 			/// @brief Constructs and sets the internal data to `T`.
