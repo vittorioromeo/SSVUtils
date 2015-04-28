@@ -44,6 +44,7 @@
 // * zip iterator
 // * experiment/consider reimplementing vector/map/flatmap with no exceptions and only asserts
 // * remove "include/" folder
+// * "String" -> "Str"
 
 // TODO: Internal/ -> Impl/ ?
 

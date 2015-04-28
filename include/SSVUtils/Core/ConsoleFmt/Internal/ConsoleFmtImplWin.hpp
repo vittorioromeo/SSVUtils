@@ -93,11 +93,11 @@ namespace ssvu
 			inline const std::string& getStrColorBG(Color mColor) noexcept	{ getStorage().lastColorBG = mColor; getStorage().apply(); return getStorage().emptyString; }
 			*/
 
-			inline const auto& getStrResetFmt() noexcept		{ return getEmptyString(); }
-			inline const auto& getStrStyle(Style) noexcept		{ return getEmptyString(); }
-			inline const auto& getStrColorFG(Color) noexcept	{ return getEmptyString(); }
-			inline const auto& getStrColorBG(Color) noexcept	{ return getEmptyString(); }
-			inline const auto& getStrClear() noexcept			{ return getEmptyString(); }
+			inline const auto& getStrResetFmt() noexcept		{ return getEmptyStr(); }
+			inline const auto& getStrStyle(Style) noexcept		{ return getEmptyStr(); }
+			inline const auto& getStrColorFG(Color) noexcept	{ return getEmptyStr(); }
+			inline const auto& getStrColorBG(Color) noexcept	{ return getEmptyStr(); }
+			inline const auto& getStrClear() noexcept			{ return getEmptyStr(); }
 
 			struct InfoImpl
 			{

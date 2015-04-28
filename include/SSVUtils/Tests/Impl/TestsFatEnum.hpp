@@ -18,17 +18,17 @@ SSVUT_TEST(FatEnumTests)
 	SSVUT_EXPECT(int(_ssvutTestEnum::B) == 4);
 	SSVUT_EXPECT(int(_ssvutTestEnum::C) == -3);
 
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsString<_ssvutTestEnum::A>() == "A");
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsString<_ssvutTestEnum::B>() == "B");
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsString<_ssvutTestEnum::C>() == "C");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsStr<_ssvutTestEnum::A>() == "A");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsStr<_ssvutTestEnum::B>() == "B");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsStr<_ssvutTestEnum::C>() == "C");
 
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsString(_ssvutTestEnum::A) == "A");
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsString(_ssvutTestEnum::B) == "B");
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsString(_ssvutTestEnum::C) == "C");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsStr(_ssvutTestEnum::A) == "A");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsStr(_ssvutTestEnum::B) == "B");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getAsStr(_ssvutTestEnum::C) == "C");
 
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getFromString("A") == _ssvutTestEnum::A);
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getFromString("B") == _ssvutTestEnum::B);
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getFromString("C") == _ssvutTestEnum::C);
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getFromStr("A") == _ssvutTestEnum::A);
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getFromStr("B") == _ssvutTestEnum::B);
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnum>::getFromStr("C") == _ssvutTestEnum::C);
 
 	{
 		std::string temp;
@@ -48,17 +48,17 @@ SSVUT_TEST(FatEnumTests)
 	SSVUT_EXPECT(int(_ssvutTestEnumColors::Green) == 1);
 	SSVUT_EXPECT(int(_ssvutTestEnumColors::Blue) == 2);
 
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsString<_ssvutTestEnumColors::Red>() == "Red");
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsString<_ssvutTestEnumColors::Green>() == "Green");
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsString<_ssvutTestEnumColors::Blue>() == "Blue");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsStr<_ssvutTestEnumColors::Red>() == "Red");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsStr<_ssvutTestEnumColors::Green>() == "Green");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsStr<_ssvutTestEnumColors::Blue>() == "Blue");
 
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsString(_ssvutTestEnumColors::Red) == "Red");
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsString(_ssvutTestEnumColors::Green) == "Green");
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsString(_ssvutTestEnumColors::Blue) == "Blue");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsStr(_ssvutTestEnumColors::Red) == "Red");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsStr(_ssvutTestEnumColors::Green) == "Green");
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getAsStr(_ssvutTestEnumColors::Blue) == "Blue");
 
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getFromString("Red") == _ssvutTestEnumColors::Red);
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getFromString("Green") == _ssvutTestEnumColors::Green);
-	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getFromString("Blue") == _ssvutTestEnumColors::Blue);
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getFromStr("Red") == _ssvutTestEnumColors::Red);
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getFromStr("Green") == _ssvutTestEnumColors::Green);
+	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getFromStr("Blue") == _ssvutTestEnumColors::Blue);
 
 	SSVUT_EXPECT(_ssvutTestMgr<_ssvutTestEnumColors>::getSize() == 3);
 

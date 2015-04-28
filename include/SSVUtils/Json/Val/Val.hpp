@@ -219,7 +219,7 @@ namespace ssvu
 
 					// IO reading implementations
 					template<typename TRS = RSDefault, typename T> void readFromStr(T&& mStr);
-					template<typename TRS = RSDefault> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(mPath.getContentsAsString()); }
+					template<typename TRS = RSDefault> inline void readFromFile(const ssvufs::Path& mPath) { readFromStr(mPath.getContentsAsStr()); }
 
 					// Construction from strings or files
 					template<typename T> inline static Val fromStr(T&& mStr)	{ Val result; result.readFromStr(FWD(mStr)); return result; }

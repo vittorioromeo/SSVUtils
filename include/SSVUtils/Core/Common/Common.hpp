@@ -8,6 +8,7 @@
 #include "SSVUtils/Core/Common/LikelyUnlikely.hpp"
 #include "SSVUtils/Core/Common/CPP14Support.hpp"
 #include "SSVUtils/Core/Common/Aliases.hpp"
+#include "SSVUtils/Core/Common/Casts.hpp"
 #include "SSVUtils/Core/Common/Frametime.hpp"
 #include "SSVUtils/Core/Common/SmartPointers.hpp"
 #include "SSVUtils/Core/Common/EmptyString.hpp"

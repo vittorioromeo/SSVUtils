@@ -19,8 +19,8 @@ namespace ssvu
 		inline LOut& lo() noexcept { static LOut result; return result; }
 		template<typename T> inline LOut& lo(const T&) { return lo(); }
 
-		inline const char* hr() noexcept { return getEmptyString().c_str(); }
-		inline std::string hr(int, char) { return getEmptyString(); }
+		inline const char* hr() noexcept { return getEmptyStr().c_str(); }
+		inline std::string hr(int, char) { return getEmptyStr(); }
 	}
 }
 

@@ -9,14 +9,14 @@ namespace ssvu
 {
 	namespace Impl
 	{
-		using StringSize = std::string::size_type;
+		using StrSize = std::string::size_type;
 
-		inline StringSize findFirstOf(const std::string& mStr, const StringSize& mStartAt, const std::vector<std::string>& mSeparator, StringSize& mLength)
+		inline StrSize findFirstOf(const std::string& mStr, const StrSize& mStartAt, const std::vector<std::string>& mSeparator, StrSize& mLength)
 		{
-			StringSize result{NumLimits<StringSize>::max()};
+			StrSize result{NumLimits<StrSize>::max()};
 			for(const auto& s : mSeparator)
 			{
-				StringSize temp{mStr.find(s, mStartAt)};
+				StrSize temp{mStr.find(s, mStartAt)};
 				if(temp < result) { result = temp; mLength = s.size(); }
 			}
 			return result;
@@ -24,7 +24,7 @@ namespace ssvu
 
 		template<typename T> struct SplitFindHelperDefault
 		{
-			inline static StringSize getNextIdx(const std::string& mStr, const T& mSeparator, StringSize mStart)
+			inline static StrSize getNextIdx(const std::string& mStr, const T& mSeparator, StrSize mStart)
 			{
 				return mStr.find(mSeparator, mStart);
 			}
@@ -35,7 +35,7 @@ namespace ssvu
 		template<> struct SplitFindHelper<std::string> : public SplitFindHelperDefault<std::string> { };
 		template<SizeT TN> struct SplitFindHelper<char[TN]>
 		{
-			inline static StringSize getNextIdx(const std::string& mStr, const char(&mSeparator)[TN], StringSize mStart)
+			inline static StrSize getNextIdx(const std::string& mStr, const char(&mSeparator)[TN], StrSize mStart)
 			{
 				std::string separator(&mSeparator[0], &mSeparator[TN - 1]);
 				return mStr.find(separator, mStart);
@@ -46,7 +46,7 @@ namespace ssvu
 		{
 			inline static void split(std::vector<std::string>& mTarget, const std::string& mStr, const T& mSeparator, SizeT mSeparatorSize)
 			{
-				StringSize pos{0}, startAt{0};
+				StrSize pos{0}, startAt{0};
 				std::string token;
 
 				while((pos = mStr.find(mSeparator, startAt)) != std::string::npos)
@@ -93,7 +93,7 @@ namespace ssvu
 		{
 			inline static void split(std::vector<std::string>& mTarget, const std::string& mStr, const std::vector<std::string>& mSeparator)
 			{
-				StringSize pos{0}, startAt{0}, lastLength;
+				StrSize pos{0}, startAt{0}, lastLength;
 				std::string token;
 				while((pos = findFirstOf(mStr, startAt, mSeparator, lastLength)) != std::string::npos)
 				{

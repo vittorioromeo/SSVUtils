@@ -8,7 +8,7 @@
 namespace ssvu
 {
 	/// @brief Returns a const reference to a statically allocated empty `std::string`.
-	inline const auto& getEmptyString() noexcept { static std::string result; return result; }
+	inline const auto& getEmptyStr() noexcept { static std::string result; return result; }
 }
 
 #endif

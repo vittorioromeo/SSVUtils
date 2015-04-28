@@ -23,7 +23,7 @@
 #define SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY_DEFS(mIdx, mData, mArg)	SSVPP_TOSTR(mArg) SSVPP_COMMA_IF(mIdx)
 #define SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY(mDispatch)				SSVPP_CAT(SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY_, mDispatch)
 
-#define SSVU_FATENUM_IMPL_MK_GETASSTRING(mMgr, mEnum, mX)			template<> inline const auto& mMgr < mEnum > :: getAsStringImpl < mEnum :: mX >() noexcept { static std::string s{SSVPP_TOSTR(mX)}; return s; }
+#define SSVU_FATENUM_IMPL_MK_GETASSTRING(mMgr, mEnum, mX)			template<> inline const auto& mMgr < mEnum > :: getAsStrImpl < mEnum :: mX >() noexcept { static std::string s{SSVPP_TOSTR(mX)}; return s; }
 #define SSVU_FATENUM_IMPL_MK_GETASSTRING_VALS(mIdx, mData, mArg)	SSVU_FATENUM_IMPL_MK_GETASSTRING(SSVPP_TPL_ELEM(mData, 0), SSVPP_TPL_ELEM(mData, 1), SSVPP_TPL_ELEM(mArg, 0))
 #define SSVU_FATENUM_IMPL_MK_GETASSTRING_DEFS(mIdx, mData, mArg)	SSVU_FATENUM_IMPL_MK_GETASSTRING(SSVPP_TPL_ELEM(mData, 0), SSVPP_TPL_ELEM(mData, 1), mArg)
 #define SSVU_FATENUM_IMPL_MK_GETASSTRING_DISPATCH(mDispatch)		SSVPP_CAT(SSVU_FATENUM_IMPL_MK_GETASSTRING_, mDispatch)
@@ -39,9 +39,9 @@ namespace ssvu
 		template<SizeT TS, template<typename> class T, typename TEnum> struct FatEnumMgrImpl<TS, T<TEnum>>
 		{
 			inline static SizeT getSize() noexcept									{ return TS; }
-			template<TEnum TVal> inline static const auto& getAsString() noexcept	{ return T<TEnum>::template getAsStringImpl<TVal>(); }
-			inline static auto& getAsString(TEnum mValue) noexcept					{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
-			inline static TEnum getFromString(const std::string& mValue) noexcept	{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
+			template<TEnum TVal> inline static const auto& getAsStr() noexcept	{ return T<TEnum>::template getAsStrImpl<TVal>(); }
+			inline static auto& getAsStr(TEnum mValue) noexcept					{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
+			inline static TEnum getFromStr(const std::string& mValue) noexcept	{ SSVU_ASSERT(T<TEnum>::getBimap().has(mValue)); return T<TEnum>::getBimap().at(mValue); }
 		};
 	}
 }
@@ -53,7 +53,7 @@ namespace ssvu
 	}; \
 	template<> struct mMgr<mName> final : public ssvu::Impl::FatEnumMgrImpl<SSVPP_ARGCOUNT(__VA_ARGS__), mMgr<mName>> \
 	{ \
-		template<mName TVal> inline static const auto& getAsStringImpl() noexcept; \
+		template<mName TVal> inline static const auto& getAsStrImpl() noexcept; \
 		inline static const auto& getBimap() noexcept \
 		{ \
 			static ssvu::Bimap<std::string, mName> result \
@@ -89,8 +89,8 @@ namespace ssvu
 /// SSVU_ASSERT(int(EnumName::EName1) == 5);
 /// SSVU_ASSERT(int(EnumName::EName2) == 2);
 /// SSVU_ASSERT(EnumManager<EnumName>::getSize() == 3);
-/// SSVU_ASSERT(EnumManager<EnumName>::getAsString(EnumName::EName0) == "EName0");
-/// SSVU_ASSERT(EnumManager<EnumName>::getFromString("EName0") == EnumName::EName0);
+/// SSVU_ASSERT(EnumManager<EnumName>::getAsStr(EnumName::EName0) == "EName0");
+/// SSVU_ASSERT(EnumManager<EnumName>::getFromStr("EName0") == EnumName::EName0);
 /// @endcode
 /// @details Must end without semicolon.
 #define SSVU_FATENUM_VALS(mMgr, mName, mUnderlying, ...) SSVU_FATENUM_IMPL(mMgr, mName, mUnderlying, VALS, __VA_ARGS__)
@@ -103,8 +103,8 @@ namespace ssvu
 /// SSVU_ASSERT(int(EnumName::EName1) == 1);
 /// SSVU_ASSERT(int(EnumName::EName2) == 2);
 /// SSVU_ASSERT(EnumManager<EnumName>::getSize() == 3);
-/// SSVU_ASSERT(EnumManager<EnumName>::getAsString(EnumName::EName0) == "EName0");
-/// SSVU_ASSERT(EnumManager<EnumName>::getFromString("EName0") == EnumName::EName0);
+/// SSVU_ASSERT(EnumManager<EnumName>::getAsStr(EnumName::EName0) == "EName0");
+/// SSVU_ASSERT(EnumManager<EnumName>::getFromStr("EName0") == EnumName::EName0);
 /// @endcode
 /// @details Must end without semicolon.
 // TODO: since integer values cannot be specified for this enum, use an array for string-value lookup?

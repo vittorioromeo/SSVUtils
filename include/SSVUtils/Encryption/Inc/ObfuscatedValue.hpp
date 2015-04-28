@@ -25,7 +25,7 @@ namespace ssvu
 			/// @brief Converts the encodedValue to the arithmetic type.
 			/// @details Used internally.
 			/// @param mStr String to convert to arithmetic type.
-			T fromString(const std::string& mStr) const { std::istringstream stream(mStr); T t; stream >> t; return t; }
+			T fromStr(const std::string& mStr) const { std::istringstream stream(mStr); T t; stream >> t; return t; }
 
 		public:
 			/// @brief Constructs an ObfuscatedValue from an arithmetic value.
@@ -37,7 +37,7 @@ namespace ssvu
 			inline void set(const T& mValue) { dummy = mValue; encodedValue = Encryption::encrypt<TCrypto>(toStr(mValue)); }
 
 			/// @brief Converts the internal Base64 string and returns the unobfuscated value.
-			inline T get() const { return fromString(Encryption::decrypt<TCrypto>(encodedValue)); }
+			inline T get() const { return fromStr(Encryption::decrypt<TCrypto>(encodedValue)); }
 
 			/// @brief Implicit conversion to the obfuscated type.
 			inline operator T() const { return get(); }
