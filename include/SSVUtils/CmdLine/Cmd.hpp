@@ -5,6 +5,8 @@
 #ifndef SSVU_CMDLINE_CMD
 #define SSVU_CMDLINE_CMD
 
+#include "SSVUtils/CmdLine/Elements/Elements.hpp"
+
 namespace ssvu
 {
 	namespace CmdLine
@@ -28,7 +30,7 @@ namespace ssvu
 				private:
 					static constexpr SizeT maxTypes{50};
 
-					PolyFixedRecVector<BaseElement, maxTypes> elements;
+					PolyRecVector<BaseElement> elements;
 					std::array<std::vector<BaseElement*>, maxTypes> groupedElements;
 
 					template<EType TET> inline auto& getGroupVec() noexcept				{ return groupedElements[castEnum(TET)]; }
