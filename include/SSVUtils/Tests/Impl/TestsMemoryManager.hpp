@@ -39,7 +39,7 @@ SSVUT_TEST(RecycledVectorTests)
 	}
 
 	{
-		ssvu::PolyFixedRecVector<TMMItem, 2> prvf;
+		ssvu::PolyFixedRecVector<TMMItem, TMMItemS, TMMItemB> prvf;
 		auto& i1 __attribute__((unused)) = prvf.template create<TMMItemS>(cc, dc);
 		auto& i2 __attribute__((unused)) = prvf.template create<TMMItemB>(cc, dc);
 	}
