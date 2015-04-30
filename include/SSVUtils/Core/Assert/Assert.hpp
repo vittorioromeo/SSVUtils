@@ -30,8 +30,11 @@
 	/// @macro Assertion in release mode: this macro does nothing.
 	#define SSVU_ASSERT(...)
 
-	// TODO: docs
+	/// @macro Assertion in release mode: this macro does nothing.
 	#define SSVU_ASSERT_OP(...)
+
+	/// @macro Assertion in release mode: this macro does nothing.
+	#define SSVU_ASSERT_OP_MSG(...)
 
 	/// @macro Assertion in release mode: this macro does nothing.
 	#define SSVU_ASSERT_CONSTEXPR(...)
@@ -58,10 +61,10 @@
 		}
 	}
 
-	// TODO: docs
+	/// @macro Shared implementation details for assertions.
 	#define SSVU_IMPL_ASSERT_INIT(...) \
 		::ssvu::Impl::AssertData ad{}; \
-		ad.code = SSVPP_SEP_TOSTR(",", SSVPP_EMPTY(), __VA_ARGS__); \
+		ad.code = SSVPP_SEP_TOSTR(" ", SSVPP_EMPTY(), __VA_ARGS__); \
 		ad.line = SSVPP_TOSTR(__LINE__); \
 		ad.file = __FILE__;
 
@@ -74,17 +77,19 @@
 			::ssvu::Impl::assertImpl(::ssvu::move(ad), __VA_ARGS__); \
 		} while(false)
 
-	// TODO: docs, cleanup
+	/// @macro Assertion that checks the result of an operation between `mLhs` and `mRhs`.
+	/// @details Displays a message when fired.
 	#define SSVU_ASSERT_OP_MSG(mLhs, mOp, mRhs, ...) \
 		do \
 		{ \
-			SSVU_IMPL_ASSERT_INIT(mLhs, mOp, mRhs, __VA_ARGS__) \
-			ad.lhs = SSVPP_TOSTR(mLhs) + std::string{" = "} + ::ssvu::toStr(mLhs); \
-			ad.rhs = SSVPP_TOSTR(mRhs) + std::string{" = "} + ::ssvu::toStr(mRhs); \
+			SSVU_IMPL_ASSERT_INIT(mLhs, mOp, mRhs) \
+			ad.lhs = SSVPP_TOSTR(mLhs) " = " + ::ssvu::toStr(mLhs); \
+			ad.rhs = SSVPP_TOSTR(mRhs) " = " + ::ssvu::toStr(mRhs); \
 			::ssvu::Impl::assertImpl(::ssvu::move(ad), mLhs mOp mRhs, __VA_ARGS__); \
 		} while(false)
 
-	// TODO: docs
+	/// @macro Assertion that checks the result of an operation between `mLhs` and `mRhs`.
+	/// @details No message.
 	#define SSVU_ASSERT_OP(...) SSVU_ASSERT_OP_MSG(__VA_ARGS__, "")
 
 	// TODO: BUG: gcc - doesn't work yet

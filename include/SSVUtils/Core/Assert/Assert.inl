@@ -17,8 +17,8 @@ namespace ssvu
 		{
 			if(SSVU_LIKELY(mExpression)) return;
 
-			lo() << "\n";
-			lo("ASSERTION FAILED") << mMsg << "\n\n"
+			lo() << hr() << "\n";
+			lo("ASSERTION FAILED") << "\n" << mMsg << "\n\n"
 				<< "Line " << mAD.line << " in file " << mAD.file << "\n"
 				<< "Code: " << mAD.code << "\n\n";
 
