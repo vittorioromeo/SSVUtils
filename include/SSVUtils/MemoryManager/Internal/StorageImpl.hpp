@@ -135,7 +135,7 @@ namespace ssvu
 			ChunkType chunk;
 		};
 
-		/// @brief Storage data structure for multiple types - uses a map of `Chunk` objects.
+		/// @brief Storage data structure for multiple types (run-time) - uses a map of `Chunk` objects.
 		template<typename TBase, template<typename> class TLHelper> class PolyStorage
 		{
 			public:
@@ -148,60 +148,29 @@ namespace ssvu
 				template<typename T> inline auto& getChunk() { return chunks[sizeof(T)]; }
 		};
 
-		namespace FixedStorageImpl
-		{
-			/// @typedef Type of size index.
-			using SizeIdx = SizeT;
-
-			/// @brief Returns a new unique idx.
-			inline auto getLastSizeIdx() noexcept
-			{
-				static SizeIdx lastSizeIdx{0}; return lastSizeIdx++;
-			}
-
-			// Stores a specific index for a size
-			template<SizeT TS> struct SizeIdxInfo { static SizeIdx idx; };
-			template<SizeT TS> SizeIdx SizeIdxInfo<TS>::idx{getLastSizeIdx()};
-
-			/// @brief Returns an unique idx attached to a specific object size.
-			template<SizeT TS> inline auto getSizeIdx() noexcept { return SizeIdxInfo<TS>::idx; }
-		}
-
-		// TODO: update docs
-		// TODO: fix sizeIdx (global??) -> do it with tuple + variadic type list
-		/// @brief Storage data structure for multiple types - uses a map of `Chunk` objects. Supports a limited number of object sizes.
-		template<typename TBase, template<typename> class TLHelper, SizeT TMaxChunks> class PolyFixedStorage
+		/// @brief Storage data structure for multiple types (compile-time) - uses a tuple of `Chunk` objects.
+		template<typename TBase, template<typename> class TLHelper, typename TTypes> class PolyFixedStorage
 		{
 			public:
 				using ChunkType = Chunk<TBase, TLHelper>;
 
 			private:
-				std::array<ChunkType, TMaxChunks> chunks;
+				template<SizeT TS> struct ChunkHolder { ChunkType chunk; };
+				template<typename T> using ChunkHolderFor = ChunkHolder<sizeof(T)>;
+
+				using CHList = typename TTypes::template Apply<ChunkHolderFor>::Unique;
+				using CHTpl = typename CHList::AsTpl;
+
+			private:
+				CHTpl chTpl;
 
 			public:
 				template<typename T> inline auto& getChunk() noexcept
 				{
-					SSVU_ASSERT_OP(FixedStorageImpl::getSizeIdx<sizeof(T)>(), <, TMaxChunks);
-					return chunks[FixedStorageImpl::getSizeIdx<sizeof(T)>()];
+					SSVU_ASSERT_STATIC_NM(CHList::template has<ChunkHolderFor<T>>());
+					return std::get<ChunkHolderFor<T>>(chTpl).chunk;
 				}
 		};
-
-		// TODO: fix impement and replace fixedstorage
-		/*template<typename TBase, template<typename> class TLHelper, typename TTypes> class PolyFixedStorageVariadic
-		{
-			public:
-				using ChunkType = Chunk<TBase, TLHelper>;
-
-			private:
-				std::array<ChunkType, TMaxChunks> chunks;
-
-			public:
-				template<typename T> inline auto& getChunk() noexcept
-				{
-					SSVU_ASSERT_OP(FixedStorageImpl::getSizeIdx<sizeof(T)>(), <, TMaxChunks);
-					return chunks[FixedStorageImpl::getSizeIdx<sizeof(T)>()];
-				}
-		};*/
 	}
 }
 
