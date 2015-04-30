@@ -29,7 +29,7 @@
 #define SSVPP_TKNCAT_4(m0, m1, m2, m3)			SSVPP_IMPL_TKNCAT_4(m0, m1, m2, m3)
 #define SSVPP_TKNCAT_5(m0, m1, m2, m3, m4)		SSVPP_IMPL_TKNCAT_5(m0, m1, m2, m3, m4)
 
-// TODO: move, generate
+// TODO: move, generate, docs
 #define SSVPP_IMPL_EVAL_5(...) __VA_ARGS__
 #define SSVPP_IMPL_EVAL_4(...) SSVPP_IMPL_EVAL_5(SSVPP_IMPL_EVAL_5(SSVPP_IMPL_EVAL_5(__VA_ARGS__)))
 #define SSVPP_IMPL_EVAL_3(...) SSVPP_IMPL_EVAL_4(SSVPP_IMPL_EVAL_4(SSVPP_IMPL_EVAL_4(__VA_ARGS__)))
