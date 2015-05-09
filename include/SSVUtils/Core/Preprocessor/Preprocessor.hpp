@@ -7,6 +7,7 @@
 
 #include "SSVUtils/Core/Preprocessor/Internal/Generated.hpp"
 #include "SSVUtils/Core/Preprocessor/Utils.hpp"
+#include "SSVUtils/Core/Preprocessor/Eval.hpp"
 #include "SSVUtils/Core/Preprocessor/ArgCount.hpp"
 #include "SSVUtils/Core/Preprocessor/Tuple.hpp"
 #include "SSVUtils/Core/Preprocessor/Aritmethic.hpp"

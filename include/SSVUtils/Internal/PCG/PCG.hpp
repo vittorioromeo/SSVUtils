@@ -5,6 +5,8 @@
 // Include as system header to suppress PCG warnings.
 #pragma GCC system_header
 
+// This folder contains code from http://www.pcg-random.org/
+
 #ifndef SSVU_INTERNAL_PCG
 #define SSVU_INTERNAL_PCG
 
