@@ -51,7 +51,7 @@ namespace ssvu
 			}
 
 			inline auto& operator=(const VecMap& mVM) { data = mVM.data; return *this; }
-			inline auto& operator=(VecMap&& mVM) noexcept { data = move(mVM.data); return *this; }
+			inline auto& operator=(VecMap&& mVM) noexcept { data = mv(mVM.data); return *this; }
 
 			inline SizeT count(const TK& mKey) const noexcept { return is(lookup(mKey), mKey) ? 1 : 0; }
 

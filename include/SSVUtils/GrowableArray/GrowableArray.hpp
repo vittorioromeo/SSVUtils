@@ -34,8 +34,8 @@ namespace ssvu
 				SSVU_ASSERT(mCapacityOld <= mCapacityNew);
 
 				auto newData(mkUPtr<T[]>(mCapacityNew));
-				for(auto i(0u); i < mCapacityOld; ++i) newData[i] = move(data[i]);
-				data = move(newData);
+				for(auto i(0u); i < mCapacityOld; ++i) newData[i] = mv(data[i]);
+				data = mv(newData);
 			}
 
 			// Getters

@@ -74,7 +74,7 @@
 		do \
 		{ \
 			SSVU_IMPL_ASSERT_INIT(__VA_ARGS__) \
-			::ssvu::Impl::assertImpl(::ssvu::move(ad), __VA_ARGS__); \
+			::ssvu::Impl::assertImpl(::ssvu::mv(ad), __VA_ARGS__); \
 		} while(false)
 
 	/// @macro Assertion that checks the result of an operation between `mLhs` and `mRhs`.

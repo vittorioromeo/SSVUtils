@@ -103,7 +103,7 @@ namespace ssvu
 /// Must end without semicolon.
 #define SSVU_DEFINE_SINK_SETTER_SIMPLE(mName, mMember) \
 	inline void mName(const decltype(mMember)& mParam)		{ mMember = mParam; } \
-	inline void mName(decltype(mMember)&& mParam) noexcept	{ mMember = move(mParam); }
+	inline void mName(decltype(mMember)&& mParam) noexcept	{ mMember = mv(mParam); }
 
 /// @macro Defines a basic "sink" constructor for a class, taking one argument.
 /// @details Generates two constructors.

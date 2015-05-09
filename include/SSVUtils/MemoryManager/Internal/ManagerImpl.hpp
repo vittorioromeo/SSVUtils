@@ -125,7 +125,7 @@ namespace ssvu
 
 					if(capacity <= sizeNext) reserve(capacity * 3);
 
-					items.initAt(sizeNext, move(uPtr));
+					items.initAt(sizeNext, mv(uPtr));
 					return castUp<T>(*items[sizeNext++]);
 				}
 

@@ -10,11 +10,11 @@ namespace ssvu
 	namespace Json
 	{
 		inline auto& Val::operator=(const Val& mV) noexcept	{ set(mV); return *this; }
-		inline auto& Val::operator=(Val&& mV) noexcept		{ set(move(mV)); return *this; }
+		inline auto& Val::operator=(Val&& mV) noexcept		{ set(mv(mV)); return *this; }
 
 		template<typename T> inline auto Val::as() & -> decltype(Impl::AsHelper<T>::as(*this))		{ SSVU_ASSERT(isNoNum<T>()); return Impl::AsHelper<T>::as(*this); }
 		template<typename T> inline auto Val::as() const& -> decltype(Impl::AsHelper<T>::as(*this))	{ SSVU_ASSERT(isNoNum<T>()); return Impl::AsHelper<T>::as(*this); }
-		template<typename T> inline auto Val::as() && -> decltype(Impl::AsHelper<T>::as(*this))		{ SSVU_ASSERT(isNoNum<T>()); return move(Impl::AsHelper<T>::as(*this)); }
+		template<typename T> inline auto Val::as() && -> decltype(Impl::AsHelper<T>::as(*this))		{ SSVU_ASSERT(isNoNum<T>()); return mv(Impl::AsHelper<T>::as(*this)); }
 
 		template<typename TWS> inline void Val::writeToStream(std::ostream& mStream) const { Impl::Writer<TWS> w; w.write(*this, mStream); mStream.flush(); }
 		template<typename TRS, typename T> inline void Val::readFromStr(T&& mStr) { Impl::Reader<TRS> r{FWD(mStr)}; Impl::tryParse<TRS>(*this, r); }

@@ -44,7 +44,7 @@ namespace ssvu
 
 					inline void throwError(std::string mTitle, std::string mBody)
 					{
-						throw ReadException{move(mTitle), move(mBody), getErrorSrc()};
+						throw ReadException{move(mTitle), mv(mBody), getErrorSrc()};
 					}
 
 					inline void purgeSource()

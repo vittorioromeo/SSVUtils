@@ -62,7 +62,7 @@ namespace ssvu
 					#define SSVJ_DEFINE_VAL_GETTER(mType, mMember) \
 						inline mType&		SSVPP_CAT(get, mType)() & noexcept		{ SSVU_ASSERT(is<mType>()); return mMember; } \
 						inline const mType&	SSVPP_CAT(get, mType)() const& noexcept	{ SSVU_ASSERT(is<mType>()); return mMember; } \
-						inline mType		SSVPP_CAT(get, mType)() && noexcept		{ SSVU_ASSERT(is<mType>()); return move(mMember); }
+						inline mType		SSVPP_CAT(get, mType)() && noexcept		{ SSVU_ASSERT(is<mType>()); return mv(mMember); }
 
 					SSVJ_DEFINE_VAL_GETTER(Obj, h.get<Obj>())
 					SSVJ_DEFINE_VAL_GETTER(Arr, h.get<Arr>())
@@ -114,7 +114,7 @@ namespace ssvu
 
 					// Copy/move constructors
 					inline Val(const Val& mV)	{ init(mV); }
-					inline Val(Val&& mV)		{ init(move(mV)); }
+					inline Val(Val&& mV)		{ init(mv(mV)); }
 
 					/// @brief Constructs the `Val` from `mX`.
 					template<typename T, SSVU_ENABLEIF_RA_IS_NOT(T, Val)> inline Val(T&& mX) { set(FWD(mX)); }
@@ -280,7 +280,7 @@ namespace ssvu
 		inline auto mkObj() { return Val{Impl::Obj{}}; }
 
 		/// @brief Returns a JSON value containing a JSON object filled with the passed key-value pairs.
-		inline auto mkObj(std::initializer_list<std::pair<Key, Val>>&& mX) { return Val{Impl::Obj{std::move(mX)}}; }
+		inline auto mkObj(std::initializer_list<std::pair<Key, Val>>&& mX) { return Val{Impl::Obj{ssvu::mv(mX)}}; }
 
 		/// @brief Returns a JSON value containing a JSON array filled with the passed arguments.
 		template<typename... TArgs> inline auto mkArr(TArgs&&... mArgs) { return Val{Impl::Arr{FWD(mArgs)...}}; }

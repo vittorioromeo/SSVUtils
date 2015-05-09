@@ -88,7 +88,7 @@ namespace ssvu
 				inline auto& operator=(const Chunk&) = delete;
 				inline auto& operator=(Chunk&& mC) noexcept
 				{
-					ptrChain = move(mC.ptrChain);
+					ptrChain = mv(mC.ptrChain);
 					return *this;
 				}
 

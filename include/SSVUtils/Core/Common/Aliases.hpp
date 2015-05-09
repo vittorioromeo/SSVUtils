@@ -83,8 +83,12 @@ namespace ssvu
 	/// @brief Wrapper for `std::forward`.
 	template<typename T> inline constexpr decltype(auto) fwd(RmRef<T>&& mA) noexcept { return std::forward<T>(mA); }
 
-	/// @brief Bring `std::move` into the `ssvu` namespace.
-	using std::move;
+	/// @brief Wrapper for `std::move` that prevents moving const values.
+	template<typename T> inline constexpr decltype(auto) mv(T&& mX) noexcept
+	{
+		SSVU_ASSERT_STATIC_NM(!isConst<RmRef<T>>());
+		return std::move(mX);
+	}
 
 	/// @macro Perfect-forwards the arguments by using `ssvu::fwd` and `decltype`.
 	#define SSVU_FWD(...) ::ssvu::fwd<decltype(__VA_ARGS__)>(__VA_ARGS__)

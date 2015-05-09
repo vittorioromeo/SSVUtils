@@ -28,7 +28,7 @@ namespace ssvu
 
 				inline T& get() & noexcept { return uv.template get<T>(); }
 				inline const T& get() const& noexcept { return uv.template get<T>(); }
-				inline const T get() && noexcept { return move(uv.template get<T>()); }
+				inline const T get() && noexcept { return mv(uv.template get<T>()); }
 
 				inline T& operator*() noexcept { return get(); }
 				inline const T& operator*() const noexcept { return get(); }

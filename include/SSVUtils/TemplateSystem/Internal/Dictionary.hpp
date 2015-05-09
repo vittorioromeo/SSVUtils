@@ -37,11 +37,11 @@ namespace ssvu
 
 				// Init single replacement
 				template<typename T> inline void initImpl(T&& mKey, const std::string& mReplacement)	{ replacements[FWD(mKey)] = mReplacement; }
-				template<typename T> inline void initImpl(T&& mKey, std::string&& mReplacement)			{ replacements[FWD(mKey)] = move(mReplacement); }
+				template<typename T> inline void initImpl(T&& mKey, std::string&& mReplacement)			{ replacements[FWD(mKey)] = mv(mReplacement); }
 
 				// Init section replacement
 				template<typename T> inline void initImpl(T&& mKey, const DictVec& mDicts)	{ sections[FWD(mKey)] = mDicts; }
-				template<typename T> inline void initImpl(T&& mKey, DictVec&& mDicts)		{ sections[FWD(mKey)] = move(mDicts); }
+				template<typename T> inline void initImpl(T&& mKey, DictVec&& mDicts)		{ sections[FWD(mKey)] = mv(mDicts); }
 
 				// Copy/move init
 				inline void initImpl(const Dictionary& mDict)
@@ -53,8 +53,8 @@ namespace ssvu
 				inline void initImpl(Dictionary&& mDict) noexcept
 				{
 					parentDict = mDict.parentDict; mDict.parentDict = nullptr;
-					replacements = move(mDict.replacements);
-					sections = move(mDict.sections);
+					replacements = mv(mDict.replacements);
+					sections = mv(mDict.sections);
 				}
 
 				inline void init() noexcept { }

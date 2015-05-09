@@ -28,7 +28,7 @@ namespace ssvu
 			// Getters
 			template<typename T> inline T& get() & noexcept				{ return this->template getImpl<T>(); }
 			template<typename T> inline const T& get() const& noexcept	{ return this->template getImpl<T>(); }
-			template<typename T> inline T get() && noexcept				{ return move(this->template getImpl<T>());}
+			template<typename T> inline T get() && noexcept				{ return mv(this->template getImpl<T>());}
 	};
 }
 
