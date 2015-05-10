@@ -40,8 +40,8 @@ namespace ssvu
 		public:
 			inline VecSorted() = default;
 			inline VecSorted(const VecSorted& mVM) : data{mVM.data} { }
-			inline VecSorted(VecSorted&& mVM) noexcept : data{move(mVM.data)} { }
-			inline VecSorted(std::initializer_list<T>&& mIL) : data{move(mIL)} { sort(data, cmp); }
+			inline VecSorted(VecSorted&& mVM) noexcept : data{mv(mVM.data)} { }
+			inline VecSorted(std::initializer_list<T>&& mIL) : data{mv(mIL)} { sort(data, cmp); }
 
 			inline auto& operator=(const VecSorted& mVS) { data = mVS.data; return *this; }
 			inline auto& operator=(VecSorted&& mVS) noexcept { data = mv(mVS.data); return *this; }

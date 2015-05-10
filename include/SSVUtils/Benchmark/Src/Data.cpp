@@ -13,7 +13,7 @@ namespace ssvu
 	{
 		namespace Impl
 		{
-			SSVU_INLINE Data::Data(const TP& mTP, std::string mName) : tp{mTP}, name{move(mName)}
+			SSVU_INLINE Data::Data(const TP& mTP, std::string mName) : tp{mTP}, name{mv(mName)}
 			{
 
 			}

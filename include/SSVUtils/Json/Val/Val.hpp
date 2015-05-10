@@ -160,7 +160,7 @@ namespace ssvu
 					}
 
 					// "Implicit" Val from Obj by Key getters
-					inline auto& operator[](Key&& mKey)								{ return getObj()[move(mKey)]; }
+					inline auto& operator[](Key&& mKey)								{ return getObj()[mv(mKey)]; }
 					inline auto& operator[](const Key& mKey)						{ return getObj()[mKey]; }
 					inline const auto& operator[](const Key& mKey) const noexcept	{ return getObj().atOrDefault(mKey); }
 

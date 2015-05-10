@@ -19,7 +19,7 @@ namespace ssvu
 	{
 		SSVU_INLINE void start(std::string mTitle)
 		{
-			return Impl::start(move(mTitle));
+			return Impl::start(mv(mTitle));
 		}
 
 		SSVU_INLINE Impl::Data getEndData()

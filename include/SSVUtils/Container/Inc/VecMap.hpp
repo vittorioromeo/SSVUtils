@@ -44,8 +44,8 @@ namespace ssvu
 		public:
 			inline VecMap() = default;
 			inline VecMap(const VecMap& mVM) : data{mVM.data} { }
-			inline VecMap(VecMap&& mVM) noexcept : data{move(mVM.data)} { }
-			inline VecMap(std::initializer_list<Item>&& mIL) : data{move(mIL)}
+			inline VecMap(VecMap&& mVM) noexcept : data{mv(mVM.data)} { }
+			inline VecMap(std::initializer_list<Item>&& mIL) : data{mv(mIL)}
 			{
 				sort(data, [](const auto& mA, const auto& mB){ return mA.first < mB.first; });
 			}

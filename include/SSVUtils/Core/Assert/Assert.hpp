@@ -85,7 +85,7 @@
 			SSVU_IMPL_ASSERT_INIT(mLhs, mOp, mRhs) \
 			ad.lhs = SSVPP_TOSTR(mLhs) " = " + ::ssvu::toStr(mLhs); \
 			ad.rhs = SSVPP_TOSTR(mRhs) " = " + ::ssvu::toStr(mRhs); \
-			::ssvu::Impl::assertImpl(::ssvu::move(ad), mLhs mOp mRhs, __VA_ARGS__); \
+			::ssvu::Impl::assertImpl(::ssvu::mv(ad), mLhs mOp mRhs, __VA_ARGS__); \
 		} while(false)
 
 	/// @macro Assertion that checks the result of an operation between `mLhs` and `mRhs`.

@@ -83,7 +83,7 @@ namespace ssvu
 			public:
 				inline Chunk() noexcept = default;
 				inline Chunk(const Chunk&) = delete;
-				inline Chunk(Chunk&& mC) noexcept : ptrChain(move(mC.ptrChain)) { }
+				inline Chunk(Chunk&& mC) noexcept : ptrChain(mv(mC.ptrChain)) { }
 
 				inline auto& operator=(const Chunk&) = delete;
 				inline auto& operator=(Chunk&& mC) noexcept

@@ -16,7 +16,7 @@ namespace ssvu
 		public:
 			inline IgnoreManip() = default;
 			inline IgnoreManip(const std::string& mStr) : str{mStr} { }
-			inline IgnoreManip(std::string&& mStr) noexcept : str{move(mStr)} { }
+			inline IgnoreManip(std::string&& mStr) noexcept : str{mv(mStr)} { }
 
 			template<typename T> inline auto& operator=(T&& mStr) { str = FWD(mStr); return *this; }
 

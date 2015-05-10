@@ -79,9 +79,9 @@ namespace ssvu
 
 			if(cFlagValues.size() != cmd.getCount<EType::FlagValue>()) throw Exception::createSignatureMismatch(getForCmdPhrase(cmd), "required flag values", toStr(cmd.getCount<EType::FlagValue>()));
 
-			for(const auto& f : cFlags) eraseRemove(entered, f);
-			for(const auto& f : cFlagValues) eraseRemove(entered, f);
-			for(const auto& f : cFlagValuesOpt) eraseRemove(entered, f);
+			for(const auto& f : cFlags) eraseRemv(entered, f);
+			for(const auto& f : cFlagValues) eraseRemv(entered, f);
+			for(const auto& f : cFlagValuesOpt) eraseRemv(entered, f);
 
 			// Find args, put them in cArgs
 			std::vector<std::string> cArgs;

@@ -50,9 +50,9 @@ namespace ssvu
 			public:
 				inline Path() = default;
 				inline Path(const Path& mPath) : path{mPath.path} { }
-				inline Path(Path&& mPath) noexcept : path{move(mPath.path)} { }
+				inline Path(Path&& mPath) noexcept : path{mv(mPath.path)} { }
 				inline Path(const std::string& mPath) : path{mPath} { }
-				inline Path(std::string&& mPath) noexcept : path{move(mPath)} { }
+				inline Path(std::string&& mPath) noexcept : path{mv(mPath)} { }
 				inline Path(const char* mPath) : path{mPath} { }
 
 				inline auto& operator=(const Path& mPath)		{ path = mPath.path; mustNormalize = true; return *this; }

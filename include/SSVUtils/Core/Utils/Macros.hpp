@@ -110,16 +110,16 @@ namespace ssvu
 /// Must end without semicolon.
 #define SSVU_DEFINE_SINK_CTOR_SIMPLE_1(mClassName, mMember) \
 	inline mClassName(const decltype(mMember)& mParam)		: mMember{mParam} { } \
-	inline mClassName(decltype(mMember)&& mParam) noexcept	: mMember{move(mParam)} { }
+	inline mClassName(decltype(mMember)&& mParam) noexcept	: mMember{mv(mParam)} { }
 
 /// @macro Defines a basic "sink" constructor for a class, taking two arguments.
 /// @details Generates four constructors.
 /// Must end without semicolon.
 #define SSVU_DEFINE_SINK_CTOR_SIMPLE_2(mClassName, mMember1, mMember2) \
 	inline mClassName(const decltype(mMember1)& mParam1,	const decltype(mMember2)& mParam2)		: mMember1{mParam1},		mMember2{mParam2} { } \
-	inline mClassName(const decltype(mMember1)& mParam1,	decltype(mMember2)&& mParam2)			: mMember1{mParam1},		mMember2{move(mParam2)} { } \
-	inline mClassName(decltype(mMember1)&& mParam1,			const decltype(mMember2)& mParam2)		: mMember1{move(mParam1)},	mMember2{mParam2} { } \
-	inline mClassName(decltype(mMember1)&& mParam1,			decltype(mMember2)&& mParam2) noexcept	: mMember1{move(mParam1)},	mMember2{move(mParam2)} { }
+	inline mClassName(const decltype(mMember1)& mParam1,	decltype(mMember2)&& mParam2)			: mMember1{mParam1},		mMember2{mv(mParam2)} { } \
+	inline mClassName(decltype(mMember1)&& mParam1,			const decltype(mMember2)& mParam2)		: mMember1{mv(mParam1)},	mMember2{mParam2} { } \
+	inline mClassName(decltype(mMember1)&& mParam1,			decltype(mMember2)&& mParam2) noexcept	: mMember1{mv(mParam1)},	mMember2{mv(mParam2)} { }
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro in the template arguments list.
 #define SSVU_ENABLEIF(...) EnableIf<__VA_ARGS__>* = nullptr
