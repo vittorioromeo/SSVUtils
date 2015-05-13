@@ -79,6 +79,18 @@ namespace ssvu
 
 				template<EType TET> inline void setElementValue(SizeT mIdx, const std::string& mValue) { mgr.getAt<TET>(mIdx).set(mValue); }
 
+				template<EType TET> auto getHelpStrForET(std::string& mStr, const Impl::ManagerElements& mMgr, const std::string& mTitle) const
+				{
+					if(mMgr.template isEmpty<TET>()) return;
+
+					mStr += "\t" + mTitle + ":\n";
+
+					for(auto p : getAll<TET>())
+						mStr += p->getHelpStr();
+
+					mStr += "\n";
+				}
+
 			public:
 				inline Cmd(const std::initializer_list<std::string>& mNames) : names{mNames} { }
 
@@ -109,63 +121,12 @@ namespace ssvu
 
 					if(!desc.empty()) result += ">>" + desc + "\n\n";
 
-					if(!mgr.isEmpty<EType::Arg>())
-					{
-						result += "\tRequired arguments:\n";
-
-						for(auto p : getAll<EType::Arg>())
-							result += p->getHelpStr();
-
-						result += "\n";
-					}
-
-					if(!mgr.isEmpty<EType::ArgOpt>())
-					{
-						result += "\tOptional arguments:\n";
-
-						for(auto p : getAll<EType::ArgOpt>())
-							result += p->getHelpStr();
-
-						result += "\n";
-					}
-
-					if(!mgr.isEmpty<EType::ArgPack>())
-					{
-						result += "\tArgument packs:\n";
-
-						for(auto p : getAll<EType::ArgPack>())
-							result += p->getHelpStr();
-
-						result += "\n";
-					}
-
-					if(!mgr.isEmpty<EType::Flag>())
-					{
-						result += "\tFlags:\n";
-
-						for(auto p : getAll<EType::Flag>())
-							result += p->getHelpStr();
-
-						result += "\n";
-					}
-
-					if(!mgr.isEmpty<EType::FlagValue>())
-					{
-						result += "\tFlag values:\n";
-
-						for(auto p : getAll<EType::FlagValue>())
-							result += p->getHelpStr();
-
-						result += "\n";
-					}
-
-					if(!mgr.isEmpty<EType::FlagValueOpt>())
-					{
-						result += "\tOptional flag values:\n";
-
-						for(auto p : getAll<EType::FlagValueOpt>())
-							result += p->getHelpStr();
-					}
+					getHelpStrForET<EType::Arg>(result, mgr, "Required arguments");
+					getHelpStrForET<EType::ArgOpt>(result, mgr, "Optional arguments");
+					getHelpStrForET<EType::ArgPack>(result, mgr, "Argument packs");
+					getHelpStrForET<EType::Flag>(result, mgr, "Flags");
+					getHelpStrForET<EType::FlagValue>(result, mgr, "Flag values");
+					getHelpStrForET<EType::FlagValueOpt>(result, mgr, "Optional flag values");
 
 					return result;
 				}
