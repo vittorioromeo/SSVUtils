@@ -103,18 +103,69 @@ namespace ssvu
 				std::string getNamesStr() const			{ return Impl::buildCmdStr(names, "<", ">", " || "); }
 				template<EType TET> auto getStr() const	{ return Impl::buildCmdStr(getAll<TET>()); }
 
-				auto getHelpStr() const
+				inline auto getHelpStr() const
 				{
 					std::string result;
 
 					if(!desc.empty()) result += ">>" + desc + "\n\n";
 
-					if(!mgr.isEmpty<EType::Arg>())			{ result += "\tRequired arguments:\n";		for(auto p : getAll<EType::Arg>())			result += p->getHelpStr();		result += "\n"; }
-					if(!mgr.isEmpty<EType::ArgOpt>())		{ result += "\tOptional arguments:\n";		for(auto p : getAll<EType::ArgOpt>())		result += p->getHelpStr();		result += "\n"; }
-					if(!mgr.isEmpty<EType::ArgPack>())		{ result += "\tArgument packs:\n";			for(auto p : getAll<EType::ArgPack>())		result += p->getHelpStr();		result += "\n"; }
-					if(!mgr.isEmpty<EType::Flag>())			{ result += "\tFlags:\n";					for(auto p : getAll<EType::Flag>())			result += p->getHelpStr();		result += "\n"; }
-					if(!mgr.isEmpty<EType::FlagValue>())	{ result += "\tFlag values:\n";				for(auto p : getAll<EType::FlagValue>())	result += p->getHelpStr();		result += "\n"; }
-					if(!mgr.isEmpty<EType::FlagValueOpt>())	{ result += "\tOptional flag values:\n";	for(auto p : getAll<EType::FlagValueOpt>())	result += p->getHelpStr();						}
+					if(!mgr.isEmpty<EType::Arg>())
+					{
+						result += "\tRequired arguments:\n";
+
+						for(auto p : getAll<EType::Arg>())
+							result += p->getHelpStr();
+
+						result += "\n";
+					}
+
+					if(!mgr.isEmpty<EType::ArgOpt>())
+					{
+						result += "\tOptional arguments:\n";
+
+						for(auto p : getAll<EType::ArgOpt>())
+							result += p->getHelpStr();
+
+						result += "\n";
+					}
+
+					if(!mgr.isEmpty<EType::ArgPack>())
+					{
+						result += "\tArgument packs:\n";
+
+						for(auto p : getAll<EType::ArgPack>())
+							result += p->getHelpStr();
+
+						result += "\n";
+					}
+
+					if(!mgr.isEmpty<EType::Flag>())
+					{
+						result += "\tFlags:\n";
+
+						for(auto p : getAll<EType::Flag>())
+							result += p->getHelpStr();
+
+						result += "\n";
+					}
+
+					if(!mgr.isEmpty<EType::FlagValue>())
+					{
+						result += "\tFlag values:\n";
+
+						for(auto p : getAll<EType::FlagValue>())
+							result += p->getHelpStr();
+
+						result += "\n";
+					}
+
+					if(!mgr.isEmpty<EType::FlagValueOpt>())
+					{
+						result += "\tOptional flag values:\n";
+
+						for(auto p : getAll<EType::FlagValueOpt>())
+							result += p->getHelpStr();
+					}
 
 					return result;
 				}
