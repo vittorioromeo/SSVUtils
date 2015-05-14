@@ -8,6 +8,7 @@ constexpr SizeT arithCount{256};
 constexpr SizeT foreachCount{128};
 constexpr SizeT tplCount{64};
 constexpr SizeT repeatCount{128};
+constexpr SizeT evalDepth{5};
 
 std::ostringstream output;
 
@@ -161,6 +162,28 @@ void genRepeat()
 		output << "#define SSVPP_IMPL_REPEAT_INC_" << i + 1 << "(mAction, mData, mLast) mAction(mLast, mData) SSVPP_IMPL_REPEAT_INC_" << i << "(mAction, mData, SSVPP_INCREMENT(mLast))\n";
 }
 
+void genEval()
+{
+	output << "#define SSVPP_IMPL_EVAL_" << evalDepth - 1 << "(...) __VA_ARGS__\n";
+
+	for(auto i(1u); i < evalDepth; ++i)
+	{
+		auto dp(evalDepth - i);
+
+		output << "#define SSVPP_IMPL_EVAL_" << dp - 1 << "(...) ";
+
+		for(auto j(0u); j < 3; ++j)
+			output << "SSVPP_IMPL_EVAL_" << dp << "(";
+
+		output << "__VA_ARGS__";
+
+		for(auto j(0u); j < 3; ++j)
+			output << ")";
+
+		output << "\n";
+	}
+}
+
 int main()
 {
 	output << 	"// Copyright (c) 2013-2015 Vittorio Romeo\n"
@@ -183,6 +206,9 @@ int main()
 	output << "\n\n";
 
 	genRepeat();
+	output << "\n";
+
+	genEval();
 	output << "\n";
 
 	output << "#endif";
