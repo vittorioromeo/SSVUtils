@@ -123,7 +123,7 @@ namespace ssvu
 	/// @brief Removes a specific item from a container.
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
-	template<typename TC, typename TV> inline void eraseRemv(TC& mContainer, const TV& mValue)
+	template<typename TC, typename TV> inline void eraseRemove(TC& mContainer, const TV& mValue)
 	{
 		mContainer.erase(remv(mContainer, mValue), std::end(mContainer));
 	}
