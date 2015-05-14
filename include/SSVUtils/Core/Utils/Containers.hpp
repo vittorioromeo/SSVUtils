@@ -59,7 +59,7 @@ namespace ssvu
 	/// @param mContainer Reference to the container.
 	/// @param mValue Const reference to the value.
 	/// @return Returns a past-the-end iterator for the new end of the range.
-	template<typename TC, typename TV> inline auto remv(TC& mContainer, const TV& mValue)
+	template<typename TC, typename TV> inline auto remove(TC& mContainer, const TV& mValue)
 	{
 		return std::remove(std::begin(mContainer), std::end(mContainer), mValue);
 	}
@@ -125,7 +125,7 @@ namespace ssvu
 	/// @param mValue Const reference to the value.
 	template<typename TC, typename TV> inline void eraseRemove(TC& mContainer, const TV& mValue)
 	{
-		mContainer.erase(remv(mContainer, mValue), std::end(mContainer));
+		mContainer.erase(remove(mContainer, mValue), std::end(mContainer));
 	}
 
 	/// @brief Checks if a specific item is in a container.

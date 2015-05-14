@@ -21,7 +21,7 @@ namespace ssvu
 			using Swallow = bool[];
 
 			#define IMPL_IMPL_FORNARGS_EXECN_BODY() \
-				FWD(mFn)(std::get<TArity + Cs>(FWD(mXs))...)
+				mFn(std::get<TArity + Cs>(FWD(mXs))...)
 
 			template<SizeT TArity, typename TF, typename TTpl, typename... Ts>
 			inline static constexpr void execN(TF&& mFn, TTpl&& mXs)
@@ -33,7 +33,7 @@ namespace ssvu
 			#undef IMPL_IMPL_FORNARGS_EXECN_BODY
 
 			#define IMPL_IMPL_FORNARGS_EXEC_BODY() \
-				(void) Swallow{(execN<(Bs * sizeof...(Cs))>(FWD(mFn), FWD(mXs)), true)..., true}
+				(void) Swallow{(execN<(Bs * sizeof...(Cs))>(mFn, FWD(mXs)), true)..., true}
 
 			template<typename TF, typename TTpl, typename... Ts>
 			inline static constexpr void exec(TF&& mFn, TTpl&& mXs)
