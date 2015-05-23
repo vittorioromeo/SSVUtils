@@ -120,11 +120,7 @@ namespace ssvu
 					tplForData([&mV](auto mD, auto& mE)
 					{
 						SSVU_ASSERT(mV.template is<Arr>() && mV.getArr().size() > mD.getIdx());
-
-						// TODO: BUG: gcc complains
-						// http://stackoverflow.com/questions/28264628/possible-gcc-bug-with-c14-polymorphic-lambdas
-						// mE = moveIfRValue<decltype(mV)>(FWD(mV)[mIdx].template as<RmRef<decltype(mE)>>());
-						mE = ssvu::fwd<T>(mV)[mD.getIdx()].template as<RmRef<decltype(mE)>>();
+						mE = moveIfRValue<decltype(mV)>(FWD(mV)[mD.getIdx()].template as<RmRef<decltype(mE)>>());
 					}, mX);
 				}
 			};
