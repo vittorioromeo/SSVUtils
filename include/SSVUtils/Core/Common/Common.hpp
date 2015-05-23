@@ -6,7 +6,6 @@
 #define SSVU_CORE_COMMON_COMMON
 
 #include "SSVUtils/Core/Common/LikelyUnlikely.hpp"
-#include "SSVUtils/Core/Common/CPP14Support.hpp"
 #include "SSVUtils/Core/Common/Aliases.hpp"
 #include "SSVUtils/Core/Common/Casts.hpp"
 #include "SSVUtils/Core/Common/Frametime.hpp"
