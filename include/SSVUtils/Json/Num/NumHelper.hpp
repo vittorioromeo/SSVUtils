@@ -15,7 +15,7 @@ namespace ssvu
 				template<> struct NumHelper<mType> \
 				{ \
 					inline static void set(Num& mN, const mType& mX) noexcept { return SSVPP_CAT(mN.set, mRepr)(mX); } \
-					inline static auto as(const Num& mN) noexcept { return static_cast<mType>(SSVPP_CAT(mN.get, mRepr)()); } \
+					inline static auto as(const Num& mN) noexcept { return toNum<mType>(SSVPP_CAT(mN.get, mRepr)()); } \
 				};
 
 			#define SSVJ_DEFINE_REPRHELPER(mType) \
