@@ -16,6 +16,9 @@ namespace ssvu
 		template<typename... Ts> using Head = typename List<Ts...>::Head;
 		template<typename... Ts> using Tail = typename List<Ts...>::Tail;
 		template<int TS, typename... Ts> using At = typename List<Ts...>::template At<TS>;
+		template<template<typename> class TFilter, typename... Ts> using Filter = typename List<Ts...>::template Filter<TFilter>;
+		template<typename TFilter, typename... Ts> using FilterIdx = typename List<Ts...>::template FilterIdx<TFilter>;
+		template<template<typename...> class T, typename TL> using Rename = typename TL::template Rename<T>;
 
 		// List function shortcuts
 		template<typename... Ts> inline constexpr auto getSize() noexcept						{ return List<Ts...>::size; }

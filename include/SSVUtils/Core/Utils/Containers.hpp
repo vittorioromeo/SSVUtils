@@ -282,9 +282,7 @@ namespace ssvu
 	// TODO: move, fix, TESTS, possible usages, etc
 	template<typename... TArgs> inline auto mkVector(TArgs&&... mArgs)
 	{
-		using ItemType = std::common_type_t<TArgs...>;
-
-		std::vector<ItemType> result;
+		std::vector<Common<TArgs...>> result;
 		result.reserve(sizeof...(TArgs));
 
 		forArgs
@@ -299,22 +297,11 @@ namespace ssvu
 	// TODO: move, fix, TESTS, possible usages, etc
 	template<typename... TArgs> inline auto mkUnorderedMap(TArgs&&... mArgs)
 	{
-		struct EvenFn
-		{
-			inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 0; }
-		};
+		struct EvenFn	{ inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 0; } };
+		struct OddFn	{ inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 1; } };
 
-		struct OddFn
-		{
-			inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 1; }
-		};
-
-		using Types = MPL::List<TArgs...>;
-		using KeyTypes = typename Types::template FilterIdx<EvenFn>;
-		using ValueTypes = typename Types::template FilterIdx<OddFn>;
-
-		using KeyType = typename KeyTypes::template Rename<::std::common_type>::type;
-		using ValueType = typename ValueTypes::template Rename<::std::common_type>::type;
+		using KeyType = MPL::Rename<Common, MPL::FilterIdx<EvenFn, TArgs...>>;
+		using ValueType = MPL::Rename<Common, MPL::FilterIdx<OddFn, TArgs...>>;
 
 		std::unordered_map<KeyType, ValueType> result;
 		result.reserve(sizeof...(TArgs) / 2);

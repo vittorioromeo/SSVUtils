@@ -32,7 +32,7 @@ namespace ssvu
 
 		private:
 			/// @brief Storage of key/value pairs.
-			/// @details Implemented as an std::vector of ssvu::UPtr.
+			/// @details Implemented as an `std::vector` of `ssvu::UPtr`.
 			Storage storage;
 
 			/// @brief Set of the first type.

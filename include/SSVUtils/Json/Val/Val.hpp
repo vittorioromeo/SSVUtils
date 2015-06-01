@@ -276,12 +276,20 @@ namespace ssvu
 		/// @typedef `Val` - json value.
 		using Val = Impl::Val;
 
-		/// @brief Returns a JSON value containing an empty JSON object.
-		inline auto mkObj() { return Val{Impl::Obj{}}; }
-
 		/// @brief Returns a JSON value containing a JSON object filled with the passed key-value pairs.
-		// TODO: forArgs<2>?
-		inline auto mkObj(std::initializer_list<std::pair<Key, Val>>&& mX) { return Val{Impl::Obj{ssvu::mv(mX)}}; }
+		template<typename... TArgs> inline auto mkObj(TArgs&&... mArgs)
+		{
+			auto impl(Impl::Obj{});
+			impl.reserve(sizeof...(TArgs) / 2);
+
+			ssvu::forArgs<2>
+			(
+				[&impl](auto&& mK, auto&& mV){ impl[FWD(mK)] = FWD(mV); },
+				FWD(mArgs)...
+			);
+
+			return Val{ssvu::mv(impl)};
+		}
 
 		/// @brief Returns a JSON value containing a JSON array filled with the passed arguments.
 		template<typename... TArgs> inline auto mkArr(TArgs&&... mArgs) { return Val{Impl::Arr{FWD(mArgs)...}}; }

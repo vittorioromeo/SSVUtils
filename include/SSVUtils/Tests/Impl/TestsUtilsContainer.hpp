@@ -29,4 +29,46 @@ SSVUT_TEST(UtilsContainersTests)
 	SSVUT_EXPECT(ssvu::getKeys(m)[2] == "def");
 }
 
+// TODO: move
+SSVUT_TEST(ContainerMkTests)
+{
+	using namespace ssvu;
+
+	{
+		auto vecInt(mkVector(0, 1, 2, 3, 4, 5));
+		SSVU_ASSERT_STATIC_NM(isSame<decltype(vecInt), std::vector<int>>());
+		SSVUT_EXPECT_OP(vecInt.size(), ==, 6);
+	}
+
+	{
+		auto vecFloat(mkVector(0, 1, 2, 3, 4, 5.f));
+		SSVU_ASSERT_STATIC_NM(isSame<decltype(vecFloat), std::vector<float>>());
+		SSVUT_EXPECT_OP(vecFloat.size(), ==, 6);
+	}
+
+	{
+		auto vecDouble(mkVector(0., 1, 2.f, 3, 4, 5));
+		SSVU_ASSERT_STATIC_NM(isSame<decltype(vecDouble), std::vector<double>>());
+		SSVUT_EXPECT_OP(vecDouble.size(), ==, 6);
+	}
+
+	{
+		auto umIntInt(mkUnorderedMap(0, 0, 1, 1, 2, 2));
+		SSVU_ASSERT_STATIC_NM(isSame<decltype(umIntInt), std::unordered_map<int, int>>());
+		SSVUT_EXPECT_OP(umIntInt.size(), ==, 3);
+	}
+
+	{
+		auto umIntFloat(mkUnorderedMap(0, 0, 1, 1, 2, 2.f));
+		SSVU_ASSERT_STATIC_NM(isSame<decltype(umIntFloat), std::unordered_map<int, float>>());
+		SSVUT_EXPECT_OP(umIntFloat.size(), ==, 3);
+	}
+
+	{
+		auto umStrInt(mkUnorderedMap("0", 0, "1", 1, std::string{"2"}, 2));
+		SSVU_ASSERT_STATIC_NM(isSame<decltype(umStrInt), std::unordered_map<std::string, int>>());
+		SSVUT_EXPECT_OP(umStrInt.size(), ==, 3);
+	}
+}
+
 #endif
