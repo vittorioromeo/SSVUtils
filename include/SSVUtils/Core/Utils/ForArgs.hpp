@@ -6,6 +6,7 @@
 #define SSVU_CORE_UTILS_FORARGS
 
 #include "SSVUtils/Core/Common/Aliases.hpp"
+#include "SSVUtils/Core/Assert/Assert.hpp"
 
 // Implemented thanks to Daniel Frey:
 // http://stackoverflow.com/a/29901074/598696
@@ -53,6 +54,7 @@ namespace ssvu
 	inline constexpr void forArgs(TF&& mFn, Ts&&... mXs)
 		noexcept(noexcept(IMPL_FORNARGS_BODY()))
 	{
+		SSVU_ASSERT_STATIC(TArity > 0, "Unallowed arity: must be greater than 0");
 		SSVU_ASSERT_STATIC(sizeof...(Ts) % TArity == 0, "Unallowed arity: not divisible by number of arguments");
 		IMPL_FORNARGS_BODY();
 	}

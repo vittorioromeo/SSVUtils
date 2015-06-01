@@ -280,6 +280,7 @@ namespace ssvu
 		inline auto mkObj() { return Val{Impl::Obj{}}; }
 
 		/// @brief Returns a JSON value containing a JSON object filled with the passed key-value pairs.
+		// TODO: forArgs<2>?
 		inline auto mkObj(std::initializer_list<std::pair<Key, Val>>&& mX) { return Val{Impl::Obj{ssvu::mv(mX)}}; }
 
 		/// @brief Returns a JSON value containing a JSON array filled with the passed arguments.

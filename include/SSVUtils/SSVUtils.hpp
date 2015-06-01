@@ -80,4 +80,4 @@
 // TODO: check for functionality in GGJ and ASG that can be brought in SSVU
 // TODO: BTR::Ptr -> ssvu::Ptr (?)
 // TODO: Flags<TImpl> class that can use a bitset or a char array as underlying impls
-// TODO: mkMap, mkVector, mkUnorderedMap, and use them
+// TODO: mkMap, mkVector, mkUnorderedMap, and use them in json?
