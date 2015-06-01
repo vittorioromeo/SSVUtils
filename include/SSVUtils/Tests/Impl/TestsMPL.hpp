@@ -310,6 +310,28 @@ SSVUT_TEST(MPLTests)
 		List<PT0, PT1, PT2>::Reverse,
 		List<PT2, PT1, PT0>
 	>());
+
+	struct EvenFn
+	{
+		inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 0; }
+	};
+
+	struct OddFn
+	{
+		inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 1; }
+	};
+
+	SSVU_ASSERT_STATIC_NM(isSame
+	<
+		List<int, char, float, int, char, float>::FilterIdx<EvenFn>,
+		List<int, float, char>
+	>());
+
+	SSVU_ASSERT_STATIC_NM(isSame
+	<
+		List<int, char, float, int, char, float>::FilterIdx<OddFn>,
+		List<char, int, float>
+	>());
 }
 
 #endif

@@ -30,6 +30,7 @@ namespace ssvu
 			using Clear = List<>;
 			using Unique = List<>;
 			using Reverse = List<>;
+			template<template<typename...> class T> using Rename = T<>;
 
 			static constexpr SizeT size{0};
 			static constexpr bool empty{true};
@@ -52,6 +53,7 @@ namespace ssvu
 
 			template<template<typename> class> using Apply = List<>;
 			template<template<typename> class> using Filter = List<>;
+			template<template<typename> class> using FilterIdx = List<>;
 
 			template<typename TL> using Append = TL;
 			template<typename TL> using Prepend = TL;
@@ -91,6 +93,9 @@ namespace ssvu
 
 			/// @brief Returns a copy of this list, in reverse order.
 			using Reverse = Impl::Reverse<Ts...>;
+
+			/// @brief Replaces `List<Ts...>` with `T<Ts...>`.
+			template<template<typename...> class T> using Rename = T<Ts...>;
 
 
 
@@ -151,6 +156,9 @@ namespace ssvu
 
 			/// @brief Returns a copy of this list, discarding the types that do not satisfy `TFilter`.
 			template<template<typename> class TFilter> using Filter = Impl::Filter<TFilter, Ts...>;
+
+			/// @brief Returns a copy of this list, discarding the types at the indices that do not satisfy `TFilter`.
+			template<typename TFilter> using FilterIdx = Impl::FilterIdx<TFilter, Ts...>;
 
 
 

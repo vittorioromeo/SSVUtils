@@ -13,8 +13,7 @@ namespace ssvu
 	{
 		namespace Impl
 		{
-			template<template<typename> class, typename, typename> struct FilterHlpr;
-			template<template<typename> class TFilter, typename TResult> struct FilterHlpr<TFilter, List<>, TResult>
+			template<template<typename> class, typename, typename TResult> struct FilterHlpr
 			{
 				using Type = TResult;
 			};
@@ -27,6 +26,22 @@ namespace ssvu
 			};
 
 			template<template<typename> class TFilter, typename... Ts> using Filter = typename FilterHlpr<TFilter, List<Ts...>, List<>>::Type;
+
+
+
+			template<typename, SizeT, typename, typename TResult> struct FilterIdxHlpr
+			{
+				using Type = TResult;
+			};
+			template<typename TFilter, SizeT TI, typename T, typename... T1s, typename TResult> struct FilterIdxHlpr<TFilter, TI, List<T, T1s...>, TResult>
+			{
+				using CurrentList = typename FilterIdxHlpr<TFilter, TI + 1, List<T1s...>, TResult>::Type;
+				using AddedList = typename FilterIdxHlpr<TFilter, TI + 1, List<T1s...>, typename TResult::template PushBack<T>>::Type;
+
+				using Type = Conditional<!TFilter{}(TI), CurrentList, AddedList>;
+			};
+
+			template<typename TFilter, typename... Ts> using FilterIdx = typename FilterIdxHlpr<TFilter, 0, List<Ts...>, List<>>::Type;
 		}
 	}
 }

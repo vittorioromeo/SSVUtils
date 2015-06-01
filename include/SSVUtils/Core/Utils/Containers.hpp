@@ -6,6 +6,7 @@
 #define SSVU_CORE_UTILS_CONTAINERS
 
 #include <algorithm>
+#include "SSVUtils/Core/MPL/MPL.hpp"
 
 namespace ssvu
 {
@@ -276,6 +277,56 @@ namespace ssvu
 
 	/// @brief Returns the size of a non-dynamic C-array.
 	template<typename TArray, SizeT TS> inline constexpr SizeT getCArraySize(TArray(&)[TS]) noexcept { return TS; }
+
+
+	// TODO: move, fix, TESTS, possible usages, etc
+	template<typename... TArgs> inline auto mkVector(TArgs&&... mArgs)
+	{
+		using ItemType = std::common_type_t<TArgs...>;
+
+		std::vector<ItemType> result;
+		result.reserve(sizeof...(TArgs));
+
+		forArgs
+		(
+			[&result](auto&& mX){ result.emplace_back(FWD(mX)); },
+			FWD(mArgs)...
+		);
+
+		return result;
+	}
+
+	// TODO: move, fix, TESTS, possible usages, etc
+	template<typename... TArgs> inline auto mkUnorderedMap(TArgs&&... mArgs)
+	{
+		struct EvenFn
+		{
+			inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 0; }
+		};
+
+		struct OddFn
+		{
+			inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 1; }
+		};
+
+		using Types = MPL::List<TArgs...>;
+		using KeyTypes = typename Types::template FilterIdx<EvenFn>;
+		using ValueTypes = typename Types::template FilterIdx<OddFn>;
+
+		using KeyType = typename KeyTypes::template Rename<::std::common_type>::type;
+		using ValueType = typename ValueTypes::template Rename<::std::common_type>::type;
+
+		std::unordered_map<KeyType, ValueType> result;
+		result.reserve(sizeof...(TArgs) / 2);
+
+		forArgs<2>
+		(
+			[&result](auto&& mK, auto&& mV){ result.emplace(FWD(mK), FWD(mV)); },
+			FWD(mArgs)...
+		);
+
+		return result;
+	}
 }
 
 #endif
