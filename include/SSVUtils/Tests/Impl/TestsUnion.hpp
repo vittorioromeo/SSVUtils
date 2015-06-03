@@ -22,6 +22,18 @@
 		SSVUT_EXPECT_OP(u.get<mType>(), ==, mX); \
 	}
 
+#define EXEC_TEST_POD_CPMV(mType, mX) \
+	{ \
+		u.init<mType>(mX); \
+		SSVUT_EXPECT_OP(u.get<mType>(), ==, mX); \
+		UnionPOD<char, short int, int, float, long int, double> j; \
+		j = u; \
+		SSVUT_EXPECT_OP(j.get<mType>(), ==, mX); \
+		UnionPOD<char, short int, int, float, long int, double> k; \
+		k = mv(j); \
+		SSVUT_EXPECT_OP(k.get<mType>(), ==, mX); \
+	}
+
 
 SSVUT_TEST(UnionTests)
 {
@@ -56,6 +68,16 @@ SSVUT_TEST(UnionTests)
 
 	MaybePOD<int> mbpInt;
 	mbpInt.init(5);
+
+	{
+		UnionPOD<char, short int, int, float, long int, double> u;
+		EXEC_TEST_POD_CPMV(char, 'c')
+		EXEC_TEST_POD_CPMV(short int, 152)
+		EXEC_TEST_POD_CPMV(int, 152)
+		EXEC_TEST_POD_CPMV(float, 152.5f)
+		EXEC_TEST_POD_CPMV(long int, 152)
+		EXEC_TEST_POD_CPMV(double, 33.21)
+	}
 }
 
 #undef EXEC_TEST

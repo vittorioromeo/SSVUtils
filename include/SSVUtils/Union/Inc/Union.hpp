@@ -33,6 +33,14 @@ namespace ssvu
 			#endif
 
 		public:
+			inline Union() = default;
+
+			// Prevent copy/move
+			inline Union(Union&&) = delete;
+			inline Union(const Union&) = delete;
+			inline Union& operator=(Union&&) = delete;
+			inline Union& operator=(const Union&) = delete;
+
 			/// @brief Constructs and sets the internal data to `T`.
 			/// @details Asserts that any previous data was destroyed.
 			template<typename T, typename... TArgs> inline void init(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())

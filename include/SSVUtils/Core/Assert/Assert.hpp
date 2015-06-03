@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_ASSERT
 #define SSVU_CORE_ASSERT
 
+#include "SSVUtils/Core/Detection/Detection.hpp"
+
 /// @macro Static assertion. Checked at compile-time.
 /// @details Wrapper for the standard `static_assert`.
 #define SSVU_ASSERT_STATIC(...) static_assert(__VA_ARGS__)
