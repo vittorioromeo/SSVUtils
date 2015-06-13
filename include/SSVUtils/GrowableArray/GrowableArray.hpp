@@ -39,6 +39,9 @@ namespace ssvu
 			}
 
 			// Getters
+			inline auto& getData() noexcept						{ return data; }
+			inline const auto& getData() const noexcept			{ return data; }
+			inline auto getDataPtr() noexcept					{ return data.get(); }
 			inline T& operator[](SizeT mI) noexcept				{ return data[mI]; }
 			inline const T& operator[](SizeT mI) const noexcept	{ return data[mI]; }
 	};
@@ -81,6 +84,9 @@ namespace ssvu
 			}
 
 			// Getters
+			inline auto& getData() noexcept						{ return data; }
+			inline const auto& getData() const noexcept			{ return data; }
+			inline auto getDataPtr() noexcept					{ return data.get(); }
 			inline T& operator[](SizeT mI) noexcept				{ return castStorage<T>(data[mI]); }
 			inline const T& operator[](SizeT mI) const noexcept	{ return castStorage<T>(data[mI]); }
 	};
