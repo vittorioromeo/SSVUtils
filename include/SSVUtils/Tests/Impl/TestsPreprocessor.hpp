@@ -64,7 +64,7 @@ SSVUT_TEST(PreprocessorTests)
 
 		#define SSVU_TEST_FOREFFECT(mIdx, mData, mArg)	k += mIdx; k += mArg;
 		//					v action(idx, data, arg)	v data				v vargs
-		SSVPP_FOREACH(SSVU_TEST_FOREFFECT,		SSVPP_EMPTY(),	1, 2, 3, 4)
+		SSVPP_FOREACH_REVERSE(SSVU_TEST_FOREFFECT,		SSVPP_EMPTY(),	1, 2, 3, 4)
 		#undef SSVU_TEST_FOREFFECT
 
 		SSVUT_EXPECT(k == 16);
@@ -79,7 +79,7 @@ SSVUT_TEST(PreprocessorTests)
 		#define SSVU_TEST_ADDTEN(mX)					SSVPP_CAT(1, mX)
 		#define SSVU_TEST_FOREFFECT(mIdx, mData, mArg)	SSVU_TEST_ADDTEN(mArg)SSVPP_COMMA_IF(mIdx)
 
-		std::string s(SSVPP_SEP_TOSTR(", ", SSVPP_FOREACH(SSVU_TEST_FOREFFECT, SSVPP_EMPTY(), 1, 2, 3, 4)));
+		std::string s(SSVPP_SEP_TOSTR(", ", SSVPP_FOREACH_REVERSE(SSVU_TEST_FOREFFECT, SSVPP_EMPTY(), 1, 2, 3, 4)));
 		SSVUT_EXPECT(s == "11, 12, 13, 14");
 
 		#undef SSVU_TEST_ADDTEN

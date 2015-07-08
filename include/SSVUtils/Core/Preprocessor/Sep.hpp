@@ -10,6 +10,6 @@
 #include "SSVUtils/Core/Preprocessor/Bool.hpp"
 
 #define SSVPP_IMPL_SEP(mIdx, mData, mArg)	mArg SSVPP_IF(mIdx, mData, SSVPP_EMPTY())
-#define SSVPP_SEP(mSeparator, ...)			SSVPP_FOREACH(SSVPP_IMPL_SEP, mSeparator, __VA_ARGS__)
+#define SSVPP_SEP(mSeparator, ...)			SSVPP_FOREACH_REVERSE(SSVPP_IMPL_SEP, mSeparator, __VA_ARGS__)
 
 #endif

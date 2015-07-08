@@ -135,14 +135,28 @@ void genArgCount()
 
 void genForeach()
 {
-	output << "#define SSVPP_IMPL_FOREACH_1(mAction, mData, mA0)				mAction(0, mData, mA0)\n";
-	output << "#define SSVPP_IMPL_FOREACH_2(mAction, mData, mA0, mA1)			mAction(1, mData, mA0) SSVPP_IMPL_FOREACH_1(mAction, mData, mA1)\n";
+	output << "#define SSVPP_IMPL_FOREACH_1(mLast, mAction, mData, mA0)				mAction(mLast, mData, mA0)\n";
+	output << "#define SSVPP_IMPL_FOREACH_2(mLast, mAction, mData, mA0, mA1)		mAction(mLast, mData, mA0) SSVPP_IMPL_FOREACH_1(SSVPP_INCREMENT(mLast), mAction, mData, mA1)\n";
 
 	for(auto i(2u); i < foreachCount; ++i)
 	{
 		output << "#define SSVPP_IMPL_FOREACH_" << i + 1;
+		output << "(mLast, mAction, mData, mA0, mA1, ...)		";
+		output << "mAction(mLast, mData, mA0) SSVPP_IMPL_FOREACH_" << i << "(SSVPP_INCREMENT(mLast), mAction, mData, mA1, __VA_ARGS__)";
+		output << "\n";
+	}
+}
+
+void genForeachReverse()
+{
+	output << "#define SSVPP_IMPL_FOREACH_REVERSE_1(mAction, mData, mA0)				mAction(0, mData, mA0)\n";
+	output << "#define SSVPP_IMPL_FOREACH_REVERSE_2(mAction, mData, mA0, mA1)			mAction(1, mData, mA0) SSVPP_IMPL_FOREACH_REVERSE_1(mAction, mData, mA1)\n";
+
+	for(auto i(2u); i < foreachCount; ++i)
+	{
+		output << "#define SSVPP_IMPL_FOREACH_REVERSE_" << i + 1;
 		output << "(mAction, mData, mA0, mA1, ...)		";
-		output << "mAction(" << i << ", mData, mA0) SSVPP_IMPL_FOREACH_" << i << "(mAction, mData, mA1, __VA_ARGS__)";
+		output << "mAction(" << i << ", mData, mA0) SSVPP_IMPL_FOREACH_REVERSE_" << i << "(mAction, mData, mA1, __VA_ARGS__)";
 		output << "\n";
 	}
 }
@@ -203,6 +217,9 @@ int main()
 	output << "\n\n";
 
 	genForeach();
+	output << "\n\n";
+
+	genForeachReverse();
 	output << "\n\n";
 
 	genRepeat();

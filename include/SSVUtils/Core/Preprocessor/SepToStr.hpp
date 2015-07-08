@@ -10,6 +10,6 @@
 #include "SSVUtils/Core/Preprocessor/Bool.hpp"
 
 #define SSVPP_IMPL_SEP_TOSTR(mIdx, mData, mArg)	SSVPP_TOSTR(mArg) SSVPP_IF(mIdx, mData, SSVPP_EMPTY())
-#define SSVPP_SEP_TOSTR(mSeparator, ...)		SSVPP_FOREACH(SSVPP_IMPL_SEP_TOSTR, mSeparator, __VA_ARGS__)
+#define SSVPP_SEP_TOSTR(mSeparator, ...)		SSVPP_FOREACH_REVERSE(SSVPP_IMPL_SEP_TOSTR, mSeparator, __VA_ARGS__)
 
 #endif

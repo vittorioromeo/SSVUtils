@@ -49,7 +49,7 @@ namespace ssvu
 #define SSVU_FATENUM_IMPL(mMgr, mName, mUnderlying, mDispatch, ...) \
 	enum class mName : mUnderlying \
 	{ \
-		SSVPP_FOREACH(SSVU_FATENUM_IMPL_MK_ELEM_DISPATCH(mDispatch), SSVPP_EMPTY(), __VA_ARGS__) \
+		SSVPP_FOREACH_REVERSE(SSVU_FATENUM_IMPL_MK_ELEM_DISPATCH(mDispatch), SSVPP_EMPTY(), __VA_ARGS__) \
 	}; \
 	template<> struct mMgr<mName> final : public ssvu::Impl::FatEnumMgrImpl<SSVPP_ARGCOUNT(__VA_ARGS__), mMgr<mName>> \
 	{ \
@@ -58,7 +58,7 @@ namespace ssvu
 		{ \
 			static ssvu::Bimap<std::string, mName> result \
 			{ \
-				SSVPP_FOREACH(SSVU_FATENUM_IMPL_MK_BIMAP_ENTRY(mDispatch), mName, __VA_ARGS__) \
+				SSVPP_FOREACH_REVERSE(SSVU_FATENUM_IMPL_MK_BIMAP_ENTRY(mDispatch), mName, __VA_ARGS__) \
 			}; \
 			return result; \
 		} \
@@ -66,7 +66,7 @@ namespace ssvu
 		{ \
 			static auto result(::ssvu::mkArray \
 			( \
-				SSVPP_FOREACH(SSVU_FATENUM_IMPL_MK_ARRAY_ENTRY(mDispatch), mName, __VA_ARGS__) \
+				SSVPP_FOREACH_REVERSE(SSVU_FATENUM_IMPL_MK_ARRAY_ENTRY(mDispatch), mName, __VA_ARGS__) \
 			)); \
 			return result; \
 		} \
@@ -74,12 +74,12 @@ namespace ssvu
 		{ \
 			static auto result(::ssvu::mkArray \
 			( \
-				SSVPP_FOREACH(SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY(mDispatch), mName, __VA_ARGS__) \
+				SSVPP_FOREACH_REVERSE(SSVU_FATENUM_IMPL_MK_ARRAY_EN_ENTRY(mDispatch), mName, __VA_ARGS__) \
 			)); \
 			return result; \
 		} \
 	}; \
-	SSVPP_FOREACH(SSVU_FATENUM_IMPL_MK_GETASSTRING_DISPATCH(mDispatch), SSVPP_TPL_MAKE(mMgr, mName), __VA_ARGS__)
+	SSVPP_FOREACH_REVERSE(SSVU_FATENUM_IMPL_MK_GETASSTRING_DISPATCH(mDispatch), SSVPP_TPL_MAKE(mMgr, mName), __VA_ARGS__)
 
 /// @macro Defines a fat enum using tuples of name and values.
 /// @code
