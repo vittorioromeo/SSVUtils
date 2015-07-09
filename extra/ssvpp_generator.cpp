@@ -135,6 +135,7 @@ void genArgCount()
 
 void genForeach()
 {
+	output << "#define SSVPP_IMPL_FOREACH_0(mLast, mAction, mData)					\n";
 	output << "#define SSVPP_IMPL_FOREACH_1(mLast, mAction, mData, mA0)				mAction(mLast, mData, mA0)\n";
 	output << "#define SSVPP_IMPL_FOREACH_2(mLast, mAction, mData, mA0, mA1)		mAction(mLast, mData, mA0) SSVPP_IMPL_FOREACH_1(SSVPP_INCREMENT(mLast), mAction, mData, mA1)\n";
 
@@ -149,6 +150,7 @@ void genForeach()
 
 void genForeachReverse()
 {
+	output << "#define SSVPP_IMPL_FOREACH_REVERSE_0(mAction, mData)						\n";
 	output << "#define SSVPP_IMPL_FOREACH_REVERSE_1(mAction, mData, mA0)				mAction(0, mData, mA0)\n";
 	output << "#define SSVPP_IMPL_FOREACH_REVERSE_2(mAction, mData, mA0, mA1)			mAction(1, mData, mA0) SSVPP_IMPL_FOREACH_REVERSE_1(mAction, mData, mA1)\n";
 
