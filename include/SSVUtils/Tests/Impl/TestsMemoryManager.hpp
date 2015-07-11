@@ -449,6 +449,4 @@ SSVUT_TEST(MemoryManagerTests)
 	SSVUT_EXPECT_OP(dc, ==, 7);
 }
 
-
-
 #endif

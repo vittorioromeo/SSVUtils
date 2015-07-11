@@ -13,9 +13,6 @@
 /// @macro Generates an unique name for the test runner instance.
 #define SSVUT_IMPL_GET_NAME_RUNNER(mName) SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), runner)
 
-/// @macro Generates an unique name for the test instance + test class type.
-#define SSVUT_IMPL_GET_NAME_INSTANCE(mName) SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), instance)
-
 /// @macro Generates an unique key for the test.
 #define SSVUT_IMPL_GET_KEY(mName) SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
 
@@ -25,8 +22,7 @@
 	{ \
 		inline SSVUT_IMPL_GET_NAME_TYPE(mName) () : ::ssvu::Test::Impl::TestBase{SSVPP_TOSTR(mName), SSVPP_TOSTR(__LINE__), SSVPP_TOSTR(__FILE__)} { } \
 		virtual void run() const override; \
-	}; \
-	static SSVUT_IMPL_GET_NAME_TYPE(mName) SSVUT_IMPL_GET_NAME_INSTANCE(mName);
+	};
 
 /// @macro Generates the test runner.
 #define SSVUT_IMPL_GENERATE_RUNNER(mName) \
@@ -34,7 +30,7 @@
 	{ \
 		if(::ssvu::Test::Impl::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) return; \
 		::ssvu::Test::Impl::setTestExecuted(SSVUT_IMPL_GET_KEY(mName)); \
-		ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Impl::getTestStorage(), SSVUT_IMPL_GET_NAME_INSTANCE(mName)); \
+		ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Impl::getTestStorage()); \
 	}};
 
 #ifndef SSVUT_DISABLE
@@ -45,17 +41,16 @@
 		inline void SSVUT_IMPL_GET_NAME_TYPE(mName)::run() const
 
 	/// @macro Test check. If `mExpr` is false, the test fails.
-	#define SSVUT_EXPECT(mExpr) \
-		do \
-		{ \
-			if(!(mExpr)) throw ::ssvu::Test::Impl::TestFailException{this, #mExpr, SSVPP_TOSTR(__LINE__), ::ssvu::toStr(mExpr)}; \
-		} while(false)
+	#define SSVUT_EXPECT(mExpr) SSVUT_EXPECT_OP((mExpr), ==, true)
 
 	/// @macro Test check. If `mExpr mOp mRes` is false, the test fails.
 	#define SSVUT_EXPECT_OP(mExpr, mOp, mRes) \
 		do \
 		{ \
-			if(!(mExpr mOp mRes)) throw ::ssvu::Test::Impl::TestFailException{this, #mExpr, SSVPP_TOSTR(__LINE__), ::ssvu::toStr(mExpr), ::ssvu::toStr(mRes)}; \
+			if(SSVU_UNLIKELY(!(mExpr mOp mRes))) \
+			{ \
+				::ssvu::Test::Impl::testFailure(this, #mExpr, SSVPP_TOSTR(__LINE__), ::ssvu::toStr(mExpr), ::ssvu::toStr(mRes)); \
+			} \
 		} while(false)
 
 	/// @macro Runs all tests.

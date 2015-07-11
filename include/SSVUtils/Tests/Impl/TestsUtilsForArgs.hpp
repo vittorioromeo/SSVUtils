@@ -36,7 +36,7 @@ SSVUT_TEST(UtilsForArgs)
 		auto e = [&steps, &ctrl]{ ++steps; ctrl = 5; return 5; };
 
 		int acc{0};
-		forArgs([this, &ctrl, &steps, &acc](auto x)
+		forArgs([&](auto x)
 		{
 			auto val(x());
 			acc += val;

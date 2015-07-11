@@ -69,7 +69,7 @@ SSVUT_TEST(TestsUtilsTuple)
 		ssvu::Tpl<int, char, float> tt1{1, 'c', 3.4f};
 		ssvu::Tpl<double, std::string> tt2{10.55, "banana"};
 
-		ssvu::tplForData([this, &tt1, &tt2](auto mD, const auto& mA, const auto& mB)
+		ssvu::tplForData([&](auto mD, const auto& mA, const auto& mB)
 		{
 			using ts = typename decltype(mD)::Types;
 
