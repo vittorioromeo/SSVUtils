@@ -10,38 +10,38 @@
 /// @macro Generates an unique name for the test class type.
 #define SSVUT_IMPL_GET_NAME_TYPE(mName) SSVPP_CAT(SSVUTTestUnique, mName, __LINE__)
 
-/// @macro Generates an unique name for the test runner instance.
-#define SSVUT_IMPL_GET_NAME_RUNNER(mName) SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), runner)
-
-/// @macro Generates an unique key for the test.
-#define SSVUT_IMPL_GET_KEY(mName) SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
-
-/// @macro Generates the test struct.
-#define SSVUT_IMPL_GENERATE_STRUCT(mName) \
-	struct SSVUT_IMPL_GET_NAME_TYPE(mName) final : public ::ssvu::Test::Impl::TestBase \
-	{ \
-		inline SSVUT_IMPL_GET_NAME_TYPE(mName) () : ::ssvu::Test::Impl::TestBase{SSVPP_TOSTR(mName), SSVPP_TOSTR(__LINE__), SSVPP_TOSTR(__FILE__)} { } \
-		virtual void run() const override; \
-	};
-
-/// @macro Generates the test runner.
-#define SSVUT_IMPL_GENERATE_RUNNER(mName) \
-	static ::ssvu::Test::Impl::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName) {[] \
-	{ \
-		if(::ssvu::Test::Impl::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) return; \
-		::ssvu::Test::Impl::setTestExecuted(SSVUT_IMPL_GET_KEY(mName)); \
-		ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Impl::getTestStorage()); \
-	}};
-
 #ifndef SSVUT_DISABLE
+	#include "SSVUtils/Test/Internal/TestImplEnabled.hpp"
+
+	/// @macro Generates an unique name for the test runner instance.
+	#define SSVUT_IMPL_GET_NAME_RUNNER(mName) SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), runner)
+
+	/// @macro Generates an unique key for the test.
+	#define SSVUT_IMPL_GET_KEY(mName) SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
+
+	/// @macro Generates the test struct.
+	#define SSVUT_IMPL_GENERATE_STRUCT(mName) \
+		struct SSVUT_IMPL_GET_NAME_TYPE(mName) final : public ::ssvu::Test::Impl::TestBase \
+		{ \
+			inline SSVUT_IMPL_GET_NAME_TYPE(mName) () : ::ssvu::Test::Impl::TestBase{SSVPP_TOSTR(mName), SSVPP_TOSTR(__LINE__), SSVPP_TOSTR(__FILE__)} { } \
+			virtual void run() const override; \
+		};
+
+	/// @macro Generates the test runner.
+	#define SSVUT_IMPL_GENERATE_RUNNER(mName) \
+		::ssvu::Test::Impl::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName) {[] \
+		{ \
+			if(::ssvu::Test::Impl::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) return; \
+			::ssvu::Test::Impl::setTestExecuted(SSVUT_IMPL_GET_KEY(mName)); \
+			ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(::ssvu::Test::Impl::getTestStorage()); \
+		}};
+
 	/// @macro Test wrapper. After using this macro, write the test body in curly braces.
 	#define SSVUT_TEST(mName) \
 		SSVUT_IMPL_GENERATE_STRUCT(mName) \
 		SSVUT_IMPL_GENERATE_RUNNER(mName) \
 		inline void SSVUT_IMPL_GET_NAME_TYPE(mName)::run() const
 
-	/// @macro Test check. If `mExpr` is false, the test fails.
-	#define SSVUT_EXPECT(mExpr) SSVUT_EXPECT_OP((mExpr), ==, true)
 
 	/// @macro Test check. If `mExpr mOp mRes` is false, the test fails.
 	#define SSVUT_EXPECT_OP(mExpr, mOp, mRes) \
@@ -53,10 +53,12 @@
 			} \
 		} while(false)
 
+	/// @macro Test check. If `mExpr` is false, the test fails.
+	#define SSVUT_EXPECT(mExpr) SSVUT_EXPECT_OP((mExpr), ==, true)
+
 	/// @macro Runs all tests.
 	#define SSVUT_RUN() ::ssvu::Test::Impl::runAllTests()
 
-	#include "SSVUtils/Test/Internal/TestImplEnabled.hpp"
 #else
 	#define SSVUT_TEST(mName) inline void SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), unused) ()
 	#define SSVUT_EXPECT(...)
