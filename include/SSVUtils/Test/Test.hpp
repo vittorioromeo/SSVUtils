@@ -29,7 +29,7 @@
 
 	/// @macro Generates the test runner.
 	#define SSVUT_IMPL_GENERATE_RUNNER(mName) \
-		::ssvu::Test::Impl::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName) {[] \
+		static ::ssvu::Test::Impl::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName) {[] \
 		{ \
 			if(::ssvu::Test::Impl::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) return; \
 			::ssvu::Test::Impl::setTestExecuted(SSVUT_IMPL_GET_KEY(mName)); \
