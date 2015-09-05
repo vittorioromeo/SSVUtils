@@ -16,8 +16,8 @@ namespace ssvu
 			/// @typedef Shortcut typedef for `std::chrono::timepoint<HRClock>`.
 			using TP = std::chrono::time_point<HRClock>;
 
-			/// @typedef Shortcut typedef for `std::chrono::milliseconds`.
-			using Duration = std::chrono::milliseconds;
+			/// @typedef Shortcut typedef for `std::chrono::nanoseconds`.
+			using Duration = std::chrono::nanoseconds;
 		}
 	}
 }

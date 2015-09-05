@@ -68,8 +68,8 @@ SSVUT_TEST(HandleManagerMixedTests)
 
 			mgr.refresh();
 
-			SSVUT_EXPECT(cc == 7);
-			SSVUT_EXPECT(dd == 3);
+			SSVUT_EXPECT_OP(cc, ==, 7);
+			SSVUT_EXPECT_OP(dd, ==, 3);
 			SSVUT_EXPECT(mgr.getSize() == 4);
 			SSVUT_EXPECT(mgr.getSizeNext() == 4);
 
