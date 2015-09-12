@@ -2,6 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
+#ifndef SSVUT_DISABLE
+
 #ifndef SSVU_TESTS
 #define SSVU_TESTS
 
@@ -40,5 +42,5 @@
 // #include "SSVUtils/Tests/Impl/TestsTicker.hpp"
 // #include "SSVUtils/Tests/Impl/TestsTimeline.hpp"
 
-
+#endif
 #endif

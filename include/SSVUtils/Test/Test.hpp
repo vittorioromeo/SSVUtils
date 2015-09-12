@@ -8,16 +8,19 @@
 #include "SSVUtils/Core/Core.hpp"
 
 /// @macro Generates an unique name for the test class type.
-#define SSVUT_IMPL_GET_NAME_TYPE(mName) SSVPP_CAT(SSVUTTestUnique, mName, __LINE__)
+#define SSVUT_IMPL_GET_NAME_TYPE(mName) \
+	SSVPP_CAT(SSVUTTestUnique, mName, __LINE__)
 
 #ifndef SSVUT_DISABLE
 	#include "SSVUtils/Test/Internal/TestImplEnabled.hpp"
 
 	/// @macro Generates an unique name for the test runner instance.
-	#define SSVUT_IMPL_GET_NAME_RUNNER(mName) SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), runner)
+	#define SSVUT_IMPL_GET_NAME_RUNNER(mName) \
+		SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), runner)
 
 	/// @macro Generates an unique key for the test.
-	#define SSVUT_IMPL_GET_KEY(mName) SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
+	#define SSVUT_IMPL_GET_KEY(mName) \
+		SSVPP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
 
 	/// @macro Generates the test struct.
 	#define SSVUT_IMPL_GENERATE_STRUCT(mName) \
@@ -54,10 +57,12 @@
 		} while(false)
 
 	/// @macro Test check. If `mExpr` is false, the test fails.
-	#define SSVUT_EXPECT(mExpr) SSVUT_EXPECT_OP((mExpr), ==, true)
+	#define SSVUT_EXPECT(mExpr) \
+		SSVUT_EXPECT_OP((mExpr), ==, true)
 
 	/// @macro Runs all tests.
-	#define SSVUT_RUN() ::ssvu::Test::Impl::runAllTests()
+	#define SSVUT_RUN() \
+		do { ::ssvu::Test::Impl::runAllTests(); } while(false)
 
 #else
 	#define SSVUT_TEST(mName) inline void SSVPP_CAT(SSVUT_IMPL_GET_NAME_TYPE(mName), unused) ()

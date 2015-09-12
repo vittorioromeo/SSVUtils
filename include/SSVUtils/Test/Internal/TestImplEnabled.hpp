@@ -61,7 +61,7 @@ namespace ssvu
 
 			inline void runAllTests()
 			{
-				static bool	done{false};
+				static bool done{false};
 				if(done) return;
 
 				done = true;
