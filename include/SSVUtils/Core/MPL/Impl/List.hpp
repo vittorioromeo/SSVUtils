@@ -219,6 +219,7 @@ namespace ssvu
 }
 
 // TODO: sort
+// TODO: check stackoverflow question: http://stackoverflow.com/questions/28767814/
 // GCC5: variadic templates
 
 #endif
