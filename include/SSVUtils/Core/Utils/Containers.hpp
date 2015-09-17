@@ -300,8 +300,8 @@ namespace ssvu
 		struct EvenFn	{ inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 0; } };
 		struct OddFn	{ inline constexpr auto operator()(SizeT mI) noexcept { return mI % 2 == 1; } };
 
-		using KeyType = MPL::Rename<Common, MPL::FilterIdx<EvenFn, TArgs...>>;
-		using ValueType = MPL::Rename<Common, MPL::FilterIdx<OddFn, TArgs...>>;
+		using KeyType = MPL::L::Rename<Common, MPL::FilterIdx<EvenFn, TArgs...>>;
+		using ValueType = MPL::L::Rename<Common, MPL::FilterIdx<OddFn, TArgs...>>;
 
 		std::unordered_map<KeyType, ValueType> result;
 		result.reserve(sizeof...(TArgs) / 2);
