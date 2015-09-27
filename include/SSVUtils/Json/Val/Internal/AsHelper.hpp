@@ -31,15 +31,15 @@ namespace ssvu
 			#define SSVU_JSON_DEFINE_ASHELPER_BIG_MUTABLE(mType) \
 				template<> struct AsHelper<mType> final \
 				{ \
-					inline static const auto& as(const Val& mV) noexcept	{ return SSVPP_CAT(mV.get, mType)(); } \
-					inline static auto as(Val&& mV) noexcept				{ return SSVPP_CAT(mV.get, mType)(); } \
-					inline static auto& as(Val& mV) noexcept				{ return SSVPP_CAT(mV.get, mType)(); } \
+					inline static const auto& as(const Val& mV) noexcept	{ return VRM_PP_CAT(mV.get, mType)(); } \
+					inline static auto as(Val&& mV) noexcept				{ return VRM_PP_CAT(mV.get, mType)(); } \
+					inline static auto& as(Val& mV) noexcept				{ return VRM_PP_CAT(mV.get, mType)(); } \
 				};
 
 			#define SSVU_JSON_DEFINE_ASHELPER_SMALL_IMMUTABLE(mType) \
 				template<> struct AsHelper<mType> final \
 				{ \
-					inline static auto as(const Val& mV) noexcept { return SSVPP_CAT(mV.get, mType)(); } \
+					inline static auto as(const Val& mV) noexcept { return VRM_PP_CAT(mV.get, mType)(); } \
 				};
 
 			SSVU_JSON_DEFINE_ASHELPER_NUM(char)

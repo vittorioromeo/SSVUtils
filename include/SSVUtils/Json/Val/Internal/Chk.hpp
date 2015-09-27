@@ -46,12 +46,12 @@ namespace ssvu
 				template<> struct Chk<mType> final { };
 
 			#define SSVJ_DEFINE_CHK_NUM_REPR(mType) \
-				template<> struct Chk<mType> final { inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::TNum && mV.getNum().getRepr() == SSVPP_DEFER(Num::Repr::mType); } };
+				template<> struct Chk<mType> final { inline static auto is(const Val& mV) noexcept { return mV.getType() == Val::Type::TNum && mV.getNum().getRepr() == VRM_PP_DEFER(Num::Repr::mType); } };
 
 			#define SSVJ_DEFINE_CHK_BASIC(mType) \
 				template<> struct Chk<mType> final \
 				{ \
-					inline static auto is(const Val& mV) noexcept { return mV.getType() == SSVPP_DEFER(Val::Type::SSVPP_CAT(T, mType)); } \
+					inline static auto is(const Val& mV) noexcept { return mV.getType() == VRM_PP_DEFER(Val::Type::VRM_PP_CAT(T, mType)); } \
 				};
 
 			#define SSVJ_DEFINE_CHKNONUM(mType) \

@@ -21,15 +21,15 @@ namespace ssvu
 			#define SSVJ_DEFINE_CNV_BIG_MUTABLE(mType) \
 				template<> struct Cnv<mType, void> final \
 				{ \
-					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(SSVPP_CAT(mV.set, mType)(FWD(mX)))) { SSVPP_CAT(mV.set, mType)(FWD(mX)); } \
-					template<typename T> inline static void fromVal(T&& mV, mType& mX) { mX = moveIfRValue<decltype(mV)>(SSVPP_CAT(mV.get, mType)()); } \
+					template<typename T> inline static void toVal(Val& mV, T&& mX) noexcept(noexcept(VRM_PP_CAT(mV.set, mType)(FWD(mX)))) { VRM_PP_CAT(mV.set, mType)(FWD(mX)); } \
+					template<typename T> inline static void fromVal(T&& mV, mType& mX) { mX = moveIfRValue<decltype(mV)>(VRM_PP_CAT(mV.get, mType)()); } \
 				};
 
 			#define SSVJ_DEFINE_CNV_SMALL_IMMUTABLE(mType) \
 				template<> struct Cnv<mType, void> final \
 				{ \
-					inline static void toVal(Val& mV, const mType& mX) noexcept		{ SSVPP_CAT(mV.set, mType)(mX); } \
-					inline static void fromVal(const Val& mV, mType& mX) noexcept	{ mX = SSVPP_CAT(mV.get, mType)(); } \
+					inline static void toVal(Val& mV, const mType& mX) noexcept		{ VRM_PP_CAT(mV.set, mType)(mX); } \
+					inline static void fromVal(const Val& mV, mType& mX) noexcept	{ mX = VRM_PP_CAT(mV.get, mType)(); } \
 				};
 
 			// Define numeric value converters

@@ -39,9 +39,11 @@
 // The "Core/Detection/Detection" module detects OS, compiler and debug/release information
 #include "SSVUtils/Core/Detection/Detection.hpp"
 
+// TODO:
 // The "Core/Preprocessor/Preprocessor" module is used in various parts of the library.
 // It does not introduce any additional dependency and is safe to include first.
-#include "SSVUtils/Core/Preprocessor/Preprocessor.hpp"
+// #include "SSVUtils/Core/Preprocessor/Preprocessor.hpp"
+#include <vrm/pp.hpp>
 
 // "Core/Assert/Assert" comes next, as many other modules make heavy use of assertions.
 #include "SSVUtils/Core/Assert/Assert.hpp"

@@ -14,12 +14,12 @@ namespace ssvu
 			#define SSVJ_DEFINE_NUMHELPER(mType, mRepr) \
 				template<> struct NumHelper<mType> \
 				{ \
-					inline static void set(Num& mN, const mType& mX) noexcept { return SSVPP_CAT(mN.set, mRepr)(mX); } \
-					inline static auto as(const Num& mN) noexcept { return toNum<mType>(SSVPP_CAT(mN.get, mRepr)()); } \
+					inline static void set(Num& mN, const mType& mX) noexcept { return VRM_PP_CAT(mN.set, mRepr)(mX); } \
+					inline static auto as(const Num& mN) noexcept { return toNum<mType>(VRM_PP_CAT(mN.get, mRepr)()); } \
 				};
 
 			#define SSVJ_DEFINE_REPRHELPER(mType) \
-				template<> struct ReprHelper<mType> { inline static auto get() { return SSVPP_DEFER(Num::Repr::mType); } };
+				template<> struct ReprHelper<mType> { inline static auto get() { return VRM_PP_DEFER(Num::Repr::mType); } };
 
 			// Define helpers to set/get numeric types to/from specific representations
 			SSVJ_DEFINE_NUMHELPER(char, IntS)

@@ -60,9 +60,9 @@ namespace ssvu
 
 					// Ref-qualified getters
 					#define SSVJ_DEFINE_VAL_GETTER(mType, mMember) \
-						inline mType&		SSVPP_CAT(get, mType)() & noexcept		{ SSVU_ASSERT(is<mType>()); return mMember; } \
-						inline const mType&	SSVPP_CAT(get, mType)() const& noexcept	{ SSVU_ASSERT(is<mType>()); return mMember; } \
-						inline mType		SSVPP_CAT(get, mType)() && noexcept		{ SSVU_ASSERT(is<mType>()); return mv(mMember); }
+						inline mType&		VRM_PP_CAT(get, mType)() & noexcept		{ SSVU_ASSERT(is<mType>()); return mMember; } \
+						inline const mType&	VRM_PP_CAT(get, mType)() const& noexcept	{ SSVU_ASSERT(is<mType>()); return mMember; } \
+						inline mType		VRM_PP_CAT(get, mType)() && noexcept		{ SSVU_ASSERT(is<mType>()); return mv(mMember); }
 
 					SSVJ_DEFINE_VAL_GETTER(Obj, h.get<Obj>())
 					SSVJ_DEFINE_VAL_GETTER(Arr, h.get<Arr>())

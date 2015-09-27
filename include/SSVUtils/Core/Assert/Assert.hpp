@@ -13,7 +13,7 @@
 
 /// @macro Static assertion. Checked at compile-time. No message.
 /// @details Wrapper for the standard `static_assert` with a default message.
-#define SSVU_ASSERT_STATIC_NM(...) static_assert(__VA_ARGS__, SSVPP_TOSTR(__VA_ARGS__))
+#define SSVU_ASSERT_STATIC_NM(...) static_assert(__VA_ARGS__, VRM_PP_TOSTR(__VA_ARGS__))
 
 // `SSVU_ASSERT_FORCE_OFF` and `SSVU_ASSERT_FORCE_ON` macros force enabling/disabling of assertions.
 // `SSVU_ASSERT_FORCE_ON` has priority over `SSVU_ASSERT_FORCE_OFF`.
@@ -66,8 +66,8 @@
 	/// @macro Shared implementation details for assertions.
 	#define SSVU_IMPL_ASSERT_INIT(...) \
 		::ssvu::Impl::AssertData ad{}; \
-		ad.code = SSVPP_SEP_TOSTR(" ", SSVPP_EMPTY(), __VA_ARGS__); \
-		ad.line = SSVPP_TOSTR(__LINE__); \
+		ad.code = VRM_PP_SEP_TOSTR(" ", VRM_PP_EMPTY(), __VA_ARGS__); \
+		ad.line = VRM_PP_TOSTR(__LINE__); \
 		ad.file = __FILE__;
 
 	/// @macro Normal assertion. Requires a boolean expression and an optional string message.
@@ -85,8 +85,8 @@
 		do \
 		{ \
 			SSVU_IMPL_ASSERT_INIT(mLhs, mOp, mRhs) \
-			ad.lhs = SSVPP_TOSTR(mLhs) " = " + ::ssvu::toStr(mLhs); \
-			ad.rhs = SSVPP_TOSTR(mRhs) " = " + ::ssvu::toStr(mRhs); \
+			ad.lhs = VRM_PP_TOSTR(mLhs) " = " + ::ssvu::toStr(mLhs); \
+			ad.rhs = VRM_PP_TOSTR(mRhs) " = " + ::ssvu::toStr(mRhs); \
 			::ssvu::Impl::assertImpl(::ssvu::mv(ad), mLhs mOp mRhs, __VA_ARGS__); \
 		} while(false)
 

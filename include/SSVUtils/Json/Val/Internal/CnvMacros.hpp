@@ -33,20 +33,20 @@
 #define SSVJ_CNV_END() };
 
 // Serialize members to array
-#define SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)	mData . mArg SSVPP_COMMA_IF(mIdx)
-#define SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG(mX, ...)				SSVPP_FOREACH_REVERSE(SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
+#define SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)	mData . mArg VRM_PP_COMMA_IF(mIdx)
+#define SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG(mX, ...)				VRM_PP_FOREACH_REVERSE(SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
 
 // Serialize members to obj with same name
-#define SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)	SSVPP_TOSTR(mArg), mData . mArg SSVPP_COMMA_IF(mIdx)
-#define SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG(mX, ...)					SSVPP_FOREACH_REVERSE(SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
+#define SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG_STEP(mIdx, mData, mArg)	VRM_PP_TOSTR(mArg), mData . mArg VRM_PP_COMMA_IF(mIdx)
+#define SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG(mX, ...)					VRM_PP_FOREACH_REVERSE(SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
 
 // Wrapper macro to avoid repetition
 #define SSVJ_IMPL_CNV_WRAPPER(mType, mTemplateArgs, mBody) \
 	SSVJ_CNV_NAMESPACE() \
 	{ \
-		template< SSVPP_TPL_EXPLODE(mTemplateArgs) > SSVJ_CNV(mType, mV, mX) \
+		template< VRM_PP_TPL_EXPLODE(mTemplateArgs) > SSVJ_CNV(mType, mV, mX) \
 		{ \
-			SSVPP_TPL_EXPLODE(mBody) \
+			VRM_PP_TPL_EXPLODE(mBody) \
 		} \
 		SSVJ_CNV_END() \
 	} \

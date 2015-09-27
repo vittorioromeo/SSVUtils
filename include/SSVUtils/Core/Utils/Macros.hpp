@@ -25,7 +25,7 @@ namespace ssvu
 
 /// @macro Defines a dummy struct with a name generated from the current line and passed variadic args.
 /// @details Must end with semicolon.
-#define SSVU_DEFINE_DUMMY_STRUCT(...) struct SSVPP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))
+#define SSVU_DEFINE_DUMMY_STRUCT(...) struct VRM_PP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) { } __attribute__ ((unused))
 
 /// @macro Define a template class with name `mName` that checks if a certain type T has a member of name `mMemberName`.
 /// @code
@@ -37,14 +37,14 @@ namespace ssvu
 /// @endcode
 /// @details Must end without semicolon.
 #define SSVU_DEFINE_MEMFN_DETECTOR(mName, mMemberName) \
-	template<typename, typename T> struct SSVPP_CAT(__, mName, __impl); \
-	template<typename TC, typename TReturn, typename... TArgs> struct SSVPP_CAT(__, mName, __impl)<TC, TReturn(TArgs...)> \
+	template<typename, typename T> struct VRM_PP_CAT(__, mName, __impl); \
+	template<typename TC, typename TReturn, typename... TArgs> struct VRM_PP_CAT(__, mName, __impl)<TC, TReturn(TArgs...)> \
 	{ \
 		template<typename T> inline static constexpr auto check(T*) -> ssvu::IsSame<decltype(std::declval<T>().mMemberName(std::declval<TArgs>()...)), TReturn> { return {}; } \
 		template<typename> inline static constexpr ssvu::FalseT check(...) { return {}; } \
 		static constexpr bool value{decltype(check<TC>(0))::value}; \
 	}; \
-	template<typename T, typename TSignature> inline constexpr bool mName() noexcept { return SSVPP_CAT(__, mName, __impl) < T, TSignature > :: value; }
+	template<typename T, typename TSignature> inline constexpr bool mName() noexcept { return VRM_PP_CAT(__, mName, __impl) < T, TSignature > :: value; }
 
 /// @macro Define a template function with name `mName` that invokes `mMemberName` on objects
 /// if those objects have a `mMemberName` member, otherwise does nothing. Must be used with
@@ -81,8 +81,8 @@ namespace ssvu
 /// @endcode
 /// @details Must end without semicolon.
 #define SSVU_DEFINE_MEMFN_CALLER(mName, mMemberName, mSignature) \
-	SSVU_DEFINE_MEMFN_DETECTOR(SSVPP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName) \
-	SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName, ( SSVPP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__)<T, mSignature>() ))
+	SSVU_DEFINE_MEMFN_DETECTOR(VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName) \
+	SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName, ( VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__)<T, mSignature>() ))
 
 /// @macro Gets the base `mType*` structure pointer from a `mMemberPointer` pointer to a member of `mType`, with member name `mMemberName`. Const version.
 /// @details Requires `mType` to be a standard-layout type. Uses offsetof(...) internally.
@@ -143,7 +143,7 @@ namespace ssvu
 
 /// @macro Returns an unique name for a temporary variable, based on the current line number.
 /// @details Useful for temporary variables that require a name to make RAII work properly.
-#define SSVU_UNIQUE_NAME SSVPP_CAT(__tempVar, __LINE)
+#define SSVU_UNIQUE_NAME VRM_PP_CAT(__tempVar, __LINE)
 
 #endif
 
