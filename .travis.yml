@@ -1,0 +1,38 @@
+language: cpp
+os: linux
+sudo: false
+
+compiler: 
+    - clang
+    - gcc
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise
+            - llvm-toolchain-precise-3.7
+        packages:
+            - clang-3.7
+            - gcc-5
+            - g++-5
+            - valgrind
+
+before_install:
+    - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+    - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
+    - |
+      CMAKE_URL="http://www.cmake.org/files/v3.3/cmake-3.3.1-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+
+before_script:
+    - cd ${TRAVIS_BUILD_DIR}
+    - ./init-repository.sh
+    - mkdir build && cd build
+    - cmake .. -DCMAKE_CXX_COMPILER=${COMPILER} -DVRM_PP_ENABLE_WERROR=ON ${CMAKE_OPTIONS}
+
+script:
+    - cd ${TRAVIS_BUILD_DIR}
+    - cd build
+    - make -j check
