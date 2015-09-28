@@ -6,6 +6,10 @@ compiler:
     - clang
     - gcc
 
+cache:
+    apt: true
+    directories:
+        - ${TRAVIS_BUILD_DIR}/deps
 addons:
     apt:
         sources:
@@ -35,4 +39,5 @@ before_script:
 script:
     - cd ${TRAVIS_BUILD_DIR}
     - cd build
-    - make -j check
+    - make
+    # - make -j check
