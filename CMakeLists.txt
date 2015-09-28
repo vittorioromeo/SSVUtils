@@ -11,8 +11,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 include(SSVCMake)
 
-find_package(vrm_pp)
-
+SSVCMake_findExtlib(vrm_pp)
 SSVCMake_setDefaults()
 SSVCMake_setAndInstallHeaderOnly()
 

@@ -30,10 +30,6 @@
 #include "SSVUtils/Container/Container.hpp"
 #include "SSVUtils/Json/Json.hpp"
 
-#ifndef SSVUT_DISABLE
-	#include "SSVUtils/Tests/Tests.hpp"
-#endif
-
 #endif
 
 // TODO:
