@@ -1,4 +1,4 @@
-# SSVUtils
+# SSVUtils [![Build Status](https://travis-ci.org/SuperV1234/SSVUtils.svg)](https://travis-ci.org/SuperV1234/SSVUtils)
 
 C++14 multi-purpose utility library that only depends on the STL.
 
