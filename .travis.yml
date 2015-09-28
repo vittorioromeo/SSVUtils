@@ -33,7 +33,7 @@ before_script:
     - cd ${TRAVIS_BUILD_DIR}
     - ./init-repository.sh
     - mkdir build && cd build
-    - cmake .. -DCMAKE_CXX_COMPILER=${COMPILER} -DVRM_PP_ENABLE_WERROR=ON ${CMAKE_OPTIONS}
+    - cmake .. -DCMAKE_CXX_COMPILER=${COMPILER} -DCMAKE_BUILD_TYPE=WIP
 
 script:
     - cd ${TRAVIS_BUILD_DIR}
