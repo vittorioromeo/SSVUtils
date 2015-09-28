@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(SSVUtils)
+enable_testing()
 
 list(APPEND CMAKE_MODULE_PATH
     "${CMAKE_SOURCE_DIR}/../SSVCMake/cmake/modules/"
@@ -14,3 +15,10 @@ find_package(vrm_pp)
 
 SSVCMake_setDefaults()
 SSVCMake_setAndInstallHeaderOnly()
+
+add_custom_target(check 
+        COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Build and then run all the tests and examples.")
+
+add_subdirectory(test)

@@ -40,4 +40,4 @@ script:
     - cd ${TRAVIS_BUILD_DIR}
     - cd build
     - make
-    # - make -j check
+    - make -j check
