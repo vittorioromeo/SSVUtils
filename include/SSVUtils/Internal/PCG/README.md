@@ -1,4 +1,4 @@
-# PCG Random Number Generation, C++ Edition
+#PCG Random Number Generation, C++ Edition
 
 [PCG-Random website]: http://www.pcg-random.org
 

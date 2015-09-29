@@ -5,75 +5,75 @@
 #ifndef SSVU_INTERNAL_SHAREDFUNCS
 #define SSVU_INTERNAL_SHAREDFUNCS
 
+#include "SSVUtils/Core/Core.hpp"
+
 namespace ssvu
 {
-	namespace Impl
-	{
-		template<typename TF1, typename TF2, typename TF3>
-		inline auto refreshImplLoop(SizeT& mSizeNext, const TF1& mFAliveChk, const TF2& mFSwap, const TF3& mFDeinit) noexcept
-		{
-			SizeT iD{0}, iA{mSizeNext - 1};
+    namespace Impl
+    {
+        template <typename TF1, typename TF2, typename TF3>
+        inline auto refreshImplLoop(SizeT& mSizeNext, const TF1& mFAliveChk,
+                                    const TF2& mFSwap,
+                                    const TF3& mFDeinit) noexcept
+        {
+            SizeT iD{0}, iA{mSizeNext - 1};
 
-			while(true)
-			{
-				// Find dead item from left
-				for(; true; ++iD)
-				{
-					// Order matters.
-					if(SSVU_UNLIKELY(iD > iA))
-					{
-						// No more dead items
-						return iD;
-					}
+            while(true) {
+                // Find dead item from left
+                for(; true; ++iD) {
+                    // Order matters.
+                    if(SSVU_UNLIKELY(iD > iA)) {
+                        // No more dead items
+                        return iD;
+                    }
 
-					if(SSVU_UNLIKELY(!mFAliveChk(iD))) break;
-				}
+                    if(SSVU_UNLIKELY(!mFAliveChk(iD))) break;
+                }
 
-				// Find alive item from right
-				for(; true; --iA)
-				{
-					// Order matters.
-					if(SSVU_UNLIKELY(mFAliveChk(iA))) break;
-					mFDeinit(iA);
+                // Find alive item from right
+                for(; true; --iA) {
+                    // Order matters.
+                    if(SSVU_UNLIKELY(mFAliveChk(iA))) break;
+                    mFDeinit(iA);
 
-					if(SSVU_UNLIKELY(iA <= iD))
-					{
-						// No more alive items
-						return iD;
-					}
-				}
+                    if(SSVU_UNLIKELY(iA <= iD)) {
+                        // No more alive items
+                        return iD;
+                    }
+                }
 
-				SSVU_ASSERT(!mFAliveChk(iD) && mFAliveChk(iA));
-				mFSwap(iD, iA);
-				mFDeinit(iA);
+                SSVU_ASSERT(!mFAliveChk(iD) && mFAliveChk(iA));
+                mFSwap(iD, iA);
+                mFDeinit(iA);
 
-				// Move both iterators
-				++iD; --iA;
-			}
+                // Move both iterators
+                ++iD;
+                --iA;
+            }
 
-			return iD;
-		}
+            return iD;
+        }
 
-		template<typename TF1, typename TF2, typename TF3>
-		inline void refreshImpl(SizeT& mSize, SizeT& mSizeNext, const TF1& mFAliveChk, const TF2& mFSwap, const TF3& mFDeinit) noexcept
-		{
-			if(SSVU_UNLIKELY(mSizeNext == 0))
-			{
-				mSize = 0;
-				return;
-			}
+        template <typename TF1, typename TF2, typename TF3>
+        inline void refreshImpl(SizeT& mSize, SizeT& mSizeNext,
+                                const TF1& mFAliveChk, const TF2& mFSwap,
+                                const TF3& mFDeinit) noexcept
+        {
+            if(SSVU_UNLIKELY(mSizeNext == 0)) {
+                mSize = 0;
+                return;
+            }
 
-			auto iD(refreshImplLoop(mSizeNext, mFAliveChk, mFSwap, mFDeinit));
-			mSize = mSizeNext = iD;
+            auto iD(refreshImplLoop(mSizeNext, mFAliveChk, mFSwap, mFDeinit));
+            mSize = mSizeNext = iD;
 
-			#if defined(SSVU_DEBUG)
-				for(auto i(0u); i < iD; ++i)
-				{
-					SSVU_ASSERT(mFAliveChk(i));
-				}
-			#endif
-		}
-	}
+#if defined(SSVU_DEBUG)
+            for(auto i(0u); i < iD; ++i) {
+                SSVU_ASSERT(mFAliveChk(i));
+            }
+#endif
+        }
+    }
 }
 
 #endif

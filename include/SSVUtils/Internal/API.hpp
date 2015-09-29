@@ -8,10 +8,10 @@
 #define SSVU_API_HEADERONLY 1
 
 #if defined(SSVU_API_HEADERONLY)
-	#define SSVU_INLINE inline
+#define SSVU_INLINE inline
 #else
-	// TODO:
-	#define SSVU_INLINE inline
+// TODO:
+#define SSVU_INLINE inline
 #endif
 
 #endif

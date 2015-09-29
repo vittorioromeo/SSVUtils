@@ -5,20 +5,34 @@
 #ifndef SSVU_CMDLINE_INTERNAL_ETYPE
 #define SSVU_CMDLINE_INTERNAL_ETYPE
 
+#include "SSVUtils/Core/Core.hpp"
+
 namespace ssvu
 {
-	namespace CmdLine
-	{
-		enum class EType : SizeT {Arg, ArgOpt, ArgPack, Flag, FlagValue, FlagValueOpt};
+    namespace CmdLine
+    {
+        enum class EType : SizeT
+        {
+            Arg,
+            ArgOpt,
+            ArgPack,
+            Flag,
+            FlagValue,
+            FlagValueOpt
+        };
 
-		namespace Impl
-		{
-			template<EType TET> struct ETypeInfo
-			{
-				inline static constexpr EType getEType() noexcept { return TET; }
-			};
-		}
-	}
+        namespace Impl
+        {
+            template <EType TET>
+            struct ETypeInfo
+            {
+                inline static constexpr EType getEType() noexcept
+                {
+                    return TET;
+                }
+            };
+        }
+    }
 }
 
 #endif

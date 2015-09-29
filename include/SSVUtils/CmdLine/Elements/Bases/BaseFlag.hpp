@@ -5,29 +5,47 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_BASES_BASEFLAG
 #define SSVU_CMDLINE_ELEMENTS_BASES_BASEFLAG
 
+#include <string>
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/CmdLine/Elements/Bases/BaseElement.hpp"
+
 namespace ssvu
 {
-	namespace CmdLine
-	{
-		namespace Impl
-		{
-			constexpr const char* flagPrefixShort{"-"};
-			constexpr const char* flagPrefixLong{"--"};
+    namespace CmdLine
+    {
+        namespace Impl
+        {
+            constexpr const char* flagPrefixShort{"-"};
+            constexpr const char* flagPrefixLong{"--"};
 
-			class BaseFlag : public BaseElement
-			{
-				private:
-					std::string nameShort, nameLong; // With prefix
+            class BaseFlag : public BaseElement
+            {
+            private:
+                std::string nameShort, nameLong; // With prefix
 
-				public:
-					inline BaseFlag(const std::string& mNameShort, const std::string& mNameLong) : nameShort{flagPrefixShort + mNameShort}, nameLong{flagPrefixLong + mNameLong} { }
+            public:
+                inline BaseFlag(const std::string& mNameShort,
+                                const std::string& mNameLong)
+                    : nameShort{flagPrefixShort + mNameShort},
+                      nameLong{flagPrefixLong + mNameLong}
+                {
+                }
 
-					inline const auto& getNameShort() const noexcept				{ return nameShort; }
-					inline const auto& getNameLong() const noexcept					{ return nameLong; }
-					inline auto hasName(const std::string& mName) const noexcept	{ return mName == nameShort || mName == nameLong; }
-			};
-		}
-	}
+                inline const auto& getNameShort() const noexcept
+                {
+                    return nameShort;
+                }
+                inline const auto& getNameLong() const noexcept
+                {
+                    return nameLong;
+                }
+                inline auto hasName(const std::string& mName) const noexcept
+                {
+                    return mName == nameShort || mName == nameLong;
+                }
+            };
+        }
+    }
 }
 
 #endif

@@ -9,15 +9,15 @@
 #include "SSVUtils/Benchmark/Inc/Benchmark.hpp"
 
 #if defined(SSVU_API_HEADERONLY)
-	#ifndef SSVU_BENCHMARK_DISABLE
-		#include "SSVUtils/Benchmark/Src/ImplEnabled.cpp"
-	#else
-		#include "SSVUtils/Benchmark/Src/ImplDisabled.cpp"
-	#endif
+#ifndef SSVU_BENCHMARK_DISABLE
+#include "SSVUtils/Benchmark/Src/ImplEnabled.cpp"
+#else
+#include "SSVUtils/Benchmark/Src/ImplDisabled.cpp"
+#endif
 
-	#include "SSVUtils/Benchmark/Src/Benchmark.cpp"
-	#include "SSVUtils/Benchmark/Src/Data.cpp"
-	#include "SSVUtils/Benchmark/Src/DataGroup.cpp"
+#include "SSVUtils/Benchmark/Src/Benchmark.cpp"
+#include "SSVUtils/Benchmark/Src/Data.cpp"
+#include "SSVUtils/Benchmark/Src/DataGroup.cpp"
 #endif
 
 #endif

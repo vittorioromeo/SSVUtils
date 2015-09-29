@@ -9,24 +9,30 @@
 
 namespace ssvu
 {
-	namespace MPL
-	{
-		namespace Impl
-		{
-			inline constexpr SizeT getMapIns(SizeT mI, SizeT mFrom, SizeT mTo) noexcept
-			{
-				return mI < mTo ? mI : mI == mTo ? mFrom : mI - 1;
-			}
+    namespace MPL
+    {
+        namespace Impl
+        {
+            inline constexpr SizeT getMapIns(SizeT mI, SizeT mFrom,
+                                             SizeT mTo) noexcept
+            {
+                return mI < mTo ? mI : mI == mTo ? mFrom : mI - 1;
+            }
 
-			template<typename, typename, SizeT, typename...> struct Insert;
+            template <typename, typename, SizeT, typename...>
+            struct Insert;
 
-			template<SizeT... TIs, typename T, SizeT TN, typename... Ts> struct Insert<IdxSeq<TIs...>, T, TN, Ts...>
-			{
-				SSVU_ASSERT_STATIC(TN <= sizeof...(Ts), "Insert index smaller or equal to the size of the list");
-				using Type = List<TplElem<getMapIns(TIs, sizeof...(Ts), TN), Tpl<Ts..., T>>...>;
-			};
-		}
-	}
+            template <SizeT... TIs, typename T, SizeT TN, typename... Ts>
+            struct Insert<IdxSeq<TIs...>, T, TN, Ts...>
+            {
+                SSVU_ASSERT_STATIC(
+                    TN <= sizeof...(Ts),
+                    "Insert index smaller or equal to the size of the list");
+                using Type = List<TplElem<getMapIns(TIs, sizeof...(Ts), TN),
+                                          Tpl<Ts..., T>>...>;
+            };
+        }
+    }
 }
 
 #endif

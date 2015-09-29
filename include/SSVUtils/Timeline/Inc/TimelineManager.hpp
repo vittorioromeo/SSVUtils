@@ -5,18 +5,22 @@
 #ifndef SSVS_IMPL_TIMELINE_MANAGER
 #define SSVS_IMPL_TIMELINE_MANAGER
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/MemoryManager/MemoryManager.hpp"
+#include "SSVUtils/Timeline/Inc/Timeline.hpp"
+
 namespace ssvu
 {
-	class TimelineManager
-	{
-		private:
-			MonoManager<Timeline> timelines;
+    class TimelineManager
+    {
+    private:
+        MonoManager<Timeline> timelines;
 
-		public:
-			auto& create();
-			void update(FT mFT);
-			void clear() noexcept;
-	};
+    public:
+        auto& create();
+        void update(FT mFT);
+        void clear() noexcept;
+    };
 }
 
 #endif

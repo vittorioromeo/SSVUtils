@@ -9,4 +9,3 @@
 #include "SSVUtils/Delegate/Inc/Delegate.hpp"
 
 #endif
-

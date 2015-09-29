@@ -6,28 +6,42 @@
 #define SSVU_CMDLINE_ELEMENTS_ARGOPT
 
 #include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/CmdLine/Elements/Arg.hpp"
+#include "SSVUtils/CmdLine/Internal/Internal.hpp"
 
 namespace ssvu
 {
-	namespace CmdLine
-	{
-		template<typename T> class ArgOpt final : public Impl::ArgImpl<T>, public Impl::ETypeInfo<EType::ArgOpt>
-		{
-			private:
-				T valueDefault;
-				bool active{false};
+    namespace CmdLine
+    {
+        template <typename T>
+        class ArgOpt final : public Impl::ArgImpl<T>,
+                             public Impl::ETypeInfo<EType::ArgOpt>
+        {
+        private:
+            T valueDefault;
+            bool active{false};
 
-			public:
-				SSVU_DEFINE_SINK_CTOR_SIMPLE_1(ArgOpt, valueDefault)
+        public:
+            SSVU_DEFINE_SINK_CTOR_SIMPLE_1(ArgOpt, valueDefault)
 
-				inline operator bool() const noexcept { return active; }
+            inline operator bool() const noexcept { return active; }
 
-				inline void set(const std::string& mValue) override	{ Impl::ArgImpl<T>::set(mValue); active = true; }
-				inline auto get() const								{ return active ? Impl::ArgImpl<T>::get() : valueDefault; }
+            inline void set(const std::string& mValue) override
+            {
+                Impl::ArgImpl<T>::set(mValue);
+                active = true;
+            }
+            inline auto get() const
+            {
+                return active ? Impl::ArgImpl<T>::get() : valueDefault;
+            }
 
-				inline std::string getUsageStr() const override { return "(ARGOPT " + Impl::BaseElement::getName() + ")"; }
-		};
-	}
+            inline std::string getUsageStr() const override
+            {
+                return "(ARGOPT " + Impl::BaseElement::getName() + ")";
+            }
+        };
+    }
 }
 
 #endif

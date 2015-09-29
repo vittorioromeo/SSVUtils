@@ -5,16 +5,18 @@
 #ifndef SSVU_IMPL_ENCRYPTION_INTERNAL_BASE64
 #define SSVU_IMPL_ENCRYPTION_INTERNAL_BASE64
 
+#include <string>
+
 namespace ssvu
 {
-	namespace Encryption
-	{
-		namespace Impl
-		{
-			std::string Base64Encode(const std::string& mStr);
-			std::string Base64Decode(const std::string& mStr);
-		}
-	}
+    namespace Encryption
+    {
+        namespace Impl
+        {
+            std::string Base64Encode(const std::string& mStr);
+            std::string Base64Decode(const std::string& mStr);
+        }
+    }
 }
 
 #endif

@@ -1,23 +1,32 @@
-cmake_minimum_required(VERSION 2.8)
-project(SSVUtils)
-enable_testing()
+cmake_minimum_required(VERSION 3.0)
 
+# Include SSVCmake.
 list(APPEND CMAKE_MODULE_PATH
     "${CMAKE_SOURCE_DIR}/../SSVCMake/cmake/modules/"
-    "${CMAKE_SOURCE_DIR}/extlibs/SSVCMake/cmake/modules/"
-    "${CMAKE_SOURCE_DIR}/../vrm_pp/cmake/"
-    "${CMAKE_SOURCE_DIR}/extlibs/vrm_pp/cmake/"
-    "${CMAKE_MODULE_PATH}")
+    "${CMAKE_SOURCE_DIR}/extlibs/SSVCMake/cmake/modules/")
 
 include(SSVCMake)
 
-SSVCMake_findExtlib(vrm_pp)
-SSVCMake_setDefaults()
-SSVCMake_setAndInstallHeaderOnly()
+# Basic project setup.
+vrm_cmake_init_project(SSVUtils)
+vrm_cmake_find_extlib(vrm_pp)
 
-add_custom_target(check 
-        COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Build and then run all the tests and examples.")
+# Alias the include directory.
+set(SSVUTILS_INC_DIR "${SSVUTILS_SOURCE_DIR}/include/")
 
+# Other compiler flags.
+vrm_cmake_add_common_compiler_flags()
+
+# Setup user options.
+vrm_cmake_add_option_memcheck()
+vrm_cmake_add_option_no_exceptions()
+vrm_cmake_add_option_werror()
+
+# The `check` target runs all tests and examples.
+vrm_check_target()
+
+# Setup subdirectories.
 add_subdirectory(test)
+
+# Create header-only install target (automatically glob)
+vrm_cmake_header_only_install_glob("${SSVUTILS_INC_DIR}" "include")

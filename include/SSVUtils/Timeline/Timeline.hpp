@@ -16,11 +16,11 @@
 #include "SSVUtils/Timeline/Inc/TimelineManager.hpp"
 
 #if defined(SSVU_API_HEADERONLY)
-	#include "SSVUtils/Timeline/Src/Timeline.cpp"
-	#include "SSVUtils/Timeline/Src/Command.cpp"
-	#include "SSVUtils/Timeline/Src/Do.cpp"
-	#include "SSVUtils/Timeline/Src/Wait.cpp"
-	#include "SSVUtils/Timeline/Src/TimelineManager.cpp"
+#include "SSVUtils/Timeline/Src/Timeline.cpp"
+#include "SSVUtils/Timeline/Src/Command.cpp"
+#include "SSVUtils/Timeline/Src/Do.cpp"
+#include "SSVUtils/Timeline/Src/Wait.cpp"
+#include "SSVUtils/Timeline/Src/TimelineManager.cpp"
 #endif
 
 #endif

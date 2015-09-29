@@ -5,17 +5,21 @@
 #ifndef SSVU_HANDLEVECTOR_HANDLE_INL
 #define SSVU_HANDLEVECTOR_HANDLE_INL
 
+#include "SSVUtils/HandleVector/Handle.hpp"
+
 namespace ssvu
 {
-	template<typename T> inline bool Handle<T>::isAlive() const noexcept
-	{
-		return hVec->marks[markIdx].ctr == ctr;
-	}
+    template <typename T>
+    inline bool Handle<T>::isAlive() const noexcept
+    {
+        return hVec->marks[markIdx].ctr == ctr;
+    }
 
-	template<typename T> inline void Handle<T>::destroy() noexcept
-	{
-		hVec->destroy(markIdx);
-	}
+    template <typename T>
+    inline void Handle<T>::destroy() noexcept
+    {
+        hVec->destroy(markIdx);
+    }
 }
 
 #endif

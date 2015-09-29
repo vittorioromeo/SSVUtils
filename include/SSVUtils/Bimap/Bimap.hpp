@@ -11,7 +11,7 @@
 #include "SSVUtils/Bimap/Inc/Stringifier.hpp"
 
 #if defined(SSVU_API_HEADERONLY)
-	#include "SSVUtils/Bimap/Src/Bimap.cpp"
+#include "SSVUtils/Bimap/Src/Bimap.cpp"
 #endif
 
 #endif

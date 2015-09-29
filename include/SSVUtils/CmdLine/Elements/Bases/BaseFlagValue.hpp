@@ -5,19 +5,27 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_BASES_BASEFLAGVALUE
 #define SSVU_CMDLINE_ELEMENTS_BASES_BASEFLAGVALUE
 
+#include <string>
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/CmdLine/Elements/Bases/BaseFlag.hpp"
+
 namespace ssvu
 {
-	namespace CmdLine
-	{
-		namespace Impl
-		{
-			struct BaseFlagValue : public BaseFlag
-			{
-				inline BaseFlagValue(const std::string& mNameShort, const std::string& mNameLong) : BaseFlag{mNameShort, mNameLong} { }
-				virtual void set(const std::string&) = 0;
-			};
-		}
-	}
+    namespace CmdLine
+    {
+        namespace Impl
+        {
+            struct BaseFlagValue : public BaseFlag
+            {
+                inline BaseFlagValue(const std::string& mNameShort,
+                                     const std::string& mNameLong)
+                    : BaseFlag{mNameShort, mNameLong}
+                {
+                }
+                virtual void set(const std::string&) = 0;
+            };
+        }
+    }
 }
 
 #endif

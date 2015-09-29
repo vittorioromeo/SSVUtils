@@ -13,53 +13,63 @@
 
 namespace ssvu
 {
-	namespace Impl
-	{
-		template<typename, typename> struct ForNArgsHlpr;
+    namespace Impl
+    {
+        template <typename, typename>
+        struct ForNArgsHlpr;
 
-		template<SizeT... Bs, SizeT... Cs> struct ForNArgsHlpr<IdxSeq<Bs...>, IdxSeq<Cs...>>
-		{
-			using Swallow = bool[];
+        template <SizeT... Bs, SizeT... Cs>
+        struct ForNArgsHlpr<IdxSeq<Bs...>, IdxSeq<Cs...>>
+        {
+            using Swallow = bool[];
 
-			#define IMPL_IMPL_FORNARGS_EXECN_BODY() \
-				mFn(std::get<TArity + Cs>(FWD(mXs))...)
+#define IMPL_IMPL_FORNARGS_EXECN_BODY() mFn(std::get<TArity + Cs>(FWD(mXs))...)
 
-			template<SizeT TArity, typename TF, typename TTpl, typename... Ts>
-			inline static constexpr void execN(TF&& mFn, TTpl&& mXs)
-				noexcept(noexcept(IMPL_IMPL_FORNARGS_EXECN_BODY()))
-			{
-				IMPL_IMPL_FORNARGS_EXECN_BODY();
-			}
+            template <SizeT TArity, typename TF, typename TTpl, typename... Ts>
+            inline static constexpr void execN(TF&& mFn, TTpl&& mXs) noexcept(
+                noexcept(IMPL_IMPL_FORNARGS_EXECN_BODY()))
+            {
+                IMPL_IMPL_FORNARGS_EXECN_BODY();
+            }
 
-			#undef IMPL_IMPL_FORNARGS_EXECN_BODY
+#undef IMPL_IMPL_FORNARGS_EXECN_BODY
 
-			#define IMPL_IMPL_FORNARGS_EXEC_BODY() \
-				(void) Swallow{(execN<(Bs * sizeof...(Cs))>(mFn, FWD(mXs)), true)..., true}
+#define IMPL_IMPL_FORNARGS_EXEC_BODY()                              \
+    (void) Swallow                                                  \
+    {                                                               \
+        (execN<(Bs * sizeof...(Cs))>(mFn, FWD(mXs)), true)..., true \
+    }
 
-			template<typename TF, typename TTpl, typename... Ts>
-			inline static constexpr void exec(TF&& mFn, TTpl&& mXs)
-				noexcept(noexcept(IMPL_IMPL_FORNARGS_EXEC_BODY()))
-			{
-				IMPL_IMPL_FORNARGS_EXEC_BODY();
-			}
+            template <typename TF, typename TTpl, typename... Ts>
+            inline static constexpr void
+            exec(TF&& mFn,
+                 TTpl&& mXs) noexcept(noexcept(IMPL_IMPL_FORNARGS_EXEC_BODY()))
+            {
+                IMPL_IMPL_FORNARGS_EXEC_BODY();
+            }
 
-			#undef IMPL_IMPL_FORNARGS_EXEC_BODY
-		};
-	}
+#undef IMPL_IMPL_FORNARGS_EXEC_BODY
+        };
+    }
 
-	#define IMPL_FORNARGS_BODY() \
-		Impl::ForNArgsHlpr<MkIdxSeq<sizeof...(Ts) / TArity>, MkIdxSeq<TArity>>::exec(FWD(mFn), fwdAsTpl(FWD(mXs)...))
+#define IMPL_FORNARGS_BODY()                             \
+    Impl::ForNArgsHlpr<MkIdxSeq<sizeof...(Ts) / TArity>, \
+                       MkIdxSeq<TArity>>::exec(FWD(mFn), \
+                                               fwdAsTpl(FWD(mXs)...))
 
-	template<SizeT TArity = 1, typename TF, typename... Ts>
-	inline constexpr void forArgs(TF&& mFn, Ts&&... mXs)
-		noexcept(noexcept(IMPL_FORNARGS_BODY()))
-	{
-		SSVU_ASSERT_STATIC(TArity > 0, "Unallowed arity: must be greater than 0");
-		SSVU_ASSERT_STATIC(sizeof...(Ts) % TArity == 0, "Unallowed arity: not divisible by number of arguments");
-		IMPL_FORNARGS_BODY();
-	}
+    template <SizeT TArity = 1, typename TF, typename... Ts>
+    inline constexpr void
+    forArgs(TF&& mFn, Ts&&... mXs) noexcept(noexcept(IMPL_FORNARGS_BODY()))
+    {
+        SSVU_ASSERT_STATIC(TArity > 0,
+                           "Unallowed arity: must be greater than 0");
+        SSVU_ASSERT_STATIC(
+            sizeof...(Ts) % TArity == 0,
+            "Unallowed arity: not divisible by number of arguments");
+        IMPL_FORNARGS_BODY();
+    }
 
-	#undef IMPL_FORNARGS_BODY
+#undef IMPL_FORNARGS_BODY
 }
 
 #endif

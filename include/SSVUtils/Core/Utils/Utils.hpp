@@ -5,6 +5,7 @@
 #ifndef SSVU_CORE_UTILS
 #define SSVU_CORE_UTILS
 
+#include "SSVUtils/Core/Common/Common.hpp"
 #include "SSVUtils/Core/Utils/Macros.hpp"
 #include "SSVUtils/Core/Utils/ForArgs.hpp"
 #include "SSVUtils/Core/Utils/Rnd.hpp"

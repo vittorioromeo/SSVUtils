@@ -5,26 +5,50 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_FLAGVALUEOPT
 #define SSVU_CMDLINE_ELEMENTS_FLAGVALUEOPT
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/CmdLine/Internal/Internal.hpp"
+#include "SSVUtils/CmdLine/Elements/Bases/Bases.hpp"
+#include "SSVUtils/CmdLine/Elements/FlagValue.hpp"
+
 namespace ssvu
 {
-	namespace CmdLine
-	{
-		template<typename T> class FlagValueOpt final : public Impl::FlagValueImpl<T>, public Impl::ETypeInfo<EType::FlagValueOpt>
-		{
-			private:
-				T valueDefault;
-				bool active{false};
+    namespace CmdLine
+    {
+        template <typename T>
+        class FlagValueOpt final : public Impl::FlagValueImpl<T>,
+                                   public Impl::ETypeInfo<EType::FlagValueOpt>
+        {
+        private:
+            T valueDefault;
+            bool active{false};
 
-			public:
-				inline FlagValueOpt(const std::string& mNameShort, const std::string& mNameLong, const T& mValueDefault) noexcept
-					: Impl::FlagValueImpl<T>{mNameShort, mNameLong}, valueDefault{mValueDefault} { }
+        public:
+            inline FlagValueOpt(const std::string& mNameShort,
+                                const std::string& mNameLong,
+                                const T& mValueDefault) noexcept
+                : Impl::FlagValueImpl<T>{mNameShort, mNameLong},
+                  valueDefault{mValueDefault}
+            {
+            }
 
-				inline void set(const std::string& mValue) override	{ FlagValue<T>::set(mValue); active = true; }
-				inline auto get() const noexcept					{ return active ? FlagValue<T>::get() : valueDefault; }
+            inline void set(const std::string& mValue) override
+            {
+                FlagValue<T>::set(mValue);
+                active = true;
+            }
+            inline auto get() const noexcept
+            {
+                return active ? FlagValue<T>::get() : valueDefault;
+            }
 
-				inline std::string getUsageStr() const override { return "[OPT " + Impl::BaseFlag::getNameShort() + "=(...) || OPT " + Impl::BaseFlag::getNameLong() + "=(...)]"; }
-		};
-	}
+            inline std::string getUsageStr() const override
+            {
+                return "[OPT " + Impl::BaseFlag::getNameShort() +
+                       "=(...) || OPT " + Impl::BaseFlag::getNameLong() +
+                       "=(...)]";
+            }
+        };
+    }
 }
 
 #endif

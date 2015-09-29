@@ -10,63 +10,91 @@
 
 namespace ssvu
 {
-	/// @brief Vector-like sorted container implemented on top of an `std::vector`.
-	/// @details Values are stored in a sorted vector of `T`.
-	/// @tparam T Value type.
-	/// @tparam TCmp Comparer type.
-	template<typename T, typename TCmp = std::less<T>> class VecSorted : public Impl::VecMapBase<VecSorted<T>>
-	{
-		template<typename> friend class Impl::VecMapBase;
+    /// @brief Vector-like sorted container implemented on top of an
+    /// `std::vector`.
+    /// @details Values are stored in a sorted vector of `T`.
+    /// @tparam T Value type.
+    /// @tparam TCmp Comparer type.
+    template <typename T, typename TCmp = std::less<T>>
+    class VecSorted : public Impl::VecMapBase<VecSorted<T>>
+    {
+        template <typename>
+        friend class Impl::VecMapBase;
 
-		private:
-			std::vector<T> data;
-			TCmp cmp{};
+    private:
+        std::vector<T> data;
+        TCmp cmp{};
 
-			// Value lookup helper
-			template<typename TT> inline static auto lookupHelper(TT& mVecSorted, const T& mX) noexcept
-			{
-				return lowerBound(mVecSorted.data, mX, mVecSorted.cmp);
-			}
+        // Value lookup helper
+        template <typename TT>
+        inline static auto lookupHelper(TT& mVecSorted, const T& mX) noexcept
+        {
+            return lowerBound(mVecSorted.data, mX, mVecSorted.cmp);
+        }
 
-			inline auto lookup(const T& mX) noexcept		{ return lookupHelper(*this, mX); }
-			inline auto lookup(const T& mX) const noexcept	{ return lookupHelper(*this, mX); }
+        inline auto lookup(const T& mX) noexcept
+        {
+            return lookupHelper(*this, mX);
+        }
+        inline auto lookup(const T& mX) const noexcept
+        {
+            return lookupHelper(*this, mX);
+        }
 
-			// Returns validity of a looked-up object
-			template<typename TT> inline bool is(const TT& mItr, const T& mX) const noexcept
-			{
-				return mItr != std::end(data) && mItr == mX;
-			}
+        // Returns validity of a looked-up object
+        template <typename TT>
+        inline bool is(const TT& mItr, const T& mX) const noexcept
+        {
+            return mItr != std::end(data) && mItr == mX;
+        }
 
-		public:
-			inline VecSorted() = default;
-			inline VecSorted(const VecSorted& mVM) : data{mVM.data} { }
-			inline VecSorted(VecSorted&& mVM) noexcept : data{mv(mVM.data)} { }
-			inline VecSorted(std::initializer_list<T>&& mIL) : data{mv(mIL)} { sort(data, cmp); }
+    public:
+        inline VecSorted() = default;
+        inline VecSorted(const VecSorted& mVM) : data{mVM.data} {}
+        inline VecSorted(VecSorted&& mVM) noexcept : data{mv(mVM.data)} {}
+        inline VecSorted(std::initializer_list<T>&& mIL) : data{mv(mIL)}
+        {
+            sort(data, cmp);
+        }
 
-			inline auto& operator=(const VecSorted& mVS) { data = mVS.data; return *this; }
-			inline auto& operator=(VecSorted&& mVS) noexcept { data = mv(mVS.data); return *this; }
+        inline auto& operator=(const VecSorted& mVS)
+        {
+            data = mVS.data;
+            return *this;
+        }
+        inline auto& operator=(VecSorted&& mVS) noexcept
+        {
+            data = mv(mVS.data);
+            return *this;
+        }
 
-			/// @brief Inserts a value in the sorted vector. Returns an iterator to the emplaced value.
-			template<typename TT> inline auto insert(TT&& mX)
-			{
-				auto itr(lookup(mX));
-				return data.emplace(itr, FWD(mX));
-			}
+        /// @brief Inserts a value in the sorted vector. Returns an iterator to
+        /// the emplaced value.
+        template <typename TT>
+        inline auto insert(TT&& mX)
+        {
+            auto itr(lookup(mX));
+            return data.emplace(itr, FWD(mX));
+        }
 
-			/// @brief Returns an iterator to the value `mX`. A past-the-end iterator is returned if unexistant.
-			inline auto atItr(const T& mX) const noexcept
-			{
-				auto itr(lookup(mX));
-				if(is(itr, mX)) return itr;
-				return std::end(data);
-			}
+        /// @brief Returns an iterator to the value `mX`. A past-the-end
+        /// iterator is returned if unexistant.
+        inline auto atItr(const T& mX) const noexcept
+        {
+            auto itr(lookup(mX));
+            if(is(itr, mX)) return itr;
+            return std::end(data);
+        }
 
-			/// @brief Returns a reference to the item stored at index `mI`.
-			inline auto& operator[](SizeT mI) noexcept { return data[mI]; }
+        /// @brief Returns a reference to the item stored at index `mI`.
+        inline auto& operator[](SizeT mI) noexcept { return data[mI]; }
 
-			/// @brief Returns a const reference to the item stored at index `mI`.
-			inline const auto& operator[](SizeT mI) const noexcept { return data[mI]; }
-	};
+        /// @brief Returns a const reference to the item stored at index `mI`.
+        inline const auto& operator[](SizeT mI) const noexcept
+        {
+            return data[mI];
+        }
+    };
 }
 
 #endif

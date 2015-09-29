@@ -38,7 +38,8 @@
 // * test framework - write expected and actual value and more...
 // * ModuleName/Impl/...
 // * zip iterator
-// * experiment/consider reimplementing vector/map/flatmap with no exceptions and only asserts
+// * experiment/consider reimplementing vector/map/flatmap with no exceptions
+// and only asserts
 // * remove "include/" folder
 // * "String" -> "Str"
 
@@ -46,34 +47,36 @@
 
 // * .inl and .cpp FILES and SSVU_INLINE macro
 /*
-	* Benchmark
-	* Bimap
-	CmdLine
-	* Container
-	Core
-	* Delegate
-	* Easing
-	Encryption
-	FatEnum
-	GrowableArrayAS
-	HandleVector
-	Internal
-	Json
-	Memorymanager
-	Range
-	TemplateSystem
-	Test
-	Tests
-	* Ticker
-	* Timeline
-	* Union
+    * Benchmark
+    * Bimap
+    CmdLine
+    * Container
+    Core
+    * Delegate
+    * Easing
+    Encryption
+    FatEnum
+    GrowableArrayAS
+    HandleVector
+    Internal
+    Json
+    Memorymanager
+    Range
+    TemplateSystem
+    Test
+    Tests
+    * Ticker
+    * Timeline
+    * Union
 */
 
 // TODO: TArgs -> Ts (?)
 // TODO: size_t literal operator, replace auto(0u), and SizeT() casts
-// TODO: SSVCMAKE: release disable tests, maybe enable lfto optimizations, -ffast-math
+// TODO: SSVCMAKE: release disable tests, maybe enable lfto optimizations,
+// -ffast-math
 // TODO: replace for loops with for(auto x : range())
 // TODO: check for functionality in GGJ and ASG that can be brought in SSVU
 // TODO: BTR::Ptr -> ssvu::Ptr (?)
-// TODO: Flags<TImpl> class that can use a bitset or a char array as underlying impls
+// TODO: Flags<TImpl> class that can use a bitset or a char array as underlying
+// impls
 // TODO: mkMap, mkVector, mkUnorderedMap, and use them in json?

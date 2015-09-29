@@ -5,15 +5,19 @@
 #ifndef SSVU_JSON_STRINGIFIER
 #define SSVU_JSON_STRINGIFIER
 
+#include "SSVUtils/Json/Val/Val.hpp"
+
 namespace ssvu
 {
-	template<> struct Stringifier<Json::Val>
-	{
-		template<bool TFmt> inline static void impl(std::ostream& mStream, const Json::Val& mVal)
-		{
-			mVal.writeToStream<Json::WriterSettings<TFmt, true>>(mStream);
-		}
-	};
+    template <>
+    struct Stringifier<Json::Val>
+    {
+        template <bool TFmt>
+        inline static void impl(std::ostream& mStream, const Json::Val& mVal)
+        {
+            mVal.writeToStream<Json::WriterSettings<TFmt, true>>(mStream);
+        }
+    };
 }
 
 #endif

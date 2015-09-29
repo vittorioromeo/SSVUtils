@@ -5,24 +5,54 @@
 #ifndef SSVU_CMDLINE_INTERNAL_ETYPEBASEINFO
 #define SSVU_CMDLINE_INTERNAL_ETYPEBASEINFO
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/CmdLine/Internal/EType.hpp"
+#include "SSVUtils/CmdLine/Elements/Bases/Bases.hpp"
+
 namespace ssvu
 {
-	namespace CmdLine
-	{
-		namespace Impl
-		{
-			template<EType TET> struct ETypeBaseInfo;
+    namespace CmdLine
+    {
+        namespace Impl
+        {
+            template <EType TET>
+            struct ETypeBaseInfo;
 
-			template<> struct ETypeBaseInfo<EType::Arg>				{ using Type = BaseArg; };
-			template<> struct ETypeBaseInfo<EType::ArgOpt>			{ using Type = BaseArg; };
-			template<> struct ETypeBaseInfo<EType::ArgPack>			{ using Type = BaseArgPack; };
-			template<> struct ETypeBaseInfo<EType::Flag>			{ using Type = BaseFlag; };
-			template<> struct ETypeBaseInfo<EType::FlagValue>		{ using Type = BaseFlagValue; };
-			template<> struct ETypeBaseInfo<EType::FlagValueOpt>	{ using Type = BaseFlagValue; };
+            template <>
+            struct ETypeBaseInfo<EType::Arg>
+            {
+                using Type = BaseArg;
+            };
+            template <>
+            struct ETypeBaseInfo<EType::ArgOpt>
+            {
+                using Type = BaseArg;
+            };
+            template <>
+            struct ETypeBaseInfo<EType::ArgPack>
+            {
+                using Type = BaseArgPack;
+            };
+            template <>
+            struct ETypeBaseInfo<EType::Flag>
+            {
+                using Type = BaseFlag;
+            };
+            template <>
+            struct ETypeBaseInfo<EType::FlagValue>
+            {
+                using Type = BaseFlagValue;
+            };
+            template <>
+            struct ETypeBaseInfo<EType::FlagValueOpt>
+            {
+                using Type = BaseFlagValue;
+            };
 
-			template<EType TET> using ETypeBase = typename ETypeBaseInfo<TET>::Type;
-		}
-	}
+            template <EType TET>
+            using ETypeBase = typename ETypeBaseInfo<TET>::Type;
+        }
+    }
 }
 
 #endif

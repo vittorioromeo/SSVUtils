@@ -7,8 +7,13 @@
 
 namespace ssvu
 {
-	/// @brief String split mode.
-	enum class Split{Normal, TrailingSeparator, TokenizeSeparator};
+    /// @brief String split mode.
+    enum class Split
+    {
+        Normal,
+        TrailingSeparator,
+        TokenizeSeparator
+    };
 }
 
 #endif

@@ -9,7 +9,7 @@
 #include "SSVUtils/Ticker/Inc/Ticker.hpp"
 
 #if defined(SSVU_API_HEADERONLY)
-	#include "SSVUtils/Ticker/Src/Ticker.cpp"
+#include "SSVUtils/Ticker/Src/Ticker.cpp"
 #endif
 
 #endif

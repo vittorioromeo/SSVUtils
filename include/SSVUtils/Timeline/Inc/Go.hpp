@@ -5,30 +5,50 @@
 #ifndef SSVU_IMPL_TIMELINE_GO
 #define SSVU_IMPL_TIMELINE_GO
 
+#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Timeline/Inc/Timeline.hpp"
+#include "SSVUtils/Timeline/Inc/Command.hpp"
+
 namespace ssvu
 {
-	namespace Impl
-	{
-		template<typename T> class GoImpl final : public Command
-		{
-			protected:
-				T target;
-				SizeT times, currentTimes;
+    namespace Impl
+    {
+        template <typename T>
+        class GoImpl final : public Command
+        {
+        protected:
+            T target;
+            SizeT times, currentTimes;
 
-				inline void update(FT) override
-				{
-					if(currentTimes == 0)		{ timeline.next(); }
-					else if(currentTimes > 0)	{ --currentTimes; timeline.jumpTo(target); }
-					else						{ timeline.jumpTo(target); }
-				}
-				inline void reset() override { currentTimes = times; }
+            inline void update(FT) override
+            {
+                if(currentTimes == 0) {
+                    timeline.next();
+                }
+                else if(currentTimes > 0)
+                {
+                    --currentTimes;
+                    timeline.jumpTo(target);
+                }
+                else
+                {
+                    timeline.jumpTo(target);
+                }
+            }
+            inline void reset() override { currentTimes = times; }
 
-			public:
-				inline GoImpl(Timeline& mTimeline, T mTarget, SizeT mTimes = -1) noexcept : Command{mTimeline}, target(mTarget), times{mTimes}, currentTimes{mTimes} { }
-		};
-	}
+        public:
+            inline GoImpl(Timeline& mTimeline, T mTarget,
+                          SizeT mTimes = -1) noexcept : Command{mTimeline},
+                                                        target(mTarget),
+                                                        times{mTimes},
+                                                        currentTimes{mTimes}
+            {
+            }
+        };
+    }
 
-	using Go = Impl::GoImpl<Timeline::Idx>;
+    using Go = Impl::GoImpl<Timeline::Idx>;
 }
 
 #endif
