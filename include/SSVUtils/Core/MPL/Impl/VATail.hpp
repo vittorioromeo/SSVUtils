@@ -9,27 +9,27 @@
 
 namespace ssvu
 {
-    namespace MPL
+namespace MPL
+{
+    namespace Impl
     {
-        namespace Impl
+        template <typename...>
+        struct VATailHlpr;
+        template <typename T, typename... Ts>
+        struct VATailHlpr<T, Ts...>
         {
-            template <typename...>
-            struct VATailHlpr;
-            template <typename T, typename... Ts>
-            struct VATailHlpr<T, Ts...>
-            {
-                using Type = typename VATailHlpr<Ts...>::Type;
-            };
-            template <typename T>
-            struct VATailHlpr<T>
-            {
-                using Type = T;
-            };
+            using Type = typename VATailHlpr<Ts...>::Type;
+        };
+        template <typename T>
+        struct VATailHlpr<T>
+        {
+            using Type = T;
+        };
 
-            template <typename... Ts>
-            using VATail = typename Impl::VATailHlpr<Ts...>::Type;
-        }
+        template <typename... Ts>
+        using VATail = typename Impl::VATailHlpr<Ts...>::Type;
     }
+}
 }
 
 #endif

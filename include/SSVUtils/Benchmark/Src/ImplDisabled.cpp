@@ -9,17 +9,17 @@
 
 namespace ssvu
 {
-    namespace Benchmark
+namespace Benchmark
+{
+    namespace Impl
     {
-        namespace Impl
-        {
-            SSVU_INLINE void start(std::string) {}
-            SSVU_INLINE Data getEndData() { return Data{}; }
-            SSVU_INLINE void endLo() {}
-            SSVU_INLINE void groupReset(const std::string&) {}
-            SSVU_INLINE void groupResume(const std::string&) {}
-            SSVU_INLINE void groupPause(const std::string&) {}
-            SSVU_INLINE void groupEndLo(const std::string&) {}
-        }
+        SSVU_INLINE void start(std::string) {}
+        SSVU_INLINE Data getEndData() { return Data{}; }
+        SSVU_INLINE void endLo() {}
+        SSVU_INLINE void groupReset(const std::string&) {}
+        SSVU_INLINE void groupResume(const std::string&) {}
+        SSVU_INLINE void groupPause(const std::string&) {}
+        SSVU_INLINE void groupEndLo(const std::string&) {}
     }
+}
 }

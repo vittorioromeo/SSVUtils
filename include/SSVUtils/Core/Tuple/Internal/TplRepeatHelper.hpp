@@ -10,25 +10,30 @@
 
 namespace ssvu
 {
-	namespace Impl
-	{
-		template<typename, SizeT, typename> struct TplRepeatImplHelper;
+namespace Impl
+{
+    template <typename, SizeT, typename>
+    struct TplRepeatImplHelper;
 
-		template<typename T, SizeT TS, typename... TArgs> struct TplRepeatImplHelper<T, TS, Tpl<TArgs...>>
-		{
-			using Type = typename TplRepeatImplHelper<T, TS - 1, Tpl<TArgs..., T>>::Type;
-		};
+    template <typename T, SizeT TS, typename... TArgs>
+    struct TplRepeatImplHelper<T, TS, Tpl<TArgs...>>
+    {
+        using Type =
+        typename TplRepeatImplHelper<T, TS - 1, Tpl<TArgs..., T>>::Type;
+    };
 
-		template<typename T, typename... TArgs> struct TplRepeatImplHelper<T, 0, Tpl<TArgs...>>
-		{
-			using Type = Tpl<TArgs...>;
-		};
+    template <typename T, typename... TArgs>
+    struct TplRepeatImplHelper<T, 0, Tpl<TArgs...>>
+    {
+        using Type = Tpl<TArgs...>;
+    };
 
-		template<typename T, SizeT TS> struct TplRepeatImpl
-		{
-			using Type = typename TplRepeatImplHelper<T, TS, Tpl<>>::Type;
-		};
-	}
+    template <typename T, SizeT TS>
+    struct TplRepeatImpl
+    {
+        using Type = typename TplRepeatImplHelper<T, TS, Tpl<>>::Type;
+    };
+}
 }
 
 #endif

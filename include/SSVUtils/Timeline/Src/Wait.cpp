@@ -9,24 +9,24 @@
 
 namespace ssvu
 {
-    SSVU_INLINE void Wait::update(FT mFT)
-    {
-        timeline.ready = false;
+SSVU_INLINE void Wait::update(FT mFT)
+{
+    timeline.ready = false;
 
-        currentTime -= mFT;
-        if(currentTime > 0) return;
+    currentTime -= mFT;
+    if(currentTime > 0) return;
 
-        timeline.remainder = currentTime;
-        timeline.next();
-        reset();
-    }
+    timeline.remainder = currentTime;
+    timeline.next();
+    reset();
+}
 
-    SSVU_INLINE void Wait::reset() { currentTime = time; }
-    SSVU_INLINE Wait::Wait(Timeline &mTimeline, FT mTime) noexcept
-        : Command{mTimeline},
-          time{mTime},
-          currentTime{mTime}
-    {
-        SSVU_ASSERT(time >= 0);
-    }
+SSVU_INLINE void Wait::reset() { currentTime = time; }
+SSVU_INLINE Wait::Wait(Timeline &mTimeline, FT mTime) noexcept
+: Command{mTimeline},
+  time{mTime},
+  currentTime{mTime}
+{
+    SSVU_ASSERT(time >= 0);
+}
 }

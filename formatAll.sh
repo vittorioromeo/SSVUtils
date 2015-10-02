@@ -22,7 +22,7 @@ function recursefmt
         elif [ -f $f ]; then
 
             if [[ $f == *.(cpp|hpp|inl|c|h|cxx|hxx) ]]; then
-                echo $f
+                fmtfile $f
             fi
         fi
     done

@@ -9,30 +9,27 @@
 
 namespace ssvu
 {
-    namespace CmdLine
+namespace CmdLine
+{
+    enum class EType : SizeT
     {
-        enum class EType : SizeT
-        {
-            Arg,
-            ArgOpt,
-            ArgPack,
-            Flag,
-            FlagValue,
-            FlagValueOpt
-        };
+        Arg,
+        ArgOpt,
+        ArgPack,
+        Flag,
+        FlagValue,
+        FlagValueOpt
+    };
 
-        namespace Impl
+    namespace Impl
+    {
+        template <EType TET>
+        struct ETypeInfo
         {
-            template <EType TET>
-            struct ETypeInfo
-            {
-                inline static constexpr EType getEType() noexcept
-                {
-                    return TET;
-                }
-            };
-        }
+            inline static constexpr EType getEType() noexcept { return TET; }
+        };
     }
+}
 }
 
 #endif

@@ -8,16 +8,16 @@
 
 namespace ssvu
 {
-    namespace Impl
+namespace Impl
+{
+    namespace TestUnused
     {
-        namespace TestUnused
-        {
-            inline void x0() {}
-            inline void x1(int) {}
-            inline void x2(int, char) {}
-            inline int x3(double) { return 0; }
-        }
+        inline void x0() {}
+        inline void x1(int) {}
+        inline void x2(int, char) {}
+        inline int x3(double) { return 0; }
     }
+}
 }
 
 #include "./utils/test_utils.hpp"
@@ -64,14 +64,14 @@ int main()
 
 
     SSVU_ASSERT_STATIC_NM(
-        isSame<FnTraits<decltype(x2)>::Type, void(int, char)>());
+    isSame<FnTraits<decltype(x2)>::Type, void(int, char)>());
     SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x2)>::Return, void>());
     SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x2)>::Arg<0>, int>());
     SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x2)>::Arg<1>, char>());
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(x2)>::arity == 2);
 
     SSVU_ASSERT_STATIC_NM(
-        isSame<FnTraits<decltype(l2)>::Type, void(int, char)>());
+    isSame<FnTraits<decltype(l2)>::Type, void(int, char)>());
     SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l2)>::Return, void>());
     SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l2)>::Arg<0>, int>());
     SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l2)>::Arg<1>, char>());

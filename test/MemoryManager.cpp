@@ -46,17 +46,17 @@ int main()
         {
             ssvu::PolyRecVector<TMMItem> prv;
             auto& i1 __attribute__((unused)) =
-                prv.template create<TMMItemS>(cc, dc);
+            prv.template create<TMMItemS>(cc, dc);
             auto& i2 __attribute__((unused)) =
-                prv.template create<TMMItemB>(cc, dc);
+            prv.template create<TMMItemB>(cc, dc);
         }
 
         {
             ssvu::PolyFixedRecVector<TMMItem, TMMItemS, TMMItemB> prvf;
             auto& i1 __attribute__((unused)) =
-                prvf.template create<TMMItemS>(cc, dc);
+            prvf.template create<TMMItemS>(cc, dc);
             auto& i2 __attribute__((unused)) =
-                prvf.template create<TMMItemB>(cc, dc);
+            prvf.template create<TMMItemB>(cc, dc);
         }
 
         TEST_ASSERT(cc > 0 && dc > 0);
@@ -319,17 +319,17 @@ int main()
 
             {
                 auto& __attribute__((unused)) i1 __attribute__((unused)) =
-                    mm.create<TMMItemS>(cc, dc);
+                mm.create<TMMItemS>(cc, dc);
                 TEST_ASSERT_OP(cc, ==, 1);
                 TEST_ASSERT_OP(dc, ==, 0);
 
                 auto& __attribute__((unused)) i2 __attribute__((unused)) =
-                    mm.create<TMMItemB>(cc, dc);
+                mm.create<TMMItemB>(cc, dc);
                 TEST_ASSERT_OP(cc, ==, 2);
                 TEST_ASSERT_OP(dc, ==, 0);
 
                 auto& __attribute__((unused)) i3 __attribute__((unused)) =
-                    mm.create<TMMItemB>(cc, dc);
+                mm.create<TMMItemB>(cc, dc);
                 TEST_ASSERT_OP(cc, ==, 3);
                 TEST_ASSERT_OP(dc, ==, 0);
             }
@@ -353,17 +353,17 @@ int main()
 
             {
                 auto& __attribute__((unused)) i1 __attribute__((unused)) =
-                    mm.create<TMMItemS>(cc, dc);
+                mm.create<TMMItemS>(cc, dc);
                 TEST_ASSERT_OP(cc, ==, 1);
                 TEST_ASSERT_OP(dc, ==, 0);
 
                 auto& __attribute__((unused)) i2 __attribute__((unused)) =
-                    mm.create<TMMItemB>(cc, dc);
+                mm.create<TMMItemB>(cc, dc);
                 TEST_ASSERT_OP(cc, ==, 2);
                 TEST_ASSERT_OP(dc, ==, 0);
 
                 auto& __attribute__((unused)) i3 __attribute__((unused)) =
-                    mm.create<TMMItemB>(cc, dc);
+                mm.create<TMMItemB>(cc, dc);
                 TEST_ASSERT_OP(cc, ==, 3);
                 TEST_ASSERT_OP(dc, ==, 0);
             }
@@ -406,7 +406,7 @@ int main()
             TEST_ASSERT_OP(mm.size(), ==, 0);
 
             auto& __attribute__((unused)) i3 __attribute__((unused)) =
-                mm.create<TMMItemB>(cc, dc);
+            mm.create<TMMItemB>(cc, dc);
             TEST_ASSERT_OP(cc, ==, 3);
             TEST_ASSERT_OP(dc, ==, 0);
             TEST_ASSERT_OP(mm.size(), ==, 0);

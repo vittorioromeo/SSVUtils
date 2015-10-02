@@ -9,14 +9,14 @@
 
 namespace ssvu
 {
-    namespace Encryption
+namespace Encryption
+{
+    namespace Impl
     {
-        namespace Impl
-        {
-            std::string Base64Encode(const std::string& mStr);
-            std::string Base64Decode(const std::string& mStr);
-        }
+        std::string Base64Encode(const std::string& mStr);
+        std::string Base64Decode(const std::string& mStr);
     }
+}
 }
 
 #endif

@@ -9,71 +9,69 @@
 
 namespace ssvu
 {
-    namespace Impl
+namespace Impl
+{
+    template <typename TF1, typename TF2, typename TF3>
+    inline auto refreshImplLoop(SizeT& mSizeNext, const TF1& mFAliveChk,
+    const TF2& mFSwap, const TF3& mFDeinit) noexcept
     {
-        template <typename TF1, typename TF2, typename TF3>
-        inline auto refreshImplLoop(SizeT& mSizeNext, const TF1& mFAliveChk,
-                                    const TF2& mFSwap,
-                                    const TF3& mFDeinit) noexcept
-        {
-            SizeT iD{0}, iA{mSizeNext - 1};
+        SizeT iD{0}, iA{mSizeNext - 1};
 
-            while(true) {
-                // Find dead item from left
-                for(; true; ++iD) {
-                    // Order matters.
-                    if(SSVU_UNLIKELY(iD > iA)) {
-                        // No more dead items
-                        return iD;
-                    }
-
-                    if(SSVU_UNLIKELY(!mFAliveChk(iD))) break;
+        while(true) {
+            // Find dead item from left
+            for(; true; ++iD) {
+                // Order matters.
+                if(SSVU_UNLIKELY(iD > iA)) {
+                    // No more dead items
+                    return iD;
                 }
 
-                // Find alive item from right
-                for(; true; --iA) {
-                    // Order matters.
-                    if(SSVU_UNLIKELY(mFAliveChk(iA))) break;
-                    mFDeinit(iA);
+                if(SSVU_UNLIKELY(!mFAliveChk(iD))) break;
+            }
 
-                    if(SSVU_UNLIKELY(iA <= iD)) {
-                        // No more alive items
-                        return iD;
-                    }
-                }
-
-                SSVU_ASSERT(!mFAliveChk(iD) && mFAliveChk(iA));
-                mFSwap(iD, iA);
+            // Find alive item from right
+            for(; true; --iA) {
+                // Order matters.
+                if(SSVU_UNLIKELY(mFAliveChk(iA))) break;
                 mFDeinit(iA);
 
-                // Move both iterators
-                ++iD;
-                --iA;
+                if(SSVU_UNLIKELY(iA <= iD)) {
+                    // No more alive items
+                    return iD;
+                }
             }
 
-            return iD;
+            SSVU_ASSERT(!mFAliveChk(iD) && mFAliveChk(iA));
+            mFSwap(iD, iA);
+            mFDeinit(iA);
+
+            // Move both iterators
+            ++iD;
+            --iA;
         }
 
-        template <typename TF1, typename TF2, typename TF3>
-        inline void refreshImpl(SizeT& mSize, SizeT& mSizeNext,
-                                const TF1& mFAliveChk, const TF2& mFSwap,
-                                const TF3& mFDeinit) noexcept
-        {
-            if(SSVU_UNLIKELY(mSizeNext == 0)) {
-                mSize = 0;
-                return;
-            }
+        return iD;
+    }
 
-            auto iD(refreshImplLoop(mSizeNext, mFAliveChk, mFSwap, mFDeinit));
-            mSize = mSizeNext = iD;
+    template <typename TF1, typename TF2, typename TF3>
+    inline void refreshImpl(SizeT& mSize, SizeT& mSizeNext,
+    const TF1& mFAliveChk, const TF2& mFSwap, const TF3& mFDeinit) noexcept
+    {
+        if(SSVU_UNLIKELY(mSizeNext == 0)) {
+            mSize = 0;
+            return;
+        }
+
+        auto iD(refreshImplLoop(mSizeNext, mFAliveChk, mFSwap, mFDeinit));
+        mSize = mSizeNext = iD;
 
 #if defined(SSVU_DEBUG)
-            for(auto i(0u); i < iD; ++i) {
-                SSVU_ASSERT(mFAliveChk(i));
-            }
-#endif
+        for(auto i(0u); i < iD; ++i) {
+            SSVU_ASSERT(mFAliveChk(i));
         }
+#endif
     }
+}
 }
 
 #endif

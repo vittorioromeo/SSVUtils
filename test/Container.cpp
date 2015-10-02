@@ -63,8 +63,8 @@ int main()
         TEST_ASSERT(tm.empty());
         TEST_ASSERT(tm.size() == 0);
 
-        std::vector<std::string> words{"a",         "klab",   "eacbds",
-                                       "haadfopja", "bdasaa", "aasdfpoasfas"};
+        std::vector<std::string> words{
+        "a", "klab", "eacbds", "haadfopja", "bdasaa", "aasdfpoasfas"};
 
         for(const auto& w : words) tm[w] = w + "val";
 
@@ -99,7 +99,7 @@ int main()
         TEST_ASSERT(vs.size() == 0);
         {
             std::vector<std::string> words{
-                "a", "klab", "eacbds", "haadfopja", "bdasaa", "aasdfpoasfas"};
+            "a", "klab", "eacbds", "haadfopja", "bdasaa", "aasdfpoasfas"};
 
             for(const auto& w : words) vs.insert(w);
 

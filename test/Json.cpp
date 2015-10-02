@@ -15,7 +15,7 @@ SSVJ_CNV_NAMESPACE()
         int f0{10};
         float f1{5.5f};
         std::vector<std::pair<float, double>> f2{
-            {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
+        {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
         std::string f3{"yo"};
         Tpl<std::string, int, int> f4{"hey", 5, 10};
 
@@ -44,7 +44,7 @@ int main()
         using namespace ssvu::Json;
         using namespace ssvu::Json::Impl;
 
-#define EXEC_NUM_TESTS()                                                  \
+#define EXEC_NUM_TESTS()                                                     \
     TEST_ASSERT_NS(n.as<char>() == char{10});                                \
     TEST_ASSERT_NS(n.as<int>() == 10);                                       \
     TEST_ASSERT_NS(n.as<long int>() == 10l);                                 \
@@ -83,28 +83,28 @@ int main()
     {                                            \
         Val v0, v1, v2;                          \
         v0 = mVal;                               \
-        TEST_ASSERT_NS(v0.is<mRepr>());             \
+        TEST_ASSERT_NS(v0.is<mRepr>());          \
         v1 = v0;                                 \
-        TEST_ASSERT_NS(v1.is<mRepr>());             \
-        TEST_ASSERT_NS(v0.as<Val>() == v0);         \
-        TEST_ASSERT_NS(v0.as<mType>() == mVal);     \
-        TEST_ASSERT_NS(v1.as<mType>() == mVal);     \
-        TEST_ASSERT_NS(v0 == v1);                   \
+        TEST_ASSERT_NS(v1.is<mRepr>());          \
+        TEST_ASSERT_NS(v0.as<Val>() == v0);      \
+        TEST_ASSERT_NS(v0.as<mType>() == mVal);  \
+        TEST_ASSERT_NS(v1.as<mType>() == mVal);  \
+        TEST_ASSERT_NS(v0 == v1);                \
         v2 = mv(v1);                             \
-        TEST_ASSERT_NS(v2.is<mRepr>());             \
-        TEST_ASSERT_NS(v2.as<mType>() == mVal);     \
+        TEST_ASSERT_NS(v2.is<mRepr>());          \
+        TEST_ASSERT_NS(v2.as<mType>() == mVal);  \
         v0 = Obj{};                              \
         v0["inner"] = v2;                        \
-        TEST_ASSERT_NS(v0["inner"] == v2);          \
+        TEST_ASSERT_NS(v0["inner"] == v2);       \
         auto sv0(v0.getWriteToStr());            \
         auto sv2(v2.getWriteToStr());            \
         auto osv0(fromStr(sv0));                 \
         auto osv2(fromStr(sv2));                 \
-        TEST_ASSERT_NS(v0 == osv0);                 \
-        TEST_ASSERT_NS(v2 == osv2);                 \
-        TEST_ASSERT_NS(v0["inner"] == osv2);        \
-        TEST_ASSERT_NS(osv0["inner"] == v2);        \
-        TEST_ASSERT_NS(osv0["inner"] == osv2);      \
+        TEST_ASSERT_NS(v0 == osv0);              \
+        TEST_ASSERT_NS(v2 == osv2);              \
+        TEST_ASSERT_NS(v0["inner"] == osv2);     \
+        TEST_ASSERT_NS(osv0["inner"] == v2);     \
+        TEST_ASSERT_NS(osv0["inner"] == osv2);   \
     }
 
 #define EXEC_TEST_BASIC(mType, mVal) EXEC_TEST_BASIC_IMPL(mType, mVal, mType)
@@ -126,8 +126,8 @@ int main()
         using namespace ssvu::Json;
         using namespace ssvu::Json::Impl;
 
-        EXEC_TEST_BASIC_IMPL(unsigned char, ssvu::toNum<unsigned char>('a'),
-                             IntU)
+        EXEC_TEST_BASIC_IMPL(
+        unsigned char, ssvu::toNum<unsigned char>('a'), IntU)
         EXEC_TEST_BASIC_IMPL(unsigned int, 10u, IntU)
         EXEC_TEST_BASIC_IMPL(unsigned long int, 10ul, IntU)
         EXEC_TEST_BASIC_IMPL(float, 10.f, Real)
@@ -148,10 +148,8 @@ int main()
         }
 
         {
-            Obj o{{"hello", "bye"},
-                  {"welcome"s, "goodbye"s},
-                  {"banana", 15},
-                  {"best letter", 'v'}};
+            Obj o{{"hello", "bye"}, {"welcome"s, "goodbye"s}, {"banana", 15},
+            {"best letter", 'v'}};
             EXEC_TEST_BASIC(Obj, o)
         }
 
@@ -162,10 +160,10 @@ int main()
         }
 
         {
-            using PP = std::pair<std::pair<int, std::string>,
-                                 std::pair<float, double>>;
+            using PP =
+            std::pair<std::pair<int, std::string>, std::pair<float, double>>;
             PP p{std::pair<int, std::string>{10, "coolpair2"},
-                 std::pair<float, double>{15.f, 205.5}};
+            std::pair<float, double>{15.f, 205.5}};
             EXEC_TEST_BASIC(PP, p)
         }
 
@@ -189,43 +187,38 @@ int main()
 
         {
             using PP = Tpl<int, float, std::string, int, std::pair<double, int>,
-                           float, Tpl<int, int, int>>;
-            PP p{10,
-                 15.5f,
-                 "ULTRA SWAG"s,
-                 22,
-                 std::pair<double, int>{10.5, 99},
-                 0.f,
-                 Tpl<int, int, int>{0, 1, 2}};
+            float, Tpl<int, int, int>>;
+            PP p{10, 15.5f, "ULTRA SWAG"s, 22, std::pair<double, int>{10.5, 99},
+            0.f, Tpl<int, int, int>{0, 1, 2}};
             EXEC_TEST_BASIC(PP, p)
         }
     }
 
 // Equality with C-style arrays doesn't work
-#define EXEC_TEST_C_ARRAY(mType, mVal)      \
-    {                                       \
-        Val v0, v1, v2;                     \
-        v0 = mVal;                          \
+#define EXEC_TEST_C_ARRAY(mType, mVal)         \
+    {                                          \
+        Val v0, v1, v2;                        \
+        v0 = mVal;                             \
         TEST_ASSERT_NS(v0.is<mType>());        \
-        v1 = v0;                            \
+        v1 = v0;                               \
         TEST_ASSERT_NS(v1.is<mType>());        \
         TEST_ASSERT_NS(v0 == v1);              \
-        v2 = mv(v1);                        \
+        v2 = mv(v1);                           \
         TEST_ASSERT_NS(v2.is<mType>());        \
-        v0 = Obj{};                         \
-        v0["inner"] = v2;                   \
+        v0 = Obj{};                            \
+        v0["inner"] = v2;                      \
         TEST_ASSERT_NS(v0["inner"] == v2);     \
-        auto sv0(v0.getWriteToStr());       \
-        auto sv2(v2.getWriteToStr());       \
-        auto osv0(fromStr(sv0));            \
-        auto osv2(fromStr(sv2));            \
+        auto sv0(v0.getWriteToStr());          \
+        auto sv2(v2.getWriteToStr());          \
+        auto osv0(fromStr(sv0));               \
+        auto osv2(fromStr(sv2));               \
         TEST_ASSERT_NS(v0 == osv0);            \
         TEST_ASSERT_NS(v2 == osv2);            \
         TEST_ASSERT_NS(v0["inner"] == osv2);   \
         TEST_ASSERT_NS(osv0["inner"] == v2);   \
         TEST_ASSERT_NS(osv0["inner"] == osv2); \
-        auto s = v0.getWriteToStr();        \
-        auto fs = fromStr(s);               \
+        auto s = v0.getWriteToStr();           \
+        auto fs = fromStr(s);                  \
         TEST_ASSERT_NS(fs == v0);              \
     }
 
@@ -254,12 +247,12 @@ int main()
 
         {
             using PP = Tpl<std::vector<std::string>,
-                           std::pair<std::vector<int>, std::vector<float>>, int,
-                           std::vector<int>>;
+            std::pair<std::vector<int>, std::vector<float>>, int,
+            std::vector<int>>;
             PP p{std::vector<std::string>{"10", "20", "35"},
-                 std::pair<std::vector<int>, std::vector<float>>{
-                     std::vector<int>{1, 2}, std::vector<float>{1.f, 2.f}},
-                 20, std::vector<int>{}};
+            std::pair<std::vector<int>, std::vector<float>>{
+            std::vector<int>{1, 2}, std::vector<float>{1.f, 2.f}},
+            20, std::vector<int>{}};
             EXEC_TEST_BASIC(PP, p)
         }
     }
@@ -338,57 +331,57 @@ int main()
         auto minified(v.getWriteToStr<WSMinified>());
 
         TEST_ASSERT_NS(minified ==
-                    R"({"a":15,"b":{"c":null},"c":["x","y",10.5]})");
+                       R"({"a":15,"b":{"c":null},"c":["x","y",10.5]})");
     }
 
-#define EXEC_CV_TEST(mType, mBV)                 \
-    {                                            \
-        using Type = mType;                      \
-        Val vIn;                                 \
-        const Type& in = mBV;                    \
-        cnv(vIn, in);                            \
+#define EXEC_CV_TEST(mType, mBV)                    \
+    {                                               \
+        using Type = mType;                         \
+        Val vIn;                                    \
+        const Type& in = mBV;                       \
+        cnv(vIn, in);                               \
         TEST_ASSERT_NS(vIn.as<Type>() == mBV);      \
-        const Val& vOut{static_cast<Type>(mBV)}; \
-        Type out;                                \
-        cnv(vOut, out);                          \
+        const Val& vOut{static_cast<Type>(mBV)};    \
+        Type out;                                   \
+        cnv(vOut, out);                             \
         TEST_ASSERT_NS(out == mBV);                 \
-        auto s = vOut.getWriteToStr();           \
-        auto fs = fromStr(s);                    \
+        auto s = vOut.getWriteToStr();              \
+        auto fs = fromStr(s);                       \
         TEST_ASSERT_NS(fs == vOut);                 \
         TEST_ASSERT_NS(fs.as<Type>() == out);       \
         TEST_ASSERT_NS(fs.as<Type>() == mBV);       \
-        Val eaVal;                               \
-        arch(eaVal, mBV);                        \
+        Val eaVal;                                  \
+        arch(eaVal, mBV);                           \
         TEST_ASSERT_NS(eaVal.as<Type>() == mBV);    \
-        Type eaOut;                              \
-        extr(eaVal, eaOut);                      \
+        Type eaOut;                                 \
+        extr(eaVal, eaOut);                         \
         TEST_ASSERT_NS(eaOut == mBV);               \
-        auto getEaVal(getArch(mBV));             \
+        auto getEaVal(getArch(mBV));                \
         TEST_ASSERT_NS(getEaVal.as<Type>() == mBV); \
-        auto getEaOut(getExtr<Type>(getEaVal));  \
+        auto getEaOut(getExtr<Type>(getEaVal));     \
         TEST_ASSERT_NS(getEaOut == mBV);            \
     }
 
-#define EXEC_CV_TEST_ARR(mType, mBV0, mBV1, mBV2) \
-    {                                             \
-        using Type = mType;                       \
-        Val vIn;                                  \
-        const Type& in0 = mBV0;                   \
-        const Type& in1 = mBV1;                   \
-        const Type& in2 = mBV2;                   \
-        cnvArr(vIn, in0, in1, in2);               \
-        TEST_ASSERT_NS(vIn[0].as<Type>() == mBV0);   \
-        TEST_ASSERT_NS(vIn[1].as<Type>() == mBV1);   \
-        TEST_ASSERT_NS(vIn[2].as<Type>() == mBV2);   \
-        const Val& vOut(vIn);                     \
-        Type out0, out1, out2;                    \
-        cnvArr(vOut, out0, out1, out2);           \
-        TEST_ASSERT_NS(out0 == mBV0);                \
-        TEST_ASSERT_NS(out1 == mBV1);                \
-        TEST_ASSERT_NS(out2 == mBV2);                \
-        auto s = vOut.getWriteToStr();            \
-        auto fs = fromStr(s);                     \
-        TEST_ASSERT_NS(fs == vOut);                  \
+#define EXEC_CV_TEST_ARR(mType, mBV0, mBV1, mBV2)  \
+    {                                              \
+        using Type = mType;                        \
+        Val vIn;                                   \
+        const Type& in0 = mBV0;                    \
+        const Type& in1 = mBV1;                    \
+        const Type& in2 = mBV2;                    \
+        cnvArr(vIn, in0, in1, in2);                \
+        TEST_ASSERT_NS(vIn[0].as<Type>() == mBV0); \
+        TEST_ASSERT_NS(vIn[1].as<Type>() == mBV1); \
+        TEST_ASSERT_NS(vIn[2].as<Type>() == mBV2); \
+        const Val& vOut(vIn);                      \
+        Type out0, out1, out2;                     \
+        cnvArr(vOut, out0, out1, out2);            \
+        TEST_ASSERT_NS(out0 == mBV0);              \
+        TEST_ASSERT_NS(out1 == mBV1);              \
+        TEST_ASSERT_NS(out2 == mBV2);              \
+        auto s = vOut.getWriteToStr();             \
+        auto fs = fromStr(s);                      \
+        TEST_ASSERT_NS(fs == vOut);                \
     }
 
 #define EXEC_CV_TEST_OBJ(mType, mBV0, mBV1, mBV2)         \
@@ -399,18 +392,18 @@ int main()
         const Type& in1 = mBV1;                           \
         const Type& in2 = mBV2;                           \
         cnvObj(vIn, "k0", in0, "k1", in1, "k2", in2);     \
-        TEST_ASSERT_NS(vIn["k0"].as<Type>() == mBV0);        \
-        TEST_ASSERT_NS(vIn["k1"].as<Type>() == mBV1);        \
-        TEST_ASSERT_NS(vIn["k2"].as<Type>() == mBV2);        \
+        TEST_ASSERT_NS(vIn["k0"].as<Type>() == mBV0);     \
+        TEST_ASSERT_NS(vIn["k1"].as<Type>() == mBV1);     \
+        TEST_ASSERT_NS(vIn["k2"].as<Type>() == mBV2);     \
         const Val& vOut(vIn);                             \
         Type out0, out1, out2;                            \
         cnvObj(vOut, "k0", out0, "k1", out1, "k2", out2); \
-        TEST_ASSERT_NS(out0 == mBV0);                        \
-        TEST_ASSERT_NS(out1 == mBV1);                        \
-        TEST_ASSERT_NS(out2 == mBV2);                        \
+        TEST_ASSERT_NS(out0 == mBV0);                     \
+        TEST_ASSERT_NS(out1 == mBV1);                     \
+        TEST_ASSERT_NS(out2 == mBV2);                     \
         auto s = vOut.getWriteToStr();                    \
         auto fs = fromStr(s);                             \
-        TEST_ASSERT_NS(fs == vOut);                          \
+        TEST_ASSERT_NS(fs == vOut);                       \
     }
 
     {
@@ -478,7 +471,7 @@ int main()
         int f0{10};
         float f1{5.5f};
         std::vector<std::pair<float, double>> f2{
-            {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
+        {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
         std::string f3{"yo"};
         Tpl<std::string, int, int> f4{"hey", 5, 10};
 
@@ -537,16 +530,16 @@ int main()
         v.emplace(TT(4));                                           \
         acc = 0;                                                    \
         for(const auto& i : v.forArr()) acc += i.as<TT>();          \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                                \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                             \
         acc = 0;                                                    \
         for(const auto& i : v.forArrAs<TT>()) acc += i;             \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                                \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                             \
         acc = 0;                                                    \
         for(const auto& i : v.forUncheckedArr()) acc += i.as<TT>(); \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                                \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                             \
         acc = 0;                                                    \
         for(const auto& i : v.forUncheckedArrAs<TT>()) acc += i;    \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                                \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                             \
     }
 
     {
@@ -596,32 +589,32 @@ int main()
             keyacc += i.key;                             \
             acc += i.value.as<TT>();                     \
         }                                                \
-        TEST_ASSERT_NS_OP(keyacc, ==, "01234");             \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                     \
+        TEST_ASSERT_NS_OP(keyacc, ==, "01234");          \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                  \
         keyacc = "";                                     \
         acc = 0;                                         \
         for(const auto& i : v.forObjAs<TT>()) {          \
             keyacc += i.key;                             \
             acc += i.value;                              \
         }                                                \
-        TEST_ASSERT_NS_OP(keyacc, ==, "01234");             \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                     \
+        TEST_ASSERT_NS_OP(keyacc, ==, "01234");          \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                  \
         keyacc = "";                                     \
         acc = 0;                                         \
         for(const auto& i : v.forUncheckedObj()) {       \
             keyacc += i.key;                             \
             acc += i.value.as<TT>();                     \
         }                                                \
-        TEST_ASSERT_NS_OP(keyacc, ==, "01234");             \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                     \
+        TEST_ASSERT_NS_OP(keyacc, ==, "01234");          \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                  \
         keyacc = "";                                     \
         acc = 0;                                         \
         for(const auto& i : v.forUncheckedObjAs<TT>()) { \
             keyacc += i.key;                             \
             acc += i.value;                              \
         }                                                \
-        TEST_ASSERT_NS_OP(keyacc, ==, "01234");             \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                     \
+        TEST_ASSERT_NS_OP(keyacc, ==, "01234");          \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                  \
     }
 
     {

@@ -12,51 +12,45 @@
 
 namespace ssvu
 {
-    namespace Impl
+namespace Impl
+{
+    template <typename T, template <typename...> class TUV>
+    class MaybeImpl
     {
-        template <typename T, template <typename...> class TUV>
-        class MaybeImpl
+    protected:
+        TUV<T> uv;
+
+    public:
+        template <typename... TArgs>
+        inline void init(TArgs&&... mArgs) noexcept(
+        noexcept(uv.template init<T>(FWD(mArgs)...)))
         {
-        protected:
-            TUV<T> uv;
-
-        public:
-            template <typename... TArgs>
-            inline void init(TArgs&&... mArgs) noexcept(
-                noexcept(uv.template init<T>(FWD(mArgs)...)))
-            {
-                uv.template init<T>(FWD(mArgs)...);
-            }
-
-            inline T& get() & noexcept { return uv.template get<T>(); }
-            inline const T& get() const& noexcept
-            {
-                return uv.template get<T>();
-            }
-            inline const T get() && noexcept
-            {
-                return mv(uv.template get<T>());
-            }
-
-            inline T& operator*() noexcept { return get(); }
-            inline const T& operator*() const noexcept { return get(); }
-
-            inline T* operator->() noexcept { return &get(); }
-            inline const T* operator->() const noexcept { return &get(); }
-        };
-    }
-
-    template <typename T>
-    struct Maybe : public Impl::MaybeImpl<T, Union>
-    {
-        inline void deinit() noexcept(isNothrowDtor<T>())
-        {
-            this->uv.template deinit<T>();
+            uv.template init<T>(FWD(mArgs)...);
         }
-    };
 
-    template <typename T>
-    using MaybePOD = Impl::MaybeImpl<T, UnionPOD>;
+        inline T& get() & noexcept { return uv.template get<T>(); }
+        inline const T& get() const& noexcept { return uv.template get<T>(); }
+        inline const T get() && noexcept { return mv(uv.template get<T>()); }
+
+        inline T& operator*() noexcept { return get(); }
+        inline const T& operator*() const noexcept { return get(); }
+
+        inline T* operator->() noexcept { return &get(); }
+        inline const T* operator->() const noexcept { return &get(); }
+    };
+}
+
+template <typename T>
+struct Maybe : public Impl::MaybeImpl<T, Union>
+{
+    inline void deinit() noexcept(isNothrowDtor<T>())
+    {
+        this->uv.template deinit<T>();
+    }
+};
+
+template <typename T>
+using MaybePOD = Impl::MaybeImpl<T, UnionPOD>;
 }
 
 #endif

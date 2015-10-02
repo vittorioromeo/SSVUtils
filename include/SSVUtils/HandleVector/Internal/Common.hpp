@@ -11,31 +11,31 @@
 
 namespace ssvu
 {
-    /// @typedef HandleVector index type.
-    using HIdx = SizeT;
+/// @typedef HandleVector index type.
+using HIdx = SizeT;
 
-    /// @typedef HandleVector counter type.
-    using HCtr = int;
+/// @typedef HandleVector counter type.
+using HCtr = int;
 
-    namespace Impl
+namespace Impl
+{
+    struct HVStat
     {
-        struct HVStat
-        {
-            HIdx markIdx;
-            bool alive{false};
+        HIdx markIdx;
+        bool alive{false};
 
-            inline HVStat(HIdx mMarkIdx) noexcept : markIdx{mMarkIdx} {}
-        };
+        inline HVStat(HIdx mMarkIdx) noexcept : markIdx{mMarkIdx} {}
+    };
 
-        /// @brief Structure controlling validity of the atoms and handles.
-        struct HVMark
-        {
-            HIdx atomIdx;
-            HCtr ctr;
+    /// @brief Structure controlling validity of the atoms and handles.
+    struct HVMark
+    {
+        HIdx atomIdx;
+        HCtr ctr;
 
-            inline HVMark(HIdx mAtomIdx) noexcept : atomIdx{mAtomIdx} {}
-        };
-    }
+        inline HVMark(HIdx mAtomIdx) noexcept : atomIdx{mAtomIdx} {}
+    };
+}
 }
 
 #endif

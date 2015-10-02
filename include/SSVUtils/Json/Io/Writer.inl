@@ -12,26 +12,26 @@
 
 namespace ssvu
 {
-    namespace Json
+namespace Json
+{
+    namespace Impl
     {
-        namespace Impl
+        template <typename TWS>
+        inline void Writer<TWS>::write(const Val& mVal)
         {
-            template <typename TWS>
-            inline void Writer<TWS>::write(const Val& mVal)
+            switch(mVal.getType())
             {
-                switch(mVal.getType())
-                {
-                    case Val::Type::TObj: write(mVal.as<Obj>()); break;
-                    case Val::Type::TArr: write(mVal.as<Arr>()); break;
-                    case Val::Type::TStr: write(mVal.as<Str>()); break;
-                    case Val::Type::TNum: write(mVal.as<Num>()); break;
-                    case Val::Type::TBln: write(mVal.as<Bln>()); break;
-                    case Val::Type::TNll: write(Nll{}); break;
-                    default: SSVU_UNREACHABLE();
-                }
+                case Val::Type::TObj: write(mVal.as<Obj>()); break;
+                case Val::Type::TArr: write(mVal.as<Arr>()); break;
+                case Val::Type::TStr: write(mVal.as<Str>()); break;
+                case Val::Type::TNum: write(mVal.as<Num>()); break;
+                case Val::Type::TBln: write(mVal.as<Bln>()); break;
+                case Val::Type::TNll: write(Nll{}); break;
+                default: SSVU_UNREACHABLE();
             }
         }
     }
+}
 }
 
 #endif

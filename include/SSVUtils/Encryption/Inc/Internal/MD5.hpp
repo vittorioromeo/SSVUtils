@@ -30,39 +30,38 @@ documentation and/or software. */
 
 namespace ssvu
 {
-    namespace Encryption
+namespace Encryption
+{
+    namespace Impl
     {
-        namespace Impl
+        class MD5
         {
-            class MD5
+        private:
+            std::string m_sHash;
+            unsigned char m_rawHash[16];
+
+        public:
+            MD5() = default;
+            MD5(const std::string& source) { Calculate(source); }
+            MD5(std::ifstream& file) { Calculate(file); }
+            MD5(const unsigned char* source, unsigned int len)
             {
-            private:
-                std::string m_sHash;
-                unsigned char m_rawHash[16];
+                Calculate(source, len);
+            }
 
-            public:
-                MD5() = default;
-                MD5(const std::string& source) { Calculate(source); }
-                MD5(std::ifstream& file) { Calculate(file); }
-                MD5(const unsigned char* source, unsigned int len)
-                {
-                    Calculate(source, len);
-                }
+            std::string Calculate(const std::string& source)
+            {
+                return Calculate(
+                (const unsigned char*)source.c_str(), source.size());
+            }
+            std::string Calculate(std::ifstream& file);
+            std::string Calculate(const unsigned char* source, uint32_t len);
 
-                std::string Calculate(const std::string& source)
-                {
-                    return Calculate((const unsigned char*)source.c_str(),
-                                     source.size());
-                }
-                std::string Calculate(std::ifstream& file);
-                std::string Calculate(const unsigned char* source,
-                                      uint32_t len);
-
-                std::string GetHash() const { return m_sHash; }
-                const unsigned char* GetRawHash() const { return m_rawHash; }
-            };
-        }
+            std::string GetHash() const { return m_sHash; }
+            const unsigned char* GetRawHash() const { return m_rawHash; }
+        };
     }
+}
 }
 
 #endif

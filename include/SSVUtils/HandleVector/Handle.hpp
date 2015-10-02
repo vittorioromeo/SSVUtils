@@ -14,76 +14,76 @@
 
 namespace ssvu
 {
-    /// @brief Handle class that points to HandleVector elements.
-    template <typename T>
-    class Handle
+/// @brief Handle class that points to HandleVector elements.
+template <typename T>
+class Handle
+{
+    template <typename>
+    friend class HandleVector;
+
+public:
+    /// @typedef Templatized `Impl::Atom<T>` type;
+    using Atom = typename Impl::Atom<T>;
+
+private:
+    /// @brief Internal pointer to the HandleVector.
+    HandleVector<T>* hVec;
+
+    /// @brief Index of the mark to check.
+    HIdx markIdx;
+
+    /// @brief Counter of the handle. Will be compared to the mark's
+    /// counter.
+    HCtr ctr;
+
+    inline Handle(HandleVector<T>& mHVec, HIdx mMarkIdx, HCtr mCtr) noexcept
+    : hVec(&mHVec),
+      markIdx{mMarkIdx},
+      ctr{mCtr}
     {
-        template <typename>
-        friend class HandleVector;
+    }
 
-    public:
-        /// @typedef Templatized `Impl::Atom<T>` type;
-        using Atom = typename Impl::Atom<T>;
+    /// @brief Internal implementation method that returns a reference or a
+    /// const reference to the atom.
+    template <typename TT>
+    inline TT getAtomImpl() noexcept
+    {
+        SSVU_ASSERT(isAlive());
+        return hVec->getAtomFromMark(hVec->marks[markIdx]);
+    }
 
-    private:
-        /// @brief Internal pointer to the HandleVector.
-        HandleVector<T>* hVec;
+public:
+    /// @brief Returns a reference to the atom. Assumes the handle is valid.
+    inline auto& getAtom() noexcept { return getAtomImpl<Atom&>(); }
 
-        /// @brief Index of the mark to check.
-        HIdx markIdx;
+    /// @brief Returns a const reference to the atom. Assumes the handle is
+    /// valid.
+    inline const auto& getAtom() const noexcept
+    {
+        return getAtomImpl<const Atom&>();
+    }
 
-        /// @brief Counter of the handle. Will be compared to the mark's
-        /// counter.
-        HCtr ctr;
+    /// @brief Returns a reference to the data. Assumes the handle is valid.
+    inline T& get() noexcept { return getAtom().getData(); }
 
-        inline Handle(HandleVector<T>& mHVec, HIdx mMarkIdx, HCtr mCtr) noexcept
-            : hVec(&mHVec),
-              markIdx{mMarkIdx},
-              ctr{mCtr}
-        {
-        }
+    /// @brief Returns a const reference to the data. Assumes the handle is
+    /// valid.
+    inline const T& get() const noexcept { return getAtom().getData(); }
 
-        /// @brief Internal implementation method that returns a reference or a
-        /// const reference to the atom.
-        template <typename TT>
-        inline TT getAtomImpl() noexcept
-        {
-            SSVU_ASSERT(isAlive());
-            return hVec->getAtomFromMark(hVec->marks[markIdx]);
-        }
+    /// @brief Returns whether the handle is valid or not.
+    /// @details The handle is considered valid only when it points to the
+    /// atom it originally pointed to.
+    bool isAlive() const noexcept;
 
-    public:
-        /// @brief Returns a reference to the atom. Assumes the handle is valid.
-        inline auto& getAtom() noexcept { return getAtomImpl<Atom&>(); }
+    /// @brief Sets the pointed atom's status as dead.
+    void destroy() noexcept;
 
-        /// @brief Returns a const reference to the atom. Assumes the handle is
-        /// valid.
-        inline const auto& getAtom() const noexcept
-        {
-            return getAtomImpl<const Atom&>();
-        }
-
-        /// @brief Returns a reference to the data. Assumes the handle is valid.
-        inline T& get() noexcept { return getAtom().getData(); }
-
-        /// @brief Returns a const reference to the data. Assumes the handle is
-        /// valid.
-        inline const T& get() const noexcept { return getAtom().getData(); }
-
-        /// @brief Returns whether the handle is valid or not.
-        /// @details The handle is considered valid only when it points to the
-        /// atom it originally pointed to.
-        bool isAlive() const noexcept;
-
-        /// @brief Sets the pointed atom's status as dead.
-        void destroy() noexcept;
-
-        // Pointer-like interface
-        inline T& operator*() noexcept { return get(); }
-        inline const T& operator*() const noexcept { return get(); }
-        inline T* operator->() noexcept { return &(get()); }
-        inline const T* operator->() const noexcept { return &(get()); }
-    };
+    // Pointer-like interface
+    inline T& operator*() noexcept { return get(); }
+    inline const T& operator*() const noexcept { return get(); }
+    inline T* operator->() noexcept { return &(get()); }
+    inline const T* operator->() const noexcept { return &(get()); }
+};
 }
 
 #endif

@@ -9,15 +9,15 @@
 
 namespace ssvu
 {
-    SSVU_INLINE void TimelineManager::update(FT mFT)
-    {
-        timelines.refresh();
+SSVU_INLINE void TimelineManager::update(FT mFT)
+{
+    timelines.refresh();
 
-        for(const auto& t : timelines) {
-            t->update(mFT);
-            if(t->isFinished()) timelines.del(*t);
-        }
+    for(const auto& t : timelines) {
+        t->update(mFT);
+        if(t->isFinished()) timelines.del(*t);
     }
-    SSVU_INLINE auto& TimelineManager::create() { return timelines.create(); }
-    SSVU_INLINE void TimelineManager::clear() noexcept { timelines.clear(); }
+}
+SSVU_INLINE auto& TimelineManager::create() { return timelines.create(); }
+SSVU_INLINE void TimelineManager::clear() noexcept { timelines.clear(); }
 }

@@ -10,46 +10,45 @@
 
 namespace ssvu
 {
-    namespace CmdLine
+namespace CmdLine
+{
+    namespace Impl
     {
-        namespace Impl
+        class BaseElement
         {
-            class BaseElement
+        private:
+            std::string name, briefDesc, desc;
+
+        public:
+            inline virtual ~BaseElement() {}
+
+            SSVU_DEFINE_SINK_SETTER_SIMPLE(setName, name)
+            SSVU_DEFINE_SINK_SETTER_SIMPLE(setBriefDesc, briefDesc)
+            SSVU_DEFINE_SINK_SETTER_SIMPLE(setDesc, desc)
+
+            inline const auto& getName() const noexcept { return name; }
+            inline const auto& getBriefDesc() const noexcept
             {
-            private:
-                std::string name, briefDesc, desc;
+                return briefDesc;
+            }
+            inline const auto& getDesc() const noexcept { return desc; }
 
-            public:
-                inline virtual ~BaseElement() {}
+            virtual std::string getUsageStr() const = 0;
 
-                SSVU_DEFINE_SINK_SETTER_SIMPLE(setName, name)
-                SSVU_DEFINE_SINK_SETTER_SIMPLE(setBriefDesc, briefDesc)
-                SSVU_DEFINE_SINK_SETTER_SIMPLE(setDesc, desc)
+            inline auto getHelpStr()
+            {
+                std::string result, usageStr{this->getUsageStr()};
 
-                inline const auto& getName() const noexcept { return name; }
-                inline const auto& getBriefDesc() const noexcept
-                {
-                    return briefDesc;
-                }
-                inline const auto& getDesc() const noexcept { return desc; }
+                if(!usageStr.empty()) appendTo(result, "* ", usageStr);
+                if(!name.empty()) appendTo(result, "\n  --", name);
+                if(!briefDesc.empty()) appendTo(result, "\n  --", briefDesc);
+                if(!desc.empty()) appendTo(result, "\n  --", desc);
 
-                virtual std::string getUsageStr() const = 0;
-
-                inline auto getHelpStr()
-                {
-                    std::string result, usageStr{this->getUsageStr()};
-
-                    if(!usageStr.empty()) appendTo(result, "* ", usageStr);
-                    if(!name.empty()) appendTo(result, "\n  --", name);
-                    if(!briefDesc.empty())
-                        appendTo(result, "\n  --", briefDesc);
-                    if(!desc.empty()) appendTo(result, "\n  --", desc);
-
-                    return result + "\n\n";
-                }
-            };
-        }
+                return result + "\n\n";
+            }
+        };
     }
+}
 }
 
 #endif

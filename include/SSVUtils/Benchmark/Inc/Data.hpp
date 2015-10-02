@@ -12,25 +12,25 @@
 
 namespace ssvu
 {
-    namespace Benchmark
+namespace Benchmark
+{
+    namespace Impl
     {
-        namespace Impl
+        /// @brief Benchmark data structure storing a time point and a name.
+        struct Data : public DataBase<Data>
         {
-            /// @brief Benchmark data structure storing a time point and a name.
-            struct Data : public DataBase<Data>
-            {
-                TP tp;
-                std::string name;
+            TP tp;
+            std::string name;
 
-                Data() = default;
-                Data(const TP& mTP, std::string mName);
+            Data() = default;
+            Data(const TP& mTP, std::string mName);
 
-                /// @brief Returns the elapsed time as a
-                /// std::chrono::milliseconds.
-                Duration getDuration() const noexcept;
-            };
-        }
+            /// @brief Returns the elapsed time as a
+            /// std::chrono::milliseconds.
+            Duration getDuration() const noexcept;
+        };
     }
+}
 }
 
 #endif

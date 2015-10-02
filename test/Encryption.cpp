@@ -13,8 +13,8 @@ int main()
     using namespace ssvu;
     using namespace ssvu::Encryption;
 
-    TEST_ASSERT(encrypt<Type::MD5>("testhash") ==
-                "082949a8dfacccda185a135db425377b");
+    TEST_ASSERT(
+    encrypt<Type::MD5>("testhash") == "082949a8dfacccda185a135db425377b");
     TEST_ASSERT(encrypt<Type::MD5>("") == "d41d8cd98f00b204e9800998ecf8427e");
 
     TEST_ASSERT(encrypt<Type::Base64>("testhash") == "dGVzdGhhc2g=");

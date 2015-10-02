@@ -22,30 +22,28 @@
 #define SSVUT_IMPL_GET_KEY(mName) VRM_PP_TOSTR(SSVUT_IMPL_GET_NAME_TYPE(mName))
 
 /// @macro Generates the test struct.
-#define SSVUT_IMPL_GENERATE_STRUCT(mName)                          \
-    struct SSVUT_IMPL_GET_NAME_TYPE(mName) final                   \
-        : public ::ssvu::Test::Impl::TestBase                      \
-    {                                                              \
-        inline SSVUT_IMPL_GET_NAME_TYPE(mName)()                   \
-            : ::ssvu::Test::Impl::TestBase{VRM_PP_TOSTR(mName),    \
-                                           VRM_PP_TOSTR(__LINE__), \
-                                           VRM_PP_TOSTR(__FILE__)} \
-        {                                                          \
-        }                                                          \
-        virtual void run() const override;                         \
+#define SSVUT_IMPL_GENERATE_STRUCT(mName)                       \
+    struct SSVUT_IMPL_GET_NAME_TYPE(mName) final                \
+    : public ::ssvu::Test::Impl::TestBase                       \
+    {                                                           \
+        inline SSVUT_IMPL_GET_NAME_TYPE(mName)()                \
+            : ::ssvu::Test::Impl::TestBase{VRM_PP_TOSTR(mName), \
+              VRM_PP_TOSTR(__LINE__), VRM_PP_TOSTR(__FILE__)}   \
+        {                                                       \
+        }                                                       \
+        virtual void run() const override;                      \
     };
 
 /// @macro Generates the test runner.
-#define SSVUT_IMPL_GENERATE_RUNNER(mName)                                      \
-    static ::ssvu::Test::Impl::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName){       \
-        []                                                                     \
-        {                                                                      \
-            if(::ssvu::Test::Impl::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) \
-                return;                                                        \
-            ::ssvu::Test::Impl::setTestExecuted(SSVUT_IMPL_GET_KEY(mName));    \
-            ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(             \
-                ::ssvu::Test::Impl::getTestStorage());                         \
-        }};
+#define SSVUT_IMPL_GENERATE_RUNNER(mName)                                  \
+    static ::ssvu::Test::Impl::Runner SSVUT_IMPL_GET_NAME_RUNNER(mName){[] \
+    {                                                                      \
+        if(::ssvu::Test::Impl::wasTestExecuted(SSVUT_IMPL_GET_KEY(mName))) \
+            return;                                                        \
+        ::ssvu::Test::Impl::setTestExecuted(SSVUT_IMPL_GET_KEY(mName));    \
+        ssvu::getEmplaceUPtr<SSVUT_IMPL_GET_NAME_TYPE(mName)>(             \
+        ::ssvu::Test::Impl::getTestStorage());                             \
+    }};
 
 /// @macro Test wrapper. After using this macro, write the test body in curly
 /// braces.
@@ -56,14 +54,14 @@
 
 
 /// @macro Test check. If `mExpr mOp mRes` is false, the test fails.
-#define SSVUT_EXPECT_OP(mExpr, mOp, mRes)                                   \
-    do                                                                      \
-    {                                                                       \
-        if(SSVU_UNLIKELY(!(mExpr mOp mRes))) {                              \
-            ::ssvu::Test::Impl::testFailure(                                \
-                this, #mExpr, VRM_PP_TOSTR(__LINE__), ::ssvu::toStr(mExpr), \
-                ::ssvu::toStr(mRes));                                       \
-        }                                                                   \
+#define SSVUT_EXPECT_OP(mExpr, mOp, mRes)                 \
+    do                                                    \
+    {                                                     \
+        if(SSVU_UNLIKELY(!(mExpr mOp mRes))) {            \
+            ::ssvu::Test::Impl::testFailure(this, #mExpr, \
+            VRM_PP_TOSTR(__LINE__), ::ssvu::toStr(mExpr), \
+            ::ssvu::toStr(mRes));                         \
+        }                                                 \
     } while(false)
 
 /// @macro Test check. If `mExpr` is false, the test fails.

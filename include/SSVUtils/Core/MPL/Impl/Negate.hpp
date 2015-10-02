@@ -9,18 +9,18 @@
 
 namespace ssvu
 {
-    namespace MPL
+namespace MPL
+{
+    namespace Impl
     {
-        namespace Impl
+        template <template <typename...> class TP>
+        struct Negate
         {
-            template <template <typename...> class TP>
-            struct Negate
-            {
-                template <typename T>
-                using Type = CTBool<!TP<T>{}()>;
-            };
-        }
+            template <typename T>
+            using Type = CTBool<!TP<T>{}()>;
+        };
     }
+}
 }
 
 #define SSVU_MPL_NEGATE(...) \

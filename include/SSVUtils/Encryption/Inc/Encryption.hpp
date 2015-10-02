@@ -9,48 +9,48 @@
 
 namespace ssvu
 {
-    namespace Encryption
+namespace Encryption
+{
+    enum class Type
     {
-        enum class Type
-        {
-            MD5,
-            Base64
-        }; /*!< Enum containing all encryption types. */
+        MD5,
+        Base64
+    }; /*!< Enum containing all encryption types. */
 
-        /// @brief Encrypts a string.
-        /// @code
-        /// using namespace ssvu::Encryption;
-        ///
-        /// string s{"test"};
-        /// string e{encrypt<Type::Base64>(s)};
-        /// strign d{decrypt<Type::Base64>(s)};
-        ///
-        /// SSVU_ASSERT(s == d);
-        /// @endcode
-        /// @tparam T Type of encryption to use. (example
-        /// ssvu::Encryption::Type::MD5)
-        /// @param mStr String to encrypt.
-        /// @return Returns a string containing the encrypted value.
-        template <Type TT>
-        std::string encrypt(const std::string& mStr);
+    /// @brief Encrypts a string.
+    /// @code
+    /// using namespace ssvu::Encryption;
+    ///
+    /// string s{"test"};
+    /// string e{encrypt<Type::Base64>(s)};
+    /// strign d{decrypt<Type::Base64>(s)};
+    ///
+    /// SSVU_ASSERT(s == d);
+    /// @endcode
+    /// @tparam T Type of encryption to use. (example
+    /// ssvu::Encryption::Type::MD5)
+    /// @param mStr String to encrypt.
+    /// @return Returns a string containing the encrypted value.
+    template <Type TT>
+    std::string encrypt(const std::string& mStr);
 
-        /// @brief Decrypts a string.
-        /// @code
-        /// using namespace ssvu::Encryption;
-        ///
-        /// string s{"test"};
-        /// string e{encrypt<Type::Base64>(s)};
-        /// strign d{decrypt<Type::Base64>(s)};
-        ///
-        /// SSVU_ASSERT(s == d);
-        /// @endcode
-        /// @tparam T Type of encryption to use. (example
-        /// ssvu::Encryption::Type::MD5)
-        /// @param mStr String to decrypt.
-        /// @return Returns a string containing the decrypted value.
-        template <Type TT>
-        std::string decrypt(const std::string& mStr);
-    }
+    /// @brief Decrypts a string.
+    /// @code
+    /// using namespace ssvu::Encryption;
+    ///
+    /// string s{"test"};
+    /// string e{encrypt<Type::Base64>(s)};
+    /// strign d{decrypt<Type::Base64>(s)};
+    ///
+    /// SSVU_ASSERT(s == d);
+    /// @endcode
+    /// @tparam T Type of encryption to use. (example
+    /// ssvu::Encryption::Type::MD5)
+    /// @param mStr String to decrypt.
+    /// @return Returns a string containing the decrypted value.
+    template <Type TT>
+    std::string decrypt(const std::string& mStr);
+}
 }
 
 #endif

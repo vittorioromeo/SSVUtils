@@ -49,7 +49,7 @@ int main()
     {
         using namespace ssvu;
 
-        struct XTBase 
+        struct XTBase
         {
             inline virtual ~XTBase() {}
         };

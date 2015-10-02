@@ -83,9 +83,9 @@ int main()
             TEST_ASSERT(a6.isAlive());
 
             mgr.forEach([](OTest& mA)
-                        {
-                            mA.s += "bb";
-                        });
+            {
+                mA.s += "bb";
+            });
 
             TEST_ASSERT(a0->s == "hibb");
             TEST_ASSERT(a4->s == "ciaobb");

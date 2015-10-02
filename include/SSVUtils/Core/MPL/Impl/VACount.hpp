@@ -9,33 +9,33 @@
 
 namespace ssvu
 {
-    namespace MPL
+namespace MPL
+{
+    namespace Impl
     {
-        namespace Impl
+        template <typename, typename...>
+        struct VACountHlpr;
+        template <typename T, typename T1, typename... Ts>
+        struct VACountHlpr<T, T1, Ts...>
         {
-            template <typename, typename...>
-            struct VACountHlpr;
-            template <typename T, typename T1, typename... Ts>
-            struct VACountHlpr<T, T1, Ts...>
-            {
-                static constexpr SizeT value{
-                    (isSame<T, T1>() ? SizeT(1) : SizeT(0)) +
-                    VACountHlpr<T, Ts...>::value};
-            };
+            static constexpr SizeT value{
+            (isSame<T, T1>() ? SizeT(1) : SizeT(0)) +
+            VACountHlpr<T, Ts...>::value};
+        };
 
-            template <typename T>
-            struct VACountHlpr<T>
-            {
-                static constexpr SizeT value{0};
-            };
+        template <typename T>
+        struct VACountHlpr<T>
+        {
+            static constexpr SizeT value{0};
+        };
 
-            template <typename T, typename... Ts>
-            inline constexpr SizeT getCountOf()
-            {
-                return VACountHlpr<T, Ts...>::value;
-            }
+        template <typename T, typename... Ts>
+        inline constexpr SizeT getCountOf()
+        {
+            return VACountHlpr<T, Ts...>::value;
         }
     }
+}
 }
 
 #endif

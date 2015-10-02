@@ -10,15 +10,15 @@
 
 namespace ssvu
 {
-    class Do final : public Command
-    {
-    protected:
-        Action action;
-        void update(FT) override;
+class Do final : public Command
+{
+protected:
+    Action action;
+    void update(FT) override;
 
-    public:
-        Do(Timeline& mTimeline, const Action& mAction) noexcept;
-    };
+public:
+    Do(Timeline& mTimeline, const Action& mAction) noexcept;
+};
 }
 
 #endif

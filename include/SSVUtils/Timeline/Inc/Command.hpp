@@ -9,21 +9,21 @@
 
 namespace ssvu
 {
-    class Timeline;
+class Timeline;
 
-    class Command
-    {
-        friend Timeline;
+class Command
+{
+    friend Timeline;
 
-    protected:
-        Timeline& timeline;
+protected:
+    Timeline& timeline;
 
-    public:
-        Command(Timeline& mTimeline) noexcept;
-        virtual ~Command();
-        virtual void update(FT);
-        virtual void reset();
-    };
+public:
+    Command(Timeline& mTimeline) noexcept;
+    virtual ~Command();
+    virtual void update(FT);
+    virtual void reset();
+};
 }
 
 #endif

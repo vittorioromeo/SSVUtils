@@ -9,35 +9,34 @@
 
 namespace ssvu
 {
-    namespace MPL
+namespace MPL
+{
+    namespace Impl
     {
-        namespace Impl
+        inline constexpr SizeT getMapRem(SizeT mI, SizeT mIdx) noexcept
         {
-            inline constexpr SizeT getMapRem(SizeT mI, SizeT mIdx) noexcept
-            {
-                return mI < mIdx ? mI : mI + 1;
-            }
-
-            template <typename, SizeT, typename...>
-            struct RemoveHlpr;
-
-            template <SizeT... TIs, SizeT TN, typename... Ts>
-            struct RemoveHlpr<IdxSeq<TIs...>, TN, Ts...>
-            {
-                using Type = List<TplElem<getMapRem(TIs, TN), Tpl<Ts...>>...>;
-            };
-
-            template <SizeT TN, typename... Ts>
-            struct Remove
-            {
-                SSVU_ASSERT_STATIC(
-                    TN < sizeof...(Ts),
-                    "Remove index smaller than the size of the list");
-                using Type = typename RemoveHlpr<MkIdxSeq<sizeof...(Ts)-1>, TN,
-                                                 Ts...>::Type;
-            };
+            return mI < mIdx ? mI : mI + 1;
         }
+
+        template <typename, SizeT, typename...>
+        struct RemoveHlpr;
+
+        template <SizeT... TIs, SizeT TN, typename... Ts>
+        struct RemoveHlpr<IdxSeq<TIs...>, TN, Ts...>
+        {
+            using Type = List<TplElem<getMapRem(TIs, TN), Tpl<Ts...>>...>;
+        };
+
+        template <SizeT TN, typename... Ts>
+        struct Remove
+        {
+            SSVU_ASSERT_STATIC(TN < sizeof...(Ts),
+            "Remove index smaller than the size of the list");
+            using Type =
+            typename RemoveHlpr<MkIdxSeq<sizeof...(Ts)-1>, TN, Ts...>::Type;
+        };
     }
+}
 }
 
 #endif
