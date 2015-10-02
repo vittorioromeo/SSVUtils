@@ -6,6 +6,28 @@ function fmtfile
     cat /tmp/tmpfmt > $1
 }
 
+function recursefmt
+{
+    for f in $1/* ; do
+        if [ -d $f ]; then
+
+            if [[ $f == *(extlibs|build|doc|cmake|_RELEASE)* ]]; then
+                echo "Pruning $f"
+            else
+                (recursefmt $f)
+            fi
+
+            # echo $f
+
+        elif [ -f $f ]; then
+
+            if [[ $f == *.(cpp|hpp|inl|c|h|cxx|hxx) ]]; then
+                echo $f
+            fi
+        fi
+    done
+}
+
 function forallfiles
 {
     for f in ./**/*(.hpp|.cpp|.inl) ; do
@@ -16,7 +38,7 @@ function forallfiles
     done
 }
 
-forallfiles
+recursefmt .
 
 #(cd ./include/ && forallfiles)
 #(cd ./src/ && forallfiles)
