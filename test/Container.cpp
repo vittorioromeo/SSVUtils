@@ -64,14 +64,15 @@ int main()
         TEST_ASSERT(tm.size() == 0);
 
         std::vector<std::string> words{
-        "a", "klab", "eacbds", "haadfopja", "bdasaa", "aasdfpoasfas"};
+            "a", "klab", "eacbds", "haadfopja", "bdasaa", "aasdfpoasfas"};
 
         for(const auto& w : words) tm[w] = w + "val";
 
         TEST_ASSERT(!tm.empty());
         TEST_ASSERT(tm.size() == words.size());
 
-        for(const auto& w : words) {
+        for(const auto& w : words)
+        {
             TEST_ASSERT_OP(tm[w], ==, w + "val");
         }
 
@@ -99,13 +100,14 @@ int main()
         TEST_ASSERT(vs.size() == 0);
         {
             std::vector<std::string> words{
-            "a", "klab", "eacbds", "haadfopja", "bdasaa", "aasdfpoasfas"};
+                "a", "klab", "eacbds", "haadfopja", "bdasaa", "aasdfpoasfas"};
 
             for(const auto& w : words) vs.insert(w);
 
             sort(words);
 
-            for(auto i(0u); i < words.size(); ++i) {
+            for(auto i(0u); i < words.size(); ++i)
+            {
                 TEST_ASSERT_OP(words[i], ==, vs[i]);
             }
 

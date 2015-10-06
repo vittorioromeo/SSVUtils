@@ -9,22 +9,22 @@
 
 namespace ssvu
 {
-namespace MPL
-{
-    namespace Impl
+    namespace MPL
     {
-        template <typename T, typename... Ts>
-        struct IdxOf;
-        template <typename T, typename... Ts>
-        struct IdxOf<T, T, Ts...> : CTInt<0>
+        namespace Impl
         {
-        };
-        template <typename T, typename TTail, typename... Ts>
-        struct IdxOf<T, TTail, Ts...> : CTInt<1 + IdxOf<T, Ts...>()>
-        {
-        };
+            template <typename T, typename... Ts>
+            struct IdxOf;
+            template <typename T, typename... Ts>
+            struct IdxOf<T, T, Ts...> : CTInt<0>
+            {
+            };
+            template <typename T, typename TTail, typename... Ts>
+            struct IdxOf<T, TTail, Ts...> : CTInt<1 + IdxOf<T, Ts...>()>
+            {
+            };
+        }
     }
-}
 }
 
 #endif

@@ -11,27 +11,27 @@
 
 namespace ssvu
 {
-namespace Benchmark
-{
-    namespace Impl
+    namespace Benchmark
     {
-        /// @brief Benchmark group data structure storing a time point and a
-        /// duration.
-        struct DataGroup : public DataBase<DataGroup>
+        namespace Impl
         {
-            TP tp;
-            Duration duration;
+            /// @brief Benchmark group data structure storing a time point and a
+            /// duration.
+            struct DataGroup : public DataBase<DataGroup>
+            {
+                TP tp;
+                Duration duration;
 
-            void reset() noexcept;
-            void resume() noexcept;
-            void pause() noexcept;
+                void reset() noexcept;
+                void resume() noexcept;
+                void pause() noexcept;
 
-            /// @brief Returns the elapsed time as a
-            /// std::chrono::milliseconds.
-            Duration getDuration() const noexcept;
-        };
+                /// @brief Returns the elapsed time as a
+                /// std::chrono::milliseconds.
+                Duration getDuration() const noexcept;
+            };
+        }
     }
-}
 }
 
 #endif

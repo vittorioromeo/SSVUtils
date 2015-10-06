@@ -12,7 +12,8 @@ int main()
     using namespace std;
     using namespace ssvu;
 
-    for(int i{0}; i < 100; ++i) {
+    for(int i{0}; i < 100; ++i)
+    {
         auto r(getRndI<int>(-10, 10));
         TEST_ASSERT(r >= -10 && r < 10);
 

@@ -9,104 +9,104 @@
 
 namespace ssvu
 {
-namespace Test
-{
-    namespace Impl
+    namespace Test
     {
-        struct Runner final
+        namespace Impl
         {
-            template <typename T>
-            inline Runner(const T& mAction) noexcept(noexcept(mAction()))
+            struct Runner final
             {
-                mAction();
-            }
-        };
+                template <typename T>
+                inline Runner(const T& mAction) noexcept(noexcept(mAction()))
+                {
+                    mAction();
+                }
+            };
 
-        struct TestBase
-        {
-            const char* name;
-            const char* line;
-            const char* file;
-
-            inline TestBase(
-            const char* mName, const char* mLine, const char* mFile)
-                : name{mName}, line{mLine}, file{mFile}
+            struct TestBase
             {
+                const char* name;
+                const char* line;
+                const char* file;
+
+                inline TestBase(
+                    const char* mName, const char* mLine, const char* mFile)
+                    : name{mName}, line{mLine}, file{mFile}
+                {
+                }
+                inline virtual ~TestBase() {}
+                inline virtual void run() const {}
+            };
+
+            using TestStorage = VecUPtr<TestBase>;
+            using TestExecMap = std::map<const char*, bool>;
+
+            inline auto& getTestStorage() noexcept
+            {
+                static TestStorage result;
+                return result;
             }
-            inline virtual ~TestBase() {}
-            inline virtual void run() const {}
-        };
+            inline auto& getTestExecMap() noexcept
+            {
+                static TestExecMap result;
+                return result;
+            }
+            inline auto& getFailure() noexcept
+            {
+                static bool failure{false};
+                return failure;
+            }
 
-        using TestStorage = VecUPtr<TestBase>;
-        using TestExecMap = std::map<const char*, bool>;
+            inline bool wasTestExecuted(const char* mKey) noexcept
+            {
+                return getTestExecMap()[mKey];
+            }
+            inline void setTestExecuted(const char* mKey) noexcept
+            {
+                getTestExecMap()[mKey] = true;
+            }
 
-        inline auto& getTestStorage() noexcept
-        {
-            static TestStorage result;
-            return result;
-        }
-        inline auto& getTestExecMap() noexcept
-        {
-            static TestExecMap result;
-            return result;
-        }
-        inline auto& getFailure() noexcept
-        {
-            static bool failure{false};
-            return failure;
-        }
+            inline void testFailure(const TestBase* mTest, const char* mExpr,
+                const char* mLine, std::string mCurrent = "",
+                std::string mExpected = "")
+            {
+                if(getFailure()) return;
+                getFailure() = true;
 
-        inline bool wasTestExecuted(const char* mKey) noexcept
-        {
-            return getTestExecMap()[mKey];
-        }
-        inline void setTestExecuted(const char* mKey) noexcept
-        {
-            getTestExecMap()[mKey] = true;
-        }
+                lo("Test") << "Test failure\n\n"
+                           << "Test:\t<" << mTest->name << ">\n"
+                           << "Line:\t<" << mTest->line << ">\n"
+                           << "File:\t<" << mTest->file << ">\n\n"
+                           << "Expression:\n" << mExpr << "\n"
+                           << "at line: " << mLine << "\n";
 
-        inline void testFailure(const TestBase* mTest, const char* mExpr,
-        const char* mLine, std::string mCurrent = "",
-        std::string mExpected = "")
-        {
-            if(getFailure()) return;
-            getFailure() = true;
+                if(!mCurrent.empty())
+                    lo() << "\nExpression result: " << mCurrent << "\n";
+                if(!mExpected.empty())
+                    lo() << "Expected result:   " << mExpected << "\n";
 
-            lo("Test") << "Test failure\n\n"
-                       << "Test:\t<" << mTest->name << ">\n"
-                       << "Line:\t<" << mTest->line << ">\n"
-                       << "File:\t<" << mTest->file << ">\n\n"
-                       << "Expression:\n" << mExpr << "\n"
-                       << "at line: " << mLine << "\n";
+                lo() << hr() << "\n\n";
+            }
 
-            if(!mCurrent.empty())
-                lo() << "\nExpression result: " << mCurrent << "\n";
-            if(!mExpected.empty())
-                lo() << "Expected result:   " << mExpected << "\n";
+            inline void runAllTests()
+            {
+                static bool done{false};
+                if(done) return;
 
-            lo() << hr() << "\n\n";
-        }
+                done = true;
 
-        inline void runAllTests()
-        {
-            static bool done{false};
-            if(done) return;
+                for(const auto& t : getTestStorage()) t->run();
 
-            done = true;
+                if(!getFailure())
+                    lo("Test") << "All " << getTestStorage().size()
+                               << " tests passed!\n";
 
-            for(const auto& t : getTestStorage()) t->run();
+                getTestStorage().clear();
+                getTestExecMap().clear();
 
-            if(!getFailure())
-                lo("Test") << "All " << getTestStorage().size()
-                           << " tests passed!\n";
-
-            getTestStorage().clear();
-            getTestExecMap().clear();
-
-            lo().flush();
+                lo().flush();
+            }
         }
     }
-}
 }
 
 #endif

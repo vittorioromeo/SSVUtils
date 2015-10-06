@@ -10,66 +10,71 @@
 
 namespace ssvu
 {
-namespace CmdLine
-{
-    namespace Exception
+    namespace CmdLine
     {
-        class Base : public std::runtime_error
+        namespace Exception
         {
-        private:
-            std::string title;
-
-        public:
-            inline Base(const std::string& mTitle, const std::string& mStr)
-                : std::runtime_error{mStr}, title{mTitle}
+            class Base : public std::runtime_error
             {
+            private:
+                std::string title;
+
+            public:
+                inline Base(const std::string& mTitle, const std::string& mStr)
+                    : std::runtime_error{mStr}, title{mTitle}
+                {
+                }
+                inline const auto& getTitle() const noexcept { return title; }
+            };
+
+            inline Base createFlagNotFound(
+                const std::string& mFlagName, const std::string& mCmdName)
+            {
+                return {"Flag not found", "Flag `" + mFlagName +
+                                              "` not found in command " +
+                                              mCmdName};
             }
-            inline const auto& getTitle() const noexcept { return title; }
-        };
 
-        inline Base createFlagNotFound(
-        const std::string& mFlagName, const std::string& mCmdName)
-        {
-            return {"Flag not found",
-            "Flag `" + mFlagName + "` not found in command " + mCmdName};
-        }
+            inline Base createCmdNotFound(
+                const std::string& mCmdName, const std::string& mSuggestion)
+            {
+                return {"Command not found",
+                    "Command with name <" + mCmdName +
+                        "> not found - did you mean <" + mSuggestion + ">?"};
+            }
 
-        inline Base createCmdNotFound(
-        const std::string& mCmdName, const std::string& mSuggestion)
-        {
-            return {"Command not found", "Command with name <" + mCmdName +
-                                         "> not found - did you mean <" +
-                                         mSuggestion + ">?"};
-        }
+            inline Base createSignatureMismatch(
+                const std::string& mForCmdPhrase, const std::string& mElement,
+                const ::std::string& mCorrect)
+            {
+                return {"Signature mismatch",
+                    "Incorrect number of " + mElement + " " + mForCmdPhrase +
+                        " - expected: " + mCorrect};
+            }
 
-        inline Base createSignatureMismatch(const std::string& mForCmdPhrase,
-        const std::string& mElement, const ::std::string& mCorrect)
-        {
-            return {"Signature mismatch", "Incorrect number of " + mElement +
-                                          " " + mForCmdPhrase +
-                                          " - expected: " + mCorrect};
-        }
+            inline Base createArgPackInfinitePositionError()
+            {
+                return {"Infinite ArgPack position error",
+                    "Infinite ArgPacks must be specified last in the command"};
+            }
 
-        inline Base createArgPackInfinitePositionError()
-        {
-            return {"Infinite ArgPack position error",
-            "Infinite ArgPacks must be specified last in the command"};
-        }
+            inline Base createArgPackSignatureMismatch(
+                Impl::BaseArgPack& mArgPack)
+            {
+                return {"ArgPack signature mismatch",
+                    "Incorrect number of parameters for ArgPack `" +
+                        mArgPack.getName() + "` - expected (" +
+                        toStr(mArgPack.getMin()) + " .. " +
+                        toStr(mArgPack.getMax()) + ")"};
+            }
 
-        inline Base createArgPackSignatureMismatch(Impl::BaseArgPack& mArgPack)
-        {
-            return {"ArgPack signature mismatch",
-            "Incorrect number of parameters for ArgPack `" +
-            mArgPack.getName() + "` - expected (" + toStr(mArgPack.getMin()) +
-            " .. " + toStr(mArgPack.getMax()) + ")"};
-        }
-
-        inline Base createParsingError()
-        {
-            return {"Parsing error", "Too many arguments used in command line"};
+            inline Base createParsingError()
+            {
+                return {
+                    "Parsing error", "Too many arguments used in command line"};
+            }
         }
     }
-}
 }
 
 #endif

@@ -9,19 +9,19 @@
 
 namespace ssvu
 {
-namespace MPL
-{
-    namespace Impl
+    namespace MPL
     {
-        template <typename, typename>
-        struct Append;
-        template <typename... Ts1, typename... Ts2>
-        struct Append<List<Ts1...>, List<Ts2...>>
+        namespace Impl
         {
-            using Type = List<Ts1..., Ts2...>;
-        };
+            template <typename, typename>
+            struct Append;
+            template <typename... Ts1, typename... Ts2>
+            struct Append<List<Ts1...>, List<Ts2...>>
+            {
+                using Type = List<Ts1..., Ts2...>;
+            };
+        }
     }
-}
 }
 
 #endif

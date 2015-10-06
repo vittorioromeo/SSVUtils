@@ -10,19 +10,19 @@
 
 namespace ssvu
 {
-namespace Benchmark
-{
-    namespace Impl
+    namespace Benchmark
     {
-        void start(std::string);
-        Data getEndData();
-        void endLo();
-        void groupReset(const std::string&);
-        void groupResume(const std::string&);
-        void groupPause(const std::string&);
-        void groupEndLo(const std::string&);
+        namespace Impl
+        {
+            void start(std::string);
+            Data getEndData();
+            void endLo();
+            void groupReset(const std::string&);
+            void groupResume(const std::string&);
+            void groupPause(const std::string&);
+            void groupEndLo(const std::string&);
+        }
     }
-}
 }
 
 #endif

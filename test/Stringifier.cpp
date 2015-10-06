@@ -12,8 +12,8 @@
 int main()
 {
     auto nothing([]
-    {
-    });
+        {
+        });
     int testArray[]{1, 2, 3};
     std::ostringstream trash;
 #define SSVUT_STRINGIFY_TEST(mValue)      \
@@ -40,11 +40,11 @@ int main()
     SSVUT_STRINGIFY_TEST(__R(std::list<int>{1, 2, 3}));
     SSVUT_STRINGIFY_TEST(__R(std::forward_list<int>{1, 2, 3}));
     SSVUT_STRINGIFY_TEST(
-    __R(std::map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
+        __R(std::map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
+    SSVUT_STRINGIFY_TEST(__R(
+        std::unordered_map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
     SSVUT_STRINGIFY_TEST(
-    __R(std::unordered_map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
-    SSVUT_STRINGIFY_TEST(
-    __R(ssvu::Bimap<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
+        __R(ssvu::Bimap<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
     SSVUT_STRINGIFY_TEST(__R(ssvu::Tpl<int, int, int>{1, 2, 3}));
     SSVUT_STRINGIFY_TEST(__R(std::pair<int, int>{2, 3}));
 

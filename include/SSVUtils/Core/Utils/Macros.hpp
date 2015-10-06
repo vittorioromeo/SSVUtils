@@ -12,30 +12,30 @@
 
 namespace ssvu
 {
-namespace Impl
-{
-    /// @brief Internal structure with `isStandardLayout` static assertion
-    /// used for "baseptr" macros.
-    template <typename T>
-    struct StandardLayoutChecker
+    namespace Impl
     {
-        SSVU_ASSERT_STATIC(
-        isStandardLayout<T>(), "T must be a standard-layout type");
-        using Type = T;
-    };
+        /// @brief Internal structure with `isStandardLayout` static assertion
+        /// used for "baseptr" macros.
+        template <typename T>
+        struct StandardLayoutChecker
+        {
+            SSVU_ASSERT_STATIC(
+                isStandardLayout<T>(), "T must be a standard-layout type");
+            using Type = T;
+        };
 
-    template <typename T>
-    using StandardLayoutCheckerT =
-    typename ssvu::Impl::StandardLayoutChecker<T>::Type;
+        template <typename T>
+        using StandardLayoutCheckerT =
+            typename ssvu::Impl::StandardLayoutChecker<T>::Type;
 
-    template <typename...>
-    struct Voider
-    {
-        using Type = void;
-    };
-    template <typename... TArgs>
-    using VoidT = typename Voider<TArgs...>::Type;
-}
+        template <typename...>
+        struct Voider
+        {
+            using Type = void;
+        };
+        template <typename... TArgs>
+        using VoidT = typename Voider<TArgs...>::Type;
+    }
 }
 
 /// @macro Defines a dummy struct with a name generated from the current line
@@ -65,9 +65,9 @@ namespace Impl
     {                                                               \
         template <typename T>                                       \
         inline static constexpr auto check(T*)                      \
-        -> ssvu::IsSame<decltype(std::declval<T>().mMemberName(     \
-                        std::declval<TArgs>()...)),                 \
-        TReturn>                                                    \
+            -> ssvu::IsSame<decltype(std::declval<T>().mMemberName( \
+                                std::declval<TArgs>()...)),         \
+                TReturn>                                            \
         {                                                           \
             return {};                                              \
         }                                                           \
@@ -114,7 +114,7 @@ namespace Impl
     inline auto mName(T& mArg, TArgs&&... mArgs)                             \
     {                                                                        \
         return __ssvuMacroImpl::_##mName##Impl<T, mChecker, TArgs...>::call( \
-        mArg, FWD(mArgs)...);                                                \
+            mArg, FWD(mArgs)...);                                            \
     }
 
 /// @macro Define a template function with name `mName` that invokes
@@ -127,12 +127,12 @@ namespace Impl
 /// callTestMethod(example);
 /// @endcode
 /// @details Must end without semicolon.
-#define SSVU_DEFINE_MEMFN_CALLER(mName, mMemberName, mSignature)          \
-    SSVU_DEFINE_MEMFN_DETECTOR(                                           \
-    VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName) \
-    SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName,                     \
-    (VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__) < T,         \
-                                  mSignature > ()))
+#define SSVU_DEFINE_MEMFN_CALLER(mName, mMemberName, mSignature)              \
+    SSVU_DEFINE_MEMFN_DETECTOR(                                               \
+        VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName) \
+    SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName,                         \
+        (VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__) < T,         \
+                                      mSignature > ()))
 
 /// @macro Gets the base `mType*` structure pointer from a `mMemberPointer`
 /// pointer to a member of `mType`, with member name `mMemberName`. Const
@@ -144,7 +144,8 @@ namespace Impl
 /// Must end with semicolon.
 #define SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(mType, mMemberPtr, mMemberName) \
     reinterpret_cast<const ssvu::Impl::StandardLayoutCheckerT<mType>*>(       \
-    reinterpret_cast<const char*>(mMemberPtr) - offsetof(mType, mMemberName))
+        reinterpret_cast<const char*>(mMemberPtr) -                           \
+        offsetof(mType, mMemberName))
 
 /// @macro Gets the base `mType*` structure pointer from a `mMemberPointer`
 /// pointer to a member of `mType`, with member name `mMemberName`.
@@ -155,7 +156,7 @@ namespace Impl
 /// Must end with semicolon.
 #define SSVU_GET_BASEPTR_FROM_MEMBERPTR(mType, mMemberPtr, mMemberName) \
     const_cast<mType*>(                                                 \
-    SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(mType, mMemberPtr, mMemberName))
+        SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(mType, mMemberPtr, mMemberName))
 
 /// @macro Defines a basic "sink" setter for a class field.
 /// @details Generates two functions, one that takes the parameter by && and
@@ -174,33 +175,33 @@ namespace Impl
 #define SSVU_DEFINE_SINK_CTOR_SIMPLE_1(mClassName, mMember)                 \
     inline mClassName(const decltype(mMember)& mParam) : mMember{mParam} {} \
     inline mClassName(decltype(mMember)&& mParam) noexcept                  \
-    : mMember{mv(mParam)}                                                   \
+        : mMember{mv(mParam)}                                               \
     {                                                                       \
     }
 
 /// @macro Defines a basic "sink" constructor for a class, taking two arguments.
 /// @details Generates four constructors.
 /// Must end without semicolon.
-#define SSVU_DEFINE_SINK_CTOR_SIMPLE_2(mClassName, mMember1, mMember2)    \
-    inline mClassName(                                                    \
-    const decltype(mMember1)& mParam1, const decltype(mMember2)& mParam2) \
-        : mMember1{mParam1}, mMember2{mParam2}                            \
-    {                                                                     \
-    }                                                                     \
-    inline mClassName(                                                    \
-    const decltype(mMember1)& mParam1, decltype(mMember2)&& mParam2)      \
-        : mMember1{mParam1}, mMember2{mv(mParam2)}                        \
-    {                                                                     \
-    }                                                                     \
-    inline mClassName(                                                    \
-    decltype(mMember1)&& mParam1, const decltype(mMember2)& mParam2)      \
-        : mMember1{mv(mParam1)}, mMember2{mParam2}                        \
-    {                                                                     \
-    }                                                                     \
-    inline mClassName(decltype(mMember1)&& mParam1,                       \
-    decltype(mMember2)&& mParam2) noexcept : mMember1{mv(mParam1)},       \
-                                             mMember2{mv(mParam2)}        \
-    {                                                                     \
+#define SSVU_DEFINE_SINK_CTOR_SIMPLE_2(mClassName, mMember1, mMember2)        \
+    inline mClassName(                                                        \
+        const decltype(mMember1)& mParam1, const decltype(mMember2)& mParam2) \
+        : mMember1{mParam1}, mMember2{mParam2}                                \
+    {                                                                         \
+    }                                                                         \
+    inline mClassName(                                                        \
+        const decltype(mMember1)& mParam1, decltype(mMember2)&& mParam2)      \
+        : mMember1{mParam1}, mMember2{mv(mParam2)}                            \
+    {                                                                         \
+    }                                                                         \
+    inline mClassName(                                                        \
+        decltype(mMember1)&& mParam1, const decltype(mMember2)& mParam2)      \
+        : mMember1{mv(mParam1)}, mMember2{mParam2}                            \
+    {                                                                         \
+    }                                                                         \
+    inline mClassName(decltype(mMember1)&& mParam1,                           \
+        decltype(mMember2)&& mParam2) noexcept : mMember1{mv(mParam1)},       \
+                                                 mMember2{mv(mParam2)}        \
+    {                                                                         \
     }
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro

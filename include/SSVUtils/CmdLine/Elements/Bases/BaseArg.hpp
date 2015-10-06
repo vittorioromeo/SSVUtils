@@ -11,20 +11,20 @@
 
 namespace ssvu
 {
-namespace CmdLine
-{
-    namespace Impl
+    namespace CmdLine
     {
-        struct BaseArg : public BaseElement
+        namespace Impl
         {
-            virtual void set(const std::string&) = 0;
-            inline std::string getUsageStr() const override
+            struct BaseArg : public BaseElement
             {
-                return "(ARG " + getName() + ")";
-            }
-        };
+                virtual void set(const std::string&) = 0;
+                inline std::string getUsageStr() const override
+                {
+                    return "(ARG " + getName() + ")";
+                }
+            };
+        }
     }
-}
 }
 
 #endif

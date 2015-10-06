@@ -11,38 +11,41 @@
 
 namespace ssvu
 {
-namespace CmdLine
-{
-    namespace Impl
+    namespace CmdLine
     {
-        constexpr const char* flagPrefixShort{"-"};
-        constexpr const char* flagPrefixLong{"--"};
-
-        class BaseFlag : public BaseElement
+        namespace Impl
         {
-        private:
-            std::string nameShort, nameLong; // With prefix
+            constexpr const char* flagPrefixShort{"-"};
+            constexpr const char* flagPrefixLong{"--"};
 
-        public:
-            inline BaseFlag(
-            const std::string& mNameShort, const std::string& mNameLong)
-                : nameShort{flagPrefixShort + mNameShort},
-                  nameLong{flagPrefixLong + mNameLong}
+            class BaseFlag : public BaseElement
             {
-            }
+            private:
+                std::string nameShort, nameLong; // With prefix
 
-            inline const auto& getNameShort() const noexcept
-            {
-                return nameShort;
-            }
-            inline const auto& getNameLong() const noexcept { return nameLong; }
-            inline auto hasName(const std::string& mName) const noexcept
-            {
-                return mName == nameShort || mName == nameLong;
-            }
-        };
+            public:
+                inline BaseFlag(
+                    const std::string& mNameShort, const std::string& mNameLong)
+                    : nameShort{flagPrefixShort + mNameShort},
+                      nameLong{flagPrefixLong + mNameLong}
+                {
+                }
+
+                inline const auto& getNameShort() const noexcept
+                {
+                    return nameShort;
+                }
+                inline const auto& getNameLong() const noexcept
+                {
+                    return nameLong;
+                }
+                inline auto hasName(const std::string& mName) const noexcept
+                {
+                    return mName == nameShort || mName == nameLong;
+                }
+            };
+        }
     }
-}
 }
 
 #endif

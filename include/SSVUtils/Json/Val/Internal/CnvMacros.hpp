@@ -17,9 +17,9 @@
 #define SSVJ_CNV_NAMESPACE() \
     namespace ssvu           \
     {                        \
-    namespace Json           \
-    {                        \
-    namespace Impl
+        namespace Json       \
+        {                    \
+        namespace Impl
 
 /// @macro Closes a namespace for user-defined converters implementation.
 /// @details Must be called after `SSVU_CNV_NAMESPACE()`. Semicolon must not be
@@ -49,14 +49,14 @@
     mData.mArg VRM_PP_COMMA_IF(mIdx)
 #define SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG(mX, ...) \
     VRM_PP_FOREACH_REVERSE(                      \
-    SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
+        SSVJ_IMPL_SRLZ_ARR_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
 
 // Serialize members to obj with same name
 #define SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG_STEP(mIdx, mData, mArg) \
     VRM_PP_TOSTR(mArg), mData.mArg VRM_PP_COMMA_IF(mIdx)
 #define SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG(mX, ...) \
     VRM_PP_FOREACH_REVERSE(                           \
-    SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
+        SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
 
 // Wrapper macro to avoid repetition
 #define SSVJ_IMPL_CNV_WRAPPER(mType, mTemplateArgs, mBody) \
@@ -102,7 +102,7 @@
 /// `mTemplateArgs`.
 #define SSVJ_CNV_ARR_TEMPLATE(mTemplateArgs, mType, ...) \
     SSVJ_IMPL_CNV_WRAPPER(                               \
-    mType, (mTemplateArgs), (SSVJ_SRLZ_ARR(mV, mX, __VA_ARGS__);))
+        mType, (mTemplateArgs), (SSVJ_SRLZ_ARR(mV, mX, __VA_ARGS__);))
 
 /// @macro Define a JSON converter for type `mType`, that
 /// serializes/deserializes the specified members to a JSON objects.

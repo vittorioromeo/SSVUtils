@@ -10,83 +10,83 @@
 
 namespace ssvu
 {
-namespace Json
-{
-    /// @typedef Type of Arr indices.
-    using Idx = SizeT;
-
-    /// @typedef Type of Obj keys.
-    using Key = std::string;
-
-    /// @typedef Type of string values.
-    using Str = std::string;
-
-    /// @typedef Type of boolean values.
-    using Bln = bool;
-
-    /// @typedef Representation/storage for a signed integral numeric value.
-    using IntS = long int;
-
-    /// @typedef Representation/storage for an unsigned integral numeric
-    /// value.
-    using IntU = unsigned long int;
-
-    /// @typedef Representation/storage for a real value.
-    using Real = double;
-
-    namespace Impl
+    namespace Json
     {
-        /// @typedef Template for `Obj` type. Intended to be instantiated
-        /// with `Val`.
-        template <typename T>
-        using ObjImpl = VecMap<Key, T>;
+        /// @typedef Type of Arr indices.
+        using Idx = SizeT;
 
-        /// @typedef Template for `Arr` type. Intended to be instantiated
-        /// with `Val`.
-        template <typename T>
-        using ArrImpl = std::vector<T>;
-    }
+        /// @typedef Type of Obj keys.
+        using Key = std::string;
 
-    /// @brief Empty struct representing a null type.
-    struct Nll
-    {
-    };
+        /// @typedef Type of string values.
+        using Str = std::string;
 
+        /// @typedef Type of boolean values.
+        using Bln = bool;
 
+        /// @typedef Representation/storage for a signed integral numeric value.
+        using IntS = long int;
 
-    /// @brief Struct holding settings for `Writer`.
-    /// @tparam TFmt If true, applies console color/style formatting.
-    /// @tparam TPretty If true, applies indentation and newlines.
-    template <bool TFmt, bool TPretty>
-    struct WriterSettings
-    {
-        enum
+        /// @typedef Representation/storage for an unsigned integral numeric
+        /// value.
+        using IntU = unsigned long int;
+
+        /// @typedef Representation/storage for a real value.
+        using Real = double;
+
+        namespace Impl
         {
-            fmt = TFmt,
-            pretty = TPretty
+            /// @typedef Template for `Obj` type. Intended to be instantiated
+            /// with `Val`.
+            template <typename T>
+            using ObjImpl = VecMap<Key, T>;
+
+            /// @typedef Template for `Arr` type. Intended to be instantiated
+            /// with `Val`.
+            template <typename T>
+            using ArrImpl = std::vector<T>;
+        }
+
+        /// @brief Empty struct representing a null type.
+        struct Nll
+        {
         };
-    };
-
-    /// @typedef `Writer` settings intended for human-readable text files.
-    using WSPretty = WriterSettings<false, true>;
-
-    /// @typedef `Writer` settings intended for non human-readable text
-    /// files.
-    using WSMinified = WriterSettings<false, false>;
-
-    /// @typedef `Writer` settings intended for console logging.
-    using WSPrettyLog = WriterSettings<true, true>;
 
 
 
-    /// @brief Struct holding settings for `Reader`.
-    struct ReaderSettings
-    {
-    };
+        /// @brief Struct holding settings for `Writer`.
+        /// @tparam TFmt If true, applies console color/style formatting.
+        /// @tparam TPretty If true, applies indentation and newlines.
+        template <bool TFmt, bool TPretty>
+        struct WriterSettings
+        {
+            enum
+            {
+                fmt = TFmt,
+                pretty = TPretty
+            };
+        };
 
-    /// @typedef `Reader` settings intended for any JSON file.
-    using RSDefault = ReaderSettings;
-}
+        /// @typedef `Writer` settings intended for human-readable text files.
+        using WSPretty = WriterSettings<false, true>;
+
+        /// @typedef `Writer` settings intended for non human-readable text
+        /// files.
+        using WSMinified = WriterSettings<false, false>;
+
+        /// @typedef `Writer` settings intended for console logging.
+        using WSPrettyLog = WriterSettings<true, true>;
+
+
+
+        /// @brief Struct holding settings for `Reader`.
+        struct ReaderSettings
+        {
+        };
+
+        /// @typedef `Reader` settings intended for any JSON file.
+        using RSDefault = ReaderSettings;
+    }
 }
 
 /// @namespace Shortcut for the `ssvu::Json` namespace.

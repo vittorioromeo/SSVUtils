@@ -11,13 +11,13 @@
 // C++14/C++17: hopefully will be in standard
 namespace ssvu
 {
-template <typename... TArgs>
-inline constexpr auto mkArray(TArgs&&... mArgs) noexcept(noexcept(
-std::array<Decay<Common<TArgs...>>, sizeof...(TArgs)>{{FWD(mArgs)...}}))
-{
-    return std::array<Decay<Common<TArgs...>>, sizeof...(TArgs)>{
-    {FWD(mArgs)...}};
-}
+    template <typename... TArgs>
+    inline constexpr auto mkArray(TArgs&&... mArgs) noexcept(noexcept(
+        std::array<Decay<Common<TArgs...>>, sizeof...(TArgs)>{{FWD(mArgs)...}}))
+    {
+        return std::array<Decay<Common<TArgs...>>, sizeof...(TArgs)>{
+            {FWD(mArgs)...}};
+    }
 }
 
 #endif

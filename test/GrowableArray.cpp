@@ -16,12 +16,14 @@ int main()
         gab.grow(0, 10);
 
         for(int i = 0; i < 10; ++i) gab[i] = i;
-        for(int i = 0; i < 10; ++i) {
+        for(int i = 0; i < 10; ++i)
+        {
             TEST_ASSERT_OP(gab[i], ==, i);
         }
 
         gab.grow(10, 20);
-        for(int i = 0; i < 10; ++i) {
+        for(int i = 0; i < 10; ++i)
+        {
             TEST_ASSERT_OP(gab[i], ==, i);
         }
     }

@@ -8,28 +8,31 @@
 
 namespace ssvu
 {
-namespace Benchmark
-{
-    namespace Impl
+    namespace Benchmark
     {
-        SSVU_INLINE void DataGroup::reset() noexcept
+        namespace Impl
         {
-            tp = HRClock::now();
-            duration = Duration{0};
-        }
+            SSVU_INLINE void DataGroup::reset() noexcept
+            {
+                tp = HRClock::now();
+                duration = Duration{0};
+            }
 
-        SSVU_INLINE void DataGroup::resume() noexcept { tp = HRClock::now(); }
+            SSVU_INLINE void DataGroup::resume() noexcept
+            {
+                tp = HRClock::now();
+            }
 
-        SSVU_INLINE void DataGroup::pause() noexcept
-        {
-            duration +=
-            std::chrono::duration_cast<Duration>(HRClock::now() - tp);
-        }
+            SSVU_INLINE void DataGroup::pause() noexcept
+            {
+                duration +=
+                    std::chrono::duration_cast<Duration>(HRClock::now() - tp);
+            }
 
-        SSVU_INLINE Duration DataGroup::getDuration() const noexcept
-        {
-            return duration;
+            SSVU_INLINE Duration DataGroup::getDuration() const noexcept
+            {
+                return duration;
+            }
         }
     }
-}
 }

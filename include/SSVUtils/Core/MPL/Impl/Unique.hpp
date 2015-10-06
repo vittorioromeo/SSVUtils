@@ -9,33 +9,33 @@
 
 namespace ssvu
 {
-namespace MPL
-{
-    namespace Impl
+    namespace MPL
     {
-        template <typename, typename>
-        struct UniqueHlpr;
-        template <typename TResult>
-        struct UniqueHlpr<List<>, TResult>
+        namespace Impl
         {
-            using Type = TResult;
-        };
-        template <typename T, typename... T1s, typename... T2s>
-        struct UniqueHlpr<List<T, T1s...>, List<T2s...>>
-        {
-            using CurrentList =
-            typename UniqueHlpr<List<T1s...>, List<T2s...>>::Type;
-            using AddedList =
-            typename UniqueHlpr<List<T1s...>, List<T2s..., T>>::Type;
+            template <typename, typename>
+            struct UniqueHlpr;
+            template <typename TResult>
+            struct UniqueHlpr<List<>, TResult>
+            {
+                using Type = TResult;
+            };
+            template <typename T, typename... T1s, typename... T2s>
+            struct UniqueHlpr<List<T, T1s...>, List<T2s...>>
+            {
+                using CurrentList =
+                    typename UniqueHlpr<List<T1s...>, List<T2s...>>::Type;
+                using AddedList =
+                    typename UniqueHlpr<List<T1s...>, List<T2s..., T>>::Type;
 
-            using Type = Conditional<List<T2s...>::template has<T>(),
-            CurrentList, AddedList>;
-        };
+                using Type = Conditional<List<T2s...>::template has<T>(),
+                    CurrentList, AddedList>;
+            };
 
-        template <typename... Ts>
-        using Unique = typename UniqueHlpr<List<Ts...>, List<>>::Type;
+            template <typename... Ts>
+            using Unique = typename UniqueHlpr<List<Ts...>, List<>>::Type;
+        }
     }
-}
 }
 
 #endif

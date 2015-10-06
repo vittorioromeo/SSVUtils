@@ -10,30 +10,31 @@
 
 namespace ssvu
 {
-namespace Impl
-{
-    template <SizeT TN>
-    struct Exploder
+    namespace Impl
     {
-        template <typename TF, typename T, typename... TArgs>
-        inline static auto explode(TF&& mF, T&& mT, TArgs&&... mArgs) noexcept
+        template <SizeT TN>
+        struct Exploder
         {
-            return Exploder<TN - 1>::explode(
-            FWD(mF), FWD(mT), ::std::get<TN - 1>(FWD(mT)), FWD(mArgs)...);
-        }
-    };
+            template <typename TF, typename T, typename... TArgs>
+            inline static auto explode(
+                TF&& mF, T&& mT, TArgs&&... mArgs) noexcept
+            {
+                return Exploder<TN - 1>::explode(FWD(mF), FWD(mT),
+                    ::std::get<TN - 1>(FWD(mT)), FWD(mArgs)...);
+            }
+        };
 
-    template <>
-    struct Exploder<0>
-    {
-        template <typename TF, typename T, typename... TArgs>
-        inline static auto explode(TF&& mF, T&&, TArgs&&... mArgs) noexcept(
-        noexcept(FWD(mF)(FWD(mArgs)...)))
+        template <>
+        struct Exploder<0>
         {
-            return FWD(mF)(FWD(mArgs)...);
-        }
-    };
-}
+            template <typename TF, typename T, typename... TArgs>
+            inline static auto explode(TF&& mF, T&&, TArgs&&... mArgs) noexcept(
+                noexcept(FWD(mF)(FWD(mArgs)...)))
+            {
+                return FWD(mF)(FWD(mArgs)...);
+            }
+        };
+    }
 }
 
 #endif

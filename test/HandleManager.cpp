@@ -27,7 +27,8 @@ int main()
     // Mixed elements
     {
         HandleVector<OTest> mgr;
-        for(int k = 0; k < 2; ++k) {
+        for(int k = 0; k < 2; ++k)
+        {
             cc = dd = 0;
 
             auto a0(mgr.create(cc, dd));
@@ -83,9 +84,9 @@ int main()
             TEST_ASSERT(a6.isAlive());
 
             mgr.forEach([](OTest& mA)
-            {
-                mA.s += "bb";
-            });
+                {
+                    mA.s += "bb";
+                });
 
             TEST_ASSERT(a0->s == "hibb");
             TEST_ASSERT(a4->s == "ciaobb");
@@ -173,7 +174,8 @@ int main()
     // All alive -> all dead -> all alive
     {
         HandleVector<OTest> mgr;
-        for(int k = 0; k < 2; ++k) {
+        for(int k = 0; k < 2; ++k)
+        {
             cc = dd = 0;
 
             auto a0(mgr.create(cc, dd));
@@ -276,7 +278,8 @@ int main()
     // Empty, one element
     {
         HandleVector<OTest> mgr;
-        for(int k = 0; k < 2; ++k) {
+        for(int k = 0; k < 2; ++k)
+        {
             cc = dd = 0;
 
             TEST_ASSERT(cc == 0);

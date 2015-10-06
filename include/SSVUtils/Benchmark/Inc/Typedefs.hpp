@@ -9,17 +9,17 @@
 
 namespace ssvu
 {
-namespace Benchmark
-{
-    namespace Impl
+    namespace Benchmark
     {
-        /// @typedef Shortcut typedef for `std::chrono::timepoint<HRClock>`.
-        using TP = std::chrono::time_point<HRClock>;
+        namespace Impl
+        {
+            /// @typedef Shortcut typedef for `std::chrono::timepoint<HRClock>`.
+            using TP = std::chrono::time_point<HRClock>;
 
-        /// @typedef Shortcut typedef for `std::chrono::nanoseconds`.
-        using Duration = std::chrono::nanoseconds;
+            /// @typedef Shortcut typedef for `std::chrono::nanoseconds`.
+            using Duration = std::chrono::nanoseconds;
+        }
     }
-}
 }
 
 #endif

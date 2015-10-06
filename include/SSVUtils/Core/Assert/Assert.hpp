@@ -49,34 +49,34 @@
 
 namespace ssvu
 {
-namespace Impl
-{
-    /// @brief Internal struct storing data for an assertion.
-    struct AssertData
+    namespace Impl
     {
-        std::string code, line, file, lhs, rhs;
-    };
+        /// @brief Internal struct storing data for an assertion.
+        struct AssertData
+        {
+            std::string code, line, file, lhs, rhs;
+        };
 
-    /// @brief Internal struct storing global state for assertions.
-    struct AssertState
-    {
-        bool skip{false};
-    };
+        /// @brief Internal struct storing global state for assertions.
+        struct AssertState
+        {
+            bool skip{false};
+        };
 
-    /// @brief Returns a reference to the global thread_local AssertState
-    /// instance.
-    inline auto& getAssertState() noexcept
-    {
-        thread_local AssertState result;
-        return result;
+        /// @brief Returns a reference to the global thread_local AssertState
+        /// instance.
+        inline auto& getAssertState() noexcept
+        {
+            thread_local AssertState result;
+            return result;
+        }
+
+        /// @brief Assert implementation: if mExpression is false, the assertion
+        /// fires.
+        /// @details Called via the SSVU_ASSERT macro.
+        void assertImpl(AssertData&& mAD, bool mExpression,
+            const std::string& mMsg = "") noexcept;
     }
-
-    /// @brief Assert implementation: if mExpression is false, the assertion
-    /// fires.
-    /// @details Called via the SSVU_ASSERT macro.
-    void assertImpl(
-    AssertData&& mAD, bool mExpression, const std::string& mMsg = "") noexcept;
-}
 }
 
 /// @macro Shared implementation details for assertions.

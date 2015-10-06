@@ -11,21 +11,21 @@
 
 namespace ssvu
 {
-namespace CmdLine
-{
-    namespace Impl
+    namespace CmdLine
     {
-        struct BaseFlagValue : public BaseFlag
+        namespace Impl
         {
-            inline BaseFlagValue(
-            const std::string& mNameShort, const std::string& mNameLong)
-                : BaseFlag{mNameShort, mNameLong}
+            struct BaseFlagValue : public BaseFlag
             {
-            }
-            virtual void set(const std::string&) = 0;
-        };
+                inline BaseFlagValue(
+                    const std::string& mNameShort, const std::string& mNameLong)
+                    : BaseFlag{mNameShort, mNameLong}
+                {
+                }
+                virtual void set(const std::string&) = 0;
+            };
+        }
     }
-}
 }
 
 #endif

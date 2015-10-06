@@ -12,42 +12,43 @@
 
 namespace ssvu
 {
-namespace CmdLine
-{
-    class Ctx
+    namespace CmdLine
     {
-    private:
-        VecUPtr<Cmd> cmds;
-        Cmd cmdMain{Cmd::createCmdMain()};
-
-        inline bool beginsAsFlag(const std::string& mStr) const noexcept
+        class Ctx
         {
-            return beginsWith(mStr, Impl::flagPrefixShort) ||
-                   beginsWith(mStr, Impl::flagPrefixLong);
-        }
+        private:
+            VecUPtr<Cmd> cmds;
+            Cmd cmdMain{Cmd::createCmdMain()};
 
-        inline auto getForCmdPhrase(Cmd& mCmd) const noexcept
-        {
-            return mCmd.isMainCmd() ? ""s
-                                    : " for command "s + mCmd.getNamesStr();
-        }
+            inline bool beginsAsFlag(const std::string& mStr) const noexcept
+            {
+                return beginsWith(mStr, Impl::flagPrefixShort) ||
+                       beginsWith(mStr, Impl::flagPrefixLong);
+            }
 
-    public:
-        Cmd& findCmd(const std::string& mName) const;
-        Cmd& create(const std::initializer_list<std::string>& mNames);
+            inline auto getForCmdPhrase(Cmd& mCmd) const noexcept
+            {
+                return mCmd.isMainCmd() ? ""s
+                                        : " for command "s + mCmd.getNamesStr();
+            }
 
-        void process(const std::vector<std::string>& mArgs);
-        inline void process(int mArgCount, char* mArgValues[])
-        {
-            std::vector<std::string> args;
-            for(int i{1}; i < mArgCount; ++i) args.emplace_back(mArgValues[i]);
-            process(args);
-        }
+        public:
+            Cmd& findCmd(const std::string& mName) const;
+            Cmd& create(const std::initializer_list<std::string>& mNames);
 
-        inline const auto& getCmds() const noexcept { return cmds; }
-        inline auto& getCmdMain() noexcept { return cmdMain; }
-    };
-}
+            void process(const std::vector<std::string>& mArgs);
+            inline void process(int mArgCount, char* mArgValues[])
+            {
+                std::vector<std::string> args;
+                for(int i{1}; i < mArgCount; ++i)
+                    args.emplace_back(mArgValues[i]);
+                process(args);
+            }
+
+            inline const auto& getCmds() const noexcept { return cmds; }
+            inline auto& getCmdMain() noexcept { return cmdMain; }
+        };
+    }
 }
 
 #endif

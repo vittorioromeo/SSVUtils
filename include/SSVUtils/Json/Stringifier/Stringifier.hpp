@@ -9,15 +9,15 @@
 
 namespace ssvu
 {
-template <>
-struct Stringifier<Json::Val>
-{
-    template <bool TFmt>
-    inline static void impl(std::ostream& mStream, const Json::Val& mVal)
+    template <>
+    struct Stringifier<Json::Val>
     {
-        mVal.writeToStream<Json::WriterSettings<TFmt, true>>(mStream);
-    }
-};
+        template <bool TFmt>
+        inline static void impl(std::ostream& mStream, const Json::Val& mVal)
+        {
+            mVal.writeToStream<Json::WriterSettings<TFmt, true>>(mStream);
+        }
+    };
 }
 
 #endif

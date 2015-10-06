@@ -9,29 +9,29 @@
 
 namespace ssvu
 {
-namespace MPL
-{
-    namespace Impl
+    namespace MPL
     {
-        template <typename TL, typename TIdxs, int TS>
-        struct SliceHlpr;
-        template <typename TL, SizeT... TIdxs, int TS>
-        struct SliceHlpr<TL, IdxSeq<TIdxs...>, TS>
+        namespace Impl
         {
-            using Type = List<typename TL::template At<TS + TIdxs>...>;
-        };
+            template <typename TL, typename TIdxs, int TS>
+            struct SliceHlpr;
+            template <typename TL, SizeT... TIdxs, int TS>
+            struct SliceHlpr<TL, IdxSeq<TIdxs...>, TS>
+            {
+                using Type = List<typename TL::template At<TS + TIdxs>...>;
+            };
 
-        template <typename TL>
-        inline constexpr int clampListIdx(int mX) noexcept
-        {
-            return getClamped(mX, 0, TL::size);
+            template <typename TL>
+            inline constexpr int clampListIdx(int mX) noexcept
+            {
+                return getClamped(mX, 0, TL::size);
+            }
+            template <typename TL, int TS1, int TS2>
+            using Slice = typename SliceHlpr<TL,
+                MkIdxSeq<clampListIdx<TL>(TS2) - clampListIdx<TL>(TS1)>,
+                clampListIdx<TL>(TS1)>::Type;
         }
-        template <typename TL, int TS1, int TS2>
-        using Slice = typename SliceHlpr<TL,
-        MkIdxSeq<clampListIdx<TL>(TS2) - clampListIdx<TL>(TS1)>,
-        clampListIdx<TL>(TS1)>::Type;
     }
-}
 }
 
 #endif

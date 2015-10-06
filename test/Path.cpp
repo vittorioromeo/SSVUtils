@@ -13,7 +13,8 @@ int main()
     using namespace ssvu::FileSystem;
 
     Path path{"/usr"};
-    if(path.exists<ssvufs::Type::Folder>()) {
+    if(path.exists<ssvufs::Type::Folder>())
+    {
         TEST_ASSERT_OP(path.getStr(), ==, "/usr/");
         TEST_ASSERT_OP(path.getFolderName(), ==, "usr");
     }

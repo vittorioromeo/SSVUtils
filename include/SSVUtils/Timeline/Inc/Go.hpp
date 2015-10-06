@@ -11,44 +11,45 @@
 
 namespace ssvu
 {
-namespace Impl
-{
-    template <typename T>
-    class GoImpl final : public Command
+    namespace Impl
     {
-    protected:
-        T target;
-        SizeT times, currentTimes;
-
-        inline void update(FT) override
+        template <typename T>
+        class GoImpl final : public Command
         {
-            if(currentTimes == 0) {
-                timeline.next();
-            }
-            else if(currentTimes > 0)
-            {
-                --currentTimes;
-                timeline.jumpTo(target);
-            }
-            else
-            {
-                timeline.jumpTo(target);
-            }
-        }
-        inline void reset() override { currentTimes = times; }
+        protected:
+            T target;
+            SizeT times, currentTimes;
 
-    public:
-        inline GoImpl(Timeline& mTimeline, T mTarget,
-        SizeT mTimes = -1) noexcept : Command{mTimeline},
-                                      target(mTarget),
-                                      times{mTimes},
-                                      currentTimes{mTimes}
-        {
-        }
-    };
-}
+            inline void update(FT) override
+            {
+                if(currentTimes == 0)
+                {
+                    timeline.next();
+                }
+                else if(currentTimes > 0)
+                {
+                    --currentTimes;
+                    timeline.jumpTo(target);
+                }
+                else
+                {
+                    timeline.jumpTo(target);
+                }
+            }
+            inline void reset() override { currentTimes = times; }
 
-using Go = Impl::GoImpl<Timeline::Idx>;
+        public:
+            inline GoImpl(Timeline& mTimeline, T mTarget,
+                SizeT mTimes = -1) noexcept : Command{mTimeline},
+                                              target(mTarget),
+                                              times{mTimes},
+                                              currentTimes{mTimes}
+            {
+            }
+        };
+    }
+
+    using Go = Impl::GoImpl<Timeline::Idx>;
 }
 
 #endif

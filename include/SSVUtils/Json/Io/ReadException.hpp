@@ -9,24 +9,25 @@
 
 namespace ssvu
 {
-namespace Json
-{
-    class ReadException : public std::runtime_error
+    namespace Json
     {
-    private:
-        std::string title, src;
-
-    public:
-        inline ReadException(
-        std::string mTitle, std::string mWhat, std::string mSrc)
-            : std::runtime_error{mv(mWhat)}, title{mv(mTitle)}, src{mv(mSrc)}
+        class ReadException : public std::runtime_error
         {
-        }
+        private:
+            std::string title, src;
 
-        inline const auto& getTitle() const noexcept { return title; }
-        inline const auto& getSrc() const noexcept { return src; }
-    };
-}
+        public:
+            inline ReadException(
+                std::string mTitle, std::string mWhat, std::string mSrc)
+                : std::runtime_error{mv(mWhat)}, title{mv(mTitle)},
+                  src{mv(mSrc)}
+            {
+            }
+
+            inline const auto& getTitle() const noexcept { return title; }
+            inline const auto& getSrc() const noexcept { return src; }
+        };
+    }
 }
 
 #endif

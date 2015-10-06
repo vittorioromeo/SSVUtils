@@ -9,68 +9,73 @@
 
 namespace ssvu
 {
-namespace CmdLine
-{
-    namespace Impl
+    namespace CmdLine
     {
-        template <typename T>
-        struct Parser;
-
-        template <>
-        struct Parser<std::string>
+        namespace Impl
         {
-            inline static auto parse(const std::string& mStr) { return mStr; }
-        };
+            template <typename T>
+            struct Parser;
 
-        template <>
-        struct Parser<int>
-        {
-            inline static int parse(const std::string& mStr)
+            template <>
+            struct Parser<std::string>
             {
-                try
+                inline static auto parse(const std::string& mStr)
                 {
-                    return sToInt(mStr);
+                    return mStr;
                 }
-                catch(...)
+            };
+
+            template <>
+            struct Parser<int>
+            {
+                inline static int parse(const std::string& mStr)
                 {
+                    try
+                    {
+                        return sToInt(mStr);
+                    }
+                    catch(...)
+                    {
+                        throw std::runtime_error(
+                            "Cannot parse '" + mStr + "' to int");
+                    }
+                }
+            };
+
+            template <>
+            struct Parser<float>
+            {
+                inline static float parse(const std::string& mStr)
+                {
+                    try
+                    {
+                        return sToFloat(mStr);
+                    }
+                    catch(...)
+                    {
+                        throw std::runtime_error(
+                            "Cannot parse '" + mStr + "' to float");
+                    }
+                }
+            };
+
+            template <>
+            struct Parser<bool>
+            {
+                inline static bool parse(const std::string& mStr)
+                {
+                    static std::string trueValues[]{
+                        "y", "yes", "on", "true", "1"};
+                    static std::string falseValues[]{
+                        "n", "no", "off", "false", "0"};
+                    if(contains(trueValues, toLower(mStr))) return true;
+                    if(contains(falseValues, toLower(mStr))) return false;
                     throw std::runtime_error(
-                    "Cannot parse '" + mStr + "' to int");
+                        "Cannot parse '" + mStr + "' to bool");
                 }
-            }
-        };
-
-        template <>
-        struct Parser<float>
-        {
-            inline static float parse(const std::string& mStr)
-            {
-                try
-                {
-                    return sToFloat(mStr);
-                }
-                catch(...)
-                {
-                    throw std::runtime_error(
-                    "Cannot parse '" + mStr + "' to float");
-                }
-            }
-        };
-
-        template <>
-        struct Parser<bool>
-        {
-            inline static bool parse(const std::string& mStr)
-            {
-                static std::string trueValues[]{"y", "yes", "on", "true", "1"};
-                static std::string falseValues[]{
-                "n", "no", "off", "false", "0"};
-                if(contains(trueValues, toLower(mStr))) return true;
-                if(contains(falseValues, toLower(mStr))) return false;
-                throw std::runtime_error("Cannot parse '" + mStr + "' to bool");
-            }
-        };
+            };
+        }
     }
-}
 }
 
 #endif

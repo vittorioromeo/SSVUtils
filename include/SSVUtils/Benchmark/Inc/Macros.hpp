@@ -21,7 +21,7 @@
 /// Pass the desired benchmark group as a parameter. Requires semicolon.
 #define SSVU_BENCHMARK_RUN_GROUP_SCOPE_EXIT(...)           \
     ::ssvu::Benchmark::Impl::RunGroupScopeExit VRM_PP_CAT( \
-    __logGroupScopeExit, __LINE__)                         \
+        __logGroupScopeExit, __LINE__)                     \
     {                                                      \
         __VA_ARGS__                                        \
     }
@@ -33,7 +33,7 @@
 /// Pass the desired benchmark group as a parameter. Requires semicolon.
 #define SSVU_BENCHMARK_INIT_GROUP_SCOPE_EXIT(...)           \
     ::ssvu::Benchmark::Impl::InitGroupScopeExit VRM_PP_CAT( \
-    __initGroupScopeExit, __LINE__)                         \
+        __initGroupScopeExit, __LINE__)                     \
     {                                                       \
         __VA_ARGS__                                         \
     }

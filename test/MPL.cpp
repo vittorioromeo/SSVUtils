@@ -46,7 +46,7 @@ int main()
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::AsTpl, Tpl<PT0>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1>::AsTpl, Tpl<PT0, PT1>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT0>::AsTpl, Tpl<PT0, PT1, PT0>>());
+        isSame<List<PT0, PT1, PT0>::AsTpl, Tpl<PT0, PT1, PT0>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::At<0>, PT0>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2>::At<1>, PT1>());
@@ -55,31 +55,31 @@ int main()
     SSVU_ASSERT_STATIC_NM(isSame<List<>::PushBack<PT0>, List<PT0>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::PushBack<PT1>, List<PT0, PT1>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1>::PushBack<PT2>, List<PT0, PT1, PT2>>());
+        isSame<List<PT0, PT1>::PushBack<PT2>, List<PT0, PT1, PT2>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<>::PushFront<PT0>, List<PT0>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::PushFront<PT1>, List<PT1, PT0>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT1, PT0>::PushFront<PT2>, List<PT2, PT1, PT0>>());
+        isSame<List<PT1, PT0>::PushFront<PT2>, List<PT2, PT1, PT0>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2>::PopBack, List<PT0, PT1>>());
+        isSame<List<PT0, PT1, PT2>::PopBack, List<PT0, PT1>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1>::PopBack, List<PT0>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::PopBack, List<>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2>::PopFront, List<PT1, PT2>>());
+        isSame<List<PT0, PT1, PT2>::PopFront, List<PT1, PT2>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT1, PT2>::PopFront, List<PT2>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT2>::PopFront, List<>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 0>, List<>>());
+        isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 0>, List<>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 1>, List<PT0>>());
+        isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 1>, List<PT0>>());
+    SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 3>,
+        List<PT0, PT1, PT2>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0, 3>, List<PT0, PT1, PT2>>());
-    SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<2, 4>, List<PT2, PT1>>());
+        isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<2, 4>, List<PT2, PT1>>());
 
     // Will not compile
     // SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1, PT2, PT1, PT0>::Slice<0,
@@ -93,28 +93,28 @@ int main()
     SSVU_ASSERT_STATIC_NM(!List<>::has<PT0>());
     SSVU_ASSERT_STATIC_NM(!List<>::has<PT1>());
 
+    SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1>::Append<List<PT0, PT1>>,
+        List<PT0, PT1, PT0, PT1>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1>::Append<List<PT0, PT1>>, List<PT0, PT1, PT0, PT1>>());
+        isSame<List<PT0, PT1>::Append<List<>>, List<PT0, PT1>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1>::Append<List<>>, List<PT0, PT1>>());
-    SSVU_ASSERT_STATIC_NM(
-    isSame<List<>::Append<List<PT0, PT1>>, List<PT0, PT1>>());
+        isSame<List<>::Append<List<PT0, PT1>>, List<PT0, PT1>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1>::Prepend<List<PT2, PT1>>,
-    List<PT2, PT1, PT0, PT1>>());
+        List<PT2, PT1, PT0, PT1>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1>::Prepend<List<>>, List<PT0, PT1>>());
+        isSame<List<PT0, PT1>::Prepend<List<>>, List<PT0, PT1>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<>::Prepend<List<PT0, PT1>>, List<PT0, PT1>>());
+        isSame<List<>::Prepend<List<PT0, PT1>>, List<PT0, PT1>>());
 
     SSVU_ASSERT_STATIC_NM(
-    List<PT0, PT1, PT2, PT1, PT0>::getCountOf<PT0>() == 2);
+        List<PT0, PT1, PT2, PT1, PT0>::getCountOf<PT0>() == 2);
     SSVU_ASSERT_STATIC_NM(
-    List<PT0, PT1, PT2, PT1, PT0>::getCountOf<PT1>() == 2);
+        List<PT0, PT1, PT2, PT1, PT0>::getCountOf<PT1>() == 2);
     SSVU_ASSERT_STATIC_NM(
-    List<PT0, PT1, PT2, PT1, PT0>::getCountOf<PT2>() == 1);
+        List<PT0, PT1, PT2, PT1, PT0>::getCountOf<PT2>() == 1);
     SSVU_ASSERT_STATIC_NM(
-    List<PT0, PT1, PT2, PT1, PT0>::getCountOf<PT3>() == 0);
+        List<PT0, PT1, PT2, PT1, PT0>::getCountOf<PT3>() == 0);
 
     SSVU_ASSERT_STATIC_NM(!List<PT0, PT1, PT2, PT1, PT0>::unique);
     SSVU_ASSERT_STATIC_NM(!List<PT0, PT0>::unique);
@@ -124,52 +124,52 @@ int main()
     SSVU_ASSERT_STATIC_NM(isSame<List<>::Unique, List<>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::Unique, List<PT0>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2, PT1, PT0>::Unique, List<PT0, PT1, PT2>>());
+        isSame<List<PT0, PT1, PT2, PT1, PT0>::Unique, List<PT0, PT1, PT2>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2, PT1, PT0, PT1, PT2, PT0>::Unique,
-    List<PT0, PT1, PT2>>());
+        isSame<List<PT0, PT1, PT2, PT1, PT0, PT1, PT2, PT0>::Unique,
+            List<PT0, PT1, PT2>>());
 
     SSVU_ASSERT_STATIC_NM(
-    !isSame<List<PT2, PT1, PT0>::Unique, List<PT0, PT1, PT2>>());
+        !isSame<List<PT2, PT1, PT0>::Unique, List<PT0, PT1, PT2>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT2, PT1, PT0>::Unique, List<PT2, PT1, PT0>>());
+        isSame<List<PT2, PT1, PT0>::Unique, List<PT2, PT1, PT0>>());
 
     SSVU_ASSERT_STATIC_NM(
-    !isSame<List<PT0, PT2, PT1, PT0>::Unique, List<PT0, PT1, PT2>>());
+        !isSame<List<PT0, PT2, PT1, PT0>::Unique, List<PT0, PT1, PT2>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT2, PT1, PT0>::Unique, List<PT0, PT2, PT1>>());
+        isSame<List<PT0, PT2, PT1, PT0>::Unique, List<PT0, PT2, PT1>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<>::Apply<AddLVRef>, List<>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::Apply<AddLVRef>, List<PT0&>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT0>::Apply<AddLVRef>, List<PT0&, PT0&>>());
+        isSame<List<PT0, PT0>::Apply<AddLVRef>, List<PT0&, PT0&>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2>::Apply<AddLVRef>, List<PT0&, PT1&, PT2&>>());
+        isSame<List<PT0, PT1, PT2>::Apply<AddLVRef>, List<PT0&, PT1&, PT2&>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<>::Filter<std::is_pod>, List<>>());
+    SSVU_ASSERT_STATIC_NM(isSame<List<int, char, int>::Filter<std::is_pod>,
+        List<int, char, int>>());
+    SSVU_ASSERT_STATIC_NM(isSame<List<int, std::string, char, int,
+                                     std::vector<int>>::Filter<std::is_pod>,
+        List<int, char, int>>());
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, int>::Filter<std::is_pod>, List<int, char, int>>());
-    SSVU_ASSERT_STATIC_NM(isSame<
-    List<int, std::string, char, int, std::vector<int>>::Filter<std::is_pod>,
-    List<int, char, int>>());
-    SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, std::string, char, int,
-           std::vector<int>>::Filter<SSVU_MPL_NEGATE(std::is_pod)>,
-    List<std::string, std::vector<int>>>());
+        isSame<List<int, std::string, char, int,
+                   std::vector<int>>::Filter<SSVU_MPL_NEGATE(std::is_pod)>,
+            List<std::string, std::vector<int>>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<int, char, float>::Insert<int, 0>,
-    List<int, int, char, float>>());
+        List<int, int, char, float>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<int, char, float>::Insert<int, 2>,
-    List<int, char, int, float>>());
+        List<int, char, int, float>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<>::Insert<int, 0>, List<int>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, float>::Remove<0>, List<char, float>>());
+        isSame<List<int, char, float>::Remove<0>, List<char, float>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, float>::Remove<1>, List<int, float>>());
+        isSame<List<int, char, float>::Remove<1>, List<int, float>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<int, char>::Remove<0>, List<char>>());
 
@@ -200,60 +200,62 @@ int main()
     SSVU_ASSERT_STATIC_NM(!isSame<List<>::IdxsOfSeq<List<>>, ListInt<0>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int>::IdxsOfSeq<List<int>>, ListInt<0>>());
+        isSame<List<int>::IdxsOfSeq<List<int>>, ListInt<0>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, int>::IdxsOfSeq<List<int>>, ListInt<0, 1>>());
+        isSame<List<int, int>::IdxsOfSeq<List<int>>, ListInt<0, 1>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, int>::IdxsOfSeq<List<int>>, ListInt<0, 2>>());
+        isSame<List<int, char, int>::IdxsOfSeq<List<int>>, ListInt<0, 2>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, int>::IdxsOfSeq<List<int, char>>, ListInt<0>>());
+        isSame<List<int, char, int>::IdxsOfSeq<List<int, char>>, ListInt<0>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, char>::IdxsOfSeq<List<int, char>>, ListInt<0>>());
+        isSame<List<int, char, char>::IdxsOfSeq<List<int, char>>,
+            ListInt<0>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, int, char>::IdxsOfSeq<List<int, char>>,
-    ListInt<0, 2>>());
+        isSame<List<int, char, int, char>::IdxsOfSeq<List<int, char>>,
+            ListInt<0, 2>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, char, int, char>::IdxsOfSeq<List<int, char>>,
-    ListInt<0, 3>>());
+        isSame<List<int, char, char, int, char>::IdxsOfSeq<List<int, char>>,
+            ListInt<0, 3>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int>::ReplaceAllOfSeq<List<int>, List<>>, List<>>());
+        isSame<List<int>::ReplaceAllOfSeq<List<int>, List<>>, List<>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int>::ReplaceAllOfSeq<List<int>, List<char>>, List<char>>());
+        isSame<List<int>::ReplaceAllOfSeq<List<int>, List<char>>,
+            List<char>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, float>::ReplaceAllOfSeq<List<int>, List<char>>,
-    List<char, float>>());
+        isSame<List<int, float>::ReplaceAllOfSeq<List<int>, List<char>>,
+            List<char, float>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, float, int>::ReplaceAllOfSeq<List<int>, List<char>>,
-    List<char, float, char>>());
+        isSame<List<int, float, int>::ReplaceAllOfSeq<List<int>, List<char>>,
+            List<char, float, char>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, float>::ReplaceAllOfSeq<List<int, float>, List<char>>,
-    List<char>>());
+        isSame<List<int, float>::ReplaceAllOfSeq<List<int, float>, List<char>>,
+            List<char>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, float, int, int, int, float, int, float,
-           float>::ReplaceAllOfSeq<List<int, float>, List<char>>,
-    List<char, int, int, char, char, float>>());
+        isSame<List<int, float, int, int, int, float, int, float,
+                   float>::ReplaceAllOfSeq<List<int, float>, List<char>>,
+            List<char, int, int, char, char, float>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, float, int, int, int, float, int, float,
-           float>::ReplaceAllOfSeq<List<int, float>, List<>>,
-    List<int, int, float>>());
+        isSame<List<int, float, int, int, int, float, int, float,
+                   float>::ReplaceAllOfSeq<List<int, float>, List<>>,
+            List<int, int, float>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, float, int, int, int, float, int, float,
-           float>::ReplaceAllOfSeq<List<int, float>, List<char, double>>,
-    List<char, double, int, int, char, double, char, double, float>>());
+        isSame<List<int, float, int, int, int, float, int, float, float>::
+                   ReplaceAllOfSeq<List<int, float>, List<char, double>>,
+            List<char, double, int, int, char, double, char, double, float>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<>::Reverse, List<>>());
 
@@ -262,7 +264,7 @@ int main()
     SSVU_ASSERT_STATIC_NM(isSame<List<PT0, PT1>::Reverse, List<PT1, PT0>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<PT0, PT1, PT2>::Reverse, List<PT2, PT1, PT0>>());
+        isSame<List<PT0, PT1, PT2>::Reverse, List<PT2, PT1, PT0>>());
 
     struct EvenFn
     {
@@ -281,10 +283,10 @@ int main()
     };
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, float, int, char, float>::FilterIdx<EvenFn>,
-    List<int, float, char>>());
+        isSame<List<int, char, float, int, char, float>::FilterIdx<EvenFn>,
+            List<int, float, char>>());
 
     SSVU_ASSERT_STATIC_NM(
-    isSame<List<int, char, float, int, char, float>::FilterIdx<OddFn>,
-    List<char, int, float>>());
+        isSame<List<int, char, float, int, char, float>::FilterIdx<OddFn>,
+            List<char, int, float>>());
 }

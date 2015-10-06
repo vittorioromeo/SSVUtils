@@ -19,24 +19,26 @@ int main()
         std::vector<int> cv{1, 2, 3, 4, 5, 6};
         std::list<int> cl{1, 2, 3, 4, 5, 6};
 
-#define EXEC_TEST(mC)                             \
-    {                                             \
-        int k{0};                                 \
-        for(const auto& i : asRange(mC)) k += i;  \
-        TEST_ASSERT(k == 21);                     \
-        k = 0;                                    \
-        for(auto& i : asRange(mC)) k += i;        \
-        TEST_ASSERT(k == 21);                     \
-        k = 0;                                    \
-        for(const auto& i : asRangeReverse(mC)) { \
-            TEST_ASSERT_OP(i, ==, valsr[k]);      \
-            ++k;                                  \
-        }                                         \
-        k = 0;                                    \
-        for(auto& i : asRangeReverse(mC)) {       \
-            TEST_ASSERT_OP(i, ==, valsr[k]);      \
-            ++k;                                  \
-        }                                         \
+#define EXEC_TEST(mC)                            \
+    {                                            \
+        int k{0};                                \
+        for(const auto& i : asRange(mC)) k += i; \
+        TEST_ASSERT(k == 21);                    \
+        k = 0;                                   \
+        for(auto& i : asRange(mC)) k += i;       \
+        TEST_ASSERT(k == 21);                    \
+        k = 0;                                   \
+        for(const auto& i : asRangeReverse(mC))  \
+        {                                        \
+            TEST_ASSERT_OP(i, ==, valsr[k]);     \
+            ++k;                                 \
+        }                                        \
+        k = 0;                                   \
+        for(auto& i : asRangeReverse(mC))        \
+        {                                        \
+            TEST_ASSERT_OP(i, ==, valsr[k]);     \
+            ++k;                                 \
+        }                                        \
     }
 
         EXEC_TEST(ca);
@@ -66,10 +68,12 @@ int main()
         v.emplace_back(mkUPtr<XTDer>());
         v.emplace_back(mkUPtr<XTDer>());
 
-        for(const auto& i : asRangeCastPtr<const XTDer&>(v)) {
+        for(const auto& i : asRangeCastPtr<const XTDer&>(v))
+        {
             TEST_ASSERT(i.f(2) == 3);
         }
-        for(auto& i : asRangeCastPtr<XTDer&>(v)) {
+        for(auto& i : asRangeCastPtr<XTDer&>(v))
+        {
             i.n = 3;
             TEST_ASSERT(i.f(2) == 5);
         }
@@ -83,10 +87,12 @@ int main()
         l.emplace_back(mkUPtr<XTDer>());
         l.emplace_back(mkUPtr<XTDer>());
 
-        for(const auto& i : asRangeCastPtr<const XTDer&>(l)) {
+        for(const auto& i : asRangeCastPtr<const XTDer&>(l))
+        {
             TEST_ASSERT(i.f(2) == 3);
         }
-        for(auto& i : asRangeCastPtr<XTDer&>(l)) {
+        for(auto& i : asRangeCastPtr<XTDer&>(l))
+        {
             i.n = 3;
             TEST_ASSERT(i.f(2) == 5);
         }

@@ -28,15 +28,15 @@ int main()
     MacroTestStruct mts;
 
     TEST_ASSERT(
-    __R(SsvuTestMacroTestChecker1<MacroTestStruct, void()>()) == true);
+        __R(SsvuTestMacroTestChecker1<MacroTestStruct, void()>()) == true);
     TEST_ASSERT(
-    __R(SsvuTestMacroTestChecker2<MacroTestStruct, void()>()) == false);
+        __R(SsvuTestMacroTestChecker2<MacroTestStruct, void()>()) == false);
     TEST_ASSERT(
-    __R(SsvuTestMacroTestChecker2<MacroTestStruct, float(int)>()) == true);
+        __R(SsvuTestMacroTestChecker2<MacroTestStruct, float(int)>()) == true);
     TEST_ASSERT(
-    __R(SsvuTestMacroTestChecker3<MacroTestStruct, void()>()) == false);
+        __R(SsvuTestMacroTestChecker3<MacroTestStruct, void()>()) == false);
     TEST_ASSERT(
-    __R(SsvuTestMacroTestChecker3<MacroTestStruct, float(int)>()) == false);
+        __R(SsvuTestMacroTestChecker3<MacroTestStruct, float(int)>()) == false);
     TEST_ASSERT(SsvuTestMacroTestCallGoodbye1(mts) == 2);
     TEST_ASSERT(SsvuTestMacroTestCallGoodbye2(mts) == 4);
 }

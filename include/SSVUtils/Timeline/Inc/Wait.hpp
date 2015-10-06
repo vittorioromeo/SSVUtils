@@ -11,44 +11,44 @@
 
 namespace ssvu
 {
-class Wait final : public Command
-{
-private:
-    FT time, currentTime;
-
-protected:
-    void update(FT mFT) override;
-    void reset() override;
-
-public:
-    inline Wait(Timeline& mTimeline, FT mTime) noexcept;
-};
-
-namespace Impl
-{
-    template <bool TWhile>
-    class WaitLoop final : public Command
+    class Wait final : public Command
     {
     private:
-        Predicate predicate;
+        FT time, currentTime;
 
     protected:
-        inline void update(FT) override
-        {
-            timeline.ready = false;
-            if(predicate() != TWhile) timeline.next();
-        }
+        void update(FT mFT) override;
+        void reset() override;
 
     public:
-        inline WaitLoop(Timeline& mTimeline, const Predicate& mPredicate)
-            : Command{mTimeline}, predicate{mPredicate}
-        {
-        }
+        inline Wait(Timeline& mTimeline, FT mTime) noexcept;
     };
-}
 
-using WaitWhile = Impl::WaitLoop<true>;
-using WaitUntil = Impl::WaitLoop<false>;
+    namespace Impl
+    {
+        template <bool TWhile>
+        class WaitLoop final : public Command
+        {
+        private:
+            Predicate predicate;
+
+        protected:
+            inline void update(FT) override
+            {
+                timeline.ready = false;
+                if(predicate() != TWhile) timeline.next();
+            }
+
+        public:
+            inline WaitLoop(Timeline& mTimeline, const Predicate& mPredicate)
+                : Command{mTimeline}, predicate{mPredicate}
+            {
+            }
+        };
+    }
+
+    using WaitWhile = Impl::WaitLoop<true>;
+    using WaitUntil = Impl::WaitLoop<false>;
 }
 
 #endif

@@ -23,7 +23,7 @@ int main()
     // TEST_ASSERT_OP((getTplIdxOf<int, TplRepeat<float, 0>>()), ==, 0);
 
     TEST_ASSERT_OP(
-    (getTplIdxOf<int, tuple<float, double, int, float, int>>()), ==, 2);
+        (getTplIdxOf<int, tuple<float, double, int, float, int>>()), ==, 2);
 
     auto lbd0 = [](int a, int b)
     {
@@ -44,34 +44,34 @@ int main()
 
     double acc{0};
     tplFor(
-    [&acc](auto x)
-    {
-        acc += x;
-    },
-    tuple<int, float, int, double>(1, 2.f, 3, 4.));
+        [&acc](auto x)
+        {
+            acc += x;
+        },
+        tuple<int, float, int, double>(1, 2.f, 3, 4.));
 
     TEST_ASSERT_OP(acc, ==, 1 + 2.f + 3 + 4.);
 
     acc = 0;
     tplFor(
-    [&acc](auto x, auto y)
-    {
-        acc += x;
-        acc += y;
-    },
-    tuple<int, float, int, double>(1, 2.f, 3, 4.), tuple<int, int>(1, 2));
+        [&acc](auto x, auto y)
+        {
+            acc += x;
+            acc += y;
+        },
+        tuple<int, float, int, double>(1, 2.f, 3, 4.), tuple<int, int>(1, 2));
 
     TEST_ASSERT_OP(acc, ==, 1 + 2.f + 1 + 2);
 
     acc = 0;
     tplForData(
-    [&acc](auto data, auto x, auto y)
-    {
-        acc += x;
-        acc += y;
-        acc += data.getIdx();
-    },
-    tuple<int, float, int, double>(1, 2.f, 3, 4.), tuple<int, int>(1, 2));
+        [&acc](auto data, auto x, auto y)
+        {
+            acc += x;
+            acc += y;
+            acc += data.getIdx();
+        },
+        tuple<int, float, int, double>(1, 2.f, 3, 4.), tuple<int, int>(1, 2));
 
     TEST_ASSERT_OP(acc, ==, 1 + 2.f + 1 + 2 + 0 + 1);
 
@@ -81,21 +81,22 @@ int main()
         ssvu::Tpl<double, std::string> tt2{10.55, "banana"};
 
         ssvu::tplForData(
-        [&](auto mD, const auto& mA, const auto& mB)
-        {
-            using ts = typename decltype(mD)::Types;
+            [&](auto mD, const auto& mA, const auto& mB)
+            {
+                using ts = typename decltype(mD)::Types;
 
-            TEST_ASSERT(
-            (typeid(typename ts::template At<0>)) ==
-            (typeid(ssvu::TplElem<mD.getIdx(), ssvu::Tpl<int, char, float>>)));
-            TEST_ASSERT(
-            (typeid(typename ts::template At<1>)) ==
-            (typeid(
-            ssvu::TplElem<mD.getIdx(), ssvu::Tpl<double, std::string>>)));
-            TEST_ASSERT((typeid(typename ts::template At<0>)) == (typeid(mA)));
-            TEST_ASSERT((typeid(typename ts::template At<1>)) == (typeid(mB)));
-        },
-        tt1, tt2);
+                TEST_ASSERT((typeid(typename ts::template At<0>)) ==
+                            (typeid(ssvu::TplElem<mD.getIdx(),
+                                ssvu::Tpl<int, char, float>>)));
+                TEST_ASSERT((typeid(typename ts::template At<1>)) ==
+                            (typeid(ssvu::TplElem<mD.getIdx(),
+                                ssvu::Tpl<double, std::string>>)));
+                TEST_ASSERT(
+                    (typeid(typename ts::template At<0>)) == (typeid(mA)));
+                TEST_ASSERT(
+                    (typeid(typename ts::template At<1>)) == (typeid(mB)));
+            },
+            tt1, tt2);
     }
 #endif
 }

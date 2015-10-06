@@ -9,22 +9,22 @@
 
 namespace ssvu
 {
-namespace MPL
-{
-    namespace Impl
+    namespace MPL
     {
-        template <typename...>
-        struct VAHeadHlpr;
-        template <typename T, typename... Ts>
-        struct VAHeadHlpr<T, Ts...>
+        namespace Impl
         {
-            using Type = T;
-        };
+            template <typename...>
+            struct VAHeadHlpr;
+            template <typename T, typename... Ts>
+            struct VAHeadHlpr<T, Ts...>
+            {
+                using Type = T;
+            };
 
-        template <typename... Ts>
-        using VAHead = typename Impl::VAHeadHlpr<Ts...>::Type;
+            template <typename... Ts>
+            using VAHead = typename Impl::VAHeadHlpr<Ts...>::Type;
+        }
     }
-}
 }
 
 #endif

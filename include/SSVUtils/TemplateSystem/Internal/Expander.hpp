@@ -11,55 +11,55 @@
 
 namespace ssvu
 {
-namespace TemplateSystem
-{
-    enum class Settings
+    namespace TemplateSystem
     {
-        EraseUnexisting,    // Do not write empty/unexisting
-                            // replacements/sections
-        MaintainUnexisting, // Write empty/unexisting replacements/sections
-                            // (both symbols and contents)
-        MaintainUnexistingOnlyCnt // Write only empty/unexisting sections
-                                  // contents once (not symbols)
-    };
-
-    class Dictionary;
-
-    class Expander
-    {
-    private:
-        const Dictionary& dict;
-        const std::string& src;
-        std::string& bufResult;
-        std::string& bufKey;
-        const SizeT idxBegin, idxEnd;
-        SizeT idx, sectIdxCntStart, sectIdxCntEnd, sectIdxStart, sectIdxEnd;
-        bool separate;
-        Settings settings;
-
-        inline auto getC(SizeT mIdx) const noexcept
+        enum class Settings
         {
-            SSVU_ASSERT(mIdx < src.size());
-            return src[mIdx];
-        }
-        inline auto getC() const noexcept { return getC(idx); }
+            EraseUnexisting,    // Do not write empty/unexisting
+                                // replacements/sections
+            MaintainUnexisting, // Write empty/unexisting replacements/sections
+                                // (both symbols and contents)
+            MaintainUnexistingOnlyCnt // Write only empty/unexisting sections
+                                      // contents once (not symbols)
+        };
 
-        bool replace();
-        bool replaceSection();
+        class Dictionary;
 
-    public:
-        inline Expander(const Dictionary& mDict, const std::string& mSrc,
-        std::string& mBufResult, std::string& mBufKey, SizeT mIdxBegin,
-        SizeT mIdxEnd, bool mSeparate, Settings mSettings)
-            : dict{mDict}, src{mSrc}, bufResult{mBufResult}, bufKey{mBufKey},
-              idxBegin{mIdxBegin}, idxEnd{mIdxEnd}, idx{idxBegin},
-              separate{mSeparate}, settings{mSettings}
+        class Expander
         {
-        }
+        private:
+            const Dictionary& dict;
+            const std::string& src;
+            std::string& bufResult;
+            std::string& bufKey;
+            const SizeT idxBegin, idxEnd;
+            SizeT idx, sectIdxCntStart, sectIdxCntEnd, sectIdxStart, sectIdxEnd;
+            bool separate;
+            Settings settings;
 
-        bool expand();
-    };
-}
+            inline auto getC(SizeT mIdx) const noexcept
+            {
+                SSVU_ASSERT(mIdx < src.size());
+                return src[mIdx];
+            }
+            inline auto getC() const noexcept { return getC(idx); }
+
+            bool replace();
+            bool replaceSection();
+
+        public:
+            inline Expander(const Dictionary& mDict, const std::string& mSrc,
+                std::string& mBufResult, std::string& mBufKey, SizeT mIdxBegin,
+                SizeT mIdxEnd, bool mSeparate, Settings mSettings)
+                : dict{mDict}, src{mSrc}, bufResult{mBufResult},
+                  bufKey{mBufKey}, idxBegin{mIdxBegin}, idxEnd{mIdxEnd},
+                  idx{idxBegin}, separate{mSeparate}, settings{mSettings}
+            {
+            }
+
+            bool expand();
+        };
+    }
 }
 
 #endif

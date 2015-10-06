@@ -11,39 +11,39 @@
 
 namespace ssvu
 {
-namespace CmdLine
-{
-    namespace Impl
+    namespace CmdLine
     {
-        class BaseArgPack : public BaseElement
+        namespace Impl
         {
-        protected:
-            SizeT min, max;
-
-        public:
-            inline BaseArgPack() noexcept : min{0}, max{0} {}
-            inline BaseArgPack(SizeT mMin, SizeT mMax) noexcept : min{mMin},
-                                                                  max{mMax}
+            class BaseArgPack : public BaseElement
             {
-            }
+            protected:
+                SizeT min, max;
 
-            virtual void set(const std::vector<std::string>&) = 0;
+            public:
+                inline BaseArgPack() noexcept : min{0}, max{0} {}
+                inline BaseArgPack(SizeT mMin, SizeT mMax) noexcept : min{mMin},
+                                                                      max{mMax}
+                {
+                }
 
-            inline auto isInfinite() const noexcept
-            {
-                return min == 0 && max == 0;
-            }
-            inline auto getMin() const noexcept { return min; }
-            inline auto getMax() const noexcept { return max; }
+                virtual void set(const std::vector<std::string>&) = 0;
 
-            inline std::string getUsageStr() const override
-            {
-                return "(PACK " + getName() + " " + "[" + toStr(min) + "/" +
-                       (isInfinite() ? "..." : toStr(max)) + "])";
-            }
-        };
+                inline auto isInfinite() const noexcept
+                {
+                    return min == 0 && max == 0;
+                }
+                inline auto getMin() const noexcept { return min; }
+                inline auto getMax() const noexcept { return max; }
+
+                inline std::string getUsageStr() const override
+                {
+                    return "(PACK " + getName() + " " + "[" + toStr(min) + "/" +
+                           (isInfinite() ? "..." : toStr(max)) + "])";
+                }
+            };
+        }
     }
-}
 }
 
 #endif

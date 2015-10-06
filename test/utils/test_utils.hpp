@@ -7,67 +7,67 @@
 
 namespace impl
 {
-template <typename T>
-inline void test_assert(bool x, const T& res, const char* expr) noexcept
-{
-    using namespace std::literals;
+    template <typename T>
+    inline void test_assert(bool x, const T& res, const char* expr) noexcept
+    {
+        using namespace std::literals;
 
-    if(x) return;
-    std::ostringstream error;
+        if(x) return;
+        std::ostringstream error;
 
-    error << expr << "\n"
-          << "result: " << res << "\n";
+        error << expr << "\n"
+              << "result: " << res << "\n";
 
-    std::cout << error.str() << std::endl;
-    std::terminate();
-}
+        std::cout << error.str() << std::endl;
+        std::terminate();
+    }
 
-template <typename T>
-inline void test_assert_expected(
-bool x, const T& res, const char* expr, const char* expected)
-{
-    using namespace std::literals;
+    template <typename T>
+    inline void test_assert_expected(
+        bool x, const T& res, const char* expr, const char* expected)
+    {
+        using namespace std::literals;
 
-    if(x) return;
-    std::ostringstream error;
+        if(x) return;
+        std::ostringstream error;
 
-    error << expr << "\n"
-          << "result: " << res << "\n"
-          << "expected: " << expected << "\n";
+        error << expr << "\n"
+              << "result: " << res << "\n"
+              << "expected: " << expected << "\n";
 
-    std::cout << error.str() << std::endl;
-    std::terminate();
-}
+        std::cout << error.str() << std::endl;
+        std::terminate();
+    }
 
-template <typename T>
-inline void test_assert_ns(bool x, const T&, const char* expr) noexcept
-{
-    using namespace std::literals;
+    template <typename T>
+    inline void test_assert_ns(bool x, const T&, const char* expr) noexcept
+    {
+        using namespace std::literals;
 
-    if(x) return;
-    std::ostringstream error;
+        if(x) return;
+        std::ostringstream error;
 
-    error << expr << "\n";
+        error << expr << "\n";
 
-    std::cout << error.str() << std::endl;
-    std::terminate();
-}
+        std::cout << error.str() << std::endl;
+        std::terminate();
+    }
 
-template <typename T>
-inline void test_assert_ns_expected(
-bool x, const T&, const char* expr, const char* expected)
-{
-    using namespace std::literals;
+    template <typename T>
+    inline void test_assert_ns_expected(
+        bool x, const T&, const char* expr, const char* expected)
+    {
+        using namespace std::literals;
 
-    if(x) return;
-    std::ostringstream error;
+        if(x) return;
+        std::ostringstream error;
 
-    error << expr << "\n"
-          << "expected: " << expected << "\n";
+        error << expr << "\n"
+              << "expected: " << expected << "\n";
 
-    std::cout << error.str() << std::endl;
-    std::terminate();
-}
+        std::cout << error.str() << std::endl;
+        std::terminate();
+    }
 }
 
 #define TEST_ASSERT(expr)                     \

@@ -15,7 +15,7 @@ SSVJ_CNV_NAMESPACE()
         int f0{10};
         float f1{5.5f};
         std::vector<std::pair<float, double>> f2{
-        {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
+            {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
         std::string f3{"yo"};
         Tpl<std::string, int, int> f4{"hey", 5, 10};
 
@@ -127,7 +127,7 @@ int main()
         using namespace ssvu::Json::Impl;
 
         EXEC_TEST_BASIC_IMPL(
-        unsigned char, ssvu::toNum<unsigned char>('a'), IntU)
+            unsigned char, ssvu::toNum<unsigned char>('a'), IntU)
         EXEC_TEST_BASIC_IMPL(unsigned int, 10u, IntU)
         EXEC_TEST_BASIC_IMPL(unsigned long int, 10ul, IntU)
         EXEC_TEST_BASIC_IMPL(float, 10.f, Real)
@@ -149,7 +149,7 @@ int main()
 
         {
             Obj o{{"hello", "bye"}, {"welcome"s, "goodbye"s}, {"banana", 15},
-            {"best letter", 'v'}};
+                {"best letter", 'v'}};
             EXEC_TEST_BASIC(Obj, o)
         }
 
@@ -160,10 +160,10 @@ int main()
         }
 
         {
-            using PP =
-            std::pair<std::pair<int, std::string>, std::pair<float, double>>;
+            using PP = std::pair<std::pair<int, std::string>,
+                std::pair<float, double>>;
             PP p{std::pair<int, std::string>{10, "coolpair2"},
-            std::pair<float, double>{15.f, 205.5}};
+                std::pair<float, double>{15.f, 205.5}};
             EXEC_TEST_BASIC(PP, p)
         }
 
@@ -187,9 +187,9 @@ int main()
 
         {
             using PP = Tpl<int, float, std::string, int, std::pair<double, int>,
-            float, Tpl<int, int, int>>;
+                float, Tpl<int, int, int>>;
             PP p{10, 15.5f, "ULTRA SWAG"s, 22, std::pair<double, int>{10.5, 99},
-            0.f, Tpl<int, int, int>{0, 1, 2}};
+                0.f, Tpl<int, int, int>{0, 1, 2}};
             EXEC_TEST_BASIC(PP, p)
         }
     }
@@ -247,12 +247,12 @@ int main()
 
         {
             using PP = Tpl<std::vector<std::string>,
-            std::pair<std::vector<int>, std::vector<float>>, int,
-            std::vector<int>>;
+                std::pair<std::vector<int>, std::vector<float>>, int,
+                std::vector<int>>;
             PP p{std::vector<std::string>{"10", "20", "35"},
-            std::pair<std::vector<int>, std::vector<float>>{
-            std::vector<int>{1, 2}, std::vector<float>{1.f, 2.f}},
-            20, std::vector<int>{}};
+                std::pair<std::vector<int>, std::vector<float>>{
+                    std::vector<int>{1, 2}, std::vector<float>{1.f, 2.f}},
+                20, std::vector<int>{}};
             EXEC_TEST_BASIC(PP, p)
         }
     }
@@ -471,7 +471,7 @@ int main()
         int f0{10};
         float f1{5.5f};
         std::vector<std::pair<float, double>> f2{
-        {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
+            {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
         std::string f3{"yo"};
         Tpl<std::string, int, int> f4{"hey", 5, 10};
 
@@ -572,49 +572,53 @@ int main()
 
 #undef EXEC_TEST_ITR_NUM_ARR
 
-#define EXEC_TEST_ITR_NUM_OBJ(mType)                     \
-    {                                                    \
-        using TT = mType;                                \
-        std::string keyacc = "";                         \
-        TT acc = TT(0);                                  \
-        Val v{Obj{}};                                    \
-        v["0"] = TT(0);                                  \
-        v["1"] = TT(1);                                  \
-        v["2"] = TT(2);                                  \
-        v["3"] = TT(3);                                  \
-        v["4"] = TT(4);                                  \
-        keyacc = "";                                     \
-        acc = 0;                                         \
-        for(const auto& i : v.forObj()) {                \
-            keyacc += i.key;                             \
-            acc += i.value.as<TT>();                     \
-        }                                                \
-        TEST_ASSERT_NS_OP(keyacc, ==, "01234");          \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                  \
-        keyacc = "";                                     \
-        acc = 0;                                         \
-        for(const auto& i : v.forObjAs<TT>()) {          \
-            keyacc += i.key;                             \
-            acc += i.value;                              \
-        }                                                \
-        TEST_ASSERT_NS_OP(keyacc, ==, "01234");          \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                  \
-        keyacc = "";                                     \
-        acc = 0;                                         \
-        for(const auto& i : v.forUncheckedObj()) {       \
-            keyacc += i.key;                             \
-            acc += i.value.as<TT>();                     \
-        }                                                \
-        TEST_ASSERT_NS_OP(keyacc, ==, "01234");          \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                  \
-        keyacc = "";                                     \
-        acc = 0;                                         \
-        for(const auto& i : v.forUncheckedObjAs<TT>()) { \
-            keyacc += i.key;                             \
-            acc += i.value;                              \
-        }                                                \
-        TEST_ASSERT_NS_OP(keyacc, ==, "01234");          \
-        TEST_ASSERT_NS_OP(acc, ==, 10);                  \
+#define EXEC_TEST_ITR_NUM_OBJ(mType)                   \
+    {                                                  \
+        using TT = mType;                              \
+        std::string keyacc = "";                       \
+        TT acc = TT(0);                                \
+        Val v{Obj{}};                                  \
+        v["0"] = TT(0);                                \
+        v["1"] = TT(1);                                \
+        v["2"] = TT(2);                                \
+        v["3"] = TT(3);                                \
+        v["4"] = TT(4);                                \
+        keyacc = "";                                   \
+        acc = 0;                                       \
+        for(const auto& i : v.forObj())                \
+        {                                              \
+            keyacc += i.key;                           \
+            acc += i.value.as<TT>();                   \
+        }                                              \
+        TEST_ASSERT_NS_OP(keyacc, ==, "01234");        \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                \
+        keyacc = "";                                   \
+        acc = 0;                                       \
+        for(const auto& i : v.forObjAs<TT>())          \
+        {                                              \
+            keyacc += i.key;                           \
+            acc += i.value;                            \
+        }                                              \
+        TEST_ASSERT_NS_OP(keyacc, ==, "01234");        \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                \
+        keyacc = "";                                   \
+        acc = 0;                                       \
+        for(const auto& i : v.forUncheckedObj())       \
+        {                                              \
+            keyacc += i.key;                           \
+            acc += i.value.as<TT>();                   \
+        }                                              \
+        TEST_ASSERT_NS_OP(keyacc, ==, "01234");        \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                \
+        keyacc = "";                                   \
+        acc = 0;                                       \
+        for(const auto& i : v.forUncheckedObjAs<TT>()) \
+        {                                              \
+            keyacc += i.key;                           \
+            acc += i.value;                            \
+        }                                              \
+        TEST_ASSERT_NS_OP(keyacc, ==, "01234");        \
+        TEST_ASSERT_NS_OP(acc, ==, 10);                \
     }
 
     {
