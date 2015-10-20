@@ -59,7 +59,7 @@ namespace ssvu
     template <typename T, typename TStorage>
     inline constexpr T& castStorage(TStorage& mStorage) noexcept
     {
-        SSVU_ASSERT_STATIC_NM(IsValidStorage<T, TStorage>{});
+        SSVU_ASSERT_STATIC_NM(Impl::IsValidStorage<T, TStorage>{});
         return reinterpret_cast<T&>(mStorage);
     }
 
@@ -68,7 +68,7 @@ namespace ssvu
     template <typename T, typename TStorage>
     inline constexpr T* castStorage(TStorage* mStorage) noexcept
     {
-        SSVU_ASSERT_STATIC_NM(IsValidStorage<T, TStorage>{});
+        SSVU_ASSERT_STATIC_NM(Impl::IsValidStorage<T, TStorage>{});
         return reinterpret_cast<T*>(mStorage);
     }
 
@@ -77,7 +77,7 @@ namespace ssvu
     template <typename T, typename TStorage>
     inline constexpr const T& castStorage(const TStorage& mStorage) noexcept
     {
-        SSVU_ASSERT_STATIC_NM(IsValidStorage<T, TStorage>{});
+        SSVU_ASSERT_STATIC_NM(Impl::IsValidStorage<T, TStorage>{});
         return reinterpret_cast<const T&>(mStorage);
     }
 
@@ -86,7 +86,7 @@ namespace ssvu
     template <typename T, typename TStorage>
     inline constexpr const T* castStorage(const TStorage* mStorage) noexcept
     {
-        SSVU_ASSERT_STATIC_NM(IsValidStorage<T, TStorage>{});
+        SSVU_ASSERT_STATIC_NM(Impl::IsValidStorage<T, TStorage>{});
         return reinterpret_cast<const T*>(mStorage);
     }
 
