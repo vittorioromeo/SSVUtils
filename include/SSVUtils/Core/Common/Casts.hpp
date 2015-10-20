@@ -10,6 +10,14 @@
 
 namespace ssvu
 {
+    namespace Impl
+    {
+        template <typename T, typename TStorage>
+        using IsValidStorage = std::integral_constant<bool,
+            sizeof(typename TStorage::type) >= sizeof(T) &&
+                alignof(typename TStorage::type) >= alignof(T)>;
+    }
+
     /// @brief Returns a `TBase&` casted to `T&`. Asserts that `T` is derived
     /// from `TBase`.
     template <typename T, typename TBase>
@@ -51,6 +59,7 @@ namespace ssvu
     template <typename T, typename TStorage>
     inline constexpr T& castStorage(TStorage& mStorage) noexcept
     {
+        SSVU_ASSERT_STATIC_NM(IsValidStorage<T, TStorage>{});
         return reinterpret_cast<T&>(mStorage);
     }
 
@@ -59,6 +68,7 @@ namespace ssvu
     template <typename T, typename TStorage>
     inline constexpr T* castStorage(TStorage* mStorage) noexcept
     {
+        SSVU_ASSERT_STATIC_NM(IsValidStorage<T, TStorage>{});
         return reinterpret_cast<T*>(mStorage);
     }
 
@@ -67,6 +77,7 @@ namespace ssvu
     template <typename T, typename TStorage>
     inline constexpr const T& castStorage(const TStorage& mStorage) noexcept
     {
+        SSVU_ASSERT_STATIC_NM(IsValidStorage<T, TStorage>{});
         return reinterpret_cast<const T&>(mStorage);
     }
 
@@ -75,6 +86,7 @@ namespace ssvu
     template <typename T, typename TStorage>
     inline constexpr const T* castStorage(const TStorage* mStorage) noexcept
     {
+        SSVU_ASSERT_STATIC_NM(IsValidStorage<T, TStorage>{});
         return reinterpret_cast<const T*>(mStorage);
     }
 
