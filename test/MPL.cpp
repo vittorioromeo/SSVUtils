@@ -289,4 +289,10 @@ int main()
     SSVU_ASSERT_STATIC_NM(
         isSame<List<int, char, float, int, char, float>::FilterIdx<OddFn>,
             List<char, int, float>>());
+
+    SSVU_ASSERT_STATIC_NM(List<int, char, char>::template getIdxOf<int>() == 0);
+    SSVU_ASSERT_STATIC_NM(List<int, char, char>::template getIdxOf<char>() == 1);
+
+    SSVU_ASSERT_STATIC_NM(List<double, char, float>::template getIdxOf<double>() == 0);
+    SSVU_ASSERT_STATIC_NM(List<double, char, float>::template getIdxOf<float>() == 2);
 }

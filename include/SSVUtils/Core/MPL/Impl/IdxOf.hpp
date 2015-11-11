@@ -13,14 +13,19 @@ namespace ssvu
     {
         namespace Impl
         {
-            template <typename T, typename... Ts>
+            template <typename, typename...>
             struct IdxOf;
+
+            // IndexOf base case: found the type we're looking for.
             template <typename T, typename... Ts>
-            struct IdxOf<T, T, Ts...> : CTInt<0>
+            struct IdxOf<T, T, Ts...> : std::integral_constant<std::size_t, 0>
             {
             };
-            template <typename T, typename TTail, typename... Ts>
-            struct IdxOf<T, TTail, Ts...> : CTInt<1 + IdxOf<T, Ts...>()>
+
+            // IndexOf recursive case: 1 + IndexOf the rest of the types.
+            template <typename T, typename TOther, typename... Ts>
+            struct IdxOf<T, TOther, Ts...>
+                : std::integral_constant<std::size_t, 1 + IdxOf<T, Ts...>{}>
             {
             };
         }

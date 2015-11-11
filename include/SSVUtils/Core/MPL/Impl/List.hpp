@@ -291,7 +291,7 @@ namespace ssvu
             inline static constexpr SizeT getIdxOf()
             {
                 SSVU_ASSERT_STATIC_NM(has<T>());
-                return Impl::IdxOf<T, Ts...>{}();
+                return Impl::IdxOf<T, Ts...>{};
             }
 
 
