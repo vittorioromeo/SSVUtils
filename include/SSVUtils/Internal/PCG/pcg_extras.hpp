@@ -620,6 +620,8 @@ namespace pcg_extras
             IntType(2166136261U ^ sizeof(IntType)), __DATE__ __TIME__ __FILE__);
     };
 
+#if __cpp_rtti || __GXX_RTTI
+
     // Sometimes, when debugging or testing, it's handy to be able print the
     // name
     // of a (in human-readable form).  This code allows the idiom:
@@ -648,6 +650,8 @@ namespace pcg_extras
         out << implementation_typename;
         return out;
     }
+
+#endif
 
 } // namespace pcg_extras
 
