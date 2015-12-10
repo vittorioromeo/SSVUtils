@@ -14,6 +14,8 @@
 #include "SSVUtils/HandleVector/Handle.hpp"
 #include "SSVUtils/Internal/SharedFuncs.hpp"
 
+// TODO: consider removing
+
 namespace ssvu
 {
     template <typename T>

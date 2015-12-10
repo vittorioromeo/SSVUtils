@@ -11,7 +11,6 @@
 // "Core" module
 #include "SSVUtils/Core/Core.hpp"
 
-#include "SSVUtils/Test/Test.hpp"
 #include "SSVUtils/Benchmark/Benchmark.hpp"
 #include "SSVUtils/Timeline/Timeline.hpp"
 #include "SSVUtils/Delegate/Delegate.hpp"
@@ -63,7 +62,6 @@
     Memorymanager
     Range
     TemplateSystem
-    Test
     Tests
     * Ticker
     * Timeline
