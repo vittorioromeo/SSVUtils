@@ -21,7 +21,6 @@
 #include "SSVUtils/CmdLine/CmdLine.hpp"
 #include "SSVUtils/FatEnum/FatEnum.hpp"
 #include "SSVUtils/GrowableArray/GrowableArray.hpp"
-#include "SSVUtils/HandleVector/HandleVector.hpp"
 #include "SSVUtils/Easing/Easing.hpp"
 #include "SSVUtils/Ticker/Ticker.hpp"
 #include "SSVUtils/Range/Range.hpp"
@@ -56,7 +55,6 @@
     Encryption
     FatEnum
     GrowableArrayAS
-    HandleVector
     Internal
     Json
     Memorymanager
