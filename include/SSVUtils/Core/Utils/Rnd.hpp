@@ -64,7 +64,6 @@ namespace ssvu
     }
 
     /// @brief Returns a random real value. (Normal distribution)
-    /// @tparam T Type of real value. (default float)
     /// @param mMean Mean of the distribution.
     /// @param mDeviation Deviation of the distribution.
     template <typename T1, typename T2>

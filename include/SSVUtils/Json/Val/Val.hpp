@@ -142,6 +142,7 @@ namespace ssvu
                         case Type::TStr: h.deinit<Str>(); break;
                         case Type::TNum: h.deinit<Num>(); break;
                         case Type::TBln: h.deinit<Bln>(); break;
+                        case Type::TNll: break;
                         default: break;
                     }
                 }

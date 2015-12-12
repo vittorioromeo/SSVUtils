@@ -22,6 +22,9 @@ int main()
 
         OTest(int& mRCC, int& mRDD) : rCC(mRCC), rDD(mRDD) { ++rCC; }
         ~OTest() { ++rDD; }
+
+        OTest(const OTest&) = default;
+        OTest& operator=(const OTest&) = default;
     };
 
     // Iterator tests

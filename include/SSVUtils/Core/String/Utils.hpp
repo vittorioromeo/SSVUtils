@@ -79,7 +79,7 @@ namespace ssvu
     /// @brief Converts a value to a string.
     /// @details Uses Stringifier<T> internally, with disabled formatting
     /// options.
-    /// @param mValue Const reference to the value. (original value won't be
+    /// @param mX Const reference to the value. (original value won't be
     /// changed)
     /// @return Returns a std::string representing the stringified value.
     template <typename T>
@@ -268,8 +268,7 @@ namespace ssvu
         return std::count(std::begin(mStr), std::end(mStr), mChar);
     }
 
-    /// @brief Counts the number of newlines in a std::string. Newlines are
-    /// searched for as '\n'.
+    /// @brief Counts the number of newlines in a std::string.
     /// @param mStr String to work with.
     /// @return Returns the count of newlines.
     inline auto getNewLinesCount(const std::string& mStr)

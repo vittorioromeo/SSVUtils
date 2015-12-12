@@ -27,7 +27,7 @@ namespace ssvu
         ///
         /// SSVU_ASSERT(s == d);
         /// @endcode
-        /// @tparam T Type of encryption to use. (example
+        /// @tparam TT Type of encryption to use. (example
         /// ssvu::Encryption::Type::MD5)
         /// @param mStr String to encrypt.
         /// @return Returns a string containing the encrypted value.
@@ -44,7 +44,7 @@ namespace ssvu
         ///
         /// SSVU_ASSERT(s == d);
         /// @endcode
-        /// @tparam T Type of encryption to use. (example
+        /// @tparam TT Type of encryption to use. (example
         /// ssvu::Encryption::Type::MD5)
         /// @param mStr String to decrypt.
         /// @return Returns a string containing the decrypted value.

@@ -18,7 +18,7 @@ namespace ssvu
             template <typename>
             struct NumHelper;
 
-            /// @briewf Helper template to convert numeric types to
+            /// @brief Helper template to convert numeric types to
             /// representation types.
             template <typename>
             struct ReprHelper;

@@ -93,7 +93,7 @@ namespace ssvu
     /// @brief Shifts items not matching the predicate towards the beginning of
     /// the container.
     /// @param mContainer Reference to the container.
-    /// @param mValue Const reference to the value.
+    /// @param mPredicate Predicate to use.
     /// @return Returns a past-the-end iterator for the new end of the range.
     template <typename TC, typename TP>
     inline auto removeIf(TC& mContainer, TP mPredicate)

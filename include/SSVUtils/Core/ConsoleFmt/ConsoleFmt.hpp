@@ -88,7 +88,7 @@ namespace ssvu
 
         /// @brief Returns a format string that sets the current foreground
         /// color.
-        /// @param mStyle Desired color. (ssvu::Console::Color member)
+        /// @param mColor Desired color. (ssvu::Console::Color member)
         inline const auto& setColorFG(Color mColor) noexcept
         {
             return Impl::getStrColorFG(mColor);
@@ -96,7 +96,7 @@ namespace ssvu
 
         /// @brief Returns a format string that sets the current background
         /// color.
-        /// @param mStyle Desired color. (ssvu::Console::Color member)
+        /// @param mColor Desired color. (ssvu::Console::Color member)
         inline const auto& setColorBG(Color mColor) noexcept
         {
             return Impl::getStrColorBG(mColor);
