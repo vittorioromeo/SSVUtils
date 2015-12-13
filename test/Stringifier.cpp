@@ -16,7 +16,7 @@ int main()
         });
     int testArray[]{1, 2, 3};
     std::ostringstream trash;
-#define SSVUT_STRINGIFY_TEST(mValue)      \
+#define STRINGIFY_TEST(mValue)      \
     {                                     \
         auto k(mValue);                   \
         ssvu::stringify<true>(trash, k);  \
@@ -24,29 +24,29 @@ int main()
     }                                     \
     nothing()
 
-    SSVUT_STRINGIFY_TEST(0);
-    SSVUT_STRINGIFY_TEST(0l);
-    SSVUT_STRINGIFY_TEST(0u);
-    SSVUT_STRINGIFY_TEST(0ul);
-    SSVUT_STRINGIFY_TEST(0.f);
-    SSVUT_STRINGIFY_TEST(0.);
-    SSVUT_STRINGIFY_TEST(&trash);
-    SSVUT_STRINGIFY_TEST("abc");
-    SSVUT_STRINGIFY_TEST("abc"s);
+    STRINGIFY_TEST(0);
+    STRINGIFY_TEST(0l);
+    STRINGIFY_TEST(0u);
+    STRINGIFY_TEST(0ul);
+    STRINGIFY_TEST(0.f);
+    STRINGIFY_TEST(0.);
+    STRINGIFY_TEST(&trash);
+    STRINGIFY_TEST("abc");
+    STRINGIFY_TEST("abc"s);
     ssvu::stringify<true>(trash, testArray);
     ssvu::stringify<false>(trash, testArray);
-    SSVUT_STRINGIFY_TEST(__R(std::array<int, 3>{{1, 2, 3}}));
-    SSVUT_STRINGIFY_TEST(__R(std::vector<int>{1, 2, 3}));
-    SSVUT_STRINGIFY_TEST(__R(std::list<int>{1, 2, 3}));
-    SSVUT_STRINGIFY_TEST(__R(std::forward_list<int>{1, 2, 3}));
-    SSVUT_STRINGIFY_TEST(
+    STRINGIFY_TEST(__R(std::array<int, 3>{{1, 2, 3}}));
+    STRINGIFY_TEST(__R(std::vector<int>{1, 2, 3}));
+    STRINGIFY_TEST(__R(std::list<int>{1, 2, 3}));
+    STRINGIFY_TEST(__R(std::forward_list<int>{1, 2, 3}));
+    STRINGIFY_TEST(
         __R(std::map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
-    SSVUT_STRINGIFY_TEST(__R(
+    STRINGIFY_TEST(__R(
         std::unordered_map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
-    SSVUT_STRINGIFY_TEST(
+    STRINGIFY_TEST(
         __R(ssvu::Bimap<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
-    SSVUT_STRINGIFY_TEST(__R(ssvu::Tpl<int, int, int>{1, 2, 3}));
-    SSVUT_STRINGIFY_TEST(__R(std::pair<int, int>{2, 3}));
+    STRINGIFY_TEST(__R(ssvu::Tpl<int, int, int>{1, 2, 3}));
+    STRINGIFY_TEST(__R(std::pair<int, int>{2, 3}));
 
-#undef SSVUT_STRINGIFY_TEST
+#undef STRINGIFY_TEST
 }
