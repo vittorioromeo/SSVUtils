@@ -238,7 +238,7 @@ namespace ssvu
                 return result;
             }
 
-            SSVU_DEFINE_SINK_SETTER_SIMPLE(setDesc, desc);
+            SSVU_DEFINE_SINK_SETTER_SIMPLE(setDesc, desc)
             inline const auto& getDesc() const noexcept { return desc; }
         };
     }

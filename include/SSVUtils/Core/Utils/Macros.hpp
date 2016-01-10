@@ -38,6 +38,9 @@ namespace ssvu
     }
 }
 
+// TODO: docs
+#define SSVU_ATTRIBUTE(...) __attribute__((__VA_ARGS__))
+
 /// @macro Defines a dummy struct with a name generated from the current line
 /// and passed variadic args.
 /// @details Must end with semicolon.

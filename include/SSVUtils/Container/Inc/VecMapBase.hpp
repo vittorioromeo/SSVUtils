@@ -26,7 +26,7 @@ namespace ssvu
             /// @brief Returns whether or not `mValue` is present in the
             /// container.
             template <typename T>
-            inline bool has(const T& mValue) const noexcept
+            inline bool SSVU_ATTRIBUTE(pure) has(const T& mValue) const noexcept
             {
                 return getTD().is(getTD().lookup(mValue), mValue);
             }
