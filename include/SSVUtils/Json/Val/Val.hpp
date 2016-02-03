@@ -172,7 +172,7 @@ namespace ssvu
                 /// @brief Checks the stored type. Doesn't check number
                 /// representation.
                 template <typename T>
-                inline bool isNoNum() const noexcept
+                inline bool SSVU_ATTRIBUTE(pure) isNoNum() const noexcept
                 {
                     return Impl::ChkNoNum<RmAll<T>>::is(*this);
                 }
@@ -210,7 +210,7 @@ namespace ssvu
                 /// use `IntS`, `IntU` or `Real`.
                 ///	Any other numeric type will not work.
                 template <typename T>
-                inline bool is() const noexcept
+                inline bool SSVU_ATTRIBUTE(pure) is() const noexcept
                 {
                     return Impl::Chk<RmAll<T>>::is(*this);
                 }
@@ -311,7 +311,7 @@ namespace ssvu
                 }
 
                 // Equality/inequality
-                inline bool operator==(const Val& mV) const noexcept
+                inline bool SSVU_ATTRIBUTE(pure) operator==(const Val& mV) const noexcept
                 {
                     if(type != mV.type) return false;
 

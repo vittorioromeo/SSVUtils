@@ -37,7 +37,8 @@ namespace ssvu
 
             // Equality/inequality
             template <typename TC>
-            inline auto operator==(const TC& mC) const noexcept
+            inline auto SSVU_ATTRIBUTE(pure) operator==(const TC& mC) const
+                noexcept
             {
                 return getData() == mC.getData();
             }

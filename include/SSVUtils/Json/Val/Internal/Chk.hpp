@@ -38,7 +38,7 @@ namespace ssvu
                 /// @brief Returns `true` if all items of an `Arr` are of type
                 /// `T`.
                 template <typename T>
-                inline static bool areArrItemsOfType(const Val& mV) noexcept
+                inline static bool SSVU_ATTRIBUTE(pure) areArrItemsOfType(const Val& mV) noexcept
                 {
                     SSVU_ASSERT(mV.is<Arr>());
                     for(const auto& v : mV.getArr())
@@ -50,12 +50,12 @@ namespace ssvu
             template <typename T>
             struct Chk
             {
-                inline static bool is(const Val&) noexcept { return true; }
+                inline static bool SSVU_ATTRIBUTE(const) is(const Val&) noexcept { return true; }
             };
             template <typename T>
             struct ChkNoNum
             {
-                inline static bool is(const Val& mV) noexcept
+                inline static bool SSVU_ATTRIBUTE(pure) is(const Val& mV) noexcept
                 {
                     return Chk<RmAll<T>>::is(mV);
                 }
@@ -179,7 +179,7 @@ namespace ssvu
             template <typename... TArgs>
             struct Chk<Tpl<TArgs...>> final
             {
-                inline static auto is(const Val& mV) noexcept
+                inline static auto SSVU_ATTRIBUTE(pure) is(const Val& mV) noexcept
                 {
                     return mV.getType() == Val::Type::TArr &&
                            mV.getArr().size() == sizeof...(TArgs) &&
@@ -191,7 +191,7 @@ namespace ssvu
             template <typename TItem>
             struct Chk<std::vector<TItem>> final
             {
-                inline static auto is(const Val& mV) noexcept
+                inline static auto SSVU_ATTRIBUTE(pure) is(const Val& mV) noexcept
                 {
                     return mV.getType() == Val::Type::TArr &&
                            TplIsHelper::areArrItemsOfType<TItem>(mV);
@@ -202,7 +202,7 @@ namespace ssvu
             template <typename TItem, SizeT TS>
             struct Chk<TItem[TS]> final
             {
-                inline static auto is(const Val& mV) noexcept
+                inline static auto SSVU_ATTRIBUTE(pure) is(const Val& mV) noexcept
                 {
                     return mV.getType() == Val::Type::TArr &&
                            mV.getArr().size() == TS &&
