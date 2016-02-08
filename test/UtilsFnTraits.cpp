@@ -21,7 +21,7 @@ namespace ssvu
 }
 
 #include "./utils/test_utils.hpp"
-int main()
+TEST_MAIN()
 {
     using namespace std;
     using namespace ssvu;
