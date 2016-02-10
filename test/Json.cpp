@@ -19,7 +19,7 @@ SSVJ_CNV_NAMESPACE()
         std::string f3{"yo"};
         Tpl<std::string, int, int> f4{"hey", 5, 10};
 
-        inline bool operator==(const __ssvjTestStruct& mT) const noexcept
+        inline bool SSVU_ATTRIBUTE(pure) operator==(const __ssvjTestStruct& mT) const noexcept
         {
             return f0 == mT.f0 && f1 == mT.f1 && f2 == mT.f2 && f3 == mT.f3 &&
                    f4 == mT.f4;
