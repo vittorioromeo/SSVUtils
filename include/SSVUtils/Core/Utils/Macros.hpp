@@ -219,8 +219,8 @@ namespace ssvu
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro
 /// in the template arguments list.
-/// /// @details Enables if `mT` has not the same type of `mType`. Uses `RmAll`
-/// on the passed type.
+/// @details Enables if `mT` has not the same type of `mType`. Uses `RmAll` on
+/// the passed type.
 #define SSVU_ENABLEIF_RA_IS_NOT(mT, mType) \
     SSVU_ENABLEIF(!isSame<RmAll<mT>, mType>())
 
