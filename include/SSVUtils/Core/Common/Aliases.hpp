@@ -236,8 +236,10 @@ namespace ssvu
 /// @macro Perfect-forwards the arguments by using `ssvu::fwd` and `decltype`.
 #define SSVU_FWD(...) ::ssvu::fwd<decltype(__VA_ARGS__)>(__VA_ARGS__)
 
+#if !defined(FWD)
 /// @macro Alias for `SSVU_FWD` macro.
 #define FWD(...) SSVU_FWD(__VA_ARGS__)
+#endif
 
     /// @brief Wrapper for `std::tuple_cat`.
     template <typename... Ts>
