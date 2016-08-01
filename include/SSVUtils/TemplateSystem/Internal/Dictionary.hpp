@@ -39,6 +39,16 @@ namespace ssvu
                 {
                 }
 
+                inline auto& asStr() noexcept
+                {
+                    return dict.replacements[key];
+                }
+
+                inline const auto& asStr() const noexcept
+                {
+                    return dict.replacements.at(key);
+                }
+
                 template <typename T>
                 inline auto& operator=(T&& mReplacement)
                 {
@@ -92,7 +102,9 @@ namespace ssvu
                 sections = mv(mDict.sections);
             }
 
-            inline void init() noexcept {}
+            inline void init() noexcept
+            {
+            }
             template <typename T1, typename... TArgs>
             inline void init(T1&& mA1, TArgs&&... mArgs)
             {
