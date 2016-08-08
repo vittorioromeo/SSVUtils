@@ -21,12 +21,12 @@ onSomething(2);
 assert(result == 6);
 ```
 
-###Encryption
+###Encoding
 ```cpp
-string source{"encrypt me!"};
-auto encrypted = ssvu::Encryption::encrypt<Encryption::Type::Base64>(source);
-auto decrypted = ssvu::Encryption::decrypt<Encryption::Type::Base64>(encrypted);
-assert(source == decrypted);
+string source{"encode me!"};
+auto encoded = ssvu::Encoding::encode<Encoding::Type::Base64>(source);
+auto decoded = ssvu::Encoding::decode<Encoding::Type::Base64>(encoded);
+assert(source == decoded);
 ```
 
 ###FileSystem

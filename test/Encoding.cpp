@@ -2,7 +2,6 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-
 #include "SSVUtils/Core/Core.hpp"
 
 #include "SSVUtils/Encoding/Encoding.hpp"
@@ -14,10 +13,10 @@ int main()
     using namespace ssvu;
     using namespace ssvu::Encoding;
 
-    ObfuscatedValue<float> v{10.f};
-    TEST_ASSERT(v.get() == 10.f);
-    TEST_ASSERT(v == 10.f);
-    v = 15.f;
-    TEST_ASSERT(v.get() == 15.f);
-    TEST_ASSERT(v == 15.f);
+    TEST_ASSERT(
+        encode<Type::MD5>("testhash") == "082949a8dfacccda185a135db425377b");
+    TEST_ASSERT(encode<Type::MD5>("") == "d41d8cd98f00b204e9800998ecf8427e");
+
+    TEST_ASSERT(encode<Type::Base64>("testhash") == "dGVzdGhhc2g=");
+    TEST_ASSERT(decode<Type::Base64>("dGVzdGhhc2g=") == "testhash");
 }

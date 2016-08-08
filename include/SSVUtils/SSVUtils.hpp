@@ -16,7 +16,7 @@
 #include "SSVUtils/Delegate/Delegate.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/TemplateSystem/TemplateSystem.hpp"
-#include "SSVUtils/Encryption/Encryption.hpp"
+#include "SSVUtils/Encoding/Encoding.hpp"
 #include "SSVUtils/Bimap/Bimap.hpp"
 #include "SSVUtils/CmdLine/CmdLine.hpp"
 #include "SSVUtils/FatEnum/FatEnum.hpp"
@@ -52,7 +52,7 @@
     Core
     * Delegate
     * Easing
-    Encryption
+    Encoding
     FatEnum
     GrowableArrayAS
     Internal

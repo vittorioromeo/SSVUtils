@@ -6,11 +6,11 @@
 #define SSVU_ENCRYPTION_OBFUSCATEDVALUE
 
 #include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/Encryption/Encryption.hpp"
+#include "SSVUtils/Encoding/Encoding.hpp"
 
 namespace ssvu
 {
-    template <typename T, Encryption::Type TCrypto = Encryption::Type::Base64,
+    template <typename T, Encoding::Type TCrypto = Encoding::Type::Base64,
         typename TEnable = void>
     class ObfuscatedValue;
 
@@ -19,7 +19,7 @@ namespace ssvu
     /// memory scanners (such as Cheat Engine).
     /// Obviously introduces a runtime cost to get/set the internal value.
     /// @tparam T Type of the underlying arithmetic value.
-    template <typename T, Encryption::Type TCrypto>
+    template <typename T, Encoding::Type TCrypto>
     class ObfuscatedValue<T, TCrypto, EnableIf<isArithmetic<T>()>>
     {
     private:
@@ -50,14 +50,14 @@ namespace ssvu
         inline void set(const T& mValue)
         {
             dummy = mValue;
-            encodedValue = Encryption::encrypt<TCrypto>(toStr(mValue));
+            encodedValue = Encoding::encode<TCrypto>(toStr(mValue));
         }
 
         /// @brief Converts the internal Base64 string and returns the
         /// unobfuscated value.
         inline T get() const
         {
-            return fromStr(Encryption::decrypt<TCrypto>(encodedValue));
+            return fromStr(Encoding::decode<TCrypto>(encodedValue));
         }
 
         /// @brief Implicit conversion to the obfuscated type.

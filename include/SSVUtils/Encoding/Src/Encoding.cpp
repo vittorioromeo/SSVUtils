@@ -4,27 +4,27 @@
 
 #include "SSVUtils/Internal/API.hpp"
 #include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/Encryption/Inc/Encryption.hpp"
-#include "SSVUtils/Encryption/Inc/Internal/Base64.hpp"
-#include "SSVUtils/Encryption/Inc/Internal/MD5.hpp"
+#include "SSVUtils/Encoding/Inc/Encoding.hpp"
+#include "SSVUtils/Encoding/Inc/Internal/Base64.hpp"
+#include "SSVUtils/Encoding/Inc/Internal/MD5.hpp"
 
 namespace ssvu
 {
-    namespace Encryption
+    namespace Encoding
     {
         template <>
-        SSVU_INLINE std::string encrypt<Type::Base64>(const std::string& mStr)
+        SSVU_INLINE std::string encode<Type::Base64>(const std::string& mStr)
         {
             return Impl::Base64Encode(mStr);
         }
         template <>
-        SSVU_INLINE std::string encrypt<Type::MD5>(const std::string& mStr)
+        SSVU_INLINE std::string encode<Type::MD5>(const std::string& mStr)
         {
             return Impl::MD5{mStr}.GetHash();
         }
 
         template <>
-        SSVU_INLINE std::string decrypt<Type::Base64>(const std::string& mStr)
+        SSVU_INLINE std::string decode<Type::Base64>(const std::string& mStr)
         {
             return Impl::Base64Decode(mStr);
         }

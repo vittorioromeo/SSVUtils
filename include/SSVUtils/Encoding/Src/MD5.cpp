@@ -4,11 +4,11 @@
 
 #include "SSVUtils/Internal/API.hpp"
 #include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/Encryption/Inc/Internal/MD5.hpp"
+#include "SSVUtils/Encoding/Inc/Internal/MD5.hpp"
 
 namespace ssvu
 {
-    namespace Encryption
+    namespace Encoding
     {
         namespace Impl
         {

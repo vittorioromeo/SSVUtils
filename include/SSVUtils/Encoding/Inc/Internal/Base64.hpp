@@ -9,7 +9,7 @@
 
 namespace ssvu
 {
-    namespace Encryption
+    namespace Encoding
     {
         namespace Impl
         {

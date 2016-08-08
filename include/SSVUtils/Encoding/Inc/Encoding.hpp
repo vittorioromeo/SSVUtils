@@ -9,7 +9,7 @@
 
 namespace ssvu
 {
-    namespace Encryption
+    namespace Encoding
     {
         enum class Type
         {
@@ -19,37 +19,37 @@ namespace ssvu
 
         /// @brief Encrypts a string.
         /// @code
-        /// using namespace ssvu::Encryption;
+        /// using namespace ssvu::Encoding;
         ///
         /// string s{"test"};
-        /// string e{encrypt<Type::Base64>(s)};
-        /// strign d{decrypt<Type::Base64>(s)};
+        /// string e{encode<Type::Base64>(s)};
+        /// strign d{decode<Type::Base64>(s)};
         ///
         /// SSVU_ASSERT(s == d);
         /// @endcode
         /// @tparam TT Type of encryption to use. (example
-        /// ssvu::Encryption::Type::MD5)
+        /// ssvu::Encoding::Type::MD5)
         /// @param mStr String to encrypt.
         /// @return Returns a string containing the encrypted value.
         template <Type TT>
-        std::string encrypt(const std::string& mStr);
+        std::string encode(const std::string& mStr);
 
         /// @brief Decrypts a string.
         /// @code
-        /// using namespace ssvu::Encryption;
+        /// using namespace ssvu::Encoding;
         ///
         /// string s{"test"};
-        /// string e{encrypt<Type::Base64>(s)};
-        /// strign d{decrypt<Type::Base64>(s)};
+        /// string e{encode<Type::Base64>(s)};
+        /// strign d{decode<Type::Base64>(s)};
         ///
         /// SSVU_ASSERT(s == d);
         /// @endcode
         /// @tparam TT Type of encryption to use. (example
-        /// ssvu::Encryption::Type::MD5)
+        /// ssvu::Encoding::Type::MD5)
         /// @param mStr String to decrypt.
         /// @return Returns a string containing the decrypted value.
         template <Type TT>
-        std::string decrypt(const std::string& mStr);
+        std::string decode(const std::string& mStr);
     }
 }
 
