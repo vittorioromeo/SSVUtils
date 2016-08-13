@@ -63,6 +63,26 @@ namespace ssvu
                 }
             };
 
+            template <typename TKey>
+            class ConstProxy
+            {
+            private:
+                TKey key;
+                const Dictionary& dict;
+
+            public:
+                inline ConstProxy(TKey mKey, const Dictionary& mDict)
+                    : key{mKey}, dict{mDict}
+                {
+                }
+
+
+                inline const auto& asStr() const noexcept
+                {
+                    return dict.replacements.at(key);
+                }
+            };
+
             // Init single replacement
             template <typename T>
             inline void initImpl(T&& mKey, const std::string& mReplacement)
@@ -142,6 +162,11 @@ namespace ssvu
                 init(FWD(mArgs)...);
             }
 
+            inline bool has(const std::string& mKey) const noexcept
+            {
+                return replacements.count(mKey) > 0;
+            }
+
             inline std::string getExpanded(std::string mSrc,
                 Settings mSettings = Settings::EraseUnexisting)
             {
@@ -180,6 +205,12 @@ namespace ssvu
             inline auto operator[](T&& mKey) noexcept
             {
                 return Proxy<T>{FWD(mKey), *this};
+            }
+
+            template <typename T>
+            inline auto operator[](T&& mKey) const noexcept
+            {
+                return ConstProxy<T>{FWD(mKey), *this};
             }
         };
     }
