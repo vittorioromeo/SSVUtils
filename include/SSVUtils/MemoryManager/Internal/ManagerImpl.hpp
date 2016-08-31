@@ -83,10 +83,16 @@ namespace ssvu
             Container items;
 
         public:
-            inline BaseRecVector() { items.reserve(25); }
+            inline BaseRecVector()
+            {
+                items.reserve(25);
+            }
             inline BaseRecVector(BaseRecVector&&) = default;
 
-            inline ~BaseRecVector() { clear(); }
+            inline ~BaseRecVector()
+            {
+                clear();
+            }
 
             template <typename T = TBase, typename... TArgs>
             inline T& create(TArgs&&... mArgs)
@@ -108,23 +114,68 @@ namespace ssvu
             }
 
             // Standard (partial) vector interface support
-            inline void reserve(SizeT mV) { items.reserve(mV); }
-            inline void clear() noexcept { items.clear(); }
-            inline auto size() const noexcept { return items.size(); }
-            inline auto empty() const noexcept { return items.empty(); }
-            inline auto capacity() const noexcept { return items.capacity(); }
+            inline void reserve(SizeT mV)
+            {
+                items.reserve(mV);
+            }
+            inline void clear() noexcept
+            {
+                items.clear();
+            }
+            inline auto size() const noexcept
+            {
+                return items.size();
+            }
+            inline auto empty() const noexcept
+            {
+                return items.empty();
+            }
+            inline auto capacity() const noexcept
+            {
+                return items.capacity();
+            }
 
             // Standard iterator support
-            inline auto begin() noexcept { return std::begin(items); }
-            inline auto end() noexcept { return std::end(items); }
-            inline auto begin() const noexcept { return std::begin(items); }
-            inline auto end() const noexcept { return std::end(items); }
-            inline auto cbegin() const noexcept { return std::cbegin(items); }
-            inline auto cend() const noexcept { return std::cend(items); }
-            inline auto rbegin() noexcept { return std::rbegin(items); }
-            inline auto rend() noexcept { return std::rend(items); }
-            inline auto crbegin() const noexcept { return std::crbegin(items); }
-            inline auto crend() const noexcept { return std::crend(items); }
+            inline auto begin() noexcept
+            {
+                return std::begin(items);
+            }
+            inline auto end() noexcept
+            {
+                return std::end(items);
+            }
+            inline auto begin() const noexcept
+            {
+                return std::begin(items);
+            }
+            inline auto end() const noexcept
+            {
+                return std::end(items);
+            }
+            inline auto cbegin() const noexcept
+            {
+                return std::cbegin(items);
+            }
+            inline auto cend() const noexcept
+            {
+                return std::cend(items);
+            }
+            inline auto rbegin() noexcept
+            {
+                return std::rbegin(items);
+            }
+            inline auto rend() noexcept
+            {
+                return std::rend(items);
+            }
+            inline auto crbegin() const noexcept
+            {
+                return std::crbegin(items);
+            }
+            inline auto crend() const noexcept
+            {
+                return std::crend(items);
+            }
         };
 
         /// @brief Base memory recycler manager class.
@@ -157,10 +208,19 @@ namespace ssvu
             }
 
         public:
-            inline BaseManager() { reserve(25); }
-            inline ~BaseManager() { clear(); }
+            inline BaseManager()
+            {
+                reserve(25);
+            }
+            inline ~BaseManager()
+            {
+                clear();
+            }
 
-            inline auto& getDataAt(SizeT mI) noexcept { return items[mI]; }
+            inline auto& getDataAt(SizeT mI) noexcept
+            {
+                return items[mI];
+            }
             inline const auto& getDataAt(SizeT mI) const noexcept
             {
                 return items[mI];
@@ -203,7 +263,8 @@ namespace ssvu
                     },
                     [this](SizeT mD, SizeT mA)
                     {
-                        std::swap(items[mD], items[mA]);
+                        using std::swap;
+                        swap(items[mD], items[mA]);
                     },
                     [this](SizeT mD)
                     {
@@ -220,11 +281,26 @@ namespace ssvu
                 return !isAlive(mBase);
             }
 
-            inline auto size() const noexcept { return msize; }
-            inline auto begin() noexcept { return ItrIdx{0, this}; }
-            inline auto end() noexcept { return ItrIdx{msize, this}; }
-            inline auto begin() const noexcept { return ItrIdxC{0, this}; }
-            inline auto end() const noexcept { return ItrIdxC{msize, this}; }
+            inline auto size() const noexcept
+            {
+                return msize;
+            }
+            inline auto begin() noexcept
+            {
+                return ItrIdx{0, this};
+            }
+            inline auto end() noexcept
+            {
+                return ItrIdx{msize, this};
+            }
+            inline auto begin() const noexcept
+            {
+                return ItrIdxC{0, this};
+            }
+            inline auto end() const noexcept
+            {
+                return ItrIdxC{msize, this};
+            }
             /*inline auto cbegin()	const noexcept	{ return std::cbegin(items);
             }
             inline auto cend()		const noexcept	{ return std::cend(items); }
