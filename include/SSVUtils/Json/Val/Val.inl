@@ -17,12 +17,12 @@ namespace ssvu
 {
     namespace Json
     {
-        inline auto& Val::operator=(const Val& mV) noexcept
+        inline Val& Val::operator=(const Val& mV) noexcept
         {
             set(mV);
             return *this;
         }
-        inline auto& Val::operator=(Val&& mV) noexcept
+        inline Val& Val::operator=(Val&& mV) noexcept
         {
             set(mv(mV));
             return *this;

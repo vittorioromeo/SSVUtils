@@ -27,8 +27,8 @@ namespace ssvu
                 }
                 return mStart + mEnd;
             }
-            template <template <typename...> class T>
-            std::string buildCmdStr(const T<std::string>& mC,
+            template <template <typename...> class T, typename... Ts>
+            std::string buildCmdStr(const T<std::string, Ts...>& mC,
                 std::string mStart = "", const std::string& mEnd = "",
                 const std::string& mSep = " ")
             {

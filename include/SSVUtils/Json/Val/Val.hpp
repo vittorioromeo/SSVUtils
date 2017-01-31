@@ -234,10 +234,11 @@ namespace ssvu
                 auto as() && -> decltype(Impl::AsHelper<T>::as(*this));
 
                 // "Implicit" `set` function done via `operator=` overloading
-                auto& operator=(const Val& mV) noexcept;
-                auto& operator=(Val&& mV) noexcept;
+                Val& operator=(const Val& mV) noexcept;
+                Val& operator=(Val&& mV) noexcept;
+                
                 template <typename T>
-                inline auto& operator=(T&& mX) noexcept(
+                inline Val& operator=(T&& mX) noexcept(
                     noexcept(std::declval<Val&>().set(FWD(mX))))
                 {
                     set(FWD(mX));
