@@ -178,7 +178,7 @@ namespace ssvu
                 }
 
             public:
-                inline Val() noexcept = default;
+                inline Val() = default;
 
                 // Copy/move constructors
                 inline Val(const Val& mV) { init(mV); }
