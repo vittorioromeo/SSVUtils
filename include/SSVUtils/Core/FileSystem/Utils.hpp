@@ -39,11 +39,11 @@ namespace ssvu
             std::string userHome;
 
 #if defined(SSVU_OS_WINDOWS)
-            if(std::getenv("HOME") != NULL)
+            if(std::getenv("HOME") != nullptr)
                 userHome = std::getenv("HOME");
-            else if(std::getenv("USERPROFILE") != NULL)
+            else if(std::getenv("USERPROFILE") != nullptr)
                 userHome = std::getenv("USERPROFILE");
-            else if(std::getenv("HOMEPATH") == NULL)
+            else if(std::getenv("HOMEPATH") == nullptr)
                 return;
             else
             {
@@ -51,7 +51,7 @@ namespace ssvu
                 userHome = drive + std::getenv("HOMEPATH");
             }
 #else
-            if(std::getenv("HOME") != NULL) userHome = std::getenv("HOME");
+            if(std::getenv("HOME") != nullptr) userHome = std::getenv("HOME");
 #endif
 
             mPath = getReplacedAll(mPath, "~", userHome);
