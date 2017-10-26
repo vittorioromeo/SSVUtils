@@ -6,11 +6,12 @@ C++14 multi-purpose utility library that only depends on the STL.
 
 ---
 
-###CommandLine
+### CommandLine
+--
 ```cpp
 ```
 
-###Delegates
+### Delegates
 
 ```cpp
 int result{0};
@@ -21,7 +22,7 @@ onSomething(2);
 assert(result == 6);
 ```
 
-###Encoding
+### Encoding
 ```cpp
 string source{"encode me!"};
 auto encoded = ssvu::Encoding::encode<Encoding::Type::Base64>(source);
@@ -29,7 +30,7 @@ auto decoded = ssvu::Encoding::decode<Encoding::Type::Base64>(encoded);
 assert(source == decoded);
 ```
 
-###FileSystem
+### FileSystem
 ```cpp
 string myPath{"/home/folder"};
 ssvu::FileSystem::normalizePath(myPath);
@@ -51,7 +52,7 @@ for(const auto& subFolderPath : ssvu::FileSystem::getScan<Mode::Recurse, Type::F
 // and more...
 ```
 
-###Global
+### Global
 ```cpp
 // std::unique_ptr is verbose
 using namespace ssvu;
@@ -60,7 +61,7 @@ Uptr<int> test{new int};
 Uptr<int, SomeCustomDeleter>{new int};
 ```
 
-###Log
+### Log
 ```cpp
 using namespace ssvu;
 
@@ -71,15 +72,17 @@ saveLogToFile("log.txt");
 // Saves everything that was logged to "log.txt"
 ```
 
-###MemoryManager
+### MemoryManager
+--
 ```cpp
 ```
 
-###PreAlloc
+### PreAlloc
+--
 ```cpp
 ```
 
-###String
+### String
 ```cpp
 string test{"abcdef"};
 
@@ -98,7 +101,7 @@ assert(test == "ABCdef100");
 // and more...
 ```
 
-###TemplateSystem
+### TemplateSystem
 ```cpp
 // Example 1
 using namespace ssvu::TemplateSystem;
@@ -117,11 +120,12 @@ string toExpand{"{{#section}}.{{key}}.{{/section}}"};
 assert(dict.getExpanded(toExpand) == ".value1..value2.");
 ```
 
-###Timeline
+### Timeline
+--
 ```cpp
 ```
 
-###Utils
+### Utils
 ```cpp
 auto i = ssvu::getRnd(0, 5); // get random int [0, 5)
 auto f = ssvu::getRndF(0.f, 5.f); // get random float [0.f, 5.f)
