@@ -5,10 +5,10 @@
 #ifndef SSVU_CORE_UTILS_MACROS
 #define SSVU_CORE_UTILS_MACROS
 
-#include <cmath>
-#include <vrm/pp.hpp>
 #include "SSVUtils/Core/Assert/Assert.hpp"
 #include "SSVUtils/Core/Common/Common.hpp"
+#include <cmath>
+#include <vrm/pp.hpp>
 
 namespace ssvu
 {
@@ -35,8 +35,8 @@ namespace ssvu
         };
         template <typename... TArgs>
         using VoidT = typename Voider<TArgs...>::Type;
-    }
-}
+    } // namespace Impl
+} // namespace ssvu
 
 // TODO: docs
 #define SSVU_ATTRIBUTE(...) __attribute__((__VA_ARGS__))
@@ -60,31 +60,31 @@ namespace ssvu
 /// callTestMethod(example);
 /// @endcode
 /// @details Must end without semicolon.
-#define SSVU_DEFINE_MEMFN_DETECTOR(mName, mMemberName)              \
-    template <typename, typename T>                                 \
-    struct VRM_PP_CAT(__, mName, __impl);                           \
-    template <typename TC, typename TReturn, typename... TArgs>     \
-    struct VRM_PP_CAT(__, mName, __impl)<TC, TReturn(TArgs...)>     \
-    {                                                               \
-        template <typename T>                                       \
-        inline static constexpr auto check(T*)                      \
-            -> ssvu::IsSame<decltype(std::declval<T>().mMemberName( \
-                                std::declval<TArgs>()...)),         \
-                TReturn>                                            \
-        {                                                           \
-            return {};                                              \
-        }                                                           \
-        template <typename>                                         \
-        inline static constexpr ssvu::FalseT check(...)             \
-        {                                                           \
-            return {};                                              \
-        }                                                           \
-        static constexpr bool value{decltype(check<TC>(0))::value}; \
-    };                                                              \
-    template <typename T, typename TSignature>                      \
-    inline constexpr bool mName() noexcept                          \
-    {                                                               \
-        return VRM_PP_CAT(__, mName, __impl)<T, TSignature>::value; \
+#define SSVU_DEFINE_MEMFN_DETECTOR(mName, mMemberName)                    \
+    template <typename, typename T>                                       \
+    struct VRM_PP_CAT(__, mName, __impl);                                 \
+    template <typename TC, typename TReturn, typename... TArgs>           \
+    struct VRM_PP_CAT(__, mName, __impl)<TC, TReturn(TArgs...)>           \
+    {                                                                     \
+        template <typename T>                                             \
+        inline static constexpr auto check(T*)                            \
+            -> ssvu::IsSame<decltype(std::declval<T>().mMemberName(       \
+                                std::declval<TArgs>()...)),               \
+                TReturn>                                                  \
+        {                                                                 \
+            return {};                                                    \
+        }                                                                 \
+        template <typename>                                               \
+        inline static constexpr ssvu::FalseT check(...)                   \
+        {                                                                 \
+            return {};                                                    \
+        }                                                                 \
+        static constexpr bool value{decltype(check<TC>(nullptr))::value}; \
+    };                                                                    \
+    template <typename T, typename TSignature>                            \
+    inline constexpr bool mName() noexcept                                \
+    {                                                                     \
+        return VRM_PP_CAT(__, mName, __impl)<T, TSignature>::value;       \
     }
 
 /// @macro Define a template function with name `mName` that invokes
@@ -110,7 +110,9 @@ namespace ssvu
         template <typename T, typename... TArgs>                             \
         struct _##mName##Impl<T, false, TArgs...>                            \
         {                                                                    \
-            inline static void call(T&, TArgs&&...) {}                       \
+            inline static void call(T&, TArgs&&...)                          \
+            {                                                                \
+            }                                                                \
         };                                                                   \
     }                                                                        \
     template <typename T, typename... TArgs>                                 \
@@ -135,7 +137,7 @@ namespace ssvu
         VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName) \
     SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName,                         \
         (VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__) < T,         \
-                                      mSignature > ()))
+            mSignature > ()))
 
 /// @macro Gets the base `mType*` structure pointer from a `mMemberPointer`
 /// pointer to a member of `mType`, with member name `mMemberName`. Const
@@ -165,21 +167,26 @@ namespace ssvu
 /// @details Generates two functions, one that takes the parameter by && and
 /// moves it, and another that takes it by const&.
 /// Must end without semicolon.
-#define SSVU_DEFINE_SINK_SETTER_SIMPLE(mName, mMember)                       \
-    inline void mName(const decltype(mMember)& mParam) { mMember = mParam; } \
-    inline void mName(decltype(mMember)&& mParam) noexcept                   \
-    {                                                                        \
-        mMember = mv(mParam);                                                \
+#define SSVU_DEFINE_SINK_SETTER_SIMPLE(mName, mMember)     \
+    inline void mName(const decltype(mMember)& mParam)     \
+    {                                                      \
+        mMember = mParam;                                  \
+    }                                                      \
+    inline void mName(decltype(mMember)&& mParam) noexcept \
+    {                                                      \
+        mMember = mv(mParam);                              \
     }
 
 /// @macro Defines a basic "sink" constructor for a class, taking one argument.
 /// @details Generates two constructors.
 /// Must end without semicolon.
-#define SSVU_DEFINE_SINK_CTOR_SIMPLE_1(mClassName, mMember)                 \
-    inline mClassName(const decltype(mMember)& mParam) : mMember{mParam} {} \
-    inline mClassName(decltype(mMember)&& mParam) noexcept                  \
-        : mMember{mv(mParam)}                                               \
-    {                                                                       \
+#define SSVU_DEFINE_SINK_CTOR_SIMPLE_1(mClassName, mMember)              \
+    inline mClassName(const decltype(mMember)& mParam) : mMember{mParam} \
+    {                                                                    \
+    }                                                                    \
+    inline mClassName(decltype(mMember)&& mParam) noexcept               \
+        : mMember{mv(mParam)}                                            \
+    {                                                                    \
     }
 
 /// @macro Defines a basic "sink" constructor for a class, taking two arguments.
@@ -201,9 +208,9 @@ namespace ssvu
         : mMember1{mv(mParam1)}, mMember2{mParam2}                            \
     {                                                                         \
     }                                                                         \
-    inline mClassName(decltype(mMember1)&& mParam1,                           \
-        decltype(mMember2)&& mParam2) noexcept : mMember1{mv(mParam1)},       \
-                                                 mMember2{mv(mParam2)}        \
+    inline mClassName(                                                        \
+        decltype(mMember1)&& mParam1, decltype(mMember2)&& mParam2) noexcept  \
+        : mMember1{mv(mParam1)}, mMember2{mv(mParam2)}                        \
     {                                                                         \
     }
 

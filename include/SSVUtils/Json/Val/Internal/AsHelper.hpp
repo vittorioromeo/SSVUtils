@@ -45,7 +45,7 @@ namespace ssvu
         {                                                    \
             return VRM_PP_CAT(mV.get, mType)();              \
         }                                                    \
-        inline static auto as(Val&& mV) noexcept             \
+        inline static auto&& as(Val&& mV) noexcept           \
         {                                                    \
             return VRM_PP_CAT(mV.get, mType)();              \
         }                                                    \
@@ -93,8 +93,14 @@ namespace ssvu
                 {
                     return mV;
                 }
-                inline static auto as(Val&& mV) noexcept { return mV; }
-                inline static auto& as(Val& mV) noexcept { return mV; }
+                inline static auto&& as(Val&& mV) noexcept
+                {
+                    return std::move(mV);
+                }
+                inline static auto& as(Val& mV) noexcept
+                {
+                    return mV;
+                }
             };
 
             template <typename TItem>
@@ -112,8 +118,8 @@ namespace ssvu
                     return result;
                 }
             };
-        }
-    }
-}
+        } // namespace Impl
+    }     // namespace Json
+} // namespace ssvu
 
 #endif

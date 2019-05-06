@@ -41,9 +41,9 @@ int main()
         }                                        \
     }
 
-        EXEC_TEST(ca);
-        EXEC_TEST(cv);
-        EXEC_TEST(cl);
+        EXEC_TEST(ca)
+        EXEC_TEST(cv)
+        EXEC_TEST(cl)
 
 #undef EXEC_TEST
     }
