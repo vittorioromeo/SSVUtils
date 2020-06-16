@@ -38,7 +38,7 @@ namespace ssvu
         template <typename T>
         inline void assertDirty() const noexcept
         {
-            SSVU_ASSERT(dirtyFlag == MPL::getIdxOf<T, Ts...>(),
+            SSVU_ASSERT(dirtyFlag == static_cast<int>(MPL::getIdxOf<T, Ts...>()),
                 "Union needs to be dirty with the correct type");
         }
 #else
