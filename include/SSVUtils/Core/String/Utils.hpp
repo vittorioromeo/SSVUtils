@@ -9,7 +9,7 @@
 
 namespace ssvu
 {
-    template <typename>
+    template <typename, typename = void>
     struct Stringifier;
 
     /// @brief Stringifies a value in a stream.

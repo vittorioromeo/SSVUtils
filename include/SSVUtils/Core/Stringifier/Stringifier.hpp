@@ -190,7 +190,7 @@ namespace ssvu
     }
 
     // Stringify common types
-    template <typename T>
+    template <typename T, typename>
     struct Stringifier : public Impl::StringifierDefault<T>
     {
     };
@@ -267,10 +267,33 @@ namespace ssvu
     {
     };
 
+    template <typename T, typename = void>
+    struct HasKeyType : std::false_type
+    {
+    };
+
+    template <typename T>
+    struct HasKeyType<T, Impl::VoidT<typename T::key_type>> : std::true_type
+    {
+    };
+
+    template <typename T, typename = void>
+    struct IsAlloc : std::false_type
+    {
+    };
+
+    template <typename T>
+    struct IsAlloc<T, Impl::VoidT<typename T::propagate_on_container_move_assignment>> : std::true_type
+    {
+    };
+
+
+
     // Stringify linear containers (value type and allocator type)
     template <template <typename, typename> class T, typename TV,
         typename TAlloc>
-    struct Stringifier<T<TV, TAlloc>> final
+    struct Stringifier<T<TV, TAlloc>, EnableIf<!HasKeyType<T<TV, TAlloc>>::value && IsAlloc<TAlloc>::value>
+        > final
         : public Impl::StringifierContainer<T<TV, TAlloc>>
     {
     };
@@ -279,7 +302,9 @@ namespace ssvu
     template <template <typename, typename, typename, typename...> class TM,
         typename TK, typename TV, typename TComp, typename TAlloc,
         typename... TArgs>
-    struct Stringifier<TM<TK, TV, TComp, TAlloc, TArgs...>>
+    struct Stringifier<TM<TK, TV, TComp, TAlloc, TArgs...>,
+                        EnableIf<HasKeyType<TM<TK, TV, TComp, TAlloc, TArgs...>>::value>
+                      >
     {
         template <bool TFmt>
         inline static void impl(std::ostream& mStream,

@@ -226,7 +226,9 @@ namespace ssvu
             template <typename TKey, typename TValue,
                 template <typename, typename, typename...> class TMap,
                 typename... TExtra>
-            struct Cnv<TMap<TKey, TValue, TExtra...>> final
+            struct Cnv<TMap<TKey, TValue, TExtra...>,
+                    ssvu::Impl::VoidT<typename TMap<TKey, TValue, TExtra...>::key_type>
+               > final
             {
                 using Type = TMap<TKey, TValue, TExtra...>;
 

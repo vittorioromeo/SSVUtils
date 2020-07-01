@@ -236,7 +236,7 @@ namespace ssvu
                 // "Implicit" `set` function done via `operator=` overloading
                 Val& operator=(const Val& mV) noexcept;
                 Val& operator=(Val&& mV) noexcept;
-                
+
                 template <typename T>
                 inline Val& operator=(T&& mX) noexcept(
                     noexcept(std::declval<Val&>().set(FWD(mX))))
