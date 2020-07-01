@@ -40,9 +40,9 @@ constexpr char digits[201]{
     "90919293949596979899"};
 
 template <typename T>
-struct Conv<T, std::enable_if_t<!isUnsigned<T>()>>
+struct Conv<T, std::enable_if_t<!std::is_unsigned_v<T>>>
 {
-    static constexpr std::size_t bufferSize{NumLimits<T>::digits10};
+    static constexpr std::size_t bufferSize{std::numeric_limits<T>::digits10};
 
     inline static auto toStr(T val) noexcept
     {
@@ -87,9 +87,9 @@ struct Conv<T, std::enable_if_t<!isUnsigned<T>()>>
 };
 
 template <typename T>
-struct Conv<T, std::enable_if_t<isUnsigned<T>()>>
+struct Conv<T, std::enable_if_t<std::is_unsigned_v<T>>>
 {
-    static constexpr std::size_t bufferSize{NumLimits<T>::digits10};
+    static constexpr std::size_t bufferSize{std::numeric_limits<T>::digits10};
 
     inline static auto toStr(T val) noexcept
     {

@@ -17,7 +17,7 @@ SSVJ_CNV_NAMESPACE()
         std::vector<std::pair<float, double>> f2{
             {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
         std::string f3{"yo"};
-        Tpl<std::string, int, int> f4{"hey", 5, 10};
+        std::tuple<std::string, int, int> f4{"hey", 5, 10};
 
         inline bool SSVU_ATTRIBUTE(pure) operator==(const __ssvjTestStruct& mT) const noexcept
         {
@@ -168,28 +168,28 @@ int main()
         }
 
         {
-            using PP = Tpl<int>;
+            using PP = std::tuple<int>;
             PP p{10};
             EXEC_TEST_BASIC(PP, p)
         }
 
         {
-            using PP = Tpl<int, float, std::string>;
+            using PP = std::tuple<int, float, std::string>;
             PP p{10, 15.5f, "swag"s};
             EXEC_TEST_BASIC(PP, p)
         }
 
         {
-            using PP = Tpl<int, float, std::string, int, float>;
+            using PP = std::tuple<int, float, std::string, int, float>;
             PP p{10, 15.5f, "more swag"s, 22, 0.f};
             EXEC_TEST_BASIC(PP, p)
         }
 
         {
-            using PP = Tpl<int, float, std::string, int, std::pair<double, int>,
-                float, Tpl<int, int, int>>;
+            using PP = std::tuple<int, float, std::string, int, std::pair<double, int>,
+                float, std::tuple<int, int, int>>;
             PP p{10, 15.5f, "ULTRA SWAG"s, 22, std::pair<double, int>{10.5, 99},
-                0.f, Tpl<int, int, int>{0, 1, 2}};
+                0.f, std::tuple<int, int, int>{0, 1, 2}};
             EXEC_TEST_BASIC(PP, p)
         }
     }
@@ -246,7 +246,7 @@ int main()
         }
 
         {
-            using PP = Tpl<std::vector<std::string>,
+            using PP = std::tuple<std::vector<std::string>,
                 std::pair<std::vector<int>, std::vector<float>>, int,
                 std::vector<int>>;
             PP p{std::vector<std::string>{"10", "20", "35"},
@@ -473,7 +473,7 @@ int main()
         std::vector<std::pair<float, double>> f2{
             {5.f, 10.}, {5.5f, 10.5}, {5.f, 10.}};
         std::string f3{"yo"};
-        Tpl<std::string, int, int> f4{"hey", 5, 10};
+        std::tuple<std::string, int, int> f4{"hey", 5, 10};
 
         Val vIn;
         cnvObj(vIn, "f0", f0, "f1", f1, "f2", f2, "f3", f3, "f4", f4);

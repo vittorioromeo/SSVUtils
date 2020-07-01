@@ -21,7 +21,8 @@ struct AsHelper
     inline static auto as(TFwd&& mV)
     {
         T result;
-        Cnv<RmAll<T>>::fromVal(FWD(mV), result);
+        Cnv<std::remove_cv_t<std::remove_reference_t<T>>>::fromVal(
+            FWD(mV), result);
         return result;
     }
 };

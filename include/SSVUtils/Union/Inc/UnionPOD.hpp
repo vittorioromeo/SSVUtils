@@ -19,11 +19,12 @@ namespace ssvu
 template <typename... Ts>
 struct UnionPOD : public Impl::UnionBase<Ts...>
 {
-    SSVU_ASSERT_STATIC(MPL::all<IsPOD, Ts...>(), "All types must be POD");
+    SSVU_ASSERT_STATIC(MPL::all<std::is_pod, Ts...>(), "All types must be POD");
 
     /// @brief Constructs and sets the internal data to `T`.
     template <typename T, typename... TArgs>
-    inline void init(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
+    inline void init(TArgs&&... mArgs) noexcept(
+        std::is_nothrow_constructible_v<T, TArgs...>)
     {
         this->template initImpl<T>(FWD(mArgs)...);
     }

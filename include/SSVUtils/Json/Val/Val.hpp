@@ -177,7 +177,8 @@ private:
     template <typename T>
     inline bool SSVU_ATTRIBUTE(pure) isNoNum() const noexcept
     {
-        return Impl::ChkNoNum<RmAll<T>>::is(*this);
+        return Impl::ChkNoNum<std::remove_cv_t<std::remove_reference_t<T>>>::is(
+            *this);
     }
 
 public:
@@ -210,10 +211,12 @@ public:
     ///	@details The current stored value is deinitialized first.
     template <typename T>
     inline void set(T&& mX) noexcept(noexcept(
-        Impl::Cnv<RmAll<T>, void>::toVal(std::declval<Val&>(), FWD(mX))))
+        Impl::Cnv<std::remove_cv_t<std::remove_reference_t<T>>, void>::toVal(
+            std::declval<Val&>(), FWD(mX))))
     {
         deinitCurrent();
-        Impl::Cnv<RmAll<T>, void>::toVal(*this, FWD(mX));
+        Impl::Cnv<std::remove_cv_t<std::remove_reference_t<T>>, void>::toVal(
+            *this, FWD(mX));
     }
 
     /// @brief Checks if the stored internal value is of type `T`.
@@ -223,7 +226,8 @@ public:
     template <typename T>
     inline bool SSVU_ATTRIBUTE(pure) is() const noexcept
     {
-        return Impl::Chk<RmAll<T>>::is(*this);
+        return Impl::Chk<std::remove_cv_t<std::remove_reference_t<T>>>::is(
+            *this);
     }
 
     /// @brief Gets the internal value as `T`. (non-const version)

@@ -93,13 +93,14 @@ public:
     /// @brief Constructs a `T` instance at index `mI`.
     template <typename... TArgs>
     inline void initAt(std::size_t mI, TArgs&&... mArgs) noexcept(
-        isNothrowCtor<T, TArgs...>())
+        std::is_nothrow_constructible_v<T, TArgs...>)
     {
         new(&data[mI]) T(FWD(mArgs)...);
     }
 
     /// @brief Destroyes a `T` instance at index `mI`.
-    inline void deinitAt(std::size_t mI) noexcept(isNothrowDtor<T>())
+    inline void deinitAt(std::size_t mI) noexcept(
+        std::is_nothrow_destructible_v<T>)
     {
         (*this)[mI].~T();
     }

@@ -26,7 +26,7 @@ protected:
     /// @brief Constructs and sets the internal data to `T`.
     template <typename T, typename... TArgs>
     inline void initImpl(TArgs&&... mArgs) noexcept(
-        isNothrowCtor<T, TArgs...>())
+        std::is_nothrow_constructible_v<T, TArgs...>)
     {
         SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>());
         new(&data) T(FWD(mArgs)...);
@@ -34,7 +34,7 @@ protected:
 
     /// @brief Destructs the internal `T` data.
     template <typename T>
-    inline void deinitImpl() noexcept(isNothrowDtor<T>())
+    inline void deinitImpl() noexcept(std::is_nothrow_destructible_v<T>)
     {
         SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>());
         getImpl<T>().~T();

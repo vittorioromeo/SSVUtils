@@ -38,10 +38,10 @@ struct AsHelper;
 /// @brief Helper class for `arch`/`extr` conversion functions.
 struct CnvFuncHelper;
 
-/// @brief Helper class for conversion to/from `Tpl`.
+/// @brief Helper class for conversion to/from `std::tuple`.
 struct TplCnvHelper;
 
-/// @brief Helper class for checking types to/from `Tpl`.
+/// @brief Helper class for checking types to/from `std::tuple`.
 struct TplIsHelper;
 } // namespace Impl
 } // namespace Json

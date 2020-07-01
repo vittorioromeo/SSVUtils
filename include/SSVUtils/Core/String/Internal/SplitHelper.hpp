@@ -14,7 +14,7 @@ using StrSize = std::string::size_type;
 inline StrSize findFirstOf(const std::string& mStr, const StrSize& mStartAt,
     const std::vector<std::string>& mSeparator, StrSize& mLength)
 {
-    StrSize result{NumLimits<StrSize>::max()};
+    StrSize result{std::numeric_limits<StrSize>::max()};
     for(const auto& s : mSeparator)
     {
         StrSize temp{mStr.find(s, mStartAt)};

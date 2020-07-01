@@ -23,9 +23,9 @@ template <typename, std::size_t, typename...>
 struct RemoveHlpr;
 
 template <std::size_t... TIs, std::size_t TN, typename... Ts>
-struct RemoveHlpr<IdxSeq<TIs...>, TN, Ts...>
+struct RemoveHlpr<std::index_sequence<TIs...>, TN, Ts...>
 {
-    using Type = List<std::tuple_element_t<getMapRem(TIs, TN), Tpl<Ts...>>...>;
+    using Type = List<std::tuple_element_t<getMapRem(TIs, TN), std::tuple<Ts...>>...>;
 };
 
 template <std::size_t TN, typename... Ts>
@@ -34,7 +34,7 @@ struct Remove
     SSVU_ASSERT_STATIC(
         TN < sizeof...(Ts), "Remove index smaller than the size of the list");
     using Type =
-        typename RemoveHlpr<MkIdxSeq<sizeof...(Ts) - 1>, TN, Ts...>::Type;
+        typename RemoveHlpr<std::make_index_sequence<sizeof...(Ts) - 1>, TN, Ts...>::Type;
 };
 } // namespace Impl
 } // namespace MPL

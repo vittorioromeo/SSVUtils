@@ -21,7 +21,7 @@ inline Cmd& Ctx::findCmd(const std::string& mName) const
         if(c->hasName(mName)) return *c;
 
     auto closestMatch(
-        std::make_pair(NumLimits<std::size_t>::max(), std::string{}));
+        std::make_pair(std::numeric_limits<std::size_t>::max(), std::string{}));
 
     for(const auto& c : cmds)
         for(const auto& n : c->getNames())

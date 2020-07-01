@@ -17,7 +17,8 @@ namespace Impl
 struct TplIsHelper
 {
     template <std::size_t TI, typename TTpl>
-    using TplArg = std::tuple_element_t<TI, RmAll<TTpl>>;
+    using TplArg = std::tuple_element_t<TI,
+        std::remove_cv_t<std::remove_reference_t<TTpl>>>;
 
     template <std::size_t TI = 0, typename... TArgs>
     inline static std::enable_if_t<TI == sizeof...(TArgs), bool> isTpl(
@@ -30,7 +31,7 @@ struct TplIsHelper
         TI<sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
     {
         SSVU_ASSERT(mV.is<Arr>() && mV.getArr().size() > TI);
-        if(!mV[TI].isNoNum<TplArg<TI, Tpl<TArgs...>>>()) return false;
+        if(!mV[TI].isNoNum<TplArg<TI, std::tuple<TArgs...>>>()) return false;
         return isTpl<TI + 1, TArgs...>(mV);
     }
 
@@ -60,7 +61,7 @@ struct ChkNoNum
 {
     inline static bool SSVU_ATTRIBUTE(pure) is(const Val& mV) noexcept
     {
-        return Chk<RmAll<T>>::is(mV);
+        return Chk<std::remove_cv_t<std::remove_reference_t<T>>>::is(mV);
     }
 };
 
@@ -179,9 +180,9 @@ struct Chk<std::pair<T1, T2>> final
     }
 };
 
-// Check `Tpl`
+// Check `std::tuple`
 template <typename... TArgs>
-struct Chk<Tpl<TArgs...>> final
+struct Chk<std::tuple<TArgs...>> final
 {
     inline static auto SSVU_ATTRIBUTE(pure) is(const Val& mV) noexcept
     {

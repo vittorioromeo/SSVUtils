@@ -14,13 +14,13 @@ namespace ssvu
 {
 namespace Impl
 {
-/// @brief Internal structure with `isStandardLayout` static assertion
+/// @brief Internal structure with `std::is_standard_layout_v` static assertion
 /// used for "baseptr" macros.
 template <typename T>
 struct StandardLayoutChecker
 {
     SSVU_ASSERT_STATIC(
-        isStandardLayout<T>(), "T must be a standard-layout type");
+        std::is_standard_layout_v<T>, "T must be a standard-layout type");
     using Type = T;
 };
 
@@ -68,14 +68,14 @@ using VoidT = typename Voider<TArgs...>::Type;
     {                                                                     \
         template <typename T>                                             \
         inline static constexpr auto check(T*)                            \
-            -> ssvu::IsSame<decltype(std::declval<T>().mMemberName(       \
-                                std::declval<TArgs>()...)),               \
+            -> ::std::is_same<decltype(std::declval<T>().mMemberName(     \
+                                  std::declval<TArgs>()...)),             \
                 TReturn>                                                  \
         {                                                                 \
             return {};                                                    \
         }                                                                 \
         template <typename>                                               \
-        inline static constexpr ssvu::std::false_type check(...)          \
+        inline static constexpr std::false_type check(...)                \
         {                                                                 \
             return {};                                                    \
         }                                                                 \
@@ -222,14 +222,17 @@ using VoidT = typename Voider<TArgs...>::Type;
 /// in the template arguments list.
 /// @details Enables if `mT` has the same type of `mType`. Uses `RmAll` on the
 /// passed type.
-#define SSVU_ENABLEIF_RA_IS(mT, mType) SSVU_ENABLEIF(isSame<RmAll<mT>, mType>())
+#define SSVU_ENABLEIF_RA_IS(mT, mType) \
+    SSVU_ENABLEIF(                     \
+        std::is_same_v<std::remove_cv_t<std::remove_reference_t<mT>>, mType>)
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro
 /// in the template arguments list.
 /// @details Enables if `mT` has not the same type of `mType`. Uses `RmAll` on
 /// the passed type.
 #define SSVU_ENABLEIF_RA_IS_NOT(mT, mType) \
-    SSVU_ENABLEIF(!isSame<RmAll<mT>, mType>())
+    SSVU_ENABLEIF(                         \
+        !std::is_same_v<std::remove_cv_t<std::remove_reference_t<mT>>, mType>)
 
 // Unreachable macro
 #if(defined(SSVU_COMPILER_CLANG) || defined(SSVU_COMPILER_GCC))

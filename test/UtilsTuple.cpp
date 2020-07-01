@@ -11,10 +11,10 @@ int main()
     using namespace std;
     using namespace ssvu;
 
-    SSVU_ASSERT_STATIC_NM(isSame<TplRepeat<int, 0>, tuple<>>());
-    SSVU_ASSERT_STATIC_NM(isSame<TplRepeat<int, 1>, tuple<int>>());
-    SSVU_ASSERT_STATIC_NM(isSame<TplRepeat<int, 2>, tuple<int, int>>());
-    SSVU_ASSERT_STATIC_NM(isSame<TplRepeat<int, 3>, tuple<int, int, int>>());
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<TplRepeat<int, 0>, tuple<>>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<TplRepeat<int, 1>, tuple<int>>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<TplRepeat<int, 2>, tuple<int, int>>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<TplRepeat<int, 3>, tuple<int, int, int>>);
 
     TEST_ASSERT_OP((getTplIdxOf<int, TplRepeat<int, 1>>()), ==, 0);
     TEST_ASSERT_OP((getTplIdxOf<int, TplRepeat<int, 10>>()), ==, 0);
@@ -77,8 +77,8 @@ int main()
 
 #if defined(__GXX_RTTI)
     {
-        ssvu::Tpl<int, char, float> tt1{1, 'c', 3.4f};
-        ssvu::Tpl<double, std::string> tt2{10.55, "banana"};
+        std::tuple<int, char, float> tt1{1, 'c', 3.4f};
+        std::tuple<double, std::string> tt2{10.55, "banana"};
 
         ssvu::tplForData(
             [&](auto mD, const auto& mA, const auto& mB)
@@ -86,11 +86,11 @@ int main()
                 using ts = typename decltype(mD)::Types;
 
                 TEST_ASSERT((typeid(typename ts::template At<0>)) ==
-                            (typeid(ssvu::std::tuple_element_t<mD.getIdx(),
-                                ssvu::Tpl<int, char, float>>)));
+                            (typeid(std::tuple_element_t<mD.getIdx(),
+                                std::tuple<int, char, float>>)));
                 TEST_ASSERT((typeid(typename ts::template At<1>)) ==
-                            (typeid(ssvu::std::tuple_element_t<mD.getIdx(),
-                                ssvu::Tpl<double, std::string>>)));
+                            (typeid(std::tuple_element_t<mD.getIdx(),
+                                std::tuple<double, std::string>>)));
                 TEST_ASSERT(
                     (typeid(typename ts::template At<0>)) == (typeid(mA)));
                 TEST_ASSERT(

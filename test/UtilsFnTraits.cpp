@@ -41,51 +41,51 @@ TEST_MAIN()
         return 0;
     };
 
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x0)>::Type, void()>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x0)>::Return, void>());
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x0)>::Type, void()>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x0)>::Return, void>);
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(x0)>::arity == 0);
 
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l0)>::Type, void()>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l0)>::Return, void>());
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l0)>::Type, void()>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l0)>::Return, void>);
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(l0)>::arity == 0);
 
 
 
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x1)>::Type, void(int)>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x1)>::Return, void>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x1)>::Arg<0>, int>());
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x1)>::Type, void(int)>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x1)>::Return, void>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x1)>::Arg<0>, int>);
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(x1)>::arity == 1);
 
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l1)>::Type, void(int)>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l1)>::Return, void>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l1)>::Arg<0>, int>());
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l1)>::Type, void(int)>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l1)>::Return, void>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l1)>::Arg<0>, int>);
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(l1)>::arity == 1);
 
 
 
     SSVU_ASSERT_STATIC_NM(
-        isSame<FnTraits<decltype(x2)>::Type, void(int, char)>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x2)>::Return, void>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x2)>::Arg<0>, int>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x2)>::Arg<1>, char>());
+        std::is_same_v<FnTraits<decltype(x2)>::Type, void(int, char)>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x2)>::Return, void>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x2)>::Arg<0>, int>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x2)>::Arg<1>, char>);
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(x2)>::arity == 2);
 
     SSVU_ASSERT_STATIC_NM(
-        isSame<FnTraits<decltype(l2)>::Type, void(int, char)>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l2)>::Return, void>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l2)>::Arg<0>, int>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l2)>::Arg<1>, char>());
+        std::is_same_v<FnTraits<decltype(l2)>::Type, void(int, char)>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l2)>::Return, void>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l2)>::Arg<0>, int>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l2)>::Arg<1>, char>);
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(l2)>::arity == 2);
 
 
 
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x3)>::Type, int(double)>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x3)>::Return, int>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(x3)>::Arg<0>, double>());
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x3)>::Type, int(double)>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x3)>::Return, int>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(x3)>::Arg<0>, double>);
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(x3)>::arity == 1);
 
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l3)>::Type, int(double)>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l3)>::Return, int>());
-    SSVU_ASSERT_STATIC_NM(isSame<FnTraits<decltype(l3)>::Arg<0>, double>());
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l3)>::Type, int(double)>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l3)>::Return, int>);
+    SSVU_ASSERT_STATIC_NM(std::is_same_v<FnTraits<decltype(l3)>::Arg<0>, double>);
     SSVU_ASSERT_STATIC_NM(FnTraits<decltype(l3)>::arity == 1);
 }

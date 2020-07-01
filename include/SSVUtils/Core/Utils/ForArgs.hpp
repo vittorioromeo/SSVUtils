@@ -19,7 +19,7 @@ template <typename, typename>
 struct ForNArgsHlpr;
 
 template <std::size_t... Bs, std::size_t... Cs>
-struct ForNArgsHlpr<IdxSeq<Bs...>, IdxSeq<Cs...>>
+struct ForNArgsHlpr<std::index_sequence<Bs...>, std::index_sequence<Cs...>>
 {
     using Swallow = bool[];
 
@@ -52,8 +52,8 @@ struct ForNArgsHlpr<IdxSeq<Bs...>, IdxSeq<Cs...>>
 } // namespace Impl
 
 #define IMPL_FORNARGS_BODY()                             \
-    Impl::ForNArgsHlpr<MkIdxSeq<sizeof...(Ts) / TArity>, \
-        MkIdxSeq<TArity>>::exec(FWD(mFn), std::forward_as_tuple(FWD(mXs)...))
+    Impl::ForNArgsHlpr<std::make_index_sequence<sizeof...(Ts) / TArity>, \
+        std::make_index_sequence<TArity>>::exec(FWD(mFn), std::forward_as_tuple(FWD(mXs)...))
 
 template <std::size_t TArity = 1, typename TF, typename... Ts>
 inline constexpr void forArgs(TF&& mFn, Ts&&... mXs) noexcept(

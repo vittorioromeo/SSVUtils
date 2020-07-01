@@ -16,7 +16,7 @@ namespace Impl
 template <typename TL, typename TIdxs, int TS>
 struct SliceHlpr;
 template <typename TL, std::size_t... TIdxs, int TS>
-struct SliceHlpr<TL, IdxSeq<TIdxs...>, TS>
+struct SliceHlpr<TL, std::index_sequence<TIdxs...>, TS>
 {
     using Type = List<typename TL::template At<TS + TIdxs>...>;
 };
@@ -28,7 +28,7 @@ inline constexpr int clampListIdx(int mX) noexcept
 }
 template <typename TL, int TS1, int TS2>
 using Slice = typename SliceHlpr<TL,
-    MkIdxSeq<clampListIdx<TL>(TS2) - clampListIdx<TL>(TS1)>,
+    std::make_index_sequence<clampListIdx<TL>(TS2) - clampListIdx<TL>(TS1)>,
     clampListIdx<TL>(TS1)>::Type;
 } // namespace Impl
 } // namespace MPL

@@ -20,7 +20,7 @@ class ObfuscatedValue;
 /// Obviously introduces a runtime cost to get/set the internal value.
 /// @tparam T Type of the underlying arithmetic value.
 template <typename T, Encoding::Type TCrypto>
-class ObfuscatedValue<T, TCrypto, std::enable_if_t<isArithmetic<T>()>>
+class ObfuscatedValue<T, TCrypto, std::enable_if_t<std::is_arithmetic_v<T>>>
 {
 private:
     /// @brief Dummy value used to "fool" memory scanners.

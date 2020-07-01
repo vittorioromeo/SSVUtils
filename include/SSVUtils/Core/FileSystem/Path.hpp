@@ -292,8 +292,8 @@ inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath)
 }
 
 #define ENABLEIF_ANY_PATH()                       \
-    std::enable_if_t<isSame<RmAll<T1>, Path>() || \
-                     isSame<RmAll<T2>, Path>()>* = nullptr
+    std::enable_if_t<std::is_same_v<std::remove_cv_t<std::remove_reference_t<T1>>, Path> || \
+                     std::is_same_v<std::remove_cv_t<std::remove_reference_t<T2>>, Path>>* = nullptr
 
 // Operator+
 template <typename T1, typename T2, ENABLEIF_ANY_PATH()>

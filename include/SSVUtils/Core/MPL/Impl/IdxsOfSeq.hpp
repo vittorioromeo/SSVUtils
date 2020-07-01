@@ -13,22 +13,6 @@ namespace MPL
 {
 namespace Impl
 {
-template <typename...>
-struct AreAllTrue : std::false_type
-{
-};
-template <typename... Ts>
-struct AreAllTrue<std::false_type, Ts...> : std::false_type
-{
-};
-template <typename... Ts>
-struct AreAllTrue<std::true_type, Ts...> : CTBool<AreAllTrue<Ts...>{}()>
-{
-};
-template <>
-struct AreAllTrue<> : std::true_type
-{
-};
 
 template <bool TAllTrue, int TStart>
 struct Matches;
@@ -46,11 +30,12 @@ struct Matches<false, TStart>
 template <typename TS, typename TM, int TStart, typename TMIdxs>
 struct GetMatch;
 template <typename TS, typename TM, int TStart, std::size_t... TMIdxs>
-struct GetMatch<TS, TM, TStart, IdxSeq<TMIdxs...>>
+struct GetMatch<TS, TM, TStart, std::index_sequence<TMIdxs...>>
 {
     using Type = typename Matches<
-        AreAllTrue<IsSame<typename TS::template At<TStart + TMIdxs>,
-            typename TM::template At<TMIdxs>>...>{}(),
+        (std::is_same_v<typename TS::template At<TStart + TMIdxs>,
+             typename TM::template At<TMIdxs>> &&
+            ...),
         TStart>::Type;
 };
 
@@ -72,13 +57,13 @@ struct ConcatTest<TR>
 template <typename TS, typename TM, typename TSIdxs, typename TMIdxs>
 struct IdxsOfSeqHlpr;
 template <typename TS, typename TM, std::size_t... TSIdxs, typename TMIdxs>
-struct IdxsOfSeqHlpr<TS, TM, IdxSeq<TSIdxs...>, TMIdxs>
+struct IdxsOfSeqHlpr<TS, TM, std::index_sequence<TSIdxs...>, TMIdxs>
 {
     using Type = typename ConcatTest<ListInt<>,
         typename GetMatch<TS, TM, TSIdxs, TMIdxs>::Type...>::Type;
 };
 template <typename TS, std::size_t... TSIdxs, typename TMIdxs>
-struct IdxsOfSeqHlpr<TS, List<>, IdxSeq<TSIdxs...>, TMIdxs>
+struct IdxsOfSeqHlpr<TS, List<>, std::index_sequence<TSIdxs...>, TMIdxs>
 {
     using Type = ListInt<>;
 };
@@ -87,8 +72,8 @@ struct IdxsOfSeqHlpr<TS, List<>, IdxSeq<TSIdxs...>, TMIdxs>
 
 template <typename TS, typename TM>
 using IdxsOfSeq = typename IdxsOfSeqHlpr<TS, TM,
-    MkIdxSeq<getClampedMin(int(TS::size - TM::size + 1), 0)>,
-    MkIdxSeq<TM::size>>::Type;
+    std::make_index_sequence<getClampedMin(int(TS::size - TM::size + 1), 0)>,
+    std::make_index_sequence<TM::size>>::Type;
 
 
 

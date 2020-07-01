@@ -16,15 +16,15 @@ template <typename T, typename TTpl>
 struct TplIdxOf;
 
 template <typename T, typename... TTypes>
-struct TplIdxOf<T, Tpl<T, TTypes...>>
+struct TplIdxOf<T, std::tuple<T, TTypes...>>
 {
     static constexpr std::size_t value{0u};
 };
 
 template <typename T1, typename T2, typename... TTypes>
-struct TplIdxOf<T1, Tpl<T2, TTypes...>>
+struct TplIdxOf<T1, std::tuple<T2, TTypes...>>
 {
-    static constexpr std::size_t value{1 + TplIdxOf<T1, Tpl<TTypes...>>::value};
+    static constexpr std::size_t value{1 + TplIdxOf<T1, std::tuple<TTypes...>>::value};
 };
 } // namespace Impl
 } // namespace ssvu

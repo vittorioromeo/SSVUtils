@@ -101,7 +101,9 @@ struct Cnv final
 
 // Convert enums
 template <typename T>
-struct Cnv<T, std::enable_if_t<isEnum<RmAll<T>>()>> final
+struct Cnv<T, std::enable_if_t<
+                  std::is_enum_v<std::remove_cv_t<std::remove_reference_t<T>>>>>
+    final
 {
     inline static void toVal(Val& mV, const T& mX) noexcept
     {
@@ -157,11 +159,11 @@ struct Cnv<std::pair<T1, T2>> final
     }
 };
 
-// Convert `Tpl`
+// Convert `std::tuple`
 template <typename... TArgs>
-struct Cnv<Tpl<TArgs...>> final
+struct Cnv<std::tuple<TArgs...>> final
 {
-    using Type = Tpl<TArgs...>;
+    using Type = std::tuple<TArgs...>;
 
     template <typename T>
     inline static void toVal(Val& mV, T&& mX)

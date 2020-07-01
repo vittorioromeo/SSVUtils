@@ -14,7 +14,7 @@ namespace MPL
 template <typename...>
 struct List;
 template <typename T, T... Ts>
-using ListIC = List<CTVal<T, Ts>...>;
+using ListIC = List<std::integral_constant<T, Ts>...>;
 template <int... Ts>
 using ListInt = ListIC<int, Ts...>;
 

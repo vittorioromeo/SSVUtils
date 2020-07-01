@@ -19,7 +19,7 @@ template <typename T, typename T1, typename... Ts>
 struct VACountHlpr<T, T1, Ts...>
 {
     static constexpr std::size_t value{
-        (isSame<T, T1>() ? std::size_t(1) : std::size_t(0)) +
+        (std::is_same_v<T, T1> ? std::size_t(1) : std::size_t(0)) +
         VACountHlpr<T, Ts...>::value};
 };
 

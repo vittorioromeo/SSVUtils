@@ -77,9 +77,9 @@ int main()
     for(auto i(0u); i < 100; ++i)
     {
         auto is = ssvu::getRndI<int, int>(
-            NumLimits<int>::min(), NumLimits<int>::max());
+            std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
         auto iu = ssvu::getRndI<unsigned int, unsigned int>(
-            NumLimits<unsigned int>::min(), NumLimits<unsigned int>::max());
+            std::numeric_limits<unsigned int>::min(), std::numeric_limits<unsigned int>::max());
 
         TEST_ASSERT_OP(ssvu::toStr(is), ==, std::to_string(is));
         TEST_ASSERT_OP(ssvu::toStr(iu), ==, std::to_string(iu));

@@ -76,7 +76,8 @@ public:
     /// @brief Constructs and sets the internal data to `T`.
     /// @details Asserts that any previous data was destroyed.
     template <typename T, typename... TArgs>
-    inline void init(TArgs&&... mArgs) noexcept(isNothrowCtor<T, TArgs...>())
+    inline void init(TArgs&&... mArgs) noexcept(
+        std::is_nothrow_constructible_v<T, TArgs...>)
     {
         assertClean();
         setDirty<T>();
@@ -86,7 +87,7 @@ public:
     /// @brief Destroys the internal `T` data.
     /// @details Asserts that any previous data was constructed.
     template <typename T>
-    inline void deinit() noexcept(isNothrowDtor<T>())
+    inline void deinit() noexcept(std::is_nothrow_destructible_v<T>)
     {
         assertDirty<T>();
         setClean();

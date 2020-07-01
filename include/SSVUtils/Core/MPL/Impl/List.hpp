@@ -27,7 +27,7 @@ template <>
 struct List<>
 {
     using Type = List<>;
-    using AsTpl = Tpl<>;
+    using AsTpl = std::tuple<>;
     using Clear = List<>;
     using Unique = List<>;
     using Reverse = List<>;
@@ -81,7 +81,7 @@ struct List<>
     template <typename TL>
     inline static constexpr bool isEqualTo() noexcept
     {
-        return isSame<Type, TL>();
+        return std::is_same_v<Type, TL>;
     }
 
     template <typename>
@@ -126,7 +126,7 @@ struct List
     using Type = List<Ts...>;
 
     /// @brief Returns this list as a tuple.
-    using AsTpl = Tpl<Ts...>;
+    using AsTpl = std::tuple<Ts...>;
 
     /// @brief Returns an empty list.
     using Clear = List<>;
@@ -150,7 +150,7 @@ struct List
     static constexpr bool empty{size == 0};
 
     /// @brief True if the list has no duplicate types.
-    static constexpr bool unique{isSame<Type, Unique>()};
+    static constexpr bool unique{std::is_same_v<Type, Unique>};
 
 
 
@@ -169,7 +169,7 @@ struct List
     /// the index `TN`.
     template <typename T, std::size_t TN>
     using Insert =
-        typename Impl::Insert<MkIdxSeq<sizeof...(Ts) + 1>, T, TN, Ts...>::Type;
+        typename Impl::Insert<std::make_index_sequence<sizeof...(Ts) + 1>, T, TN, Ts...>::Type;
 
     /// @brief Returns a copy of this list with the type in the index
     /// `TN` removed.
@@ -257,7 +257,7 @@ struct List
     template <typename TL>
     inline static constexpr bool isEqualTo() noexcept
     {
-        return isSame<Type, TL>();
+        return std::is_same_v<Type, TL>;
     }
 
 

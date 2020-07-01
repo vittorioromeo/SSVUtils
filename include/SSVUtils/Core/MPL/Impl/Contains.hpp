@@ -20,7 +20,7 @@ struct Contains : std::false_type
 
 template <typename T, typename THead, typename... Ts>
 struct Contains<T, THead, Ts...>
-    : std::conditional_t<isSame<T, THead>(), std::true_type, Contains<T, Ts...>>
+    : std::conditional_t<std::is_same_v<T, THead>, std::true_type, Contains<T, Ts...>>
 {
 };
 } // namespace Impl

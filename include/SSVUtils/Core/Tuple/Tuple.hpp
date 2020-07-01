@@ -23,9 +23,9 @@ namespace ssvu
 /// @code
 ///	ssvu::TplRepeat<int, 5>
 /// // ...is equal to...
-/// Tpl<int, int, int, int, int>
+/// std::tuple<int, int, int, int, int>
 /// @endcode
-template <typename T, std::size_t TN, typename TIdxs = IdxSeq<TN>>
+template <typename T, std::size_t TN, typename TIdxs = std::index_sequence<TN>>
 using TplRepeat = typename Impl::TplRepeatImpl<T, TN>::Type;
 
 /// @brief Returns the index of the first occurrence of the type `T` in a

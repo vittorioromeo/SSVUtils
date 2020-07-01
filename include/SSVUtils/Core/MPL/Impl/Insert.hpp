@@ -23,12 +23,12 @@ template <typename, typename, std::size_t, typename...>
 struct Insert;
 
 template <std::size_t... TIs, typename T, std::size_t TN, typename... Ts>
-struct Insert<IdxSeq<TIs...>, T, TN, Ts...>
+struct Insert<std::index_sequence<TIs...>, T, TN, Ts...>
 {
     SSVU_ASSERT_STATIC(TN <= sizeof...(Ts),
         "Insert index smaller or equal to the size of the list");
     using Type = List<std::tuple_element_t<getMapIns(TIs, sizeof...(Ts), TN),
-        Tpl<Ts..., T>>...>;
+        std::tuple<Ts..., T>>...>;
 };
 } // namespace Impl
 } // namespace MPL

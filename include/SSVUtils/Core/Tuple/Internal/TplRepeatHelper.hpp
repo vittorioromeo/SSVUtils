@@ -16,22 +16,22 @@ template <typename, std::size_t, typename>
 struct TplRepeatImplHelper;
 
 template <typename T, std::size_t TS, typename... TArgs>
-struct TplRepeatImplHelper<T, TS, Tpl<TArgs...>>
+struct TplRepeatImplHelper<T, TS, std::tuple<TArgs...>>
 {
     using Type =
-        typename TplRepeatImplHelper<T, TS - 1, Tpl<TArgs..., T>>::Type;
+        typename TplRepeatImplHelper<T, TS - 1, std::tuple<TArgs..., T>>::Type;
 };
 
 template <typename T, typename... TArgs>
-struct TplRepeatImplHelper<T, 0, Tpl<TArgs...>>
+struct TplRepeatImplHelper<T, 0, std::tuple<TArgs...>>
 {
-    using Type = Tpl<TArgs...>;
+    using Type = std::tuple<TArgs...>;
 };
 
 template <typename T, std::size_t TS>
 struct TplRepeatImpl
 {
-    using Type = typename TplRepeatImplHelper<T, TS, Tpl<>>::Type;
+    using Type = typename TplRepeatImplHelper<T, TS, std::tuple<>>::Type;
 };
 } // namespace Impl
 } // namespace ssvu

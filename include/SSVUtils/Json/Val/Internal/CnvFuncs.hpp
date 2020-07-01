@@ -14,9 +14,9 @@ namespace Json
 {
 template <typename T, typename TFwd>
 inline void extr(TFwd&& mV, T& mX) noexcept(
-    noexcept(Impl::Cnv<RmAll<T>>::fromVal(FWD(mV), mX)))
+    noexcept(Impl::Cnv<std::remove_cv_t<std::remove_reference_t<T>>>::fromVal(FWD(mV), mX)))
 {
-    Impl::Cnv<RmAll<T>>::fromVal(FWD(mV), mX);
+    Impl::Cnv<std::remove_cv_t<std::remove_reference_t<T>>>::fromVal(FWD(mV), mX);
 }
 template <typename T>
 inline void arch(Val& mV, T&& mX) noexcept(noexcept(mV = FWD(mX)))

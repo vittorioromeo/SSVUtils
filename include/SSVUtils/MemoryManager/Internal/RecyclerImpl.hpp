@@ -96,7 +96,7 @@ struct MonoRecyclerImpl final : public MonoRecyclerBase<TBase, TLHelper>
     template <typename T, typename... TArgs>
     inline auto createImpl(TArgs&&... mArgs)
     {
-        SSVU_ASSERT_STATIC(isSame<TBase, T>(),
+        SSVU_ASSERT_STATIC(std::is_same_v<TBase, T>,
             "MonoRecyclerImpl can only allocate objects "
             "of the same type");
         return PtrType{this->storage.chunk.template create<T>(FWD(mArgs)...),

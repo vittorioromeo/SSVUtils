@@ -31,7 +31,7 @@ constexpr float radDegRatio{pi / 180.f};
 /// value == 0.
 template <typename T>
 inline constexpr int getSign(
-    const T& mX, std::enable_if_t<!isSigned<T>()>* = nullptr) noexcept
+    const T& mX, std::enable_if_t<!std::is_signed_v<T>>* = nullptr) noexcept
 {
     return 0 < mX;
 }
@@ -42,7 +42,7 @@ inline constexpr int getSign(
 /// value == 0.
 template <typename T>
 inline constexpr int getSign(
-    const T& mX, std::enable_if_t<isSigned<T>()>* = nullptr) noexcept
+    const T& mX, std::enable_if_t<std::is_signed_v<T>>* = nullptr) noexcept
 {
     return (0 < mX) - (mX < 0);
 }
@@ -252,7 +252,7 @@ inline constexpr std::common_type_t<T1, T2, T3, T4, T5> get1DIdxFrom3D(
 /// as 1D arrays.
 /// @param mIdx 1D index.
 /// @param mCols Number of columns of the 2D array.
-/// @return Returns a 2D index (under the form of an Tpl) for a 2D array
+/// @return Returns a 2D index (under the form of an std::tuple) for a 2D array
 /// with `mCols` columns.
 template <typename T1, typename T2>
 inline auto get2DIdxFrom1D(const T1& mIdx, const T2& mCols) noexcept
@@ -268,8 +268,8 @@ inline auto get2DIdxFrom1D(const T1& mIdx, const T2& mCols) noexcept
 /// @param mIdx 1D index.
 /// @param mCols Number of columns of the 2D array.
 /// @param mRows Number of rows of the 3D array.
-/// @return Returns a 3D index (under the form of an Tpl) for an "implicit
-/// 3D" array.
+/// @return Returns a 3D index (under the form of an std::tuple) for an
+/// "implicit 3D" array.
 template <typename T1, typename T2, typename T3>
 inline auto get3DIdxFrom1D(
     const T1& mIdx, const T2& mCols, const T3& mRows) noexcept

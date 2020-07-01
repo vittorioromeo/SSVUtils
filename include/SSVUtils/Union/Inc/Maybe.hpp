@@ -64,7 +64,7 @@ public:
 template <typename T>
 struct Maybe : public Impl::MaybeImpl<T, Union>
 {
-    inline void deinit() noexcept(isNothrowDtor<T>())
+    inline void deinit() noexcept(std::is_nothrow_destructible_v<T>)
     {
         this->uv.template deinit<T>();
     }

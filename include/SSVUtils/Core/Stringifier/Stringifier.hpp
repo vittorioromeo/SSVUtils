@@ -241,8 +241,8 @@ struct Stringifier<std::pair<T1, T2>> final
 {
 };
 template <typename... TArgs>
-struct Stringifier<Tpl<TArgs...>> final
-    : public Impl::StringifierTuple<Tpl<TArgs...>>
+struct Stringifier<std::tuple<TArgs...>> final
+    : public Impl::StringifierTuple<std::tuple<TArgs...>>
 {
 };
 
@@ -311,7 +311,7 @@ struct Stringifier<T*>
 {
     template <bool TFmt>
     inline static void impl(std::ostream& mStream, const T* mValue,
-        std::enable_if_t<!isSame<std::remove_const_t<T>, char>()>* = nullptr)
+        std::enable_if_t<!std::is_same_v<std::remove_const_t<T>, char>>* = nullptr)
     {
         Impl::printBold<TFmt>(mStream, "[", Console::Color::Blue);
         Impl::printFmt<TFmt>(mStream,

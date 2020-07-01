@@ -21,10 +21,10 @@ namespace Impl
 template <typename C, typename R, typename... A>
 struct MemFnType
 {
-    using Type = std::conditional_t<isConst<C>(),
-        std::conditional_t<isVolatile<C>(), R (C::*)(A...) const volatile,
+    using Type = std::conditional_t<std::is_const_v<C>,
+        std::conditional_t<std::is_volatile_v<C>, R (C::*)(A...) const volatile,
             R (C::*)(A...) const>,
-        std::conditional_t<isVolatile<C>(), R (C::*)(A...) volatile,
+        std::conditional_t<std::is_volatile_v<C>, R (C::*)(A...) volatile,
             R (C::*)(A...)>>;
 };
 } // namespace Impl
@@ -50,7 +50,7 @@ struct FnTraits<TR(TArgs...)>
 
     /// @brief Type of the n-th argument of the function.
     template <std::size_t TI>
-    using Arg = std::tuple_element_t<TI, Tpl<TArgs...>>;
+    using Arg = std::tuple_element_t<TI, std::tuple<TArgs...>>;
 };
 
 // Match function pointers

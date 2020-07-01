@@ -45,7 +45,7 @@ int main()
         std::unordered_map<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
     STRINGIFY_TEST(
         __R(ssvu::Bimap<int, std::string>{{1, "aa"}, {2, "bb"}, {3, "cc"}}));
-    STRINGIFY_TEST(__R(ssvu::Tpl<int, int, int>{1, 2, 3}));
+    STRINGIFY_TEST(__R(std::tuple<int, int, int>{1, 2, 3}));
     STRINGIFY_TEST(__R(std::pair<int, int>{2, 3}));
 
 #undef STRINGIFY_TEST
