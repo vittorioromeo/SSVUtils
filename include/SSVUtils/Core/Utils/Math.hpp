@@ -10,6 +10,7 @@
 #include <vrm/pp.hpp>
 
 #include <cmath>
+#include <tuple>
 
 namespace ssvu
 {

@@ -186,7 +186,7 @@ inline void stringifyMapImpl(
 } // namespace Impl
 
 // Stringify common types
-template <typename T, typename>
+template <typename T, typename = void>
 struct Stringifier : public Impl::StringifierDefault<T>
 {
 };

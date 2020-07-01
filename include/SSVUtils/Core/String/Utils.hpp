@@ -6,6 +6,7 @@
 #define SSVU_CORE_STRING_UTILS
 
 #include "SSVUtils/Core/String/Internal/FastIntToStr.hpp"
+#include "SSVUtils/Core/Stringifier/Stringifier.hpp"
 
 #include <string>
 #include <memory>
@@ -14,9 +15,6 @@
 
 namespace ssvu
 {
-template <typename, typename = void>
-struct Stringifier;
-
 /// @brief Stringifies a value in a stream.
 /// @details Uses Stringifier<T> internally.
 /// @tparam TFmt Use formatting? (set to false if the target stream isn't

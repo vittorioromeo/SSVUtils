@@ -7,6 +7,8 @@
 
 #include "SSVUtils/Core/ConsoleFmt/ConsoleFmt.hpp"
 #include "SSVUtils/Core/String/IgnoreManip.hpp"
+#include "SSVUtils/Core/Utils/Math.hpp"
+#include "SSVUtils/Core/String/Utils.hpp"
 
 #include <string>
 #include <mutex>
