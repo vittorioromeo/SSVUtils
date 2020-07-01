@@ -9,27 +9,27 @@
 
 namespace ssvu
 {
-    namespace MPL
-    {
-        namespace Impl
-        {
-            template <typename, typename...>
-            struct IdxOf;
+namespace MPL
+{
+namespace Impl
+{
+template <typename, typename...>
+struct IdxOf;
 
-            // IndexOf base case: found the type we're looking for.
-            template <typename T, typename... Ts>
-            struct IdxOf<T, T, Ts...> : std::integral_constant<std::size_t, 0>
-            {
-            };
+// IndexOf base case: found the type we're looking for.
+template <typename T, typename... Ts>
+struct IdxOf<T, T, Ts...> : std::integral_constant<std::size_t, 0>
+{
+};
 
-            // IndexOf recursive case: 1 + IndexOf the rest of the types.
-            template <typename T, typename TOther, typename... Ts>
-            struct IdxOf<T, TOther, Ts...>
-                : std::integral_constant<std::size_t, 1 + IdxOf<T, Ts...>{}>
-            {
-            };
-        }
-    }
-}
+// IndexOf recursive case: 1 + IndexOf the rest of the types.
+template <typename T, typename TOther, typename... Ts>
+struct IdxOf<T, TOther, Ts...>
+    : std::integral_constant<std::size_t, 1 + IdxOf<T, Ts...>{}>
+{
+};
+} // namespace Impl
+} // namespace MPL
+} // namespace ssvu
 
 #endif

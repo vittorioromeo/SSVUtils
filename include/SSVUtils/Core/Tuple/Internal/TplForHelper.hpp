@@ -8,45 +8,46 @@
 #include <tuple>
 #include "SSVUtils/Core/Common/Common.hpp"
 
-#define SSVU_IMPL_DEFINE_FORHELPER(mName, mBody)                             \
-    template <SizeT TS, typename... TTpls>                                   \
-    struct mName                                                             \
-    {                                                                        \
-        template <SizeT TI, typename TF>                                     \
-        inline static EnableIf<TI == TS, void> exec(TF, TTpls&&...) noexcept \
-        {                                                                    \
-        }                                                                    \
-                                                                             \
-        template <SizeT TI = 0, typename TF>                                 \
-            inline static EnableIf <                                         \
-            TI<TS, void> exec(TF&& mF, TTpls&&... mTpls) noexcept(           \
-                noexcept(mBody))                                             \
-        {                                                                    \
-            mBody;                                                           \
-            exec<TI + 1, TF>(FWD(mF), FWD(mTpls)...);                        \
-        }                                                                    \
+#define SSVU_IMPL_DEFINE_FORHELPER(mName, mBody)                   \
+    template <std::size_t TS, typename... TTpls>                   \
+    struct mName                                                   \
+    {                                                              \
+        template <std::size_t TI, typename TF>                     \
+        inline static std::enable_if_t<TI == TS, void> exec(       \
+            TF, TTpls&&...) noexcept                               \
+        {                                                          \
+        }                                                          \
+                                                                   \
+        template <std::size_t TI = 0, typename TF>                 \
+            inline static std::enable_if_t <                       \
+            TI<TS, void> exec(TF&& mF, TTpls&&... mTpls) noexcept( \
+                noexcept(mBody))                                   \
+        {                                                          \
+            mBody;                                                 \
+            exec<TI + 1, TF>(FWD(mF), FWD(mTpls)...);              \
+        }                                                          \
     };
 
 namespace ssvu
 {
-    namespace Impl
+namespace Impl
+{
+template <typename TTypes, std::size_t TIdx>
+struct TplForData
+{
+    using Types = TTypes;
+    inline constexpr auto getIdx() const noexcept
     {
-        template <typename TTypes, SizeT TIdx>
-        struct TplForData
-        {
-            using Types = TTypes;
-            inline constexpr auto getIdx() const noexcept { return TIdx; }
-        };
-
-        SSVU_IMPL_DEFINE_FORHELPER(
-            ForHelper, (FWD(mF)(std::get<TI>(FWD(mTpls))...)))
-        SSVU_IMPL_DEFINE_FORHELPER(ForDataHelper,
-            (FWD(mF)(
-                TplForData<MPL::List<decltype(std::get<TI>(FWD(mTpls)))...>,
-                    TI>{},
-                std::get<TI>(FWD(mTpls))...)))
+        return TIdx;
     }
-}
+};
+
+SSVU_IMPL_DEFINE_FORHELPER(ForHelper, (FWD(mF)(std::get<TI>(FWD(mTpls))...)))
+SSVU_IMPL_DEFINE_FORHELPER(ForDataHelper,
+    (FWD(mF)(TplForData<MPL::List<decltype(std::get<TI>(FWD(mTpls)))...>, TI>{},
+        std::get<TI>(FWD(mTpls))...)))
+} // namespace Impl
+} // namespace ssvu
 
 #undef SSVU_IMPL_DEFINE_FORHELPER
 

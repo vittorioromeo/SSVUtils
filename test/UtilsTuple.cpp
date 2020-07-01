@@ -86,10 +86,10 @@ int main()
                 using ts = typename decltype(mD)::Types;
 
                 TEST_ASSERT((typeid(typename ts::template At<0>)) ==
-                            (typeid(ssvu::TplElem<mD.getIdx(),
+                            (typeid(ssvu::std::tuple_element_t<mD.getIdx(),
                                 ssvu::Tpl<int, char, float>>)));
                 TEST_ASSERT((typeid(typename ts::template At<1>)) ==
-                            (typeid(ssvu::TplElem<mD.getIdx(),
+                            (typeid(ssvu::std::tuple_element_t<mD.getIdx(),
                                 ssvu::Tpl<double, std::string>>)));
                 TEST_ASSERT(
                     (typeid(typename ts::template At<0>)) == (typeid(mA)));

@@ -11,39 +11,47 @@
 
 namespace ssvu
 {
-    namespace CmdLine
+namespace CmdLine
+{
+namespace Impl
+{
+class BaseArgPack : public BaseElement
+{
+protected:
+    std::size_t min, max;
+
+public:
+    inline BaseArgPack() noexcept : min{0}, max{0}
     {
-        namespace Impl
-        {
-            class BaseArgPack : public BaseElement
-            {
-            protected:
-                SizeT min, max;
-
-            public:
-                inline BaseArgPack() noexcept : min{0}, max{0} {}
-                inline BaseArgPack(SizeT mMin, SizeT mMax) noexcept : min{mMin},
-                                                                      max{mMax}
-                {
-                }
-
-                virtual void set(const std::vector<std::string>&) = 0;
-
-                inline auto isInfinite() const noexcept
-                {
-                    return min == 0 && max == 0;
-                }
-                inline auto getMin() const noexcept { return min; }
-                inline auto getMax() const noexcept { return max; }
-
-                inline std::string getUsageStr() const override
-                {
-                    return "(PACK " + getName() + " " + "[" + toStr(min) + "/" +
-                           (isInfinite() ? "..." : toStr(max)) + "])";
-                }
-            };
-        }
     }
-}
+    inline BaseArgPack(std::size_t mMin, std::size_t mMax) noexcept
+        : min{mMin}, max{mMax}
+    {
+    }
+
+    virtual void set(const std::vector<std::string>&) = 0;
+
+    inline auto isInfinite() const noexcept
+    {
+        return min == 0 && max == 0;
+    }
+    inline auto getMin() const noexcept
+    {
+        return min;
+    }
+    inline auto getMax() const noexcept
+    {
+        return max;
+    }
+
+    inline std::string getUsageStr() const override
+    {
+        return "(PACK " + getName() + " " + "[" + toStr(min) + "/" +
+               (isInfinite() ? "..." : toStr(max)) + "])";
+    }
+};
+} // namespace Impl
+} // namespace CmdLine
+} // namespace ssvu
 
 #endif

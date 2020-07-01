@@ -67,7 +67,7 @@
 */
 
 // TODO: TArgs -> Ts (?)
-// TODO: size_t literal operator, replace auto(0u), and SizeT() casts
+// TODO: size_t literal operator, replace auto(0u), and std::size_t() casts
 // TODO: SSVCMAKE: release disable tests, maybe enable lfto optimizations,
 // -ffast-math
 // TODO: replace for loops with for(auto x : range())

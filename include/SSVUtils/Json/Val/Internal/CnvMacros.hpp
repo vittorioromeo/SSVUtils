@@ -17,9 +17,9 @@
 #define SSVJ_CNV_NAMESPACE() \
     namespace ssvu           \
     {                        \
-        namespace Json       \
-        {                    \
-        namespace Impl
+    namespace Json           \
+    {                        \
+    namespace Impl
 
 /// @macro Closes a namespace for user-defined converters implementation.
 /// @details Must be called after `SSVU_CNV_NAMESPACE()`. Semicolon must not be
@@ -35,8 +35,8 @@
 #define SSVJ_CNV(mType, mVName, mXName)            \
     struct Cnv<mType> final : CnvImplSimple<mType> \
     {                                              \
-    template <typename TV, typename TX>            \
-    inline static void impl(TV mVName, TX mXName)
+        template <typename TV, typename TX>        \
+        inline static void impl(TV mVName, TX mXName)
 
 /// @macro End macro, required after defining a converter.
 /// @details Semicolon must not be used.
@@ -59,17 +59,10 @@
         SSVJ_IMPL_SRLZ_OBJ_AUTO_IMPL_SEP_ARG_STEP, mX, __VA_ARGS__)
 
 // Wrapper macro to avoid repetition
-#define SSVJ_IMPL_CNV_WRAPPER(mType, mTemplateArgs, mBody) \
-    SSVJ_CNV_NAMESPACE()                                   \
-    {                                                      \
-        template <VRM_PP_TPL_EXPLODE(mTemplateArgs)>       \
-        SSVJ_CNV(mType, mV, mX)                            \
-        {                                                  \
-            VRM_PP_TPL_EXPLODE(mBody)                      \
-        }                                                  \
-        SSVJ_CNV_END()                                     \
-    }                                                      \
-    SSVJ_CNV_NAMESPACE_END()
+#define SSVJ_IMPL_CNV_WRAPPER(mType, mTemplateArgs, mBody)            \
+    SSVJ_CNV_NAMESPACE(){template <VRM_PP_TPL_EXPLODE(mTemplateArgs)> \
+        SSVJ_CNV(mType, mV, mX){VRM_PP_TPL_EXPLODE(                   \
+            mBody)} SSVJ_CNV_END()} SSVJ_CNV_NAMESPACE_END()
 
 /// @macro Serialize/deserialize the specified member `mArg` of `mX` to a JSON
 /// value in `mV`.

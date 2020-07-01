@@ -41,7 +41,7 @@ int main()
 
         TEST_ASSERT(tm == tmil);
 
-        auto tm2(mv(tm));
+        auto tm2(std::move(tm));
 
         TEST_ASSERT(tm2[0] == 0 && tm2.at(0) == 0);
         TEST_ASSERT(tm2[1] == 2 && tm2.at(1) == 2);

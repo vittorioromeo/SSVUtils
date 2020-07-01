@@ -12,42 +12,41 @@
 
 namespace ssvu
 {
-    namespace CmdLine
+namespace CmdLine
+{
+template <typename T>
+class FlagValueOpt final : public Impl::FlagValueImpl<T>,
+                           public Impl::ETypeInfo<EType::FlagValueOpt>
+{
+private:
+    T valueDefault;
+    bool active{false};
+
+public:
+    inline FlagValueOpt(const std::string& mNameShort,
+        const std::string& mNameLong, const T& mValueDefault) noexcept
+        : Impl::FlagValueImpl<T>{mNameShort, mNameLong}, valueDefault{
+                                                             mValueDefault}
     {
-        template <typename T>
-        class FlagValueOpt final : public Impl::FlagValueImpl<T>,
-                                   public Impl::ETypeInfo<EType::FlagValueOpt>
-        {
-        private:
-            T valueDefault;
-            bool active{false};
-
-        public:
-            inline FlagValueOpt(const std::string& mNameShort,
-                const std::string& mNameLong, const T& mValueDefault) noexcept
-                : Impl::FlagValueImpl<T>{mNameShort, mNameLong},
-                  valueDefault{mValueDefault}
-            {
-            }
-
-            inline void set(const std::string& mValue) override
-            {
-                FlagValue<T>::set(mValue);
-                active = true;
-            }
-            inline auto get() const noexcept
-            {
-                return active ? FlagValue<T>::get() : valueDefault;
-            }
-
-            inline std::string getUsageStr() const override
-            {
-                return "[OPT " + Impl::BaseFlag::getNameShort() +
-                       "=(...) || OPT " + Impl::BaseFlag::getNameLong() +
-                       "=(...)]";
-            }
-        };
     }
-}
+
+    inline void set(const std::string& mValue) override
+    {
+        FlagValue<T>::set(mValue);
+        active = true;
+    }
+    inline auto get() const noexcept
+    {
+        return active ? FlagValue<T>::get() : valueDefault;
+    }
+
+    inline std::string getUsageStr() const override
+    {
+        return "[OPT " + Impl::BaseFlag::getNameShort() + "=(...) || OPT " +
+               Impl::BaseFlag::getNameLong() + "=(...)]";
+    }
+};
+} // namespace CmdLine
+} // namespace ssvu
 
 #endif

@@ -9,27 +9,27 @@
 
 namespace ssvu
 {
-    namespace MPL
-    {
-        template <typename...>
-        struct List;
-        template <typename T, T... Ts>
-        using ListIC = List<CTVal<T, Ts>...>;
-        template <int... Ts>
-        using ListInt = ListIC<int, Ts...>;
+namespace MPL
+{
+template <typename...>
+struct List;
+template <typename T, T... Ts>
+using ListIC = List<CTVal<T, Ts>...>;
+template <int... Ts>
+using ListInt = ListIC<int, Ts...>;
 
-        namespace Impl
-        {
-            template <typename T>
-            struct IsList : FalseT
-            {
-            };
-            template <typename... Ts>
-            struct IsList<List<Ts...>> : TrueT
-            {
-            };
-        }
-    }
-}
+namespace Impl
+{
+template <typename T>
+struct IsList : std::false_type
+{
+};
+template <typename... Ts>
+struct IsList<List<Ts...>> : std::true_type
+{
+};
+} // namespace Impl
+} // namespace MPL
+} // namespace ssvu
 
 #endif

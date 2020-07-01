@@ -10,23 +10,23 @@
 
 namespace ssvu
 {
-    namespace Encoding
-    {
-        template <>
-        SSVU_INLINE std::string encode<Type::Base64>(const std::string& mStr)
-        {
-            return Impl::Base64Encode(mStr);
-        }
-        template <>
-        SSVU_INLINE std::string encode<Type::MD5>(const std::string& mStr)
-        {
-            return Impl::MD5{mStr}.GetHash();
-        }
-
-        template <>
-        SSVU_INLINE std::string decode<Type::Base64>(const std::string& mStr)
-        {
-            return Impl::Base64Decode(mStr);
-        }
-    }
+namespace Encoding
+{
+template <>
+SSVU_INLINE std::string encode<Type::Base64>(const std::string& mStr)
+{
+    return Impl::Base64Encode(mStr);
 }
+template <>
+SSVU_INLINE std::string encode<Type::MD5>(const std::string& mStr)
+{
+    return Impl::MD5{mStr}.GetHash();
+}
+
+template <>
+SSVU_INLINE std::string decode<Type::Base64>(const std::string& mStr)
+{
+    return Impl::Base64Decode(mStr);
+}
+} // namespace Encoding
+} // namespace ssvu

@@ -8,18 +8,18 @@
 // Forward declarations
 namespace ssvu
 {
-    namespace Impl
-    {
-        template <typename, template <typename> class, typename, typename>
-        class BaseRecycler;
-        template <typename, template <typename> class>
-        struct MonoRecyclerImpl;
-        template <typename, template <typename> class, typename>
-        struct PolyRecyclerImpl;
+namespace Impl
+{
+template <typename, template <typename> class, typename, typename>
+class BaseRecycler;
+template <typename, template <typename> class>
+struct MonoRecyclerImpl;
+template <typename, template <typename> class, typename>
+struct PolyRecyclerImpl;
 
-        template <typename, typename>
-        class BaseManager;
-    }
-}
+template <typename, typename>
+class BaseManager;
+} // namespace Impl
+} // namespace ssvu
 
 #endif

@@ -12,30 +12,30 @@
 
 namespace ssvu
 {
-    namespace Impl
-    {
-        /// @brief Internal structure with `isStandardLayout` static assertion
-        /// used for "baseptr" macros.
-        template <typename T>
-        struct StandardLayoutChecker
-        {
-            SSVU_ASSERT_STATIC(
-                isStandardLayout<T>(), "T must be a standard-layout type");
-            using Type = T;
-        };
+namespace Impl
+{
+/// @brief Internal structure with `isStandardLayout` static assertion
+/// used for "baseptr" macros.
+template <typename T>
+struct StandardLayoutChecker
+{
+    SSVU_ASSERT_STATIC(
+        isStandardLayout<T>(), "T must be a standard-layout type");
+    using Type = T;
+};
 
-        template <typename T>
-        using StandardLayoutCheckerT =
-            typename ssvu::Impl::StandardLayoutChecker<T>::Type;
+template <typename T>
+using StandardLayoutCheckerT =
+    typename ssvu::Impl::StandardLayoutChecker<T>::Type;
 
-        template <typename...>
-        struct Voider
-        {
-            using Type = void;
-        };
-        template <typename... TArgs>
-        using VoidT = typename Voider<TArgs...>::Type;
-    } // namespace Impl
+template <typename...>
+struct Voider
+{
+    using Type = void;
+};
+template <typename... TArgs>
+using VoidT = typename Voider<TArgs...>::Type;
+} // namespace Impl
 } // namespace ssvu
 
 // TODO: docs
@@ -75,7 +75,7 @@ namespace ssvu
             return {};                                                    \
         }                                                                 \
         template <typename>                                               \
-        inline static constexpr ssvu::FalseT check(...)                   \
+        inline static constexpr ssvu::std::false_type check(...)          \
         {                                                                 \
             return {};                                                    \
         }                                                                 \
@@ -97,23 +97,23 @@ namespace ssvu
 #define SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName, mChecker)          \
     namespace __ssvuMacroImpl                                                \
     {                                                                        \
-        template <typename T, bool TCheck, typename... TArgs>                \
-        struct _##mName##Impl;                                               \
-        template <typename T, typename... TArgs>                             \
-        struct _##mName##Impl<T, true, TArgs...>                             \
+    template <typename T, bool TCheck, typename... TArgs>                    \
+    struct _##mName##Impl;                                                   \
+    template <typename T, typename... TArgs>                                 \
+    struct _##mName##Impl<T, true, TArgs...>                                 \
+    {                                                                        \
+        inline static auto call(T& mArg, TArgs&&... mArgs)                   \
         {                                                                    \
-            inline static auto call(T& mArg, TArgs&&... mArgs)               \
-            {                                                                \
-                return mArg.mMemberName(FWD(mArgs)...);                      \
-            }                                                                \
-        };                                                                   \
-        template <typename T, typename... TArgs>                             \
-        struct _##mName##Impl<T, false, TArgs...>                            \
+            return mArg.mMemberName(FWD(mArgs)...);                          \
+        }                                                                    \
+    };                                                                       \
+    template <typename T, typename... TArgs>                                 \
+    struct _##mName##Impl<T, false, TArgs...>                                \
+    {                                                                        \
+        inline static void call(T&, TArgs&&...)                              \
         {                                                                    \
-            inline static void call(T&, TArgs&&...)                          \
-            {                                                                \
-            }                                                                \
-        };                                                                   \
+        }                                                                    \
+    };                                                                       \
     }                                                                        \
     template <typename T, typename... TArgs>                                 \
     inline auto mName(T& mArg, TArgs&&... mArgs)                             \
@@ -174,7 +174,7 @@ namespace ssvu
     }                                                      \
     inline void mName(decltype(mMember)&& mParam) noexcept \
     {                                                      \
-        mMember = mv(mParam);                              \
+        mMember = std::move(mParam);                       \
     }
 
 /// @macro Defines a basic "sink" constructor for a class, taking one argument.
@@ -185,7 +185,7 @@ namespace ssvu
     {                                                                    \
     }                                                                    \
     inline mClassName(decltype(mMember)&& mParam) noexcept               \
-        : mMember{mv(mParam)}                                            \
+        : mMember{std::move(mParam)}                                     \
     {                                                                    \
     }
 
@@ -200,23 +200,23 @@ namespace ssvu
     }                                                                         \
     inline mClassName(                                                        \
         const decltype(mMember1)& mParam1, decltype(mMember2)&& mParam2)      \
-        : mMember1{mParam1}, mMember2{mv(mParam2)}                            \
+        : mMember1{mParam1}, mMember2{std::move(mParam2)}                     \
     {                                                                         \
     }                                                                         \
     inline mClassName(                                                        \
         decltype(mMember1)&& mParam1, const decltype(mMember2)& mParam2)      \
-        : mMember1{mv(mParam1)}, mMember2{mParam2}                            \
+        : mMember1{std::move(mParam1)}, mMember2{mParam2}                     \
     {                                                                         \
     }                                                                         \
     inline mClassName(                                                        \
         decltype(mMember1)&& mParam1, decltype(mMember2)&& mParam2) noexcept  \
-        : mMember1{mv(mParam1)}, mMember2{mv(mParam2)}                        \
+        : mMember1{std::move(mParam1)}, mMember2{std::move(mParam2)}          \
     {                                                                         \
     }
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro
 /// in the template arguments list.
-#define SSVU_ENABLEIF(...) EnableIf<__VA_ARGS__>* = nullptr
+#define SSVU_ENABLEIF(...) std::enable_if_t<__VA_ARGS__>* = nullptr
 
 /// @macro Uses SFINAE to enable/disable a particular template. Place this macro
 /// in the template arguments list.

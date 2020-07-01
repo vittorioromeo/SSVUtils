@@ -9,13 +9,13 @@
 
 namespace ssvu
 {
-    /// @brief Returns a const reference to a statically allocated empty
-    /// `std::string`.
-    inline const auto& getEmptyStr() noexcept
-    {
-        static std::string result;
-        return result;
-    }
+/// @brief Returns a const reference to a statically allocated empty
+/// `std::string`.
+inline const auto& getEmptyStr() noexcept
+{
+    static std::string result;
+    return result;
 }
+} // namespace ssvu
 
 #endif

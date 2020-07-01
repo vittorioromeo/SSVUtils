@@ -9,29 +9,29 @@
 
 namespace ssvu
 {
-    namespace MPL
-    {
-        namespace Impl
-        {
-            inline constexpr SizeT getMapIns(
-                SizeT mI, SizeT mFrom, SizeT mTo) noexcept
-            {
-                return mI < mTo ? mI : mI == mTo ? mFrom : mI - 1;
-            }
-
-            template <typename, typename, SizeT, typename...>
-            struct Insert;
-
-            template <SizeT... TIs, typename T, SizeT TN, typename... Ts>
-            struct Insert<IdxSeq<TIs...>, T, TN, Ts...>
-            {
-                SSVU_ASSERT_STATIC(TN <= sizeof...(Ts),
-                    "Insert index smaller or equal to the size of the list");
-                using Type = List<TplElem<getMapIns(TIs, sizeof...(Ts), TN),
-                    Tpl<Ts..., T>>...>;
-            };
-        }
-    }
+namespace MPL
+{
+namespace Impl
+{
+inline constexpr std::size_t getMapIns(
+    std::size_t mI, std::size_t mFrom, std::size_t mTo) noexcept
+{
+    return mI < mTo ? mI : mI == mTo ? mFrom : mI - 1;
 }
+
+template <typename, typename, std::size_t, typename...>
+struct Insert;
+
+template <std::size_t... TIs, typename T, std::size_t TN, typename... Ts>
+struct Insert<IdxSeq<TIs...>, T, TN, Ts...>
+{
+    SSVU_ASSERT_STATIC(TN <= sizeof...(Ts),
+        "Insert index smaller or equal to the size of the list");
+    using Type = List<std::tuple_element_t<getMapIns(TIs, sizeof...(Ts), TN),
+        Tpl<Ts..., T>>...>;
+};
+} // namespace Impl
+} // namespace MPL
+} // namespace ssvu
 
 #endif

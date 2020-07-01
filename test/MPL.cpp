@@ -139,12 +139,12 @@ TEST_MAIN()
     SSVU_ASSERT_STATIC_NM(
         isSame<List<PT0, PT2, PT1, PT0>::Unique, List<PT0, PT2, PT1>>());
 
-    SSVU_ASSERT_STATIC_NM(isSame<List<>::Apply<AddLVRef>, List<>>());
-    SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::Apply<AddLVRef>, List<PT0&>>());
+    SSVU_ASSERT_STATIC_NM(isSame<List<>::Apply<std::add_lvalue_reference_t>, List<>>());
+    SSVU_ASSERT_STATIC_NM(isSame<List<PT0>::Apply<std::add_lvalue_reference_t>, List<PT0&>>());
     SSVU_ASSERT_STATIC_NM(
-        isSame<List<PT0, PT0>::Apply<AddLVRef>, List<PT0&, PT0&>>());
+        isSame<List<PT0, PT0>::Apply<std::add_lvalue_reference_t>, List<PT0&, PT0&>>());
     SSVU_ASSERT_STATIC_NM(
-        isSame<List<PT0, PT1, PT2>::Apply<AddLVRef>, List<PT0&, PT1&, PT2&>>());
+        isSame<List<PT0, PT1, PT2>::Apply<std::add_lvalue_reference_t>, List<PT0&, PT1&, PT2&>>());
 
     SSVU_ASSERT_STATIC_NM(isSame<List<>::Filter<std::is_pod>, List<>>());
     SSVU_ASSERT_STATIC_NM(isSame<List<int, char, int>::Filter<std::is_pod>,
@@ -268,7 +268,7 @@ TEST_MAIN()
 
     struct EvenFn
     {
-        inline constexpr auto operator()(SizeT mI) noexcept
+        inline constexpr auto operator()(std::size_t mI) noexcept
         {
             return mI % 2 == 0;
         }
@@ -276,7 +276,7 @@ TEST_MAIN()
 
     struct OddFn
     {
-        inline constexpr auto operator()(SizeT mI) noexcept
+        inline constexpr auto operator()(std::size_t mI) noexcept
         {
             return mI % 2 == 1;
         }

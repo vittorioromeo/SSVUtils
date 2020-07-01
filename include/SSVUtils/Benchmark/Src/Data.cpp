@@ -9,20 +9,20 @@
 
 namespace ssvu
 {
-    namespace Benchmark
-    {
-        namespace Impl
-        {
-            SSVU_INLINE Data::Data(const TP& mTP, std::string mName)
-                : tp{mTP}, name{mv(mName)}
-            {
-            }
-
-            SSVU_INLINE Duration Data::getDuration() const noexcept
-            {
-                return std::chrono::duration_cast<Duration>(
-                    HRClock::now() - tp);
-            }
-        }
-    }
+namespace Benchmark
+{
+namespace Impl
+{
+SSVU_INLINE Data::Data(const TP& mTP, std::string mName)
+    : tp{mTP}, name{std::move(mName)}
+{
 }
+
+SSVU_INLINE Duration Data::getDuration() const noexcept
+{
+    return std::chrono::duration_cast<Duration>(
+        std::chrono::high_resolution_clock::now() - tp);
+}
+} // namespace Impl
+} // namespace Benchmark
+} // namespace ssvu

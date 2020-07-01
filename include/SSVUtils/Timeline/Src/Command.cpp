@@ -8,11 +8,16 @@
 
 namespace ssvu
 {
-    SSVU_INLINE Command::Command(Timeline& mTimeline) noexcept
-        : timeline(mTimeline)
-    {
-    }
-    SSVU_INLINE Command::~Command() {}
-    SSVU_INLINE void Command::update(FT) {}
-    SSVU_INLINE void Command::reset() {}
+SSVU_INLINE Command::Command(Timeline& mTimeline) noexcept : timeline(mTimeline)
+{
 }
+SSVU_INLINE Command::~Command()
+{
+}
+SSVU_INLINE void Command::update(FT)
+{
+}
+SSVU_INLINE void Command::reset()
+{
+}
+} // namespace ssvu

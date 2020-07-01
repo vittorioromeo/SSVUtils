@@ -10,25 +10,24 @@
 
 namespace ssvu
 {
-    namespace Benchmark
+namespace Benchmark
+{
+namespace Impl
+{
+/// @brief CRTP struct for data classes' shared methods.
+template <typename TDerived>
+struct DataBase
+{
+    /// @brief Returns the elapsed time as a string.
+    inline std::string getString() const
     {
-        namespace Impl
-        {
-            /// @brief CRTP struct for data classes' shared methods.
-            template <typename TDerived>
-            struct DataBase
-            {
-                /// @brief Returns the elapsed time as a string.
-                inline std::string getString() const
-                {
-                    auto value(
-                        ssvu::castUp<TDerived>(this)->getDuration().count());
-                    auto ms(ssvu::toNum<double>(value) / 1000000.0);
-                    return toStr(ms) + " ms";
-                }
-            };
-        }
+        auto value(ssvu::castUp<TDerived>(this)->getDuration().count());
+        auto ms(ssvu::toNum<double>(value) / 1000000.0);
+        return toStr(ms) + " ms";
     }
-}
+};
+} // namespace Impl
+} // namespace Benchmark
+} // namespace ssvu
 
 #endif

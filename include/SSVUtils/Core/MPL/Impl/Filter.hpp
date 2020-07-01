@@ -9,57 +9,53 @@
 
 namespace ssvu
 {
-    namespace MPL
-    {
-        namespace Impl
-        {
-            template <template <typename> class, typename, typename TResult>
-            struct FilterHlpr
-            {
-                using Type = TResult;
-            };
-            template <template <typename> class TFilter, typename T,
-                typename... T1s, typename TResult>
-            struct FilterHlpr<TFilter, List<T, T1s...>, TResult>
-            {
-                using CurrentList =
-                    typename FilterHlpr<TFilter, List<T1s...>, TResult>::Type;
-                using AddedList = typename FilterHlpr<TFilter, List<T1s...>,
-                    typename TResult::template PushBack<T>>::Type;
+namespace MPL
+{
+namespace Impl
+{
+template <template <typename> class, typename, typename TResult>
+struct FilterHlpr
+{
+    using Type = TResult;
+};
+template <template <typename> class TFilter, typename T, typename... T1s,
+    typename TResult>
+struct FilterHlpr<TFilter, List<T, T1s...>, TResult>
+{
+    using CurrentList =
+        typename FilterHlpr<TFilter, List<T1s...>, TResult>::Type;
+    using AddedList = typename FilterHlpr<TFilter, List<T1s...>,
+        typename TResult::template PushBack<T>>::Type;
 
-                using Type =
-                    Conditional<!TFilter<T>{}(), CurrentList, AddedList>;
-            };
+    using Type = std::conditional_t<!TFilter<T>{}(), CurrentList, AddedList>;
+};
 
-            template <template <typename> class TFilter, typename... Ts>
-            using Filter =
-                typename FilterHlpr<TFilter, List<Ts...>, List<>>::Type;
+template <template <typename> class TFilter, typename... Ts>
+using Filter = typename FilterHlpr<TFilter, List<Ts...>, List<>>::Type;
 
 
 
-            template <typename, SizeT, typename, typename TResult>
-            struct FilterIdxHlpr
-            {
-                using Type = TResult;
-            };
-            template <typename TFilter, SizeT TI, typename T, typename... T1s,
-                typename TResult>
-            struct FilterIdxHlpr<TFilter, TI, List<T, T1s...>, TResult>
-            {
-                using CurrentList = typename FilterIdxHlpr<TFilter, TI + 1,
-                    List<T1s...>, TResult>::Type;
-                using AddedList = typename FilterIdxHlpr<TFilter, TI + 1,
-                    List<T1s...>, typename TResult::template PushBack<T>>::Type;
+template <typename, std::size_t, typename, typename TResult>
+struct FilterIdxHlpr
+{
+    using Type = TResult;
+};
+template <typename TFilter, std::size_t TI, typename T, typename... T1s,
+    typename TResult>
+struct FilterIdxHlpr<TFilter, TI, List<T, T1s...>, TResult>
+{
+    using CurrentList =
+        typename FilterIdxHlpr<TFilter, TI + 1, List<T1s...>, TResult>::Type;
+    using AddedList = typename FilterIdxHlpr<TFilter, TI + 1, List<T1s...>,
+        typename TResult::template PushBack<T>>::Type;
 
-                using Type =
-                    Conditional<!TFilter{}(TI), CurrentList, AddedList>;
-            };
+    using Type = std::conditional_t<!TFilter{}(TI), CurrentList, AddedList>;
+};
 
-            template <typename TFilter, typename... Ts>
-            using FilterIdx =
-                typename FilterIdxHlpr<TFilter, 0, List<Ts...>, List<>>::Type;
-        }
-    }
-}
+template <typename TFilter, typename... Ts>
+using FilterIdx = typename FilterIdxHlpr<TFilter, 0, List<Ts...>, List<>>::Type;
+} // namespace Impl
+} // namespace MPL
+} // namespace ssvu
 
 #endif

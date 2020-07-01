@@ -3,16 +3,16 @@
 using namespace std;
 using namespace ssvu;
 
-constexpr SizeT argCount{128};
-constexpr SizeT arithCount{256};
-constexpr SizeT foreachCount{128};
-constexpr SizeT tplCount{64};
-constexpr SizeT repeatCount{128};
-constexpr SizeT evalDepth{5};
+constexpr std::size_t argCount{128};
+constexpr std::size_t arithCount{256};
+constexpr std::size_t foreachCount{128};
+constexpr std::size_t tplCount{64};
+constexpr std::size_t repeatCount{128};
+constexpr std::size_t evalDepth{5};
 
 std::ostringstream output;
 
-void mkFill(SizeT i)
+void mkFill(std::size_t i)
 {
     output << "#define SSVPP_IMPL_TPL_FILL_" << i << "(m0)";
 
@@ -25,7 +25,7 @@ void mkFill(SizeT i)
     output << "0\n";
 }
 
-void mkFillReverse(SizeT i)
+void mkFillReverse(std::size_t i)
 {
     output << "#define SSVPP_IMPL_TPL_FILL_REVERSE_" << i << "(m0)	";
 
@@ -37,7 +37,7 @@ void mkFillReverse(SizeT i)
     output << "\n";
 }
 
-void mkTupleElem(SizeT i)
+void mkTupleElem(std::size_t i)
 {
     output << "#define SSVPP_IMPL_TPL_ELEM_" << i << "(";
 
@@ -45,7 +45,7 @@ void mkTupleElem(SizeT i)
     output << "m" << tplCount - 1 << ") m" << i << "\n";
 }
 
-void mkTupleElemReverse(SizeT i)
+void mkTupleElemReverse(std::size_t i)
 {
     output << "#define SSVPP_IMPL_TPL_ELEM_REVERSE_" << i << "(";
 
@@ -53,7 +53,7 @@ void mkTupleElemReverse(SizeT i)
     output << "m" << tplCount - 1 << ") m" << tplCount - i - 1 << "\n";
 }
 
-void mkCat(SizeT i)
+void mkCat(std::size_t i)
 {
     output << "#define SSVPP_IMPL_TPL_CAT_" << i
            << "(m0, m1, ...)	SSVPP_IMPL_TPL_CAT_" << i - 1

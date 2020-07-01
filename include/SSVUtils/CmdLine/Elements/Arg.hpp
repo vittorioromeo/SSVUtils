@@ -10,31 +10,33 @@
 
 namespace ssvu
 {
-    namespace CmdLine
+namespace CmdLine
+{
+namespace Impl
+{
+template <typename T>
+class ArgImpl : public Impl::BaseArg
+{
+protected:
+    T value;
+
+public:
+    inline void set(const std::string& mValue) override
     {
-        namespace Impl
-        {
-            template <typename T>
-            class ArgImpl : public Impl::BaseArg
-            {
-            protected:
-                T value;
-
-            public:
-                inline void set(const std::string& mValue) override
-                {
-                    value = Parser<T>::parse(mValue);
-                }
-                inline auto get() const { return value; }
-            };
-        }
-
-        template <typename T>
-        class Arg final : public Impl::ArgImpl<T>,
-                          public Impl::ETypeInfo<EType::Arg>
-        {
-        };
+        value = Parser<T>::parse(mValue);
     }
-}
+    inline auto get() const
+    {
+        return value;
+    }
+};
+} // namespace Impl
+
+template <typename T>
+class Arg final : public Impl::ArgImpl<T>, public Impl::ETypeInfo<EType::Arg>
+{
+};
+} // namespace CmdLine
+} // namespace ssvu
 
 #endif

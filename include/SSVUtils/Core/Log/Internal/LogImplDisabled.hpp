@@ -7,29 +7,35 @@
 
 namespace ssvu
 {
-    namespace Impl
-    {
-        inline const auto& getUniqueColor(const std::string&)
-        {
-            return Console::setColorFG(Console::Color::Default);
-        }
-
-        using LOut = NullLOut;
-
-        inline LOut& lo() noexcept
-        {
-            static LOut result;
-            return result;
-        }
-        template <typename T>
-        inline LOut& lo(const T&)
-        {
-            return lo();
-        }
-
-        inline const char* hr() noexcept { return getEmptyStr().c_str(); }
-        inline std::string hr(int, char) { return getEmptyStr(); }
-    }
+namespace Impl
+{
+inline const auto& getUniqueColor(const std::string&)
+{
+    return Console::setColorFG(Console::Color::Default);
 }
+
+using LOut = NullLOut;
+
+inline LOut& lo() noexcept
+{
+    static LOut result;
+    return result;
+}
+template <typename T>
+inline LOut& lo(const T&)
+{
+    return lo();
+}
+
+inline const char* hr() noexcept
+{
+    return getEmptyStr().c_str();
+}
+inline std::string hr(int, char)
+{
+    return getEmptyStr();
+}
+} // namespace Impl
+} // namespace ssvu
 
 #endif

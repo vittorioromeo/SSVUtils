@@ -10,96 +10,105 @@
 
 namespace ssvu
 {
-    template <typename T, Encoding::Type TCrypto = Encoding::Type::Base64,
-        typename TEnable = void>
-    class ObfuscatedValue;
+template <typename T, Encoding::Type TCrypto = Encoding::Type::Base64,
+    typename TEnable = void>
+class ObfuscatedValue;
 
-    /// @brief Base64 "obfuscated" value
-    /// @details Quick (but not really effective) way to protect a value against
-    /// memory scanners (such as Cheat Engine).
-    /// Obviously introduces a runtime cost to get/set the internal value.
-    /// @tparam T Type of the underlying arithmetic value.
-    template <typename T, Encoding::Type TCrypto>
-    class ObfuscatedValue<T, TCrypto, EnableIf<isArithmetic<T>()>>
+/// @brief Base64 "obfuscated" value
+/// @details Quick (but not really effective) way to protect a value against
+/// memory scanners (such as Cheat Engine).
+/// Obviously introduces a runtime cost to get/set the internal value.
+/// @tparam T Type of the underlying arithmetic value.
+template <typename T, Encoding::Type TCrypto>
+class ObfuscatedValue<T, TCrypto, std::enable_if_t<isArithmetic<T>()>>
+{
+private:
+    /// @brief Dummy value used to "fool" memory scanners.
+    T dummy;
+
+    /// @brief The "real" value, under the form of a Base64 string.
+    std::string encodedValue;
+
+    /// @brief Converts the encodedValue to the arithmetic type.
+    /// @details Used internally.
+    /// @param mStr String to convert to arithmetic type.
+    T fromStr(const std::string& mStr) const
     {
-    private:
-        /// @brief Dummy value used to "fool" memory scanners.
-        T dummy;
+        std::istringstream stream(mStr);
+        T t;
+        stream >> t;
+        return t;
+    }
 
-        /// @brief The "real" value, under the form of a Base64 string.
-        std::string encodedValue;
+public:
+    /// @brief Constructs an ObfuscatedValue from an arithmetic value.
+    /// @param mValue The arithmetic value that will be stored internally.
+    inline ObfuscatedValue(const T& mValue)
+    {
+        set(mValue);
+    }
 
-        /// @brief Converts the encodedValue to the arithmetic type.
-        /// @details Used internally.
-        /// @param mStr String to convert to arithmetic type.
-        T fromStr(const std::string& mStr) const
-        {
-            std::istringstream stream(mStr);
-            T t;
-            stream >> t;
-            return t;
-        }
+    /// @brief Sets the internal Base64 string.
+    /// @param mValue Value to use.
+    inline void set(const T& mValue)
+    {
+        dummy = mValue;
+        encodedValue = Encoding::encode<TCrypto>(toStr(mValue));
+    }
 
-    public:
-        /// @brief Constructs an ObfuscatedValue from an arithmetic value.
-        /// @param mValue The arithmetic value that will be stored internally.
-        inline ObfuscatedValue(const T& mValue) { set(mValue); }
+    /// @brief Converts the internal Base64 string and returns the
+    /// unobfuscated value.
+    inline T get() const
+    {
+        return fromStr(Encoding::decode<TCrypto>(encodedValue));
+    }
 
-        /// @brief Sets the internal Base64 string.
-        /// @param mValue Value to use.
-        inline void set(const T& mValue)
-        {
-            dummy = mValue;
-            encodedValue = Encoding::encode<TCrypto>(toStr(mValue));
-        }
+    /// @brief Implicit conversion to the obfuscated type.
+    inline operator T() const
+    {
+        return get();
+    }
 
-        /// @brief Converts the internal Base64 string and returns the
-        /// unobfuscated value.
-        inline T get() const
-        {
-            return fromStr(Encoding::decode<TCrypto>(encodedValue));
-        }
+    /// @brief Adds a value to the internal one.
+    /// @param mValue Value to add.
+    inline T operator+=(const T& mValue)
+    {
+        set(get() + mValue);
+        return get();
+    }
 
-        /// @brief Implicit conversion to the obfuscated type.
-        inline operator T() const { return get(); }
+    /// @brief Subtracts a value from the internal one.
+    /// @param mValue Value to subtract.
+    inline T operator-=(const T& mValue)
+    {
+        set(get() - mValue);
+        return get();
+    }
 
-        /// @brief Adds a value to the internal one.
-        /// @param mValue Value to add.
-        inline T operator+=(const T& mValue)
-        {
-            set(get() + mValue);
-            return get();
-        }
+    /// @brief Multiplies the internal value by another value.
+    /// @param mValue Value to multiply with.
+    inline T operator*=(const T& mValue)
+    {
+        set(get() * mValue);
+        return get();
+    }
 
-        /// @brief Subtracts a value from the internal one.
-        /// @param mValue Value to subtract.
-        inline T operator-=(const T& mValue)
-        {
-            set(get() - mValue);
-            return get();
-        }
+    /// @brief Divides the internal value by another value.
+    /// @param mValue Value to divide with.
+    inline T operator/=(const T& mValue)
+    {
+        SSVU_ASSERT(mValue != 0);
+        set(get() / mValue);
+        return get();
+    }
 
-        /// @brief Multiplies the internal value by another value.
-        /// @param mValue Value to multiply with.
-        inline T operator*=(const T& mValue)
-        {
-            set(get() * mValue);
-            return get();
-        }
-
-        /// @brief Divides the internal value by another value.
-        /// @param mValue Value to divide with.
-        inline T operator/=(const T& mValue)
-        {
-            SSVU_ASSERT(mValue != 0);
-            set(get() / mValue);
-            return get();
-        }
-
-        /// @brief Shortcut operator for set.
-        /// @param mValue Value to use.
-        inline void operator=(const T& mValue) { set(mValue); }
-    };
-}
+    /// @brief Shortcut operator for set.
+    /// @param mValue Value to use.
+    inline void operator=(const T& mValue)
+    {
+        set(mValue);
+    }
+};
+} // namespace ssvu
 
 #endif

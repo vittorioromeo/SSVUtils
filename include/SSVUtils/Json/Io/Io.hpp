@@ -12,29 +12,29 @@
 
 namespace ssvu
 {
-    namespace Json
+namespace Json
+{
+namespace Impl
+{
+template <typename TRS>
+inline bool tryParse(Val& mVal, Reader<TRS>& mReader)
+{
+    try
     {
-        namespace Impl
-        {
-            template <typename TRS>
-            inline bool tryParse(Val& mVal, Reader<TRS>& mReader)
-            {
-                try
-                {
-                    mVal = mReader.parseVal();
-                }
-                catch(const ReadException& mEx)
-                {
-                    lo("JSON") << "Error occured during read\n";
-                    lo(mEx.getTitle())
-                        << mEx.what() << " - at:\n" + mEx.getSrc() << std::endl;
-                    return false;
-                }
-
-                return true;
-            }
-        }
+        mVal = mReader.parseVal();
     }
+    catch(const ReadException& mEx)
+    {
+        lo("JSON") << "Error occured during read\n";
+        lo(mEx.getTitle()) << mEx.what() << " - at:\n" + mEx.getSrc()
+                           << std::endl;
+        return false;
+    }
+
+    return true;
 }
+} // namespace Impl
+} // namespace Json
+} // namespace ssvu
 
 #endif

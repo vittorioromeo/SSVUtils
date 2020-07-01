@@ -11,49 +11,51 @@
 
 namespace ssvu
 {
-    namespace CmdLine
+namespace CmdLine
+{
+namespace Impl
+{
+template <typename T>
+class FlagValueImpl : public BaseFlagValue
+{
+private:
+    T value;
+
+public:
+    inline FlagValueImpl(
+        const std::string& mNameShort, const std::string& mNameLong) noexcept
+        : BaseFlagValue{mNameShort, mNameLong}
     {
-        namespace Impl
-        {
-            template <typename T>
-            class FlagValueImpl : public BaseFlagValue
-            {
-            private:
-                T value;
-
-            public:
-                inline FlagValueImpl(const std::string& mNameShort,
-                    const std::string& mNameLong) noexcept
-                    : BaseFlagValue{mNameShort, mNameLong}
-                {
-                }
-
-                inline void set(const std::string& mValue) override
-                {
-                    value = Parser<T>::parse(mValue);
-                }
-                inline auto get() const noexcept { return value; }
-
-                inline std::string getUsageStr() const override
-                {
-                    return "[" + getNameShort() + "=(...) || " + getNameLong() +
-                           "=(...)]";
-                }
-            };
-        }
-
-        template <typename T>
-        class FlagValue final : public Impl::FlagValueImpl<T>,
-                                public Impl::ETypeInfo<EType::FlagValue>
-        {
-        public:
-            inline FlagValue(const std::string& mNameShort,
-                const std::string& mNameLong) noexcept
-                : Impl::FlagValueImpl<T>{mNameShort, mNameLong}
-            {
-            }
-        };
     }
-}
+
+    inline void set(const std::string& mValue) override
+    {
+        value = Parser<T>::parse(mValue);
+    }
+    inline auto get() const noexcept
+    {
+        return value;
+    }
+
+    inline std::string getUsageStr() const override
+    {
+        return "[" + getNameShort() + "=(...) || " + getNameLong() + "=(...)]";
+    }
+};
+} // namespace Impl
+
+template <typename T>
+class FlagValue final : public Impl::FlagValueImpl<T>,
+                        public Impl::ETypeInfo<EType::FlagValue>
+{
+public:
+    inline FlagValue(
+        const std::string& mNameShort, const std::string& mNameLong) noexcept
+        : Impl::FlagValueImpl<T>{mNameShort, mNameLong}
+    {
+    }
+};
+} // namespace CmdLine
+} // namespace ssvu
 
 #endif

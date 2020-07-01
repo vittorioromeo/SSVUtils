@@ -98,7 +98,7 @@ int main()
     cc = dc = 0;
 
     {
-        GrowableArrayAS<UPtr<TestItem>> g;
+        GrowableArrayAS<std::unique_ptr<TestItem>> g;
         g.grow(0, 4);
         g.initAt(0, mkUPtr<TestItem>(cc, dc, 0));
         g.initAt(1, mkUPtr<TestItem>(cc, dc, 1));

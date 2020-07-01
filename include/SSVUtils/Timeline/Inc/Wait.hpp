@@ -11,44 +11,45 @@
 
 namespace ssvu
 {
-    class Wait final : public Command
+class Wait final : public Command
+{
+private:
+    FT time, currentTime;
+
+protected:
+    void update(FT mFT) override;
+    void reset() override;
+
+public:
+    inline Wait(Timeline& mTimeline, FT mTime) noexcept;
+};
+
+namespace Impl
+{
+template <bool TWhile>
+class WaitLoop final : public Command
+{
+private:
+    std::function<bool()> predicate;
+
+protected:
+    inline void update(FT) override
     {
-    private:
-        FT time, currentTime;
-
-    protected:
-        void update(FT mFT) override;
-        void reset() override;
-
-    public:
-        inline Wait(Timeline& mTimeline, FT mTime) noexcept;
-    };
-
-    namespace Impl
-    {
-        template <bool TWhile>
-        class WaitLoop final : public Command
-        {
-        private:
-            Predicate predicate;
-
-        protected:
-            inline void update(FT) override
-            {
-                timeline.ready = false;
-                if(predicate() != TWhile) timeline.next();
-            }
-
-        public:
-            inline WaitLoop(Timeline& mTimeline, const Predicate& mPredicate)
-                : Command{mTimeline}, predicate{mPredicate}
-            {
-            }
-        };
+        timeline.ready = false;
+        if(predicate() != TWhile) timeline.next();
     }
 
-    using WaitWhile = Impl::WaitLoop<true>;
-    using WaitUntil = Impl::WaitLoop<false>;
-}
+public:
+    inline WaitLoop(
+        Timeline& mTimeline, const std::function<bool()>& mPredicate)
+        : Command{mTimeline}, predicate{mPredicate}
+    {
+    }
+};
+} // namespace Impl
+
+using WaitWhile = Impl::WaitLoop<true>;
+using WaitUntil = Impl::WaitLoop<false>;
+} // namespace ssvu
 
 #endif

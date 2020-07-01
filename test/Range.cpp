@@ -61,7 +61,7 @@ int main()
             inline int f(int mK) const { return mK + n; }
         };
 
-        std::vector<UPtr<XTBase>> v;
+        std::vector<std::unique_ptr<XTBase>> v;
         v.emplace_back(mkUPtr<XTDer>());
         v.emplace_back(mkUPtr<XTDer>());
         v.emplace_back(mkUPtr<XTDer>());
@@ -80,7 +80,7 @@ int main()
 
 
 
-        std::list<UPtr<XTBase>> l;
+        std::list<std::unique_ptr<XTBase>> l;
         l.emplace_back(mkUPtr<XTDer>());
         l.emplace_back(mkUPtr<XTDer>());
         l.emplace_back(mkUPtr<XTDer>());

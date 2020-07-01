@@ -12,9 +12,9 @@
 #include "SSVUtils/Core/MPL/MPL.hpp"
 #include "SSVUtils/Core/Tuple/Internal/TplForHelper.hpp"
 
-#define SSVU_IMPL_TPLFOR_CALL(mHelper)                                         \
-    Impl::mHelper<MPL::getMin<SizeT>(getTplSize<TTpls>()...), TTpls...>::exec( \
-        FWD(mF), FWD(mTpls)...)
+#define SSVU_IMPL_TPLFOR_CALL(mHelper)                              \
+    Impl::mHelper<MPL::getMin<std::size_t>(getTplSize<TTpls>()...), \
+        TTpls...>::exec(FWD(mF), FWD(mTpls)...)
 
 #define SSVU_IMPL_DEFINE_TPLFOR_FN(mName, mHelper)         \
     template <typename TF, typename... TTpls>              \
@@ -26,20 +26,20 @@
 
 namespace ssvu
 {
-    /// @brief Iterates over a tuple's elements passing them to `mF` one at a
-    /// time.
-    /// @details Can iterate over multiple tuples at once, passing the Nth
-    /// element of every tuple to `mF` simultaneously.
-    /// If the tuples have different sizes, the minimum size will be used.
-    SSVU_IMPL_DEFINE_TPLFOR_FN(tplFor, ForHelper)
+/// @brief Iterates over a tuple's elements passing them to `mF` one at a
+/// time.
+/// @details Can iterate over multiple tuples at once, passing the Nth
+/// element of every tuple to `mF` simultaneously.
+/// If the tuples have different sizes, the minimum size will be used.
+SSVU_IMPL_DEFINE_TPLFOR_FN(tplFor, ForHelper)
 
-    /// @brief Iterates over a tuple's elements passing current iteration data
-    /// and them to `mF` one at a time.
-    /// @details Can iterate over multiple tuples at once, passing the Nth
-    /// element of every tuple to `mF` simultaneously.
-    /// If the tuples have different sizes, the minimum size will be used.
-    SSVU_IMPL_DEFINE_TPLFOR_FN(tplForData, ForDataHelper)
-}
+/// @brief Iterates over a tuple's elements passing current iteration data
+/// and them to `mF` one at a time.
+/// @details Can iterate over multiple tuples at once, passing the Nth
+/// element of every tuple to `mF` simultaneously.
+/// If the tuples have different sizes, the minimum size will be used.
+SSVU_IMPL_DEFINE_TPLFOR_FN(tplForData, ForDataHelper)
+} // namespace ssvu
 
 #undef SSVU_IMPL_TPLFOR_CALL
 #undef SSVU_IMPL_DEFINE_TPLFOR_FN

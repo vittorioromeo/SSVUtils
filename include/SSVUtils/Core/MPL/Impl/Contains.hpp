@@ -9,22 +9,22 @@
 
 namespace ssvu
 {
-    namespace MPL
-    {
-        namespace Impl
-        {
-            template <typename T, typename... Ts>
-            struct Contains : FalseT
-            {
-            };
+namespace MPL
+{
+namespace Impl
+{
+template <typename T, typename... Ts>
+struct Contains : std::false_type
+{
+};
 
-            template <typename T, typename THead, typename... Ts>
-            struct Contains<T, THead, Ts...>
-                : Conditional<isSame<T, THead>(), TrueT, Contains<T, Ts...>>
-            {
-            };
-        }
-    }
-}
+template <typename T, typename THead, typename... Ts>
+struct Contains<T, THead, Ts...>
+    : std::conditional_t<isSame<T, THead>(), std::true_type, Contains<T, Ts...>>
+{
+};
+} // namespace Impl
+} // namespace MPL
+} // namespace ssvu
 
 #endif

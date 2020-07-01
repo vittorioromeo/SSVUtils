@@ -16,17 +16,12 @@
 #define SSVU_FATENUM_IMPL_MK_ELEM_DISPATCH(mDispatch) \
     VRM_PP_CAT(SSVU_FATENUM_IMPL_MK_ELEM_, mDispatch)
 
-#define SSVU_FATENUM_IMPL_MK_BIMAP_ENTRY_VALS(mIdx, mData, mArg)                   \
-    {                                                                              \
-        VRM_PP_TOSTR(VRM_PP_TPL_ELEM(mArg, 0)) , mData :: VRM_PP_TPL_ELEM(mArg, 0) \
-    }                                                                              \
-    VRM_PP_COMMA_IF(mIdx)
+#define SSVU_FATENUM_IMPL_MK_BIMAP_ENTRY_VALS(mIdx, mData, mArg) \
+    {VRM_PP_TOSTR(VRM_PP_TPL_ELEM(mArg, 0)),                     \
+        mData ::VRM_PP_TPL_ELEM(mArg, 0)} VRM_PP_COMMA_IF(mIdx)
 
 #define SSVU_FATENUM_IMPL_MK_BIMAP_ENTRY_DEFS(mIdx, mData, mArg) \
-    {                                                            \
-        VRM_PP_TOSTR(mArg), mData::mArg                          \
-    }                                                            \
-    VRM_PP_COMMA_IF(mIdx)
+    {VRM_PP_TOSTR(mArg), mData::mArg} VRM_PP_COMMA_IF(mIdx)
 
 #define SSVU_FATENUM_IMPL_MK_BIMAP_ENTRY(mDispatch) \
     VRM_PP_CAT(SSVU_FATENUM_IMPL_MK_BIMAP_ENTRY_, mDispatch)
@@ -75,33 +70,36 @@
 
 namespace ssvu
 {
-    namespace Impl
-    {
-        template <SizeT, typename>
-        struct FatEnumMgrImpl;
+namespace Impl
+{
+template <std::size_t, typename>
+struct FatEnumMgrImpl;
 
-        template <SizeT TS, template <typename> class T, typename TEnum>
-        struct FatEnumMgrImpl<TS, T<TEnum>>
-        {
-            inline static SizeT getSize() noexcept { return TS; }
-            template <TEnum TVal>
-            inline static const auto& getAsStr() noexcept
-            {
-                return T<TEnum>::template getAsStrImpl<TVal>();
-            }
-            inline static auto& getAsStr(TEnum mValue) noexcept
-            {
-                SSVU_ASSERT(T<TEnum>::getBimap().has(mValue));
-                return T<TEnum>::getBimap().at(mValue);
-            }
-            inline static TEnum getFromStr(const std::string& mValue) noexcept
-            {
-                SSVU_ASSERT(T<TEnum>::getBimap().has(mValue));
-                return T<TEnum>::getBimap().at(mValue);
-            }
-        };
+template <std::size_t TS, template <typename> class T, typename TEnum>
+struct FatEnumMgrImpl<TS, T<TEnum>>
+{
+    inline static std::size_t getSize() noexcept
+    {
+        return TS;
     }
-}
+    template <TEnum TVal>
+    inline static const auto& getAsStr() noexcept
+    {
+        return T<TEnum>::template getAsStrImpl<TVal>();
+    }
+    inline static auto& getAsStr(TEnum mValue) noexcept
+    {
+        SSVU_ASSERT(T<TEnum>::getBimap().has(mValue));
+        return T<TEnum>::getBimap().at(mValue);
+    }
+    inline static TEnum getFromStr(const std::string& mValue) noexcept
+    {
+        SSVU_ASSERT(T<TEnum>::getBimap().has(mValue));
+        return T<TEnum>::getBimap().at(mValue);
+    }
+};
+} // namespace Impl
+} // namespace ssvu
 
 #define SSVU_FATENUM_IMPL(mMgr, mName, mUnderlying, mDispatch, ...)           \
     enum class mName : mUnderlying                                            \

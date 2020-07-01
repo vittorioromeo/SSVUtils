@@ -49,35 +49,35 @@
 
 namespace ssvu
 {
-    namespace Impl
-    {
-        /// @brief Internal struct storing data for an assertion.
-        struct AssertData
-        {
-            std::string code, line, file, lhs, rhs;
-        };
+namespace Impl
+{
+/// @brief Internal struct storing data for an assertion.
+struct AssertData
+{
+    std::string code, line, file, lhs, rhs;
+};
 
-        /// @brief Internal struct storing global state for assertions.
-        struct AssertState
-        {
-            bool skip{false};
-        };
+/// @brief Internal struct storing global state for assertions.
+struct AssertState
+{
+    bool skip{false};
+};
 
-        /// @brief Returns a reference to the global thread_local AssertState
-        /// instance.
-        inline auto& getAssertState() noexcept
-        {
-            thread_local AssertState result;
-            return result;
-        }
-
-        /// @brief Assert implementation: if mExpression is false, the assertion
-        /// fires.
-        /// @details Called via the SSVU_ASSERT macro.
-        void assertImpl(AssertData&& mAD, bool mExpression,
-            const std::string& mMsg = "") noexcept;
-    }
+/// @brief Returns a reference to the global thread_local AssertState
+/// instance.
+inline auto& getAssertState() noexcept
+{
+    thread_local AssertState result;
+    return result;
 }
+
+/// @brief Assert implementation: if mExpression is false, the assertion
+/// fires.
+/// @details Called via the SSVU_ASSERT macro.
+void assertImpl(
+    AssertData&& mAD, bool mExpression, const std::string& mMsg = "") noexcept;
+} // namespace Impl
+} // namespace ssvu
 
 /// @macro Shared implementation details for assertions.
 #define SSVU_IMPL_ASSERT_INIT(...)                                \
@@ -90,23 +90,23 @@ namespace ssvu
 /// string message.
 ///	@details If the expression returns false, the assertion fires, calling
 ///`ssvu::Impl::assertImpl`.
-#define SSVU_ASSERT(...)                                       \
-    do                                                         \
-    {                                                          \
-        SSVU_IMPL_ASSERT_INIT(__VA_ARGS__)                     \
-        ::ssvu::Impl::assertImpl(::ssvu::mv(ad), __VA_ARGS__); \
+#define SSVU_ASSERT(...)                                        \
+    do                                                          \
+    {                                                           \
+        SSVU_IMPL_ASSERT_INIT(__VA_ARGS__)                      \
+        ::ssvu::Impl::assertImpl(::std::move(ad), __VA_ARGS__); \
     } while(false)
 
 /// @macro Assertion that checks the result of an operation between `mLhs` and
 /// `mRhs`.
 /// @details Displays a message when fired.
-#define SSVU_ASSERT_OP_MSG(mLhs, mOp, mRhs, ...)                              \
-    do                                                                        \
-    {                                                                         \
-        SSVU_IMPL_ASSERT_INIT(mLhs, mOp, mRhs)                                \
-        ad.lhs = VRM_PP_TOSTR(mLhs) " = " + ::ssvu::toStr(mLhs);              \
-        ad.rhs = VRM_PP_TOSTR(mRhs) " = " + ::ssvu::toStr(mRhs);              \
-        ::ssvu::Impl::assertImpl(::ssvu::mv(ad), mLhs mOp mRhs, __VA_ARGS__); \
+#define SSVU_ASSERT_OP_MSG(mLhs, mOp, mRhs, ...)                               \
+    do                                                                         \
+    {                                                                          \
+        SSVU_IMPL_ASSERT_INIT(mLhs, mOp, mRhs)                                 \
+        ad.lhs = VRM_PP_TOSTR(mLhs) " = " + ::ssvu::toStr(mLhs);               \
+        ad.rhs = VRM_PP_TOSTR(mRhs) " = " + ::ssvu::toStr(mRhs);               \
+        ::ssvu::Impl::assertImpl(::std::move(ad), mLhs mOp mRhs, __VA_ARGS__); \
     } while(false)
 
 /// @macro Assertion that checks the result of an operation between `mLhs` and

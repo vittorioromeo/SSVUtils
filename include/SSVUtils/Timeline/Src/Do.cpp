@@ -10,14 +10,14 @@
 
 namespace ssvu
 {
-    SSVU_INLINE Do::Do(Timeline &mTimeline, const Action &mAction) noexcept
-        : Command{mTimeline},
-          action{mAction}
-    {
-    }
-    SSVU_INLINE void Do::update(FT)
-    {
-        action();
-        timeline.next();
-    }
+SSVU_INLINE Do::Do(
+    Timeline& mTimeline, const std::function<void()>& mAction) noexcept
+    : Command{mTimeline}, action{mAction}
+{
 }
+SSVU_INLINE void Do::update(FT)
+{
+    action();
+    timeline.next();
+}
+} // namespace ssvu

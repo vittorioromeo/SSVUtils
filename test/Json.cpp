@@ -90,7 +90,7 @@ int main()
         TEST_ASSERT_NS(v0.as<mType>() == mVal);  \
         TEST_ASSERT_NS(v1.as<mType>() == mVal);  \
         TEST_ASSERT_NS(v0 == v1);                \
-        v2 = mv(v1);                             \
+        v2 = std::move(v1);                             \
         TEST_ASSERT_NS(v2.is<mRepr>());          \
         TEST_ASSERT_NS(v2.as<mType>() == mVal);  \
         v0 = Obj{};                              \
@@ -203,7 +203,7 @@ int main()
         v1 = v0;                               \
         TEST_ASSERT_NS(v1.is<mType>());        \
         TEST_ASSERT_NS(v0 == v1);              \
-        v2 = mv(v1);                           \
+        v2 = std::move(v1);                           \
         TEST_ASSERT_NS(v2.is<mType>());        \
         v0 = Obj{};                            \
         v0["inner"] = v2;                      \

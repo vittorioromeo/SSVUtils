@@ -19,52 +19,53 @@
 
 namespace ssvu
 {
-    namespace Impl
+namespace Impl
+{
+inline void assertImpl(
+    AssertData&& mAD, bool mExpression, const std::string& mMsg) noexcept
+{
+    if(SSVU_LIKELY(mExpression)) return;
+
+    lo() << hr() << "\n";
+    lo("ASSERTION FAILED") << "\n"
+                           << mMsg << "\n\n"
+                           << "Line " << mAD.line << " in file " << mAD.file
+                           << "\n"
+                           << "Code: " << mAD.code << "\n\n";
+
+    if(!mAD.rhs.empty() && !mAD.lhs.empty())
     {
-        inline void assertImpl(AssertData&& mAD, bool mExpression,
-            const std::string& mMsg) noexcept
-        {
-            if(SSVU_LIKELY(mExpression)) return;
-
-            lo() << hr() << "\n";
-            lo("ASSERTION FAILED") << "\n" << mMsg << "\n\n"
-                                   << "Line " << mAD.line << " in file "
-                                   << mAD.file << "\n"
-                                   << "Code: " << mAD.code << "\n\n";
-
-            if(!mAD.rhs.empty() && !mAD.lhs.empty())
-            {
-                lo() << mAD.lhs << "\n" << mAD.rhs << "\n\n";
-            }
-
-            if(getAssertState().skip)
-            {
-                lo() << "Skipping assertion..." << std::endl;
-                return;
-            }
-
-            lo() << "Choose what to do:\n\n"
-                 << "(  0  ) -> Skip this assertion.\n"
-                 << "(  1  ) -> Skip all assertions.\n"
-                 << "( ... ) -> Terminate the program." << std::endl;
-
-            std::string userInput;
-            std::cin >> userInput;
-
-            if(userInput == "0")
-            {
-                return;
-            }
-            if(userInput == "1")
-            {
-                getAssertState().skip = true;
-                return;
-            }
-
-            std::terminate();
-        }
+        lo() << mAD.lhs << "\n" << mAD.rhs << "\n\n";
     }
+
+    if(getAssertState().skip)
+    {
+        lo() << "Skipping assertion..." << std::endl;
+        return;
+    }
+
+    lo() << "Choose what to do:\n\n"
+         << "(  0  ) -> Skip this assertion.\n"
+         << "(  1  ) -> Skip all assertions.\n"
+         << "( ... ) -> Terminate the program." << std::endl;
+
+    std::string userInput;
+    std::cin >> userInput;
+
+    if(userInput == "0")
+    {
+        return;
+    }
+    if(userInput == "1")
+    {
+        getAssertState().skip = true;
+        return;
+    }
+
+    std::terminate();
 }
+} // namespace Impl
+} // namespace ssvu
 
 #endif
 

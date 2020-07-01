@@ -11,16 +11,16 @@
 
 namespace ssvu
 {
-    class TimelineManager
-    {
-    private:
-        MonoManager<Timeline> timelines;
+class TimelineManager
+{
+private:
+    MonoManager<Timeline> timelines;
 
-    public:
-        auto& create();
-        void update(FT mFT);
-        void clear() noexcept;
-    };
-}
+public:
+    auto& create();
+    void update(FT mFT);
+    void clear() noexcept;
+};
+} // namespace ssvu
 
 #endif

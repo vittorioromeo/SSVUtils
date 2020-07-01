@@ -11,34 +11,36 @@
 
 namespace ssvu
 {
-    namespace CmdLine
+namespace CmdLine
+{
+class Flag final : public Impl::BaseFlag, public Impl::ETypeInfo<EType::Flag>
+{
+private:
+    bool active{false};
+
+public:
+    inline Flag(
+        const std::string& mNameShort, const std::string& mNameLong) noexcept
+        : Impl::BaseFlag{mNameShort, mNameLong}
     {
-        class Flag final : public Impl::BaseFlag,
-                           public Impl::ETypeInfo<EType::Flag>
-        {
-        private:
-            bool active{false};
-
-        public:
-            inline Flag(const std::string& mNameShort,
-                const std::string& mNameLong) noexcept
-                : Impl::BaseFlag{mNameShort, mNameLong}
-            {
-            }
-
-            inline auto& operator=(bool mActive) noexcept
-            {
-                active = mActive;
-                return *this;
-            }
-            inline operator bool() const noexcept { return active; }
-
-            inline std::string getUsageStr() const override
-            {
-                return "[" + getNameShort() + " || " + getNameLong() + "]";
-            }
-        };
     }
-}
+
+    inline auto& operator=(bool mActive) noexcept
+    {
+        active = mActive;
+        return *this;
+    }
+    inline operator bool() const noexcept
+    {
+        return active;
+    }
+
+    inline std::string getUsageStr() const override
+    {
+        return "[" + getNameShort() + " || " + getNameLong() + "]";
+    }
+};
+} // namespace CmdLine
+} // namespace ssvu
 
 #endif

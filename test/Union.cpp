@@ -27,7 +27,7 @@
         j = u;                                                     \
         TEST_ASSERT_OP(j.get<mType>(), ==, mX);                    \
         UnionPOD<char, short int, int, float, long int, double> k; \
-        k = mv(j);                                                 \
+        k = std::move(j);                                                 \
         TEST_ASSERT_OP(k.get<mType>(), ==, mX);                    \
     }
 
