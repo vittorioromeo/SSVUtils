@@ -5,8 +5,9 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_ARG
 #define SSVU_CMDLINE_ELEMENTS_ARG
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Internal/Internal.hpp"
+
+#include <string>
 
 namespace ssvu
 {

@@ -5,8 +5,6 @@
 #ifndef SSVU_CMDLINE_INTERNAL_ETYPE
 #define SSVU_CMDLINE_INTERNAL_ETYPE
 
-#include "SSVUtils/Core/Core.hpp"
-
 namespace ssvu
 {
 namespace CmdLine

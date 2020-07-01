@@ -5,8 +5,12 @@
 #ifndef SSVU_IMPL_BIMAP
 #define SSVU_IMPL_BIMAP
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Utils/Containers.hpp"
 #include "SSVUtils/Bimap/Inc/Internal.hpp"
+
+#include <vector>
+#include <memory>
+
 
 namespace ssvu
 {

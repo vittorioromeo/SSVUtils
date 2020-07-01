@@ -5,8 +5,12 @@
 #ifndef SSVU_CMDLINE_INTERNAL_EXCEPTIONS
 #define SSVU_CMDLINE_INTERNAL_EXCEPTIONS
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/Bases.hpp"
+
+#include <string>
+#include <exception>
+#include <stdexcept>
+
 
 namespace ssvu
 {

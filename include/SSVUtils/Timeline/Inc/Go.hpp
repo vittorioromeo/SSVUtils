@@ -5,7 +5,7 @@
 #ifndef SSVU_IMPL_TIMELINE_GO
 #define SSVU_IMPL_TIMELINE_GO
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Frametime.hpp"
 #include "SSVUtils/Timeline/Inc/Timeline.hpp"
 #include "SSVUtils/Timeline/Inc/Command.hpp"
 

@@ -5,11 +5,16 @@
 #ifndef SSVU_CMDLINE_CTX_INL
 #define SSVU_CMDLINE_CTX_INL
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Delegate/Delegate.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/CmdLine/Cmd.hpp"
 #include "SSVUtils/CmdLine/Ctx.hpp"
+
+#include <string>
+#include <vector>
+#include <type_traits>
+#include <initializer_list>
+#include <deque>
 
 namespace ssvu
 {

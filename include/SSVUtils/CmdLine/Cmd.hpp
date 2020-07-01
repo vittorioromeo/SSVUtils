@@ -9,6 +9,11 @@
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/CmdLine/Elements/Elements.hpp"
 
+#include <string>
+#include <array>
+#include <vector>
+#include <functional>
+
 namespace ssvu
 {
 namespace CmdLine

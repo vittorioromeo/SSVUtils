@@ -4,8 +4,10 @@
 
 #include "SSVUtils/Core/Core.hpp"
 
-
 #include "./utils/test_utils.hpp"
+
+#include <string>
+
 int main()
 {
     using namespace std;

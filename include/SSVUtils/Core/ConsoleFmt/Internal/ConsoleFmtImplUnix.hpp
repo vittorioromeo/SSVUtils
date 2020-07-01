@@ -8,9 +8,15 @@
 // This file contains an Unix implementation for console formatting.
 // Everything returns ANSI formatting codes.
 
+#include "SSVUtils/Core/String/IgnoreManip.hpp"
+
+#include <cstdio>
+#include <string>
+#include <vector>
+
 #include <sys/ioctl.h>
-#include <stdio.h>
 #include <unistd.h>
+
 
 namespace ssvu
 {

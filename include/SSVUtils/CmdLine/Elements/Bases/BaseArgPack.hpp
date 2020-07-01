@@ -5,9 +5,10 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_BASES_BASEARGPACK
 #define SSVU_CMDLINE_ELEMENTS_BASES_BASEARGPACK
 
-#include <string>
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/BaseElement.hpp"
+
+#include <string>
+#include <vector>
 
 namespace ssvu
 {

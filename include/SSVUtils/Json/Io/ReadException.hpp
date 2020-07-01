@@ -7,6 +7,8 @@
 
 #include "SSVUtils/Core/Core.hpp"
 
+#include <string>
+
 namespace ssvu
 {
 namespace Json

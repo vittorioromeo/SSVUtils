@@ -5,11 +5,16 @@
 #ifndef SSVU_CORE_STRING_STRINGIFIER
 #define SSVU_CORE_STRING_STRINGIFIER
 
-#include <vrm/pp.hpp>
 #include "SSVUtils/Core/Assert/Assert.hpp"
 #include "SSVUtils/Core/Common/Common.hpp"
 #include "SSVUtils/Core/String/String.hpp"
 #include "SSVUtils/Core/ConsoleFmt/ConsoleFmt.hpp"
+
+#include <vrm/pp.hpp>
+
+#include <string>
+#include <iterator>
+#include <array>
 
 namespace ssvu
 {
@@ -144,7 +149,7 @@ struct StringifierTuple
         tplForData(
             [&mStream](auto mD, const auto& mX) {
                 callStringifyImpl<TFmt>(mStream, mX);
-                if(mD.getIdx() < getTplSize<T>() - 1)
+                if(mD.getIdx() < std::tuple_size_v<T> - 1)
                     printBold<TFmt>(mStream, ", ");
             },
             mValue);

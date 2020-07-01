@@ -5,8 +5,6 @@
 #ifndef SSVU_CORE_MPL_IMPL_MINMAX
 #define SSVU_CORE_MPL_IMPL_MINMAX
 
-#include "SSVUtils/Core/Common/Common.hpp"
-
 namespace ssvu
 {
 namespace MPL

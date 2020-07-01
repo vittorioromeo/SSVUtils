@@ -5,8 +5,10 @@
 #ifndef SSVU_IMPL_CONTAINER_VECSORTED
 #define SSVU_IMPL_CONTAINER_VECSORTED
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Container/Inc/VecMapBase.hpp"
+
+#include <vector>
+#include <utility>
 
 namespace ssvu
 {

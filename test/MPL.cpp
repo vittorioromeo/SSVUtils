@@ -4,8 +4,11 @@
 
 #include "SSVUtils/Core/Core.hpp"
 
-
 #include "./utils/test_utils.hpp"
+
+#include <string>
+#include <vector>
+
 TEST_MAIN()
 {
     using namespace std;

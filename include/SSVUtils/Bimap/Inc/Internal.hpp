@@ -5,7 +5,8 @@
 #ifndef SSVU_IMPL_BIMAP_INTERNAL
 #define SSVU_IMPL_BIMAP_INTERNAL
 
-#include "SSVUtils/Core/Core.hpp"
+#include <set>
+
 
 namespace ssvu
 {

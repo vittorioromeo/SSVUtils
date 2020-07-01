@@ -5,11 +5,15 @@
 #ifndef SSVU_MEMORYMANAGER_INTERNAL_MANAGERIMPL
 #define SSVU_MEMORYMANAGER_INTERNAL_MANAGERIMPL
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Casts.hpp"
 #include "SSVUtils/Range/Range.hpp"
 #include "SSVUtils/MemoryManager/Internal/LayoutImpl.hpp"
 #include "SSVUtils/MemoryManager/Internal/StorageImpl.hpp"
 #include "SSVUtils/MemoryManager/Internal/RecyclerImpl.hpp"
+
+#include <vector>
+#include <memory>
+
 
 namespace ssvu
 {

@@ -5,8 +5,6 @@
 #ifndef SSVU_RANGE
 #define SSVU_RANGE
 
-#include "SSVUtils/Core/Core.hpp"
-
 #include "SSVUtils/Range/Internal/Base/Adaptor.hpp"
 #include "SSVUtils/Range/Internal/Base/Range.hpp"
 

@@ -7,27 +7,38 @@
 
 #include "SSVUtils/Core/MPL/Impl/BaseTypes.hpp"
 
+#include <array>
+#include <type_traits>
+
 namespace ssvu
 {
 namespace MPL
 {
 namespace Impl
 {
-template <typename, typename...>
-struct IdxOf;
 
-// IndexOf base case: found the type we're looking for.
 template <typename T, typename... Ts>
-struct IdxOf<T, T, Ts...> : std::integral_constant<std::size_t, 0>
+constexpr std::size_t idxOfImpl() noexcept
+{
+    constexpr std::array<std::size_t, sizeof...(Ts)> res{
+        std::is_same_v<T, Ts>...};
+
+    for(std::size_t i = 0; i < sizeof...(Ts); ++i)
+    {
+        if(res[i])
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+template <typename T, typename... Ts>
+struct IdxOf : std::integral_constant<std::size_t, idxOfImpl<T, Ts...>()>
 {
 };
 
-// IndexOf recursive case: 1 + IndexOf the rest of the types.
-template <typename T, typename TOther, typename... Ts>
-struct IdxOf<T, TOther, Ts...>
-    : std::integral_constant<std::size_t, 1 + IdxOf<T, Ts...>{}>
-{
-};
 } // namespace Impl
 } // namespace MPL
 } // namespace ssvu

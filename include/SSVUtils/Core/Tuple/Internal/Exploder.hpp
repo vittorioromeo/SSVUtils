@@ -5,8 +5,9 @@
 #ifndef SSVU_CORE_TUPLE_INTERNAL_EXPLODER
 #define SSVU_CORE_TUPLE_INTERNAL_EXPLODER
 
+#include "SSVUtils/Core/Common/Aliases.hpp"
+
 #include <tuple>
-#include "SSVUtils/Core/Common/Common.hpp"
 
 namespace ssvu
 {

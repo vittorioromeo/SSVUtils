@@ -5,7 +5,6 @@
 #ifndef SSVU_RANGE_INTERNAL_CASTREF
 #define SSVU_RANGE_INTERNAL_CASTREF
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Range/Internal/Base/Adaptor.hpp"
 #include "SSVUtils/Range/Internal/Base/Range.hpp"
 

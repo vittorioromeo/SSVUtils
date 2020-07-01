@@ -5,7 +5,7 @@
 #ifndef SSVU_IMPL_BIMAP_STRINGIFIER
 #define SSVU_IMPL_BIMAP_STRINGIFIER
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Stringifier/Stringifier.hpp"
 #include "SSVUtils/Bimap/Inc/Bimap.hpp"
 
 namespace ssvu

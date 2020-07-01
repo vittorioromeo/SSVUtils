@@ -1,4 +1,7 @@
 #include <SSVUtils/Core/Core.hpp>
+#include <cstddef>
+
+#include <sstream>
 
 using namespace std;
 using namespace ssvu;

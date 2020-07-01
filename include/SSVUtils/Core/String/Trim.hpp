@@ -5,6 +5,10 @@
 #ifndef SSVU_CORE_STRING_TRIM
 #define SSVU_CORE_STRING_TRIM
 
+#include "SSVUtils/Core/Utils/Containers.hpp"
+
+#include <string>
+
 namespace ssvu
 {
 /// @brief Trims all characters of a certain type from the string's left.

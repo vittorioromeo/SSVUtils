@@ -7,6 +7,11 @@
 
 #include "SSVUtils/Core/String/Internal/FastIntToStr.hpp"
 
+#include <string>
+#include <memory>
+#include <sstream>
+
+
 namespace ssvu
 {
 template <typename, typename = void>
@@ -347,27 +352,12 @@ inline auto getDistLevenshtein(const std::string& mA, const std::string& mB)
     return costs[n];
 }
 
-// Implementation details for `appendTo`.
-namespace Impl
-{
-inline auto& appendToImpl(std::string& mStr) noexcept
-{
-    return mStr;
-}
-template <typename T, typename... TArgs>
-inline auto& appendToImpl(std::string& mStr, T&& mA, TArgs&&... mArgs)
-{
-    mStr += FWD(mA);
-    return appendToImpl(mStr, FWD(mArgs)...);
-}
-} // namespace Impl
-
 /// @brief Appends a variadic number of strings to an `std::string`. Returns
 /// `mStr` after finishing the appends.
 template <typename... TArgs>
 inline auto& appendTo(std::string& mStr, TArgs&&... mArgs)
 {
-    return Impl::appendToImpl(mStr, FWD(mArgs)...);
+    return ((mStr += FWD(mArgs)), ...);
 }
 } // namespace ssvu
 

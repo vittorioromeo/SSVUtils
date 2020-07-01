@@ -5,9 +5,10 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_FLAG
 #define SSVU_CMDLINE_ELEMENTS_FLAG
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/Bases.hpp"
 #include "SSVUtils/CmdLine/Internal/Internal.hpp"
+
+#include <string>
 
 namespace ssvu
 {

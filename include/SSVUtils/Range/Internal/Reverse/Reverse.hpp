@@ -5,7 +5,6 @@
 #ifndef SSVU_RANGE_INTERNAL_REVERSE
 #define SSVU_RANGE_INTERNAL_REVERSE
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Range/Internal/Base/Adaptor.hpp"
 #include "SSVUtils/Range/Internal/Base/Range.hpp"
 

@@ -5,7 +5,9 @@
 #ifndef SSVU_CORE_CONSOLEFMT
 #define SSVU_CORE_CONSOLEFMT
 
-#include "SSVUtils/Core/Common/Common.hpp"
+#include "SSVUtils/Core/Detection/Detection.hpp"
+
+#include <cstddef>
 
 namespace ssvu
 {

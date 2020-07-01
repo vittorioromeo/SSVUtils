@@ -8,7 +8,12 @@
 // This file contains a Windows implementation for console formatting.
 // Currently work-in-progress.
 
+#include "SSVUtils/Core/Common/EmptyString.hpp"
+
 #include <windows.h>
+
+#include <string>
+#include <cstddef>
 
 namespace ssvu
 {

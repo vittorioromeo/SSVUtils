@@ -4,8 +4,12 @@
 
 #include "SSVUtils/Core/Core.hpp"
 
-
 #include "./utils/test_utils.hpp"
+
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <map>
 
 int main()
 {

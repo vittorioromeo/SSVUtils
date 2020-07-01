@@ -5,7 +5,7 @@
 #ifndef SSVU_CONTAINER
 #define SSVU_CONTAINER
 
-#include "SSVUtils/Core/Core.hpp"
+
 #include "SSVUtils/Container/Inc/VecMapBase.hpp"
 #include "SSVUtils/Container/Inc/VecSorted.hpp"
 #include "SSVUtils/Container/Inc/VecMap.hpp"

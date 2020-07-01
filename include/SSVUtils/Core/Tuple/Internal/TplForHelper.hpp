@@ -5,8 +5,9 @@
 #ifndef SSVU_CORE_TUPLE_INTERNAL_TPLFORHELPER
 #define SSVU_CORE_TUPLE_INTERNAL_TPLFORHELPER
 
+#include "SSVUtils/Core/Common/Aliases.hpp"
+
 #include <tuple>
-#include "SSVUtils/Core/Common/Common.hpp"
 
 #define SSVU_IMPL_DEFINE_FORHELPER(mName, mBody)                   \
     template <std::size_t TS, typename... TTpls>                   \

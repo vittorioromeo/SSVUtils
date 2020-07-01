@@ -6,7 +6,9 @@
 #define SSVU_IMPL_BENCHMARK_DATABASE
 
 #include "SSVUtils/Internal/API.hpp"
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Casts.hpp"
+
+#include <string>
 
 namespace ssvu
 {
@@ -23,7 +25,7 @@ struct DataBase
     {
         auto value(ssvu::castUp<TDerived>(this)->getDuration().count());
         auto ms(ssvu::toNum<double>(value) / 1000000.0);
-        return toStr(ms) + " ms";
+        return std::to_string(ms) + " ms";
     }
 };
 } // namespace Impl

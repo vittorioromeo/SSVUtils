@@ -5,6 +5,10 @@
 #ifndef SSVU_CORE_LOG_INTERNAL_IMPL_DISABLED
 #define SSVU_CORE_LOG_INTERNAL_IMPL_DISABLED
 
+#include "SSVUtils/Core/Common/EmptyString.hpp"
+
+#include <string>
+
 namespace ssvu
 {
 namespace Impl

@@ -7,6 +7,9 @@
 
 #include "SSVUtils/Core/String/Internal/SplitHelper.hpp"
 
+#include <string>
+#include <vector>
+
 namespace ssvu
 {
 /// @brief Splits a string in smaller strings, filling a target

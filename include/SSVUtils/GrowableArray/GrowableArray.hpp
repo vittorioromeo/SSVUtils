@@ -5,7 +5,9 @@
 #ifndef SSVU_GROWABLEARRAY
 #define SSVU_GROWABLEARRAY
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Casts.hpp"
+
+#include <memory>
 
 namespace ssvu
 {
@@ -36,7 +38,7 @@ public:
     {
         SSVU_ASSERT(mCapacityOld <= mCapacityNew);
 
-        auto newData(mkUPtr<T[]>(mCapacityNew));
+        auto newData(std::make_unique<T[]>(mCapacityNew));
         for(auto i(0u); i < mCapacityOld; ++i) newData[i] = std::move(data[i]);
         data = std::move(newData);
     }

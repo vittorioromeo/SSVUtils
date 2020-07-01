@@ -9,6 +9,8 @@
 #include "SSVUtils/Json/Common/Common.hpp"
 #include "SSVUtils/Json/Val/Val.hpp"
 
+#include <string>
+
 namespace ssvu
 {
 namespace Json

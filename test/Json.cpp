@@ -6,6 +6,12 @@
 #include "SSVUtils/Json/Json.hpp"
 #include "./utils/test_utils.hpp"
 
+#include <bitset>
+#include <string>
+#include <vector>
+
+using namespace std::literals;
+
 SSVJ_CNV_NAMESPACE()
 {
     struct __ssvjTestStruct
@@ -19,7 +25,8 @@ SSVJ_CNV_NAMESPACE()
         std::string f3{"yo"};
         std::tuple<std::string, int, int> f4{"hey", 5, 10};
 
-        inline bool SSVU_ATTRIBUTE(pure) operator==(const __ssvjTestStruct& mT) const noexcept
+        inline bool SSVU_ATTRIBUTE(pure) operator==(
+            const __ssvjTestStruct& mT) const noexcept
         {
             return f0 == mT.f0 && f1 == mT.f1 && f2 == mT.f2 && f3 == mT.f3 &&
                    f4 == mT.f4;
@@ -90,7 +97,7 @@ int main()
         TEST_ASSERT_NS(v0.as<mType>() == mVal);  \
         TEST_ASSERT_NS(v1.as<mType>() == mVal);  \
         TEST_ASSERT_NS(v0 == v1);                \
-        v2 = std::move(v1);                             \
+        v2 = std::move(v1);                      \
         TEST_ASSERT_NS(v2.is<mRepr>());          \
         TEST_ASSERT_NS(v2.as<mType>() == mVal);  \
         v0 = Obj{};                              \
@@ -186,8 +193,8 @@ int main()
         }
 
         {
-            using PP = std::tuple<int, float, std::string, int, std::pair<double, int>,
-                float, std::tuple<int, int, int>>;
+            using PP = std::tuple<int, float, std::string, int,
+                std::pair<double, int>, float, std::tuple<int, int, int>>;
             PP p{10, 15.5f, "ULTRA SWAG"s, 22, std::pair<double, int>{10.5, 99},
                 0.f, std::tuple<int, int, int>{0, 1, 2}};
             EXEC_TEST_BASIC(PP, p)
@@ -203,7 +210,7 @@ int main()
         v1 = v0;                               \
         TEST_ASSERT_NS(v1.is<mType>());        \
         TEST_ASSERT_NS(v0 == v1);              \
-        v2 = std::move(v1);                           \
+        v2 = std::move(v1);                    \
         TEST_ASSERT_NS(v2.is<mType>());        \
         v0 = Obj{};                            \
         v0["inner"] = v2;                      \
@@ -330,8 +337,8 @@ int main()
 
         auto minified(v.getWriteToStr<WSMinified>());
 
-        TEST_ASSERT_NS(minified ==
-                       R"({"a":15,"b":{"c":null},"c":["x","y",10.5]})");
+        TEST_ASSERT_NS(
+            minified == R"({"a":15,"b":{"c":null},"c":["x","y",10.5]})");
     }
 
 #define EXEC_CV_TEST(mType, mBV)                    \

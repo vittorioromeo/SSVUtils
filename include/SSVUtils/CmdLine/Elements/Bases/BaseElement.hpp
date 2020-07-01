@@ -5,8 +5,9 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_BASES_BASEELEMENT
 #define SSVU_CMDLINE_ELEMENTS_BASES_BASEELEMENT
 
+#include "SSVUtils/Core/Utils/Utils.hpp"
+
 #include <string>
-#include "SSVUtils/Core/Core.hpp"
 
 namespace ssvu
 {

@@ -6,8 +6,6 @@
 #define SSVU_TIMELINE
 
 #include "SSVUtils/Internal/API.hpp"
-#include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/Timeline/Inc/Timeline.hpp"
 #include "SSVUtils/Timeline/Inc/Command.hpp"
 #include "SSVUtils/Timeline/Inc/Do.hpp"

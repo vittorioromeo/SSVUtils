@@ -7,26 +7,13 @@
 
 #include "SSVUtils/Core/Common/Aliases.hpp"
 
+#include <memory>
+
 namespace ssvu
 {
-/// @brief Creates and returns an `std::unique_ptr<T>`.
-/// @details Wraps `std::make_unique<T>`.
-template <typename T, typename... TArgs>
-inline decltype(auto) mkUPtr(TArgs&&... mArgs)
-{
-    return std::make_unique<T>(FWD(mArgs)...);
-}
-
-/// @brief Creates and returns an `std::shared_ptr<T>`.
-/// @details Wraps `std::make_shared<T>`.
-template <typename T, typename... TArgs>
-inline decltype(auto) mkSPtr(TArgs&&... mArgs)
-{
-    return std::make_shared<T>(FWD(mArgs)...);
-}
-
 namespace Impl
 {
+
 /// @brief Internal functor that creates an `std::unique_ptr`.
 template <typename T>
 struct MakerUPtr
@@ -34,20 +21,10 @@ struct MakerUPtr
     template <typename... TArgs>
     inline static auto make(TArgs&&... mArgs)
     {
-        return mkUPtr<T>(FWD(mArgs)...);
+        return std::make_unique<T>(FWD(mArgs)...);
     }
 };
 
-/// @brief Internal functor that creates an `std::shared_ptr`.
-template <typename T>
-struct MakerSPtr
-{
-    template <typename... TArgs>
-    inline static auto make(TArgs&&... mArgs)
-    {
-        return mkSPtr<T>(FWD(mArgs)...);
-    }
-};
 } // namespace Impl
 } // namespace ssvu
 

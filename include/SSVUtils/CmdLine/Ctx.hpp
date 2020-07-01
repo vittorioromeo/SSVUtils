@@ -5,10 +5,13 @@
 #ifndef SSVU_CMDLINE_CTX
 #define SSVU_CMDLINE_CTX
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Delegate/Delegate.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/CmdLine/Cmd.hpp"
+
+#include <string>
+#include <vector>
+#include <memory>
 
 namespace ssvu
 {
@@ -28,7 +31,9 @@ private:
 
     inline auto getForCmdPhrase(Cmd& mCmd) const noexcept
     {
-        return mCmd.isMainCmd() ? ""s : " for command "s + mCmd.getNamesStr();
+        return mCmd.isMainCmd()
+                   ? std::string{""}
+                   : std::string{" for command "} + mCmd.getNamesStr();
     }
 
 public:

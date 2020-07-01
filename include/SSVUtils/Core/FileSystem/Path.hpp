@@ -5,6 +5,19 @@
 #ifndef SSVU_CORE_FILESYSTEM_PATH
 #define SSVU_CORE_FILESYSTEM_PATH
 
+#include "SSVUtils/Core/FileSystem/Enums.hpp"
+
+#include "SSVUtils/Core/Utils/Macros.hpp"
+#include "SSVUtils/Core/Assert/Assert.hpp"
+#include "SSVUtils/Core/String/Utils.hpp"
+
+#include <string>
+#include <utility>
+#include <fstream>
+
+#include <dirent.h>
+#include <sys/stat.h>
+
 namespace ssvu
 {
 namespace FileSystem
@@ -267,7 +280,7 @@ public:
         auto size(ifs.tellg());
         ifs.seekg(0, std::ios::beg);
 
-        auto buffer(mkUPtr<char[]>(size));
+        auto buffer(std::make_unique<char[]>(size));
         ifs.read(&buffer[0], size);
         std::string result{buffer.get(), static_cast<std::size_t>(size)};
 
@@ -291,9 +304,11 @@ inline std::ostream& operator<<(std::ostream& mStream, const Path& mPath)
     return mStream << mPath.getStr();
 }
 
-#define ENABLEIF_ANY_PATH()                       \
-    std::enable_if_t<std::is_same_v<std::remove_cv_t<std::remove_reference_t<T1>>, Path> || \
-                     std::is_same_v<std::remove_cv_t<std::remove_reference_t<T2>>, Path>>* = nullptr
+#define ENABLEIF_ANY_PATH()                                                    \
+    std::enable_if_t<                                                          \
+        std::is_same_v<std::remove_cv_t<std::remove_reference_t<T1>>, Path> || \
+        std::is_same_v<std::remove_cv_t<std::remove_reference_t<T2>>,          \
+            Path>>* = nullptr
 
 // Operator+
 template <typename T1, typename T2, ENABLEIF_ANY_PATH()>

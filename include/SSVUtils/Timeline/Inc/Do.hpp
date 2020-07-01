@@ -5,8 +5,11 @@
 #ifndef SSVU_IMPL_TIMELINE_DO
 #define SSVU_IMPL_TIMELINE_DO
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Frametime.hpp"
 #include "SSVUtils/Timeline/Inc/Command.hpp"
+
+#include <functional>
+
 
 namespace ssvu
 {

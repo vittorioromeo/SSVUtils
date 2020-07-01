@@ -5,15 +5,14 @@
 #ifndef SSVU_CORE_TUPLE_TPLFOR
 #define SSVU_CORE_TUPLE_TPLFOR
 
-#include <tuple>
-#include <vrm/pp.hpp>
-#include "SSVUtils/Core/Assert/Assert.hpp"
-#include "SSVUtils/Core/Common/Common.hpp"
-#include "SSVUtils/Core/MPL/MPL.hpp"
+#include "SSVUtils/Core/MPL/Impl/MinMax.hpp"
 #include "SSVUtils/Core/Tuple/Internal/TplForHelper.hpp"
 
-#define SSVU_IMPL_TPLFOR_CALL(mHelper)                              \
-    Impl::mHelper<MPL::getMin<std::size_t>(getTplSize<TTpls>()...), \
+#include <tuple>
+
+#define SSVU_IMPL_TPLFOR_CALL(mHelper)                            \
+    Impl::mHelper<MPL::getMin<std::size_t>(                       \
+                      std::tuple_size_v<std::decay_t<TTpls>>...), \
         TTpls...>::exec(FWD(mF), FWD(mTpls)...)
 
 #define SSVU_IMPL_DEFINE_TPLFOR_FN(mName, mHelper)         \

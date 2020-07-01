@@ -5,9 +5,9 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_BASES_BASEFLAG
 #define SSVU_CMDLINE_ELEMENTS_BASES_BASEFLAG
 
-#include <string>
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/BaseElement.hpp"
+
+#include <string>
 
 namespace ssvu
 {

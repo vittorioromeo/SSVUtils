@@ -5,6 +5,14 @@
 #ifndef SSVU_CORE_LOG_INTERNAL_IMPL_ENABLED
 #define SSVU_CORE_LOG_INTERNAL_IMPL_ENABLED
 
+#include "SSVUtils/Core/ConsoleFmt/ConsoleFmt.hpp"
+#include "SSVUtils/Core/String/IgnoreManip.hpp"
+
+#include <string>
+#include <mutex>
+#include <unordered_map>
+#include <iomanip>
+
 namespace ssvu
 {
 namespace Impl

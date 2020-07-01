@@ -7,6 +7,11 @@
 
 #include "SSVUtils/Json/Val/Val.hpp"
 
+#include <vrm/pp.hpp>
+
+#include <bitset>
+#include <vector>
+
 namespace ssvu
 {
 namespace Json

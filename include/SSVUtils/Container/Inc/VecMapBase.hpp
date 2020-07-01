@@ -5,7 +5,7 @@
 #ifndef SSVU_IMPL_CONTAINER_VECMAPBASE
 #define SSVU_IMPL_CONTAINER_VECMAPBASE
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Casts.hpp"
 
 namespace ssvu
 {

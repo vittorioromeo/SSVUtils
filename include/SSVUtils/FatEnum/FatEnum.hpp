@@ -7,6 +7,10 @@
 
 #include "SSVUtils/Bimap/Bimap.hpp"
 
+#include <vrm/pp.hpp>
+
+#include <string>
+
 #define SSVU_FATENUM_IMPL_MK_ELEM_VALS(mIdx, mData, mArg) \
     VRM_PP_TPL_ELEM(mArg, 0) = VRM_PP_TPL_ELEM(mArg, 1) VRM_PP_COMMA_IF(mIdx)
 

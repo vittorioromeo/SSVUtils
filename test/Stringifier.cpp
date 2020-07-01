@@ -2,21 +2,28 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#include <list>
-#include <forward_list>
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Bimap/Bimap.hpp"
 
-
 #include "./utils/test_utils.hpp"
+
+#include <string>
+#include <list>
+#include <array>
+#include <forward_list>
+#include <vector>
+#include <unordered_map>
+#include <map>
+#include <sstream>
+
+using namespace std::literals;
+
 int main()
 {
-    auto nothing([]
-        {
-        });
+    auto nothing([] {});
     int testArray[]{1, 2, 3};
     std::ostringstream trash;
-#define STRINGIFY_TEST(mValue)      \
+#define STRINGIFY_TEST(mValue)            \
     {                                     \
         auto k(mValue);                   \
         ssvu::stringify<true>(trash, k);  \

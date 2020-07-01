@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_LOG_INL
 #define SSVU_CORE_LOG_INL
 
+#include <fstream>
+
 namespace ssvu
 {
 #ifndef SSVU_LOG_DISABLE

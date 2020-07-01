@@ -5,7 +5,7 @@
 #ifndef SSVU_CORE_MPL_IMPL_NEGATE
 #define SSVU_CORE_MPL_IMPL_NEGATE
 
-#include "SSVUtils/Core/Common/Common.hpp"
+#include <utility>
 
 namespace ssvu
 {
@@ -17,7 +17,7 @@ template <template <typename...> class TP>
 struct Negate
 {
     template <typename T>
-    using Type = CTBool<!TP<T>{}()>;
+    using Type = std::bool_constant<!TP<T>::value>;
 };
 } // namespace Impl
 } // namespace MPL

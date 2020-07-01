@@ -5,8 +5,9 @@
 #ifndef SSVU_IMPL_BENCHMARK_INTERNAL_IMPL_DISABLED
 #define SSVU_IMPL_BENCHMARK_INTERNAL_IMPL_DISABLED
 
-#include <string>
 #include "SSVUtils/Benchmark/Inc/Data.hpp"
+
+#include <string>
 
 namespace ssvu
 {

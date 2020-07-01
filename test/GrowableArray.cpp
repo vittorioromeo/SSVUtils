@@ -7,6 +7,10 @@
 #include "SSVUtils/GrowableArray/GrowableArray.hpp"
 
 #include "./utils/test_utils.hpp"
+
+#include <memory>
+
+
 int main()
 {
     using namespace ssvu;
@@ -100,10 +104,10 @@ int main()
     {
         GrowableArrayAS<std::unique_ptr<TestItem>> g;
         g.grow(0, 4);
-        g.initAt(0, mkUPtr<TestItem>(cc, dc, 0));
-        g.initAt(1, mkUPtr<TestItem>(cc, dc, 1));
-        g.initAt(2, mkUPtr<TestItem>(cc, dc, 2));
-        g.initAt(3, mkUPtr<TestItem>(cc, dc, 3));
+        g.initAt(0, std::make_unique<TestItem>(cc, dc, 0));
+        g.initAt(1, std::make_unique<TestItem>(cc, dc, 1));
+        g.initAt(2, std::make_unique<TestItem>(cc, dc, 2));
+        g.initAt(3, std::make_unique<TestItem>(cc, dc, 3));
 
         TEST_ASSERT_OP(cc, ==, 4);
         TEST_ASSERT_OP(dc, ==, 0);

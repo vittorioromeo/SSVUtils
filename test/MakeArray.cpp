@@ -5,6 +5,7 @@
 
 #include "SSVUtils/Core/Core.hpp"
 
+#include <array>
 
 #define EXECTEST(mType)                                                        \
     {                                                                          \

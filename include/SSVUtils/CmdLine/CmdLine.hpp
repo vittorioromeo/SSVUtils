@@ -5,7 +5,6 @@
 #ifndef SSVU_CMDLINE
 #define SSVU_CMDLINE
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Delegate/Delegate.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/Range/Range.hpp"

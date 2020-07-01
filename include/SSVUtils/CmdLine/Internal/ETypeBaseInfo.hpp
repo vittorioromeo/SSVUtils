@@ -5,7 +5,6 @@
 #ifndef SSVU_CMDLINE_INTERNAL_ETYPEBASEINFO
 #define SSVU_CMDLINE_INTERNAL_ETYPEBASEINFO
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Internal/EType.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/Bases.hpp"
 

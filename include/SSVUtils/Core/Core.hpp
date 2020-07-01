@@ -8,39 +8,6 @@
 // "Core" is the main module of the library: its parts all depend on each other,
 // and cannot be used separately.
 
-// STL Dependencies
-#include <iostream>
-#include <string>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <cassert>
-#include <vector>
-#include <fstream>
-#include <iomanip>
-#include <sstream>
-#include <chrono>
-#include <unordered_map>
-#include <array>
-#include <algorithm>
-#include <random>
-#include <map>
-#include <set>
-#include <cstddef>
-#include <functional>
-#include <climits>
-#include <stack>
-#include <memory>
-#include <iterator>
-#include <cstring>
-#include <bitset>
-#include <future>
-#include <mutex>
-#include <list>
-
-// The "vrm_pp" library is used in various parts of the library.
-// It does not introduce any additional dependency and is safe to include first.
-#include <vrm/pp.hpp>
-
 // The "Core/Detection/Detection" module detects OS, compiler and debug/release
 // information
 #include "SSVUtils/Core/Detection/Detection.hpp"

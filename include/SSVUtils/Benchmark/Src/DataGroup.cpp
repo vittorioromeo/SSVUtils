@@ -3,9 +3,9 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #include "SSVUtils/Internal/API.hpp"
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Benchmark/Inc/DataGroup.hpp"
 
+#include <chrono>
 namespace ssvu
 {
 namespace Benchmark

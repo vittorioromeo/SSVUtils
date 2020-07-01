@@ -5,7 +5,7 @@
 #ifndef SSVU_IMPL_BENCHMARK_TYPEDEFS
 #define SSVU_IMPL_BENCHMARK_TYPEDEFS
 
-#include "SSVUtils/Core/Core.hpp"
+#include <chrono>
 
 namespace ssvu
 {

@@ -5,6 +5,9 @@
 #ifndef SSVU_CORE_IGNOREMANIP
 #define SSVU_CORE_IGNOREMANIP
 
+#include <string>
+#include <utility>
+
 namespace ssvu
 {
 /// @brief `std::string` wrapper that ignores stream manipulators when sent

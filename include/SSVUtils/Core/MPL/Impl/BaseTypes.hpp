@@ -5,7 +5,8 @@
 #ifndef SSVU_CORE_MPL_IMPL_BASETYPES
 #define SSVU_CORE_MPL_IMPL_BASETYPES
 
-#include "SSVUtils/Core/Common/Common.hpp"
+#include <utility>
+#include <type_traits>
 
 namespace ssvu
 {

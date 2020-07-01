@@ -5,17 +5,16 @@
 #ifndef SSVU_CORE_TUPLE
 #define SSVU_CORE_TUPLE
 
-#include <tuple>
-#include <algorithm>
-#include <vrm/pp.hpp>
-#include "SSVUtils/Core/Assert/Assert.hpp"
-#include "SSVUtils/Core/Common/Common.hpp"
 #include "SSVUtils/Core/MPL/MPL.hpp"
 #include "SSVUtils/Core/Tuple/Internal/Exploder.hpp"
 #include "SSVUtils/Core/Tuple/Internal/TplForHelper.hpp"
 #include "SSVUtils/Core/Tuple/Internal/TplIdxOfHelper.hpp"
 #include "SSVUtils/Core/Tuple/Internal/TplRepeatHelper.hpp"
 #include "SSVUtils/Core/Tuple/TplFor.hpp"
+
+#include <tuple>
+#include <algorithm>
+#include <utility>
 
 namespace ssvu
 {
@@ -39,9 +38,9 @@ inline constexpr auto getTplIdxOf() noexcept
 /// @brief Calls the function `mF` using `mT`'s values as arguments.
 template <typename TF, typename T>
 inline auto explode(TF&& mF, T&& mT) noexcept(noexcept(
-    Impl::Exploder<getTplSize<std::decay_t<T>>()>::explode(FWD(mF), FWD(mT))))
+    Impl::Exploder<std::tuple_size_v<std::decay_t<T>>>::explode(FWD(mF), FWD(mT))))
 {
-    return Impl::Exploder<getTplSize<std::decay_t<T>>()>::explode(
+    return Impl::Exploder<std::tuple_size_v<std::decay_t<T>>>::explode(
         FWD(mF), FWD(mT));
 }
 } // namespace ssvu

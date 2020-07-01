@@ -5,12 +5,15 @@
 #ifndef SSVU_MEMORYMANAGER_INTERNAL_RECYCLERIMPL
 #define SSVU_MEMORYMANAGER_INTERNAL_RECYCLERIMPL
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Casts.hpp"
 #include "SSVUtils/GrowableArray/GrowableArray.hpp"
 #include "SSVUtils/Internal/SharedFuncs.hpp"
 #include "SSVUtils/MemoryManager/Internal/Fwd.hpp"
 #include "SSVUtils/MemoryManager/Internal/LayoutImpl.hpp"
 #include "SSVUtils/MemoryManager/Internal/StorageImpl.hpp"
+
+#include <memory>
+
 
 namespace ssvu
 {

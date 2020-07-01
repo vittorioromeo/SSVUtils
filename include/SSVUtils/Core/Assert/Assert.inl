@@ -5,13 +5,13 @@
 #ifndef SSVU_CORE_ASSERT_INL
 #define SSVU_CORE_ASSERT_INL
 
+#include "SSVUtils/Core/Assert/Assert.hpp"
+#include "SSVUtils/Core/Log/Log.hpp"
+
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <unordered_map>
-#include "SSVUtils/Core/Assert/Assert.hpp"
-#include "SSVUtils/Core/Common/Common.hpp"
-#include "SSVUtils/Core/Log/Log.hpp"
 
 // This file implements `assertImpl`, which requires additional dependencies.
 
@@ -21,6 +21,7 @@ namespace ssvu
 {
 namespace Impl
 {
+
 inline void assertImpl(
     AssertData&& mAD, bool mExpression, const std::string& mMsg) noexcept
 {
@@ -64,6 +65,7 @@ inline void assertImpl(
 
     std::terminate();
 }
+
 } // namespace Impl
 } // namespace ssvu
 

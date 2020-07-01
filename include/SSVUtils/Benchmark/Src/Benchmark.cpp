@@ -3,7 +3,10 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #include "SSVUtils/Internal/API.hpp"
-#include "SSVUtils/Core/Core.hpp"
+
+#include "SSVUtils/Core/Log/Log.hpp"
+#include "SSVUtils/Core/Log/Log.inl"
+
 #include "SSVUtils/Benchmark/Inc/Benchmark.hpp"
 #include "SSVUtils/Benchmark/Inc/Data.hpp"
 
@@ -12,6 +15,9 @@
 #else
 #include "SSVUtils/Benchmark/Inc/ImplDisabled.hpp"
 #endif
+
+#include <string>
+#include <utility>
 
 namespace ssvu
 {

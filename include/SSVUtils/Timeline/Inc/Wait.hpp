@@ -5,9 +5,12 @@
 #ifndef SSVU_IMPL_TIMELINE_WAIT
 #define SSVU_IMPL_TIMELINE_WAIT
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Frametime.hpp"
 #include "SSVUtils/Timeline/Inc/Timeline.hpp"
 #include "SSVUtils/Timeline/Inc/Command.hpp"
+
+#include <functional>
+
 
 namespace ssvu
 {

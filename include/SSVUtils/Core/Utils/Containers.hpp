@@ -5,15 +5,20 @@
 #ifndef SSVU_CORE_UTILS_CONTAINERS
 #define SSVU_CORE_UTILS_CONTAINERS
 
-#include <algorithm>
-#include <vrm/pp.hpp>
-#include "SSVUtils/Core/Assert/Assert.hpp"
-#include "SSVUtils/Core/Common/Common.hpp"
+#include "SSVUtils/Core/Utils/ForArgs.hpp"
 #include "SSVUtils/Core/MPL/MPL.hpp"
+#include "SSVUtils/Core/Common/SmartPointers.hpp"
 #include "SSVUtils/Core/Utils/Macros.hpp"
 #include "SSVUtils/Core/Utils/ForArgs.hpp"
 #include "SSVUtils/Core/Utils/Rnd.hpp"
 #include "SSVUtils/Core/Utils/Math.hpp"
+
+#include <vrm/pp.hpp>
+
+#include <algorithm>
+#include <vector>
+#include <unordered_map>
+#include <memory>
 
 namespace ssvu
 {
@@ -430,8 +435,7 @@ inline auto mkVector(TArgs&&... mArgs)
     std::vector<std::common_type_t<TArgs...>> result;
     result.reserve(sizeof...(TArgs));
 
-    forArgs(
-        [&result](auto&& mX) { result.emplace_back(FWD(mX)); }, FWD(mArgs)...);
+    (result.emplace_back(FWD(mArgs)), ...);
 
     return result;
 }

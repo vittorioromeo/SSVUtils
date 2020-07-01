@@ -10,6 +10,9 @@
 #define SSVU_CORE_STRING_INTERNAL_FASTINTTOSTR
 
 #include <string>
+#include <cstring>
+#include <array>
+
 
 namespace ssvu
 {

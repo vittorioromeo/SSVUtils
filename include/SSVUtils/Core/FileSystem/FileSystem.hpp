@@ -5,15 +5,7 @@
 #ifndef SSVU_CORE_FILESYSTEM
 #define SSVU_CORE_FILESYSTEM
 
-namespace ssvu
-{
-namespace FileSystem
-{
-/// @brief Type shortcut for `struct stat`.
-using CStat = struct stat;
-} // namespace FileSystem
-} // namespace ssvu
-
+#include "SSVUtils/Core/FileSystem/CStat.hpp"
 #include "SSVUtils/Core/FileSystem/Enums.hpp"
 #include "SSVUtils/Core/FileSystem/Path.hpp"
 #include "SSVUtils/Core/FileSystem/Utils.hpp"

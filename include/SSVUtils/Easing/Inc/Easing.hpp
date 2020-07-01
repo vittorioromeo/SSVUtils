@@ -6,7 +6,9 @@
 #ifndef SSVU_IMPL_EASING
 #define SSVU_IMPL_EASING
 
-#include "SSVUtils/Core/Core.hpp"
+#include <cmath>
+#include <cstddef>
+#include <utility>
 
 namespace ssvu
 {

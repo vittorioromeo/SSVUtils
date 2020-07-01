@@ -5,6 +5,8 @@
 #ifndef SSVU_JSON_VAL_INTERNAL_CNVMACROS
 #define SSVU_JSON_VAL_INTERNAL_CNVMACROS
 
+#include <vrm/pp.hpp>
+
 /// @macro Class mixin that allows SSVJ converters to access the current class's
 /// private members.
 #define SSVJ_CNV_FRIEND()         \

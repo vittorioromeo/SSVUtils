@@ -13,6 +13,12 @@
 #include "SSVUtils/Json/Val/Internal/Fwd.hpp"
 #include "SSVUtils/Json/Val/Internal/ItrHelper.hpp"
 
+#include <vrm/pp.hpp>
+
+#include <string>
+#include <sstream>
+#include <fstream>
+
 namespace ssvu
 {
 namespace Json

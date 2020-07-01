@@ -10,6 +10,8 @@
 #include "SSVUtils/Json/Val/Val.hpp"
 #include "SSVUtils/Json/Io/ReadException.hpp"
 
+#include <string>
+
 namespace ssvu
 {
 namespace Json
@@ -373,5 +375,3 @@ public:
 } // namespace ssvu
 
 #endif
-
-// BUG: string literal operator""s?

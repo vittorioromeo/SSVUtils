@@ -10,6 +10,9 @@
 #include "SSVUtils/Container/Container.hpp"
 #include "SSVUtils/TemplateSystem/Internal/Expander.hpp"
 
+#include <string>
+#include <vector>
+
 namespace ssvu
 {
 namespace TemplateSystem

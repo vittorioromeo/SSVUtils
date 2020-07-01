@@ -5,7 +5,6 @@
 #ifndef SSVU_RANGE_INTERNAL_BASE_RANGE
 #define SSVU_RANGE_INTERNAL_BASE_RANGE
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Range/Internal/Base/Adaptor.hpp"
 
 namespace ssvu

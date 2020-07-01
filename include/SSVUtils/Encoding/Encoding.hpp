@@ -6,7 +6,6 @@
 #define SSVU_ENCRYPTION
 
 #include "SSVUtils/Internal/API.hpp"
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Encoding/Inc/Internal/Base64.hpp"
 #include "SSVUtils/Encoding/Inc/Internal/MD5.hpp"
 #include "SSVUtils/Encoding/Inc/Encoding.hpp"

@@ -5,9 +5,8 @@
 #ifndef SSVU_CORE_UTILS_FNTRAITS
 #define SSVU_CORE_UTILS_FNTRAITS
 
-#include <vrm/pp.hpp>
-#include "SSVUtils/Core/Assert/Assert.hpp"
-#include "SSVUtils/Core/Common/Common.hpp"
+#include <functional>
+#include <type_traits>
 
 namespace ssvu
 {

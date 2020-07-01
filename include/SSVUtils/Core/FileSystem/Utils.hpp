@@ -5,6 +5,13 @@
 #ifndef SSVU_CORE_FILESYSTEM_UTILS
 #define SSVU_CORE_FILESYSTEM_UTILS
 
+#include "SSVUtils/Core/FileSystem/Path.hpp"
+
+#include <string>
+#include <utility>
+#include <cstdlib>
+#include <cstdio>
+
 namespace ssvu
 {
 namespace FileSystem

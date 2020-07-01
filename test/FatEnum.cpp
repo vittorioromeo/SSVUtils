@@ -10,6 +10,9 @@ SSVU_FATENUM_MGR(_ssvutTestMgr);
 SSVU_FATENUM_VALS(_ssvutTestMgr, _ssvutTestEnum, int, (A, 5), (B, 4), (C, -3))
 SSVU_FATENUM_DEFS(_ssvutTestMgr, _ssvutTestEnumColors, int, Red, Green, Blue)
 #include "./utils/test_utils.hpp"
+
+#include <string>
+
 int main()
 {
     TEST_ASSERT(int(_ssvutTestEnum::A) == 5);

@@ -9,6 +9,8 @@
 #include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Container/Container.hpp"
 
+#include <string>
+
 namespace ssvu
 {
 namespace TemplateSystem

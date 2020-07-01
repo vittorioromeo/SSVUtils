@@ -5,8 +5,12 @@
 #ifndef SSVU_CORE_ASSERT
 #define SSVU_CORE_ASSERT
 
-#include <string>
 #include "SSVUtils/Core/Detection/Detection.hpp"
+
+#include <vrm/pp.hpp>
+
+#include <string>
+#include <cassert>
 
 /// @macro Static assertion. Checked at compile-time.
 /// @details Wrapper for the standard `static_assert`.
@@ -99,7 +103,7 @@ void assertImpl(
 
 /// @macro Assertion that checks the result of an operation between `mLhs` and
 /// `mRhs`.
-/// @details Displays a message when fired.
+/// @std::move(splays a message when fired.
 #define SSVU_ASSERT_OP_MSG(mLhs, mOp, mRhs, ...)                               \
     do                                                                         \
     {                                                                          \
@@ -109,8 +113,7 @@ void assertImpl(
         ::ssvu::Impl::assertImpl(::std::move(ad), mLhs mOp mRhs, __VA_ARGS__); \
     } while(false)
 
-/// @macro Assertion that checks the result of an operation between `mLhs` and
-/// `mRhs`.
+/// @macro Assertion that checks the result of an operation between `mLhs` std::move(Rhs`.
 /// @details No message.
 #define SSVU_ASSERT_OP(...) SSVU_ASSERT_OP_MSG(__VA_ARGS__, "")
 

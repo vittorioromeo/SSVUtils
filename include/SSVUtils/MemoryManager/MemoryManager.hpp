@@ -5,10 +5,8 @@
 #ifndef SSVU_MEMORYMANAGER
 #define SSVU_MEMORYMANAGER
 
-#include "SSVUtils/Core/Core.hpp"
-#include "SSVUtils/Range/Range.hpp"
-#include "SSVUtils/GrowableArray/GrowableArray.hpp"
-#include "SSVUtils/Internal/SharedFuncs.hpp"
+#include "SSVUtils/Core/MPL/MPL.hpp"
+
 #include "SSVUtils/MemoryManager/Internal/Fwd.hpp"
 
 // Implementations

@@ -5,7 +5,6 @@
 #ifndef SSVU_CMDLINE_INTERAL
 #define SSVU_CMDLINE_INTERAL
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Internal/EType.hpp"
 #include "SSVUtils/CmdLine/Internal/ETypeBaseInfo.hpp"
 #include "SSVUtils/CmdLine/Internal/Exceptions.hpp"

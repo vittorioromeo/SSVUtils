@@ -5,7 +5,7 @@
 #ifndef SSVU_IMPL_UNION_UNIONBASE
 #define SSVU_IMPL_UNION_UNIONBASE
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/MPL/MPL.hpp"
 
 namespace ssvu
 {

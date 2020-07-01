@@ -3,8 +3,10 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #include "SSVUtils/Internal/API.hpp"
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Encoding/Inc/Internal/MD5.hpp"
+
+#include <string>
+#include <string_view>
 
 namespace ssvu
 {
@@ -12,7 +14,7 @@ namespace Encoding
 {
 namespace Impl
 {
-static const std::string base64_chars{
+static constexpr std::string_view base64_chars{
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     "+/"};
 SSVU_INLINE bool is_base64(unsigned char c)

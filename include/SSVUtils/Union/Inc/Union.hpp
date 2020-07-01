@@ -5,8 +5,14 @@
 #ifndef SSVU_IMPL_UNION
 #define SSVU_IMPL_UNION
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Detection/Detection.hpp"
+#include "SSVUtils/Core/Assert/Assert.hpp"
+#include "SSVUtils/Core/MPL/Impl/IdxOf.hpp"
+
 #include "SSVUtils/Union/Inc/UnionBase.hpp"
+
+#include <type_traits>
+#include <utility>
 
 namespace ssvu
 {

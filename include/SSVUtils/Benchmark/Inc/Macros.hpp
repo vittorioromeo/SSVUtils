@@ -5,6 +5,8 @@
 #ifndef SSVU_IMPL_BENCHMARK_MACROS
 #define SSVU_IMPL_BENCHMARK_MACROS
 
+#include <vrm/pp.hpp>
+
 /// @macro Instantiates a `LogScopeExit` temp-named object in the current scope.
 /// @details The istantiated object will run a benchmark during its lifetime.
 /// Pass the desired benchmark title as a parameter. Requires semicolon.

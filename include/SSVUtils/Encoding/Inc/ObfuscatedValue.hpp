@@ -5,8 +5,12 @@
 #ifndef SSVU_ENCRYPTION_OBFUSCATEDVALUE
 #define SSVU_ENCRYPTION_OBFUSCATEDVALUE
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/String/Utils.hpp"
+#include "SSVUtils/Core/Stringifier/Stringifier.hpp"
 #include "SSVUtils/Encoding/Encoding.hpp"
+
+#include <string>
+#include <type_traits>
 
 namespace ssvu
 {

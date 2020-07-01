@@ -7,6 +7,9 @@
 
 #include "SSVUtils/Core/MPL/Impl/BaseTypes.hpp"
 
+#include "SSVUtils/Core/Utils/Math.hpp"
+
+
 namespace ssvu
 {
 namespace MPL

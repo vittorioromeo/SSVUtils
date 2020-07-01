@@ -5,7 +5,6 @@
 #ifndef SSVU_UNION
 #define SSVU_UNION
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Union/Inc/UnionBase.hpp"
 #include "SSVUtils/Union/Inc/Union.hpp"
 #include "SSVUtils/Union/Inc/UnionPOD.hpp"

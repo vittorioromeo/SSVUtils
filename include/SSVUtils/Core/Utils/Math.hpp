@@ -5,10 +5,11 @@
 #ifndef SSVU_CORE_UTILS_MATH
 #define SSVU_CORE_UTILS_MATH
 
-#include <cmath>
-#include <vrm/pp.hpp>
 #include "SSVUtils/Core/Assert/Assert.hpp"
-#include "SSVUtils/Core/Common/Common.hpp"
+
+#include <vrm/pp.hpp>
+
+#include <cmath>
 
 namespace ssvu
 {

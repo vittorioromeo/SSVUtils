@@ -5,6 +5,10 @@
 #ifndef SSVU_CORE_LOG
 #define SSVU_CORE_LOG
 
+#include <string>
+#include <sstream>
+#include <iostream>
+
 namespace ssvu
 {
 namespace FileSystem

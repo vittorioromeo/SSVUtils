@@ -6,7 +6,6 @@
 #ifndef SSVU_EASING
 #define SSVU_EASING
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Easing/Inc/Easing.hpp"
 
 #endif

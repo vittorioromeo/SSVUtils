@@ -3,10 +3,13 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
 #include "SSVUtils/Internal/API.hpp"
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Frametime.hpp"
 #include "SSVUtils/Timeline/Inc/Timeline.hpp"
 #include "SSVUtils/Timeline/Inc/Command.hpp"
 #include "SSVUtils/Timeline/Inc/Do.hpp"
+
+#include <functional>
+
 
 namespace ssvu
 {

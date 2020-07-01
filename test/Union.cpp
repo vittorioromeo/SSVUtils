@@ -5,7 +5,12 @@
 #include "SSVUtils/Core/Core.hpp"
 
 #include "SSVUtils/Union/Union.hpp"
+
 #include "./utils/test_utils.hpp"
+
+#include <string>
+#include <vector>
+
 #define EXEC_TEST(mType, mX)                    \
     {                                           \
         u.init<mType>(mX);                      \

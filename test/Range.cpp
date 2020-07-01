@@ -8,6 +8,12 @@
 #include "SSVUtils/Range/Range.hpp"
 
 #include "./utils/test_utils.hpp"
+
+#include <list>
+#include <array>
+#include <vector>
+#include <memory>
+
 int main()
 {
     {
@@ -62,11 +68,11 @@ int main()
         };
 
         std::vector<std::unique_ptr<XTBase>> v;
-        v.emplace_back(mkUPtr<XTDer>());
-        v.emplace_back(mkUPtr<XTDer>());
-        v.emplace_back(mkUPtr<XTDer>());
-        v.emplace_back(mkUPtr<XTDer>());
-        v.emplace_back(mkUPtr<XTDer>());
+        v.emplace_back(std::make_unique<XTDer>());
+        v.emplace_back(std::make_unique<XTDer>());
+        v.emplace_back(std::make_unique<XTDer>());
+        v.emplace_back(std::make_unique<XTDer>());
+        v.emplace_back(std::make_unique<XTDer>());
 
         for(const auto& i : asRangeCastPtr<const XTDer&>(v))
         {
@@ -81,11 +87,11 @@ int main()
 
 
         std::list<std::unique_ptr<XTBase>> l;
-        l.emplace_back(mkUPtr<XTDer>());
-        l.emplace_back(mkUPtr<XTDer>());
-        l.emplace_back(mkUPtr<XTDer>());
-        l.emplace_back(mkUPtr<XTDer>());
-        l.emplace_back(mkUPtr<XTDer>());
+        l.emplace_back(std::make_unique<XTDer>());
+        l.emplace_back(std::make_unique<XTDer>());
+        l.emplace_back(std::make_unique<XTDer>());
+        l.emplace_back(std::make_unique<XTDer>());
+        l.emplace_back(std::make_unique<XTDer>());
 
         for(const auto& i : asRangeCastPtr<const XTDer&>(l))
         {

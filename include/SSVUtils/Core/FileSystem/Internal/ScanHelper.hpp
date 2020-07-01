@@ -5,6 +5,17 @@
 #ifndef SSVU_CORE_FILESYSTEM_INTERNAL_SCANHELPER
 #define SSVU_CORE_FILESYSTEM_INTERNAL_SCANHELPER
 
+#include "SSVUtils/Core/FileSystem/Enums.hpp"
+#include "SSVUtils/Core/FileSystem/Path.hpp"
+
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <stdexcept>
+
+#include <dirent.h>
+#include <sys/stat.h>
+
 namespace ssvu
 {
 namespace FileSystem
@@ -61,7 +72,8 @@ inline void scan(
     }
 
     closedir(dir);
-    if(TS == Sort::Alphabetic) sort(mTarget);
+    if(TS == Sort::Alphabetic)
+        std::sort(std::begin(mTarget), std::end(mTarget));
 }
 } // namespace Impl
 } // namespace FileSystem

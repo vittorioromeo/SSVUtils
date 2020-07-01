@@ -5,7 +5,10 @@
 #ifndef SSVU_CMDLINE_INTERAL_PARSER
 #define SSVU_CMDLINE_INTERAL_PARSER
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Utils/Containers.hpp"
+
+#include <string>
+#include <stdexcept>
 
 namespace ssvu
 {

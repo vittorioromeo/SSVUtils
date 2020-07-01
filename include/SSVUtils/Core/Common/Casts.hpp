@@ -8,6 +8,8 @@
 #include "SSVUtils/Core/Common/Aliases.hpp"
 #include "SSVUtils/Core/Assert/Assert.hpp"
 
+#include <string>
+
 namespace ssvu
 {
 namespace Impl
@@ -102,8 +104,8 @@ inline constexpr auto castEnum(const T& mX) noexcept
 template <typename TOut, typename TIn>
 inline constexpr auto toNum(const TIn& mX) noexcept
     -> std::enable_if_t<std::is_arithmetic_v<TOut> &&
-                            std::is_arithmetic_v<TIn> && !isEnum<TOut>() &&
-                            !isEnum<TIn>(),
+                            std::is_arithmetic_v<TIn> &&
+                            !std::is_enum_v<TOut> && !std::is_enum_v<TIn>,
         TOut>
 {
     return static_cast<TOut>(mX);
@@ -164,9 +166,8 @@ inline auto sToSizeT(const std::string& mX) noexcept
 /// @brief Converts a number to an enum of type `T`. The number type and
 /// `std::underlying_type_t<T>` must match.
 template <typename T, typename TV>
-inline constexpr auto toEnum(const TV& mX) noexcept
-    -> std::enable_if_t<isEnum<T>() && std::is_same_v<std::underlying_type_t<T>, TV>,
-        T>
+inline constexpr auto toEnum(const TV& mX) noexcept -> std::enable_if_t<
+    std::is_enum_v<T> && std::is_same_v<std::underlying_type_t<T>, TV>, T>
 {
     return static_cast<T>(mX);
 }

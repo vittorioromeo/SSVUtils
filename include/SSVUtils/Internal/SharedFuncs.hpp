@@ -5,7 +5,8 @@
 #ifndef SSVU_INTERNAL_SHAREDFUNCS
 #define SSVU_INTERNAL_SHAREDFUNCS
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/LikelyUnlikely.hpp"
+#include "SSVUtils/Core/Assert/Assert.hpp"
 
 namespace ssvu
 {

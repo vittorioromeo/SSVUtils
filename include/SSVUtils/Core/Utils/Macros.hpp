@@ -5,15 +5,15 @@
 #ifndef SSVU_CORE_UTILS_MACROS
 #define SSVU_CORE_UTILS_MACROS
 
-#include "SSVUtils/Core/Assert/Assert.hpp"
-#include "SSVUtils/Core/Common/Common.hpp"
-#include <cmath>
 #include <vrm/pp.hpp>
+
+#include <cmath>
 
 namespace ssvu
 {
 namespace Impl
 {
+
 /// @brief Internal structure with `std::is_standard_layout_v` static assertion
 /// used for "baseptr" macros.
 template <typename T>
@@ -35,6 +35,7 @@ struct Voider
 };
 template <typename... TArgs>
 using VoidT = typename Voider<TArgs...>::Type;
+
 } // namespace Impl
 } // namespace ssvu
 
@@ -148,7 +149,7 @@ using VoidT = typename Voider<TArgs...>::Type;
 /// `mType` instance.
 /// Must end with semicolon.
 #define SSVU_GET_BASEPTR_FROM_MEMBERPTR_CONST(mType, mMemberPtr, mMemberName) \
-    reinterpret_cast<const ssvu::Impl::StandardLayoutCheckerT<mType>*>(       \
+    reinterpret_cast<const ::ssvu::Impl::StandardLayoutCheckerT<mType>*>(     \
         reinterpret_cast<const char*>(mMemberPtr) -                           \
         offsetof(mType, mMemberName))
 
@@ -240,6 +241,9 @@ using VoidT = typename Voider<TArgs...>::Type;
 /// the end.
 #define SSVU_UNREACHABLE() __builtin_unreachable()
 #else
+#include "SSVUtils/Core/Assert/Assert.hpp"
+
+
 /// @macro Unreachable code. Uses an assert and `std::terminate()`. Requires
 /// semicolon at the end.
 #define SSVU_UNREACHABLE()  \

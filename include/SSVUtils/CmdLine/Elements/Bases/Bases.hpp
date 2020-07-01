@@ -5,7 +5,6 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_BASES
 #define SSVU_CMDLINE_ELEMENTS_BASES
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/BaseElement.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/BaseArg.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/BaseArgPack.hpp"

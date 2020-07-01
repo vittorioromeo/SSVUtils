@@ -5,7 +5,7 @@
 #ifndef SSVU_IMPL_TIMELINE
 #define SSVU_IMPL_TIMELINE
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Frametime.hpp"
 #include "SSVUtils/MemoryManager/MemoryManager.hpp"
 #include "SSVUtils/Timeline/Inc/Command.hpp"
 

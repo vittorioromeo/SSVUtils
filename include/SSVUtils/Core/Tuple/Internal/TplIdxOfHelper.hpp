@@ -6,7 +6,7 @@
 #define SSVU_CORE_TUPLE_INTERNAL_TPLIDXOFHELPER
 
 #include <tuple>
-#include "SSVUtils/Core/Common/Common.hpp"
+#include <cstddef>
 
 namespace ssvu
 {

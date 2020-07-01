@@ -7,6 +7,9 @@
 #include "SSVUtils/Bimap/Bimap.hpp"
 
 #include "./utils/test_utils.hpp"
+
+#include <string>
+
 int main()
 {
     ssvu::Bimap<int, std::string> sb;

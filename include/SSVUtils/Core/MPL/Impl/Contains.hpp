@@ -7,22 +7,37 @@
 
 #include "SSVUtils/Core/MPL/Impl/BaseTypes.hpp"
 
+#include <array>
+#include <type_traits>
+
 namespace ssvu
 {
 namespace MPL
 {
 namespace Impl
 {
+
 template <typename T, typename... Ts>
-struct Contains : std::false_type
+constexpr bool containsImpl() noexcept
+{
+    constexpr std::array<bool, sizeof...(Ts)> res{std::is_same_v<T, Ts>...};
+
+    for(bool b : res)
+    {
+        if(b)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template <typename T, typename... Ts>
+struct Contains : std::bool_constant<containsImpl<T, Ts...>()>
 {
 };
 
-template <typename T, typename THead, typename... Ts>
-struct Contains<T, THead, Ts...>
-    : std::conditional_t<std::is_same_v<T, THead>, std::true_type, Contains<T, Ts...>>
-{
-};
 } // namespace Impl
 } // namespace MPL
 } // namespace ssvu

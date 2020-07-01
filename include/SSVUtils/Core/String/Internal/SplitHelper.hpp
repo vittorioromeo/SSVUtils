@@ -5,6 +5,9 @@
 #ifndef SSVU_CORE_STRING_INTERNAL_SPLITHELPER
 #define SSVU_CORE_STRING_INTERNAL_SPLITHELPER
 
+#include <string>
+#include <vector>
+
 namespace ssvu
 {
 namespace Impl

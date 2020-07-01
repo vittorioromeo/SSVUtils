@@ -5,7 +5,10 @@
 #ifndef SSVU_IMPL_TICKER
 #define SSVU_IMPL_TICKER
 
-#include "SSVUtils/Core/Core.hpp"
+#include "SSVUtils/Core/Common/Frametime.hpp"
+#include "SSVUtils/Core/Common/Casts.hpp"
+
+#include <cstddef>
 
 namespace ssvu
 {

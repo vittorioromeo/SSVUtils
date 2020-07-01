@@ -5,7 +5,6 @@
 #ifndef SSVU_DELEGATE
 #define SSVU_DELEGATE
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Delegate/Inc/Delegate.hpp"
 
 #endif

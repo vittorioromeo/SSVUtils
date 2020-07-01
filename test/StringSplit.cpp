@@ -6,10 +6,15 @@
 
 
 #include "./utils/test_utils.hpp"
+
+#include <string>
+
 int main()
 {
+    using namespace std::literals;
     using namespace std;
     using namespace ssvu;
+
     string s1{"test a b c d e"};
     string s2{"test,a,b,c,d,e"};
     string s3{"test##a##b##c##d##e"};

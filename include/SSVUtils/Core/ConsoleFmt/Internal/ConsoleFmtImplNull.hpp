@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_CONSOLEFMT_INTERNAL_IMPL
 #define SSVU_CORE_CONSOLEFMT_INTERNAL_IMPL
 
+#include "SSVUtils/Core/Common/EmptyString.hpp"
+
 // This file contains a null implementation for console formatting.
 // Everything returns an empty string.
 

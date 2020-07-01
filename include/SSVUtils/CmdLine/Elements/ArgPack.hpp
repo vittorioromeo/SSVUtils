@@ -5,9 +5,11 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_ARGPACK
 #define SSVU_CMDLINE_ELEMENTS_ARGPACK
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Elements/Arg.hpp"
 #include "SSVUtils/CmdLine/Internal/Internal.hpp"
+
+#include <string>
+#include <vector>
 
 namespace ssvu
 {

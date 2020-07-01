@@ -5,9 +5,10 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_ARGOPT
 #define SSVU_CMDLINE_ELEMENTS_ARGOPT
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Elements/Arg.hpp"
 #include "SSVUtils/CmdLine/Internal/Internal.hpp"
+
+#include <string>
 
 namespace ssvu
 {

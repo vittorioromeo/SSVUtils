@@ -5,7 +5,7 @@
 #ifndef SSVU_IMPL_ENCRYPTION
 #define SSVU_IMPL_ENCRYPTION
 
-#include "SSVUtils/Core/Core.hpp"
+#include <string>
 
 namespace ssvu
 {

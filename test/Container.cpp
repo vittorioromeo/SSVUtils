@@ -7,6 +7,9 @@
 #include "SSVUtils/Container/Container.hpp"
 
 #include "./utils/test_utils.hpp"
+
+#include <vector>
+
 int main()
 {
     {

@@ -5,10 +5,11 @@
 #ifndef SSVU_CMDLINE_ELEMENTS_FLAGVALUEOPT
 #define SSVU_CMDLINE_ELEMENTS_FLAGVALUEOPT
 
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/CmdLine/Internal/Internal.hpp"
 #include "SSVUtils/CmdLine/Elements/Bases/Bases.hpp"
 #include "SSVUtils/CmdLine/Elements/FlagValue.hpp"
+
+#include <string>
 
 namespace ssvu
 {

@@ -6,9 +6,10 @@
 #define SSVU_IMPL_BENCHMARK_DATA
 
 #include "SSVUtils/Internal/API.hpp"
-#include "SSVUtils/Core/Core.hpp"
 #include "SSVUtils/Benchmark/Inc/Typedefs.hpp"
 #include "SSVUtils/Benchmark/Inc/DataBase.hpp"
+
+#include <string>
 
 namespace ssvu
 {
