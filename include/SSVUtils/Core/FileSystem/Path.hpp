@@ -6,6 +6,7 @@
 #define SSVU_CORE_FILESYSTEM_PATH
 
 #include "SSVUtils/Core/FileSystem/Enums.hpp"
+#include "SSVUtils/Core/FileSystem/CStat.hpp"
 
 #include "SSVUtils/Core/Utils/Macros.hpp"
 #include "SSVUtils/Core/Assert/Assert.hpp"

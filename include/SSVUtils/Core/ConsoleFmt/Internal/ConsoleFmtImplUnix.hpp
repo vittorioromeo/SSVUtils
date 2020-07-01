@@ -13,10 +13,10 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <string>
 
 #include <sys/ioctl.h>
 #include <unistd.h>
-
 
 namespace ssvu
 {
@@ -30,66 +30,69 @@ constexpr const char* clear{"\033[1;1H\033[2J"};
 
 inline const auto& getStyleCodes() noexcept
 {
-    static auto codes(mkArray(0, // 0 = Style::None
-        1,                       // 1 = Style::Bold
-        2,                       // 2 = Style::Dim
-        4,                       // 3 = Style::Underline
-        5,                       // 4 = Style::Blink
-        7,                       // 5 = Style::Reverse
-        8,                       // 6 = Style::Hidden
-        21,                      // 7 = Style::ResetBold
-        22,                      // 8 = Style::ResetDim
-        24,                      // 9 = Style::ResetUnderline
-        25,                      // 10 = Style::ResetBlink
-        27,                      // 11 = Style::ResetReverse
-        28                       // 12 = Style::ResetHidden
-        ));
+    static constexpr std::array codes{
+        0,  // 0 = Style::None
+        1,  // 1 = Style::Bold
+        2,  // 2 = Style::Dim
+        4,  // 3 = Style::Underline
+        5,  // 4 = Style::Blink
+        7,  // 5 = Style::Reverse
+        8,  // 6 = Style::Hidden
+        21, // 7 = Style::ResetBold
+        22, // 8 = Style::ResetDim
+        24, // 9 = Style::ResetUnderline
+        25, // 10 = Style::ResetBlink
+        27, // 11 = Style::ResetReverse
+        28  // 12 = Style::ResetHidden
+    };
 
     return codes;
 }
 inline const auto& getColorFGCodes() noexcept
 {
-    static auto codes(mkArray(39, // 0 = Color::Default
-        30,                       // 1 = Color::Black
-        31,                       // 2 = Color::Red
-        32,                       // 3 = Color::Green
-        33,                       // 4 = Color::Yellow
-        34,                       // 5 = Color::Blue
-        35,                       // 6 = Color::Magenta
-        36,                       // 7 = Color::Cyan
-        37,                       // 8 = Color::LightGray
-        90,                       // 9 = Color::DarkGray
-        91,                       // 10 = Color::LightRed
-        92,                       // 11 = Color::LightGreen
-        93,                       // 12 = Color::LightYellow
-        94,                       // 13 = Color::LightBlue
-        95,                       // 14 = Color::LightMagenta
-        96,                       // 15 = Color::LightCyan
-        97                        // 16 = Color::LightWhite
-        ));
+    static constexpr std::array codes{
+        39, // 0 = Color::Default
+        30, // 1 = Color::Black
+        31, // 2 = Color::Red
+        32, // 3 = Color::Green
+        33, // 4 = Color::Yellow
+        34, // 5 = Color::Blue
+        35, // 6 = Color::Magenta
+        36, // 7 = Color::Cyan
+        37, // 8 = Color::LightGray
+        90, // 9 = Color::DarkGray
+        91, // 10 = Color::LightRed
+        92, // 11 = Color::LightGreen
+        93, // 12 = Color::LightYellow
+        94, // 13 = Color::LightBlue
+        95, // 14 = Color::LightMagenta
+        96, // 15 = Color::LightCyan
+        97  // 16 = Color::LightWhite
+    };
 
     return codes;
 }
 inline const auto& getColorBGCodes() noexcept
 {
-    static auto codes(mkArray(49, // 0 = Color::Default
-        40,                       // 1 = Color::Black
-        41,                       // 2 = Color::Red
-        42,                       // 3 = Color::Green
-        43,                       // 4 = Color::Yellow
-        44,                       // 5 = Color::Blue
-        45,                       // 6 = Color::Magenta
-        46,                       // 7 = Color::Cyan
-        47,                       // 8 = Color::LightGray
-        100,                      // 9 = Color::DarkGray
-        101,                      // 10 = Color::LightRed
-        102,                      // 11 = Color::LightGreen
-        103,                      // 12 = Color::LightYellow
-        104,                      // 13 = Color::LightBlue
-        105,                      // 14 = Color::LightMagenta
-        106,                      // 15 = Color::LightCyan
-        107                       // 16 = Color::LightWhite
-        ));
+    static constexpr std::array codes{
+        49,  // 0 = Color::Default
+        40,  // 1 = Color::Black
+        41,  // 2 = Color::Red
+        42,  // 3 = Color::Green
+        43,  // 4 = Color::Yellow
+        44,  // 5 = Color::Blue
+        45,  // 6 = Color::Magenta
+        46,  // 7 = Color::Cyan
+        47,  // 8 = Color::LightGray
+        100, // 9 = Color::DarkGray
+        101, // 10 = Color::LightRed
+        102, // 11 = Color::LightGreen
+        103, // 12 = Color::LightYellow
+        104, // 13 = Color::LightBlue
+        105, // 14 = Color::LightMagenta
+        106, // 15 = Color::LightCyan
+        107  // 16 = Color::LightWhite
+    };
 
     return codes;
 }
@@ -104,11 +107,11 @@ struct FmtCache
     inline FmtCache()
     {
         for(const auto& i : getStyleCodes())
-            styleCodeStrs.emplace_back(toStr(i));
+            styleCodeStrs.emplace_back(std::to_string(i));
         for(const auto& i : getColorFGCodes())
-            colorFGCodeStrs.emplace_back(toStr(i));
+            colorFGCodeStrs.emplace_back(std::to_string(i));
         for(const auto& i : getColorBGCodes())
-            colorBGCodeStrs.emplace_back(toStr(i));
+            colorBGCodeStrs.emplace_back(std::to_string(i));
     }
 };
 

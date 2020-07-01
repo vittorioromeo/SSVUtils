@@ -5,12 +5,16 @@
 #ifndef SSVU_CORE_FILESYSTEM_CSTAT
 #define SSVU_CORE_FILESYSTEM_CSTAT
 
+struct stat;
+
 namespace ssvu
 {
 namespace FileSystem
 {
+
 /// @brief Type shortcut for `struct stat`.
-using CStat = struct stat;
+using CStat = stat;
+
 } // namespace FileSystem
 } // namespace ssvu
 

@@ -6,6 +6,7 @@
 #define SSVU_CORE_MPL_IMPL_SUBLIST
 
 #include "SSVUtils/Core/MPL/Impl/BaseTypes.hpp"
+#include "SSVUtils/Core/Utils/Math.hpp"
 
 namespace ssvu
 {
