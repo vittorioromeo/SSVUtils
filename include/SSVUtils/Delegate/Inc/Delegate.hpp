@@ -51,6 +51,23 @@ public:
         funcs.emplace_back(mFunc);
         return *this;
     }
+	
+	/// @brief Add a function to the delegate only if there is none in the list
+	/// @details Operator = adds a function the delegate's internal function
+	/// list which will be called using operator(), but only if there is no other
+	/// function already in such list.
+	/// @code
+	/// ssvu::Delegate<int(int)> delegate;
+	/// delegate = [](int mParameter){ return mParameter * 2; };
+	/// @endcode
+	/// @param mFunc Function to add - can be a std::function or a lambda
+	template <typename T>
+	inline auto& operator=(const T& mFunc)
+	{
+		if(funcs.empty())
+			funcs.emplace_back(mFunc);
+		return *this;
+	}
 
     /// @brief Call all the functions in the delegate.
     /// @code
