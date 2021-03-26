@@ -25,8 +25,10 @@ using StdEndLine = CoutType&(CoutType&);
 /// stream.
 inline auto& getLogStream() noexcept
 {
-    static std::ostringstream logStream;
-    return logStream;
+    static std::ostringstream* logStream =
+        new std::ostringstream; // intentionally leaked
+
+    return *logStream;
 }
 
 /// @brief Returns a reference to the static suppressed `bool` value.

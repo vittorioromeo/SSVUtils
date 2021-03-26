@@ -59,8 +59,8 @@ struct LOut
 /// instance.
 inline auto& lo() noexcept
 {
-    static LOut result{std::cout};
-    return result;
+    static LOut* result = new LOut{std::cout}; // intentionally leaked
+    return *result;
 }
 
 /// @brief Interaction between the `lo()` object and a "stringificable"

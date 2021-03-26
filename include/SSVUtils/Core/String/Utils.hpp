@@ -6,7 +6,9 @@
 #define SSVU_CORE_STRING_UTILS
 
 #include "SSVUtils/Core/String/Internal/FastIntToStr.hpp"
+#include "SSVUtils/Core/String/StringifierBase.hpp"
 #include "SSVUtils/Core/Stringifier/Stringifier.hpp"
+#include "SSVUtils/Core/ConsoleFmt/ConsoleFmt.hpp"
 
 #include <string>
 #include <memory>
@@ -15,35 +17,9 @@
 
 namespace ssvu
 {
-/// @brief Stringifies a value in a stream.
-/// @details Uses Stringifier<T> internally.
-/// @tparam TFmt Use formatting? (set to false if the target stream isn't
-/// the console)
-/// @param mStream Reference to the target stream.
-/// @param mValue Const reference to the value. (original value won't be
-/// changed)
-template <bool TFmt, typename TStream, typename T>
-inline void stringify(TStream& mStream, const T& mValue)
-{
-    Stringifier<T>::template impl<TFmt>(mStream, mValue);
-}
 
 namespace Impl
 {
-void resetFmt(std::ostream& mStream);
-inline auto& getStringifyStream() noexcept
-{
-    thread_local std::ostringstream oss;
-    return oss;
-}
-template <bool TFmt, bool TResetFmt = true, typename T>
-inline void callStringifyImpl(std::ostream& mStream, const T& mValue)
-{
-    if(TResetFmt) resetFmt(mStream);
-    stringify<TFmt>(mStream, mValue);
-    if(TResetFmt) resetFmt(mStream);
-}
-
 template <typename T>
 struct ToStrImpl
 {

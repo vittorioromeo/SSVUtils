@@ -71,8 +71,10 @@ struct AssertState
 /// instance.
 inline auto& getAssertState() noexcept
 {
-    thread_local AssertState result;
-    return result;
+    thread_local AssertState* result =
+        new AssertState{}; // intentionally leaked
+
+    return *result;
 }
 
 /// @brief Assert implementation: if mExpression is false, the assertion
@@ -113,7 +115,8 @@ void assertImpl(
         ::ssvu::Impl::assertImpl(::std::move(ad), mLhs mOp mRhs, __VA_ARGS__); \
     } while(false)
 
-/// @macro Assertion that checks the result of an operation between `mLhs` std::move(Rhs`.
+/// @macro Assertion that checks the result of an operation between `mLhs`
+/// std::move(Rhs`.
 /// @details No message.
 #define SSVU_ASSERT_OP(...) SSVU_ASSERT_OP_MSG(__VA_ARGS__, "")
 

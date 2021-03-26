@@ -22,8 +22,8 @@ using LOut = NullLOut;
 
 inline LOut& lo() noexcept
 {
-    static LOut result;
-    return result;
+    static LOut* result = new LOut{};  // intentionally leaked
+    return *result;
 }
 template <typename T>
 inline LOut& lo(const T&)

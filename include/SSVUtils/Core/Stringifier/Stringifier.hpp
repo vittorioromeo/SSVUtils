@@ -5,6 +5,7 @@
 #ifndef SSVU_CORE_STRING_STRINGIFIER
 #define SSVU_CORE_STRING_STRINGIFIER
 
+#include "SSVUtils/Core/String/StringifierBase.hpp"
 #include "SSVUtils/Core/Assert/Assert.hpp"
 #include "SSVUtils/Core/Common/Common.hpp"
 #include "SSVUtils/Core/String/String.hpp"
@@ -20,12 +21,6 @@ namespace ssvu
 {
 namespace Impl
 {
-/// @brief Streams a "formatting reset sequence" to mStream.
-inline void resetFmt(std::ostream& mStream)
-{
-    mStream << Console::resetFmt();
-}
-
 /// @brief Prints a value to a stream, with optional formatting
 /// parameters.
 /// @tparam TFmt If true, applies formatting.
@@ -103,15 +98,7 @@ inline void repeatPenultimate(
 }
 
 /// @brief Default stringifier. Simply streams the value.
-template <typename T>
-struct StringifierDefault
-{
-    template <bool TFmt>
-    inline static void impl(std::ostream& mStream, const T& mValue)
-    {
-        mStream << mValue;
-    }
-};
+
 
 /// @brief Linear container stringifier. Simply streams each element,
 /// separated by commas.
@@ -185,26 +172,7 @@ inline void stringifyMapImpl(
 }
 } // namespace Impl
 
-// Stringify common types
-template <typename T, typename = void>
-struct Stringifier : public Impl::StringifierDefault<T>
-{
-};
 
-// Stringify C-style strings
-template <std::size_t TN>
-struct Stringifier<char[TN]> final : public Impl::StringifierDefault<char[TN]>
-{
-};
-template <>
-struct Stringifier<char*> final : public Impl::StringifierDefault<char*>
-{
-};
-template <>
-struct Stringifier<const char*> final
-    : public Impl::StringifierDefault<const char*>
-{
-};
 
 // Stringify base types
 #define SSVU_IMPL_DEFINE_BASE_STRINGIFIER(mType, mColor, mStyle, mPostfix)  \
@@ -316,7 +284,8 @@ struct Stringifier<T*>
 {
     template <bool TFmt>
     inline static void impl(std::ostream& mStream, const T* mValue,
-        std::enable_if_t<!std::is_same_v<std::remove_const_t<T>, char>>* = nullptr)
+        std::enable_if_t<!std::is_same_v<std::remove_const_t<T>, char>>* =
+            nullptr)
     {
         Impl::printBold<TFmt>(mStream, "[", Console::Color::Blue);
         Impl::printFmt<TFmt>(mStream,
