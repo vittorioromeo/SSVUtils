@@ -131,7 +131,7 @@ private:
 
         repeatWithSeparator(
             std::begin(mArr), std::end(mArr),
-            [this](auto mItr) { write(*mItr); },
+            [this](auto mItr) { this->write(*mItr); },
             [this] {
                 wFmt(FmtCC::LightGray, FmtCS::Bold);
                 wOut(",");

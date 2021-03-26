@@ -126,22 +126,22 @@ private:
 
     inline char& getC() noexcept
     {
-        SSVU_ASSERT(idx >= 0 && idx < src.size());
+        SSVU_ASSERT(idx < src.size());
         return src[idx];
     }
     inline char getC() const noexcept
     {
-        SSVU_ASSERT(idx >= 0 && idx < src.size());
+        SSVU_ASSERT(idx < src.size());
         return src[idx];
     }
     inline char& getC(std::size_t mIdx) noexcept
     {
-        SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());
+        SSVU_ASSERT(mIdx < src.size());
         return src[mIdx];
     }
     inline char getC(std::size_t mIdx) const noexcept
     {
-        SSVU_ASSERT(mIdx >= 0 && mIdx < src.size());
+        SSVU_ASSERT(mIdx < src.size());
         return src[mIdx];
     }
     inline auto isC(char mC) const noexcept
