@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <string>
+#include <array>
 
 #include <sys/ioctl.h>
 #include <unistd.h>
