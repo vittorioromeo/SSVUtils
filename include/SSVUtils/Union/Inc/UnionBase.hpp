@@ -15,7 +15,7 @@ namespace Impl
 template <typename... Ts>
 class UnionBase
 {
-    SSVU_ASSERT_STATIC(
+    static_assert(
         MPL::isUnique<Ts...>(), "There must be no duplicate types");
 
 protected:
@@ -28,7 +28,7 @@ protected:
     inline void initImpl(TArgs&&... mArgs) noexcept(
         std::is_nothrow_constructible_v<T, TArgs...>)
     {
-        SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>());
+        static_assert(MPL::has<T, Ts...>());
         new(&data) T(FWD(mArgs)...);
     }
 
@@ -36,26 +36,26 @@ protected:
     template <typename T>
     inline void deinitImpl() noexcept(std::is_nothrow_destructible_v<T>)
     {
-        SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>());
+        static_assert(MPL::has<T, Ts...>());
         getImpl<T>().~T();
     }
 
     template <typename T>
     inline T& getImpl() & noexcept
     {
-        SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>());
+        static_assert(MPL::has<T, Ts...>());
         return castStorage<T>(data);
     }
     template <typename T>
     inline const T& getImpl() const& noexcept
     {
-        SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>());
+        static_assert(MPL::has<T, Ts...>());
         return castStorage<T>(data);
     }
     template <typename T>
     inline T getImpl() && noexcept
     {
-        SSVU_ASSERT_STATIC_NM(MPL::has<T, Ts...>());
+        static_assert(MPL::has<T, Ts...>());
         return std::move(castStorage<T>(data));
     }
 };

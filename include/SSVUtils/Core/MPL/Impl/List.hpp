@@ -292,7 +292,7 @@ struct List
     template <typename T>
     inline static constexpr std::size_t getIdxOf()
     {
-        SSVU_ASSERT_STATIC_NM(has<T>());
+        static_assert(has<T>());
         return Impl::IdxOf<T, Ts...>{};
     }
 

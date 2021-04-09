@@ -68,7 +68,7 @@ public:
     template <typename T, typename... TArgs>
     inline T& create(TArgs&&... mArgs)
     {
-        SSVU_ASSERT_STATIC(std::is_base_of_v<BaseElement, T>,
+        static_assert(std::is_base_of_v<BaseElement, T>,
             "`T` must derive from `BaseElement`");
 
         auto& result(elements.create<T>(FWD(mArgs)...));

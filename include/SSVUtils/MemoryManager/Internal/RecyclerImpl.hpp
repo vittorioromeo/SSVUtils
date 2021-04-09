@@ -99,7 +99,7 @@ struct MonoRecyclerImpl final : public MonoRecyclerBase<TBase, TLHelper>
     template <typename T, typename... TArgs>
     inline auto createImpl(TArgs&&... mArgs)
     {
-        SSVU_ASSERT_STATIC(std::is_same_v<TBase, T>,
+        static_assert(std::is_same_v<TBase, T>,
             "MonoRecyclerImpl can only allocate objects "
             "of the same type");
         return PtrType{this->storage.chunk.template create<T>(FWD(mArgs)...),
@@ -119,7 +119,7 @@ struct PolyRecyclerImpl final
     template <typename T, typename... TArgs>
     inline auto createImpl(TArgs&&... mArgs)
     {
-        SSVU_ASSERT_STATIC(isSameOrBaseOf<TBase, T>(),
+        static_assert(isSameOrBaseOf<TBase, T>(),
             "PolyRecyclerImpl can only allocate types "
             "that belong to the same hierarchy");
         auto& chunk(this->storage.template getChunk<T>());

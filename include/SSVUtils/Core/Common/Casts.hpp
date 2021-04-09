@@ -25,7 +25,7 @@ using IsValidStorage = std::integral_constant<bool,
 template <typename T, typename TBase>
 inline constexpr T& castUp(TBase& mBase) noexcept
 {
-    SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>());
+    static_assert(isSameOrBaseOf<TBase, T>());
     return static_cast<T&>(mBase);
 }
 
@@ -34,7 +34,7 @@ inline constexpr T& castUp(TBase& mBase) noexcept
 template <typename T, typename TBase>
 inline constexpr T* castUp(TBase* mBase) noexcept
 {
-    SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>());
+    static_assert(isSameOrBaseOf<TBase, T>());
     return static_cast<T*>(mBase);
 }
 
@@ -43,7 +43,7 @@ inline constexpr T* castUp(TBase* mBase) noexcept
 template <typename T, typename TBase>
 inline constexpr const T& castUp(const TBase& mBase) noexcept
 {
-    SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>());
+    static_assert(isSameOrBaseOf<TBase, T>());
     return static_cast<const T&>(mBase);
 }
 
@@ -52,7 +52,7 @@ inline constexpr const T& castUp(const TBase& mBase) noexcept
 template <typename T, typename TBase>
 inline constexpr const T* castUp(const TBase* mBase) noexcept
 {
-    SSVU_ASSERT_STATIC_NM(isSameOrBaseOf<TBase, T>());
+    static_assert(isSameOrBaseOf<TBase, T>());
     return static_cast<const T*>(mBase);
 }
 
@@ -61,7 +61,7 @@ inline constexpr const T* castUp(const TBase* mBase) noexcept
 template <typename T, typename TStorage>
 inline constexpr T& castStorage(TStorage& mStorage) noexcept
 {
-    SSVU_ASSERT_STATIC_NM(Impl::IsValidStorage<T, TStorage>{});
+    static_assert(Impl::IsValidStorage<T, TStorage>{});
     return reinterpret_cast<T&>(mStorage);
 }
 
@@ -70,7 +70,7 @@ inline constexpr T& castStorage(TStorage& mStorage) noexcept
 template <typename T, typename TStorage>
 inline constexpr T* castStorage(TStorage* mStorage) noexcept
 {
-    SSVU_ASSERT_STATIC_NM(Impl::IsValidStorage<T, TStorage>{});
+    static_assert(Impl::IsValidStorage<T, TStorage>{});
     return reinterpret_cast<T*>(mStorage);
 }
 
@@ -79,7 +79,7 @@ inline constexpr T* castStorage(TStorage* mStorage) noexcept
 template <typename T, typename TStorage>
 inline constexpr const T& castStorage(const TStorage& mStorage) noexcept
 {
-    SSVU_ASSERT_STATIC_NM(Impl::IsValidStorage<T, TStorage>{});
+    static_assert(Impl::IsValidStorage<T, TStorage>{});
     return reinterpret_cast<const T&>(mStorage);
 }
 
@@ -88,7 +88,7 @@ inline constexpr const T& castStorage(const TStorage& mStorage) noexcept
 template <typename T, typename TStorage>
 inline constexpr const T* castStorage(const TStorage* mStorage) noexcept
 {
-    SSVU_ASSERT_STATIC_NM(Impl::IsValidStorage<T, TStorage>{});
+    static_assert(Impl::IsValidStorage<T, TStorage>{});
     return reinterpret_cast<const T*>(mStorage);
 }
 

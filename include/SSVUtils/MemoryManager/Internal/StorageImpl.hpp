@@ -36,7 +36,7 @@ private:
 public:
     inline PtrChain() noexcept
     {
-        SSVU_ASSERT_STATIC(sizeof(TBase) >= sizeof(char*),
+        static_assert(sizeof(TBase) >= sizeof(char*),
             "sizeof(TBase) must be >= sizeof(char*)");
     }
 
@@ -216,7 +216,7 @@ public:
     template <typename T>
     inline auto& getChunk() noexcept
     {
-        SSVU_ASSERT_STATIC_NM(CHList::template has<ChunkHolderFor<T>>());
+        static_assert(CHList::template has<ChunkHolderFor<T>>());
         return std::get<ChunkHolderFor<T>>(chTpl).chunk;
     }
 };

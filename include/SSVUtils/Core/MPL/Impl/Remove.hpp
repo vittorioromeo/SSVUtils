@@ -31,7 +31,7 @@ struct RemoveHlpr<std::index_sequence<TIs...>, TN, Ts...>
 template <std::size_t TN, typename... Ts>
 struct Remove
 {
-    SSVU_ASSERT_STATIC(
+    static_assert(
         TN < sizeof...(Ts), "Remove index smaller than the size of the list");
     using Type =
         typename RemoveHlpr<std::make_index_sequence<sizeof...(Ts) - 1>, TN, Ts...>::Type;

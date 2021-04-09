@@ -13,10 +13,10 @@ int main()
     using namespace std;
     using namespace ssvu;
 
-    SSVU_ASSERT_STATIC_NM(std::is_same_v<TplRepeat<int, 0>, tuple<>>);
-    SSVU_ASSERT_STATIC_NM(std::is_same_v<TplRepeat<int, 1>, tuple<int>>);
-    SSVU_ASSERT_STATIC_NM(std::is_same_v<TplRepeat<int, 2>, tuple<int, int>>);
-    SSVU_ASSERT_STATIC_NM(std::is_same_v<TplRepeat<int, 3>, tuple<int, int, int>>);
+    static_assert(std::is_same_v<TplRepeat<int, 0>, tuple<>>);
+    static_assert(std::is_same_v<TplRepeat<int, 1>, tuple<int>>);
+    static_assert(std::is_same_v<TplRepeat<int, 2>, tuple<int, int>>);
+    static_assert(std::is_same_v<TplRepeat<int, 3>, tuple<int, int, int>>);
 
     TEST_ASSERT_OP((getTplIdxOf<int, TplRepeat<int, 1>>()), ==, 0);
     TEST_ASSERT_OP((getTplIdxOf<int, TplRepeat<int, 10>>()), ==, 0);

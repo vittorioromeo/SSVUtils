@@ -43,42 +43,42 @@ int main()
 
         {
             auto vecInt(mkVector(0, 1, 2, 3, 4, 5));
-            SSVU_ASSERT_STATIC_NM(
+            static_assert(
                 std::is_same_v<decltype(vecInt), std::vector<int>>);
             TEST_ASSERT_OP(vecInt.size(), ==, 6);
         }
 
         {
             auto vecFloat(mkVector(0, 1, 2, 3, 4, 5.f));
-            SSVU_ASSERT_STATIC_NM(
+            static_assert(
                 std::is_same_v<decltype(vecFloat), std::vector<float>>);
             TEST_ASSERT_OP(vecFloat.size(), ==, 6);
         }
 
         {
             auto vecDouble(mkVector(0., 1, 2.f, 3, 4, 5));
-            SSVU_ASSERT_STATIC_NM(
+            static_assert(
                 std::is_same_v<decltype(vecDouble), std::vector<double>>);
             TEST_ASSERT_OP(vecDouble.size(), ==, 6);
         }
 
         {
             auto umIntInt(mkUnorderedMap(0, 0, 1, 1, 2, 2));
-            SSVU_ASSERT_STATIC_NM(std::is_same_v<decltype(umIntInt),
+            static_assert(std::is_same_v<decltype(umIntInt),
                 std::unordered_map<int, int>>);
             TEST_ASSERT_OP(umIntInt.size(), ==, 3);
         }
 
         {
             auto umIntFloat(mkUnorderedMap(0, 0, 1, 1, 2, 2.f));
-            SSVU_ASSERT_STATIC_NM(std::is_same_v<decltype(umIntFloat),
+            static_assert(std::is_same_v<decltype(umIntFloat),
                 std::unordered_map<int, float>>);
             TEST_ASSERT_OP(umIntFloat.size(), ==, 3);
         }
 
         {
             auto umStrInt(mkUnorderedMap("0", 0, "1", 1, std::string{"2"}, 2));
-            SSVU_ASSERT_STATIC_NM(std::is_same_v<decltype(umStrInt),
+            static_assert(std::is_same_v<decltype(umStrInt),
                 std::unordered_map<std::string, int>>);
             TEST_ASSERT_OP(umStrInt.size(), ==, 3);
         }

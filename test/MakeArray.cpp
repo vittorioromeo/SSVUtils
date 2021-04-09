@@ -11,7 +11,7 @@
     {                                                                          \
         using TT = mType;                                                      \
         auto x = ssvu::mkArray(TT(0), TT(1), TT(2));                           \
-        SSVU_ASSERT_STATIC_NM(std::is_same_v<decltype(x), std::array<TT, 3>>); \
+        static_assert(std::is_same_v<decltype(x), std::array<TT, 3>>); \
         TT acc = TT(0);                                                        \
         for(const auto& i : x) acc += TT(i);                                   \
         TEST_ASSERT(acc == TT(3));                                             \

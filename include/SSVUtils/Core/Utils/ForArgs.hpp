@@ -59,8 +59,8 @@ template <std::size_t TArity = 1, typename TF, typename... Ts>
 inline constexpr void forArgs(TF&& mFn, Ts&&... mXs) noexcept(
     noexcept(IMPL_FORNARGS_BODY()))
 {
-    SSVU_ASSERT_STATIC(TArity > 0, "Unallowed arity: must be greater than 0");
-    SSVU_ASSERT_STATIC(sizeof...(Ts) % TArity == 0,
+    static_assert(TArity > 0, "Unallowed arity: must be greater than 0");
+    static_assert(sizeof...(Ts) % TArity == 0,
         "Unallowed arity: not divisible by number of arguments");
     IMPL_FORNARGS_BODY();
 }

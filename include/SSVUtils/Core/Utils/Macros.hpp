@@ -8,6 +8,8 @@
 #include <vrm/pp.hpp>
 
 #include <cmath>
+#include <utility>
+#include <type_traits>
 
 namespace ssvu
 {
@@ -19,7 +21,7 @@ namespace Impl
 template <typename T>
 struct StandardLayoutChecker
 {
-    SSVU_ASSERT_STATIC(
+    static_assert(
         std::is_standard_layout_v<T>, "T must be a standard-layout type");
     using Type = T;
 };
