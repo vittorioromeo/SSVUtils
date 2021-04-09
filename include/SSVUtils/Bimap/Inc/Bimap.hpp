@@ -6,6 +6,7 @@
 #define SSVU_IMPL_BIMAP
 
 #include "SSVUtils/Core/Utils/Containers.hpp"
+#include "SSVUtils/Core/Utils/Macros.hpp"
 #include "SSVUtils/Bimap/Inc/Internal.hpp"
 
 #include <vector>

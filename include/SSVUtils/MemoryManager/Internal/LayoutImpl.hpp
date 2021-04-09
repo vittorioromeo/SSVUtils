@@ -6,6 +6,7 @@
 #define SSVU_MEMORYMANAGER_INTERNAL_LAYOUTIMPL
 
 #include "SSVUtils/Core/Common/Aliases.hpp"
+#include "SSVUtils/Core/Utils/Macros.hpp"
 
 namespace ssvu
 {
