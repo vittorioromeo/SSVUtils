@@ -16,8 +16,8 @@ namespace Impl
 {
 template <typename T, typename TStorage>
 using IsValidStorage = std::integral_constant<bool,
-    sizeof(typename TStorage::type) >= sizeof(T) &&
-        alignof(typename TStorage::type) >= alignof(T)>;
+    sizeof(TStorage) >= sizeof(T) &&
+        alignof(TStorage) >= alignof(T)>;
 }
 
 /// @brief Returns a `TBase&` casted to `T&`. Asserts that `T` is derived

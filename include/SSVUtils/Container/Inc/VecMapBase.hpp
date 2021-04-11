@@ -44,18 +44,6 @@ public:
         return getTD().data;
     }
 
-    // Equality/inequality
-    template <typename TC>
-    inline auto SSVU_ATTRIBUTE(pure) operator==(const TC& mC) const noexcept
-    {
-        return getData() == mC.getData();
-    }
-    template <typename TC>
-    inline auto operator!=(const TC& mC) const noexcept
-    {
-        return !(operator==(mC));
-    }
-
     // Standard (partial) vector interface support
     inline void reserve(std::size_t mV)
     {
@@ -120,6 +108,22 @@ public:
         return std::crend(getData());
     }
 };
+
+// Equality/inequality
+template <typename TDerived>
+inline bool SSVU_ATTRIBUTE(pure) operator==(const VecMapBase<TDerived>& lhs,
+    const VecMapBase<TDerived>& rhs) noexcept
+{
+    return lhs.getData() == rhs.getData();
+}
+
+template <typename TDerived>
+inline bool SSVU_ATTRIBUTE(pure) operator!=(const VecMapBase<TDerived>& lhs,
+    const VecMapBase<TDerived>& rhs) noexcept
+{
+    return lhs.getData() != rhs.getData();
+}
+
 } // namespace Impl
 } // namespace ssvu
 

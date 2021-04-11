@@ -20,7 +20,8 @@ namespace ssvu
 template <typename... Ts>
 struct UnionPOD : public Impl::UnionBase<Ts...>
 {
-    static_assert((std::is_pod_v<Ts> && ...), "All types must be POD");
+    static_assert((std::is_standard_layout_v<Ts> && ...));
+    static_assert((std::is_trivial_v<Ts> && ...));
 
     /// @brief Constructs and sets the internal data to `T`.
     template <typename T, typename... TArgs>
