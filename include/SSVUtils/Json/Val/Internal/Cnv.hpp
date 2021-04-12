@@ -11,7 +11,7 @@
 
 #include <bitset>
 #include <vector>
-
+#include <cassert>
 
 namespace ssvu
 {
@@ -184,7 +184,7 @@ struct Cnv<std::tuple<TArgs...>> final
     {
         tplForData(
             [&mV](auto mD, auto& mE) {
-                SSVU_ASSERT(
+                assert(
                     mV.template is<Arr>() && mV.getArr().size() > mD.getIdx());
                 mE = moveIfRValue<decltype(mV)>(
                     FWD(mV)[mD.getIdx()]
@@ -265,7 +265,7 @@ struct Cnv<TItem[TS]>
     template <typename T>
     inline static void fromVal(T&& mV, Type& mX)
     {
-        SSVU_ASSERT(mV.getArr().size() >= TS);
+        assert(mV.getArr().size() >= TS);
         for(auto i(0u); i < TS; ++i)
             mX[i] = moveIfRValue<decltype(mV)>(mV[i].template as<TItem>());
     }

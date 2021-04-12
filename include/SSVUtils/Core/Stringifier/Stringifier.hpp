@@ -6,7 +6,6 @@
 #define SSVU_CORE_STRING_STRINGIFIER
 
 #include "SSVUtils/Core/String/StringifierBase.hpp"
-#include "SSVUtils/Core/Assert/Assert.hpp"
 #include "SSVUtils/Core/Common/Common.hpp"
 #include "SSVUtils/Core/String/String.hpp"
 #include "SSVUtils/Core/ConsoleFmt/ConsoleFmt.hpp"

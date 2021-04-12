@@ -11,6 +11,7 @@
 
 #include <string>
 #include <type_traits>
+#include <cassert>
 
 namespace ssvu
 {
@@ -101,7 +102,7 @@ public:
     /// @param mValue Value to divide with.
     inline T operator/=(const T& mValue)
     {
-        SSVU_ASSERT(mValue != 0);
+        assert(mValue != 0);
         set(get() / mValue);
         return get();
     }

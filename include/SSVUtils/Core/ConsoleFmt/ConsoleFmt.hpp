@@ -66,7 +66,8 @@ enum class Color : int
 #if defined(SSVU_OS_LINUX)
 #include "SSVUtils/Core/ConsoleFmt/Internal/ConsoleFmtImplUnix.hpp"
 #elif defined(SSVU_OS_WINDOWS)
-#include "SSVUtils/Core/ConsoleFmt/Internal/ConsoleFmtImplWin.hpp"
+#include "SSVUtils/Core/ConsoleFmt/Internal/ConsoleFmtImplNull.hpp"
+// #include "SSVUtils/Core/ConsoleFmt/Internal/ConsoleFmtImplWin.hpp"
 #else
 #include "SSVUtils/Core/ConsoleFmt/Internal/ConsoleFmtImplNull.hpp"
 #endif

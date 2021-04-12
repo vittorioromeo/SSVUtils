@@ -10,6 +10,7 @@
 #include <vrm/pp.hpp>
 
 #include <string>
+#include <cassert>
 
 #define SSVU_FATENUM_IMPL_MK_ELEM_VALS(mIdx, mData, mArg) \
     VRM_PP_TPL_ELEM(mArg, 0) = VRM_PP_TPL_ELEM(mArg, 1) VRM_PP_COMMA_IF(mIdx)
@@ -93,12 +94,12 @@ struct FatEnumMgrImpl<TS, T<TEnum>>
     }
     inline static auto& getAsStr(TEnum mValue) noexcept
     {
-        SSVU_ASSERT(T<TEnum>::getBimap().has(mValue));
+        assert(T<TEnum>::getBimap().has(mValue));
         return T<TEnum>::getBimap().at(mValue);
     }
     inline static TEnum getFromStr(const std::string& mValue) noexcept
     {
-        SSVU_ASSERT(T<TEnum>::getBimap().has(mValue));
+        assert(T<TEnum>::getBimap().has(mValue));
         return T<TEnum>::getBimap().at(mValue);
     }
 };
@@ -150,12 +151,12 @@ struct FatEnumMgrImpl<TS, T<TEnum>>
 /// SSVU_FATENUM_MGR(EnumManager);
 /// SSVU_FATENUM_VALS(EnumManager, EnumName, int, (EName0, 0), (EName1, 5),
 /// (EName2, 2))
-/// SSVU_ASSERT(int(EnumName::EName0) == 0);
-/// SSVU_ASSERT(int(EnumName::EName1) == 5);
-/// SSVU_ASSERT(int(EnumName::EName2) == 2);
-/// SSVU_ASSERT(EnumManager<EnumName>::getSize() == 3);
-/// SSVU_ASSERT(EnumManager<EnumName>::getAsStr(EnumName::EName0) == "EName0");
-/// SSVU_ASSERT(EnumManager<EnumName>::getFromStr("EName0") ==
+/// assert(int(EnumName::EName0) == 0);
+/// assert(int(EnumName::EName1) == 5);
+/// assert(int(EnumName::EName2) == 2);
+/// assert(EnumManager<EnumName>::getSize() == 3);
+/// assert(EnumManager<EnumName>::getAsStr(EnumName::EName0) == "EName0");
+/// assert(EnumManager<EnumName>::getFromStr("EName0") ==
 /// EnumName::EName0);
 /// @endcode
 /// @details Must end without semicolon.
@@ -166,12 +167,12 @@ struct FatEnumMgrImpl<TS, T<TEnum>>
 /// @code
 /// SSVU_FATENUM_MGR(EnumManager);
 /// SSVU_FATENUM_VALS(EnumManager, EnumName, int, EName0, EName1, EName2)
-/// SSVU_ASSERT(int(EnumName::EName0) == 0);
-/// SSVU_ASSERT(int(EnumName::EName1) == 1);
-/// SSVU_ASSERT(int(EnumName::EName2) == 2);
-/// SSVU_ASSERT(EnumManager<EnumName>::getSize() == 3);
-/// SSVU_ASSERT(EnumManager<EnumName>::getAsStr(EnumName::EName0) == "EName0");
-/// SSVU_ASSERT(EnumManager<EnumName>::getFromStr("EName0") ==
+/// assert(int(EnumName::EName0) == 0);
+/// assert(int(EnumName::EName1) == 1);
+/// assert(int(EnumName::EName2) == 2);
+/// assert(EnumManager<EnumName>::getSize() == 3);
+/// assert(EnumManager<EnumName>::getAsStr(EnumName::EName0) == "EName0");
+/// assert(EnumManager<EnumName>::getFromStr("EName0") ==
 /// EnumName::EName0);
 /// @endcode
 /// @details Must end without semicolon.

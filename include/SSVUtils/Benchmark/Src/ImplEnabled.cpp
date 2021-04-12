@@ -10,6 +10,7 @@
 #include <chrono>
 #include <map>
 #include <string>
+#include <cassert>
 
 namespace ssvu
 {
@@ -37,7 +38,7 @@ SSVU_INLINE auto& getGroupMap() noexcept
 
 SSVU_INLINE auto& getLastDataRef()
 {
-    SSVU_ASSERT(!getStack().empty());
+    assert(!getStack().empty());
     return getStack().back();
 }
 

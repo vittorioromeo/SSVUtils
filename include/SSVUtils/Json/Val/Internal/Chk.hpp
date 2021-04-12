@@ -11,6 +11,7 @@
 
 #include <bitset>
 #include <vector>
+#include <cassert>
 
 namespace ssvu
 {
@@ -35,7 +36,7 @@ struct TplIsHelper
         inline static std::enable_if_t <
         TI<sizeof...(TArgs), bool> isTpl(const Val& mV) noexcept
     {
-        SSVU_ASSERT(mV.is<Arr>() && mV.getArr().size() > TI);
+        assert(mV.is<Arr>() && mV.getArr().size() > TI);
         if(!mV[TI].isNoNum<TplArg<TI, std::tuple<TArgs...>>>()) return false;
         return isTpl<TI + 1, TArgs...>(mV);
     }
@@ -46,7 +47,7 @@ struct TplIsHelper
     inline static bool SSVU_ATTRIBUTE(pure)
         areArrItemsOfType(const Val& mV) noexcept
     {
-        SSVU_ASSERT(mV.is<Arr>());
+        assert(mV.is<Arr>());
         for(const auto& v : mV.getArr())
             if(!v.template isNoNum<T>()) return false;
         return true;

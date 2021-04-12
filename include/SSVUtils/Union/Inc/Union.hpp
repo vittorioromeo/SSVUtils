@@ -6,13 +6,13 @@
 #define SSVU_IMPL_UNION
 
 #include "SSVUtils/Core/Detection/Detection.hpp"
-#include "SSVUtils/Core/Assert/Assert.hpp"
 #include "SSVUtils/Core/MPL/Impl/IdxOf.hpp"
 
 #include "SSVUtils/Union/Inc/UnionBase.hpp"
 
 #include <type_traits>
 #include <utility>
+#include <cassert>
 
 namespace ssvu
 {
@@ -37,7 +37,7 @@ private:
     }
     inline void assertClean() const noexcept
     {
-        SSVU_ASSERT(dirtyFlag == -1, "Union needs to be clean");
+        assert(dirtyFlag == -1, "Union needs to be clean");
     }
     template <typename T>
     inline void setDirty() noexcept
@@ -47,7 +47,7 @@ private:
     template <typename T>
     inline void assertDirty() const noexcept
     {
-        SSVU_ASSERT(dirtyFlag == static_cast<int>(MPL::getIdxOf<T, Ts...>()),
+        assert(dirtyFlag == static_cast<int>(MPL::getIdxOf<T, Ts...>()),
             "Union needs to be dirty with the correct type");
     }
 #else

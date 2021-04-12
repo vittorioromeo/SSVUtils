@@ -13,6 +13,8 @@
 #include "SSVUtils/Json/Val/Internal/Chk.hpp"
 #include "SSVUtils/Json/Val/Internal/AsHelper.hpp"
 
+#include <cassert>
+
 namespace ssvu
 {
 namespace Json
@@ -31,19 +33,19 @@ inline Val& Val::operator=(Val&& mV) noexcept
 template <typename T>
 inline auto Val::as() & -> decltype(Impl::AsHelper<T>::as(*this))
 {
-    SSVU_ASSERT(isNoNum<T>());
+    assert(isNoNum<T>());
     return Impl::AsHelper<T>::as(*this);
 }
 template <typename T>
 inline auto Val::as() const& -> decltype(Impl::AsHelper<T>::as(*this))
 {
-    SSVU_ASSERT(isNoNum<T>());
+    assert(isNoNum<T>());
     return Impl::AsHelper<T>::as(*this);
 }
 template <typename T>
 inline auto Val::as() && -> decltype(Impl::AsHelper<T>::as(*this))
 {
-    SSVU_ASSERT(isNoNum<T>());
+    assert(isNoNum<T>());
     return std::move(Impl::AsHelper<T>::as(*this));
 }
 

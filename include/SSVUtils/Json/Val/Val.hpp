@@ -18,6 +18,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <cassert>
 
 namespace ssvu
 {
@@ -107,17 +108,17 @@ private:
 #define SSVJ_DEFINE_VAL_GETTER(mType, mMember)                   \
     inline mType& VRM_PP_CAT(get, mType)()& noexcept             \
     {                                                            \
-        SSVU_ASSERT(is<mType>());                                \
+        assert(is<mType>());                                \
         return mMember;                                          \
     }                                                            \
     inline const mType& VRM_PP_CAT(get, mType)() const& noexcept \
     {                                                            \
-        SSVU_ASSERT(is<mType>());                                \
+        assert(is<mType>());                                \
         return mMember;                                          \
     }                                                            \
     inline mType VRM_PP_CAT(get, mType)()&& noexcept             \
     {                                                            \
-        SSVU_ASSERT(is<mType>());                                \
+        assert(is<mType>());                                \
         return std::move(mMember);                               \
     }
 
@@ -131,12 +132,12 @@ private:
     // Other getters
     inline auto getBln() const noexcept
     {
-        SSVU_ASSERT(is<Bln>());
+        assert(is<Bln>());
         return h.get<Bln>();
     }
     inline auto getNll() const noexcept
     {
-        SSVU_ASSERT(is<Nll>());
+        assert(is<Nll>());
         return Nll{};
     }
 

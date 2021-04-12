@@ -5,12 +5,11 @@
 #ifndef SSVU_CORE_UTILS_MATH
 #define SSVU_CORE_UTILS_MATH
 
-#include "SSVUtils/Core/Assert/Assert.hpp"
-
 #include <vrm/pp.hpp>
 
 #include <cmath>
 #include <tuple>
+#include <cassert>
 
 namespace ssvu
 {
@@ -74,7 +73,7 @@ inline void clampMax(T1& mX, const T2& mMax) noexcept
 template <typename T1, typename T2, typename T3>
 inline void clamp(T1& mX, const T2& mMin, const T3& mMax) noexcept
 {
-    SSVU_ASSERT(mMin <= mMax);
+    assert(mMin <= mMax);
     if(mX < mMin)
         mX = mMin;
     else if(mX > mMax)
@@ -118,7 +117,7 @@ inline constexpr std::common_type_t<T1, T2, T3> getClamped(
 {
     using CT = std::common_type_t<T1, T2, T3>;
 
-    SSVU_ASSERT_CONSTEXPR(CT(mMin) <= CT(mMax));
+    assert(CT(mMin) <= CT(mMax));
     return CT(mX) < CT(mMin) ? CT(mMin)
                              : (CT(mX) > CT(mMax) ? CT(mMax) : CT(mX));
 }
@@ -227,7 +226,7 @@ template <typename T1, typename T2, typename T3>
 inline constexpr std::common_type_t<T1, T2, T3> get1DIdxFrom2D(
     const T1& mX, const T2& mY, const T3& mCols) noexcept
 {
-    SSVU_ASSERT_CONSTEXPR(mCols >= 0);
+    assert(mCols >= 0);
     return mX + mY * mCols;
 }
 
@@ -245,7 +244,7 @@ inline constexpr std::common_type_t<T1, T2, T3, T4, T5> get1DIdxFrom3D(
     const T1& mX, const T2& mY, const T3& mZ, const T4& mCols,
     const T5& mRows) noexcept
 {
-    SSVU_ASSERT_CONSTEXPR(mCols >= 0 && mRows >= 0);
+    assert(mCols >= 0 && mRows >= 0);
     return mX + mY * mCols + mZ * mCols * mRows;
 }
 
@@ -259,7 +258,7 @@ inline constexpr std::common_type_t<T1, T2, T3, T4, T5> get1DIdxFrom3D(
 template <typename T1, typename T2>
 inline auto get2DIdxFrom1D(const T1& mIdx, const T2& mCols) noexcept
 {
-    SSVU_ASSERT(mIdx > 0 && mCols != 0);
+    assert(mIdx > 0 && mCols != 0);
     std::common_type_t<T1, T2> y{mIdx / mCols};
     return std::make_tuple(mIdx - y * mCols, y);
 }
@@ -276,7 +275,7 @@ template <typename T1, typename T2, typename T3>
 inline auto get3DIdxFrom1D(
     const T1& mIdx, const T2& mCols, const T3& mRows) noexcept
 {
-    SSVU_ASSERT(mIdx > 0 && mRows != 0 && mCols != 0);
+    assert(mIdx > 0 && mRows != 0 && mCols != 0);
     std::common_type_t<T1, T2, T3> y{mIdx / mCols};
     return std::make_tuple(y, y % mRows, mIdx / (mCols * mRows));
 }
@@ -284,7 +283,7 @@ inline auto get3DIdxFrom1D(
 /// @brief Gets mathematically correct modulo calculation.
 /// @details Assumes the modulo is positive.
 /// @code
-/// SSVU_ASSERT(getMod(-2, 12) == 10);
+/// assert(getMod(-2, 12) == 10);
 /// @endcode
 /// @param mVal Left side of operation.
 /// @param mUB Right side of operation. Must be positive.
@@ -292,16 +291,16 @@ inline auto get3DIdxFrom1D(
 template <typename T1, typename T2>
 inline std::common_type_t<T1, T2> getMod(const T1& mVal, const T2& mUB)
 {
-    SSVU_ASSERT(mUB > 0);
+    assert(mUB > 0);
     auto result(((mVal % mUB) + mUB) % mUB);
-    SSVU_ASSERT(result >= 0 && result < mUB);
+    assert(result >= 0 && result < mUB);
     return result;
 }
 
 /// @brief Wraps a value between two other values.
 /// @details Assumes mUB - mLB is positive.
 /// @code
-/// SSVU_ASSERT(getMod(-2, 0, 12) == 9);
+/// assert(getMod(-2, 0, 12) == 9);
 /// @endcode
 /// @param mVal Index value to wrap.
 /// @param mLB Lower bound of possible indices (inclusive).
@@ -311,10 +310,10 @@ template <typename T1, typename T2, typename T3>
 inline std::common_type_t<T1, T2, T3> getMod(
     T1 mVal, const T2& mLB, const T3& mUB) noexcept
 {
-    SSVU_ASSERT(mLB < mUB);
+    assert(mLB < mUB);
 
     const auto& rangeSize(mUB - mLB);
-    SSVU_ASSERT(rangeSize > 0 && rangeSize + 1 != 0);
+    assert(rangeSize > 0 && rangeSize + 1 != 0);
 
     if(mVal < mLB) mVal += rangeSize * ((mLB - mVal) / rangeSize + 1);
     return mLB + ((mVal - mLB) % rangeSize);
@@ -430,7 +429,7 @@ template <typename T1, typename T2, typename T3, typename T4, typename T5>
 inline constexpr std::common_type_t<T1, T2, T3, T4, T5> getMap(const T1& mI,
     const T2& mIMin, const T3& mIMax, const T4& mOMin, const T5& mOMax) noexcept
 {
-    SSVU_ASSERT_CONSTEXPR((mIMax - mIMin) != 0);
+    assert((mIMax - mIMin) != 0);
     return (mI - mIMin) * (mOMax - mOMin) / (mIMax - mIMin) + mOMin;
 }
 
@@ -442,7 +441,7 @@ template <typename T1, typename T2, typename T3>
 inline constexpr std::common_type_t<T1, T2, T3> getLerp(
     const T1& mWeight, const T2& mA, const T3& mB) noexcept
 {
-    SSVU_ASSERT_CONSTEXPR(mWeight >= 0.f && mWeight <= 1.f);
+    assert(mWeight >= 0.f && mWeight <= 1.f);
     return (mA + mWeight * (mB - mA));
 }
 } // namespace ssvu

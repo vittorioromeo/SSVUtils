@@ -7,6 +7,8 @@
 #include "SSVUtils/Timeline/Inc/Timeline.hpp"
 #include "SSVUtils/Timeline/Inc/Wait.hpp"
 
+#include <cassert>
+
 namespace ssvu
 {
 SSVU_INLINE void Wait::update(FT mFT)
@@ -28,6 +30,6 @@ SSVU_INLINE void Wait::reset()
 SSVU_INLINE Wait::Wait(Timeline& mTimeline, FT mTime) noexcept
     : Command{mTimeline}, time{mTime}, currentTime{mTime}
 {
-    SSVU_ASSERT(time >= 0);
+    assert(time >= 0);
 }
 } // namespace ssvu

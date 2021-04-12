@@ -9,6 +9,8 @@
 #include "SSVUtils/Core/Common/Casts.hpp"
 #include "SSVUtils/Core/Utils/Macros.hpp"
 
+#include <cassert>
+
 namespace ssvu
 {
 namespace Impl
@@ -50,12 +52,12 @@ struct LHelperBase
     }
     inline static void deallocate(char* mPtr) noexcept
     {
-        SSVU_ASSERT(mPtr != nullptr);
+        assert(mPtr != nullptr);
         delete[] mPtr;
     }
     inline static void destroy(TBase* mBase) noexcept(noexcept(mBase->~TBase()))
     {
-        SSVU_ASSERT(mBase != nullptr);
+        assert(mBase != nullptr);
         mBase->~TBase();
     }
 
@@ -78,7 +80,7 @@ struct LHelperNoBool : public LHelperBase<TBase, LNoBool>
     inline static void construct(LNoBool<T>* mPtr, TArgs&&... mArgs) noexcept(
         noexcept(T(FWD(mArgs)...)))
     {
-        SSVU_ASSERT(mPtr != nullptr);
+        assert(mPtr != nullptr);
         new(&mPtr->storageItem) T(FWD(mArgs)...);
     }
 };
@@ -91,7 +93,7 @@ struct LHelperBool : public LHelperBase<TBase, LBool>
     inline static void construct(LBool<T>* mPtr, TArgs&&... mArgs) noexcept(
         noexcept(T(FWD(mArgs)...)))
     {
-        SSVU_ASSERT(mPtr != nullptr);
+        assert(mPtr != nullptr);
         new(&mPtr->storageBool) bool{true};
         new(&mPtr->storageItem) T(FWD(mArgs)...);
     }

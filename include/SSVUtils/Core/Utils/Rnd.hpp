@@ -5,12 +5,12 @@
 #ifndef SSVU_CORE_UTILS_RND
 #define SSVU_CORE_UTILS_RND
 
-#include "SSVUtils/Core/Assert/Assert.hpp"
 #include "SSVUtils/Internal/PCG/PCG.hpp"
 
 #include <vrm/pp.hpp>
 
 #include <random>
+#include <cassert>
 
 namespace ssvu
 {
@@ -46,7 +46,7 @@ inline auto getRndI(const T1& mMin, const T2& mMax) noexcept
     using CT = std::common_type_t<T1, T2>;
     CT min(mMin), max(mMax);
 
-    SSVU_ASSERT(min < max);
+    assert(min < max);
     return RndDistUniformI<CT>{min, max - 1}(getRndEngine());
 }
 
@@ -60,7 +60,7 @@ inline auto getRndR(const T1& mMin, const T2& mMax) noexcept
     using CT = std::common_type_t<T1, T2>;
     CT min(mMin), max(mMax);
 
-    SSVU_ASSERT(mMin <= mMax);
+    assert(mMin <= mMax);
     return RndDistUniformR<CT>(min, max)(getRndEngine());
 }
 

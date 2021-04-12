@@ -6,7 +6,6 @@
 #define SSVU_CORE_UTILS_FORARGS
 
 #include "SSVUtils/Core/Common/Aliases.hpp"
-#include "SSVUtils/Core/Assert/Assert.hpp"
 
 // Implemented thanks to Daniel Frey:
 // http://stackoverflow.com/a/29901074/598696

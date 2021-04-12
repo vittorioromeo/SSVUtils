@@ -25,7 +25,7 @@ enum class Type
 /// string e{encode<Type::Base64>(s)};
 /// strign d{decode<Type::Base64>(s)};
 ///
-/// SSVU_ASSERT(s == d);
+/// assert(s == d);
 /// @endcode
 /// @tparam TT Type of encryption to use. (example
 /// ssvu::Encoding::Type::MD5)
@@ -42,7 +42,7 @@ std::string encode(const std::string& mStr);
 /// string e{encode<Type::Base64>(s)};
 /// strign d{decode<Type::Base64>(s)};
 ///
-/// SSVU_ASSERT(s == d);
+/// assert(s == d);
 /// @endcode
 /// @tparam TT Type of encryption to use. (example
 /// ssvu::Encoding::Type::MD5)

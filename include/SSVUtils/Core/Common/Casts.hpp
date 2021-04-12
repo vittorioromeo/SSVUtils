@@ -6,7 +6,6 @@
 #define SSVU_CORE_COMMON_CASTS
 
 #include "SSVUtils/Core/Common/Aliases.hpp"
-#include "SSVUtils/Core/Assert/Assert.hpp"
 
 #include <string>
 

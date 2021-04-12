@@ -8,6 +8,8 @@
 #include "SSVUtils/Json/Val/Val.hpp"
 #include "SSVUtils/Json/Val/Internal/Cnv.hpp"
 
+#include <cassert>
+
 namespace ssvu
 {
 namespace Json
@@ -31,7 +33,7 @@ struct CnvFuncHelper
     template <Idx TI, typename TArg, typename T>
     inline static void hExtrArr(T&& mV, TArg& mArg)
     {
-        SSVU_ASSERT(mV.template is<Arr>() &&
+        assert(mV.template is<Arr>() &&
                     mV.template as<Arr>().size() > TI &&
                     mV[TI].template isNoNum<TArg>());
         extr<TArg>(moveIfRValue<decltype(mV)>(mV[TI]), mArg);
@@ -46,7 +48,7 @@ struct CnvFuncHelper
     template <Idx TI, typename TArg>
     inline static void hArchArr(Val& mV, TArg&& mArg)
     {
-        SSVU_ASSERT(mV.template is<Arr>());
+        assert(mV.template is<Arr>());
         mV.emplace(FWD(mArg));
     }
     template <Idx TI, typename TArg, typename... TArgs>
@@ -59,7 +61,7 @@ struct CnvFuncHelper
     template <typename TArg, typename T>
     inline static void hExtrObj(T&& mV, const Key& mKey, TArg& mArg)
     {
-        SSVU_ASSERT(mV.template is<Obj>() && mV.has(mKey));
+        assert(mV.template is<Obj>() && mV.has(mKey));
         extr<TArg>(moveIfRValue<decltype(mV)>(mV[mKey]), mArg);
     }
     template <typename TArg, typename... TArgs, typename T>
@@ -73,7 +75,7 @@ struct CnvFuncHelper
     template <typename TKey, typename TArg>
     inline static void hArchObj(Val& mV, TKey&& mKey, TArg&& mArg)
     {
-        SSVU_ASSERT(mV.template is<Obj>());
+        assert(mV.template is<Obj>());
         arch(mV[FWD(mKey)], FWD(mArg));
     }
     template <typename TKey, typename TArg, typename... TArgs>

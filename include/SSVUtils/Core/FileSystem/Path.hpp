@@ -8,13 +8,15 @@
 #include "SSVUtils/Core/FileSystem/Enums.hpp"
 #include "SSVUtils/Core/FileSystem/CStat.hpp"
 
+#include "SSVUtils/Core/Common/Aliases.hpp"
 #include "SSVUtils/Core/Utils/Macros.hpp"
-#include "SSVUtils/Core/Assert/Assert.hpp"
 #include "SSVUtils/Core/String/Utils.hpp"
 
 #include <string>
 #include <utility>
 #include <fstream>
+#include <sstream>
+#include <cassert>
 
 #include <dirent.h>
 #include <sys/stat.h>
@@ -158,11 +160,11 @@ public:
     }
 
     // Implicit conversion to `std::string`
-    inline operator const std::string &() & noexcept
+    inline operator const std::string&() & noexcept
     {
         return getStr();
     }
-    inline operator const std::string &() const& noexcept
+    inline operator const std::string&() const& noexcept
     {
         return getStr();
     }
@@ -272,20 +274,14 @@ public:
     /// binary mode.
     inline std::string getContentsAsStr() const
     {
-        SSVU_ASSERT(exists<Type::File>());
+        assert(exists<Type::File>());
 
         std::ifstream ifs{getCStr(), std::ios_base::binary};
-        SSVU_ASSERT(!ifs.fail());
+        assert(static_cast<bool>(ifs));
 
-        ifs.seekg(0, std::ios::end);
-        auto size(ifs.tellg());
-        ifs.seekg(0, std::ios::beg);
-
-        auto buffer(std::make_unique<char[]>(size));
-        ifs.read(&buffer[0], size);
-        std::string result{buffer.get(), static_cast<std::size_t>(size)};
-
-        return result;
+        std::ostringstream oss;
+        oss << ifs.rdbuf();
+        return oss.str();
     }
 
     /// @brief Returns true if the path is empty.

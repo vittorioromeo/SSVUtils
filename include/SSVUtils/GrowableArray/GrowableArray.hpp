@@ -8,6 +8,7 @@
 #include "SSVUtils/Core/Common/Casts.hpp"
 
 #include <memory>
+#include <cassert>
 
 namespace ssvu
 {
@@ -36,7 +37,7 @@ public:
     /// @details The new capacity must be greater or equal than the old one.
     inline void grow(std::size_t mCapacityOld, std::size_t mCapacityNew)
     {
-        SSVU_ASSERT(mCapacityOld <= mCapacityNew);
+        assert(mCapacityOld <= mCapacityNew);
 
         auto newData(std::make_unique<T[]>(mCapacityNew));
         for(auto i(0u); i < mCapacityOld; ++i) newData[i] = std::move(data[i]);

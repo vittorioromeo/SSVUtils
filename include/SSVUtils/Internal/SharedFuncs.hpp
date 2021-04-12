@@ -6,7 +6,8 @@
 #define SSVU_INTERNAL_SHAREDFUNCS
 
 #include "SSVUtils/Core/Common/LikelyUnlikely.hpp"
-#include "SSVUtils/Core/Assert/Assert.hpp"
+
+#include <cassert>
 
 namespace ssvu
 {
@@ -47,7 +48,7 @@ inline auto refreshImplLoop(std::size_t& mSizeNext, const TF1& mFAliveChk,
             }
         }
 
-        SSVU_ASSERT(!mFAliveChk(iD) && mFAliveChk(iA));
+        assert(!mFAliveChk(iD) && mFAliveChk(iA));
         mFSwap(iD, iA);
         mFDeinit(iA);
 
@@ -75,7 +76,7 @@ inline void refreshImpl(std::size_t& mSize, std::size_t& mSizeNext,
 #if defined(SSVU_DEBUG)
     for(auto i(0u); i < iD; ++i)
     {
-        SSVU_ASSERT(mFAliveChk(i));
+        assert(mFAliveChk(i));
     }
 #endif
 }

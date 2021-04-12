@@ -11,7 +11,7 @@
 
 #include <vector>
 #include <memory>
-
+#include <cassert>
 
 namespace ssvu
 {
@@ -115,7 +115,7 @@ private:
     template <typename T>
     inline void eraseImpl(const T& mKey)
     {
-        SSVU_ASSERT(this->has(mKey));
+        assert(this->has(mKey));
 
         const auto& pair(getPair(*this->find(mKey)));
 
@@ -125,7 +125,7 @@ private:
         eraseRemoveIf(
             storage, [&pair](const auto& mI) { return mI.get() == &pair; });
 
-        SSVU_ASSERT(!this->has(mKey));
+        assert(!this->has(mKey));
     }
 
 public:
@@ -149,7 +149,7 @@ public:
     template <typename TA1, typename TA2>
     inline BMPair& emplace(TA1&& mArg1, TA2&& mArg2)
     {
-        SSVU_ASSERT(!this->has(mArg1) && !this->has(mArg2));
+        assert(!this->has(mArg1) && !this->has(mArg2));
 
         auto& pair(getEmplaceUPtr<BMPair>(storage, FWD(mArg1), FWD(mArg2)));
         set1.emplace(&pair.first);
@@ -222,7 +222,7 @@ public:
     /// @param mKey Key of the pair.
     inline T2& get(const T1& mKey) noexcept
     {
-        SSVU_ASSERT(this->has(mKey));
+        assert(this->has(mKey));
         return getItem(*this->find(mKey));
     }
 
@@ -231,7 +231,7 @@ public:
     /// @param mKey Key of the pair.
     inline T1& get(const T2& mKey) noexcept
     {
-        SSVU_ASSERT(this->has(mKey));
+        assert(this->has(mKey));
         return getItem(*this->find(mKey));
     }
 

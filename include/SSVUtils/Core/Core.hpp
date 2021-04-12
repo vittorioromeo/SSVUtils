@@ -12,10 +12,6 @@
 // information
 #include "SSVUtils/Core/Detection/Detection.hpp"
 
-// "Core/Assert/Assert" comes next, as many other modules make heavy use of
-// assertions.
-#include "SSVUtils/Core/Assert/Assert.hpp"
-
 // The "Core/Common/Common" module defines various typedefs and shortcut
 // functions.
 // It also includes some commonly used STL header files and checks the current
@@ -51,9 +47,7 @@
 #include "SSVUtils/Core/Stringifier/Stringifier.hpp"
 
 // "Core/Log/Log" is also used in most of the library.
-// "Core/Assert/Assert"'s implementation requires it as well.
 #include "SSVUtils/Core/Log/Log.hpp"
-#include "SSVUtils/Core/Assert/Assert.inl"
 
 // "Core/FileSystem/FileSystem" deals with paths and file management.
 // "Core/Log/Log"'s implementation requires it as well.

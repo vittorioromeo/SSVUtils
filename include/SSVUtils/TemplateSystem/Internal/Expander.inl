@@ -11,6 +11,8 @@
 #include "SSVUtils/TemplateSystem/Internal/Expander.hpp"
 #include "SSVUtils/TemplateSystem/Internal/Dictionary.hpp"
 
+#include <cassert>
+
 namespace ssvu
 {
 namespace TemplateSystem
@@ -84,7 +86,7 @@ inline bool Expander::expand()
 
     for(; idx < idxEnd; ++idx)
     {
-        SSVU_ASSERT(idx < src.size());
+        assert(idx < src.size());
 
         // Skip non-special characters or escaped special characters
         if(getC() != '{' || (idx > 0 && getC(idx - 1) == '\\') ||
@@ -120,7 +122,7 @@ inline bool Expander::expand()
         bufKey.clear();
         for(; getC() != '}'; ++idx) bufKey += getC();
 
-        SSVU_ASSERT(getC() == '}' && getC(idx + 1) == '}');
+        assert(getC() == '}' && getC(idx + 1) == '}');
 
         // Skip first '}', second one will be skipped by the for's `idx`
         // increment or by section increment
@@ -139,10 +141,10 @@ inline bool Expander::expand()
         }
 
         // Section
-        SSVU_ASSERT(type == Type::Section);
+        assert(type == Type::Section);
 
         // Skip second '}'
-        SSVU_ASSERT(getC() == '}' && getC(idx + 1) != '}');
+        assert(getC() == '}' && getC(idx + 1) != '}');
         ++idx;
 
         sectIdxCntStart = sectIdxCntEnd = idx;
@@ -167,7 +169,7 @@ inline bool Expander::expand()
                     ++idx;
                 }
 
-                SSVU_ASSERT(getC() == '}' && getC(idx + 1) == '}');
+                assert(getC() == '}' && getC(idx + 1) == '}');
 
                 // Skip first '}', second one will be skipped by the
                 // for's `idx` increment

@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_LOG_INL
 #define SSVU_CORE_LOG_INL
 
+#include "SSVUtils/Core/FileSystem/Path.hpp"
+
 #include <fstream>
 
 namespace ssvu

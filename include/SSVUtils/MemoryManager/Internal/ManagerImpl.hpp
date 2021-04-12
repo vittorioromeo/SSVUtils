@@ -13,7 +13,7 @@
 
 #include <vector>
 #include <memory>
-
+#include <cassert>
 
 namespace ssvu
 {
@@ -248,7 +248,7 @@ public:
 
     inline void reserve(std::size_t mCapacityNew)
     {
-        SSVU_ASSERT(capacity < mCapacityNew);
+        assert(capacity < mCapacityNew);
         items.grow(capacity, mCapacityNew);
         capacity = mCapacityNew;
     }

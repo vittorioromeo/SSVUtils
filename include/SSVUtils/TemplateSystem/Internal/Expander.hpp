@@ -10,6 +10,7 @@
 #include "SSVUtils/Container/Container.hpp"
 
 #include <string>
+#include <cassert>
 
 namespace ssvu
 {
@@ -41,7 +42,7 @@ private:
 
     inline auto getC(std::size_t mIdx) const noexcept
     {
-        SSVU_ASSERT(mIdx < src.size());
+        assert(mIdx < src.size());
         return src[mIdx];
     }
     inline auto getC() const noexcept

@@ -9,6 +9,7 @@
 #include "SSVUtils/Core/Common/LikelyUnlikely.hpp"
 
 #include <unordered_map>
+#include <cassert>
 
 namespace ssvu
 {
@@ -156,7 +157,7 @@ public:
     inline void operator()(TBase* mPtr) const
         noexcept(noexcept(chunk->recycle(mPtr)))
     {
-        SSVU_ASSERT(chunk != nullptr);
+        assert(chunk != nullptr);
         chunk->recycle(mPtr);
     }
 };

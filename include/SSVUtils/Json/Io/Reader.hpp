@@ -11,6 +11,7 @@
 #include "SSVUtils/Json/Io/ReadException.hpp"
 
 #include <string>
+#include <cassert>
 
 namespace ssvu
 {
@@ -26,7 +27,7 @@ inline bool isValidEscapeSequenceChar(char mC) noexcept
 
 inline char getEscapeSequence(char mC) noexcept
 {
-    SSVU_ASSERT(isValidEscapeSequenceChar(mC));
+    assert(isValidEscapeSequenceChar(mC));
 
     switch(mC)
     {
@@ -126,22 +127,22 @@ private:
 
     inline char& getC() noexcept
     {
-        SSVU_ASSERT(idx < src.size());
+        assert(idx < src.size());
         return src[idx];
     }
     inline char getC() const noexcept
     {
-        SSVU_ASSERT(idx < src.size());
+        assert(idx < src.size());
         return src[idx];
     }
     inline char& getC(std::size_t mIdx) noexcept
     {
-        SSVU_ASSERT(mIdx < src.size());
+        assert(mIdx < src.size());
         return src[mIdx];
     }
     inline char getC(std::size_t mIdx) const noexcept
     {
-        SSVU_ASSERT(mIdx < src.size());
+        assert(mIdx < src.size());
         return src[mIdx];
     }
     inline auto isC(char mC) const noexcept
@@ -180,7 +181,7 @@ private:
 
             // Skip escape sequences
             ++end;
-            SSVU_ASSERT(isValidEscapeSequenceChar(getC(end)));
+            assert(isValidEscapeSequenceChar(getC(end)));
         }
 
         // Reserve memory for the string (BOTTLENECK)
