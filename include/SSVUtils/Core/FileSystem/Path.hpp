@@ -15,8 +15,8 @@
 #include <string>
 #include <utility>
 #include <fstream>
-#include <sstream>
 #include <cassert>
+#include <sstream>
 
 #include <dirent.h>
 #include <sys/stat.h>
@@ -271,17 +271,28 @@ public:
     }
 
     /// @brief Returns a string containing the file's contents, read in
-    /// binary mode.
-    inline std::string getContentsAsStr() const
+    /// binary mode, using a user-provided buffer.
+    inline std::string& getContentsAsStr(std::string& mBuffer) const
     {
         assert(exists<Type::File>());
 
         std::ifstream ifs{getCStr(), std::ios_base::binary};
         assert(static_cast<bool>(ifs));
 
-        std::ostringstream oss;
-        oss << ifs.rdbuf();
-        return oss.str();
+        ifs.seekg(0, std::ios::end);
+        mBuffer.resize(ifs.tellg());
+        ifs.seekg(0);
+        ifs.read(mBuffer.data(), mBuffer.size());
+
+        return mBuffer;
+    }
+
+    /// @brief Returns a string containing the file's contents, read in
+    /// binary mode.
+    inline std::string getContentsAsStr() const
+    {
+        std::string buffer;
+        return getContentsAsStr(buffer);
     }
 
     /// @brief Returns true if the path is empty.
