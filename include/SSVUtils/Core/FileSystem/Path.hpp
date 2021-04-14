@@ -105,6 +105,12 @@ public:
     {
     }
 
+    void clear()
+    {
+        path.clear();
+        mustNormalize = true;
+    }
+
     inline auto& operator=(const Path& mPath)
     {
         path = mPath.path;
@@ -228,9 +234,11 @@ public:
     /// @details It is assumed that the path points to a file.
     inline std::string getFileNameNoExtensions() const
     {
-        const auto& str(getFileName());
-        auto extBegin(str.find_first_of('.', beginsWith(str, '.') ? 1 : 0));
-        return str.substr(0, extBegin);
+        const auto& str(getStr());
+        auto nameBegin(str.find_last_of('/') + 1);
+        auto extBegin(str.find_last_of('.', beginsWith(str, '.') ? 1 : 0));
+
+        return str.substr(nameBegin, extBegin - nameBegin);
     }
 
     /// @brief Returns the folder name of the current path.
