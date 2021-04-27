@@ -144,7 +144,7 @@ inline bool beginsWith(
 /// @return Returns true if mStr starts with mChar.
 inline bool beginsWith(const std::string& mStr, char mChar) noexcept
 {
-    return mStr.size() > 0 && mStr.front() == mChar;
+    return !mStr.empty() && mStr.front() == mChar;
 }
 
 /// @brief Returns whether a string ends with a specific string.
@@ -165,7 +165,7 @@ inline bool endsWith(
 /// @return Returns true if mStr ends with mChar.
 inline bool endsWith(const std::string& mStr, char mChar) noexcept
 {
-    return mStr.size() > 0 && mStr.back() == mChar;
+    return !mStr.empty() && mStr.back() == mChar;
 }
 
 /// @brief Converts a string to a lowercase string.

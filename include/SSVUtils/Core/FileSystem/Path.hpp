@@ -236,7 +236,12 @@ public:
     {
         const auto& str(getStr());
         auto nameBegin(str.find_last_of('/') + 1);
-        auto extBegin(str.find_last_of('.', beginsWith(str, '.') ? 1 : 0));
+        auto extBegin(str.find_last_of('.'));
+
+        if(extBegin == nameBegin)
+        {
+            return str.substr(nameBegin);
+        }
 
         return str.substr(nameBegin, extBegin - nameBegin);
     }

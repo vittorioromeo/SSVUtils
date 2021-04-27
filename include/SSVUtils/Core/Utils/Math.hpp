@@ -15,16 +15,16 @@ namespace ssvu
 {
 // C++14: templatized values (GCC 5?)
 /// @brief Value of pi. (pi radians = 180 degrees)
-constexpr float pi{3.14159265f};
+constexpr float pi{3.14159265359f};
 
 /// @brief Value of pi / 2. (half pi radians = 90 degrees)
-constexpr float piHalf{pi / 2.f};
+constexpr float piHalf{1.57079632679f};
 
 /// @brief Value of pi * 2. (tau radians = 360 degrees)
-constexpr float tau{pi * 2.f};
+constexpr float tau{6.28318530718f};
 
 /// @brief Ratio between radians and degrees.
-constexpr float radDegRatio{pi / 180.f};
+constexpr float radDegRatio{0.01745329251f};
 
 /// @brief Gets the sign of a numeric value. (unsigned version)
 /// @param mX Value to use.
