@@ -7,6 +7,8 @@
 
 #include "SSVUtils/Core/FileSystem/Path.hpp"
 
+#include "SSVUtils/Core/Detection/Detection.hpp"
+
 #include <string>
 #include <utility>
 #include <cstdlib>

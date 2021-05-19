@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_UTILS_MACROS
 #define SSVU_CORE_UTILS_MACROS
 
+#include "SSVUtils/Core/Detection/Detection.hpp"
+
 #include <vrm/pp.hpp>
 
 #include <cmath>

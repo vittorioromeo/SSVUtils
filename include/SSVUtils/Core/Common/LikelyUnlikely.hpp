@@ -5,6 +5,8 @@
 #ifndef SSVU_CORE_COMMON_LIKELYUNLIKELY
 #define SSVU_CORE_COMMON_LIKELYUNLIKELY
 
+#include "SSVUtils/Core/Detection/Detection.hpp"
+
 #if(defined(SSVU_COMPILER_CLANG) || defined(SSVU_COMPILER_GCC))
 /// @macro Micro-optimization telling the compiler that this condition is more
 /// likely to happen than the `else` branch.
