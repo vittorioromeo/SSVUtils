@@ -37,7 +37,8 @@ private:
     }
     inline void assertClean() const noexcept
     {
-        assert(dirtyFlag == -1, "Union needs to be clean");
+        // Union needs to be clean
+        assert(dirtyFlag == -1);
     }
     template <typename T>
     inline void setDirty() noexcept
@@ -47,8 +48,8 @@ private:
     template <typename T>
     inline void assertDirty() const noexcept
     {
-        assert(dirtyFlag == static_cast<int>(MPL::getIdxOf<T, Ts...>()),
-            "Union needs to be dirty with the correct type");
+        // Union needs to be dirty with the correct type
+        assert((dirtyFlag == static_cast<int>(MPL::getIdxOf<T, Ts...>())));
     }
 #else
     inline void setClean() noexcept
