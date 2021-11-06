@@ -70,12 +70,14 @@ inline void scan(std::vector<Path>& mTarget, const Path& mPath,
 /// the scanned paths.
 template <Mode TM = Mode::Recurse, Type TT = Type::All, Pick TP = Pick::Any,
     Sort TS = Sort::Alphabetic>
-inline auto getScan(const Path& mPath, const std::string& mDesired = "")
+[[nodiscard]] inline std::vector<Path> getScan(
+    const Path& mPath, const std::string& mDesired = "")
 {
     std::vector<Path> result;
     scan<TM, TT, TP, TS>(result, mPath, mDesired);
     return result;
 }
+
 } // namespace FileSystem
 } // namespace ssvu
 
