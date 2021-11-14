@@ -47,5 +47,5 @@ int main()
     TEST_ASSERT(path.getExtension() == ".bak");
     TEST_ASSERT(path.getAllExtensions() == ".png.bak");
     TEST_ASSERT(path.getFileName() == "test4.png.bak");
-    TEST_ASSERT(path.getFileNameNoExtensions() == "test4");
+    TEST_ASSERT(path.getFileNameNoExtensions() == "test4.png");
 }

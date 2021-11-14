@@ -183,7 +183,8 @@ struct Cnv<std::tuple<TArgs...>> final
     inline static void fromVal(T&& mV, Type& mX)
     {
         tplForData(
-            [&mV](auto mD, auto& mE) {
+            [&mV](auto mD, auto& mE)
+            {
                 assert(
                     mV.template is<Arr>() && mV.getArr().size() > mD.getIdx());
                 mE = moveIfRValue<decltype(mV)>(

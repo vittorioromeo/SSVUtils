@@ -12,6 +12,7 @@ namespace ssvu
 {
 template <std::size_t TS, std::size_t TAlign>
 using AlignedStorage = std::aligned_storage_t<TS, TAlign>;
+
 template <typename T>
 using AlignedStorageFor = AlignedStorage<sizeof(T), alignof(T)>;
 
@@ -39,7 +40,7 @@ constexpr decltype(auto) moveIfRValue(TV&& mV) noexcept
     }
     else
     {
-        return mV;
+        return static_cast<TV&>(mV);
     }
 }
 
