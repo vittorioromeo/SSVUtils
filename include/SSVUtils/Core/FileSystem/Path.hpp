@@ -186,13 +186,23 @@ public:
 
     /// @brief Returns true if the path exists on the user's filesystem
     /// and respects the passed filter.
-    /// @tparam TType Existance type to check.
+    /// @tparam TType Existence type to check.
     template <Type TType>
     inline bool exists() const noexcept
     {
         CStat fileStat;
         int err{stat(getCStr(), &fileStat)};
         return err == 0 && Impl::ExistsFilter<TType>::get(fileStat);
+    }
+
+    inline bool isFolder() const noexcept
+    {
+        return exists<Type::Folder>();
+    }
+
+    inline bool isFile() const noexcept
+    {
+        return exists<Type::File>();
     }
 
     /// @brief Returns true if the path ends with a specified extension.
