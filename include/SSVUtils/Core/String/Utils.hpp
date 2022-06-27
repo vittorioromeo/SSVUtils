@@ -12,6 +12,7 @@
 #include <sstream>
 #include <cctype>
 #include <cstddef>
+#include <algorithm>
 
 namespace ssvu
 {
