@@ -5,8 +5,6 @@
 #ifndef SSVU_CORE_COMMON_FRAMETIME
 #define SSVU_CORE_COMMON_FRAMETIME
 
-#include <chrono>
-
 namespace ssvu
 {
 
@@ -17,11 +15,6 @@ namespace ssvu
 /// used instead of plain float for frametime-driven timers, delays and
 /// durations.
 using FT = float;
-
-/// @typedef `FTDuration` is a millisecond-precision `std::chrono::duration`
-/// intended
-/// for use in frametime-related contexts.
-using FTDuration = std::chrono::duration<FT, std::milli>;
 
 /// @brief Default constexpr ratio between seconds and frametime.
 constexpr float secondsFTRatio{60.f};

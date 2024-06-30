@@ -14,7 +14,7 @@ namespace ssvu
 #ifndef SSVU_LOG_DISABLE
 /// @brief Saves all the log entries to a file.
 /// @param mPath File path (file will be created if it doesn't exist).
-inline void saveLogToFile(const ssvufs::Path& mPath)
+inline void saveLogToFile(const ssvu::FileSystem::Path& mPath)
 {
     std::ofstream o;
     o.open(mPath);
@@ -23,7 +23,7 @@ inline void saveLogToFile(const ssvufs::Path& mPath)
     o.close();
 }
 #else
-inline void saveLogToFile(const ssvufs::Path&)
+inline void saveLogToFile(const ssvu::FileSystem::Path&)
 {
 }
 #endif
