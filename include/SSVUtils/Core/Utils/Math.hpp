@@ -5,8 +5,6 @@
 #ifndef SSVU_CORE_UTILS_MATH
 #define SSVU_CORE_UTILS_MATH
 
-#include <vrm/pp.hpp>
-
 #include <cmath>
 #include <tuple>
 #include <cassert>

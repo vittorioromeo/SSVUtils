@@ -7,11 +7,13 @@
 
 #include "SSVUtils/Core/Detection/Detection.hpp"
 
-#include <vrm/pp.hpp>
-
 #include <cmath>
 #include <utility>
 #include <type_traits>
+
+#define SSVU_CAT2(a, b) a##b
+#define SSVU_CAT3(a, b, c) a##b##c
+#define SSVU_CAT4(a, b, c, d) a##b##c##d
 
 namespace ssvu
 {
@@ -49,9 +51,9 @@ using VoidT = typename Voider<TArgs...>::Type;
 /// @macro Defines a dummy struct with a name generated from the current line
 /// and passed variadic args.
 /// @details Must end with semicolon.
-#define SSVU_DEFINE_DUMMY_STRUCT(...)                       \
-    struct VRM_PP_CAT(__dummyStruct, __VA_ARGS__, __LINE__) \
-    {                                                       \
+#define SSVU_DEFINE_DUMMY_STRUCT(...)                      \
+    struct SSVU_CAT3(__dummyStruct, __VA_ARGS__, __LINE__) \
+    {                                                      \
     } __attribute__((unused))
 
 /// @macro Define a template class with name `mName` that checks if a certain
@@ -67,9 +69,9 @@ using VoidT = typename Voider<TArgs...>::Type;
 /// @details Must end without semicolon.
 #define SSVU_DEFINE_MEMFN_DETECTOR(mName, mMemberName)                    \
     template <typename, typename T>                                       \
-    struct VRM_PP_CAT(__, mName, __impl);                                 \
+    struct SSVU_CAT3(__, mName, __impl);                                  \
     template <typename TC, typename TReturn, typename... TArgs>           \
-    struct VRM_PP_CAT(__, mName, __impl)<TC, TReturn(TArgs...)>           \
+    struct SSVU_CAT3(__, mName, __impl)<TC, TReturn(TArgs...)>            \
     {                                                                     \
         template <typename T>                                             \
         inline static constexpr auto check(T*)                            \
@@ -89,7 +91,7 @@ using VoidT = typename Voider<TArgs...>::Type;
     template <typename T, typename TSignature>                            \
     inline constexpr bool mName() noexcept                                \
     {                                                                     \
-        return VRM_PP_CAT(__, mName, __impl)<T, TSignature>::value;       \
+        return SSVU_CAT3(__, mName, __impl)<T, TSignature>::value;        \
     }
 
 /// @macro Define a template function with name `mName` that invokes
@@ -137,12 +139,12 @@ using VoidT = typename Voider<TArgs...>::Type;
 /// callTestMethod(example);
 /// @endcode
 /// @details Must end without semicolon.
-#define SSVU_DEFINE_MEMFN_CALLER(mName, mMemberName, mSignature)              \
-    SSVU_DEFINE_MEMFN_DETECTOR(                                               \
-        VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName) \
-    SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName,                         \
-        (VRM_PP_CAT(__ssvuInvoker, mName, mMemberName, __LINE__) < T,         \
-            mSignature > ()))
+#define SSVU_DEFINE_MEMFN_CALLER(mName, mMemberName, mSignature)             \
+    SSVU_DEFINE_MEMFN_DETECTOR(                                              \
+        SSVU_CAT4(__ssvuInvoker, mName, mMemberName, __LINE__), mMemberName) \
+    SSVU_DEFINE_MEMFN_CALLER_IMPL(mName, mMemberName,                        \
+        (SSVU_CAT4(__ssvuInvoker, mName, mMemberName, __LINE__) < T,         \
+            mSignature>()))
 
 /// @macro Gets the base `mType*` structure pointer from a `mMemberPointer`
 /// pointer to a member of `mType`, with member name `mMemberName`. Const
@@ -240,7 +242,7 @@ using VoidT = typename Voider<TArgs...>::Type;
         !std::is_same_v<std::remove_cv_t<std::remove_reference_t<mT>>, mType>)
 
 // Unreachable macro
-#if(defined(SSVU_COMPILER_CLANG) || defined(SSVU_COMPILER_GCC))
+#if (defined(SSVU_COMPILER_CLANG) || defined(SSVU_COMPILER_GCC))
 /// @macro Unreachable code. Uses `__builtin_unreachable`. Requires semicolon at
 /// the end.
 #define SSVU_UNREACHABLE() __builtin_unreachable()
@@ -261,7 +263,7 @@ using VoidT = typename Voider<TArgs...>::Type;
 /// line number.
 /// @details Useful for temporary variables that require a name to make RAII
 /// work properly.
-#define SSVU_UNIQUE_NAME VRM_PP_CAT(__tempVar, __LINE)
+#define SSVU_UNIQUE_NAME SSVU_CAT2(__tempVar, __LINE)
 
 #endif
 

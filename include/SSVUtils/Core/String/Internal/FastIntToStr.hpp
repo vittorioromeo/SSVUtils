@@ -47,7 +47,7 @@ struct Conv<T, std::enable_if_t<!std::is_unsigned_v<T>>>
 {
     static constexpr std::size_t bufferSize{std::numeric_limits<T>::digits10};
 
-    inline static auto toStr(T val) noexcept
+    inline static auto  toStr(T val) noexcept
     {
         auto& buf(getConvBuffer<bufferSize>());
         char* it{&buf[bufferSize - 2]};

@@ -10,8 +10,6 @@
 #include "SSVUtils/Core/String/String.hpp"
 #include "SSVUtils/Core/ConsoleFmt/ConsoleFmt.hpp"
 
-#include <vrm/pp.hpp>
-
 #include <string>
 #include <iterator>
 #include <array>
@@ -234,8 +232,11 @@ struct HasKeyType : std::false_type
 {
 };
 
+template <typename...>
+using VoidTX = void;
+
 template <typename T>
-struct HasKeyType<T, Impl::VoidT<typename T::key_type>> : std::true_type
+struct HasKeyType<T, VoidTX<typename T::key_type>> : std::true_type
 {
 };
 
@@ -246,7 +247,7 @@ struct IsAlloc : std::false_type
 
 template <typename T>
 struct IsAlloc<T,
-    Impl::VoidT<typename T::propagate_on_container_move_assignment>>
+    VoidTX<typename T::propagate_on_container_move_assignment>>
     : std::true_type
 {
 };
