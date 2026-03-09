@@ -19,16 +19,38 @@
 namespace ssvu::FileSystem::Impl
 {
 
-[[nodiscard]] inline std::string& getBufName()
+template <Mode TM>
+[[nodiscard]] inline decltype(auto) getBufName()
 {
-    thread_local std::string bufName;
-    return bufName;
+    // Use a thread-local buffer when the mode is single (non re-entrant),
+    // otherwise just create a new string.
+
+    if constexpr(TM == Mode::Recurse)
+    {
+        return std::string{};
+    }
+    else
+    {
+        thread_local std::string bufName;
+        return bufName;
+    }
 }
 
-[[nodiscard]] inline Path& getBufPath()
+template <Mode TM>
+[[nodiscard]] inline decltype(auto) getBufPath()
 {
-    thread_local Path bufPath;
-    return bufPath;
+    // Use a thread-local buffer when the mode is single (non re-entrant),
+    // otherwise just create a new path.
+
+    if constexpr(TM == Mode::Recurse)
+    {
+        return Path{};
+    }
+    else
+    {
+        thread_local Path bufPath;
+        return bufPath;
+    }
 }
 
 template <Mode TM, Type TT, Pick TP, Sort TS>
@@ -42,8 +64,8 @@ inline void scan(
 
     DIR* dir{opendir(mPath.getCStr())};
 
-    std::string& bufName = getBufName();
-    Path& bufPath = getBufPath();
+    decltype(auto) bufName = getBufName<TM>();
+    decltype(auto) bufPath = getBufPath<TM>();
 
     for(dirent* entry{readdir(dir)}; entry != nullptr; entry = readdir(dir))
     {
@@ -56,7 +78,7 @@ inline void scan(
 
         if(!bufPath.isRootOrParent())
         {
-            if(bufPath.exists<Type::Folder>())
+            if(bufPath.template exists<Type::Folder>())
             {
                 if(TT == Type::All || TT == Type::Folder)
                 {
@@ -94,8 +116,11 @@ inline void scan(
     }
 
     closedir(dir);
+
     if(TS == Sort::Alphabetic)
+    {
         std::sort(std::begin(mTarget), std::end(mTarget));
+    }
 }
 
 } // namespace ssvu::FileSystem::Impl
