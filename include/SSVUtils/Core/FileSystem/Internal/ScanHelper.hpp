@@ -19,38 +19,16 @@
 namespace ssvu::FileSystem::Impl
 {
 
-template <Mode TM>
-[[nodiscard]] inline decltype(auto) getBufName()
+[[nodiscard]] inline std::string& getBufName()
 {
-    // Use a thread-local buffer when the mode is single (non re-entrant),
-    // otherwise just create a new string.
-
-    if constexpr(TM == Mode::Recurse)
-    {
-        return std::string{};
-    }
-    else
-    {
-        thread_local std::string bufName;
-        return bufName;
-    }
+    thread_local std::string bufName;
+    return bufName;
 }
 
-template <Mode TM>
-[[nodiscard]] inline decltype(auto) getBufPath()
+[[nodiscard]] inline Path& getBufPath()
 {
-    // Use a thread-local buffer when the mode is single (non re-entrant),
-    // otherwise just create a new path.
-
-    if constexpr(TM == Mode::Recurse)
-    {
-        return Path{};
-    }
-    else
-    {
-        thread_local Path bufPath;
-        return bufPath;
-    }
+    thread_local Path bufPath;
+    return bufPath;
 }
 
 template <Mode TM, Type TT, Pick TP, Sort TS>
@@ -64,8 +42,8 @@ inline void scan(
 
     DIR* dir{opendir(mPath.getCStr())};
 
-    decltype(auto) bufName = getBufName<TM>();
-    decltype(auto) bufPath = getBufPath<TM>();
+    std::string& bufName = getBufName();
+    Path& bufPath = getBufPath();
 
     for(dirent* entry{readdir(dir)}; entry != nullptr; entry = readdir(dir))
     {
@@ -78,7 +56,7 @@ inline void scan(
 
         if(!bufPath.isRootOrParent())
         {
-            if(bufPath.template exists<Type::Folder>())
+            if(bufPath.exists<Type::Folder>())
             {
                 if(TT == Type::All || TT == Type::Folder)
                 {
@@ -88,7 +66,7 @@ inline void scan(
                 if(TM == Mode::Recurse)
                 {
                     Impl::scan<Mode::Recurse, TT, TP, TS>(
-                        mTarget, bufPath, mDesired);
+                        mTarget, Path{bufPath}, mDesired);
                 }
             }
             else if(TT == Type::All || TT == Type::File)
@@ -116,11 +94,8 @@ inline void scan(
     }
 
     closedir(dir);
-
     if(TS == Sort::Alphabetic)
-    {
         std::sort(std::begin(mTarget), std::end(mTarget));
-    }
 }
 
 } // namespace ssvu::FileSystem::Impl
